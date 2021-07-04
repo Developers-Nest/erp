@@ -1,5 +1,7 @@
 import React from 'react';
+import {View} from 'react-native';
 
+import {Button, Appbar} from 'react-native-paper';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import Home from './Home/Home';
