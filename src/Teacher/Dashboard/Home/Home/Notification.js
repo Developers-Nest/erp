@@ -80,7 +80,7 @@ export default function Notify({navigation}) {
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
-              borderBottomWidth: activeTab == 'Notification' ? 2 : 0,
+              borderBottomWidth: activeTab == 'Notification' ? 3 : 0,
               borderBottomColor: 'grey',
               justifyContent: 'center',
               alignItems: 'center',
@@ -91,7 +91,7 @@ export default function Notify({navigation}) {
 
           <TouchableOpacity
             style={{
-              borderBottomWidth: activeTab == 'Circular' ? 2 : 0,
+              borderBottomWidth: activeTab == 'Circular' ? 3 : 0,
               borderBottomColor: 'grey',
               justifyContent: 'center',
               alignItems: 'center',

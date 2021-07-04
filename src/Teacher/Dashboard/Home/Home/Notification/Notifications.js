@@ -1,101 +1,151 @@
-import * as React from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
-
-import {Text, List} from 'react-native-paper';
+import React, {Component} from 'react';
+import {
+  Switch,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-export default function Notifications({navigation}) {
-  const [lines, setLines] = React.useState(1);
+const text =
+  'This event will be held today atkrhjfbckeirvbikhev place at wjbcferob hours';
 
-  function expand() {
-    lines === 1 ? setLines(50) : setLines(1);
-  }
-  return (
-    <View style={styles.container}>
-      <List.Section style={styles.cardsWrapper}>
-        <TouchableOpacity onPress={() => expand()}>
-          <View style={styles.card}>
-            <View style={styles.cardInfo}>
-              <View style={{flexDirection: 'row', paddingVertical: 10}}>
-                <View
-                  style={{
-                    paddingHorizontal: 20,
-                    marginTop: 0,
-                  }}>
-                  <FontAwesome5 name="calendar-day" size={28} />
-                  <Text style={{fontSize: 9, fontWeight: '400'}}>Event</Text>
-                </View>
-                <View>
-                  <Text style={{fontSize: 18, fontWeight: '400'}}>Event</Text>
-                  <Text
-                    numberOfLines={lines}
-                    style={{fontSize: 12, fontWeight: '400'}}>
-                    This event will be held today at abc place. plaease
-                    tadadadadaaaa blablablaa
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <View style={{flexDirection: 'row'}}>
-          <View>
-            <List.Icon icon="calendar-blank" style={{marginBottom: 0}} />
-            <Text style={{paddingHorizontal: 10}}>News</Text>
-          </View>
-          <List.Accordion title="Controlled Accordion">
-            <List.Item
-              title=""
-              left={props => (
-                <View>
-                  <Text>
-                    hifffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-                  </Text>
-                </View>
-              )}
-            />
-          </List.Accordion>
+const CONTENT = [
+  {
+    title: 'News1',
+    content: text,
+    type: 'News',
+  },
+  {
+    title: 'Event1',
+    content: text,
+    type: 'Event',
+  },
+  {
+    title: 'Event2',
+    content: text,
+    type: 'Event',
+  },
+  {
+    title: 'News2',
+    content: text,
+    type: 'News',
+  },
+];
+
+export default class App extends Component {
+  state = {
+    activeSections: [],
+    collapsed: true,
+  };
+
+  setSections = sections => {
+    this.setState({
+      activeSections: sections.includes(undefined) ? [] : sections,
+    });
+  };
+
+  renderHeader = (section, _, isActive) => {
+    return (
+      <Animatable.View
+        duration={400}
+        style={styles.header}
+        transition="backgroundColor">
+        <View
+          style={{
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            padding: 10,
+          }}>
+          <FontAwesome5
+            name={section.type === 'Event' ? 'video' : 'calendar-day'}
+            size={27}
+          />
+          {section.type === 'Event' ? (
+            <Text style={{fontSize: 9, fontWeight: '400'}}>Event</Text>
+          ) : (
+            <Text style={{fontSize: 9, fontWeight: '400'}}>News</Text>
+          )}
         </View>
-      </List.Section>
-    </View>
-  );
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            flex: 1,
+            padding: 10,
+          }}>
+          <Text style={styles.headerText}>{section.title}</Text>
+          {isActive ? (
+            <View
+              style={{justifyContent: 'space-between', alignItems: 'center'}}>
+              <Text style={{fontSize: 10, fontWeight: '600'}}>Read Less</Text>
+
+              <FontAwesome5 name="chevron-up" size={14} />
+            </View>
+          ) : (
+            <View
+              style={{justifyContent: 'space-between', alignItems: 'center'}}>
+              <Text style={{fontSize: 10, fontWeight: '600'}}>2 min ago</Text>
+
+              <FontAwesome5 name="chevron-down" size={14} />
+            </View>
+          )}
+        </View>
+      </Animatable.View>
+    );
+  };
+
+  renderContent(section, _, isActive) {
+    return (
+      <Animatable.View duration={100} style={{paddingHorizontal: 10}}>
+        <Text animation={isActive ? 'bounceIn' : undefined}>
+          {section.content}
+        </Text>
+      </Animatable.View>
+    );
+  }
+
+  render() {
+    const {activeSections} = this.state;
+
+    return (
+      <View style={styles.container}>
+        <ScrollView>
+          <Accordion
+            activeSections={activeSections}
+            sections={CONTENT}
+            touchableComponent={TouchableOpacity}
+            renderHeader={this.renderHeader}
+            renderContent={this.renderContent}
+            duration={400}
+            onChange={this.setSections}
+            renderAsFlatList={false}
+            containerStyle={styles.cardsWrapper}
+            sectionContainerStyle={styles.card}
+          />
+        </ScrollView>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: 10,
-    paddingBottom: 10,
-    borderBottomColor: '#333',
-  },
-
-  switchTabsView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 40,
-    marginTop: 20,
-  },
-
-  switchText: {
-    fontSize: 14,
-    color: 'black',
-    paddingHorizontal: 9,
-    paddingVertical: 2,
-    fontFamily: 'Poppins',
-    fontWeight: '600',
-    height: 21,
-  },
-
   container: {
     flex: 1,
     backgroundColor: '#E5E5E5',
   },
 
   header: {
-    height: 69,
     backgroundColor: 'white',
     flexDirection: 'row',
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: '500',
   },
 
   cardsWrapper: {
@@ -105,24 +155,21 @@ const styles = StyleSheet.create({
   },
   card: {
     marginVertical: 10,
-    flexDirection: 'row',
     shadowColor: '#999',
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 5,
-  },
-  cardInfo: {
+    backgroundColor: 'white',
     flex: 2,
     padding: 10,
     borderColor: '#ccc',
     borderWidth: 1,
     borderLeftWidth: 0,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    backgroundColor: 'white',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
     paddingHorizontal: 10,
   },
 });
