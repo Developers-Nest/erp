@@ -3,7 +3,7 @@ import { StyleSheet,View,Text,Image,Button,Alert,Animate,Dimensions,StatusBar, T
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Appbar,Searchbar} from 'react-native-paper';
-export default function Events()
+export default function EventsScreen()
 {
 
     const [searchQuery, setSearchQuery] = React.useState('');
