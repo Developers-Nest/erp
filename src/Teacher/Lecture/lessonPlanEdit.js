@@ -21,7 +21,7 @@ export default function LessonPlanAdd()
         </View >
         <View style={styles.Drop}>
     
-        <List.Section style={{width:125,paddingLeft:10}}>
+        <List.Section style={{width:120}}>
       <List.Accordion
         title="Class"
       style={{borderTopRightRadius:5,borderBottomRightRadius:5,borderBottomLeftRadius:5,borderWidth:0.5,borderTopStartRadius:5,backgroundColor:'white'}}>
@@ -31,7 +31,7 @@ export default function LessonPlanAdd()
         </List.Section>
        
 
-        <List.Section  style={{width:125,paddingLeft:10}}>
+        <List.Section  style={{width:120}}>
       <List.Accordion
         title="Batch"
       style={{borderTopRightRadius:5,borderBottomRightRadius:5,borderBottomLeftRadius:5,borderWidth:0.5,borderTopStartRadius:5,backgroundColor:'white'}}>
@@ -39,7 +39,7 @@ export default function LessonPlanAdd()
         <List.Item title="Second item" />
         </List.Accordion>
         </List.Section>
-        <List.Section style={{width:125,paddingLeft:10}} >
+        <List.Section style={{width:120}} >
       <List.Accordion
         title="Subject"
       style={{borderTopRightRadius:5,borderBottomRightRadius:5,borderBottomLeftRadius:5,borderWidth:0.5,borderTopStartRadius:5,backgroundColor:'white'}}>
@@ -106,6 +106,7 @@ export default function LessonPlanAdd()
     Drop: {
         marginTop:5,
         flexDirection:'row',
+        justifyContent:'space-evenly'
      
     },
     card: {
