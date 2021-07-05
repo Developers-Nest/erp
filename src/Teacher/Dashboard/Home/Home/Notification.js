@@ -2,10 +2,6 @@ import * as React from 'react';
 import {
   StyleSheet,
   View,
-  TextInput,
-  ScrollView,
-  ImageBackground,
-  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
@@ -13,13 +9,7 @@ import {
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Text, List} from 'react-native-paper';
-import {ScreenStackHeaderRightView} from 'react-native-screens';
-
-import {Switch} from 'react-native';
-import * as Animatable from 'react-native-animatable';
-import Collapsible from 'react-native-collapsible';
-import Accordion from 'react-native-collapsible/Accordion';
+import {Text} from 'react-native-paper';
 
 import Notifications from './Notification/Notifications';
 import Circulars from './Notification/Circulars';
@@ -36,14 +26,6 @@ export default function Notify({navigation}) {
     } else {
       setActiveTab('Circular');
     }
-  }
-
-  function Notification() {
-    return <Notifications />;
-  }
-
-  function Circular() {
-    return <Circulars />;
   }
 
   return (
@@ -100,7 +82,7 @@ export default function Notify({navigation}) {
             <Text style={styles.switchText}>Circular</Text>
           </TouchableOpacity>
         </View>
-        {activeTab === 'Circular' ? <Circular /> : <Notification />}
+        {activeTab === 'Circular' ? <Circulars /> : <Notifications />}
       </View>
     </TouchableWithoutFeedback>
   );

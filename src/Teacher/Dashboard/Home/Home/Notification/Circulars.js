@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import {
-  Switch,
   ScrollView,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
 } from 'react-native';
+
 import * as Animatable from 'react-native-animatable';
-import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -48,25 +47,18 @@ export default class App extends Component {
         duration={400}
         style={styles.header}
         transition="backgroundColor">
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            flex: 1,
-          }}>
-          <Text style={styles.headerText}>{section.title}</Text>
-          {isActive ? (
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <FontAwesome5 name="chevron-up" size={14} />
-              <Text style={{fontSize: 10, fontWeight: '600'}}>Read Less</Text>
-            </View>
-          ) : (
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
-              <FontAwesome5 name="chevron-down" size={14} />
-              <Text style={{fontSize: 10, fontWeight: '600'}}>Read More</Text>
-            </View>
-          )}
-        </View>
+        <Text style={styles.headerText}>{section.title}</Text>
+        {isActive ? (
+          <View style={styles.collapseIconContainer}>
+            <FontAwesome5 name="chevron-up" size={14} />
+            <Text style={styles.collapseIconText}>Read Less</Text>
+          </View>
+        ) : (
+          <View style={styles.collapseIconContainer}>
+            <FontAwesome5 name="chevron-down" size={14} />
+            <Text style={styles.collapseIconText}>Read More</Text>
+          </View>
+        )}
       </Animatable.View>
     );
   };
@@ -120,6 +112,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    flex: 1,
   },
   headerText: {
     textAlign: 'center',
@@ -150,5 +144,13 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     paddingHorizontal: 10,
+  },
+  collapseIconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  collapseIconText: {
+    fontSize: 10,
+    fontWeight: '600',
   },
 });
