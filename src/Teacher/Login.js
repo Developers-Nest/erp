@@ -69,15 +69,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
+    fontSize: 16,
     minWidth: 171,
   },
   text_input1: {
     paddingHorizontal: 20,
-    padding: 10,
-    margin: 0,
+    height: 50,
+    fontSize: 16,
     borderRadius: 10,
     backgroundColor: 'rgba(249, 249, 249, 1)',
-    height: 50,
     width: 171,
   },
   textinput_search: {
