@@ -1,8 +1,8 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, TextInput} from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {Button, Searchbar, IconButton, TextInput} from 'react-native-paper';
+import {Button, Searchbar, IconButton} from 'react-native-paper';
 
 export default function App({navigation}) {
   return (
@@ -12,10 +12,10 @@ export default function App({navigation}) {
         style={styles.linearGradient}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}>
-        <View style={styles.text_search}>
+        <View style={styles.textinput_search}>
           <TextInput
             style={styles.text_input1}
-            label="Institution Code"
+            placeholder="Institution Code"
             mode="outlined"
           />
           <IconButton
@@ -29,14 +29,21 @@ export default function App({navigation}) {
 
         <TextInput
           style={styles.text_input}
-          label="Email or Username"
+          placeholder="Email or Username"
           mode="outlined"
         />
-        <TextInput style={styles.text_input} label="Password" mode="outlined" />
+        <TextInput
+          style={styles.text_input}
+          placeholder="Password"
+          mode="outlined"
+          secureTextEntry={true}
+        />
         <Button
           style={styles.button}
+          onPress={() => navigation.navigate('Teacher Dashboard')}
           labelStyle={{color: 'white'}}
-          onPress={() => navigation.navigate('Teacher Dashboard')}>
+          uppercase={false}
+          mode="contained">
           Login
         </Button>
       </LinearGradient>
@@ -56,33 +63,35 @@ const styles = StyleSheet.create({
     padding: 40,
   },
   text_input: {
-    padding: 0,
-    margin: 0,
+    padding: 10,
+    paddingHorizontal: 20,
+    marginVertical: 10,
     borderRadius: 10,
-    overflow: 'hidden',
     backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     minWidth: 171,
   },
   text_input1: {
-    padding: 0,
+    paddingHorizontal: 20,
+    padding: 10,
     margin: 0,
     borderRadius: 10,
-    overflow: 'hidden',
     backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     width: 171,
   },
-  text_search: {
+  textinput_search: {
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
   search_icon: {padding: 0, margin: 0, alignSelf: 'flex-end'},
   button: {
     backgroundColor: 'rgba(80, 80, 105, 1)',
-    width: 118,
-    height: 50,
     alignSelf: 'flex-end',
     marginTop: 10,
+    color: 'white',
+    padding: 7,
+    paddingHorizontal: 10,
+    borderRadius: 15,
   },
 });
