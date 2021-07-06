@@ -86,9 +86,9 @@ const Home = ({navigation}) => {
           value={searchQuery}
         />
         <View style={styles.classes}>
-          {[1, 2, 3].map(() => {
+          {[1, 2, 3].map((element, index) => {
             return (
-              <View style={styles.infoBox}>
+              <View style={styles.infoBox} key={index}>
                 <Text>{'Class'}</Text>
                 <Text>{'09:30-10:30'}</Text>
                 <Text>{'Batch'}</Text>
@@ -106,9 +106,9 @@ const Home = ({navigation}) => {
           </View>
         </View>
         <ScrollView style={styles.classes} horizontal={true}>
-          {[1, 2, 3, 4].map(() => {
+          {[1, 2, 3, 4].map((element, index) => {
             return (
-              <View style={styles.infoBox}>
+              <View style={styles.infoBox} key={index}>
                 <Text>{'Class'}</Text>
                 <Text>{'09:30-10:30'}</Text>
                 <Text>{'Batch'}</Text>
