@@ -170,22 +170,24 @@ export default function ExamReport({navigation}) {
 
 const ExamReport1 = ({navigation}) => {
   return (
-    <ScrollView>
-      <Text style={{paddingVertical: 10, fontSize: 16}}>This Year</Text>
-      <Image
-        style={styles.image}
-        source={{
-          uri: 'https://images.unsplash.com/photo-1514519273132-6a1abd48302c?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YW5pbWF0aW9uJTIwY2xvdWR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60',
-        }}
-      />
-      <Text style={{paddingVertical: 10, fontSize: 16}}>Previous Year</Text>
-      <Image
-        style={styles.image}
-        source={{
-          uri: 'https://images.unsplash.com/photo-1514519273132-6a1abd48302c?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YW5pbWF0aW9uJTIwY2xvdWR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60',
-        }}
-      />
-    </ScrollView>
+    <View>
+      <ScrollView>
+        <Text style={{paddingVertical: 10, fontSize: 16}}>This Year</Text>
+        <Image
+          style={styles.image}
+          source={{
+            uri: 'https://images.unsplash.com/photo-1496450681664-3df85efbd29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80',
+          }}
+        />
+        <Text style={{paddingVertical: 10, fontSize: 16}}>Previous Year</Text>
+        <Image
+          style={styles.image}
+          source={{
+            uri: 'https://images.unsplash.com/photo-1496450681664-3df85efbd29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80',
+          }}
+        />
+      </ScrollView>
+    </View>
   );
 };
 
@@ -285,9 +287,8 @@ const styles = StyleSheet.create({
   },
   accordion: {margin: 0, padding: 0, backgroundColor: 'white'},
   image: {
-    minWidth: '100%',
-    resizeMode: 'cover',
-    height: 300,
+    minWidth: 100,
+    height: 200,
   },
   text_input: {
     paddingHorizontal: 20,

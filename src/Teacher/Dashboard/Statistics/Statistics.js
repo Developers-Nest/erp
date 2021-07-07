@@ -18,7 +18,7 @@ const Statistics = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <FontAwesome5
             name="chevron-left"
             style={{
@@ -70,7 +70,7 @@ const Statistics = ({navigation}) => {
             <Image
               style={styles.image}
               source={{
-                uri: 'https://images.unsplash.com/photo-1514519273132-6a1abd48302c?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YW5pbWF0aW9uJTIwY2xvdWR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60',
+                uri: 'https://images.unsplash.com/photo-1496450681664-3df85efbd29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80',
               }}
             />
           </TouchableOpacity>
@@ -82,7 +82,7 @@ const Statistics = ({navigation}) => {
             <Image
               style={styles.image}
               source={{
-                uri: 'https://images.unsplash.com/photo-1514519273132-6a1abd48302c?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YW5pbWF0aW9uJTIwY2xvdWR8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60',
+                uri: 'https://images.unsplash.com/photo-1496450681664-3df85efbd29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80',
               }}
             />
           </TouchableOpacity>
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   image: {
     minWidth: '100%',
     resizeMode: 'cover',
-    height: 300,
+    height: 250,
   },
   heading: {
     padding: 10,
