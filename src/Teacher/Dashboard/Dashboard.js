@@ -1,8 +1,10 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 
 import {Button, Appbar} from 'react-native-paper';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 import Home from './Home/Home';
 import Message from './Message/Message';
@@ -13,13 +15,111 @@ import Classes from './Classes/Classes';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const getTabBarVisibility = route => {
+    const routeName = getFocusedRouteNameFromRoute(route);
+    if (routeName === 'Home' || 'Statistics') {
+      return true;
+    }
+    return false;
+  };
+
   return (
-    <Tab.Navigator initialRouteName="Home">
-      <Tab.Screen name="Classes" component={Classes} />
-      <Tab.Screen name="Statistics" component={Statistics} />
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Message" component={Message} />
-      <Tab.Screen name="Profile" component={Profile} />
+    <Tab.Navigator
+      initialRouteName="Home"
+      tabBarOptions={{
+        style: {
+          paddingTop: 5,
+
+          position: 'absolute',
+          height: 70,
+        },
+        showLabel: false,
+      }}>
+      <Tab.Screen
+        name="Classes"
+        component={Classes}
+        options={{
+          tabBarLabel: 'Classes',
+          tabBarIcon: ({color, size, focused}) => (
+            <View style={{alignItems: 'center'}}>
+              <MaterialCommunityIcons name="video" color={color} size={size} />
+              {focused ? (
+                <Text style={{color: color, fontSize: 12}}>Classes</Text>
+              ) : null}
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Statistics"
+        component={Statistics}
+        options={({route}) => ({
+          tabBarVisible: getTabBarVisibility(route),
+          tabBarIcon: ({color, size, focused}) => (
+            <View style={{alignItems: 'center'}}>
+              <MaterialCommunityIcons
+                name="chart-bar"
+                color={color}
+                size={size}
+              />
+              {focused ? (
+                <Text style={{color: color, fontSize: 12}}>Statistics</Text>
+              ) : null}
+            </View>
+          ),
+        })}
+      />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        options={({route}) => ({
+          tabBarVisible: getTabBarVisibility(route),
+          tabBarIcon: ({color, size, focused}) => (
+            <View style={{alignItems: 'center'}}>
+              <MaterialCommunityIcons name="home" color={color} size={size} />
+              {focused ? (
+                <Text style={{color: color, fontSize: 12}}>Home</Text>
+              ) : null}
+            </View>
+          ),
+        })}
+      />
+      <Tab.Screen
+        name="Message"
+        component={Message}
+        options={{
+          tabBarIcon: ({color, size, focused}) => (
+            <View style={{alignItems: 'center'}}>
+              <MaterialCommunityIcons
+                name="chat-processing-outline"
+                color={color}
+                size={size}
+              />
+              {focused ? (
+                <Text style={{color: color, fontSize: 12}}>Message</Text>
+              ) : null}
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: ({color, size, focused}) => (
+            <View style={{alignItems: 'center'}}>
+              <MaterialCommunityIcons
+                name="account"
+                color={color}
+                size={size}
+              />
+              {focused ? (
+                <Text style={{color: color, fontSize: 12}}>Profile</Text>
+              ) : null}
+            </View>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }

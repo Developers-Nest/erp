@@ -7,12 +7,15 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-import {Text, Searchbar, Appbar} from 'react-native-paper';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import * as Animatable from 'react-native-animatable';
+import {Text, Searchbar, Card, Button} from 'react-native-paper';
+import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Collapsible from 'react-native-collapsible';
 
 //drawer navigation
 import Assignment from './Assignment/Assignment';
@@ -28,15 +31,19 @@ import Notification from './Home/Notification';
 
 const Home = ({navigation}) => {
   const [searchQuery, setSearchQuery] = React.useState('');
-
+  const [collapsed, setCollapsed] = React.useState(true);
+  const toggleExpanded = () => {
+    setCollapsed(!collapsed);
+  };
   const onChangeSearch = query => setSearchQuery(query);
-
-  // const state = {drawer: 1};
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.toggleDrawer();
+          }}>
           <FontAwesome5
             name="book"
             style={{
@@ -48,139 +55,148 @@ const Home = ({navigation}) => {
             }}
           />
         </TouchableOpacity>
-        <Text
+        <View
           style={{
-            fontStyle: 'normal',
-            fontSize: 28,
-            fontFamily: 'NunitoSans-Light',
-            fontWeight: '600',
-            alignSelf: 'center',
-            paddingLeft: 30,
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}>
-          Hi Youuu
-        </Text>
-        <View style={{flex: 1, marginLeft: 20}}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Notification');
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontFamily: 'NunitoSans-Light',
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
             }}>
-            <MaterialCommunityIcons
-              name="bell"
-              style={{
-                alignSelf: 'center',
-                fontSize: 30,
-                color: 'black',
-                paddingLeft: 20,
-                paddingTop: 20,
-              }}
-            />
-          </TouchableOpacity>
-          {/* <Text style={{paddingLeft: 80}}>Add event</Text> */}
+            Hi Youuu
+          </Text>
+          <View>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Notification');
+              }}>
+              <MaterialCommunityIcons
+                name="bell"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 30,
+                  color: 'black',
+                  padding: 20,
+                }}
+              />
+            </TouchableOpacity>
+            {/* <Text style={{paddingLeft: 80}}>Add event</Text> */}
+          </View>
         </View>
       </View>
-      <SafeAreaView style={styles.main}>
+      <ScrollView style={styles.main}>
         <Searchbar
           style={styles.search}
-          placeholder="Search"
+          placeholder="Live class, fees and more"
           onChangeText={onChangeSearch}
           value={searchQuery}
         />
+        <View style={{marginTop: 30}}>
+          <Text>Upcoming Classes</Text>
+        </View>
         <View style={styles.classes}>
           {[1, 2, 3].map((element, index) => {
             return (
-              <View style={styles.infoBox} key={index}>
-                <Text>{'Class'}</Text>
-                <Text>{'09:30-10:30'}</Text>
+              <View style={styles.card} key={index}>
+                <Text style={{fontSize: 20}}>{'Class'}</Text>
+                <Text
+                  style={{fontSize: 12, paddingVertical: 5, color: '#5177E7'}}>
+                  {'09:30-10:30'}
+                </Text>
                 <Text>{'Batch'}</Text>
               </View>
             );
           })}
         </View>
-        <View>
-          <View style={styles.contentBox}>
+        <View style={{marginTop: 30}}>
+          <Text>New Circular</Text>
+        </View>
+
+        <TouchableOpacity onPress={toggleExpanded}>
+          <Animatable.View
+            duration={400}
+            style={styles.collapsable_header}
+            transition="backgroundColor">
             <Text>Title</Text>
-            <Text>
+            {!collapsed ? (
+              <View style={styles.collapseIconContainer}>
+                <FontAwesome5 name="chevron-up" size={14} />
+                <Text style={styles.collapseIconText}>Read Less</Text>
+              </View>
+            ) : (
+              <View style={styles.collapseIconContainer}>
+                <FontAwesome5 name="chevron-down" size={14} />
+                <Text style={styles.collapseIconText}>Read More</Text>
+              </View>
+            )}
+          </Animatable.View>
+        </TouchableOpacity>
+        <Collapsible collapsed={collapsed} align="center">
+          <Animatable.View
+            duration={100}
+            style={styles.content}
+            transition="backgroundColor">
+            <Text animation="bounceIn">
               Exams will be conducted via online mode. All the best. It is
               requested from the students to maintain the.
             </Text>
-          </View>
-        </View>
-        <ScrollView style={styles.classes} horizontal={true}>
-          {[1, 2, 3, 4].map((element, index) => {
-            return (
-              <View style={styles.infoBox} key={index}>
-                <Text>{'Class'}</Text>
-                <Text>{'09:30-10:30'}</Text>
-                <Text>{'Batch'}</Text>
-              </View>
-            );
-          })}
-        </ScrollView>
-      </SafeAreaView>
+          </Animatable.View>
+        </Collapsible>
+        <SafeAreaView>
+          <ScrollView
+            horizontal={true}
+            contentContainerStyle={{
+              flexGrow: 1,
+              justifyContent: 'space-between',
+            }}>
+            {[1, 2, 3, 4].map((element, index) => {
+              return (
+                <View key={index} style={{marginRight: 20}}>
+                  <Text
+                    style={{
+                      marginTop: 30,
+                      alignSelf: 'center',
+                      marginBottom: 0,
+                    }}>
+                    {'Assignment'}
+                  </Text>
+                  <View
+                    style={{
+                      ...styles.card,
+                      paddingVertical: 30,
+                      marginTop: 5,
+                      alignItems: 'flex-start',
+                    }}>
+                    <Text
+                      style={{color: 'rgba(25, 40, 57, 0.7)', fontSize: 20}}>
+                      {'Subject'}
+                    </Text>
+                    <Text style={{fontSize: 12}}>{'Title'}</Text>
+                    <Text
+                      style={{
+                        color: 'rgba(176, 67, 5, 0.75)',
+                        fontSize: 12,
+                        paddingTop: 10,
+                      }}>
+                      {'Due:21 May,2021'}
+                    </Text>
+                  </View>
+                </View>
+              );
+            })}
+          </ScrollView>
+        </SafeAreaView>
+      </ScrollView>
     </View>
   );
 };
-
-export function Default() {
-  const [searchQuery, setSearchQuery] = React.useState('');
-
-  const onChangeSearch = query => setSearchQuery(query);
-  return (
-    <SafeAreaView style={styles.main}>
-      <Appbar.Header style={styles.header}>
-        <Appbar.BackAction
-        //  onPress={_goBack}
-        />
-        <Appbar.Content title="Title" subtitle="Subtitle" />
-        <Appbar.Action
-          icon="magnify"
-          //onPress={_handleSearch}
-        />
-        <Appbar.Action
-          icon="dots-vertical"
-          // onPress={_handleMore}
-        />
-      </Appbar.Header>
-      <Searchbar
-        style={styles.search}
-        placeholder="Search"
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-      />
-      <View style={styles.classes}>
-        {[1, 2, 3].map(() => {
-          return (
-            <View style={styles.infoBox}>
-              <Text>{'Class'}</Text>
-              <Text>{'09:30-10:30'}</Text>
-              <Text>{'Batch'}</Text>
-            </View>
-          );
-        })}
-      </View>
-      <View>
-        <View style={styles.contentBox}>
-          <Text>Title</Text>
-          <Text>
-            Exams will be conducted via online mode. All the best. It is
-            requested from the students to maintain the.
-          </Text>
-        </View>
-      </View>
-      <ScrollView style={styles.classes} horizontal={true}>
-        {[1, 2, 3, 4].map(() => {
-          return (
-            <View style={styles.infoBox}>
-              <Text>{'Class'}</Text>
-              <Text>{'09:30-10:30'}</Text>
-              <Text>{'Batch'}</Text>
-            </View>
-          );
-        })}
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
 
 const Stack = createStackNavigator();
 
@@ -196,6 +212,19 @@ const Home_Route = () => {
 const Drawer = createDrawerNavigator();
 
 export default function Route() {
+  const getTabBarVisibility = route => {
+    const routeName = getFocusedRouteNameFromRoute(route);
+    if (
+      routeName === 'Home' ||
+      routeName === 'Statistics' ||
+      routeName === 'Classes' ||
+      routeName === 'Profile' ||
+      routeName === 'Message'
+    ) {
+      return true;
+    }
+    return false;
+  };
   return (
     <Drawer.Navigator initialRouteName="Home">
       <Drawer.Screen name="Home" component={Home_Route} />
@@ -210,65 +239,6 @@ export default function Route() {
   );
 }
 
-// const styles = StyleSheet.create({
-//   main: {
-//     backgroundColor: '#F9F9F9',
-//     height: '100%',
-//   },
-//   classes: {
-//     flexDirection: 'row',
-//     'justify-content': 'center',
-//   },
-//   infoBox: {
-//     position: 'relative',
-//     width: '70px',
-//     height: '70px',
-//     marginTop: '20px',
-//     margin: '5px',
-//     border: '0.1px solid #00499F',
-//     boxShadow: '4px 4px 24px -3px rgba(0, 0, 0, 0.08)',
-//     borderRadius: '8px',
-//     fontSize: 2,
-//     padding: 15,
-//     zoom: 0.2,
-//     alignItems: 'center',
-//   },
-
-//   contentBox: {
-//     position: 'relative',
-//     width: '100%',
-//     height: '70px',
-//     marginTop: '20px',
-//     margin: '5px',
-//     border: '0.1px solid #00499F',
-//     boxShadow: '4px 4px 24px -3px rgba(0, 0, 0, 0.08)',
-//     borderRadius: '8px',
-//     padding: 15,
-//     fontSize: 10,
-//   },
-//   miscBox: {
-//     position: 'relative',
-//     width: '70px',
-//     height: '70px',
-//     top: '100px',
-//     margin: '5px',
-//     border: '0.1px solid #00499F',
-//     boxShadow: '4px 4px 24px -3px rgba(0, 0, 0, 0.08)',
-//     borderRadius: '8px',
-//     fontSize: 10,
-//     backgroundColor: 'red',
-//   },
-//   header: {
-//     marginTop: 40,
-//     backgroundColor: 'transparent',
-//   },
-//   search: {
-//     marginTop: 20,
-//     border: '0.2px solid #58636D',
-//     boxShadow: '4px 4px 24px -3px #00000014',
-//   },
-// });
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -282,8 +252,6 @@ const styles = StyleSheet.create({
   searchbar: {
     width: '100%',
     alignItems: 'center',
-    // justifyContent: 'center',
-    paddingTop: 20,
     paddingLeft: 20,
     paddingRight: 20,
   },
@@ -293,28 +261,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   card: {
-    height: 150,
-    marginVertical: 10,
-    flexDirection: 'row',
     shadowColor: '#999',
+    marginTop: 10,
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 5,
-  },
-  cardInfo: {
-    flex: 2,
-    padding: 10,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 2,
+    padding: 15,
+    borderRadius: 8,
     backgroundColor: 'white',
-    paddingHorizontal: 10,
   },
+
   cardDetails: {
     fontSize: 15,
     color: '#444',
@@ -338,60 +298,74 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: 'black',
   },
-  // main: {
-  //   backgroundColor: '#F9F9F9',
-  //   height: '100%',
-  // },
-  // classes: {
-  //   flexDirection: 'row',
-  //   // 'justify-content': 'center',
-  // },
-  // infoBox: {
-  //   position: 'relative',
-  //   width: '70px',
-  //   height: '70px',
-  //   marginTop: '20px',
-  //   margin: '5px',
-  //   border: '0.1px solid #00499F',
-  //   boxShadow: '4px 4px 24px -3px rgba(0, 0, 0, 0.08)',
-  //   borderRadius: '8px',
-  //   fontSize: 2,
-  //   padding: 15,
-  //   zoom: 0.2,
-  //   alignItems: 'center',
-  // },
+  main: {
+    flex: 1,
+    paddingHorizontal: 30,
+  },
+  classes: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
+  infoBox: {},
 
-  // contentBox: {
-  //   position: 'relative',
-  //   width: '100%',
-  //   height: '70px',
-  //   marginTop: '20px',
-  //   margin: '5px',
-  //   border: '0.1px solid #00499F',
-  //   boxShadow: '4px 4px 24px -3px rgba(0, 0, 0, 0.08)',
-  //   borderRadius: '8px',
-  //   padding: 15,
-  //   fontSize: 10,
-  // },
-  // miscBox: {
-  //   position: 'relative',
-  //   width: '70px',
-  //   height: '70px',
-  //   top: '100px',
-  //   margin: '5px',
-  //   border: '0.1px solid #00499F',
-  //   boxShadow: '4px 4px 24px -3px rgba(0, 0, 0, 0.08)',
-  //   borderRadius: '8px',
-  //   fontSize: 10,
-  //   backgroundColor: 'red',
-  // },
-  // header: {
-  //   marginTop: 40,
-  //   backgroundColor: 'transparent',
-  // },
-  // search: {
-  //   marginTop: 20,
-  //   border: '0.2px solid #58636D',
-  //   boxShadow: '4px 4px 24px -3px #00000014',
-  // },
+  contentBox: {
+    position: 'relative',
+    width: '100%',
+    height: 70,
+    marginTop: 20,
+    margin: 5,
+    borderWidth: 0.1,
+    borderColor: '#00499F',
+    borderRadius: 8,
+    padding: 15,
+    fontSize: 10,
+  },
+  miscBox: {
+    position: 'relative',
+    width: 70,
+    height: 70,
+    top: 100,
+    margin: 5,
+    borderWidth: 0.1,
+    borderColor: '#00499F',
+    borderRadius: 8,
+    fontSize: 10,
+    backgroundColor: 'red',
+  },
+
+  search: {
+    marginTop: 20,
+    borderWidth: 0.2,
+    borderColor: '#58636D',
+  },
+  collapsable_header: {
+    marginTop: 10,
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    padding: 10,
+  },
+  collapse_headerText: {
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '400',
+    padding: 10,
+  },
+
+  collapseIconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  collapseIconText: {
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  content: {
+    padding: 10,
+    backgroundColor: 'white',
+    borderBottomEndRadius: 8,
+  },
 });

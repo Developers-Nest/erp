@@ -47,7 +47,7 @@ const Statistics = ({navigation}) => {
             }}>
             Statistics
           </Text>
-          <View>
+          {/* <View>
             <TouchableOpacity>
               <MaterialCommunityIcons
                 name="bell"
@@ -60,7 +60,7 @@ const Statistics = ({navigation}) => {
                 }}
               />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </View>
       <ScrollView>
