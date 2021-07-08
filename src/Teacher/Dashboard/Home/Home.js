@@ -16,6 +16,7 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Collapsible from 'react-native-collapsible';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 //drawer navigation
 import Assignment from './Assignment/Assignment';
@@ -39,58 +40,6 @@ const Home = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.toggleDrawer();
-          }}>
-          <FontAwesome5
-            name="book"
-            style={{
-              alignSelf: 'center',
-              fontSize: 25,
-              color: 'black',
-              paddingLeft: 20,
-              paddingTop: 20,
-            }}
-          />
-        </TouchableOpacity>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontSize: 28,
-              fontFamily: 'NunitoSans-Light',
-              fontWeight: '600',
-              alignSelf: 'center',
-              paddingLeft: 30,
-            }}>
-            Hi Youuu
-          </Text>
-          <View>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Notification');
-              }}>
-              <MaterialCommunityIcons
-                name="bell"
-                style={{
-                  alignSelf: 'center',
-                  fontSize: 30,
-                  color: 'black',
-                  padding: 20,
-                }}
-              />
-            </TouchableOpacity>
-            {/* <Text style={{paddingLeft: 80}}>Add event</Text> */}
-          </View>
-        </View>
-      </View>
       <ScrollView style={styles.main}>
         <Searchbar
           style={styles.search}
@@ -202,29 +151,78 @@ const Stack = createStackNavigator();
 
 const Home_Route = () => {
   return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Notification" component={Notification} />
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={({navigation, route}) => ({
+          headerTitle: 'Hi Youuu',
+          headerStyle: {
+            height: 70,
+          },
+          headerTitleStyle: {
+            fontSize: 25,
+          },
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Notification');
+              }}>
+              <FontAwesome5
+                name="bell"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 25,
+                  color: 'black',
+                  paddingRight: 20,
+                }}
+              />
+            </TouchableOpacity>
+          ),
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.toggleDrawer();
+              }}>
+              <FontAwesome5
+                name="book"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 25,
+                  color: 'black',
+                  paddingLeft: 20,
+                }}
+              />
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={Notification}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
 
 const Drawer = createDrawerNavigator();
 
+const getTabBarVisibility = route => {
+  const routeName = getFocusedRouteNameFromRoute(route);
+  if (
+    routeName === 'Home' ||
+    routeName === 'Statistics' ||
+    routeName === 'Classes' ||
+    routeName === 'Profile' ||
+    routeName === 'Message'
+  ) {
+    return true;
+  }
+  return false;
+};
+
 export default function Route() {
-  const getTabBarVisibility = route => {
-    const routeName = getFocusedRouteNameFromRoute(route);
-    if (
-      routeName === 'Home' ||
-      routeName === 'Statistics' ||
-      routeName === 'Classes' ||
-      routeName === 'Profile' ||
-      routeName === 'Message'
-    ) {
-      return true;
-    }
-    return false;
-  };
   return (
     <Drawer.Navigator initialRouteName="Home">
       <Drawer.Screen name="Home" component={Home_Route} />

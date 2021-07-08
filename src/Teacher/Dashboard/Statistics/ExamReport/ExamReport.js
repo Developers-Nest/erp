@@ -11,7 +11,7 @@ import {
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {Dropdown} from 'react-native-material-dropdown-v2-fixed';
+// import {Dropdown} from 'react-native-material-dropdown-v2-fixed';
 
 export default function ExamReport({navigation}) {
   const [open, setOpen] = useState(null);
@@ -44,17 +44,17 @@ export default function ExamReport({navigation}) {
     {label: 'Subject2', value: 'Subject2'},
     {label: 'Subject3', value: 'Subject3'},
   ]);
-  let data = [
-    {
-      value: 'Banana',
-    },
-    {
-      value: 'Mango',
-    },
-    {
-      value: 'Pear',
-    },
-  ];
+  // let data = [
+  //   {
+  //     value: 'Banana',
+  //   },
+  //   {
+  //     value: 'Mango',
+  //   },
+  //   {
+  //     value: 'Pear',
+  //   },
+  // ];
   return (
     <View style={styles.container}>
       <View style={styles.header}>

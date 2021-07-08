@@ -13,16 +13,25 @@ import Statistics from './Statistics/Statistics';
 import Classes from './Classes/Classes';
 
 const Tab = createBottomTabNavigator();
+const getTabBarVisibility = route => {
+  // const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home Route';
+  // if (
+  //   routeName !== 'Home' &&
+  //   routeName !== 'Statistics' &&
+  //   routeName !== 'Classes' &&
+  //   routeName !== 'Profile' &&
+  //   routeName !== 'Message'
+  // ) {
+  //   // alert(routeName);
+
+  //   return false;
+  // }
+  // // alert(routeName);
+
+  return true;
+};
 
 export default function App() {
-  const getTabBarVisibility = route => {
-    const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === 'Home' || 'Statistics') {
-      return true;
-    }
-    return false;
-  };
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
