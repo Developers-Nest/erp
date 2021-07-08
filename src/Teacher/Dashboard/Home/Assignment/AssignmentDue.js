@@ -6,24 +6,32 @@
 // export default function App({navigation}) {
 //   return (
 //     <View>
-//       <Text>Books Screen Teacher</Text>
+//       <Text>Assignment Screen Teacher</Text>
 //     </View>
 //   );
 // }
 
 import * as React from 'react';
-import {TextInput} from 'react-native-paper';
+
+import Icon from 'react-native-vector-icons/AntDesign';
+// import AssignmentDueHeader from '../shared/assignmentsdueheader';
+// import HeaderAssignmentDue from '../../shared/headerassignmentdue';
 
 import {
   StyleSheet,
   Text,
   View,
+  TextInput,
   ScrollView,
+  ImageBackground,
+  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+//import HostelAllocation2 from "./hostelallocation2";
 
+//import { Dropdown} from 'sharingan-rn-modal-dropdown';
 import {
   event,
   onChange,
@@ -32,19 +40,20 @@ import {
   value,
 } from 'react-native-reanimated';
 import {Searchbar} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/AntDesign';
+// import HeaderAllocatedList from '../shared/headerallocatedlist';
+// import {AntDesign} from '@expo/vector-icons';
 
-export default function IssuedBooksScreen1() {
+export default function AssignmentsDue({navigation}) {
   const [activeTab, setActiveTab] = React.useState('Due');
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
   function switchTab() {
-    if (activeTab === 'Cleared') {
+    if (activeTab === 'Submitted') {
       setActiveTab('Due');
     } else {
-      setActiveTab('Cleared');
+      setActiveTab('Submitted');
     }
   }
   function Due() {
@@ -58,7 +67,7 @@ export default function IssuedBooksScreen1() {
           <View style={styles.section}>
             <View style={styles.details}>
               <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
+                <View style={styles.differentusers}>
                   <Text
                     style={{
                       fontWeight: 'normal',
@@ -69,23 +78,47 @@ export default function IssuedBooksScreen1() {
                     Title
                   </Text>
 
-                  <Text style={{fontSize: 10, color: '#505069'}}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 12, color: '#58626C'}}>
-                    Issued: 21May,2021
-                  </Text>
                   <View style={{flexDirection: 'row'}}>
-                    <Text style={{fontSize: 12, color: '#58636D'}}>
-                      {' '}
-                      Due: 21Sept,2021
-                    </Text>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Assignment Edit')}>
+                      <Text style={{fontSize: 12, color: '#211C5A'}}>Edit</Text>
+                      <Icon size={12} color="#211C5A" name="edit" />
+                    </TouchableOpacity>
                   </View>
+                </View>
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text style={{fontSize: 12, color: '#5177E7'}}>
+                    Course and Batch
+                  </Text>
+                  {/*                 
+                <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text style={{fontSize: 12, color: '#505069'}}>
+                    Exams will be conducted via online mode in the upcoming week
+                    and these are notes for it.So,go through them and study well
+                  </Text>
+
+                  {/* <Text style={styles.userstext}>Graded</Text> */}
                 </TouchableOpacity>
               </View>
+            </View>
+
+            <View style={styles.belowhr}>
+              <View style={{flexDirection: 'column'}}>
+                <Text style={{color: '#B04305', fontSize: 12}}>
+                  Due:21 May,2021
+                </Text>
+                <Text style={{color: '#58636D', fontSize: 12}}>
+                  Saved as Draft
+                </Text>
+              </View>
+              <Button
+                title="Send"
+                mode="contained"
+                color="#58636D"
+                //   labelStyle={{color:'white'}}
+              />
             </View>
           </View>
           <View style={styles.section}>
@@ -102,23 +135,89 @@ export default function IssuedBooksScreen1() {
                     Title
                   </Text>
 
-                  <Text style={{fontSize: 10, color: '#505069'}}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 12, color: '#58626C'}}>
-                    Issued: 21May,2021
-                  </Text>
                   <View style={{flexDirection: 'row'}}>
-                    <Text style={{fontSize: 12, color: '#58636D'}}>
-                      {' '}
-                      Due: 21Sept,2021
-                    </Text>
+                    <Text style={{fontSize: 12, color: '#211C5A'}}> Edit</Text>
+                    <Icon size={12} color="#211C5A" name="edit" />
                   </View>
                 </TouchableOpacity>
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text style={{fontSize: 12, color: '#5177E7'}}>
+                    Course and Batch
+                  </Text>
+                  {/*                 
+                <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text style={{fontSize: 12, color: '#505069'}}>
+                    Exams will be conducted via online mode in the upcoming week
+                    and these are notes for it.So,go through them and study well
+                  </Text>
+
+                  {/* <Text style={styles.userstext}>Graded</Text> */}
+                </TouchableOpacity>
               </View>
+            </View>
+
+            <View style={styles.belowhr}>
+              <View style={{flexDirection: 'column'}}>
+                <Text style={{color: '#B04305', fontSize: 12}}>
+                  Due:21 May,2021
+                </Text>
+                <Text style={{color: '#58636D', fontSize: 12}}>
+                  Saved as Draft
+                </Text>
+              </View>
+              <Button title="Send" mode="contained" color="#5177E7" />
+            </View>
+          </View>
+
+          <View style={styles.section}>
+            <View style={styles.details}>
+              <View style={styles.userinhostels}>
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text
+                    style={{
+                      fontWeight: 'normal',
+                      fontSize: 18,
+                      color: '#211C5A',
+                    }}>
+                    {' '}
+                    Title
+                  </Text>
+
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={{fontSize: 12, color: '#211C5A'}}> Edit</Text>
+                    <Icon size={12} color="#211C5A" name="edit" />
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text style={{fontSize: 12, color: '#5177E7'}}>
+                    Course and Batch
+                  </Text>
+                  {/*                 
+                <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text style={{fontSize: 12, color: '#505069'}}>
+                    Exams will be conducted via online mode in the upcoming week
+                    and these are notes for it.So,go through them and study well
+                  </Text>
+
+                  {/* <Text style={styles.userstext}>Graded</Text> */}
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.belowhr}>
+              <View style={{flexDirection: 'column'}}>
+                <Text style={{color: '#B04305', fontSize: 12}}>
+                  Due:21 May,2021
+                </Text>
+                <Text style={{color: '#58636D', fontSize: 12}}>
+                  Saved as Draft
+                </Text>
+              </View>
+              <Button title="Send" mode="contained" color="#5177E7" />
             </View>
           </View>
         </ScrollView>
@@ -126,7 +225,7 @@ export default function IssuedBooksScreen1() {
     );
   }
 
-  function Cleared() {
+  function Submitted() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
@@ -208,73 +307,28 @@ export default function IssuedBooksScreen1() {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => {}}>
-            <Icon
-              size={24}
-              color="white"
-              name="left"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                paddingLeft: 20,
-                paddingTop: 20,
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontSize: 28,
-              fontWeight: '600',
-              alignSelf: 'center',
-              paddingLeft: 30,
-              color: 'white',
-            }}>
-            Issued Books
-          </Text>
-        </View>
-
         <View
           style={{
             width: '90%',
             marginLeft: 25,
-            marginBottom: 20,
-            marginTop: 20,
+            marginBottom: 30,
+            marginTop: 30,
           }}>
-          {/* open search */}
-          <View
-            style={{
-              marginLeft: 0,
-            }}>
-            <View style={{marginTop: 10, ...styles.card}}>
-              <TextInput
-                right={<TextInput.Icon name="magnify" />}
-                theme={{
-                  colors: {
-                    primary: '#999',
-                    underlineColor: 'transparent',
-                    background: 'white',
-                  },
-                }}
-                placeholder="Enter book name or ID here"
-                outlineColor="transparent"
-                styles={{
-                  margin: 10,
-                  padding: 10,
-                  backgroundColor: 'white',
-                }}
-                mode="outline"
-              />
-            </View>
-          </View>
-          {/* close search */}
+          <Searchbar
+            placeholder="Enter subject or batch name"
+            // placeholderTextColor="black"
+            // onChangeText={this.updateSearch}
+            onChangeText={onChangeSearch}
+            value={searchQuery} //value={search}
+            //    style={styles.search}
+            containerStyle={{width: '60%', marginTop: 40, marginHorizontal: 70}}
+            //     //containerStyle={{backgroundColor:"#fff"}}
+          />
         </View>
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
-              borderBottomWidth: activeTab == 'Due' ? 2 : 0,
+              borderBottomWidth: activeTab == 'Due' ? 4 : 0,
               borderBottomColor: '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
@@ -286,17 +340,18 @@ export default function IssuedBooksScreen1() {
 
           <TouchableOpacity
             style={{
-              borderBottomWidth: activeTab == 'Cleared' ? 2 : 0,
+              borderBottomWidth: activeTab == 'Submitted' ? 4 : 0,
               borderBottomColor: '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => switchTab()}>
-            <Text style={styles.switchText}>Cleared</Text>
+            <Text style={styles.switchText}>Submitted</Text>
           </TouchableOpacity>
         </View>
-        {activeTab === 'Due' ? <Due /> : <Cleared />}
+
+        {activeTab === 'Due' ? <Due /> : <Submitted />}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -330,8 +385,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     marginTop: 10,
-    paddingBottom: 10,
+    paddingBottom: 0,
     borderBottomColor: '#333',
+    borderBottomWidth: 1,
   },
   userinhostels: {
     marginTop: 10,
@@ -339,6 +395,7 @@ const styles = StyleSheet.create({
   differentusers: {
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 2,
     justifyContent: 'space-between',
   },
   userstext: {
@@ -349,10 +406,11 @@ const styles = StyleSheet.create({
   belowhr: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 10,
     justifyContent: 'space-between',
     paddingBottom: 10,
     borderBottomColor: '#333',
+    //borderBottomWidth:1,
   },
   search: {
     backgroundColor: 'white',
@@ -373,29 +431,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#E5E5E5',
   },
-  card: {
-    shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
-    shadowRadius: 12,
-    elevation: 5,
-    backgroundColor: 'white',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
-    overflow: 'hidden',
-    justifyContent: 'center',
-    margin: 0,
-    padding: 0,
-    minWidth: '30%',
-  },
-  header: {
-    height: 65,
-    marginTop: -10,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
-    flexDirection: 'row',
-  },
+  //   header: {
+  //     height:65,
+  //     backgroundColor:'white',
+  //     flexDirection:'row',
+  //   }
 });
