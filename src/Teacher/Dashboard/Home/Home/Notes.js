@@ -4,16 +4,16 @@ import {Button} from 'react-native-paper';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import LoginScreen from './Login';
-import DashboardScreen from './Dashboard/Dashboard';
+import NotesAdd from './Notes/NotesAdd';
+import NotesEdit from './Notes/NotesEdit';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="Teacher Login" component={LoginScreen} />
-      <Stack.Screen name="Teacher Dashboard" component={DashboardScreen} />
+    <Stack.Navigator>
+      <Stack.Screen name="Add Notes" component={NotesAdd} />
+      <Stack.Screen name="Edit Notes" component={NotesEdit} />
     </Stack.Navigator>
   );
 }
