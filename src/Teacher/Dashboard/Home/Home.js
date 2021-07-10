@@ -26,9 +26,11 @@ import ContentLibrary from './Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
 import LessonPlan from './Lesson Plan/LessonPlan';
 import Transport from './Transport/Transport';
+import Subject from './Subject/Subject.js';
 
 //navigations from home screen
 import Notification from './Home/Notification';
+import Notes from './Home/Notes';
 
 const Home = ({navigation}) => {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -48,7 +50,9 @@ const Home = ({navigation}) => {
           value={searchQuery}
         />
         <View style={{marginTop: 30}}>
-          <Text>Upcoming Classes</Text>
+          <Text style={{fontFamily: 'NunitoSans-Regular'}}>
+            Upcoming Classes
+          </Text>
         </View>
         <View style={styles.classes}>
           {[1, 2, 3].map((element, index) => {
@@ -105,41 +109,38 @@ const Home = ({navigation}) => {
               flexGrow: 1,
               justifyContent: 'space-between',
             }}>
-            {[1, 2, 3, 4].map((element, index) => {
-              return (
-                <View key={index} style={{marginRight: 20}}>
-                  <Text
-                    style={{
-                      marginTop: 30,
-                      alignSelf: 'center',
-                      marginBottom: 0,
-                    }}>
-                    {'Assignment'}
-                  </Text>
-                  <View
-                    style={{
-                      ...styles.card,
-                      paddingVertical: 30,
-                      marginTop: 5,
-                      alignItems: 'flex-start',
-                    }}>
-                    <Text
-                      style={{color: 'rgba(25, 40, 57, 0.7)', fontSize: 20}}>
-                      {'Subject'}
-                    </Text>
-                    <Text style={{fontSize: 12}}>{'Title'}</Text>
-                    <Text
-                      style={{
-                        color: 'rgba(176, 67, 5, 0.75)',
-                        fontSize: 12,
-                        paddingTop: 10,
-                      }}>
-                      {'Due:21 May,2021'}
-                    </Text>
-                  </View>
-                </View>
-              );
-            })}
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Notes')}
+              style={{marginRight: 20}}>
+              <Text
+                style={{
+                  marginTop: 30,
+                  alignSelf: 'center',
+                  marginBottom: 0,
+                }}>
+                {'Assignment'}
+              </Text>
+              <View
+                style={{
+                  ...styles.card,
+                  paddingVertical: 30,
+                  marginTop: 5,
+                  alignItems: 'flex-start',
+                }}>
+                <Text style={{color: 'rgba(25, 40, 57, 0.7)', fontSize: 20}}>
+                  {'Subject'}
+                </Text>
+                <Text style={{fontSize: 12}}>{'Title'}</Text>
+                <Text
+                  style={{
+                    color: 'rgba(176, 67, 5, 0.75)',
+                    fontSize: 12,
+                    paddingTop: 10,
+                  }}>
+                  {'Due:21 May,2021'}
+                </Text>
+              </View>
+            </TouchableOpacity>
           </ScrollView>
         </SafeAreaView>
       </ScrollView>
@@ -202,6 +203,11 @@ const Home_Route = () => {
         component={Notification}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="Notes"
+        component={Notes}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
@@ -233,6 +239,7 @@ export default function Route() {
       <Drawer.Screen name="Books" component={Books} />
       <Drawer.Screen name="Feedback" component={Feedback} />
       <Drawer.Screen name="Transport" component={Transport} />
+      <Drawer.Screen name="Subject" component={Subject} />
     </Drawer.Navigator>
   );
 }
