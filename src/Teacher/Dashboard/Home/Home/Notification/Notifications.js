@@ -123,7 +123,7 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
 
   header: {
@@ -146,13 +146,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 20,
-    elevation: 5,
+    elevation: 15,
     backgroundColor: 'white',
     flex: 2,
     padding: 10,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderLeftWidth: 0,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     borderTopRightRadius: 10,

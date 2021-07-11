@@ -38,9 +38,10 @@ export default function App() {
       tabBarOptions={{
         style: {
           paddingTop: 5,
-
+          borderTopWidth: 0,
           position: 'absolute',
           height: 70,
+          backgroundColor: 'rgba(249, 249, 249, 1)',
         },
         showLabel: false,
       }}>

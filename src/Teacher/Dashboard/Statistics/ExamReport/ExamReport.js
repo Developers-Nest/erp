@@ -44,17 +44,7 @@ export default function ExamReport({navigation}) {
     {label: 'Subject2', value: 'Subject2'},
     {label: 'Subject3', value: 'Subject3'},
   ]);
-  // let data = [
-  //   {
-  //     value: 'Banana',
-  //   },
-  //   {
-  //     value: 'Mango',
-  //   },
-  //   {
-  //     value: 'Pear',
-  //   },
-  // ];
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>

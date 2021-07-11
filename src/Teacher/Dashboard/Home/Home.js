@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  TextInput,
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
@@ -42,107 +43,136 @@ const Home = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.main}>
-        <Searchbar
-          style={styles.search}
-          placeholder="Live class, fees and more"
-          onChangeText={onChangeSearch}
-          value={searchQuery}
-        />
-        <View style={{marginTop: 30}}>
-          <Text style={{fontFamily: 'NunitoSans-Regular'}}>
-            Upcoming Classes
-          </Text>
+      <View style={{height: 20}}></View>
+      <View style={{marginHorizontal: 30, ...styles.shadow}}>
+        <View style={styles.search}>
+          <TextInput
+            style={{...styles.search_input}}
+            placeholder="Live class, fees and more"
+          />
+
+          <TouchableOpacity
+            style={{
+              alignSelf: 'center',
+            }}>
+            <Icon
+              name="search-sharp"
+              style={{
+                alignSelf: 'center',
+                fontSize: 30,
+                color: 'black',
+              }}
+            />
+          </TouchableOpacity>
         </View>
-        <View style={styles.classes}>
+      </View>
+      <ScrollView style={styles.main}>
+        <View style={{height: 30}}></View>
+        <View>
+          <Text style={styles.section_heading}>Upcoming Classes</Text>
+        </View>
+        <View style={{marginHorizontal: 30, ...styles.classes_cardWrapper}}>
           {[1, 2, 3].map((element, index) => {
             return (
-              <View style={styles.card} key={index}>
-                <Text style={{fontSize: 20}}>{'Class'}</Text>
-                <Text
-                  style={{fontSize: 12, paddingVertical: 5, color: '#5177E7'}}>
-                  {'09:30-10:30'}
-                </Text>
-                <Text>{'Batch'}</Text>
+              <View style={styles.shadow} key={index}>
+                <View style={styles.classes_card}>
+                  <Text style={styles.classes_cardClass}>{'Class'}</Text>
+                  <Text style={styles.classes_cardTime}>{'09:30-10:30'}</Text>
+                  <Text style={styles.classes_cardBatch}>{'Batch'}</Text>
+                </View>
               </View>
             );
           })}
         </View>
-        <View style={{marginTop: 30}}>
-          <Text>New Circular</Text>
+        <View style={{height: 30}}></View>
+        <View>
+          <Text style={styles.section_heading}>New Circular</Text>
         </View>
-
-        <TouchableOpacity onPress={toggleExpanded}>
-          <Animatable.View
-            duration={400}
-            style={styles.collapsable_header}
-            transition="backgroundColor">
-            <Text>Title</Text>
+        <View style={{marginHorizontal: 30, ...styles.shadow}}>
+          <View
+            style={{
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+              borderBottomLeftRadius: collapsed ? 8 : 0,
+              borderBottomRightRadius: collapsed ? 8 : 0,
+              ...styles.collapsable_header,
+            }}>
+            <Text style={styles.collapsable_headerText}>Title</Text>
             {!collapsed ? (
-              <View style={styles.collapseIconContainer}>
-                <FontAwesome5 name="chevron-up" size={14} />
-                <Text style={styles.collapseIconText}>Read Less</Text>
-              </View>
+              <TouchableOpacity
+                style={styles.collapsable_IconContainer}
+                onPress={toggleExpanded}>
+                <FontAwesome5
+                  name="chevron-up"
+                  size={14}
+                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                />
+                <Text style={styles.collapsable_IconText}>Read Less</Text>
+              </TouchableOpacity>
             ) : (
-              <View style={styles.collapseIconContainer}>
-                <FontAwesome5 name="chevron-down" size={14} />
-                <Text style={styles.collapseIconText}>Read More</Text>
-              </View>
+              <TouchableOpacity
+                style={styles.collapsable_IconContainer}
+                onPress={toggleExpanded}>
+                <FontAwesome5
+                  name="chevron-down"
+                  size={14}
+                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                />
+                <Text style={styles.collapsable_IconText}>Read More</Text>
+              </TouchableOpacity>
             )}
-          </Animatable.View>
-        </TouchableOpacity>
-        <Collapsible collapsed={collapsed} align="center">
-          <Animatable.View
-            duration={100}
-            style={styles.content}
-            transition="backgroundColor">
-            <Text animation="bounceIn">
+          </View>
+          <Collapsible
+            collapsed={collapsed}
+            align="center"
+            style={styles.collapsable_contentWrapper}>
+            <Text style={styles.collapsable_content}>
               Exams will be conducted via online mode. All the best. It is
               requested from the students to maintain the.
             </Text>
-          </Animatable.View>
-        </Collapsible>
-        <SafeAreaView>
-          <ScrollView
-            horizontal={true}
-            contentContainerStyle={{
-              flexGrow: 1,
-              justifyContent: 'space-between',
-            }}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Notes')}
-              style={{marginRight: 20}}>
-              <Text
-                style={{
-                  marginTop: 30,
-                  alignSelf: 'center',
-                  marginBottom: 0,
-                }}>
-                {'Assignment'}
-              </Text>
-              <View
-                style={{
-                  ...styles.card,
-                  paddingVertical: 30,
-                  marginTop: 5,
-                  alignItems: 'flex-start',
-                }}>
-                <Text style={{color: 'rgba(25, 40, 57, 0.7)', fontSize: 20}}>
-                  {'Subject'}
-                </Text>
-                <Text style={{fontSize: 12}}>{'Title'}</Text>
-                <Text
-                  style={{
-                    color: 'rgba(176, 67, 5, 0.75)',
-                    fontSize: 12,
-                    paddingTop: 10,
-                  }}>
-                  {'Due:21 May,2021'}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </ScrollView>
-        </SafeAreaView>
+          </Collapsible>
+        </View>
+        <ScrollView
+          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}>
+          <View style={{marginHorizontal: 10}}>
+            <Text style={styles.card_heading}>Assignment</Text>
+            <View style={styles.shadow}>
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() => navigation.navigate('Notes')}>
+                <Text style={styles.card_row1}>Subject</Text>
+                <Text style={styles.card_row2}>Title</Text>
+                <Text style={styles.card_row3}>Due:21 May,2021</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{marginHorizontal: 10}}>
+            <Text style={styles.card_heading}>Books</Text>
+            <View style={styles.shadow}>
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() => navigation.navigate('Notes')}>
+                <Text style={styles.card_row1}>Name</Text>
+                <Text style={styles.card_row2}>ID:451236</Text>
+                <Text style={styles.card_row3}>Due:21 May,2021</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{marginHorizontal: 10}}>
+            <Text style={styles.card_heading}>Notes</Text>
+            <View style={styles.shadow}>
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() => navigation.navigate('Notes')}>
+                <Text style={styles.card_row1}>Latest</Text>
+                <Text style={styles.card_row2}>Batch and Course</Text>
+                <Text style={styles.card_row3}>Chapter</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
       </ScrollView>
     </View>
   );
@@ -247,130 +277,173 @@ export default function Route() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
-  },
-  header: {
-    height: 65,
-    backgroundColor: 'white',
-    flexDirection: 'row',
-  },
-  searchbar: {
-    width: '100%',
-    alignItems: 'center',
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  cardsWrapper: {
-    marginTop: 20,
-    width: '90%',
-    alignSelf: 'center',
-  },
-  card: {
-    shadowColor: '#999',
-    marginTop: 10,
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
-    shadowRadius: 20,
-    elevation: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 2,
-    padding: 15,
-    borderRadius: 8,
-    backgroundColor: 'white',
-  },
-
-  cardDetails: {
-    fontSize: 15,
-    color: '#444',
-    fontWeight: 'bold',
-  },
-  categoryContainer: {
-    flexDirection: 'row',
-    width: '95%',
-    alignSelf: 'center',
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  categoryBtn: {
-    flex: 1,
-    width: '30%',
-    marginHorizontal: 0,
-    alignSelf: 'center',
-  },
-  categoryBtnTxt: {
-    alignSelf: 'center',
-    marginTop: 5,
-    color: 'black',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   main: {
     flex: 1,
-    paddingHorizontal: 30,
+    marginBottom: 90,
   },
-  classes: {
+  search: {
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    borderColor: '#00499F',
+    borderRadius: 8,
+  },
+  search_input: {
+    borderRadius: 8,
+    height: 59,
+    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    paddingTop: 15,
+    paddingHorizontal: 10,
+    width: '90%',
+  },
+  section_heading: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 18,
+    textAlign: 'left',
+    color: 'rgba(88, 99, 109, 0.85)',
+    paddingHorizontal: 30,
+    marginBottom: 5,
+  },
+  shadow: {
+    elevation: 5,
+    borderRadius: 8,
+    backgroundColor: 'transparent',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+  },
+  classes_cardWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    flexWrap: 'wrap',
   },
-  infoBox: {},
-
-  contentBox: {
-    position: 'relative',
-    width: '100%',
-    height: 70,
-    marginTop: 20,
-    margin: 5,
-    borderWidth: 0.1,
-    borderColor: '#00499F',
+  classes_card: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    backgroundColor: 'white',
     borderRadius: 8,
-    padding: 15,
-    fontSize: 10,
   },
-  miscBox: {
-    position: 'relative',
-    width: 70,
-    height: 70,
-    top: 100,
-    margin: 5,
-    borderWidth: 0.1,
-    borderColor: '#00499F',
-    borderRadius: 8,
-    fontSize: 10,
-    backgroundColor: 'red',
+  classes_cardClass: {
+    fontSize: 20,
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    color: '#58636D',
+  },
+  classes_cardTime: {
+    fontSize: 12,
+    color: '#5177E7',
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+  },
+  classes_cardBatch: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 12,
+    paddingVertical: 5,
+    color: '#58636D',
   },
 
-  search: {
-    marginTop: 20,
-    borderWidth: 0.2,
-    borderColor: '#58636D',
-  },
   collapsable_header: {
-    marginTop: 10,
     backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-    padding: 10,
-  },
-  collapse_headerText: {
-    textAlign: 'center',
-    fontSize: 18,
-    fontWeight: '400',
-    padding: 10,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
   },
 
-  collapseIconContainer: {
+  collapsable_headerText: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 17,
+    color: '#211C5A',
+  },
+
+  collapsable_IconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
-  collapseIconText: {
+  collapsable_IconText: {
     fontSize: 10,
     fontWeight: '600',
+    color: '#58636D',
   },
-  content: {
-    padding: 10,
+
+  collapsable_content: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 11,
+    color: '#00499F',
+  },
+  collapsable_contentWrapper: {
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
     backgroundColor: 'white',
-    borderBottomEndRadius: 8,
+  },
+  card: {
+    paddingVertical: 30,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    paddingHorizontal: 15,
+    backgroundColor: 'white',
+    borderRadius: 8,
+    width: 150,
+  },
+  card_heading: {
+    paddingLeft: 20,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 18,
+    textAlign: 'left',
+    color: 'rgba(88, 99, 109, 0.85)',
+    paddingHorizontal: 30,
+    marginBottom: 5,
+  },
+  card_row1: {
+    color: 'rgba(25, 40, 57, 0.7)',
+    fontFamily: 'Poppins-Regular',
+    fontSize: 17,
+    fontStyle: 'normal',
+    fontWeight: '500',
+  },
+  card_row2: {
+    color: 'rgba(88, 99, 109, 1)',
+    fontSize: 12,
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '400',
+  },
+  card_row3: {
+    paddingTop: 5,
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 12,
+    color: 'rgba(176, 67, 5, 0.75)',
+  },
+  card_Wrapper: {
+    paddingHorizontal: 10,
+    paddingBottom: 20,
+    paddingTop: 30,
   },
 });

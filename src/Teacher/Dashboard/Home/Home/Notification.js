@@ -15,18 +15,10 @@ import Notifications from './Notification/Notifications';
 import Circulars from './Notification/Circulars';
 
 export default function Notify({navigation}) {
-  const [activeTab, setActiveTab] = React.useState('Notification');
-
+  // const [activeTab, setActiveTab] = React.useState('Notification');
+  const [showContent, setshowContent] = React.useState('Notification');
   // const [searchQuery, setSearchQuery] = React.useState('');
   // const onChangeSearch = query => setSearchQuery(query);
-
-  function switchTab() {
-    if (activeTab === 'Circular') {
-      setActiveTab('Notification');
-    } else {
-      setActiveTab('Circular');
-    }
-  }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -56,33 +48,33 @@ export default function Notify({navigation}) {
               alignSelf: 'center',
               paddingLeft: 30,
             }}>
-            {activeTab === 'Circular' ? 'Circular' : 'Notification'}
+            {showContent === 'Circular' ? 'Circular' : 'Notification'}
           </Text>
         </View>
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
-              borderBottomWidth: activeTab == 'Notification' ? 3 : 0,
+              borderBottomWidth: showContent == 'Notification' ? 3 : 0,
               borderBottomColor: 'grey',
               justifyContent: 'center',
               alignItems: 'center',
             }}
-            onPress={() => switchTab()}>
+            onPress={() => setshowContent('Notification')}>
             <Text style={styles.switchText}>Notification</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{
-              borderBottomWidth: activeTab == 'Circular' ? 3 : 0,
+              borderBottomWidth: showContent == 'Circular' ? 3 : 0,
               borderBottomColor: 'grey',
               justifyContent: 'center',
               alignItems: 'center',
             }}
-            onPress={() => switchTab()}>
+            onPress={() => setshowContent('Circular')}>
             <Text style={styles.switchText}>Circular</Text>
           </TouchableOpacity>
         </View>
-        {activeTab === 'Circular' ? <Circulars /> : <Notifications />}
+        {showContent === 'Circular' ? <Circulars /> : <Notifications />}
       </View>
     </TouchableWithoutFeedback>
   );
