@@ -9,8 +9,13 @@ import {
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
-import {Text, Searchbar, Card, Button} from 'react-native-paper';
-import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
+import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
+import {
+  createDrawerNavigator,
+  useIsDrawerOpen,
+  DrawerContentScrollView,
+  DrawerItem,
+} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
@@ -141,7 +146,7 @@ const Home = ({navigation}) => {
             <View style={styles.shadow}>
               <TouchableOpacity
                 style={styles.card}
-                onPress={() => navigation.navigate('Notes')}>
+                onPress={() => navigation.navigate('Assignment')}>
                 <Text style={styles.card_row1}>Subject</Text>
                 <Text style={styles.card_row2}>Title</Text>
                 <Text style={styles.card_row3}>Due:21 May,2021</Text>
@@ -153,7 +158,7 @@ const Home = ({navigation}) => {
             <View style={styles.shadow}>
               <TouchableOpacity
                 style={styles.card}
-                onPress={() => navigation.navigate('Notes')}>
+                onPress={() => navigation.navigate('Books')}>
                 <Text style={styles.card_row1}>Name</Text>
                 <Text style={styles.card_row2}>ID:451236</Text>
                 <Text style={styles.card_row3}>Due:21 May,2021</Text>
@@ -242,7 +247,7 @@ const Home_Route = () => {
   );
 };
 
-const Drawer = createDrawerNavigator();
+const DrawerNav = createDrawerNavigator();
 
 const getTabBarVisibility = route => {
   const routeName = getFocusedRouteNameFromRoute(route);
@@ -260,20 +265,96 @@ const getTabBarVisibility = route => {
 
 export default function Route() {
   return (
-    <Drawer.Navigator initialRouteName="Home">
-      <Drawer.Screen name="Home" component={Home_Route} />
-      <Drawer.Screen name="Content Library" component={ContentLibrary} />
-      <Drawer.Screen name="Attendance" component={Attendance} />
-      <Drawer.Screen name="Assignment" component={Assignment} />
-      <Drawer.Screen name="Lesson Plan" component={LessonPlan} />
-      <Drawer.Screen name="Books" component={Books} />
-      <Drawer.Screen name="Feedback" component={Feedback} />
-      <Drawer.Screen name="Transport" component={Transport} />
-      <Drawer.Screen name="Subject" component={Subject} />
-    </Drawer.Navigator>
+    <DrawerNav.Navigator
+      initialRouteName="Home"
+      drawerContent={props => <DrawerContent {...props} />}
+      drawerStyle={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
+      <DrawerNav.Screen name="Home" component={Home_Route} />
+      <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
+      <DrawerNav.Screen name="Attendance" component={Attendance} />
+      <DrawerNav.Screen name="Assignment" component={Assignment} />
+      <DrawerNav.Screen name="Lesson Plan" component={LessonPlan} />
+      <DrawerNav.Screen name="Books" component={Books} />
+      <DrawerNav.Screen name="Feedback" component={Feedback} />
+      <DrawerNav.Screen name="Transport" component={Transport} />
+      {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
+    </DrawerNav.Navigator>
   );
 }
 
+function DrawerContent(props) {
+  return (
+    <View style={{flex: 1}}>
+      <Drawer.Section>
+        <Drawer.Item
+          label={'Home'}
+          style={{fontWeight: '100'}}
+          onPress={() => props.navigation.navigate('Home')}
+        />
+        <Drawer.Item
+          label={'Content Library'}
+          onPress={() => props.navigation.navigate('Content Library')}
+        />
+        <Drawer.Item
+          label={'Attendance'}
+          onPress={() => props.navigation.navigate('Attendance')}
+        />
+        <Drawer.Item
+          label={'Assignment'}
+          onPress={() => props.navigation.navigate('Assignment')}
+        />
+        <Drawer.Item
+          label={'Lesson Plan'}
+          onPress={() => props.navigation.navigate('Lesson Plan')}
+        />
+        <Drawer.Item
+          label={'Books'}
+          onPress={() => props.navigation.navigate('Books')}
+        />
+        <Drawer.Item
+          label={'Feedback'}
+          onPress={() => props.navigation.navigate('Feedback')}
+        />
+        <Drawer.Item
+          label={'Transport'}
+          style={{color: 'white'}}
+          onPress={() => props.navigation.navigate('Transport')}
+        />
+      </Drawer.Section>
+      <DrawerContentScrollView
+        contentContainerStyle={{
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          flex: 1,
+          justifyContent: 'flex-end',
+        }}>
+        <TouchableOpacity>
+          <View
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+
+              backgroundColor: '#B04305',
+              borderRadius: 6,
+              marginLeft: 20,
+              marginBottom: 34,
+            }}>
+            <Text
+              style={{
+                fontFamily: 'Poppins-Regular',
+                fontStyle: 'normal',
+                fontWeight: '600',
+                fontSize: 14,
+                color: '#FFFFFF',
+              }}>
+              Logout
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </DrawerContentScrollView>
+    </View>
+  );
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -281,7 +362,6 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
-    marginBottom: 90,
   },
   search: {
     backgroundColor: 'white',
@@ -399,13 +479,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   card: {
-    paddingVertical: 30,
     alignItems: 'flex-start',
     justifyContent: 'center',
     paddingHorizontal: 15,
     backgroundColor: 'white',
     borderRadius: 8,
     width: 150,
+    paddingVertical: 35,
   },
   card_heading: {
     paddingLeft: 20,

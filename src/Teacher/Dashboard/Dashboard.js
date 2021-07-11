@@ -4,6 +4,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import {Button, Appbar} from 'react-native-paper';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Foundation from 'react-native-vector-icons/Foundation';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 import Home from './Home/Home';
@@ -39,11 +40,11 @@ export default function App() {
         style: {
           paddingTop: 5,
           borderTopWidth: 0,
-          position: 'absolute',
-          height: 70,
+          height: 80,
           backgroundColor: 'rgba(249, 249, 249, 1)',
         },
         showLabel: false,
+        activeTintColor: 'black',
       }}>
       <Tab.Screen
         name="Classes"
@@ -52,7 +53,7 @@ export default function App() {
           tabBarLabel: 'Classes',
           tabBarIcon: ({color, size, focused}) => (
             <View style={{alignItems: 'center'}}>
-              <MaterialCommunityIcons name="video" color={color} size={size} />
+              <MaterialCommunityIcons name="video" color={color} size={30} />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Classes</Text>
               ) : null}
@@ -70,7 +71,7 @@ export default function App() {
               <MaterialCommunityIcons
                 name="chart-bar"
                 color={color}
-                size={size}
+                size={30}
               />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Statistics</Text>
@@ -86,7 +87,7 @@ export default function App() {
           tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
             <View style={{alignItems: 'center'}}>
-              <MaterialCommunityIcons name="home" color={color} size={size} />
+              <Foundation name="home" color={color} size={30} />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Home</Text>
               ) : null}
@@ -103,7 +104,7 @@ export default function App() {
               <MaterialCommunityIcons
                 name="chat-processing-outline"
                 color={color}
-                size={size}
+                size={30}
               />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Message</Text>
@@ -119,9 +120,9 @@ export default function App() {
           tabBarIcon: ({color, size, focused}) => (
             <View style={{alignItems: 'center'}}>
               <MaterialCommunityIcons
-                name="account"
+                name="account-circle-outline"
                 color={color}
-                size={size}
+                size={30}
               />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Profile</Text>
