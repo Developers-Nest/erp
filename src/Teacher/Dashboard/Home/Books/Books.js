@@ -2,6 +2,8 @@ import * as React from 'react';
 import { TextInput } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+import LinearGradient from 'react-native-linear-gradient';
+
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
   StyleSheet,
@@ -157,6 +159,7 @@ export default function IssuedBooksScreen1() {
         {/* <IssuedBooksheader /> */}
 
         {/* header start */}
+      
         <View style={styles.header}>
             <TouchableOpacity onPress={() => { }}>
                 <Icon size={24} color="white" name="left" style={{ alignSelf: 'center', fontSize: 25, color: 'white', paddingLeft: 20, paddingTop: 20 }} />
@@ -166,11 +169,9 @@ export default function IssuedBooksScreen1() {
             </Text>
 
         </View>
-
-
-
+        
         {/* header ends */}
-
+       
         <View
           style={{
             width: '90%',
@@ -205,12 +206,13 @@ export default function IssuedBooksScreen1() {
           style={{
             alignSelf: 'center',
             fontSize: 21,
-            color: 'black',
+            color: '#505069',
           }}
         
           />
         </TouchableOpacity>
       </View>
+      
 
 
         </View>
@@ -294,6 +296,7 @@ const styles = StyleSheet.create({
     // paddingVertical: 4,
     fontWeight: '300',
   },
+  
  
   search: {
     backgroundColor: 'white',

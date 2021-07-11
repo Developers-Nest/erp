@@ -20,7 +20,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 //drawer navigation
 import Assignment from './Assignment/Assignment';
-import Attendance from './Attendance/Attendance';
+import Attendance from './Attendance/attendancenew';
 import Books from './Books/Books';
 import ContentLibrary from './Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
