@@ -1,22 +1,60 @@
-import React from 'react';
-import {View, StyleSheet, TextInput} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { View, StyleSheet, TextInput } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {Button, Searchbar, IconButton} from 'react-native-paper';
+import { Button, Searchbar, IconButton } from 'react-native-paper';
 
-export default function App({navigation}) {
+// helpers
+import BASEURL from '../services/config/server'
+import post from '../services/config/helpers/request/post'
+
+
+export default function App({ navigation }) {
+
+  const [institutionCode, setInstitutionCode] = useState(null)
+  const [username, setUsername] = useState(null)
+  const [password, setPassword] = useState(null)
+
+  useEffect(async()=>{
+
+    // check for token from local storage
+    
+  },[])
+
+  const handleSubmit = async ()=>{
+    try{  
+      const url = BASEURL + '/user/login'
+
+      // data for post request
+      let data = {
+        username: username,
+        password: password
+      }
+
+      // post request
+      const response = await post(url,data)
+    
+      console.log("Login.js ",response)
+
+    } catch(err){
+      console.log(err)
+    }
+
+  }
+
   return (
     <View style={styles.container}>
       <LinearGradient
         colors={['rgba(0, 73, 159, 1)', 'rgba(176, 67, 5, 0.84)']}
         style={styles.linearGradient}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}>
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}>
         <View style={styles.textinput_search}>
           <TextInput
             style={styles.text_input1}
             placeholder="Institution Code"
             mode="outlined"
+            onChangeText={(code) => setInstitutionCode(code)}
           />
           <IconButton
             icon="magnify"
@@ -31,18 +69,21 @@ export default function App({navigation}) {
           style={styles.text_input}
           placeholder="Email or Username"
           mode="outlined"
+          onChangeText={(username) => setUsername(username)}
         />
         <TextInput
           style={styles.text_input}
           placeholder="Password"
           mode="outlined"
           secureTextEntry={true}
+          onChangeText={(password) => setPassword(password)}
         />
         <Button
           style={styles.button}
-          onPress={() => navigation.navigate('Teacher Dashboard')}
-          labelStyle={{color: 'white'}}
+          // onPress={() => navigation.navigate('Teacher Dashboard')}
+          labelStyle={{ color: 'white' }}
           uppercase={false}
+          onPress={handleSubmit}
           mode="contained">
           Login
         </Button>
@@ -84,7 +125,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
-  search_icon: {padding: 0, margin: 0, alignSelf: 'flex-end'},
+  search_icon: { padding: 0, margin: 0, alignSelf: 'flex-end' },
   button: {
     backgroundColor: 'rgba(80, 80, 105, 1)',
     alignSelf: 'flex-end',
