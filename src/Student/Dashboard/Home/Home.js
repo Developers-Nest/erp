@@ -30,13 +30,14 @@ import Attendance from './Attendance/Attendance';
 import Books from './Books/Books';
 import ContentLibrary from './Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
-import LessonPlan from './Lesson Plan/LessonPlan';
+import Fees from './Fees/Fees';
 import Transport from './Transport/Transport';
 import Subject from './Subject/Subject.js';
 
 //navigations from home screen
 import Notification from './Home/Notification';
 import Notes from './Home/Notes';
+import Timetable from './Home/Timetable';
 
 const Home = ({navigation}) => {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -79,13 +80,16 @@ const Home = ({navigation}) => {
         <View style={{marginHorizontal: 30, ...styles.classes_cardWrapper}}>
           {[1, 2, 3].map((element, index) => {
             return (
-              <View style={styles.shadow} key={index}>
+              <TouchableOpacity
+                style={styles.shadow}
+                key={index}
+                onPress={() => navigation.navigate('Timetable')}>
                 <View style={styles.classes_card}>
                   <Text style={styles.classes_cardClass}>{'Class'}</Text>
                   <Text style={styles.classes_cardTime}>{'09:30-10:30'}</Text>
                   <Text style={styles.classes_cardBatch}>{'Batch'}</Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>
@@ -166,14 +170,14 @@ const Home = ({navigation}) => {
             </View>
           </View>
           <View style={{marginHorizontal: 10}}>
-            <Text style={styles.card_heading}>Notes</Text>
+            <Text style={styles.card_heading}>Fees</Text>
             <View style={styles.shadow}>
               <TouchableOpacity
                 style={styles.card}
-                onPress={() => navigation.navigate('Notes')}>
-                <Text style={styles.card_row1}>Latest</Text>
-                <Text style={styles.card_row2}>Batch and Course</Text>
-                <Text style={styles.card_row3}>Chapter</Text>
+                onPress={() => navigation.navigate('Fees')}>
+                <Text style={styles.card_row1}>Fees</Text>
+                <Text style={styles.card_row2}>Rs 500</Text>
+                <Text style={styles.card_row3}>Due:21 May,2021</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -243,6 +247,11 @@ const Home_Route = () => {
         component={Notes}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="Timetable"
+        component={Timetable}
+        // options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
@@ -273,8 +282,8 @@ export default function Route() {
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
       <DrawerNav.Screen name="Assignment" component={Assignment} />
-      <DrawerNav.Screen name="Lesson Plan" component={LessonPlan} />
       <DrawerNav.Screen name="Books" component={Books} />
+      <DrawerNav.Screen name="Fees" component={Fees} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
       <DrawerNav.Screen name="Transport" component={Transport} />
       {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
@@ -300,12 +309,12 @@ function DrawerContent(props) {
           onPress={() => props.navigation.navigate('Attendance')}
         />
         <Drawer.Item
-          label={'Assignment'}
-          onPress={() => props.navigation.navigate('Assignment')}
+          label={'Fees'}
+          onPress={() => props.navigation.navigate('Fees')}
         />
         <Drawer.Item
-          label={'Lesson Plan'}
-          onPress={() => props.navigation.navigate('Lesson Plan')}
+          label={'Assignment'}
+          onPress={() => props.navigation.navigate('Assignment')}
         />
         <Drawer.Item
           label={'Books'}

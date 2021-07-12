@@ -6,7 +6,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import Teacher from './src/Teacher/Teacher';
-// import Student from './src/Student/Student';
+import Student from './src/Student/Student';
 
 const Stack = createStackNavigator();
 
@@ -16,7 +16,7 @@ export default function App() {
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Teacher Login" component={Teacher} />
-        {/* <Stack.Screen name="Student Login" component={Student} /> */}
+        <Stack.Screen name="Student Login" component={Student} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -28,9 +28,9 @@ function Login({navigation}) {
       <Button onPress={() => navigation.navigate('Teacher Login')}>
         Teacher
       </Button>
-      {/* <Button onPress={() => navigation.navigate('Student Login')}>
+      <Button onPress={() => navigation.navigate('Student Login')}>
         Student
-      </Button> */}
+      </Button>
     </View>
   );
 }

@@ -97,18 +97,15 @@ const styles = StyleSheet.create({
   },
 
   switchText: {
-    fontSize: 14,
-    color: 'black',
-    paddingHorizontal: 9,
-    paddingVertical: 2,
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins-Regular',
     fontWeight: '600',
-    height: 21,
+    fontSize: 14,
+    paddingHorizontal: 5,
   },
 
   container: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
 
   header: {
@@ -130,18 +127,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 5,
-  },
-  cardInfo: {
-    flex: 2,
-    padding: 10,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    backgroundColor: 'white',
-    paddingHorizontal: 10,
   },
 });

@@ -59,6 +59,7 @@ export default class App extends Component {
           <FontAwesome5
             name={section.type === 'Event' ? 'video' : 'calendar-day'}
             size={27}
+            style={{color: '#58636D'}}
           />
           {section.type === 'Event' ? (
             <Text style={styles.iconText}>Event</Text>
@@ -78,7 +79,11 @@ export default class App extends Component {
             <View style={styles.collapseIconContainer}>
               <Text style={styles.collapseIconText}>2 min ago</Text>
 
-              <FontAwesome5 name="chevron-down" size={14} />
+              <FontAwesome5
+                name="chevron-down"
+                size={14}
+                style={styles.collapseIconIcon}
+              />
             </View>
           )}
         </View>
@@ -89,7 +94,9 @@ export default class App extends Component {
   renderContent(section, _, isActive) {
     return (
       <Animatable.View duration={100} style={{paddingHorizontal: 10}}>
-        <Text animation={isActive ? 'bounceIn' : undefined}>
+        <Text
+          animation={isActive ? 'bounceIn' : undefined}
+          style={styles.collapseContent}>
           {section.content}
         </Text>
       </Animatable.View>
@@ -133,6 +140,12 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: '500',
+
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontSize: 18,
+
+    color: '#211C5A',
   },
 
   cardsWrapper: {
@@ -160,7 +173,9 @@ const styles = StyleSheet.create({
   },
   iconText: {
     fontSize: 9,
-    fontWeight: '400',
+    fontWeight: '600',
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
   },
   iconConatiner: {
     justifyContent: 'flex-start',
@@ -180,5 +195,20 @@ const styles = StyleSheet.create({
   collapseIconText: {
     fontSize: 10,
     fontWeight: '600',
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 10,
+    fontStyle: 'normal',
+    fontWeight: '600',
+  },
+  collapseIconIcon: {
+    color: 'rgba(62, 104, 228, 0.9)',
+  },
+  collapseContent: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 12,
+
+    color: '#00499F',
   },
 });
