@@ -82,9 +82,9 @@ export default function Fees() {
           return (
             <View style={styles.card}>
               <View>
-                <Text>{position}</Text>
-                {/* <Text>{data[position].fees}</Text>
-                <Text>{data[position].dateTime}</Text> */}
+                <Text>{data[position] && data[position].label}</Text>
+                <Text>{data[position] && data[position].fees}</Text>
+                <Text>{data[position] && data[position].dateTime}</Text>
               </View>
             </View>
           );
