@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   TextInput,
+  SafeAreaView,
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -64,7 +65,7 @@ export default function ExamReport({navigation}) {
           style={{
             fontStyle: 'normal',
             fontSize: 28,
-            fontFamily: 'NunitoSans-Light',
+            fontFamily: 'NunitoSans-Regular',
             fontWeight: '600',
             alignSelf: 'center',
             paddingLeft: 30,
@@ -72,13 +73,7 @@ export default function ExamReport({navigation}) {
           Exam Reports
         </Text>
       </View>
-      <View style={{padding: 15}}>
-        {/* <Dropdown
-          icon="chevron-down"
-          iconColor="#E1E1E1"
-          label="Favorite Fruit"
-          data={data}
-        /> */}
+      <View style={{marginHorizontal: 15, marginTop: 10}}>
         <DropDownPicker
           open={open}
           value={value}
@@ -86,15 +81,24 @@ export default function ExamReport({navigation}) {
           setOpen={setOpen}
           setValue={setValue}
           setItems={setItems}
-          style={{
-            ...styles.shadow,
+          style={styles.dropdown}
+          labelStyle={{
+            fontSize: 20,
+            paddingHorizontal: 15,
+            marginVertical: 10,
+            fontFamily: 'Poppins-Regular',
+            fontStyle: 'normal',
+            fontWeight: '500',
           }}
-          labelStyle={{fontSize: 20, paddingHorizontal: 15}}
           arrowStyle={{marginRight: 10}}
           placeholder="Final Report"
           placeholderStyle={{
             fontSize: 20,
             paddingHorizontal: 15,
+            marginVertical: 10,
+            fontFamily: 'Poppins-Regular',
+            fontStyle: 'normal',
+            fontWeight: '500',
           }}
         />
         <View
@@ -102,7 +106,6 @@ export default function ExamReport({navigation}) {
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginTop: 10,
-            alignContent: 'flex-start',
           }}>
           <DropDownPicker
             zIndex={1000}
@@ -112,12 +115,11 @@ export default function ExamReport({navigation}) {
             setOpen={setOpen1}
             setValue={setValue1}
             setItems={setItems1}
-            style={styles.shadow}
+            style={styles.dropdown}
             containerStyle={{width: '30%'}}
             placeholder="Class"
           />
           <DropDownPicker
-            zIndex={1000}
             defaultIndex={0}
             open={open2}
             value={value2}
@@ -125,12 +127,11 @@ export default function ExamReport({navigation}) {
             setOpen={setOpen2}
             setValue={setValue2}
             setItems={setItems2}
-            style={styles.shadow}
+            style={styles.dropdown}
             containerStyle={{width: '30%'}}
             placeholder="Batch"
           />
           <DropDownPicker
-            zIndex={1000}
             defaultIndex={0}
             open={open3}
             value={value3}
@@ -138,58 +139,61 @@ export default function ExamReport({navigation}) {
             setOpen={setOpen3}
             setValue={setValue3}
             setItems={setItems3}
-            style={{
-              ...styles.shadow,
-            }}
+            style={styles.dropdown}
             containerStyle={{width: '30%'}}
             placeholder="Subject"
           />
         </View>
-        {value !== null &&
-        value1 !== null &&
-        value2 !== null &&
-        value3 !== null ? (
-          <ExamReport2 />
-        ) : (
-          <ExamReport1 />
-        )}
       </View>
+
+      {value !== null &&
+      value1 !== null &&
+      value2 !== null &&
+      value3 !== null ? (
+        <ExamReport21 />
+      ) : null}
+
+      {value !== null &&
+      value1 !== null &&
+      value2 !== null &&
+      value3 !== null ? (
+        <ExamReport22 />
+      ) : (
+        <ExamReport1 />
+      )}
     </View>
   );
 }
 
-const ExamReport1 = ({navigation}) => {
+const ExamReport1 = () => {
   return (
-    <View>
-      <ScrollView>
-        <Text style={{paddingVertical: 10, fontSize: 16}}>This Year</Text>
-        <Image
-          style={styles.image}
-          source={{
-            uri: 'https://images.unsplash.com/photo-1496450681664-3df85efbd29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80',
-          }}
-        />
-        <Text style={{paddingVertical: 10, fontSize: 16}}>Previous Year</Text>
-        <Image
-          style={styles.image}
-          source={{
-            uri: 'https://images.unsplash.com/photo-1496450681664-3df85efbd29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80',
-          }}
-        />
-      </ScrollView>
-    </View>
+    <ScrollView style={{paddingHorizontal: 15}}>
+      <Text style={{paddingVertical: 10, fontSize: 16}}>This Year</Text>
+      <Image
+        style={styles.image}
+        source={{
+          uri: 'https://images.unsplash.com/photo-1496450681664-3df85efbd29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80',
+        }}
+      />
+      <Text style={{paddingVertical: 10, fontSize: 16}}>Previous Year</Text>
+      <Image
+        style={styles.image}
+        source={{
+          uri: 'https://images.unsplash.com/photo-1496450681664-3df85efbd29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80',
+        }}
+      />
+    </ScrollView>
   );
 };
 
-const ExamReport2 = () => {
+const ExamReport21 = () => {
   return (
-    <View>
+    <View style={{marginHorizontal: 15, marginTop: 10, ...styles.shadow}}>
       <View
         style={{
-          marginTop: 10,
           justifyContent: 'space-between',
           flexDirection: 'row',
-          ...styles.shadow,
+          ...styles.card,
         }}>
         <FontAwesome5
           name="search"
@@ -217,38 +221,47 @@ const ExamReport2 = () => {
           />
         </TouchableOpacity>
       </View>
-      <ScrollView>
-        <View style={{marginTop: 10, ...styles.shadow}}>
-          <View style={styles.card_top}>
-            <View>
-              <Text style={styles.card_title}>Title</Text>
-              <Text style={{color: 'blue', fontSize: 12}}>Remarks</Text>
+    </View>
+  );
+};
+
+const ExamReport22 = () => {
+  return (
+    <ScrollView>
+      <View style={{marginHorizontal: 15, marginVertical: 20}}>
+        <View style={styles.shadow}>
+          <View style={styles.card}>
+            <View style={styles.card_top}>
+              <View>
+                <Text style={styles.card_title}>Title</Text>
+                <Text style={{color: 'blue', fontSize: 12}}>Remarks</Text>
+              </View>
+              <View style={styles.card_marks}>
+                <Text style={{color: 'white'}}>18/30</Text>
+              </View>
             </View>
-            <View style={styles.card_marks}>
-              <Text style={{color: 'white'}}>18/30</Text>
+            <View style={styles.card_middle}>
+              <Text style={{color: 'black'}}>
+                There are some issues on the writing methods of the answers.Try
+                to improve them.
+              </Text>
             </View>
-          </View>
-          <View style={styles.card_middle}>
-            <Text>
-              There are some issues on the writing methods of the answers.Try to
-              improve them.
-            </Text>
-          </View>
-          <View style={styles.card_bottom}>
-            <Text style={{color: 'rgba(176, 67, 5, 1)', fontSize: 12}}>
-              Max:21/30
-            </Text>
+            <View style={styles.card_bottom}>
+              <Text style={{color: 'rgba(176, 67, 5, 1)', fontSize: 12}}>
+                Max:21/30
+              </Text>
+            </View>
           </View>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
 
   header: {
@@ -256,23 +269,39 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
   },
-
   shadow: {
-    shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
-    shadowRadius: 12,
+    elevation: 5,
+    borderRadius: 8,
+    backgroundColor: 'transparent',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+  },
+  card: {
+    borderColor: '#ccc',
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
+    justifyContent: 'center',
+    minWidth: 110,
+  },
+  dropdown: {
+    elevation: 3,
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
-    overflow: 'hidden',
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
     justifyContent: 'center',
-    margin: 0,
-    padding: 0,
     minWidth: 110,
   },
   accordion: {margin: 0, padding: 0, backgroundColor: 'white'},
@@ -315,5 +344,35 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 15,
     paddingHorizontal: 20,
+  },
+  classes_card: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    backgroundColor: 'white',
+    borderRadius: 8,
+  },
+  classes_cardClass: {
+    fontSize: 20,
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    color: '#58636D',
+  },
+  classes_cardTime: {
+    fontSize: 12,
+    color: '#5177E7',
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+  },
+  classes_cardBatch: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 12,
+    paddingVertical: 5,
+    color: '#58636D',
   },
 });
