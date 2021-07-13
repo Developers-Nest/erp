@@ -39,7 +39,6 @@ export default function App() {
         style: {
           paddingTop: 5,
 
-          position: 'absolute',
           height: 70,
         },
         showLabel: false,

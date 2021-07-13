@@ -1,12 +1,6 @@
-
 import * as React from 'react';
 import { TextInput,Button} from 'react-native-paper';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-import LinearGradient from 'react-native-linear-gradient';
-
 import Icon from 'react-native-vector-icons/AntDesign';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {
   StyleSheet,
   Text,
@@ -18,7 +12,7 @@ import {
 } from 'react-native';
 
 
-export default function App({navigation}) {
+export default function Report({navigation}) {
 
   const [Description, setDescription] = React.useState('');
   return (
@@ -26,7 +20,7 @@ export default function App({navigation}) {
 
       {/* header opens */}
              <View style={styles.header}>
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => {navigation.goBack(); }}>
                 <Icon size={24} color="white" name="left" style={{ alignSelf: 'center', fontSize: 25, color: 'white', paddingLeft: 20, paddingTop: 20 }} />
             </TouchableOpacity>
             <Text style={{ fontStyle: 'normal', fontFamily:'NunitoSans-Regular' ,fontSize: 28, fontWeight: '600', alignSelf: 'center', paddingLeft: 30, color: 'white' }}>
@@ -57,7 +51,7 @@ export default function App({navigation}) {
         
       </View> */}
 
-
+     
       <View style={{width:'90%',marginTop:20,alignSelf:'center', ...styles.shadow}}>
       <TextInput
       multiline
@@ -68,6 +62,7 @@ export default function App({navigation}) {
       onChangeText={(Description) => { setDescription(Description) }}
       style={{...styles.text_input}}                       />
      </View>
+     
      <View style={{padding:20}}/>
       
           <Button
@@ -129,7 +124,7 @@ container: {
 button: {
   backgroundColor: '#5177E7',
   alignSelf: 'flex-end',
-  // marginTop: 10,
+//   marginTop: 10,
   color: '#F9F9F9',
   padding: 3,
   paddingHorizontal: 5,

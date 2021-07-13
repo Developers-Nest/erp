@@ -6,10 +6,10 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon5 from 'react-native-vector-icons/AntDesign';
 
 import Icon from 'react-native-vector-icons/Foundation';
-import IconPhysics1 from 'react-native-vector-icons/Entypo';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IconPhysics2 from 'react-native-vector-icons/Ionicons';
 import IconEnglish2 from 'react-native-vector-icons/Feather';
-import IconEnglish1 from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import IconBio1 from 'react-native-vector-icons/FontAwesome5';
 import IconBio2 from 'react-native-vector-icons/FontAwesome5';
@@ -64,7 +64,7 @@ export default function LecturesScreen() {
                       English
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="alpha-a"
@@ -106,7 +106,7 @@ export default function LecturesScreen() {
                       Hindi
                     </Text>
                   
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="alpha-a"
@@ -149,7 +149,7 @@ export default function LecturesScreen() {
                       Physics
                     </Text>
 
-                    <IconPhysics1
+                    <EntypoIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="tree"
@@ -231,13 +231,13 @@ export default function LecturesScreen() {
                         fontFamily:'Poppins-Medium'
                       }}>
                      
-                      English
+                      Maths
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
-                      name="alpha-a"
+                      name="function-variant"
                       style={{paddingLeft: 7}}
                     />
                   </TouchableOpacity>
@@ -273,13 +273,13 @@ export default function LecturesScreen() {
                         fontFamily:'Poppins-Medium'
                       }}>
                      
-                      English
+                      Chemistry
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
-                      name="alpha-a"
+                      name="molecule"
                       style={{paddingLeft: 7}}
                     />
                   </TouchableOpacity>
@@ -287,16 +287,16 @@ export default function LecturesScreen() {
                   <TouchableOpacity style={styles.differentusers}>
                     <Text style={styles.teacher}>Teacher</Text>
                     <View style={{flexDirection: 'column'}}>
-                      <IconEnglish2
+                      <EntypoIcon
                         size={24}
-                        color="#B04305"
-                        name="radio"
+                        color="#3854B7"
+                        name="lab-flask"
                         style={{paddingLeft: 7}}
                       />
                       <Text
                         style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
-                        {' '}{' '}{' '}
-                        Class
+                        {' '}{' '}{' '}{'  '}
+                        Lab
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -338,7 +338,7 @@ export default function LecturesScreen() {
                       English
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="alpha-a"
@@ -380,7 +380,7 @@ export default function LecturesScreen() {
                       Hindi
                     </Text>
                   
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="alpha-a"
@@ -423,7 +423,7 @@ export default function LecturesScreen() {
                       Physics
                     </Text>
 
-                    <IconPhysics1
+                    <EntypoIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="tree"
@@ -505,13 +505,13 @@ export default function LecturesScreen() {
                         fontFamily:'Poppins-Medium'
                       }}>
                      
-                      English
+                      Maths
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
-                      name="alpha-a"
+                      name="function-variant"
                       style={{paddingLeft: 7}}
                     />
                   </TouchableOpacity>
@@ -547,13 +547,13 @@ export default function LecturesScreen() {
                         fontFamily:'Poppins-Medium'
                       }}>
                      
-                      English
+                      Chemistry
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
-                      name="alpha-a"
+                      name="molecule"
                       style={{paddingLeft: 7}}
                     />
                   </TouchableOpacity>
@@ -561,16 +561,16 @@ export default function LecturesScreen() {
                   <TouchableOpacity style={styles.differentusers}>
                     <Text style={styles.teacher}>Teacher</Text>
                     <View style={{flexDirection: 'column'}}>
-                      <IconEnglish2
+                      <EntypoIcon
                         size={24}
-                        color="#B04305"
-                        name="radio"
+                        color="#3854B7"
+                        name="lab-flask"
                         style={{paddingLeft: 7}}
                       />
                       <Text
                         style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
-                        {' '}{' '}{' '}
-                        Class
+                        {' '}{' '}{' '}{'  '}
+                        Lab
                       </Text>
                     </View>
                   </TouchableOpacity>

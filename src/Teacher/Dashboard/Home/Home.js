@@ -28,9 +28,17 @@ import LessonPlan from './Lesson Plan/LessonPlan';
 import Transport from './Transport/Transport';
 import Subject from './Subject/Subject.js';
 
+
+//students part
+import AssignmentStudent from './AssignmentStudent/AssignmentStudent';
+import BooksStudent from './BooksStudent/BooksStudent';
+import Dev from './Dev/Dev';
+import Report from './Report/Report';
+
 //navigations from home screen
 import Notification from './Home/Notification';
 import Notes from './Home/Notes';
+
 
 const Home = ({navigation}) => {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -240,6 +248,13 @@ export default function Route() {
       <Drawer.Screen name="Feedback" component={Feedback} />
       <Drawer.Screen name="Transport" component={Transport} />
       <Drawer.Screen name="Subject" component={Subject} />
+       {/* for student part added here */}
+      <Drawer.Screen name="AssignmentStudent" component={AssignmentStudent} />
+      <Drawer.Screen name="Dev" component={Dev} />
+      <Drawer.Screen name='BooksStudent' component={BooksStudent}/>
+      <Drawer.Screen name='Report' component={Report}/>
+      
+      
     </Drawer.Navigator>
   );
 }
