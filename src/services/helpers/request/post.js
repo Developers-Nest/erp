@@ -1,5 +1,8 @@
-async function post(url, data){
+import BASEURL from '../../config/server'
 
+async function post(slug, data, token=null){
+    let url = BASEURL + slug
+    console.log("POST URL ", url)
     let response = await fetch(url, {
         method: 'POST',
         headers: {
