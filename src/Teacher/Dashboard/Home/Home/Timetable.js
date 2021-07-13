@@ -19,7 +19,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
-export default function Timetable() {
+export default function OnlineLecture() {
   return (
     <View style={styles.container}>
       <ScrollView showsHorizontalScrollIndicator={false}>

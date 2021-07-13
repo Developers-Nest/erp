@@ -48,7 +48,7 @@ export default class App extends Component {
       activeSections: sections.includes(undefined) ? [] : sections,
     });
   };
-
+  // renderFooter = (section, _, isActive) => {
   renderHeader = (section, _, isActive) => {
     return (
       <Animatable.View
@@ -73,7 +73,11 @@ export default class App extends Component {
             <View style={styles.collapseIconContainer}>
               <Text style={styles.collapseIconText}>2 min ago</Text>
 
-              <FontAwesome5 name="chevron-up" size={14} />
+              <FontAwesome5
+                name="chevron-up"
+                size={14}
+                style={styles.collapseIconIcon}
+              />
             </View>
           ) : (
             <View style={styles.collapseIconContainer}>
@@ -108,12 +112,13 @@ export default class App extends Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView style={{padding: 10}}>
           <Accordion
             activeSections={activeSections}
             sections={CONTENT}
             touchableComponent={TouchableOpacity}
             renderHeader={this.renderHeader}
+            renderFooter={this.renderFooter}
             renderContent={this.renderContent}
             duration={400}
             onChange={this.setSections}
@@ -159,7 +164,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 20,
-    elevation: 15,
+    elevation: 3,
     backgroundColor: 'white',
     flex: 2,
     padding: 10,

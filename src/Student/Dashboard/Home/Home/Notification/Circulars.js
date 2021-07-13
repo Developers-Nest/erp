@@ -43,33 +43,56 @@ export default class App extends Component {
 
   renderHeader = (section, _, isActive) => {
     return (
-      <Animatable.View
-        duration={400}
-        style={styles.header}
-        transition="backgroundColor">
+      <View duration={400} style={styles.header} transition="backgroundColor">
         <Text style={styles.headerText}>{section.title}</Text>
         {isActive ? (
-          <View style={styles.collapseIconContainer}>
-            <FontAwesome5 name="chevron-up" size={14} />
-            <Text style={styles.collapseIconText}>Read Less</Text>
+          <View
+            style={{
+              justifyContent: 'space-between',
+              flexDirection: 'column',
+              alignSelf: 'flex-end',
+              alignItems: 'center',
+            }}>
+            <Text style={styles.collapseIconTextTime}>8 hrs ago</Text>
+
+            <View style={styles.collapseIconContainer}>
+              <FontAwesome5
+                name="chevron-up"
+                size={14}
+                color={'rgba(62, 104, 228, 0.9)'}
+              />
+              <Text style={styles.collapseIconText}>Read Less</Text>
+            </View>
           </View>
         ) : (
-          <View style={styles.collapseIconContainer}>
-            <FontAwesome5 name="chevron-down" size={14} />
-            <Text style={styles.collapseIconText}>Read More</Text>
+          <View
+            style={{
+              justifyContent: 'space-between',
+              flexDirection: 'column',
+              alignSelf: 'flex-end',
+              alignItems: 'center',
+            }}>
+            <Text style={styles.collapseIconText}>8 hrs ago</Text>
+            <View style={styles.collapseIconContainer}>
+              <FontAwesome5
+                name="chevron-down"
+                size={14}
+                color={'rgba(62, 104, 228, 0.9)'}
+              />
+              <Text style={styles.collapseIconText}>Read More</Text>
+            </View>
           </View>
         )}
-      </Animatable.View>
+      </View>
     );
   };
 
   renderContent(section, _, isActive) {
     return (
-      <Animatable.View
-        duration={100}
-        style={styles.content}
-        transition="backgroundColor">
-        <Text animation={isActive ? 'bounceIn' : undefined}>
+      <Animatable.View duration={100} transition="backgroundColor">
+        <Text
+          style={styles.content}
+          animation={isActive ? 'bounceIn' : undefined}>
           {section.content}
         </Text>
       </Animatable.View>
@@ -107,6 +130,15 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 10,
+    /* BODY-12 */
+
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 12,
+    lineHeight: 18,
+
+    color: '#00499F',
   },
   header: {
     backgroundColor: 'white',
@@ -118,7 +150,13 @@ const styles = StyleSheet.create({
   headerText: {
     textAlign: 'center',
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: '500',
+
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    lineHeight: 27,
+
+    color: '#211C5A',
   },
 
   cardsWrapper: {
@@ -132,13 +170,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 20,
-    elevation: 5,
+    elevation: 3,
     backgroundColor: 'white',
     flex: 2,
     padding: 10,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderLeftWidth: 0,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     borderTopRightRadius: 10,
@@ -147,10 +184,25 @@ const styles = StyleSheet.create({
   },
   collapseIconContainer: {
     justifyContent: 'center',
+    alignSelf: 'flex-end',
     alignItems: 'center',
+    paddingTop: 5,
   },
   collapseIconText: {
     fontSize: 10,
     fontWeight: '600',
+    fontFamily: 'OpenSans-Regular',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 14,
+    color: '#58636D',
+  },
+  collapseIconTextTime: {
+    fontSize: 10,
+    fontFamily: 'OpenSans-Regular',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 14,
+    color: '#58636D',
   },
 });
