@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,15 +9,15 @@ import {
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
-import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
+import { Text, Searchbar, Card, Button, Drawer } from 'react-native-paper';
 import {
   createDrawerNavigator,
   useIsDrawerOpen,
   DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
-import {createStackNavigator} from '@react-navigation/stack';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -39,7 +39,12 @@ import Notification from './Home/Notification';
 import Notes from './Home/Notes';
 import Timetable from './Home/Timetable';
 
-const Home = ({navigation}) => {
+// redux
+import { useSelector } from 'react-redux'
+
+let userInfo
+
+const Home = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
   const toggleExpanded = () => {
@@ -49,11 +54,11 @@ const Home = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={{height: 20}}></View>
-      <View style={{marginHorizontal: 30, ...styles.shadow}}>
+      <View style={{ height: 20 }}></View>
+      <View style={{ marginHorizontal: 30, ...styles.shadow }}>
         <View style={styles.search}>
           <TextInput
-            style={{...styles.search_input}}
+            style={{ ...styles.search_input }}
             placeholder="Live class, fees and more"
           />
 
@@ -73,11 +78,11 @@ const Home = ({navigation}) => {
         </View>
       </View>
       <ScrollView style={styles.main}>
-        <View style={{height: 30}}></View>
+        <View style={{ height: 30 }}></View>
         <View>
           <Text style={styles.section_heading}>Upcoming Classes</Text>
         </View>
-        <View style={{marginHorizontal: 30, ...styles.classes_cardWrapper}}>
+        <View style={{ marginHorizontal: 30, ...styles.classes_cardWrapper }}>
           {[1, 2, 3].map((element, index) => {
             return (
               <View style={styles.shadow} key={index}>
@@ -92,11 +97,11 @@ const Home = ({navigation}) => {
             );
           })}
         </View>
-        <View style={{height: 30}}></View>
+        <View style={{ height: 30 }}></View>
         <View>
           <Text style={styles.section_heading}>New Circular</Text>
         </View>
-        <View style={{marginHorizontal: 30, ...styles.shadow}}>
+        <View style={{ marginHorizontal: 30, ...styles.shadow }}>
           <View
             style={{
               borderTopLeftRadius: 8,
@@ -113,7 +118,7 @@ const Home = ({navigation}) => {
                 <FontAwesome5
                   name="chevron-up"
                   size={14}
-                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                  style={{ color: 'rgba(62, 104, 228, 0.9)' }}
                 />
                 <Text style={styles.collapsable_IconText}>Read Less</Text>
               </TouchableOpacity>
@@ -124,7 +129,7 @@ const Home = ({navigation}) => {
                 <FontAwesome5
                   name="chevron-down"
                   size={14}
-                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                  style={{ color: 'rgba(62, 104, 228, 0.9)' }}
                 />
                 <Text style={styles.collapsable_IconText}>Read More</Text>
               </TouchableOpacity>
@@ -141,10 +146,10 @@ const Home = ({navigation}) => {
           </Collapsible>
         </View>
         <ScrollView
-          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
+          contentContainerStyle={{ ...styles.card_Wrapper, marginHorizontal: 10 }}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          <View style={{marginHorizontal: 10}}>
+          <View style={{ marginHorizontal: 10 }}>
             <Text style={styles.card_heading}>Assignment</Text>
             <View style={styles.shadow}>
               <TouchableOpacity
@@ -156,7 +161,7 @@ const Home = ({navigation}) => {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{marginHorizontal: 10}}>
+          <View style={{ marginHorizontal: 10 }}>
             <Text style={styles.card_heading}>Books</Text>
             <View style={styles.shadow}>
               <TouchableOpacity
@@ -168,7 +173,7 @@ const Home = ({navigation}) => {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{marginHorizontal: 10}}>
+          <View style={{ marginHorizontal: 10 }}>
             <Text style={styles.card_heading}>Notes</Text>
             <View style={styles.shadow}>
               <TouchableOpacity
@@ -189,13 +194,14 @@ const Home = ({navigation}) => {
 const Stack = createStackNavigator();
 
 const Home_Route = () => {
+
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Home"
         component={Home}
-        options={({navigation, route}) => ({
-          headerTitle: 'Hi Youuu',
+        options={({ navigation, route }) => ({
+          headerTitle: userInfo ? `Hi ${userInfo.firstName}` : `Hi`,
           headerStyle: {
             height: 70,
           },
@@ -239,12 +245,12 @@ const Home_Route = () => {
       <Stack.Screen
         name="Notification"
         component={Notification}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Notes"
         component={Notes}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen name="Timetable" component={Timetable} />
     </Stack.Navigator>
@@ -267,32 +273,14 @@ const getTabBarVisibility = route => {
   return false;
 };
 
-export default function Route() {
-  return (
-    <DrawerNav.Navigator
-      initialRouteName="Home"
-      drawerContent={props => <DrawerContent {...props} />}
-      drawerStyle={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
-      <DrawerNav.Screen name="Home" component={Home_Route} />
-      <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
-      <DrawerNav.Screen name="Attendance" component={Attendance} />
-      <DrawerNav.Screen name="Assignment" component={Assignment} />
-      <DrawerNav.Screen name="Lesson Plan" component={LessonPlan} />
-      <DrawerNav.Screen name="Books" component={Books} />
-      <DrawerNav.Screen name="Feedback" component={Feedback} />
-      <DrawerNav.Screen name="Transport" component={Transport} />
-      {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
-    </DrawerNav.Navigator>
-  );
-}
 
 function DrawerContent(props) {
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Drawer.Section>
         <Drawer.Item
           label={'Home'}
-          style={{fontWeight: '100'}}
+          style={{ fontWeight: '100' }}
           onPress={() => props.navigation.navigate('Home')}
         />
         <Drawer.Item
@@ -321,7 +309,7 @@ function DrawerContent(props) {
         />
         <Drawer.Item
           label={'Transport'}
-          style={{color: 'white'}}
+          style={{ color: 'white' }}
           onPress={() => props.navigation.navigate('Transport')}
         />
       </Drawer.Section>
@@ -359,6 +347,30 @@ function DrawerContent(props) {
     </View>
   );
 }
+
+export default function Route() {
+
+  userInfo = useSelector((state) => state.userInfo)
+
+  return (
+    <DrawerNav.Navigator
+      initialRouteName="Home"
+      drawerContent={props => <DrawerContent {...props} />}
+      drawerStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}>
+      <DrawerNav.Screen name="Home" component={Home_Route} />
+      <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
+      <DrawerNav.Screen name="Attendance" component={Attendance} />
+      <DrawerNav.Screen name="Assignment" component={Assignment} />
+      <DrawerNav.Screen name="Lesson Plan" component={LessonPlan} />
+      <DrawerNav.Screen name="Books" component={Books} />
+      <DrawerNav.Screen name="Feedback" component={Feedback} />
+      <DrawerNav.Screen name="Transport" component={Transport} />
+      {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
+    </DrawerNav.Navigator>
+  );
+}
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

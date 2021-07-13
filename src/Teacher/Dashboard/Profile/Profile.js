@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -20,6 +20,9 @@ import {
 } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+// redux
+import { useSelector } from 'react-redux';
+
 const MySearchbar = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -33,9 +36,15 @@ const MySearchbar = () => {
     />
   );
 };
-export default function Profile({navigation}) {
+export default function Profile({ navigation }) {
+
+  const userInfo = useSelector((state)=>state.userInfo)
+
+  console.log("Profile.js ", userInfo)
+
+
   return (
-    <View style={{backgroundColor: '#E5E5E5', height: '100%'}}>
+    <View style={{ backgroundColor: '#E5E5E5', height: '100%' }}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <FontAwesome5
@@ -87,7 +96,7 @@ export default function Profile({navigation}) {
           padding: 20,
         }}
       />
-      <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+      <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
         <Avatar.Text size={100} label="BS" />
       </View>
       <View
@@ -96,26 +105,12 @@ export default function Profile({navigation}) {
           justifyContent: 'center',
           flexDirection: 'row',
         }}>
-        <View style={{width: '60%', backgroundColor: 'white'}}>
-          <TextInput placeholder="Name" />
+        <View style={{ width: '60%', backgroundColor: 'white' }}>
+          <Text>{userInfo.firstName} </Text>
         </View>
-        <View style={{paddingLeft: '5%'}} />
-        <View style={{width: '30%', backgroundColor: 'white'}}>
-          <TextInput secureTextEntry={true} placeholder="Class" />
-        </View>
-      </View>
-      <View
-        style={{
-          paddingTop: '5%',
-          justifyContent: 'center',
-          flexDirection: 'row',
-        }}>
-        <View style={{width: '45%', backgroundColor: 'white'}}>
-          <TextInput placeholder="Contact no." />
-        </View>
-        <View style={{paddingLeft: '5%'}} />
-        <View style={{width: '45%', backgroundColor: 'white'}}>
-          <TextInput secureTextEntry={true} placeholder="Date" />
+        <View style={{ paddingLeft: '5%' }} />
+        <View style={{ width: '30%', backgroundColor: 'white' }}>
+          <Text>{userInfo.qualification}</Text>
         </View>
       </View>
       <View
@@ -124,8 +119,22 @@ export default function Profile({navigation}) {
           justifyContent: 'center',
           flexDirection: 'row',
         }}>
-        <View style={{width: '95%', backgroundColor: 'white'}}>
-          <TextInput placeholder="Hostel Details" />
+        <View style={{ width: '45%', backgroundColor: 'white' }}>
+          <Text>{userInfo.mobile}</Text>
+        </View>
+        <View style={{ paddingLeft: '5%' }} />
+        <View style={{ width: '45%', backgroundColor: 'white' }}>
+          <Text>{userInfo.dob}</Text>
+        </View>
+      </View>
+      <View
+        style={{
+          paddingTop: '5%',
+          justifyContent: 'center',
+          flexDirection: 'row',
+        }}>
+        <View style={{ width: '95%', backgroundColor: 'white' }}>
+          <Text placeholder="Hostel Details" />
         </View>
       </View>
     </View>
