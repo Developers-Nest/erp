@@ -10,7 +10,11 @@ import {
   Button,
 } from 'react-native-paper';
 
-export default function EditAssignments() {
+export default function EditAssignments({route}) {
+
+  const {assignment} = route.params
+  console.log("Assignement ", assignment)
+
   return (
     <View style={{backgroundColor: 'white', height: '100%'}}>
       <View style={{padding: 10}} />
