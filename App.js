@@ -8,8 +8,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 // import Teacher from './src/Teacher/Teacher';
 // import Student from './src/Student/Student';
 import Login from './src/Login';
-import StudentDashboard from './src/Student/Dashboard/Home/Home';
-import TeacherDashboard from './src/Teacher/Dashboard/Home/Home';
+import StudentDashboard from './src/Student/Dashboard/Dashboard';
+import TeacherDashboard from './src/Teacher/Dashboard/Dashboard';
 
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';

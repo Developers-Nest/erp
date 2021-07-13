@@ -167,6 +167,7 @@ export default function App({navigation}) {
       if (role === 'Teacher') {
         navigation.navigate('Teacher Dashboard');
       } else if (role === 'Student') {
+        navigation.navigate('Student Dashboard');
       }
     } catch (err) {
       console.log(err);
