@@ -28,6 +28,10 @@ export default function AddAssignments() {
   const [course, setCourse] = useState(null)
   const [subject, setSubject] = useState(null)
 
+  // input values
+  const [title, setTitle] = useState(null)
+  const [desc, setDesc] = useState(null)
+
   useEffect(async () => {
 
     try {
@@ -50,9 +54,10 @@ export default function AddAssignments() {
   let getBatches = async ()=>{
 
     try{
-      let slug = `/batch/?course=${course}`
+      let slug = `/batch?course=${course}`
       let token = await read('token')
       let response = await get(slug, token)
+      console.log("Batch ", response)
       let batchArray = []
         response.map((data)=>{
           batchArray.push({
@@ -104,7 +109,10 @@ export default function AddAssignments() {
           onChange={(option) => { 
             setCourse(option.key) 
             getBatches()
-          }} />
+          }} 
+          style={{
+            width: 120,
+          }}/>
 
         <ModalSelector
           data={batches}
@@ -112,12 +120,18 @@ export default function AddAssignments() {
           onChange={(option) => { 
             setBatch(option.key) 
             getSubjects()
+          }}
+          style={{
+            width: 120,
           }} />
 
         <ModalSelector
           data={subjects}
           initValue="Subject"
-          onChange={(option) => { setSubject(option.key) }} />
+          onChange={(option) => { setSubject(option.key) }}
+          style={{
+            width: 120,
+          }}/>
 
       </View>
 
@@ -131,17 +145,25 @@ export default function AddAssignments() {
         <Card>
           <Card.Content>
             <Title>
-              <Text style={{ fontWeight: 'bold' }}>Chapter:</Text>
-              <Text> Newton's Laws Of Motion </Text>
+            <TextInput
+              label="Title"
+              value={title}
+              onChange={text => setTitle(text)}
+            />
             </Title>
             <View style={{ padding: 2 }} />
             <View style={{ borderWidth: 0.5 }} />
             <View style={{ padding: 10 }} />
-            <Paragraph>Topic: First Law Of Motion</Paragraph>
             <View style={{ padding: 2 }} />
             <View style={{ borderWidth: 0.5 }} />
             <View style={{ padding: 10 }} />
-            <Paragraph>Description (optional)</Paragraph>
+            <Paragraph>
+            <TextInput
+              label="Description"
+              value={desc}
+              onChange={desc => setDesc(desc)}
+            />
+            </Paragraph>
             <View style={{ padding: 80 }} />
             <View
               style={{
