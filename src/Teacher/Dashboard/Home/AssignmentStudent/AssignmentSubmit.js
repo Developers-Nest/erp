@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import Icon1 from 'react-native-vector-icons/AntDesign';
 import AssignmentStudentDue from './AssignmentStudentDue';
+
 import {
     StyleSheet,
     Text,
@@ -22,6 +23,7 @@ import {
 import { Searchbar } from 'react-native-paper';
 // import HeaderAllocatedList from '../shared/headerallocatedlist';
 // import {AntDesign} from '@expo/vector-icons';
+import FilePickerManager from 'react-native-file-picker';
 
 export default function AssignmentSubmit({navigation}) {
     const [activeTab, setActiveTab] = React.useState('Due');
@@ -29,7 +31,41 @@ export default function AssignmentSubmit({navigation}) {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
+    // state = {
+    //     filePicker: null
+    //   }
+    
 
+   const filePicker = () => {
+    FilePickerManager.showFilePicker(null, (response) => {
+        console.log('Response = ', response);
+      
+        if (response.didCancel) {
+          console.log('User cancelled file picker');
+        }
+        else if (response.error) {
+          console.log('FilePickerManager Error: ', response.error);
+        }
+        else {
+          this.setState({
+            file: response
+          });
+        }
+      });
+      }
+
+      const Props=(props)=>{
+          return(
+
+<View style={styles.inner}>
+                            <TouchableOpacity onPress={()=>filePicker()}>
+                            <Icon1 size={105} color="rgba(88, 99, 109, 0.65)" name="addfile" style={{padding:0,marginLeft:15}} />
+                            <Text style={{ marginTop: 20,fontSize:12,color:'#58636D',fontFamily:'Poppins-Regular' }}>Tap to add the assignment</Text>
+                            </TouchableOpacity>
+                        </View> 
+
+          );
+      }
 
     return (
 
@@ -85,12 +121,13 @@ export default function AssignmentSubmit({navigation}) {
           </View>
          </View>
   <View style={styles.box}>
-                        <View style={styles.inner}>
-                            <TouchableOpacity>
+      <Props/>
+                        {/* <View style={styles.inner}>
+                            <TouchableOpacity onPress={()=>filePicker()}>
                             <Icon1 size={105} color="rgba(88, 99, 109, 0.65)" name="addfile" style={{padding:0,marginLeft:15}} />
                             <Text style={{ marginTop: 20,fontSize:12,color:'#58636D',fontFamily:'Poppins-Regular' }}>Tap to add the assignment</Text>
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
 
 
                     </View>
