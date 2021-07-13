@@ -6,7 +6,9 @@ import { Button, Searchbar, IconButton } from 'react-native-paper';
 
 // helpers
 import BASEURL from '../services/config/server'
-import post from '../services/config/helpers/request/post'
+import post from '../services/helpers/request/post'
+import write from '../services/localstorage/write'
+import read from '../services/localstorage/read'
 
 
 export default function App({ navigation }) {
@@ -18,6 +20,17 @@ export default function App({ navigation }) {
   useEffect(async()=>{
 
     // check for token from local storage
+    try{
+      let t = await read('token')
+      console.log("Token from storage ", t)
+      // verify this token first
+      // then
+      navigation.navigate('Teacher Dashboard')
+
+    } catch(err){
+      // token not found
+      // ask user to login
+    }
     
   },[])
 
@@ -35,6 +48,13 @@ export default function App({ navigation }) {
       const response = await post(url,data)
     
       console.log("Login.js ",response)
+
+      // write token to local storage
+      try{
+        await write('token', response.token) 
+      } catch(err){
+        console.log('Cannot write token')
+      }
 
     } catch(err){
       console.log(err)
