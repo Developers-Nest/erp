@@ -3,7 +3,7 @@ import * as React from 'react';
 import {TextInput} from 'react-native-paper';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Icon5 from 'react-native-vector-icons/AntDesign';
+
 
 import Icon from 'react-native-vector-icons/Foundation';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
