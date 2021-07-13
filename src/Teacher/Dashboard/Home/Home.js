@@ -33,11 +33,13 @@ import Feedback from './Feedback/Feedback';
 import LessonPlan from './Lesson Plan/LessonPlan';
 import Transport from './Transport/Transport';
 import Subject from './Subject/Subject.js';
+import CceMarks from './CCEMarks/CCEmarks';
 
 //navigations from home screen
 import Notification from './Home/Notification';
 import Notes from './Home/Notes';
 import Timetable from './Home/Timetable';
+
 
 // redux
 import { useSelector } from 'react-redux'
@@ -364,7 +366,9 @@ export default function Route() {
       <DrawerNav.Screen name="Lesson Plan" component={LessonPlan} />
       <DrawerNav.Screen name="Books" component={Books} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
-      <DrawerNav.Screen name="Transport" component={Transport} />
+      <DrawerNav.Screen name="Transport" component={CceMarks} />
+      <DrawerNav.Screen name="Cce Marks" component={CceMarks} />
+      {/* <DrawerNav.Screen name="Cce Marks" component={CceMarks} /> */}
       {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
     </DrawerNav.Navigator>
   );
