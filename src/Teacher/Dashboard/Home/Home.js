@@ -37,6 +37,7 @@ import Subject from './Subject/Subject.js';
 //navigations from home screen
 import Notification from './Home/Notification';
 import Notes from './Home/Notes';
+import Timetable from './Home/Timetable';
 
 const Home = ({navigation}) => {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -80,11 +81,13 @@ const Home = ({navigation}) => {
           {[1, 2, 3].map((element, index) => {
             return (
               <View style={styles.shadow} key={index}>
-                <View style={styles.classes_card}>
+                <TouchableOpacity
+                  style={styles.classes_card}
+                  onPress={() => navigation.navigate('Timetable')}>
                   <Text style={styles.classes_cardClass}>{'Class'}</Text>
                   <Text style={styles.classes_cardTime}>{'09:30-10:30'}</Text>
                   <Text style={styles.classes_cardBatch}>{'Batch'}</Text>
-                </View>
+                </TouchableOpacity>
               </View>
             );
           })}
@@ -243,6 +246,7 @@ const Home_Route = () => {
         component={Notes}
         options={{headerShown: false}}
       />
+      <Stack.Screen name="Timetable" component={Timetable} />
     </Stack.Navigator>
   );
 };

@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {
@@ -21,10 +22,10 @@ import StepIndicator from 'react-native-step-indicator';
 
 const customStyles = {
   stepIndicatorSize: 25,
-  currentStepIndicatorSize: 30,
+  currentStepIndicatorSize: 50,
   separatorStrokeWidth: 2,
   currentStepStrokeWidth: 3,
-  stepStrokeCurrentColor: '#fe7013',
+  stepStrokeCurrentColor: 'black',
   stepStrokeWidth: 3,
   stepStrokeFinishedColor: '#fe7013',
   stepStrokeUnFinishedColor: '#aaaaaa',
@@ -33,47 +34,36 @@ const customStyles = {
   stepIndicatorFinishedColor: '#fe7013',
   stepIndicatorUnFinishedColor: '#ffffff',
   stepIndicatorCurrentColor: '#ffffff',
-  stepIndicatorLabelFontSize: 13,
   currentStepIndicatorLabelFontSize: 13,
   stepIndicatorLabelCurrentColor: '#fe7013',
   stepIndicatorLabelFinishedColor: '#ffffff',
   stepIndicatorLabelUnFinishedColor: '#aaaaaa',
   labelColor: '#999999',
-  labelSize: 13,
-  currentStepLabelColor: '#fe7013',
 };
 
 export default function Fees() {
   const [CurrentPosition, setCurrentPosition] = useState(0);
 
-  const labels = [
-    'Cart',
-    'Delivery Address',
-    'Order Summary',
-    'Payment Method',
-    'Track',
-  ];
+  const labels = ['Registration Form', 'Semester Fees', 'Extra Fees'];
   const data = [
     {
-      label: 'Registration Form',
       fees: 'Paid: Rs500',
       dateTime: '21 May,2021',
     },
     {
-      label: 'Semester Fees',
       fees: 'Paid: Rs37,500',
       dateTime: '07 Jun,2021',
     },
     {
-      label: 'Extra Fees',
       fees: 'Due: Rs500',
       dateTime: 'Due on 15 Jun,2021',
     },
   ];
 
   return (
-    <View style={{flex: 1, padding: 20}}>
+    <ScrollView style={{paddingHorizontal: 30, width: '100%'}}>
       <StepIndicator
+        stepCount={labels.length}
         customStyles={customStyles}
         currentPosition={CurrentPosition}
         labels={labels}
@@ -82,15 +72,15 @@ export default function Fees() {
           return (
             <View style={styles.card}>
               <View>
-                <Text>{position}</Text>
-                {/* <Text>{data[position].fees}</Text>
-                <Text>{data[position].dateTime}</Text> */}
+                <Text>{labels[position]}</Text>
+                <Text>{data[position] && data[position].fees}</Text>
+                <Text>{data[position] && data[position].dateTime}</Text>
               </View>
             </View>
           );
         }}
       />
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -121,7 +111,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: 'white',
     borderRadius: 8,
-    width: 300,
+    marginRight: 10,
   },
   classes_cardClass: {
     fontSize: 20,

@@ -7,6 +7,9 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import Teacher from './src/Teacher/Teacher';
 import Student from './src/Student/Student';
+// import Login from './src/Login';
+// import StudentDashboard from './src/Student/Dashboard/Home/Home';
+// import TeacherDashboard from './src/Teacher/Dashboard/Home/Home';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +22,7 @@ export default function App() {
         <Stack.Screen name="Student Login" component={Student} />
       </Stack.Navigator>
     </NavigationContainer>
+    // <Login />
   );
 }
 

@@ -55,7 +55,7 @@ export default function Notify({navigation}) {
           <TouchableOpacity
             style={{
               borderBottomWidth: showContent == 'Notification' ? 3 : 0,
-              borderBottomColor: 'grey',
+              borderBottomColor: '#58636D',
               justifyContent: 'center',
               alignItems: 'center',
             }}
@@ -66,7 +66,7 @@ export default function Notify({navigation}) {
           <TouchableOpacity
             style={{
               borderBottomWidth: showContent == 'Circular' ? 3 : 0,
-              borderBottomColor: 'grey',
+              borderBottomColor: '#58636D',
               justifyContent: 'center',
               alignItems: 'center',
             }}
@@ -101,6 +101,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     paddingHorizontal: 5,
+
+    lineHeight: 21,
+
+    color: '#58636D',
   },
 
   container: {
