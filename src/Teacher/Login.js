@@ -1,14 +1,20 @@
-import React, {useState, useEffect} from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { View, StyleSheet, TextInput } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
+import { Button, Searchbar, IconButton } from 'react-native-paper'
 
-import LinearGradient from 'react-native-linear-gradient';
-import { Button, Searchbar, IconButton } from 'react-native-paper';
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 // helpers
-import BASEURL from '../services/config/server'
 import post from '../services/helpers/request/post'
+import get from '../services/helpers/request/get'
 import write from '../services/localstorage/write'
 import read from '../services/localstorage/read'
+
+// redux
+import { USERINFO } from '../reducers/actionType'
+
 
 
 export default function App({ navigation }) {
@@ -17,26 +23,33 @@ export default function App({ navigation }) {
   const [username, setUsername] = useState(null)
   const [password, setPassword] = useState(null)
 
-  useEffect(async()=>{
+  useEffect(async () => {
 
     // check for token from local storage
-    try{
+    try {
       let t = await read('token')
-      console.log("Token from storage ", t)
-      // verify this token first
-      // then
-      navigation.navigate('Teacher Dashboard')
+      let r = await read('role')
 
-    } catch(err){
+      // get user information
+      const response = await get('/user', t)
+      console.log("Use Effect ", response)
+      console.log("Role ",r)
+      if(r === 'Teacher'){
+        navigation.navigate('Teacher Dashboard')
+      } else if(role === 'Student'){
+
+      }
+
+    } catch (err) {
       // token not found
       // ask user to login
     }
-    
-  },[])
 
-  const handleSubmit = async ()=>{
-    try{  
-      const url = BASEURL + '/user/login'
+  }, [])
+
+  const handleSubmit = async () => {
+    try {
+      const slug = '/user/login'
 
       // data for post request
       let data = {
@@ -45,18 +58,24 @@ export default function App({ navigation }) {
       }
 
       // post request
-      const response = await post(url,data)
-    
-      console.log("Login.js ",response)
+      const response = await post(slug, data)
+      let role = response.userType.name
 
       // write token to local storage
-      try{
-        await write('token', response.token) 
-      } catch(err){
-        console.log('Cannot write token')
+      try {
+        await write('token', response.token)
+        await write('role', role)
+      } catch (err) {
+        console.log('Cannot write to Local Storage')
       }
 
-    } catch(err){
+      if(role === 'Teacher'){
+        navigation.navigate('Teacher Dashboard')
+      } else if(role === 'Student'){
+
+      }
+
+    } catch (err) {
       console.log(err)
     }
 
