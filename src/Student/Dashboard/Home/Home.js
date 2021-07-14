@@ -34,6 +34,7 @@ import Feedback from './Feedback/Feedback';
 import Fees from './Fees/Fees';
 import Transport from './Transport/Transport';
 import Subject from './Subject/Subject.js';
+import Report from './Report/Report';
 
 //navigations from home screen
 import Notification from './Home/Notification';
@@ -287,6 +288,7 @@ export default function Route() {
       <DrawerNav.Screen name="Fees" component={Fees} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
       <DrawerNav.Screen name="Transport" component={Transport} />
+      <DrawerNav.Screen name="Report" component={Report} />
       {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
     </DrawerNav.Navigator>
   );
@@ -329,6 +331,10 @@ function DrawerContent(props) {
           label={'Transport'}
           style={{color: 'white'}}
           onPress={() => props.navigation.navigate('Transport')}
+        />
+        <Drawer.Item
+          label={'Report'}
+          onPress={() => props.navigation.navigate('Report')}
         />
       </Drawer.Section>
       <DrawerContentScrollView
