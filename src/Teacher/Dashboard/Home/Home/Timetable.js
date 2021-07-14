@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -8,76 +8,73 @@ import {
 } from 'react-native';
 
 // redux
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 // helpers
-import get from '../../../../services/helpers/request/get'
-import read from '../../../../services/localstorage/read'
-import timeTableBuilder from '../../../../services/helpers/extract/teacherTtDayWiseBuild'
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
+import timeTableBuilder from '../../../../services/helpers/extract/teacherTtDayWiseBuild';
 
 export default function OnlineLecture() {
-
-  const userInfo = useSelector((state) => state.userInfo)
-  const [timeTable, setTimeTable] = useState([])
+  const userInfo = useSelector(state => state.userInfo);
+  const [timeTable, setTimeTable] = useState([]);
 
   useEffect(async () => {
-
     try {
-      let slug = `/timetable/${userInfo._id}`
-      let token = await read('token')
-      let response = await get(slug, token)
+      let slug = `/timetable/${userInfo._id}`;
+      let token = await read('token');
+      let response = await get(slug, token);
 
       /// build timetable day-wise ///
-      let tt = timeTableBuilder(response)
-      console.log(tt)
-      setTimeTable(tt)
-
+      let tt = timeTableBuilder(response);
+      console.log(tt);
+      setTimeTable(tt);
     } catch (err) {
-      alert('Cannot Display your timetable!!')
+      alert('Cannot Display your timetable!!');
     }
-
-  }, [])
-
+  }, []);
 
   return (
     <View style={styles.container}>
       <ScrollView showsHorizontalScrollIndicator={false}>
-        {timeTable && Object.keys(timeTable).map((day, index) => {
-          return (
-            <View style={styles.section} key={index}>
-              <View style={styles.shadow}>
-                <View style={styles.card_headingContainer}>
-                  <Text style={styles.card_heading}>{day}</Text>
+        {timeTable &&
+          Object.keys(timeTable).map((day, index) => {
+            return (
+              <View style={styles.section} key={index}>
+                <View style={styles.shadow}>
+                  <View style={styles.card_headingContainer}>
+                    <Text style={styles.card_heading}>{day}</Text>
+                  </View>
                 </View>
-              </View>
-              <View style={styles.classes_cardWrapper}>
-                {
-
-                  timeTable[day].length == 0 ? <Text>No Classes</Text> :
-
+                <View style={styles.classes_cardWrapper}>
+                  {timeTable[day].length == 0 ? (
+                    <Text>No Classes</Text>
+                  ) : (
                     timeTable[day].map((slots, index) => {
-                      
-                      return slots.map((slot) => {
+                      return slots.map(slot => {
                         return (
                           <TouchableOpacity style={styles.shadow} key={index}>
                             <View style={styles.classes_card}>
-                              <Text style={styles.classes_cardClass}>{'Class'}</Text>
-                              <Text style={styles.classes_cardTime}>
-                                {`${slot.startTime}-${slot.endTime}`}
+                              <Text style={styles.classes_cardClass}>
+                                {'Class'}
                               </Text>
-                              <Text style={styles.classes_cardBatch}>{
-                                slot.subjectId && slot.subjectId.name.toUpperCase()
-                              }
+                              <Text style={styles.classes_cardTime}>
+                                {`${slot.startTime} - ${slot.endTime}`}
+                              </Text>
+                              <Text style={styles.classes_cardBatch}>
+                                {slot.subjectId &&
+                                  slot.subjectId.name.toUpperCase()}
                               </Text>
                             </View>
                           </TouchableOpacity>
                         );
-                      })
-                    })}
+                      });
+                    })
+                  )}
+                </View>
               </View>
-            </View>
-          );
-        })}
+            );
+          })}
       </ScrollView>
     </View>
   );
@@ -90,7 +87,6 @@ const styles = StyleSheet.create({
   },
   shadow: {
     marginBottom: 10,
-
     elevation: 5,
     borderRadius: 8,
     backgroundColor: 'transparent',
@@ -122,8 +118,10 @@ const styles = StyleSheet.create({
   },
   classes_cardWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignContent: 'flex-start',
+    width: '100%',
   },
   classes_card: {
     justifyContent: 'center',
@@ -132,6 +130,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: 'white',
     borderRadius: 8,
+    width: 100,
+    height: 120,
   },
   classes_cardClass: {
     fontSize: 20,
@@ -156,9 +156,8 @@ const styles = StyleSheet.create({
     color: '#58636D',
   },
   section: {
-    flex: 1,
     alignItems: 'flex-start',
-    marginHorizontal: 30,
+    marginHorizontal: 20,
     marginVertical: 10,
   },
 });

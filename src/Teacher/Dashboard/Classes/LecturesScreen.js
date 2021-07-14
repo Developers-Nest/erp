@@ -1,13 +1,15 @@
 import * as React from 'react';
 
 import {TextInput} from 'react-native-paper';
-import Icon5 from 'react-native-vector-icons/AntDesign';
+
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 
 import Icon from 'react-native-vector-icons/Foundation';
-import IconPhysics1 from 'react-native-vector-icons/Entypo';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IconPhysics2 from 'react-native-vector-icons/Ionicons';
 import IconEnglish2 from 'react-native-vector-icons/Feather';
-import IconEnglish1 from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import IconBio1 from 'react-native-vector-icons/FontAwesome5';
 import IconBio2 from 'react-native-vector-icons/FontAwesome5';
@@ -25,18 +27,14 @@ import {
 } from 'react-native';
 
 export default function LecturesScreen() {
+  const[showContent,setShowContent]=React.useState('Due');
+
   const [activeTab, setActiveTab] = React.useState('Due');
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
-  function switchTab() {
-    if (activeTab === 'Recorded') {
-      setActiveTab('Live');
-    } else {
-      setActiveTab('Recorded');
-    }
-  }
+ 
   function Live() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -58,14 +56,15 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
                         color: ' rgba(25, 40, 57, 0.7)',
+                        fontFamily:'Poppins-Medium'
                       }}>
-                      {' '}
+                     
                       English
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="alpha-a"
@@ -83,8 +82,8 @@ export default function LecturesScreen() {
                         style={{paddingLeft: 7}}
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}
+                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
+                        {' '}{' '}{' '}
                         Class
                       </Text>
                     </View>
@@ -99,14 +98,15 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
+                        fontFamily:'Poppins-Medium',
                         color: ' rgba(25, 40, 57, 0.7)',
                       }}>
                       {' '}
                       Hindi
                     </Text>
-
-                    <IconEnglish1
+                  
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="alpha-a"
@@ -124,8 +124,8 @@ export default function LecturesScreen() {
                         style={{paddingLeft: 7}}
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}
+                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
+                        {' '}{' '}
                         Test
                       </Text>
                     </View>
@@ -141,14 +141,15 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
                         color: ' rgba(25, 40, 57, 0.7)',
+                        fontFamily:'Poppins-Medium'
                       }}>
                       {' '}
                       Physics
                     </Text>
 
-                    <IconPhysics1
+                    <EntypoIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="tree"
@@ -166,7 +167,7 @@ export default function LecturesScreen() {
                         style={{paddingLeft: 7}}
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
+                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
                         {' '}
                         Doubts
                       </Text>
@@ -183,8 +184,9 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
                         color: ' rgba(25, 40, 57, 0.7)',
+                        fontFamily:'Poppins-Medium'
                       }}>
                       {' '}
                       Biology
@@ -194,7 +196,7 @@ export default function LecturesScreen() {
                       size={27}
                       color="greyrgba(25, 40, 57, 0.63)"
                       name="microscope"
-                      style={{paddingLeft: 7}}
+                      
                     />
                   </TouchableOpacity>
 
@@ -205,11 +207,11 @@ export default function LecturesScreen() {
                         size={24}
                         color="rgba(93, 109, 116, 1)"
                         name="chalkboard-teacher"
-                        style={{paddingLeft: 7}}
+                        
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}
+                        style={{fontSize: 10,  fontFamily:'Poppins-Medium',color: 'rgba(25, 40, 57, 0.9)'}}>
+                        {' '}{' '}{' '}
                         Viva
                       </Text>
                     </View>
@@ -217,7 +219,6 @@ export default function LecturesScreen() {
                 </View>
               </View>
             </View>
-
             <View style={styles.section}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
@@ -225,17 +226,18 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
                         color: ' rgba(25, 40, 57, 0.7)',
+                        fontFamily:'Poppins-Medium'
                       }}>
-                      {' '}
-                      English
+                     
+                      Maths
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
-                      name="alpha-a"
+                      name="function-variant"
                       style={{paddingLeft: 7}}
                     />
                   </TouchableOpacity>
@@ -250,8 +252,8 @@ export default function LecturesScreen() {
                         style={{paddingLeft: 7}}
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}
+                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
+                        {' '}{' '}{' '}
                         Class
                       </Text>
                     </View>
@@ -259,7 +261,6 @@ export default function LecturesScreen() {
                 </View>
               </View>
             </View>
-
             <View style={styles.section}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
@@ -267,17 +268,18 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
                         color: ' rgba(25, 40, 57, 0.7)',
+                        fontFamily:'Poppins-Medium'
                       }}>
-                      {' '}
-                      English
+                     
+                      Chemistry
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
-                      name="alpha-a"
+                      name="molecule"
                       style={{paddingLeft: 7}}
                     />
                   </TouchableOpacity>
@@ -285,16 +287,16 @@ export default function LecturesScreen() {
                   <TouchableOpacity style={styles.differentusers}>
                     <Text style={styles.teacher}>Teacher</Text>
                     <View style={{flexDirection: 'column'}}>
-                      <IconEnglish2
+                      <EntypoIcon
                         size={24}
-                        color="#B04305"
-                        name="radio"
+                        color="#3854B7"
+                        name="lab-flask"
                         style={{paddingLeft: 7}}
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}
-                        Class
+                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
+                        {' '}{' '}{' '}{'  '}
+                        Lab
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -328,14 +330,15 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
                         color: ' rgba(25, 40, 57, 0.7)',
+                        fontFamily:'Poppins-Medium'
                       }}>
-                      {' '}
+                     
                       English
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="alpha-a"
@@ -353,8 +356,8 @@ export default function LecturesScreen() {
                         style={{paddingLeft: 7}}
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}
+                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
+                        {' '}{' '}{' '}
                         Class
                       </Text>
                     </View>
@@ -369,14 +372,15 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
+                        fontFamily:'Poppins-Medium',
                         color: ' rgba(25, 40, 57, 0.7)',
                       }}>
                       {' '}
                       Hindi
                     </Text>
-
-                    <IconEnglish1
+                  
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="alpha-a"
@@ -394,8 +398,8 @@ export default function LecturesScreen() {
                         style={{paddingLeft: 7}}
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}
+                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
+                        {' '}{' '}
                         Test
                       </Text>
                     </View>
@@ -411,14 +415,15 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
                         color: ' rgba(25, 40, 57, 0.7)',
+                        fontFamily:'Poppins-Medium'
                       }}>
                       {' '}
                       Physics
                     </Text>
 
-                    <IconPhysics1
+                    <EntypoIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
                       name="tree"
@@ -436,7 +441,7 @@ export default function LecturesScreen() {
                         style={{paddingLeft: 7}}
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
+                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
                         {' '}
                         Doubts
                       </Text>
@@ -453,8 +458,9 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
                         color: ' rgba(25, 40, 57, 0.7)',
+                        fontFamily:'Poppins-Medium'
                       }}>
                       {' '}
                       Biology
@@ -464,7 +470,7 @@ export default function LecturesScreen() {
                       size={27}
                       color="greyrgba(25, 40, 57, 0.63)"
                       name="microscope"
-                      style={{paddingLeft: 7}}
+                      
                     />
                   </TouchableOpacity>
 
@@ -475,11 +481,11 @@ export default function LecturesScreen() {
                         size={24}
                         color="rgba(93, 109, 116, 1)"
                         name="chalkboard-teacher"
-                        style={{paddingLeft: 7}}
+                        
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}
+                        style={{fontSize: 10,  fontFamily:'Poppins-Medium',color: 'rgba(25, 40, 57, 0.9)'}}>
+                        {' '}{' '}{' '}
                         Viva
                       </Text>
                     </View>
@@ -487,7 +493,6 @@ export default function LecturesScreen() {
                 </View>
               </View>
             </View>
-
             <View style={styles.section}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
@@ -495,17 +500,18 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
                         color: ' rgba(25, 40, 57, 0.7)',
+                        fontFamily:'Poppins-Medium'
                       }}>
-                      {' '}
-                      English
+                     
+                      Maths
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
-                      name="alpha-a"
+                      name="function-variant"
                       style={{paddingLeft: 7}}
                     />
                   </TouchableOpacity>
@@ -520,8 +526,8 @@ export default function LecturesScreen() {
                         style={{paddingLeft: 7}}
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}
+                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
+                        {' '}{' '}{' '}
                         Class
                       </Text>
                     </View>
@@ -529,7 +535,6 @@ export default function LecturesScreen() {
                 </View>
               </View>
             </View>
-
             <View style={styles.section}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
@@ -537,17 +542,18 @@ export default function LecturesScreen() {
                     <Text
                       style={{
                         fontWeight: 'normal',
-                        fontSize: 18,
+                        fontSize: 22,
                         color: ' rgba(25, 40, 57, 0.7)',
+                        fontFamily:'Poppins-Medium'
                       }}>
-                      {' '}
-                      English
+                     
+                      Chemistry
                     </Text>
 
-                    <IconEnglish1
+                    <MaterialCommunityIcon
                       size={27}
                       color="rgba(25, 40, 57, 0.63)"
-                      name="alpha-a"
+                      name="molecule"
                       style={{paddingLeft: 7}}
                     />
                   </TouchableOpacity>
@@ -555,16 +561,16 @@ export default function LecturesScreen() {
                   <TouchableOpacity style={styles.differentusers}>
                     <Text style={styles.teacher}>Teacher</Text>
                     <View style={{flexDirection: 'column'}}>
-                      <IconEnglish2
+                      <EntypoIcon
                         size={24}
-                        color="#B04305"
-                        name="radio"
+                        color="#3854B7"
+                        name="lab-flask"
                         style={{paddingLeft: 7}}
                       />
                       <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}
-                        Class
+                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
+                        {' '}{' '}{' '}{'  '}
+                        Lab
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -583,61 +589,77 @@ export default function LecturesScreen() {
           style={{
             width: '90%',
             marginLeft: 25,
-            marginBottom: 30,
+            marginBottom: 20,
             // marginTop: 30,
           }}>
-          {/* open search */}
+         
+{/* open search */}
+<View
+        style={{
+          marginTop: 10,
+         
+          justifyContent: 'space-between',
+          width:'95%',
+          flexDirection: 'row',
+          ...styles.shadow,
+        }}>
+           <FontAwesome5
+          name="search"
+          style={{
+            alignSelf: 'center',
+            fontSize: 15,
+            color: '#6A6A80',
+          }}/>
+       
+        <TextInput
+          style={{width: '80%', ...styles.text_input}}
+          placeholder="Enter subject or batch name"
+        />
+        <TouchableOpacity
+          style={{
+            alignSelf: 'center',
+          }}>
+          <FontAwesome5
+          name="filter"
+          style={{
+            alignSelf: 'center',
+            fontSize: 21,
+            color: '#6A6A80',
+          }}
+        
+          />
+        </TouchableOpacity>
+      </View>
+      {/* close search */}
 
-          <View style={{marginTop: 20, ...styles.card}}>
-            <TextInput
-              left={<TextInput.Icon name="magnify" />}
-              right={<TextInput.Icon name="filter" />}
-              theme={{
-                colors: {
-                  primary: '#999',
-                  underlineColor: 'transparent',
-                  background: 'white',
-                },
-              }}
-              placeholder="Enter subject's or batch name"
-              outlineColor="transparent"
-              styles={{
-                margin: 10,
-                padding: 10,
-                backgroundColor: 'white',
-              }}
-              mode="outline"
-            />
-          </View>
-          {/* close search */}
-        </View>
+         </View>
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
-              borderBottomWidth: activeTab == 'Live' ? 2 : 0,
+              borderBottomWidth: showContent == 'Live' ? 2 : 0,
               borderBottomColor: '#B04305',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
-            onPress={() => switchTab()}>
+            onPress={() => setShowContent('Live')}>
             <Text style={styles.switchText}>Live</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{
-              borderBottomWidth: activeTab == 'Recorded' ? 2 : 0,
+              borderBottomWidth: showContent == 'Recorded' ? 2 : 0,
               borderBottomColor: '#B04305',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
-            onPress={() => switchTab()}>
+            onPress={() => setShowContent('Recorded')}>
             <Text style={styles.switchText}>Recorded</Text>
           </TouchableOpacity>
         </View>
 
-        {activeTab === 'Live' ? <Live /> : <Recorded />}
+        {showContent === 'Live' ? <Live /> : <Recorded />}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -743,6 +765,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'rgba(25, 40, 57, 0.63)',
     paddingLeft: 3,
+    fontFamily:'Poppins-Medium'
   },
   switchText: {
     fontSize: 14,
@@ -760,4 +783,35 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
+  text_input: {
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    // backgroundColor: 'rgba(249, 249, 249, 1)',
+    height: 50,
+    fontSize: 16,
+    minWidth: 171,
+    backgroundColor: 'white',
+  },
+
+
+  shadow: {
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    margin: 0,
+    padding: 0,
+    minWidth: 110,
+  },
+
+
 });
