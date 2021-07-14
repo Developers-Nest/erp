@@ -38,7 +38,7 @@ const customStyles = {
   currentStepIndicatorLabelFontSize: 0,
 };
 
-export default function Fees() {
+export default function Fees({navigation}) {
   const [CurrentPosition, setCurrentPosition] = useState(0);
   const labels = ['Registration Form', 'Semester Fees', 'Extra Fees'];
 
@@ -64,7 +64,7 @@ export default function Fees() {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Home');
+            navigation.goBack();
           }}>
           <FontAwesome5
             name="chevron-left"
