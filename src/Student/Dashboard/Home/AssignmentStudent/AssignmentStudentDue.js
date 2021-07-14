@@ -27,12 +27,15 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function AssignmentStudentDue({navigation}) {
   const [assignments, setAssignments] = useState([]);
-
+  const userInfo = useSelector(state => state.userInfo);
   useEffect(async () => {
     try {
-      let slug = '/note/assignment';
+      let slug = `/note/assignment?batch=${userInfo.batch}&&course=${userInfo.course}`;
       let token = await read('token');
       const response = await get(slug, token);
       console.log(response);
@@ -42,6 +45,17 @@ export default function AssignmentStudentDue({navigation}) {
     }
   }, []);
 
+  function isAssignmentDone(assignment) {
+    // alert(assignment.attemptedBy.length);
+    for (let i = 0; i < assignment.attemptedBy.length; i++) {
+      if (assignment.attemptedBy[i].userId === userInfo._id) {
+        // alert(userInfo._id + ' ' + assignment.attemptedBy[i].userId);
+        return i;
+      } else {
+        return false;
+      }
+    }
+  }
   var [isPress, setIsPress] = React.useState(false);
 
   var touchProps = {
@@ -53,13 +67,13 @@ export default function AssignmentStudentDue({navigation}) {
     onPress: () => console.log('HELLO'), // <-- "onPress" is apparently required
   };
 
-  // const press=()=>{navigation.navigate('AssignmentsScreen2');}
   const [activeTab, setActiveTab] = React.useState('Due');
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
   const [showContent, setShowContent] = React.useState('Due');
+
   function switchTab() {
     if (activeTab === 'Submitted') {
       setActiveTab('Due');
@@ -67,6 +81,7 @@ export default function AssignmentStudentDue({navigation}) {
       setActiveTab('Submitted');
     }
   }
+
   function Due() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -76,78 +91,81 @@ export default function AssignmentStudentDue({navigation}) {
       <View style={styles.container}>
         <ScrollView>
           {assignments &&
-            assignments.map(assignment => (
-              <View style={styles.section} key={assignment._id}>
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <TouchableOpacity style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 18,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        {' '}
-                        Title
-                        {assignment.course && assignment.course.courseName}
-                      </Text>
+            assignments.map(assignment =>
+              isAssignmentDone(assignment) > -1 ? null : (
+                <View style={styles.section} key={assignment._id}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontWeight: 'normal',
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          {assignment.title || 'Title Not Found'}
+                        </Text>
 
-                      {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: '#5177E7',
-                          fontFamily: 'Poppins-Medium',
-                        }}>
-                        {'  '}Subject
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          marginRight: 30,
-                          fontFamily: 'Poppins-Regular',
-                          color: '#505069',
-                        }}>
-                        {'\n  '}Exams will be conducted via online{'\n '}{' '}
-                        mode.All the best.It is requested
-                        {'\n  '}from the students to maintain the.
-                      </Text>
+                        {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#5177E7',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                          {'  '}
+                          {assignment.subject.name || 'Subject name Not Found'}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            marginRight: 30,
+                            fontFamily: 'Poppins-Regular',
+                            color: '#505069',
+                          }}>
+                          {'  '}
+                          {assignment.description || 'Description Not Found'}
+                        </Text>
 
-                      {/* <Text style={styles.userstext}>Graded</Text> */}
-                    </TouchableOpacity>
+                        {/* <Text style={styles.userstext}>Graded</Text> */}
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  <View style={styles.belowhr}>
+                    <Text
+                      style={{
+                        color: '#58636D',
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                      }}>
+                      {'  '}Due:
+                      {assignment.submissionDateString ||
+                        'Subject name Not Found'}
+                    </Text>
+
+                    <Button
+                      style={styles.button}
+                      onPress={() => navigation.navigate('AssignmentSubmit')}
+                      labelStyle={{
+                        color: 'white',
+                        fontFamily: 'Poppins-Regular',
+                        fontWeight: 'bold',
+                      }}
+                      uppercase={false}
+                      mode="contained">
+                      Submit
+                    </Button>
                   </View>
                 </View>
-
-                <View style={styles.belowhr}>
-                  <Text
-                    style={{
-                      color: '#58636D',
-                      fontSize: 12,
-                      fontFamily: 'Poppins-Medium',
-                    }}>
-                    {'  '}Due:21May,2021
-                  </Text>
-
-                  <Button
-                    style={styles.button}
-                    onPress={() => navigation.navigate('AssignmentSubmit')}
-                    labelStyle={{
-                      color: 'white',
-                      fontFamily: 'Poppins-Regular',
-                      fontWeight: 'bold',
-                    }}
-                    uppercase={false}
-                    mode="contained">
-                    Submit
-                  </Button>
-                </View>
-              </View>
-            ))}
+              ),
+            )}
         </ScrollView>
       </View>
     );
@@ -161,160 +179,91 @@ export default function AssignmentStudentDue({navigation}) {
     return (
       <View style={styles.container}>
         <ScrollView>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
+          {assignments &&
+            assignments.map(assignment =>
+              !(isAssignmentDone(assignment) > -1) ? null : (
+                <View style={styles.section} key={assignment._id}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontWeight: 'normal',
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          {assignment.title || 'Title Not Found'}
+                        </Text>
 
-                  {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#5177E7',
-                      fontFamily: 'Poppins-Medium',
-                    }}>
-                    {'  '}Subject
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#5177E7',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    Not Graded
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      marginRight: 30,
-                      fontFamily: 'Poppins-Regular',
-                      color: '#505069',
-                    }}>
-                    {'\n  '}Exams will be conducted via online{'\n '} mode.All
-                    the best.It is requested
-                    {'\n  '}from the students to maintain the.
-                  </Text>
+                        {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#5177E7',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                          {'  '}
+                          {assignment.subject.name || 'Subject name Not Found'}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#5177E7',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {assignment.attemptedBy[isAssignmentDone(assignment)]
+                            .marks || 'Marks Not Found'}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            marginRight: 30,
+                            fontFamily: 'Poppins-Regular',
+                            color: '#505069',
+                          }}>
+                          {'  '}
+                          {assignment.description || 'Description Not Found'}
+                        </Text>
 
-                  {/* <Text style={styles.userstext}>Graded</Text> */}
-                </TouchableOpacity>
-              </View>
-            </View>
+                        {/* <Text style={styles.userstext}>Graded</Text> */}
+                      </TouchableOpacity>
+                    </View>
+                  </View>
 
-            <View style={styles.belowhr}>
-              <Text
-                style={{
-                  color: '#58636D',
-                  fontSize: 12,
-                  fontFamily: 'Poppins-Medium',
-                }}>
-                {'  '}Due:21May,2021
-              </Text>
+                  <View style={styles.belowhr}>
+                    <Text
+                      style={{
+                        color: '#58636D',
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                      }}>
+                      {'  '}Due:
+                      {assignment.submissionDateString ||
+                        'Subject name Not Found'}
+                    </Text>
 
-              <Button
-                style={styles.button}
-                onPress={() => navigation.navigate('Teacher Dashboard')}
-                labelStyle={{
-                  color: 'white',
-                  fontFamily: 'Poppins-Regular',
-                  fontWeight: 'bold',
-                }}
-                uppercase={false}
-                mode="contained">
-                View
-              </Button>
-            </View>
-          </View>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-
-                  {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#5177E7',
-                      fontFamily: 'Poppins-Medium',
-                    }}>
-                    {'  '}Subject
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#58636D',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    Not Graded
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      marginRight: 30,
-                      fontFamily: 'Poppins-Regular',
-                      color: '#505069',
-                    }}>
-                    {'\n  '}Exams will be conducted via online{'\n '} mode.All
-                    the best.It is requested
-                    {'\n  '}from the students to maintain the.
-                  </Text>
-
-                  {/* <Text style={styles.userstext}>Graded</Text> */}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.belowhr}>
-              <Text
-                style={{
-                  color: '#58636D',
-                  fontSize: 12,
-                  fontFamily: 'Poppins-Medium',
-                }}>
-                {'  '}Due:21May,2021
-              </Text>
-
-              <Button
-                style={styles.button}
-                onPress={() => navigation.navigate('Teacher Dashboard')}
-                labelStyle={{
-                  color: 'white',
-                  fontFamily: 'Poppins-Regular',
-                  fontWeight: 'bold',
-                }}
-                uppercase={false}
-                mode="contained">
-                Edit
-              </Button>
-            </View>
-          </View>
+                    <Button
+                      style={styles.button}
+                      // onPress={() => navigation.navigate('Student Dashboard')}
+                      labelStyle={{
+                        color: 'white',
+                        fontFamily: 'Poppins-Regular',
+                        fontWeight: 'bold',
+                      }}
+                      uppercase={false}
+                      mode="contained">
+                      View
+                    </Button>
+                  </View>
+                </View>
+              ),
+            )}
         </ScrollView>
       </View>
     );
