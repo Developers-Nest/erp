@@ -13,37 +13,38 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DropDownPicker from 'react-native-dropdown-picker';
 // import {Dropdown} from 'react-native-material-dropdown-v2-fixed';
+import ModalSelector from 'react-native-modal-selector';
 
 export default function ExamReport({navigation}) {
-  const [open, setOpen] = useState(null);
+  // const [open, setOpen] = useState(null);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Final Reports', value: 'Final Reports'},
-    {label: 'Mid Term', value: 'Mid Term'},
+    {label: 'Final Reports', key: 'Final Reports'},
+    {label: 'Mid Term', key: 'Mid Term'},
   ]);
 
-  const [open1, setOpen1] = useState(null);
-  const [value1, setValue1] = useState(null);
-  const [items1, setItems1] = useState([
-    {label: 'Class1', value: 'Class1'},
-    {label: 'Class2', value: 'Class2'},
-    {label: 'Class3', value: 'Class3'},
+  // const [open1, setOpen1] = useState(null);
+  const [className, setclassName] = useState(null);
+  const [classes, setclasses] = useState([
+    {label: 'Class1', key: 'Class1'},
+    {label: 'Class2', key: 'Class2'},
+    {label: 'Class3', key: 'Class3'},
   ]);
 
-  const [open2, setOpen2] = useState(null);
-  const [value2, setValue2] = useState(null);
-  const [items2, setItems2] = useState([
-    {label: 'Batch1', value: 'Batch1'},
-    {label: 'Batch2', value: 'Batch2'},
-    {label: 'Batch3', value: 'Batch3'},
+  // const [open2, setOpen2] = useState(null);
+  const [batch, setbatch] = useState(null);
+  const [batches, setbatches] = useState([
+    {label: 'Batch1', key: 'Batch1'},
+    {label: 'Batch2', key: 'Batch2'},
+    {label: 'Batch3', key: 'Batch3'},
   ]);
 
-  const [open3, setOpen3] = useState(null);
-  const [value3, setValue3] = useState(null);
-  const [items3, setItems3] = useState([
-    {label: 'Subject1', value: 'Subject1'},
-    {label: 'Subject2', value: 'Subject2'},
-    {label: 'Subject3', value: 'Subject3'},
+  // const [open3, setOpen3] = useState(null);
+  const [subject, setsubject] = useState(null);
+  const [subjects, setsubjects] = useState([
+    {label: 'Subject1', key: 'Subject1'},
+    {label: 'Subject2', key: 'Subject2'},
+    {label: 'Subject3', key: 'Subject3'},
   ]);
 
   return (
@@ -73,8 +74,8 @@ export default function ExamReport({navigation}) {
           Exam Reports
         </Text>
       </View>
-      <View style={{marginHorizontal: 15, marginTop: 10}}>
-        <DropDownPicker
+      <View style={{marginHorizontal: 15, marginVertical: 10}}>
+        {/* <DropDownPicker
           open={open}
           value={value}
           items={items}
@@ -100,6 +101,16 @@ export default function ExamReport({navigation}) {
             fontStyle: 'normal',
             fontWeight: '500',
           }}
+        /> */}
+        <ModalSelector
+          data={items}
+          initValue="Final Exam"
+          onChange={option => {
+            setValue(option.key);
+          }}
+          style={styles.card}
+          initValueTextStyle={styles.SelectedValue}
+          selectTextStyle={styles.SelectedValue}
         />
         <View
           style={{
@@ -107,14 +118,14 @@ export default function ExamReport({navigation}) {
             justifyContent: 'space-between',
             marginTop: 10,
           }}>
-          <DropDownPicker
+          {/* <DropDownPicker
             zIndex={1000}
             open={open1}
-            value={value1}
-            items={items1}
+            value={class}
+            items={classes}
             setOpen={setOpen1}
-            setValue={setValue1}
-            setItems={setItems1}
+            setValue={setclass}
+            setItems={setclasses}
             style={styles.dropdown}
             containerStyle={{width: '30%'}}
             placeholder="Class"
@@ -122,11 +133,11 @@ export default function ExamReport({navigation}) {
           <DropDownPicker
             defaultIndex={0}
             open={open2}
-            value={value2}
-            items={items2}
+            value={batch}
+            items={batches}
             setOpen={setOpen2}
-            setValue={setValue2}
-            setItems={setItems2}
+            setValue={setbatch}
+            setItems={setbatches}
             style={styles.dropdown}
             containerStyle={{width: '30%'}}
             placeholder="Batch"
@@ -134,29 +145,59 @@ export default function ExamReport({navigation}) {
           <DropDownPicker
             defaultIndex={0}
             open={open3}
-            value={value3}
-            items={items3}
+            value={subject}
+            items={subjects}
             setOpen={setOpen3}
-            setValue={setValue3}
-            setItems={setItems3}
+            setValue={setsubject}
+            setItems={setsubjects}
             style={styles.dropdown}
             containerStyle={{width: '30%'}}
             placeholder="Subject"
+          /> */}
+          <ModalSelector
+            data={classes}
+            initValue="Class1"
+            onChange={option => {
+              setclass(option.key);
+            }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+          <ModalSelector
+            data={batches}
+            initValue="Batch1"
+            onChange={option => {
+              setbatch(option.key);
+            }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+          <ModalSelector
+            data={subjects}
+            initValue="Subject1"
+            onChange={option => {
+              setsubject(option.key);
+            }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
           />
         </View>
       </View>
 
       {value !== null &&
-      value1 !== null &&
-      value2 !== null &&
-      value3 !== null ? (
+      className !== null &&
+      batch !== null &&
+      subject !== null ? (
         <ExamReport21 />
       ) : null}
 
       {value !== null &&
-      value1 !== null &&
-      value2 !== null &&
-      value3 !== null ? (
+      className !== null &&
+      batch !== null &&
+      subject !== null ? (
         <ExamReport22 />
       ) : (
         <ExamReport1 />
@@ -318,6 +359,23 @@ const styles = StyleSheet.create({
     minWidth: 171,
     backgroundColor: 'white',
   },
+  card: {
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+
+    minWidth: 110,
+    elevation: 3,
+  },
   card_title: {fontSize: 18},
   card_marks: {
     justifyContent: 'center',
@@ -374,5 +432,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     paddingVertical: 5,
     color: '#58636D',
+  },
+  SelectedValue: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 18,
+    lineHeight: 27,
+    padding: 10,
+    color: '#211C5A',
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
   },
 });
