@@ -16,6 +16,7 @@ import getTerm from '../../../../services/helpers/getList/getTerm'
 import getAssessesment from '../../../../services/helpers/getList/getAssessesment'
 import get from '../../../../services/helpers/request/get'
 import read from '../../../../services/localstorage/read'
+import getExam from '../../../../services/helpers/getList/getExam'
 
 const MySearchbar = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -38,6 +39,7 @@ export default function CceMarks() {
   const [subjects, setSubjects] = useState([])
   const [terms, setTerms] = useState([])
   const [assessments, setAssessments] = useState([])
+  const [exams, setExams] = useState([])
 
   // selected Values
   const [course, setCourse] = useState(null)
@@ -45,6 +47,7 @@ export default function CceMarks() {
   const [subject, setSubject] = useState(null)
   const [term, setTerm] = useState(null)
   const [assessment, setAssessment] = useState(null)
+  const [exam, setExam] = useState(null)
 
   // after fetching list
   const [fetched, setFetched] = useState(false)
@@ -106,21 +109,40 @@ export default function CceMarks() {
     }
   }
 
+  const getExams = async (ss) => {
+    try {
+      await setSubject(ss)
+      console.log("Selected exam ", ss)
+      const response = await getExam(course, batch, subject, term, assessment)
+      console.log('Exams ', response)
+    } catch (err) {
+      alert('Cannot get your exams !!')
+    }
+  }
+
   ///////////// get dropdown values ends ///////////////
 
   const getList = async () => {
 
-    try{
-      const slug = `/cce/exam/scholasticMark?
-        course=${course}&batch=${batch}&examname=60e69d016c02fa225d45f1a2
-        &term=${term}&subject=${subject}
-        &assessment=${assessment}`
-      const token = await read('token')
-      const response = await get(slug, token)
-      console.log("List ", response)
+    try {
+
+      let slug = `/cce/exam/scholasticMark?course=${course}&batch=${batch}&examname=${exam}&term=${term}&subject=${subject}&assessment=${assessment}`
+      let token = await read('token')
+      let res = await get(slug, token)
+      console.log("Marks list ", res)
+      res = res.students
+      let marksArray = []
+      res.map((data) => {
+        marksArray.push({
+          subjectName: data.subjectSub,
+          studentAddNum: data.studentAdmissionNumber,
+          mark: data.mark
+        })
+      })
+      setList(res)
       setFetched(true)
 
-    } catch(err){
+    } catch (err) {
       alert('Cannot fetch list!!')
     }
   }
@@ -202,7 +224,18 @@ export default function CceMarks() {
           data={subjects}
           initValue="Subjects"
           onChange={async (option) => {
-            setSubject(option.key)
+            await getExams(option.key)
+          }}
+          style={{
+            width: "100%",
+          }} />
+
+        {/* exam selector */}
+        <ModalSelector
+          data={exams}
+          initValue="Exams"
+          onChange={async (option) => {
+            setExam(option.key)
           }}
           style={{
             width: "100%",
@@ -228,40 +261,41 @@ export default function CceMarks() {
       </View>
       {
         fetched ? (
-          <View>
-            <View
-              style={{
-                padding: 5,
-              }}>
-              <MySearchbar />
-            </View>
-            <View
-              style={{
-                padding: 5,
-              }}></View>
-            <View style={{ marginTop: 10, ...styles.shadow }}>
-              <View style={styles.card_top}>
-                <View>
-                  <Text style={styles.card_title}>Title</Text>
-                  <Text style={{ color: 'blue', fontSize: 12 }}>Remarks</Text>
+          list && list.map((data) => (
+            <View>
+              <View
+                style={{
+                  padding: 5,
+                }}>
+                <MySearchbar />
+              </View>
+              <View
+                style={{
+                  padding: 5,
+                }}></View>
+              <View style={{ marginTop: 10, ...styles.shadow }}>
+                <View style={styles.card_top}>
+                  <View>
+                    <Text style={styles.card_title}>{data.studentAddNum}</Text>
+                    <Text style={{ color: 'blue', fontSize: 12 }}>Remarks</Text>
+                  </View>
+                  <View style={styles.card_marks}>
+                    <Text style={{ color: 'white' }}>{data.mark}/50</Text>
+                  </View>
                 </View>
-                <View style={styles.card_marks}>
-                  <Text style={{ color: 'white' }}>18/30</Text>
+                <View style={styles.card_middle}>
+                  <Text>
+                    {data.subjectName}
+                  </Text>
                 </View>
-              </View>
-              <View style={styles.card_middle}>
-                <Text>
-                  There are some issues on the writing methods of the answers.Try to
-                  improve them.
-                </Text>
-              </View>
-              <View style={styles.card_bottom}>
-                <Text style={{ color: 'rgba(176, 67, 5, 1)', fontSize: 12 }}>
-                  Max:21/30
-                </Text>
+                {/* <View style={styles.card_bottom}>
+                  <Text style={{ color: 'rgba(176, 67, 5, 1)', fontSize: 12 }}>
+                    Max:21/30
+                  </Text>
+                </View> */}
               </View>
             </View>
-          </View>
+          ))
         ) : (null)
       }
 
