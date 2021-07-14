@@ -18,6 +18,10 @@ import read from '../../../../services/localstorage/read'
 
 export default function AddAssignments() {
 
+  const [Chapter, setChapter]=useState("Chapter's name");
+  const [Topic, setTopic]=useState('Topic:');
+  const [Discription, setDiscription]=useState('Discription:')
+
   // data array
   const [batches, setBatches] = useState([])
   const [courses, setCourses] = useState([])
@@ -130,18 +134,27 @@ export default function AddAssignments() {
 
         <Card>
           <Card.Content>
-            <Title>
-              <Text style={{ fontWeight: 'bold' }}>Chapter:</Text>
-              <Text> Newton's Laws Of Motion </Text>
-            </Title>
+          <View style={{
+                flexDirection:"row"
+            }}>
+
+            <TextInput 
+            placeholder="Chapter's name "
+            onChange={(val)=>setChapter(val)}/>
+            {/* <View style={{paddingLeft:10}} /> */}
+            </View>
             <View style={{ padding: 2 }} />
-            <View style={{ borderWidth: 0.5 }} />
+            <View style={{ borderWidth: 0.2 }} />
             <View style={{ padding: 10 }} />
-            <Paragraph>Topic: First Law Of Motion</Paragraph>
+            <TextInput 
+            placeholder="Topic "
+            onChange={(val)=>setTopic(val)} />
             <View style={{ padding: 2 }} />
-            <View style={{ borderWidth: 0.5 }} />
+            <View style={{ borderWidth: 0.2 }} />
             <View style={{ padding: 10 }} />
-            <Paragraph>Description (optional)</Paragraph>
+            <TextInput 
+            placeholder="Discription (optional) "
+            onChange={(val)=>setDiscription(val)}/>
             <View style={{ padding: 80 }} />
             <View
               style={{
