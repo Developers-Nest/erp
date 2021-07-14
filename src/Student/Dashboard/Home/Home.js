@@ -25,7 +25,8 @@ import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 //drawer navigation
-import Assignment from './Assignment/Assignment';
+// import Assignment from './Assignment/Assignment';
+import AssignmentStudent from './AssignmentStudent/AssignmentStudent';
 import Attendance from './Attendance/Attendance';
 import Books from './Books/Books';
 import ContentLibrary from './Content Library/ContentLibrary';
@@ -281,7 +282,7 @@ export default function Route() {
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
-      <DrawerNav.Screen name="Assignment" component={Assignment} />
+      <DrawerNav.Screen name="AssignmentStudent" component={AssignmentStudent} />
       <DrawerNav.Screen name="Books" component={Books} />
       <DrawerNav.Screen name="Fees" component={Fees} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
@@ -314,7 +315,7 @@ function DrawerContent(props) {
         />
         <Drawer.Item
           label={'Assignment'}
-          onPress={() => props.navigation.navigate('Assignment')}
+          onPress={() => props.navigation.navigate('AssignmentStudent')}
         />
         <Drawer.Item
           label={'Books'}
