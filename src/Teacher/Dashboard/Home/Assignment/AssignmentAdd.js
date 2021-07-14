@@ -14,6 +14,9 @@ import ModalSelector from 'react-native-modal-selector'
 // helpers
 import get from '../../../../services/helpers/request/get'
 import read from '../../../../services/localstorage/read'
+import getBatch from '../../../../services/helpers/getList/getBatch'
+import getCourse from '../../../../services/helpers/getList/getCourse'
+import getSubject from '../../../../services/helpers/getList/getSubject'
 
 
 export default function AddAssignments() {
@@ -32,18 +35,14 @@ export default function AddAssignments() {
   const [course, setCourse] = useState(null)
   const [subject, setSubject] = useState(null)
 
+  // input values
+  const [title, setTitle] = useState(null)
+  const [desc, setDesc] = useState(null)
+
   useEffect(async () => {
 
     try {
-      let token = await read('token')
-      let response = await get('/course', token)
-      let courseArray = []
-      response.map((data)=>{
-        courseArray.push({
-          label: data.courseName,
-          key: data._id
-        })
-      })
+      let courseArray = await getCourse()
       setCourses(courseArray)
     } catch (err) {
       alert('Error in Getting Your Courses!!')
@@ -54,38 +53,18 @@ export default function AddAssignments() {
   let getBatches = async ()=>{
 
     try{
-      let slug = `/batch/?course=${course}`
-      let token = await read('token')
-      let response = await get(slug, token)
-      let batchArray = []
-        response.map((data)=>{
-          batchArray.push({
-            label: data.batchName,
-            key: data._id
-          })
-        })
-
+      let batchArray = await getBatch(course)
       setBatches(batchArray)
     } catch(err){
       alert('Cannot get your Batches!!')
     }
     
-  
   }
 
   let getSubjects = async ()=>{
 
     try{
-      let slug = `/subject/assign?course=${course}&batch=${batch}`
-      let token = await read('token')
-      let response = await get(slug, token)
-      let subjectArray = []
-      response.map((data)=>{
-          subjectArray.push({
-            label: data.subject,
-            key: data.subjectId
-          })
-      })
+      let subjectArray = await getSubject(course, batch)
       setSubjects(subjectArray)
     } catch(err){
       alert('Cannot get your Subjects!!')
@@ -108,7 +87,10 @@ export default function AddAssignments() {
           onChange={(option) => { 
             setCourse(option.key) 
             getBatches()
-          }} />
+          }} 
+          style={{
+            width: 120,
+          }}/>
 
         <ModalSelector
           data={batches}
@@ -116,12 +98,18 @@ export default function AddAssignments() {
           onChange={(option) => { 
             setBatch(option.key) 
             getSubjects()
+          }}
+          style={{
+            width: 120,
           }} />
 
         <ModalSelector
           data={subjects}
           initValue="Subject"
-          onChange={(option) => { setSubject(option.key) }} />
+          onChange={(option) => { setSubject(option.key) }}
+          style={{
+            width: 120,
+          }}/>
 
       </View>
 

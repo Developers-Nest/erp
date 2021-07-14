@@ -25,7 +25,8 @@ import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 //drawer navigation
-import Assignment from './Assignment/Assignment';
+// import Assignment from './Assignment/Assignment';
+import AssignmentStudent from './AssignmentStudent/AssignmentStudent';
 import Attendance from './Attendance/Attendance';
 import Books from './Books/Books';
 import ContentLibrary from './Content Library/ContentLibrary';
@@ -33,6 +34,7 @@ import Feedback from './Feedback/Feedback';
 import Fees from './Fees/Fees';
 import Transport from './Transport/Transport';
 import Subject from './Subject/Subject.js';
+import Report from './Report/Report';
 
 //navigations from home screen
 import Notification from './Home/Notification';
@@ -281,11 +283,12 @@ export default function Route() {
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
-      <DrawerNav.Screen name="Assignment" component={Assignment} />
+      <DrawerNav.Screen name="AssignmentStudent" component={AssignmentStudent} />
       <DrawerNav.Screen name="Books" component={Books} />
       <DrawerNav.Screen name="Fees" component={Fees} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
       <DrawerNav.Screen name="Transport" component={Transport} />
+      <DrawerNav.Screen name="Report" component={Report} />
       {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
     </DrawerNav.Navigator>
   );
@@ -314,7 +317,7 @@ function DrawerContent(props) {
         />
         <Drawer.Item
           label={'Assignment'}
-          onPress={() => props.navigation.navigate('Assignment')}
+          onPress={() => props.navigation.navigate('AssignmentStudent')}
         />
         <Drawer.Item
           label={'Books'}
@@ -328,6 +331,10 @@ function DrawerContent(props) {
           label={'Transport'}
           style={{color: 'white'}}
           onPress={() => props.navigation.navigate('Transport')}
+        />
+        <Drawer.Item
+          label={'Report'}
+          onPress={() => props.navigation.navigate('Report')}
         />
       </Drawer.Section>
       <DrawerContentScrollView

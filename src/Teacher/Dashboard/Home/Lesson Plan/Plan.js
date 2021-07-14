@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -21,7 +21,24 @@ import {
 import Icon from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
-export default function LessonPlan({navigation}) {
+// helpers
+import get from '../../../../services/helpers/request/get'
+import read from '../../../../services/localstorage/read'
+
+export default function LessonPlan({ navigation }) {
+
+  const [data, setData] = useState([])
+
+  useEffect(async () => {
+
+    let slug = '/lessonplanning'
+    const token = await read('token')
+    const response = await get(slug, token)
+    console.log(response)
+    setData(response)
+
+  }, [])
+
   return (
     <View
       style={{
@@ -30,7 +47,7 @@ export default function LessonPlan({navigation}) {
         justifyContent: 'flex-start',
       }}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => { }}>
           <Icon
             size={24}
             color="white"
@@ -55,7 +72,7 @@ export default function LessonPlan({navigation}) {
           }}>
           Lesson Plan
         </Text>
-        <View style={{flex: 1, marginLeft: 20}}>
+        <View style={{ flex: 1, marginLeft: 20 }}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Add Lesson Plan');
@@ -73,7 +90,7 @@ export default function LessonPlan({navigation}) {
               }}
             />
           </TouchableOpacity>
-          <Text style={{paddingLeft: 70, color: '#fff'}}>Add</Text>
+          <Text style={{ paddingLeft: 70, color: '#fff' }}>Add</Text>
         </View>
       </View>
 
@@ -87,7 +104,7 @@ export default function LessonPlan({navigation}) {
         }}>
         {/* open search */}
 
-        <View style={{marginTop: 20, ...styles.card}}>
+        <View style={{ marginTop: 20, ...styles.card }}>
           <TextInput
             left={<TextInput.Icon name="magnify" />}
             right={<TextInput.Icon name="filter" />}
@@ -108,158 +125,93 @@ export default function LessonPlan({navigation}) {
             mode="outline"
           />
         </View>
-        {/* close search */}
       </View>
-      {/* starting of Card loop-section,scroll for more number of cards */}
+
       <ScrollView>
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontWeight: 'normal',
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: 18,
-                    color: '#211C5A',
-                  }}>
-                  {' '}
-                  Topic Name
-                </Text>
 
-                <TouchableOpacity
-                  style={{flexDirection: 'row'}}
-                  onPress={() => {
-                    navigation.navigate('Edit Lesson Plan');
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#58636D',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    Edit
-                  </Text>
-                  <Icon size={12} color="#211C5A" name="edit" />
-                </TouchableOpacity>
-              </View>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#505069',
-                    fontFamily: 'Poppins-Regular',
-                  }}>
-                  Physics(Phy-20232)
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#505069',
-                    paddingRight: 15,
-                    fontFamily: 'Poppins-Regular',
-                  }}>
-                  Exams will be conducted via online mode.All the best.It is
-                  requested from the students to maintain the dignity
-                </Text>
+        {
+          data && data.map((plan) => (
+            <View style={styles.section} key={data._id}>
+              <View style={styles.details}>
+                <View style={styles.userinhostels}>
+                  <View style={styles.differentusers}>
+                    <Text
+                      style={{
+                        fontWeight: 'normal',
+                        fontFamily: 'Poppins-Regular',
+                        fontSize: 18,
+                        color: '#211C5A',
+                      }}>
+                      {' '}
+                      {plan.topic || 'Topic not found'}
+                    </Text>
 
-                {/* <Text style={styles.userstext}>Graded</Text> */}
-              </TouchableOpacity>
-            </View>
-          </View>
+                    <TouchableOpacity
+                      style={{ flexDirection: 'row' }}
+                      onPress={() => {
+                        navigation.navigate('Edit Lesson Plan',{
+                          lessonPlan: plan
+                        });
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58636D',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        Edit
+                      </Text>
+                      <Icon size={12} color="#211C5A" name="edit" />
+                    </TouchableOpacity>
+                  </View>
+                  <TouchableOpacity style={styles.differentusers}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#505069',
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {plan.name || 'Subject not found'}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.differentusers}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#505069',
+                        paddingRight: 15,
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {plan.description || 'Description not found'}
+                    </Text>
 
-          <View style={styles.belowhr}>
-            <Text
-              style={{
-                color: '#505069',
-                fontSize: 12,
-                fontFamily: 'Poppins-Regular',
-              }}>
-              Batch
-            </Text>
-
-            <Button
-              title="Link"
-              mode="contained"
-              color="#5177E7"
-              labelStyle={{color: 'white'}}
-            />
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontWeight: 'normal',
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: 18,
-                    color: '#211C5A',
-                  }}>
-                  {' '}
-                  Topic Name
-                </Text>
-
-                <View style={{flexDirection: 'row'}}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#58636D',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Edit
-                  </Text>
-                  <Icon size={12} color="#211C5A" name="edit" />
+                    {/* <Text style={styles.userstext}>Graded</Text> */}
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
+              </View>
+
+              <View style={styles.belowhr}>
                 <Text
                   style={{
-                    fontSize: 12,
                     color: '#505069',
+                    fontSize: 12,
                     fontFamily: 'Poppins-Regular',
                   }}>
-                  Physics(Phy-20232)
+                  {plan.course && plan.course.courseName} -
+                  {plan.batch && plan.batch.batchName}
                 </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#505069',
-                    paddingRight: 15,
-                    fontFamily: 'Poppins-Regular',
-                  }}>
-                  Exams will be conducted via online mode.All the best.It is
-                  requested from the students to maintain the dignity
-                </Text>
-              </TouchableOpacity>
+
+                <Button
+                  title="Link"
+                  mode="contained"
+                  color="#5177E7"
+                  labelStyle={{ color: 'white' }}
+                />
+              </View>
             </View>
-          </View>
+          ))
+        }
 
-          <View style={styles.belowhr}>
-            <Text
-              style={{
-                color: '#505069',
-                fontSize: 12,
-                fontFamily: 'Poppins-Regular',
-              }}>
-              Batch
-            </Text>
-
-            <Button
-              title="Link"
-              mode="contained"
-              color="#5177E7"
-              labelStyle={{color: 'white'}}
-            />
-          </View>
-        </View>
       </ScrollView>
       {/* Cards end */}
     </View>
@@ -342,7 +294,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,

@@ -121,7 +121,7 @@ export default function App({navigation}) {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(async () => {
     // check for token from local storage
@@ -135,19 +135,19 @@ export default function App({navigation}) {
 
       dispatch({
         type: USERINFO,
-        userInfo: response
-      })
+        userInfo: response,
+      });
 
       console.log('Role ', r);
       if (r === 'Teacher') {
         navigation.navigate('Teacher Dashboard');
-      } else if (role === 'Student') {
+      } else if (r === 'Student') {
         navigation.navigate('Student Dashboard');
       }
     } catch (err) {
       // token not found
       // ask user to login
-      console.log("Use Effect Error ", err)
+      console.log('Use Effect Error ', err);
     }
   }, []);
 
@@ -167,8 +167,8 @@ export default function App({navigation}) {
 
       dispatch({
         type: USERINFO,
-        userInfo: response
-      })
+        userInfo: response,
+      });
 
       // write token to local storage
       try {

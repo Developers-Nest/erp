@@ -1,309 +1,44 @@
-// import React from 'react';
-// import {View} from 'react-native';
-
-// import {Text} from 'react-native-paper';
-
-// export default function App({navigation}) {
-//   return (
-//     <View>
-//       <Text>Assignment Screen Teacher</Text>
-//     </View>
-//   );
-// }
-
-import * as React from 'react';
-
+import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
-// import AssignmentDueHeader from '../shared/assignmentsdueheader';
-// import HeaderAssignmentDue from '../../shared/headerassignmentdue';
 
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   ScrollView,
-  ImageBackground,
-  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-//import HostelAllocation2 from "./hostelallocation2";
 
-//import { Dropdown} from 'sharingan-rn-modal-dropdown';
-import {
-  event,
-  onChange,
-  setValue,
-  target,
-  value,
-} from 'react-native-reanimated';
-import {Searchbar} from 'react-native-paper';
-// import HeaderAllocatedList from '../shared/headerallocatedlist';
-// import {AntDesign} from '@expo/vector-icons';
+import { Searchbar } from 'react-native-paper';
 
-export default function AssignmentsDue({navigation}) {
-  const [activeTab, setActiveTab] = React.useState('Due');
+// helpers
+import get from '../../../../services/helpers/request/get'
+import read from '../../../../services/localstorage/read'
 
-  const [searchQuery, setSearchQuery] = React.useState('');
+export default function AssignmentsDue({ navigation }) {
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [assignments, setAssignments] = useState([])
 
   const onChangeSearch = query => setSearchQuery(query);
-  function switchTab() {
-    if (activeTab === 'Submitted') {
-      setActiveTab('Due');
-    } else {
-      setActiveTab('Submitted');
+
+  useEffect(async () => {
+
+    try {
+      let slug = '/note/assignment'
+      let token = await read('token')
+      const response = await get(slug, token)
+      console.log(response)
+      setAssignments(response)
+
+    } catch (err) {
+      alert('Cannot fetch your assignments !!')
     }
-  }
-  function Due() {
-    const [searchQuery, setSearchQuery] = React.useState('');
 
-    const onChangeSearch = query => setSearchQuery(query);
+  }, [])
 
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <View style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-
-                  <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('Assignment Edit')}>
-                      <Text style={{fontSize: 12, color: '#211C5A'}}>Edit</Text>
-                      <Icon size={12} color="#211C5A" name="edit" />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 12, color: '#5177E7'}}>
-                    Course and Batch
-                  </Text>
-                  {/*                 
-                <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 12, color: '#505069'}}>
-                    Exams will be conducted via online mode in the upcoming week
-                    and these are notes for it.So,go through them and study well
-                  </Text>
-
-                  {/* <Text style={styles.userstext}>Graded</Text> */}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.belowhr}>
-              <View style={{flexDirection: 'column'}}>
-                <Text style={{color: '#B04305', fontSize: 12}}>
-                  Due:21 May,2021
-                </Text>
-                <Text style={{color: '#58636D', fontSize: 12}}>
-                  Saved as Draft
-                </Text>
-              </View>
-              <Button
-                title="Send"
-                mode="contained"
-                color="#58636D"
-                //   labelStyle={{color:'white'}}
-              />
-            </View>
-          </View>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-
-                  <View style={{flexDirection: 'row'}}>
-                    <Text style={{fontSize: 12, color: '#211C5A'}}> Edit</Text>
-                    <Icon size={12} color="#211C5A" name="edit" />
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 12, color: '#5177E7'}}>
-                    Course and Batch
-                  </Text>
-                  {/*                 
-                <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 12, color: '#505069'}}>
-                    Exams will be conducted via online mode in the upcoming week
-                    and these are notes for it.So,go through them and study well
-                  </Text>
-
-                  {/* <Text style={styles.userstext}>Graded</Text> */}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.belowhr}>
-              <View style={{flexDirection: 'column'}}>
-                <Text style={{color: '#B04305', fontSize: 12}}>
-                  Due:21 May,2021
-                </Text>
-                <Text style={{color: '#58636D', fontSize: 12}}>
-                  Saved as Draft
-                </Text>
-              </View>
-              <Button title="Send" mode="contained" color="#5177E7" />
-            </View>
-          </View>
-
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-
-                  <View style={{flexDirection: 'row'}}>
-                    <Text style={{fontSize: 12, color: '#211C5A'}}> Edit</Text>
-                    <Icon size={12} color="#211C5A" name="edit" />
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 12, color: '#5177E7'}}>
-                    Course and Batch
-                  </Text>
-                  {/*                 
-                <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 12, color: '#505069'}}>
-                    Exams will be conducted via online mode in the upcoming week
-                    and these are notes for it.So,go through them and study well
-                  </Text>
-
-                  {/* <Text style={styles.userstext}>Graded</Text> */}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={styles.belowhr}>
-              <View style={{flexDirection: 'column'}}>
-                <Text style={{color: '#B04305', fontSize: 12}}>
-                  Due:21 May,2021
-                </Text>
-                <Text style={{color: '#58636D', fontSize: 12}}>
-                  Saved as Draft
-                </Text>
-              </View>
-              <Button title="Send" mode="contained" color="#5177E7" />
-            </View>
-          </View>
-        </ScrollView>
-      </View>
-    );
-  }
-
-  function Submitted() {
-    const [searchQuery, setSearchQuery] = React.useState('');
-
-    const onChangeSearch = query => setSearchQuery(query);
-
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-
-                  <Text style={{fontSize: 10, color: '#505069'}}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 12, color: '#58626C'}}>
-                    Issued: 21May,2021
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text style={{fontSize: 12, color: '#58636D'}}>
-                      {' '}
-                      Due: 21Sept,2021
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-
-                  <Text style={{fontSize: 10, color: '#505069'}}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 12, color: '#58626C'}}>
-                    Issued: 21May,2021
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text style={{fontSize: 12, color: '#58636D'}}>
-                      {' '}
-                      Due: 21Sept,2021
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
-      </View>
-    );
-  }
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
@@ -316,42 +51,74 @@ export default function AssignmentsDue({navigation}) {
           }}>
           <Searchbar
             placeholder="Enter subject or batch name"
-            // placeholderTextColor="black"
-            // onChangeText={this.updateSearch}
             onChangeText={onChangeSearch}
             value={searchQuery} //value={search}
-            //    style={styles.search}
-            containerStyle={{width: '60%', marginTop: 40, marginHorizontal: 70}}
-            //     //containerStyle={{backgroundColor:"#fff"}}
+            containerStyle={{ width: '60%', marginTop: 40, marginHorizontal: 70 }}
           />
         </View>
-        <View style={styles.switchTabsView}>
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: activeTab == 'Due' ? 4 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => switchTab()}>
-            <Text style={styles.switchText}>Due</Text>
-          </TouchableOpacity>
+        <View style={styles.container}>
+          <ScrollView>
+            {
+              assignments && assignments.map((assignment) => (
 
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: activeTab == 'Submitted' ? 4 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => switchTab()}>
-            <Text style={styles.switchText}>Submitted</Text>
-          </TouchableOpacity>
+                <View style={styles.section} key={assignment._id}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontWeight: 'normal',
+                            fontSize: 18,
+                            color: '#211C5A',
+                          }}>
+                          {' '}
+                          {assignment.title || 'Title Not Found'}
+                        </Text>
+
+                        <View style={{ flexDirection: 'row' }}>
+
+                          {/* passin assignment id */}
+                          <TouchableOpacity
+                            onPress={() => navigation.navigate('Assignment Edit', {
+                              assignment: assignment
+                            })}>
+
+                            <Text style={{ fontSize: 12, color: '#211C5A' }}>Edit</Text>
+                            <Icon size={12} color="#211C5A" name="edit" />
+                          </TouchableOpacity>
+
+                        </View>
+                      </View>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text style={{ fontSize: 12, color: '#5177E7' }}>
+                          {assignment.course && assignment.course.courseName} -
+                          {assignment.batch && assignment.batch.batchName}
+                        </Text>
+
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text style={{ fontSize: 12, color: '#505069' }}>
+                          {assignment.description || 'Description Not Found'}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  <View style={styles.belowhr}>
+                    <View style={{ flexDirection: 'column' }}>
+                      <Text style={{ color: '#B04305', fontSize: 12 }}>
+                        Due: {assignment.submissionDateString || 'Submission date Not Found'}
+                      </Text>
+                      <Text style={{ color: '#58636D', fontSize: 12 }}>
+                        Saved as Draft
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              ))
+            }
+          </ScrollView>
         </View>
-
-        {activeTab === 'Due' ? <Due /> : <Submitted />}
       </View>
     </TouchableWithoutFeedback>
   );

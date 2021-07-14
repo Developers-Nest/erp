@@ -13,14 +13,15 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DropDownPicker from 'react-native-dropdown-picker';
 // import {Dropdown} from 'react-native-material-dropdown-v2-fixed';
 
+import ModalSelector from 'react-native-modal-selector';
+
 export default function ExamReport({navigation}) {
-  const [open, setOpen] = useState(null);
+  // const [open, setOpen] = useState(null);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    {label: 'Final Reports', value: 'Final Reports'},
-    {label: 'Mid Term', value: 'Mid Term'},
+    {label: 'Final Reports', key: 'Final Reports'},
+    {label: 'Mid Term', key: 'Mid Term'},
   ]);
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -49,7 +50,7 @@ export default function ExamReport({navigation}) {
         </Text>
       </View>
       <View style={{padding: 15}}>
-        <DropDownPicker
+        {/* <DropDownPicker
           open={open}
           value={value}
           items={items}
@@ -77,8 +78,17 @@ export default function ExamReport({navigation}) {
             lineHeight: 27,
             color: '#211C5A',
           }}
+        /> */}
+        <ModalSelector
+          data={items}
+          initValue="Final Exam"
+          onChange={option => {
+            setValue(option.key);
+          }}
+          style={styles.card}
+          initValueTextStyle={styles.SelectedValue}
+          selectTextStyle={styles.SelectedValue}
         />
-
         {value !== null ? <ExamReport2 /> : <ExamReport1 />}
       </View>
     </View>
@@ -192,15 +202,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
     overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
     padding: 0,
     minWidth: 110,
+    elevation: 3,
   },
   sectionHeading: {
     fontFamily: 'Poppins-Regular',
@@ -249,5 +260,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 15,
     paddingHorizontal: 20,
+  },
+  SelectedValue: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 18,
+    lineHeight: 27,
+    padding: 10,
+    alignSelf: 'flex-start',
+    color: '#211C5A',
   },
 });
