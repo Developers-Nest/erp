@@ -115,6 +115,7 @@ export default function CceMarks() {
       console.log("Selected exam ", ss)
       const response = await getExam(course, batch, subject, term, assessment)
       console.log('Exams ', response)
+      setExams(response)
     } catch (err) {
       alert('Cannot get your exams !!')
     }
@@ -143,7 +144,7 @@ export default function CceMarks() {
       setFetched(true)
 
     } catch (err) {
-      alert('Cannot fetch list!!')
+      alert('List Not found!!')
     }
   }
 
