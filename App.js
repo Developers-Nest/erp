@@ -8,8 +8,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 // import Teacher from './src/Teacher/Teacher';
 // import Student from './src/Student/Student';
 import Login from './src/Login';
-import StudentDashboard from './src/Student/Dashboard/Home/Home';
-import TeacherDashboard from './src/Teacher/Dashboard/Home/Home';
+import StudentDashboard from './src/Student/Dashboard/Dashboard';
+import TeacherDashboard from './src/Teacher/Dashboard/Dashboard';
 
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
@@ -25,8 +25,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator headerMode="none">
           <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Teacher Login" component={Teacher} />
-          <Stack.Screen name="Student Login" component={Student} />
+          <Stack.Screen name="Teacher Dashboard" component={TeacherDashboard} />
+          <Stack.Screen name="Student Dashboard" component={StudentDashboard} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
