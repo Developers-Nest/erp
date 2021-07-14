@@ -1,5 +1,4 @@
-
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {
   StyleSheet,
@@ -21,89 +20,153 @@ import {
   target,
   value,
 } from 'react-native-reanimated';
-import {Searchbar,Button} from 'react-native-paper';
+import {Searchbar, Button} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 
+// helpers
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
+
+// redux
+import {useSelector} from 'react-redux';
 
 export default function AssignmentStudentDue({navigation}) {
-    var [ isPress, setIsPress ] = React.useState(false);
+  const [assignments, setAssignments] = useState([]);
+  const userInfo = useSelector(state => state.userInfo);
+  useEffect(async () => {
+    try {
+      let slug = `/note/assignment?batch=${userInfo.batch}&&course=${userInfo.course}`;
+      let token = await read('token');
+      const response = await get(slug, token);
+      console.log(response);
+      setAssignments(response);
+    } catch (err) {
+      alert('Cannot fetch your assignments !!');
+    }
+  }, []);
+
+  function isAssignmentDone(assignment) {
+    // alert(assignment.attemptedBy.length);
+    for (let i = 0; i < assignment.attemptedBy.length; i++) {
+      if (assignment.attemptedBy[i].userId === userInfo._id) {
+        // alert(userInfo._id + ' ' + assignment.attemptedBy[i].userId);
+        return i;
+      } else {
+        return -1;
+      }
+    }
+  }
+  var [isPress, setIsPress] = React.useState(false);
 
   var touchProps = {
     activeOpacity: 1,
-    underlayColor: 'blue',                               // <-- "backgroundColor" will be always overwritten by "underlayColor"
+    underlayColor: 'blue', // <-- "backgroundColor" will be always overwritten by "underlayColor"
     style: isPress ? styles.btnPress : styles.btnNormal, // <-- but you can still apply other style changes
     onHideUnderlay: () => setIsPress(false),
     onShowUnderlay: () => setIsPress(true),
-    onPress: () => console.log('HELLO'),                 // <-- "onPress" is apparently required
+    onPress: () => console.log('HELLO'), // <-- "onPress" is apparently required
   };
 
-    // const press=()=>{navigation.navigate('AssignmentsScreen2');}
   const [activeTab, setActiveTab] = React.useState('Due');
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
-  const[showContent,setShowContent]=React.useState('Due')
+  const [showContent, setShowContent] = React.useState('Due');
+
   function switchTab() {
     if (activeTab === 'Submitted') {
       setActiveTab('Due');
+    } else {
+      setActiveTab('Submitted');
     }
-    
-    else{setActiveTab('Submitted');}
   }
+
   function Due() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
 
     return (
-
-        
       <View style={styles.container}>
-          <ScrollView>
-      <View style={styles.section}>
-          <View style={styles.details}>
-             
-             <View style={styles.userinhostels}>
-               <TouchableOpacity style={styles.differentusers}>
-               <Text style={{fontWeight: 'normal', fontSize: 18,color:'#211C5A',fontFamily:'Poppins-Regular'}}> Title</Text>
- 
-                {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
-               </TouchableOpacity>
-               <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize:12,color:'#5177E7',fontFamily:'Poppins-Medium'}}>{'  '}Subject</Text>
-                
-               </TouchableOpacity>
-               <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize:12,marginRight:30,fontFamily:'Poppins-Regular',color:'#505069'}}>{'\n  '}Exams will be conducted via online{'\n '} mode.All the best.It is requested
-                {'\n  '}from the students to maintain the.</Text>
-                
-                {/* <Text style={styles.userstext}>Graded</Text> */}
-               </TouchableOpacity>
-             </View>
-              
+        <ScrollView>
+          {assignments &&
+            assignments.map(assignment =>
+              isAssignmentDone(assignment) > -1 ? null : (
+                <View style={styles.section} key={assignment._id}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontWeight: 'normal',
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          {assignment.title || 'Title Not Found'}
+                        </Text>
 
+                        {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#5177E7',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                          {'  '}
+                          {assignment.subject.name || 'Subject name Not Found'}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            marginRight: 30,
+                            fontFamily: 'Poppins-Regular',
+                            color: '#505069',
+                          }}>
+                          {'  '}
+                          {assignment.description || 'Description Not Found'}
+                        </Text>
 
-          </View>
+                        {/* <Text style={styles.userstext}>Graded</Text> */}
+                      </TouchableOpacity>
+                    </View>
+                  </View>
 
-          <View style={styles.belowhr}>
-               <Text style={{color:'#58636D',fontSize:12,fontFamily:'Poppins-Medium'}}>{'  '}Due:21May,2021</Text>
-              
-               <Button
-          style={styles.button}
-          onPress={() => navigation.navigate('AssignmentSubmit')}
-          labelStyle={{color: 'white',fontFamily:'Poppins-Regular',fontWeight:'bold'}}
-          uppercase={false}
-          mode="contained">
-          Submit
-        </Button>
-              
+                  <View style={styles.belowhr}>
+                    <Text
+                      style={{
+                        color: '#58636D',
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                      }}>
+                      {'  '}Due:
+                      {assignment.submissionDateString ||
+                        'Subject name Not Found'}
+                    </Text>
 
-
-
-          </View>
-         </View>
-         </ScrollView>  
+                    <Button
+                      style={styles.button}
+                      onPress={() => navigation.navigate('AssignmentSubmit')}
+                      labelStyle={{
+                        color: 'white',
+                        fontFamily: 'Poppins-Regular',
+                        fontWeight: 'bold',
+                      }}
+                      uppercase={false}
+                      mode="contained">
+                      Submit
+                    </Button>
+                  </View>
+                </View>
+              ),
+            )}
+        </ScrollView>
       </View>
     );
   }
@@ -115,120 +178,131 @@ export default function AssignmentStudentDue({navigation}) {
 
     return (
       <View style={styles.container}>
-          <ScrollView>
-            <View style={styles.section}>
-          <View style={styles.details}>
-             
-             <View style={styles.userinhostels}>
-               <TouchableOpacity style={styles.differentusers}>
-               <Text style={{fontWeight: 'normal', fontSize: 18,color:'#211C5A',fontFamily:'Poppins-Regular'}}> Title</Text>
- 
-                {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
-               </TouchableOpacity>
-               <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize:12,color:'#5177E7',fontFamily:'Poppins-Medium'}}>{'  '}Subject</Text>
-                <Text style={{fontSize:12,color:'#5177E7',fontFamily:'Poppins-Regular'}}>Not Graded</Text>
-                
-               </TouchableOpacity>
-               <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize:12,marginRight:30,fontFamily:'Poppins-Regular',color:'#505069'}}>{'\n  '}Exams will be conducted via online{'\n '} mode.All the best.It is requested
-                {'\n  '}from the students to maintain the.</Text>
-                
-                {/* <Text style={styles.userstext}>Graded</Text> */}
-               </TouchableOpacity>
-             </View>
-              
+        <ScrollView>
+          {assignments &&
+            assignments.map(assignment =>
+              !(isAssignmentDone(assignment) > -1) ? null : (
+                <View style={styles.section} key={assignment._id}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontWeight: 'normal',
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          {assignment.title || 'Title Not Found'}
+                        </Text>
 
+                        {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#5177E7',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                          {'  '}
+                          {assignment.subject.name || 'Subject name Not Found'}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#5177E7',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {assignment.attemptedBy[isAssignmentDone(assignment)]
+                            .marks || 'Marks Not Found'}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            marginRight: 30,
+                            fontFamily: 'Poppins-Regular',
+                            color: '#505069',
+                          }}>
+                          {'  '}
+                          {assignment.description || 'Description Not Found'}
+                        </Text>
 
-          </View>
+                        {/* <Text style={styles.userstext}>Graded</Text> */}
+                      </TouchableOpacity>
+                    </View>
+                  </View>
 
-          <View style={styles.belowhr}>
-               <Text style={{color:'#58636D',fontSize:12,fontFamily:'Poppins-Medium'}}>{'  '}Due:21May,2021</Text>
-              
-               <Button
-          style={styles.button}
-          onPress={() => navigation.navigate('Teacher Dashboard')}
-          labelStyle={{color: 'white',fontFamily:'Poppins-Regular',fontWeight:'bold'}}
-          uppercase={false}
-          mode="contained">
-          View
-        </Button>
-              
+                  <View style={styles.belowhr}>
+                    <Text
+                      style={{
+                        color: '#58636D',
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                      }}>
+                      {'  '}Due:
+                      {assignment.submissionDateString ||
+                        'Subject name Not Found'}
+                    </Text>
 
-
-
-          </View>
-         </View>
-         <View style={styles.section}>
-          <View style={styles.details}>
-             
-             <View style={styles.userinhostels}>
-               <TouchableOpacity style={styles.differentusers}>
-               <Text style={{fontWeight: 'normal', fontSize: 18,color:'#211C5A',fontFamily:'Poppins-Regular'}}> Title</Text>
- 
-                {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
-               </TouchableOpacity>
-               <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize:12,color:'#5177E7',fontFamily:'Poppins-Medium'}}>{'  '}Subject</Text>
-                <Text style={{fontSize:12,color:'#58636D',fontFamily:'Poppins-Regular'}}>Not Graded</Text>
-                
-               </TouchableOpacity>
-               <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize:12,marginRight:30,fontFamily:'Poppins-Regular',color:'#505069'}}>{'\n  '}Exams will be conducted via online{'\n '} mode.All the best.It is requested
-                {'\n  '}from the students to maintain the.</Text>
-                
-                {/* <Text style={styles.userstext}>Graded</Text> */}
-               </TouchableOpacity>
-             </View>
-              
-
-
-          </View>
-
-          <View style={styles.belowhr}>
-               <Text style={{color:'#58636D',fontSize:12,fontFamily:'Poppins-Medium'}}>{'  '}Due:21May,2021</Text>
-              
-               <Button
-          style={styles.button}
-          onPress={() => navigation.navigate('Teacher Dashboard')}
-          labelStyle={{color: 'white',fontFamily:'Poppins-Regular',fontWeight:'bold'}}
-          uppercase={false}
-          mode="contained">
-          Edit
-        </Button>
-              
-
-
-
-          </View>
-         </View>
-         </ScrollView>
+                    <Button
+                      style={styles.button}
+                      // onPress={() => navigation.navigate('Student Dashboard')}
+                      labelStyle={{
+                        color: 'white',
+                        fontFamily: 'Poppins-Regular',
+                        fontWeight: 'bold',
+                      }}
+                      uppercase={false}
+                      mode="contained">
+                      View
+                    </Button>
+                  </View>
+                </View>
+              ),
+            )}
+        </ScrollView>
       </View>
     );
   }
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
-          
-<View  style={styles.header}>
-      <TouchableOpacity  onPress={()=>{}}>
-      <Icon size={24} color="white" name="left" style={{ alignSelf: 'center', fontSize: 25, color: 'white',paddingTop:8,paddingRight:10 }} />
-
-        </TouchableOpacity>
-        <Text style={{fontStyle:'normal',
-        fontFamily:'NunitoSans-Regular',fontSize:28,fontWeight:'600',color:'white'}}>
-           Assignments
-        </Text>
-    {/* <View style={{flex:1,marginLeft:20}}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => {}}>
+            <Icon
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingTop: 8,
+                paddingRight: 10,
+              }}
+            />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontFamily: 'NunitoSans-Regular',
+              fontSize: 28,
+              fontWeight: '600',
+              color: 'white',
+            }}>
+            Assignments
+          </Text>
+          {/* <View style={{flex:1,marginLeft:20}}>
     <TouchableOpacity onPress={()=>{}}>
     <Ionicons name="add-circle-outline" style={{alignSelf:'center',fontSize:25,color:'white',paddingLeft:20,paddingTop:15}}/>
     </TouchableOpacity>
     <Text style={{paddingLeft:20,color:'#fff'}}>Issue Books</Text>
     </View> */}
-    </View>
-
-
-
+        </View>
 
         <View
           style={{
@@ -237,44 +311,40 @@ export default function AssignmentStudentDue({navigation}) {
             marginBottom: 30,
             marginTop: 30,
           }}>
-         
- {/* open search */}
-       <View
-        style={{
-          marginTop: 10,
-          //make search and card in same line
-          marginLeft:5,
-          justifyContent: 'space-between',
-          width:'95%',
-          flexDirection: 'row',
-          ...styles.shadow,
-        }}>
-       
-        <TextInput
-          style={{width: '80%', ...styles.text_input}}
-          placeholder="Enter subject name"
-        />
-        <TouchableOpacity
-          style={{
-            alignSelf: 'center',
-          }}>
-          <FontAwesome5
-          name="search"
-          style={{
-            alignSelf: 'center',
-            fontSize: 21,
-            
-            color: '#505069',
-          }}
-        
-          />
-        </TouchableOpacity>
-      </View>
+          {/* open search */}
+          <View
+            style={{
+              marginTop: 10,
+              //make search and card in same line
+              marginLeft: 5,
+              justifyContent: 'space-between',
+              width: '95%',
+              flexDirection: 'row',
+              ...styles.shadow,
+            }}>
+            <TextInput
+              style={{width: '80%', ...styles.text_input}}
+              placeholder="Enter subject name"
+            />
+            <TouchableOpacity
+              style={{
+                alignSelf: 'center',
+              }}>
+              <FontAwesome5
+                name="search"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 21,
 
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-        
+
         <View style={styles.switchTabsView}>
-        <TouchableOpacity
+          <TouchableOpacity
             style={{
               borderBottomWidth: showContent == 'Due' ? 1 : 0,
               borderBottomColor: 'rgba(176, 67, 5, 1)',
@@ -299,7 +369,7 @@ export default function AssignmentStudentDue({navigation}) {
           </TouchableOpacity>
         </View>
         {showContent === 'Due' ? <Due /> : <Submitted />}
-          {/* <TouchableOpacity
+        {/* <TouchableOpacity
             style={{
               borderBottomWidth: activeTab == 'Due' ? 4 : 0,
               borderBottomColor: '#58636D',
@@ -308,10 +378,10 @@ export default function AssignmentStudentDue({navigation}) {
               alignItems: 'center',
             }}
             onPress={() => switchTab()}> */}
-            
-            {/* <Text style={styles.switchText}>Due</Text> */}
-          {/* </TouchableOpacity> */}
-{/* 
+
+        {/* <Text style={styles.switchText}>Due</Text> */}
+        {/* </TouchableOpacity> */}
+        {/* 
           <TouchableOpacity
             style={{
               borderBottomWidth: activeTab == 'Submitted' ? 4 : 0,
@@ -321,8 +391,8 @@ export default function AssignmentStudentDue({navigation}) {
               alignItems: 'center',
             }}
             onPress={() => switchTab()}> */}
-            
-            {/* <Button title="Submitted" style={{
+
+        {/* <Button title="Submitted" style={{
               borderBottomWidth: showContent == 'Submitted' ? 4 : 0,
               borderBottomColor: '#58636D',
               paddingHorizontal: 4,
@@ -335,8 +405,7 @@ export default function AssignmentStudentDue({navigation}) {
                 
                  setShowContent('Submitted')}}
             /> */}
-          {/* </TouchableOpacity> */}
-        
+        {/* </TouchableOpacity> */}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -372,7 +441,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingBottom: 0,
     borderBottomColor: 'rgba(88, 99, 109, 0.45)',
-    borderBottomWidth:0.8,
+    borderBottomWidth: 0.8,
   },
   userinhostels: {
     marginTop: 10,
@@ -405,13 +474,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 40,
   },
-   switchText: {
+  switchText: {
     fontSize: 14,
     color: '#58636D',
     paddingHorizontal: 5,
-    fontFamily:'Poppins-SemiBold',
-    fontWeight:'bold',
-    
+    fontFamily: 'Poppins-SemiBold',
+    fontWeight: 'bold',
   },
   maincontainer: {
     // paddingTop: 10,
@@ -419,11 +487,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5E5E5',
   },
   header: {
-    height:65,
-    backgroundColor:'rgba(0, 73, 159, 1)',
-    flexDirection:'row',
+    height: 65,
+    backgroundColor: 'rgba(0, 73, 159, 1)',
+    flexDirection: 'row',
     // justifyContent:'flex-start'   ,
-    padding:10 
+    padding: 10,
   },
   button: {
     backgroundColor: 'rgba(81, 119, 231, 1)',
@@ -434,14 +502,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 1,
     borderRadius: 6,
   },
-    switchTextDue: {
+  switchTextDue: {
     fontSize: 14,
     color: '#B04305',
     paddingHorizontal: 5,
-    fontFamily:'Poppins-SemiBold',
-    fontWeight:'bold',
+    fontFamily: 'Poppins-SemiBold',
+    fontWeight: 'bold',
   },
-    text_input: {
+  text_input: {
     paddingHorizontal: 20,
     borderRadius: 10,
     // backgroundColor: 'rgba(249, 249, 249, 1)',
@@ -450,7 +518,6 @@ const styles = StyleSheet.create({
     minWidth: 171,
     backgroundColor: 'white',
   },
-
 
   shadow: {
     shadowColor: '#999',
@@ -470,5 +537,4 @@ const styles = StyleSheet.create({
     padding: 0,
     minWidth: 110,
   },
-
 });
