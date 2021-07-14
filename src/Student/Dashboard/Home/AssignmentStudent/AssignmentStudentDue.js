@@ -52,7 +52,7 @@ export default function AssignmentStudentDue({navigation}) {
         // alert(userInfo._id + ' ' + assignment.attemptedBy[i].userId);
         return i;
       } else {
-        return false;
+        return -1;
       }
     }
   }
