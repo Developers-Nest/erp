@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextInput } from 'react-native-paper';
+// import { TextInput } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {
   StyleSheet,
   Text,
+  TextInput,
   View,
   ScrollView,
   TouchableOpacity,
@@ -255,24 +256,26 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   section: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    shadowColor: '#333',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.2,
-    elevation: 2,
+    shadowOpacity: 1,
+    elevation: 5,
     marginTop: 14,
-    borderRadius: 12,
+    borderRadius: 8,
     paddingLeft: 10,
     paddingRight: 10,
     marginHorizontal: 20,
+    marginBottom:10
+
   },
 
   details: {
@@ -281,6 +284,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingBottom: 10,
     borderBottomColor: '#333',
+    paddingHorizontal:10
 
   },
   userinhostels: {
@@ -306,6 +310,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 40,
+    marginBottom:10
   },
   switchText: {
     fontSize: 14,
@@ -317,8 +322,9 @@ const styles = StyleSheet.create({
   },
   maincontainer: {
     paddingTop: 10,
+    
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
 
   switchTextDue: {
