@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
   Card,
-  Title,
-  Paragraph,
   Button,
 } from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector'
+
+// date picker
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 
 // helpers
 import get from '../../../../services/helpers/request/get'
@@ -17,13 +16,14 @@ import read from '../../../../services/localstorage/read'
 import getBatch from '../../../../services/helpers/getList/getBatch'
 import getCourse from '../../../../services/helpers/getList/getCourse'
 import getSubject from '../../../../services/helpers/getList/getSubject'
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen'
 
 
 export default function AddAssignments() {
 
-  const [Chapter, setChapter]=useState("Chapter's name");
-  const [Topic, setTopic]=useState('Topic:');
-  const [Discription, setDiscription]=useState('Discription:')
+  const [Chapter, setChapter] = useState("Chapter's name");
+  const [Topic, setTopic] = useState('Topic:');
+  const [Discription, setDiscription] = useState('Discription:')
 
   // data array
   const [batches, setBatches] = useState([])
@@ -34,42 +34,59 @@ export default function AddAssignments() {
   const [batch, setBatch] = useState(null)
   const [course, setCourse] = useState(null)
   const [subject, setSubject] = useState(null)
+  const [date, setDate] = useState(new Date(1598051730000))
 
   // input values
   const [title, setTitle] = useState(null)
   const [desc, setDesc] = useState(null)
 
-  useEffect(async () => {
+  const [showdatePicker, setShowDatePicker] = useState(false)
 
+  // loading screem
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
+  useEffect(async () => {
+    showLoadingScreen()
     try {
       let courseArray = await getCourse()
       setCourses(courseArray)
     } catch (err) {
       alert('Error in Getting Your Courses!!')
     }
-
+    hideLoadingScreen()
   }, [])
 
-  let getBatches = async ()=>{
-
-    try{
-      let batchArray = await getBatch(course)
+  let getBatches = async (sc) => {
+    showLoadingScreen()
+    setCourse(sc)
+    try {
+      let batchArray = await getBatch(sc)
       setBatches(batchArray)
-    } catch(err){
+    } catch (err) {
       alert('Cannot get your Batches!!')
     }
-    
+    hideLoadingScreen()
   }
 
-  let getSubjects = async ()=>{
-
-    try{
-      let subjectArray = await getSubject(course, batch)
+  let getSubjects = async (sb) => {
+    showLoadingScreen()
+    setBatch(sb)
+    try {
+      let subjectArray = await getSubject(course, sb)
       setSubjects(subjectArray)
-    } catch(err){
+    } catch (err) {
       alert('Cannot get your Subjects!!')
     }
-  
+    hideLoadingScreen()
+  }
+
+  // handle form submission
+  let handleSubmit = async(sd) => {
+    showLoadingScreen()
+    console.log("Date ", sd)
+    await setDate(sd.toString())
+    setShowDatePicker(false)
+    hideLoadingScreen()
   }
 
   return (
@@ -80,24 +97,22 @@ export default function AddAssignments() {
           flexDirection: 'row',
           justifyContent: 'space-evenly',
         }}>
-
+          {loadingScreen}
         <ModalSelector
           data={courses}
           initValue="Course"
-          onChange={(option) => { 
-            setCourse(option.key) 
-            getBatches()
-          }} 
+          onChange={(option) => {
+            getBatches(option.key)
+          }}
           style={{
             width: 120,
-          }}/>
+          }} />
 
         <ModalSelector
           data={batches}
           initValue="Batch"
-          onChange={(option) => { 
-            setBatch(option.key) 
-            getSubjects()
+          onChange={(option) => {
+            getSubjects(option.key)
           }}
           style={{
             width: 120,
@@ -109,7 +124,7 @@ export default function AddAssignments() {
           onChange={(option) => { setSubject(option.key) }}
           style={{
             width: 120,
-          }}/>
+          }} />
 
       </View>
 
@@ -122,40 +137,49 @@ export default function AddAssignments() {
 
         <Card>
           <Card.Content>
-          <View style={{
-                flexDirection:"row"
+            <View style={{
+              flexDirection: "row"
             }}>
 
-            <TextInput 
-            placeholder="Chapter's name "
-            onChange={(val)=>setChapter(val)}/>
-            {/* <View style={{paddingLeft:10}} /> */}
+              <TextInput
+                placeholder="Chapter's name "
+                onChange={(val) => setChapter(val)} />
+              {/* <View style={{paddingLeft:10}} /> */}
             </View>
             <View style={{ padding: 2 }} />
             <View style={{ borderWidth: 0.2 }} />
             <View style={{ padding: 10 }} />
-            <TextInput 
-            placeholder="Topic "
-            onChange={(val)=>setTopic(val)} />
+            <TextInput
+              placeholder="Topic "
+              onChange={(val) => setTopic(val)} />
             <View style={{ padding: 2 }} />
             <View style={{ borderWidth: 0.2 }} />
             <View style={{ padding: 10 }} />
-            <TextInput 
-            placeholder="Discription (optional) "
-            onChange={(val)=>setDiscription(val)}/>
+            <TextInput
+              placeholder="Discription (optional) "
+              onChange={(val) => setDiscription(val)} />
             <View style={{ padding: 80 }} />
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-around',
               }}>
+              {/* date picker */}
               <Button
                 icon="calendar"
                 mode="contained"
                 color="white"
-                onPress={() => console.log('Pressed')}>
-                13:00{' '}
+                onPress={() => setShowDatePicker(true)}>
+                Set Deadline
               </Button>
+
+              <DateTimePickerModal
+                isVisible={showdatePicker}
+                mode="date"
+                onConfirm={handleSubmit}
+                onCancel={()=>setShowDatePicker(!showdatePicker)}
+              />
+
               <View style={{ padding: 10 }} />
               <Button
                 mode="contained"
@@ -178,7 +202,8 @@ export default function AddAssignments() {
           onPress={() => console.log('Pressed')}
           style={{
             width: 90,
-          }}>
+          }}
+          onPress={handleSubmit}>
           {' '}
           Save
         </Button>
