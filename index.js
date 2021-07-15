@@ -3,7 +3,7 @@
  */
 
 import { AppRegistry } from 'react-native';
-import App from './App';
+import App from './src/Teacher/Dashboard/Home/Assignment/AssignmentEdit';
 import { name as appName } from './app.json';
 import RNFetchBlob from 'rn-fetch-blob';
 
