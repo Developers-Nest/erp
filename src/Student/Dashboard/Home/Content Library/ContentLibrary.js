@@ -29,13 +29,8 @@ export default function ContentLibrary({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
-  function switchTab() {
-    if (activeTab === 'Videos') {
-      setActiveTab('Material');
-    } else {
-      setActiveTab('Videos');
-    }
-  }
+  
+  const[setContent,setShowContent]=React.useState('Materials');
   function Material() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -53,39 +48,72 @@ export default function ContentLibrary({navigation}) {
                     fontSize: 20,
                     color: '#211C5A',
                   }}>
-                  Title
+                  Chapter Name
                 </Text>
                 <Button>
-                  edit
-                  <FontAwesome5 name={'edit'} size={20} light />
+                  <FontAwesome5 name={'file-alt'} size={20} light />
                 </Button>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 16, color: 'blue'}}>
-                  course and Batch
-                </Text>
+                <Text style={{fontSize: 14, color: 'black'}}>Title</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 16}}>
-                  Exams will be conducted via online mode in the upcoming week
-                  and these are the notes for it so go through them and study
-                  well
+                <Text style={{fontSize: 16, paddingRight: 100}}>
+                  Exams will be conducted via online mode and students are
+                  required to maintain the.
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.hey}>
                 <Text style={{fontSize: 16, marginRight: 100}}>
-                  Teacher's Name
+                  Abhinav Chikkara
                 </Text>
 
-                <Button
-                  styles={{flexDirection: 'flex-end'}}
-                  mode="contained"
-                  onPress={() => console.log('Pressed')}>
-                  Send
+                <View>
+                  <Text>21 May,2021</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        <View style={styles.section}>
+          <View style={styles.details}>
+            <View style={styles.userinhostels}>
+              <TouchableOpacity style={styles.differentusers}>
+                <Text
+                  style={{
+                    fontWeight: 'normal',
+                    fontSize: 20,
+                    color: '#211C5A',
+                  }}>
+                  Chapter Name
+                </Text>
+                <Button>
+                  <FontAwesome5 name={'image'} size={20} light />
                 </Button>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.differentusers}>
+                <Text style={{fontSize: 14, color: 'black'}}>Subject</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.differentusers}>
+                <Text style={{fontSize: 16, paddingRight: 100}}>
+                  Exams will be conducted via online mode and students are
+                  required to maintain the.
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.hey}>
+                <Text style={{fontSize: 16, marginRight: 100}}>
+                  Abhinav Chikkara
+                </Text>
+
+                <View>
+                  <Text>21 May,2021</Text>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -111,36 +139,73 @@ export default function ContentLibrary({navigation}) {
                     fontSize: 20,
                     color: '#211C5A',
                   }}>
-                  Title
+                  Chapter Name
                 </Text>
                 <Button>
-                  edit
-                  <FontAwesome5 name={'edit'} size={20} light />
+                  <FontAwesome5 name={'file-alt'} size={20} light />
                 </Button>
               </TouchableOpacity>
+
               <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 16, color: 'blue'}}>
-                  course and Batch
-                </Text>
+                <Text style={{fontSize: 14, color: 'black'}}>Title</Text>
               </TouchableOpacity>
+
               <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 16}}>
-                  Exams will be conducted via online mode in the upcoming week
-                  and these are the notes for it so go through them and study
-                  well
+                <Text style={{fontSize: 16, paddingRight: 100}}>
+                  Exams will be conducted via online mode and students are
+                  required to maintain the.
                 </Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.hey}>
                 <Text style={{fontSize: 16, marginRight: 100}}>
-                  Teacher's Name
+                  Abhinav Chikkara
                 </Text>
-                <Button
-                  styles={{flexDirection: 'flex-end'}}
-                  mode="contained"
-                  onPress={() => console.log('Pressed')}>
-                  Send
+
+                <View>
+                  <Text>21 May,2021</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <View style={styles.details}>
+            <View style={styles.userinhostels}>
+              <TouchableOpacity style={styles.differentusers}>
+                <Text
+                  style={{
+                    fontWeight: 'normal',
+                    fontSize: 20,
+                    color: '#211C5A',
+                  }}>
+                  Chapter Name
+                </Text>
+                <Button>
+                  <FontAwesome5 name={'image'} size={20} light />
                 </Button>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.differentusers}>
+                <Text style={{fontSize: 14, color: 'black'}}>Subject</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.differentusers}>
+                <Text style={{fontSize: 16, paddingRight: 100}}>
+                  Exams will be conducted via online mode and students are
+                  required to maintain the.
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.hey}>
+                <Text style={{fontSize: 16, marginRight: 100}}>
+                  Abhinav Chikkara
+                </Text>
+
+                <View>
+                  <Text>21 May,2021</Text>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -152,9 +217,8 @@ export default function ContentLibrary({navigation}) {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{flex: 1}}>
         <Appbar>
-          <Appbar.BackAction onPress={() => navigation.navigate('Home')} />
+          <Appbar.BackAction onPress={() => {navigation.goBack();}} />
           <Appbar.Content title="Content Library" />
-          <Appbar.Action icon="plus-circle-outline" />
         </Appbar>
         <View style={styles.maincontainer}>
           <View
@@ -166,44 +230,42 @@ export default function ContentLibrary({navigation}) {
               justifyContent: 'flex-start',
             }}>
             <Searchbar
-              placeholder="Enter subject or batch name"
+              placeholder="Enter subject or topic name"
               onChangeText={onChangeSearch}
               value={searchQuery}
-              //   containerStyle={{
-              //     width: '60%',
-              //     marginTop: 20,
-              //     marginHorizontal: 70,
-              //   }}
+              containerStyle={{
+                width: '60%',
+                marginTop: 20,
+                marginHorizontal: 70,
+              }}
             />
           </View>
           <View style={styles.switchTabsView}>
             <TouchableOpacity
               style={{
-                // flex: 1,
-                borderBottomWidth: activeTab == 'Material' ? 2 : 0,
+                borderBottomWidth: setContent == 'Material' ? 2 : 0,
                 borderBottomColor: 'black',
                 paddingHorizontal: 4,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              onPress={() => switchTab()}>
+              onPress={() => setShowContent('Material')}>
               <Text style={styles.switchText}>Material</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={{
-                // flex: 1,
-                borderBottomWidth: activeTab == 'Videos' ? 2 : 0,
+                borderBottomWidth: setContent == 'Videos' ? 2 : 0,
                 borderBottomColor: 'black',
                 paddingHorizontal: 4,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              onPress={() => switchTab()}>
+              onPress={() => setShowContent('Videos')}>
               <Text style={styles.switchText}>Videos</Text>
             </TouchableOpacity>
           </View>
-          {activeTab === 'Material' ? <Material /> : <Videos />}
+          {setContent === 'Material' ? <Material /> : <Videos />}
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -222,6 +284,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+
   section: {
     display: 'flex',
     flexDirection: 'column',

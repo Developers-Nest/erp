@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import {
   Searchbar,
@@ -18,7 +19,7 @@ import {
   Title,
   Paragraph,
   Button,
-  TextInput,
+ 
   RadioButton,
 } from 'react-native-paper';
 
@@ -70,7 +71,9 @@ const AttendanceScreen1 = ({ navigation }) => {
   //   { label: 'Subject2', value: 'Subject2' },
   //   { label: 'Subject3', value: 'Subject3' },
   // ]);
+  const [checked, setChecked] = React.useState('first');
 
+  const [checked2, setChecked2] = React.useState('');
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
     {label: 'Final Reports', key: 'Final Reports'},
@@ -256,39 +259,7 @@ const AttendanceScreen1 = ({ navigation }) => {
 
         </View>
         <ScrollView>
-          <AttendancePart/>
-        </ScrollView>
-      </View>
-
-
-
-
-
-
-      <View style={{ padding: 7 }} />
-
-      {/* close list part */}
-
-      {/* Cards end */}
-    </View>
-  );
-};
-
-
-const AttendancePart = () => {
-
-
-
-
-  const [nameMethod, setNameMethod] = useState('Name');
-  const [checked, setChecked] = React.useState('first');
-
-  const [checked2, setChecked2] = React.useState('');
-
-
-  return (
-
-    <View style={{ marginTop: 6 }}>
+        <View style={{ marginTop: 6 }}>
       <View style={{ padding: 5, justifyContent: 'center' }} />
 
       {/* open search */}
@@ -310,6 +281,7 @@ const AttendancePart = () => {
           }} />
         <TextInput
           style={{ width: '80%', ...styles.text_input }}
+          underlineColorAndroid='transparent'
           placeholder="Enter student's name"
         />
         <TouchableOpacity
@@ -338,11 +310,13 @@ const AttendancePart = () => {
             <View style={styles.userinhostels}>
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Name</Text>
+                <View style={{marginRight:20}}>
                 <RadioButton
                   value="first"
                   status={checked === 'first' ? 'checked' : 'unchecked'}
                   onPress={() => setChecked('first')}
                 />
+                </View>
               </TouchableOpacity>
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{ fontSize: 14, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
@@ -362,11 +336,14 @@ const AttendancePart = () => {
             <View style={styles.userinhostels}>
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Name</Text>
+                <View style={{marginRight:20}}>
                 <RadioButton
+    
                   value="second"
                   status={checked2 === 'second' ? 'checked' : 'unchecked'}
                   onPress={() => setChecked2('second')}
                 />
+                </View>
               </TouchableOpacity>
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{ fontSize: 14, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
@@ -386,8 +363,23 @@ const AttendancePart = () => {
       {/* Cards end */}
 
     </View>
+        </ScrollView>
+      </View>
+
+
+
+
+
+
+      <View style={{ padding: 7 }} />
+
+      {/* close list part */}
+
+      {/* Cards end */}
+    </View>
   );
 };
+
 
 
 const AttendanceScreen2 = ({ navigation }) => {
@@ -681,26 +673,35 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
 
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   section: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    shadowColor: '#333',
+    // shadowColor: '#333',
+    // shadowOffset: {
+    //   width: 3,
+    //   height: 1,
+    // },
+    // shadowOpacity: 0.2,
+    // elevation: 5,
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.2,
-    elevation: 4,
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation:5,
     marginTop: 10,
     borderRadius: 12,
 
 
     padding: 10,
-    marginVertical: 10,
-    width: '100%'
+    marginLeft:2,
+    marginVertical: 15,
+    width: '99%'
   },
 
   details: {
@@ -747,7 +748,7 @@ const styles = StyleSheet.create({
   maincontainer: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   card: {
     shadowColor: '#999',
