@@ -143,7 +143,7 @@ export default function AddAssignments() {
             <TextInput 
             placeholder="Discription (optional) "
             onChange={(val)=>setDiscription(val)}/>
-            <View style={{ padding: 80 }} />
+            <View style={{ padding: 40 }} />
             <View
               style={{
                 flexDirection: 'row',
@@ -167,7 +167,7 @@ export default function AddAssignments() {
           </Card.Content>
         </Card>
       </View>
-      <View style={{ padding: 30 }} />
+      <View style={{ padding: 20 }} />
       <View
         style={{
           justifyContent: 'center',
