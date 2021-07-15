@@ -134,7 +134,7 @@ export default function RecordedClasses({navigation}) {
             <TextInput 
             placeholder="Discription (optional) "
             onChange={(val)=>setDiscription(val)}/>
-            <View style={{ padding: 80 }} />
+            <View style={{ padding: 10 }} />
             <View
               style={{
                 flexDirection: 'row',
