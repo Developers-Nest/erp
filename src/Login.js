@@ -116,6 +116,9 @@ import read from '../src/services/localstorage/read';
 // redux
 import {USERINFO} from '../src/reducers/actionType';
 
+// loading screen
+import LoadingScreen from './components/LoadingScreen/LoadingScreen'
+
 export default function App({navigation}) {
   const [institutionCode, setInstitutionCode] = useState(null);
   const [username, setUsername] = useState(null);
@@ -123,7 +126,11 @@ export default function App({navigation}) {
 
   const dispatch = useDispatch();
 
+  // loading screen
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
   useEffect(async () => {
+    setLoadingScreen()
     // check for token from local storage
     try {
       let t = await read('token');
@@ -149,9 +156,11 @@ export default function App({navigation}) {
       // ask user to login
       console.log('Use Effect Error ', err);
     }
+    hideLoadingScreen()
   }, []);
 
   const handleSubmit = async () => {
+    setLoadingScreen()
     try {
       const slug = '/user/login';
 
@@ -186,10 +195,12 @@ export default function App({navigation}) {
     } catch (err) {
       console.log(err);
     }
+    hideLoadingScreen()
   };
 
   return (
     <View style={styles.container}>
+      {loadingScreen}
       <LinearGradient
         colors={['rgba(0, 73, 159, 1)', 'rgba(176, 67, 5, 0.84)']}
         style={styles.linearGradient}
