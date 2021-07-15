@@ -1,9 +1,10 @@
 import BASEURL from '../../config/server'
 
-async function post(slug, data, token=null){
+async function patch(slug, data, token=null){
+
     let url = BASEURL + slug
     let response = await fetch(url, {
-        method: 'POST',
+        method: 'PATCH',
         headers: {
           Accept: 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -16,4 +17,4 @@ async function post(slug, data, token=null){
 
 }
 
-export default post
+export default patch
