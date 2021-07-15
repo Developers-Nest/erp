@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -45,6 +45,12 @@ import Timetable from './Home/Timetable';
 // redux
 import {useSelector} from 'react-redux';
 
+// helpers
+import read from '../../../services/localstorage/read'
+import get from '../../../services/helpers/request/get'
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen'
+import write from '../../../services/localstorage/write';
+
 let userInfo;
 
 const Home = ({navigation}) => {
@@ -54,9 +60,19 @@ const Home = ({navigation}) => {
     setCollapsed(!collapsed);
   };
   const onChangeSearch = query => setSearchQuery(query);
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
+
+  useEffect(async()=>{
+    let slug = `/timetable/upcomingTimetable`
+    let token = await read('token')
+    let response = await get(slug, token)
+    console.log('Response ', response)
+  },[])
 
   return (
     <View style={styles.container}>
+      {loadingScreen}
       <View style={{height: 20}}></View>
       <View style={{marginHorizontal: 30, ...styles.shadow}}>
         <View style={styles.search}>
@@ -276,6 +292,11 @@ const getTabBarVisibility = route => {
 };
 
 function DrawerContent(props) {
+
+  let handleLogout = async()=>{
+    await write('token', null)
+  }
+
   return (
     <View style={{flex: 1}}>
       <Drawer.Section>
@@ -350,7 +371,8 @@ function DrawerContent(props) {
                 fontWeight: '600',
                 fontSize: 14,
                 color: '#FFFFFF',
-              }}>
+              }}
+              onPress={handleLogout}>
               Logout
             </Text>
           </View>
