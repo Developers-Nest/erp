@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { TextInput } from 'react-native-paper';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -19,6 +18,7 @@ import {
   Text,
   View,
   ScrollView,
+  TextInput,
   ImageBackground,
   Button,
   TouchableOpacity,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {TextInput} from 'react-native-paper';
+// import {TextInput} from 'react-native-paper';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -24,6 +24,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  TextInput
 } from 'react-native';
 
 export default function LecturesScreen() {
