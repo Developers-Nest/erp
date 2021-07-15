@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { TextInput, Button } from 'react-native-paper';
+import {Button ,TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
     StyleSheet,
     Text,
     View,
+    
     ScrollView,
     TouchableOpacity,
     Alert,
@@ -17,6 +18,7 @@ export default function Report({ navigation }) {
 
     const [Description, setDescription] = React.useState('');
     return (
+
         < View style={styles.container}>
 
             {/* header opens */}
@@ -30,17 +32,18 @@ export default function Report({ navigation }) {
 
             </View>
 
-
+<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={{ width: '90%', marginTop: 20, alignSelf: 'center', ...styles.shadow }}>
                 <TextInput
                     multiline
-                    mode='outlined'
+                    // mode='outlined'
                     placeholder='Write down your problems here..'
                     numberOfLines={20}
                     value={Description}
                     onChangeText={(Description) => { setDescription(Description) }}
                     style={{ ...styles.text_input }} />
             </View>
+            </TouchableWithoutFeedback>
 
             <View style={{ padding: 20 }} />
 
@@ -60,29 +63,28 @@ export default function Report({ navigation }) {
 const styles = StyleSheet.create({
 
     text_input: {
-
+        
         backgroundColor: 'white',
+        fontFamily: 'Poppins-Regular',
     },
 
 
     shadow: {
 
-        shadowColor: '#333',
+        shadowColor: '#000',
         shadowOffset: {
-            width: 1,
-            height: 0,
+            width: 0,
+            height: 1,
         },
-        shadowOpacity: 2.0,
-        elevation: 13,
+        shadowOpacity: 1.0,
+        elevation: 5,
 
 
-        borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12,
-        borderTopRightRadius: 12,
-        borderTopLeftRadius: 12,
-
-        margin: 0,
-        padding: 0,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderTopRightRadius: 8,
+        borderTopLeftRadius: 8,
+        padding: 1,
 
     },
 
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 10,
         flex: 1,
-        backgroundColor: '#E5E5E5',
+        backgroundColor: 'rgba(249, 249, 249, 1)',
         alignContent: 'center',
 
     },
