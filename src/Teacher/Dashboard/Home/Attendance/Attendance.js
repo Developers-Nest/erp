@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import DropDownPicker from 'react-native-dropdown-picker';
 import ModalSelector from 'react-native-modal-selector';
 import {
   StyleSheet,
@@ -12,19 +11,11 @@ import {
   TextInput,
 } from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
   Button,
-
   RadioButton,
 } from 'react-native-paper';
 
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -78,7 +69,7 @@ const AttendanceScreen1 = ({ navigation }) => {
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
 
   // values after fetch
-  let attendanceId
+  const [attendanceId, setAttendanceId] = useState('')
 
   // on load of the screen
   useEffect(async () => {
@@ -131,9 +122,8 @@ const AttendanceScreen1 = ({ navigation }) => {
       let slug = `/student/attendance/?course=${course}&batch=${batch}&timestamp=1626287400000&subject=${sb}`
       let token = await read('token')
       let res = await get(slug, token)
-      console.log('List response ', res)
       setStudentObject(res)
-      attendanceId = res._id  // will be used during list submission
+      setAttendanceId(res._id)  // will be used during list submission
       setDay(res.day)
       let students = res.students
       let studentsMap = {}
@@ -144,11 +134,10 @@ const AttendanceScreen1 = ({ navigation }) => {
           present: student.present
         }
       })
-      console.log('Students ', studentsMap)
       setStudentsList(studentsMap)
       setFetched(true)
     } catch (err) {
-      alert('Cannot get list !!')
+      alert('No Lists found !!')
     }
     hideLoadingScreen()
   }
@@ -175,6 +164,7 @@ const AttendanceScreen1 = ({ navigation }) => {
   const handleSaveList = async()=>{
     try{
       let slug = `/student/attendance/${attendanceId}`
+      console.log('Att slug ', slug)
       let token = await read('token')
       let list = []
       studentObject.students.map((student)=>{
@@ -188,7 +178,7 @@ const AttendanceScreen1 = ({ navigation }) => {
           studentId: student.studentId._id
         })
       })
-      console.log('Patch List ', list)
+      // console.log('Patch List ', list)
       let data = {
         course: course,
         batch: batch,
@@ -197,9 +187,7 @@ const AttendanceScreen1 = ({ navigation }) => {
         day: day,
         list: list
       }
-      console.log('Data in Patch ', data)
       let response = await patch(slug, data, token)
-      console.log('Response after patch ', response)
       alert('List Updated!')
     } catch(err){
       alert('Cannot update List!')
