@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {TextInput} from 'react-native-paper';
+// import {TextInput} from 'react-native-paper';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -24,6 +24,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  TextInput
 } from 'react-native';
 
 export default function LecturesScreen() {
@@ -669,7 +670,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
 
   maincontainer: {
@@ -701,7 +702,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
 
     paddingHorizontal: 13,
-    shadowColor: '#333',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -775,7 +776,7 @@ const styles = StyleSheet.create({
   maincontainer: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   header: {
     height: 65,

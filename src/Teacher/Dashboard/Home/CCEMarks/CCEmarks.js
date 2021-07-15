@@ -189,7 +189,7 @@ export default function CceMarks() {
           onChange={async (option) => {
             await getBatches(option.key)
           }}
-          style={{
+          style={styles.card,{
             width: 150,
           }} />
 
@@ -201,7 +201,7 @@ export default function CceMarks() {
           onChange={async (option) => {
             await getSubjects(option.key)
           }}
-          style={{
+          style={styles.card,{
             width: 150,
           }} />
       </List.Section>
@@ -211,7 +211,7 @@ export default function CceMarks() {
           paddingLeft: 20,
           paddingRight: 20,
         }}>
-
+        <View style={{padding:8}}/>
         {/* select term */}
         <ModalSelector
           data={terms}
@@ -219,11 +219,11 @@ export default function CceMarks() {
           onChange={async (option) => {
             await getAssessesments(option.key)
           }}
-          style={{
+          style={styles.card,{
             width: "100%",
           }} />
 
-
+        <View style={{padding:8}}/>
         {/* select assessment */}
         <ModalSelector
           data={assessments}
@@ -231,10 +231,10 @@ export default function CceMarks() {
           onChange={async (option) => {
             setAssessment(option.key)
           }}
-          style={{
+          style={styles.card,{
             width: "100%",
           }} />
-
+        <View style={{padding:8}}/>
         {/* subject selector */}
         <ModalSelector
           data={subjects}
@@ -242,10 +242,10 @@ export default function CceMarks() {
           onChange={async (option) => {
             await getExams(option.key)
           }}
-          style={{
+          style={styles.card, styles.shadow,{
             width: "100%",
           }} />
-
+        <View style={{padding:8}}/>
         {/* exam selector */}
         <ModalSelector
           data={exams}
@@ -253,14 +253,14 @@ export default function CceMarks() {
           onChange={async (option) => {
             setExam(option.key)
           }}
-          style={{
+          style={styles.card,{
             width: "100%",
           }} />
       </View>
 
       <View
         style={{
-          paddingTop: 5,
+          paddingTop: 10,
           justifyContent: 'center',
           alignItems: 'center',
         }}>
@@ -319,6 +319,23 @@ export default function CceMarks() {
   );
 }
 const styles = StyleSheet.create({
+  card: {
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+
+    minWidth: 110,
+    elevation: 3,
+  },
   shadow: {
     shadowColor: '#999',
     shadowOffset: { width: 0, height: 1 },
