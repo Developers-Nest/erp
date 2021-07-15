@@ -26,7 +26,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 //drawer navigation
 import Assignment from './Assignment/Assignment';
-import Attendance from './Attendance/Attendance';
+import AttendanceStack from './Attendance/AttendanceStack';
+// import Attendance from './Attendance/Attendance';
 import Books from './Books/Books';
 import ContentLibrary from './Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
@@ -289,7 +290,7 @@ function DrawerContent(props) {
         />
         <Drawer.Item
           label={'Attendance'}
-          onPress={() => props.navigation.navigate('Attendance')}
+          onPress={() => props.navigation.navigate('AttendanceStack')}
         />
         <Drawer.Item
           label={'Assignment'}
@@ -369,7 +370,7 @@ export default function Route() {
       drawerStyle={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
-      <DrawerNav.Screen name="Attendance" component={Attendance} />
+      <DrawerNav.Screen name="AttendanceStack" component={AttendanceStack} />
       <DrawerNav.Screen name="Assignment" component={Assignment} />
       <DrawerNav.Screen name="Lesson Plan" component={LessonPlan} />
       <DrawerNav.Screen name="Books" component={Books} />
