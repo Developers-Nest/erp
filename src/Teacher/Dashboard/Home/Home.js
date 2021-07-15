@@ -34,17 +34,17 @@ import LessonPlan from './Lesson Plan/LessonPlan';
 import Transport from './Transport/Transport';
 import Subject from './Subject/Subject.js';
 import CceMarks from './CCEMarks/CCEmarks';
-
+import RecordedClasses from './Recorded Classes/RecordedClasses';
+import Report from './Report/Report';
 //navigations from home screen
 import Notification from './Home/Notification';
 import Notes from './Home/Notes';
 import Timetable from './Home/Timetable';
 
-
 // redux
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 
-let userInfo
+let userInfo;
 
 const Home = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -196,7 +196,6 @@ const Home = ({ navigation }) => {
 const Stack = createStackNavigator();
 
 const Home_Route = () => {
-
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -275,7 +274,6 @@ const getTabBarVisibility = route => {
   return false;
 };
 
-
 function DrawerContent(props) {
   return (
     <View style={{ flex: 1 }}>
@@ -311,8 +309,19 @@ function DrawerContent(props) {
         />
         <Drawer.Item
           label={'Transport'}
-          style={{ color: 'white' }}
           onPress={() => props.navigation.navigate('Transport')}
+        />
+        <Drawer.Item
+          label={'CCE Marks'}
+          onPress={() => props.navigation.navigate('Cce Marks')}
+        />
+        <Drawer.Item
+          label={'Recorded Classes'}
+          onPress={() => props.navigation.navigate('Recorded Classes')}
+        />
+        <Drawer.Item
+          label={'Report'}
+          onPress={() => props.navigation.navigate('Report')}
         />
       </Drawer.Section>
       <DrawerContentScrollView
@@ -351,8 +360,7 @@ function DrawerContent(props) {
 }
 
 export default function Route() {
-
-  userInfo = useSelector((state) => state.userInfo)
+  userInfo = useSelector(state => state.userInfo);
 
   return (
     <DrawerNav.Navigator
@@ -366,14 +374,15 @@ export default function Route() {
       <DrawerNav.Screen name="Lesson Plan" component={LessonPlan} />
       <DrawerNav.Screen name="Books" component={Books} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
-      <DrawerNav.Screen name="Transport" component={CceMarks} />
+      <DrawerNav.Screen name="Transport" component={Transport} />
       <DrawerNav.Screen name="Cce Marks" component={CceMarks} />
+      <DrawerNav.Screen name="Recorded Classes" component={RecordedClasses} />
+      <DrawerNav.Screen name="Report" component={Report} />
       {/* <DrawerNav.Screen name="Cce Marks" component={CceMarks} /> */}
       {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
     </DrawerNav.Navigator>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {

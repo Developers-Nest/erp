@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DropDownPicker from 'react-native-dropdown-picker';
+import ModalSelector from 'react-native-modal-selector';
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   ScrollView,
+  TextInput,
 } from 'react-native';
 import {
   Searchbar,
@@ -17,7 +19,7 @@ import {
   Title,
   Paragraph,
   Button,
-  TextInput,
+ 
   RadioButton,
 } from 'react-native-paper';
 
@@ -39,35 +41,67 @@ export default function Attendance() {
 }
 
 const AttendanceScreen1 = ({ navigation }) => {
-  const [open, setOpen] = useState(null);
+  // const [open, setOpen] = useState(null);
+  // const [value, setValue] = useState(null);
+  // const [items, setItems] = useState([
+  //   { label: 'Final Reports', value: 'Final Reports' },
+  //   { label: 'Mid Term', value: 'Mid Term' },
+  // ]);
+
+  // const [open1, setOpen1] = useState(null);
+  // const [value1, setValue1] = useState(null);
+  // const [items1, setItems1] = useState([
+  //   { label: 'Class1', value: 'Class1' },
+  //   { label: 'Class2', value: 'Class2' },
+  //   { label: 'Class3', value: 'Class3' },
+  // ]);
+
+  // const [open2, setOpen2] = useState(null);
+  // const [value2, setValue2] = useState(null);
+  // const [items2, setItems2] = useState([
+  //   { label: 'Batch1', value: 'Batch1' },
+  //   { label: 'Batch2', value: 'Batch2' },
+  //   { label: 'Batch3', value: 'Batch3' },
+  // ]);
+
+  // const [open3, setOpen3] = useState(null);
+  // const [value3, setValue3] = useState(null);
+  // const [items3, setItems3] = useState([
+  //   { label: 'Subject1', value: 'Subject1' },
+  //   { label: 'Subject2', value: 'Subject2' },
+  //   { label: 'Subject3', value: 'Subject3' },
+  // ]);
+  const [checked, setChecked] = React.useState('first');
+
+  const [checked2, setChecked2] = React.useState('');
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
-    { label: 'Final Reports', value: 'Final Reports' },
-    { label: 'Mid Term', value: 'Mid Term' },
+    {label: 'Final Reports', key: 'Final Reports'},
+    {label: 'Mid Term', key: 'Mid Term'},
   ]);
 
-  const [open1, setOpen1] = useState(null);
-  const [value1, setValue1] = useState(null);
-  const [items1, setItems1] = useState([
-    { label: 'Class1', value: 'Class1' },
-    { label: 'Class2', value: 'Class2' },
-    { label: 'Class3', value: 'Class3' },
+  // const [open1, setOpen1] = useState(null);
+  const [className, setclassName] = useState(null);
+  const [classes, setclasses] = useState([
+    {label: 'Class1', key: 'Class1'},
+    {label: 'Class2', key: 'Class2'},
+    {label: 'Class3', key: 'Class3'},
   ]);
 
-  const [open2, setOpen2] = useState(null);
-  const [value2, setValue2] = useState(null);
-  const [items2, setItems2] = useState([
-    { label: 'Batch1', value: 'Batch1' },
-    { label: 'Batch2', value: 'Batch2' },
-    { label: 'Batch3', value: 'Batch3' },
+  // const [open2, setOpen2] = useState(null);
+  const [batch, setbatch] = useState(null);
+  const [batches, setbatches] = useState([
+    {label: 'Batch1', key: 'Batch1'},
+    {label: 'Batch2', key: 'Batch2'},
+    {label: 'Batch3', key: 'Batch3'},
   ]);
 
-  const [open3, setOpen3] = useState(null);
-  const [value3, setValue3] = useState(null);
-  const [items3, setItems3] = useState([
-    { label: 'Subject1', value: 'Subject1' },
-    { label: 'Subject2', value: 'Subject2' },
-    { label: 'Subject3', value: 'Subject3' },
+  // const [open3, setOpen3] = useState(null);
+  const [subject, setsubject] = useState(null);
+  const [subjects, setsubjects] = useState([
+    {label: 'Subject1', key: 'Subject1'},
+    {label: 'Subject2', key: 'Subject2'},
+    {label: 'Subject3', key: 'Subject3'},
   ]);
 
 
@@ -152,7 +186,7 @@ const AttendanceScreen1 = ({ navigation }) => {
             alignContent: 'flex-start',
             width: '99%'
           }}>
-          <DropDownPicker
+          {/* <DropDownPicker
             zIndex={1000}
             open={open1}
             value={value1}
@@ -191,49 +225,41 @@ const AttendanceScreen1 = ({ navigation }) => {
             }}
             containerStyle={{ width: '30%' }}
             placeholder="Subject"
+          /> */}
+           <ModalSelector
+            data={classes}
+            initValue="Class1"
+            onChange={option => {
+              // setclass(option.key);
+            }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
           />
+          <ModalSelector
+            data={batches}
+            initValue="Batch1"
+            onChange={option => {
+              // setbatch(option.key);
+            }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+          <ModalSelector
+            data={subjects}
+            initValue="Subject1"
+            onChange={option => {
+              // setsubject(option.key);
+            }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+
         </View>
         <ScrollView>
-          {value !== null &&
-            value1 !== null &&
-            value2 !== null &&
-            value3 !== null ? (
-            <AttendancePart />
-          ) : (
-            <AttendancePart />
-          )}
-        </ScrollView>
-      </View>
-
-
-
-
-
-
-      <View style={{ padding: 7 }} />
-
-      {/* close list part */}
-
-      {/* Cards end */}
-    </View>
-  );
-};
-
-
-const AttendancePart = () => {
-
-
-
-
-  const [nameMethod, setNameMethod] = useState('Name');
-  const [checked, setChecked] = React.useState('first');
-
-  const [checked2, setChecked2] = React.useState('');
-
-
-  return (
-
-    <View style={{ marginTop: 6 }}>
+        <View style={{ marginTop: 6 }}>
       <View style={{ padding: 5, justifyContent: 'center' }} />
 
       {/* open search */}
@@ -255,6 +281,7 @@ const AttendancePart = () => {
           }} />
         <TextInput
           style={{ width: '80%', ...styles.text_input }}
+          underlineColorAndroid='transparent'
           placeholder="Enter student's name"
         />
         <TouchableOpacity
@@ -283,11 +310,13 @@ const AttendancePart = () => {
             <View style={styles.userinhostels}>
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Name</Text>
+                <View style={{marginRight:20}}>
                 <RadioButton
                   value="first"
                   status={checked === 'first' ? 'checked' : 'unchecked'}
                   onPress={() => setChecked('first')}
                 />
+                </View>
               </TouchableOpacity>
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{ fontSize: 14, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
@@ -307,11 +336,14 @@ const AttendancePart = () => {
             <View style={styles.userinhostels}>
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Name</Text>
+                <View style={{marginRight:20}}>
                 <RadioButton
+    
                   value="second"
                   status={checked2 === 'second' ? 'checked' : 'unchecked'}
                   onPress={() => setChecked2('second')}
                 />
+                </View>
               </TouchableOpacity>
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{ fontSize: 14, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
@@ -331,40 +363,49 @@ const AttendancePart = () => {
       {/* Cards end */}
 
     </View>
+        </ScrollView>
+      </View>
+
+
+
+
+
+
+      <View style={{ padding: 7 }} />
+
+      {/* close list part */}
+
+      {/* Cards end */}
+    </View>
   );
 };
 
 
+
 const AttendanceScreen2 = ({ navigation }) => {
-  const [open, setOpen] = useState(null);
+  
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: 'Final Reports', value: 'Final Reports' },
-    { label: 'Mid Term', value: 'Mid Term' },
+  const [className, setclassName] = useState(null);
+  const [classes, setclasses] = useState([
+    {label: 'Class1', key: 'Class1'},
+    {label: 'Class2', key: 'Class2'},
+    {label: 'Class3', key: 'Class3'},
   ]);
 
-  const [open1, setOpen1] = useState(null);
-  const [value1, setValue1] = useState(null);
-  const [items1, setItems1] = useState([
-    { label: 'Class1', value: 'Class1' },
-    { label: 'Class2', value: 'Class2' },
-    { label: 'Class3', value: 'Class3' },
+  // const [open2, setOpen2] = useState(null);
+  const [batch, setbatch] = useState(null);
+  const [batches, setbatches] = useState([
+    {label: 'Batch1', key: 'Batch1'},
+    {label: 'Batch2', key: 'Batch2'},
+    {label: 'Batch3', key: 'Batch3'},
   ]);
 
-  const [open2, setOpen2] = useState(null);
-  const [value2, setValue2] = useState(null);
-  const [items2, setItems2] = useState([
-    { label: 'Batch1', value: 'Batch1' },
-    { label: 'Batch2', value: 'Batch2' },
-    { label: 'Batch3', value: 'Batch3' },
-  ]);
-
-  const [open3, setOpen3] = useState(null);
-  const [value3, setValue3] = useState(null);
-  const [items3, setItems3] = useState([
-    { label: 'Subject1', value: 'Subject1' },
-    { label: 'Subject2', value: 'Subject2' },
-    { label: 'Subject3', value: 'Subject3' },
+  // const [open3, setOpen3] = useState(null);
+  const [subject, setsubject] = useState(null);
+  const [subjects, setsubjects] = useState([
+    {label: 'Subject1', key: 'Subject1'},
+    {label: 'Subject2', key: 'Subject2'},
+    {label: 'Subject3', key: 'Subject3'},
   ]);
 
 
@@ -422,7 +463,7 @@ const AttendanceScreen2 = ({ navigation }) => {
             alignContent: 'flex-start',
             width: '99%'
           }}>
-          <DropDownPicker
+          {/* <DropDownPicker
             zIndex={1000}
             open={open1}
             value={value1}
@@ -461,17 +502,51 @@ const AttendanceScreen2 = ({ navigation }) => {
             }}
             containerStyle={{ width: '30%' }}
             placeholder="Subject"
+          /> */}
+
+<ModalSelector
+            data={classes}
+            initValue="Class1"
+            onChange={option => {
+              // setclass(option.key);
+            }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
           />
+          <ModalSelector
+            data={batches}
+            initValue="Batch1"
+            onChange={option => {
+              // setbatch(option.key);
+            }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+          <ModalSelector
+            data={subjects}
+            initValue="Subject1"
+            onChange={option => {
+              // setsubject(option.key);
+            }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+
         </View>
         <ScrollView>
-          {value !== null &&
+          {/* {value !== null &&
             value1 !== null &&
             value2 !== null &&
             value3 !== null ? (
             <AttendancePart2 />
           ) : (
             <AttendancePart2 />
-          )}
+          )} */}
+
+          <AttendancePart2/>
         </ScrollView>
       </View>
       <View style={{ padding: 7 }} />
@@ -598,26 +673,35 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
 
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   section: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    shadowColor: '#333',
+    // shadowColor: '#333',
+    // shadowOffset: {
+    //   width: 3,
+    //   height: 1,
+    // },
+    // shadowOpacity: 0.2,
+    // elevation: 5,
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.2,
-    elevation: 4,
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation:5,
     marginTop: 10,
     borderRadius: 12,
 
 
     padding: 10,
-    marginVertical: 10,
-    width: '100%'
+    marginLeft:2,
+    marginVertical: 15,
+    width: '99%'
   },
 
   details: {
@@ -664,7 +748,7 @@ const styles = StyleSheet.create({
   maincontainer: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   card: {
     shadowColor: '#999',
@@ -756,4 +840,97 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
+  card: {
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+
+    minWidth: 110,
+    elevation: 3,
+  },
+  card_title: {fontSize: 18},
+  card_marks: {
+    justifyContent: 'center',
+    backgroundColor: ' rgba(88, 99, 109, 1)',
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    color: 'white',
+  },
+  card_top: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  card_middle: {
+    paddingHorizontal: 20,
+    paddingBottom: 15,
+  },
+  card_bottom: {
+    borderTopColor: 'rgba(88, 99, 109, 0.45)',
+    borderTopWidth: 1,
+    borderRadius: 20,
+    padding: 15,
+    paddingHorizontal: 20,
+  },
+  classes_card: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    backgroundColor: 'white',
+    borderRadius: 8,
+  },
+  classes_cardClass: {
+    fontSize: 20,
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    color: '#58636D',
+  },
+  classes_cardTime: {
+    fontSize: 12,
+    color: '#5177E7',
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+  },
+  classes_cardBatch: {
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 12,
+    paddingVertical: 5,
+    color: '#58636D',
+  },
+  SelectedValue: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontSize: 18,
+    lineHeight: 27,
+    padding: 10,
+    color: '#211C5A',
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
+  },
+
 });

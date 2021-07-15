@@ -35,7 +35,7 @@ export default function AssignmentStudentDue({navigation}) {
   const userInfo = useSelector(state => state.userInfo);
   useEffect(async () => {
     try {
-      let slug = `/note/assignment?batch=${userInfo.batch}&&course=${userInfo.course}`;
+      let slug = `/note/assignment?batch=${userInfo.batch}&course=${userInfo.course}`;
       let token = await read('token');
       const response = await get(slug, token);
       console.log(response);
