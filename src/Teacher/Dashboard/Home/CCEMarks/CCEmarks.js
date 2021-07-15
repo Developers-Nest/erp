@@ -18,6 +18,9 @@ import get from '../../../../services/helpers/request/get'
 import read from '../../../../services/localstorage/read'
 import getExam from '../../../../services/helpers/getList/getExam'
 
+// loading screem
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js'
+
 const MySearchbar = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -53,7 +56,11 @@ export default function CceMarks() {
   const [fetched, setFetched] = useState(false)
   const [list, setList] = useState([])
 
+  // loading screen
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
   useEffect(async () => {
+    showLoadingScreen()
     try {
       const response = await getCourse()
       console.log("Courses CCE ", response)
@@ -69,12 +76,13 @@ export default function CceMarks() {
     } catch (err) {
       alert('Cannot get Terms!')
     }
-
+    hideLoadingScreen()
   }, [])
 
 
   ///////////// get dropdown values ///////////////
   const getBatches = async (selectedCourse) => {
+    showLoadingScreen()
     try {
       await setCourse(selectedCourse)
       const response = await getBatch(selectedCourse)
@@ -82,11 +90,11 @@ export default function CceMarks() {
     } catch (err) {
       alert('Cannot get Batches')
     }
+    hideLoadingScreen()
   }
 
   const getSubjects = async (sc) => {
-    console.log("Selected Subject ", sc)
-
+    showLoadingScreen()
     try {
       await setBatch(sc)
       const response = await getSubject(course, batch)
@@ -95,9 +103,11 @@ export default function CceMarks() {
     } catch (err) {
       alert('Cannot get Subjects')
     }
+    hideLoadingScreen()
   }
 
   const getAssessesments = async (st) => {
+    showLoadingScreen()
     try {
       await setTerm(st)
       console.log("Selected term ", st)
@@ -107,23 +117,27 @@ export default function CceMarks() {
     } catch (err) {
       alert('Cannot get Assessments!!')
     }
+    hideLoadingScreen()
   }
 
   const getExams = async (ss) => {
+    showLoadingScreen()
     try {
       await setSubject(ss)
       console.log("Selected exam ", ss)
       const response = await getExam(course, batch, subject, term, assessment)
       console.log('Exams ', response)
+      setExams(response)
     } catch (err) {
       alert('Cannot get your exams !!')
     }
+    hideLoadingScreen()
   }
 
   ///////////// get dropdown values ends ///////////////
 
   const getList = async () => {
-
+    showLoadingScreen()
     try {
 
       let slug = `/cce/exam/scholasticMark?course=${course}&batch=${batch}&examname=${exam}&term=${term}&subject=${subject}&assessment=${assessment}`
@@ -143,8 +157,9 @@ export default function CceMarks() {
       setFetched(true)
 
     } catch (err) {
-      alert('Cannot fetch list!!')
+      alert('No Lists found!!')
     }
+    hideLoadingScreen()
   }
 
 
@@ -155,6 +170,7 @@ export default function CceMarks() {
         <Appbar.Content title="CCE Marks" />
         <Appbar.Action icon="information" onPress={() => { }} />
       </Appbar>
+      {loadingScreen}
       <View
         style={{
           padding: 10,
