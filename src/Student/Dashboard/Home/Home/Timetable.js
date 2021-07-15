@@ -192,14 +192,14 @@ export default function OnlineLecture() {
                           <TouchableOpacity style={styles.shadow} key={index}>
                             <View style={styles.classes_card}>
                               <Text style={styles.classes_cardClass}>
-                                {'Class'}
+                                {slot.subjectId &&
+                                  slot.subjectId.name.toUpperCase()}
                               </Text>
                               <Text style={styles.classes_cardTime}>
                                 {`${slot.startTime} - ${slot.endTime}`}
                               </Text>
                               <Text style={styles.classes_cardBatch}>
-                                {slot.subjectId &&
-                                  slot.subjectId.name.toUpperCase()}
+                                {`${slot.faculty}`}
                               </Text>
                             </View>
                           </TouchableOpacity>
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     width: 100,
-    height: 120,
+    height: 150,
   },
   classes_cardClass: {
     fontSize: 20,
