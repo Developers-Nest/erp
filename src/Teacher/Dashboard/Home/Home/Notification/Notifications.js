@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -11,45 +11,34 @@ import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const text =
-  'This event will be held today atkrhjfbckeirvbikhev place at wjbcferob hours';
+export default function Notification() {
+  const text =
+    'This event will be held today atkrhjfbckeirvbikhev place at wjbcferob hours';
 
-const CONTENT = [
-  {
-    title: 'News1',
-    content: text,
-    type: 'News',
-  },
-  {
-    title: 'Event1',
-    content: text,
-    type: 'Event',
-  },
-  {
-    title: 'Event2',
-    content: text,
-    type: 'Event',
-  },
-  {
-    title: 'News2',
-    content: text,
-    type: 'News',
-  },
-];
+  const CONTENT = [
+    {
+      title: 'News1',
+      content: text,
+      type: 'News',
+    },
+    {
+      title: 'Event1',
+      content: text,
+      type: 'Event',
+    },
+    {
+      title: 'Event2',
+      content: text,
+      type: 'Event',
+    },
+    {
+      title: 'News2',
+      content: text,
+      type: 'News',
+    },
+  ];
 
-export default class App extends Component {
-  state = {
-    activeSections: [],
-    collapsed: true,
-  };
-
-  setSections = sections => {
-    this.setState({
-      activeSections: sections.includes(undefined) ? [] : sections,
-    });
-  };
-
-  renderHeader = (section, _, isActive) => {
+  function renderHeader(section, _, isActive) {
     return (
       <Animatable.View
         duration={400}
@@ -89,9 +78,9 @@ export default class App extends Component {
         </View>
       </Animatable.View>
     );
-  };
+  }
 
-  renderContent(section, _, isActive) {
+  function renderContent(section, _, isActive) {
     return (
       <Animatable.View duration={100} style={{paddingHorizontal: 10}}>
         <Text
@@ -103,28 +92,31 @@ export default class App extends Component {
     );
   }
 
-  render() {
-    const {activeSections} = this.state;
+  const [ActiveSections, setActiveSections] = useState([]);
+  const [collapsed, setcollapsed] = useState(true);
 
-    return (
-      <View style={styles.container}>
-        <ScrollView style={{padding: 10}}>
-          <Accordion
-            activeSections={activeSections}
-            sections={CONTENT}
-            touchableComponent={TouchableOpacity}
-            renderHeader={this.renderHeader}
-            renderContent={this.renderContent}
-            duration={400}
-            onChange={this.setSections}
-            renderAsFlatList={false}
-            containerStyle={styles.cardsWrapper}
-            sectionContainerStyle={styles.card}
-          />
-        </ScrollView>
-      </View>
-    );
-  }
+  const setSections = sections => {
+    setActiveSections(sections.includes(undefined) ? [] : sections);
+  };
+
+  return (
+    <View style={styles.container}>
+      <ScrollView style={{padding: 10}}>
+        <Accordion
+          activeSections={ActiveSections}
+          sections={CONTENT}
+          touchableComponent={TouchableOpacity}
+          renderHeader={renderHeader}
+          renderContent={renderContent}
+          duration={400}
+          onChange={setSections}
+          renderAsFlatList={false}
+          containerStyle={styles.cardsWrapper}
+          sectionContainerStyle={styles.card}
+        />
+      </ScrollView>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
