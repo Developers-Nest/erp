@@ -46,9 +46,9 @@ import Timetable from './Home/Timetable';
 import {useSelector} from 'react-redux';
 
 // helpers
-import read from '../../../services/localstorage/read'
-import get from '../../../services/helpers/request/get'
-import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen'
+import read from '../../../services/localstorage/read';
+import get from '../../../services/helpers/request/get';
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 import write from '../../../services/localstorage/write';
 
 let userInfo;
@@ -60,15 +60,21 @@ const Home = ({navigation}) => {
     setCollapsed(!collapsed);
   };
   const onChangeSearch = query => setSearchQuery(query);
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
+  const [UpcomingClasses, setUpcomingClasses] = useState([]);
 
-  useEffect(async()=>{
-    let slug = `/timetable/upcomingTimetable`
-    let token = await read('token')
-    let response = await get(slug, token)
-    console.log('Response ', response)
-  },[])
+  useEffect(async () => {
+    try {
+      let slug = `/timetable/upcomingTimetable`;
+      let token = await read('token');
+      let response = await get(slug, token);
+      console.log('Response ', response);
+      setUpcomingClasses(response);
+    } catch (err) {
+      alert('Cannot fetch your Upcoming Timetable !!');
+    }
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -102,19 +108,28 @@ const Home = ({navigation}) => {
           <Text style={styles.section_heading}>Upcoming Classes</Text>
         </View>
         <View style={{marginHorizontal: 30, ...styles.classes_cardWrapper}}>
-          {[1, 2, 3].map((element, index) => {
-            return (
-              <View style={styles.shadow} key={index}>
-                <TouchableOpacity
-                  style={styles.classes_card}
-                  onPress={() => navigation.navigate('Timetable')}>
-                  <Text style={styles.classes_cardClass}>{'Class'}</Text>
-                  <Text style={styles.classes_cardTime}>{'09:30-10:30'}</Text>
-                  <Text style={styles.classes_cardBatch}>{'Batch'}</Text>
-                </TouchableOpacity>
-              </View>
-            );
-          })}
+          {UpcomingClasses &&
+            UpcomingClasses.map(
+              UpcomingClass =>
+                UpcomingClass.days[0] &&
+                UpcomingClass.days[0].periods.map(period => (
+                  <View style={styles.shadow} key={UpcomingClass._id}>
+                    <TouchableOpacity
+                      style={styles.classes_card}
+                      onPress={() => navigation.navigate('Timetable')}>
+                      <Text style={styles.classes_cardClass}>
+                        {period.subject}
+                      </Text>
+                      <Text style={styles.classes_cardTime}>
+                        {`${period.startTime} - ${period.endTime}`}
+                      </Text>
+                      <Text style={styles.classes_cardBatch}>
+                        {UpcomingClass.batch.batchName}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )),
+            )}
         </View>
         <View style={{height: 30}}></View>
         <View>
@@ -292,10 +307,9 @@ const getTabBarVisibility = route => {
 };
 
 function DrawerContent(props) {
-
-  let handleLogout = async()=>{
-    await write('token', null)
-  }
+  let handleLogout = async () => {
+    await write('token', null);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -466,6 +480,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: 'white',
     borderRadius: 8,
+    width: 110,
+    height: 120,
   },
   classes_cardClass: {
     fontSize: 20,
