@@ -46,6 +46,7 @@ export default function Feedback({navigation}) {
             style={{backgroundColor: 'white'}}/>
           </Card.Content>
         </Card>
+        
     </View>
   );
 }
