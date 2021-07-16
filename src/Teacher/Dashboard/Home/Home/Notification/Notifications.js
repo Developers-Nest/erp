@@ -31,9 +31,20 @@ export default function Notification() {
   useEffect(async () => {
     showLoadingScreen()
     try {
-      let slug = `/notification?userType=${userInfo.userType._id}&department=${userInfo.department}`
+      
+      let getUserType = ()=>{
+        if(typeof(userInfo.userType) === 'string'){
+          return userInfo.userType
+        } else{
+          return userInfo.userType._id
+        }
+      }
+
+      let slug = `/notification?userType=${getUserType()}&department=${userInfo.department}`
+      console.log('Slug ', slug)
       let token = await read('token')
       let res = await get(slug, token)
+      console.log('Res ', res)
       let Content = []
       res.map((noti) => {
         Content.push({
