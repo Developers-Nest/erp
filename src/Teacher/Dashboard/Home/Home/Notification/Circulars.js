@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -11,37 +11,26 @@ import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const text =
-  'Exams will be conducted via online mode. All the best. It is requested from the students to maintain the.';
+export default function Circular() {
+  const text =
+    'Exams will be conducted via online mode. All the best. It is requested from the students to maintain the.';
 
-const CONTENT = [
-  {
-    title: 'Title1',
-    content: text,
-  },
-  {
-    title: 'Title2',
-    content: text,
-  },
-  {
-    title: 'Title3',
-    content: text,
-  },
-];
+  const CONTENT = [
+    {
+      title: 'Title1',
+      content: text,
+    },
+    {
+      title: 'Title2',
+      content: text,
+    },
+    {
+      title: 'Title3',
+      content: text,
+    },
+  ];
 
-export default class App extends Component {
-  state = {
-    activeSections: [],
-    collapsed: true,
-  };
-
-  setSections = sections => {
-    this.setState({
-      activeSections: sections.includes(undefined) ? [] : sections,
-    });
-  };
-
-  renderHeader = (section, _, isActive) => {
+  function renderHeader(section, _, isActive) {
     return (
       <View duration={400} style={styles.header} transition="backgroundColor">
         <Text style={styles.headerText}>{section.title}</Text>
@@ -85,9 +74,9 @@ export default class App extends Component {
         )}
       </View>
     );
-  };
+  }
 
-  renderContent(section, _, isActive) {
+  function renderContent(section, _, isActive) {
     return (
       <Animatable.View duration={100} transition="backgroundColor">
         <Text
@@ -99,28 +88,31 @@ export default class App extends Component {
     );
   }
 
-  render() {
-    const {activeSections} = this.state;
+  const [ActiveSections, setActiveSections] = useState([]);
+  const [collapsed, setcollapsed] = useState(true);
 
-    return (
-      <View style={styles.container}>
-        <ScrollView style={{padding: 10}}>
-          <Accordion
-            activeSections={activeSections}
-            sections={CONTENT}
-            touchableComponent={TouchableOpacity}
-            renderHeader={this.renderHeader}
-            renderContent={this.renderContent}
-            duration={400}
-            onChange={this.setSections}
-            renderAsFlatList={false}
-            containerStyle={styles.cardsWrapper}
-            sectionContainerStyle={styles.card}
-          />
-        </ScrollView>
-      </View>
-    );
-  }
+  const setSections = sections => {
+    setActiveSections(sections.includes(undefined) ? [] : sections);
+  };
+
+  return (
+    <View style={styles.container}>
+      <ScrollView style={{padding: 10}}>
+        <Accordion
+          activeSections={ActiveSections}
+          sections={CONTENT}
+          touchableComponent={TouchableOpacity}
+          renderHeader={renderHeader}
+          renderContent={renderContent}
+          duration={400}
+          onChange={setSections}
+          renderAsFlatList={false}
+          containerStyle={styles.cardsWrapper}
+          sectionContainerStyle={styles.card}
+        />
+      </ScrollView>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
