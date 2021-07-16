@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Linking,
 } from 'react-native';
 import AssignmentSubmit from './AssignmentSubmit';
 
@@ -257,6 +258,12 @@ export default function AssignmentStudentDue({navigation}) {
                         fontWeight: 'bold',
                       }}
                       uppercase={false}
+                      onPress={() =>
+                        Linking.openURL(
+                          assignment.attemptedBy[isAssignmentDone(assignment)]
+                            .url,
+                        )
+                      }
                       mode="contained">
                       View
                     </Button>
