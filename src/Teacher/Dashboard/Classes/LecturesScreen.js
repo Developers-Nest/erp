@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
-    minWidth: 171,
+    
     backgroundColor: 'white',
   },
 
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     margin: 0,
     padding: 0,
-    minWidth: 110,
+    
   },
 
 
