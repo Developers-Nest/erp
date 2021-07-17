@@ -23,7 +23,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 // redux
 import { useSelector } from 'react-redux';
-
+let color
 const MySearchbar = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -41,8 +41,7 @@ export default function Profile({ navigation }) {
 
   const userInfo = useSelector((state) => state.userInfo)
 
-  console.log("Profile.js ", userInfo)
-
+  const institute = useSelector((state) => state.institute)
 
   return (
     <View style={styles.container}>
@@ -90,37 +89,37 @@ export default function Profile({ navigation }) {
 
       <View style={styles.textFields}>
         <View style={styles.input}>
-          <FontAwesome5 name="user-alt" style={styles.icons}/>
+          <FontAwesome5 name="user-alt" style={{ color: institute.themeColor, fontSize:22, marginRight:10, }}/>
           <Text style={styles.inputField}>Name: </Text>
           <Text style={styles.inputValue}>{userInfo.firstName}</Text>
         </View>
 
         <View style={styles.input}>
-          <FontAwesome5 name="building" style={styles.icons}/>
+          <FontAwesome5 name="building" style={{ color: institute.themeColor, fontSize:22, marginRight:10, }}/>
           <Text style={styles.inputField}>Department: </Text>
           <Text style={styles.inputValue}>{userInfo.departmentName}</Text>
         </View>
 
         <View style={styles.input}>
-          <FontAwesome5 name="user-check" style={styles.icons}/>
+          <FontAwesome5 name="user-check" style={{ color: institute.themeColor, fontSize:22, marginRight:10, }}/>
           <Text style={styles.inputField}>Designation: </Text>
           <Text style={styles.inputValue}>{userInfo.designationName}</Text>
         </View>
 
         <View style={styles.input}>
-          <FontAwesome5 name="id-badge" style={styles.icons}/>
+          <FontAwesome5 name="id-badge" style={{ color: institute.themeColor, fontSize:22, marginRight:10, }}/>
           <Text style={styles.inputField}>Employee Code: </Text>
           <Text style={styles.inputValue}>{userInfo.code}</Text>
         </View>
 
         <View style={styles.input}>
-          <FontAwesome5 name="user-tag" style={styles.icons}/>
+          <FontAwesome5 name="user-tag" style={{ color: institute.themeColor, fontSize:22, marginRight:10, }}/>
           <Text style={styles.inputField}>Role: </Text>
           <Text style={styles.inputValue}>{userInfo.permRole.name}</Text>
         </View>
 
         <View style={styles.input}>
-          <FontAwesome5 name="mobile-alt" style={styles.icons}/>
+          <FontAwesome5 name="mobile-alt" style={{ color: institute.themeColor, fontSize:22, marginRight:10, }}/>
           <Text style={styles.inputField}>Mobile: </Text>
           <Text style={styles.inputValue}>{userInfo.mobile}</Text>
         </View>
@@ -170,11 +169,6 @@ const styles = StyleSheet.create({
   },
   inputValue: {
     fontSize: 18
-  },
-  icons : {
-    fontSize:22,
-    marginRight:10
-
   },
 
 });
