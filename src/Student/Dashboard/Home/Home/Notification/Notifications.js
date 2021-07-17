@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,37 +6,60 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-
+import {useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-export default function Notification() {
-  const text =
-    'This event will be held today atkrhjfbckeirvbikhev place at wjbcferob hours';
+// helpers
+import read from '../../../../../services/localstorage/read';
+import get from '../../../../../services/helpers/request/get';
 
-  const CONTENT = [
-    {
-      title: 'News1',
-      content: text,
-      type: 'News',
-    },
-    {
-      title: 'Event1',
-      content: text,
-      type: 'Event',
-    },
-    {
-      title: 'Event2',
-      content: text,
-      type: 'Event',
-    },
-    {
-      title: 'News2',
-      content: text,
-      type: 'News',
-    },
-  ];
+import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
+
+export default function Notification() {
+  let userInfo = useSelector(state => state.userInfo);
+
+  const [notifications, setNotifications] = useState([]);
+
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+  const [content, setContent] = useState([]);
+  const [fetched, setFetched] = useState(false);
+
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      let getUserType = () => {
+        if (typeof userInfo.userType === 'string') {
+          return userInfo.userType;
+        } else {
+          return userInfo.userType._id;
+        }
+      };
+
+      let slug = `/notification?userType=${getUserType()}&course=${
+        userInfo.course
+      }&batch=${userInfo.batch}`;
+      console.log('Slug ', slug);
+      let token = await read('token');
+      let res = await get(slug, token);
+      console.log('Res ', res);
+      let Content = [];
+      res.map(noti => {
+        Content.push({
+          title: noti.title,
+          content: noti.message,
+          type: 'News',
+        });
+      });
+      setContent(Content);
+      setFetched(true);
+    } catch (err) {
+      alert('Cannot get Notifications!!');
+    }
+    hideLoadingScreen();
+  }, []);
 
   function renderHeader(section, _, isActive) {
     return (
@@ -45,6 +68,7 @@ export default function Notification() {
         style={styles.header}
         transition="backgroundColor">
         <View style={styles.iconConatiner}>
+          {loadingScreen}
           <FontAwesome5
             name={section.type === 'Event' ? 'video' : 'calendar-day'}
             size={27}
@@ -60,19 +84,11 @@ export default function Notification() {
           <Text style={styles.headerText}>{section.title}</Text>
           {isActive ? (
             <View style={styles.collapseIconContainer}>
-              <Text style={styles.collapseIconText}>2 min ago</Text>
-
               <FontAwesome5 name="chevron-up" size={14} />
             </View>
           ) : (
             <View style={styles.collapseIconContainer}>
-              <Text style={styles.collapseIconText}>2 min ago</Text>
-
-              <FontAwesome5
-                name="chevron-down"
-                size={14}
-                style={styles.collapseIconIcon}
-              />
+              <FontAwesome5 name="chevron-down" size={14} />
             </View>
           )}
         </View>
@@ -101,20 +117,32 @@ export default function Notification() {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={{padding: 10}}>
-        <Accordion
-          activeSections={ActiveSections}
-          sections={CONTENT}
-          touchableComponent={TouchableOpacity}
-          renderHeader={renderHeader}
-          renderContent={renderContent}
-          duration={400}
-          onChange={setSections}
-          renderAsFlatList={false}
-          containerStyle={styles.cardsWrapper}
-          sectionContainerStyle={styles.card}
-        />
-      </ScrollView>
+      {fetched ? (
+        <ScrollView style={{padding: 10}}>
+          {content.length === 0 ? (
+            <Text
+              style={{
+                marginVertical: 10,
+                marginHorizontal: 30,
+              }}>
+              No Notifications
+            </Text>
+          ) : (
+            <Accordion
+              activeSections={ActiveSections}
+              sections={content}
+              touchableComponent={TouchableOpacity}
+              renderHeader={renderHeader}
+              renderContent={renderContent}
+              duration={400}
+              onChange={setSections}
+              renderAsFlatList={false}
+              containerStyle={styles.cardsWrapper}
+              sectionContainerStyle={styles.card}
+            />
+          )}
+        </ScrollView>
+      ) : null}
     </View>
   );
 }
