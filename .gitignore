@@ -60,3 +60,5 @@ package-lock.json
 # CocoaPods
 /ios/Pods/
 
+package-lock.json
+yarn.lock
