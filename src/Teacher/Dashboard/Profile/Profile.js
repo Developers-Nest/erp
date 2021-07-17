@@ -23,10 +23,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 // redux
 import { useSelector } from 'react-redux';
-let color
+
 const MySearchbar = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
-
   const onChangeSearch = query => setSearchQuery(query);
 
   return (
@@ -55,6 +54,7 @@ export default function Profile({ navigation }) {
               color: 'black',
               paddingLeft: 20,
               paddingTop: 20,
+              color: institute.themeColor
             }}
           />
         </TouchableOpacity>
@@ -72,6 +72,7 @@ export default function Profile({ navigation }) {
               fontWeight: '600',
               alignSelf: 'center',
               paddingLeft: 30,
+              color: institute.themeColor
             }}>
             Profile
           </Text>

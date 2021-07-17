@@ -99,6 +99,7 @@ const Home = ({navigation}) => {
               color: 'black',
               paddingLeft: 20,
               paddingTop: 20,
+              color: institute.themeColor,
             }}
           />
         </TouchableOpacity>
@@ -110,7 +111,7 @@ const Home = ({navigation}) => {
             fontWeight: '600',
             alignSelf: 'center',
             paddingLeft: 30,
-            color: 'black',
+            color: institute.themeColor,
           }}>
           {userInfo ? `Hi ${userInfo.firstName}` : `Hi`}
         </Text>
@@ -130,6 +131,7 @@ const Home = ({navigation}) => {
               fontSize: 25,
               color: 'black',
               paddingRight: 20,
+              color: institute.themeColor,
             }}
           />
         </TouchableOpacity>
@@ -436,7 +438,7 @@ function DrawerContent(props) {
 
 export default function Route() {
   userInfo = useSelector(state => state.userInfo);
-
+  institute = useSelector(state => state.institute)
   return (
     <DrawerNav.Navigator
       initialRouteName="Home"
