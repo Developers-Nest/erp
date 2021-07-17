@@ -19,6 +19,7 @@ import {
   BottomNavigation,
 } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 // redux
 import { useSelector } from 'react-redux';
@@ -38,13 +39,13 @@ const MySearchbar = () => {
 };
 export default function Profile({ navigation }) {
 
-  const userInfo = useSelector((state)=>state.userInfo)
+  const userInfo = useSelector((state) => state.userInfo)
 
   console.log("Profile.js ", userInfo)
 
 
   return (
-    <View style={{ backgroundColor: '#E5E5E5', height: '100%' }}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <FontAwesome5
@@ -82,53 +83,59 @@ export default function Profile({ navigation }) {
           padding: 20,
         }}
       />
+      <ScrollView>
       <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
         <Avatar.Text size={100} label={userInfo.firstName[0]} />
       </View>
-      <View
-        style={{
-          paddingTop: '10%',
-          justifyContent: 'center',
-          flexDirection: 'row',
-        }}>
-        <View style={{ width: '60%', backgroundColor: 'white', height: '170%',}}>
-          <Text>{userInfo.firstName} </Text>
+
+      <View style={styles.textFields}>
+        <View style={styles.input}>
+          <FontAwesome5 name="user-alt" style={styles.icons}/>
+          <Text style={styles.inputField}>Name: </Text>
+          <Text style={styles.inputValue}>{userInfo.firstName}</Text>
         </View>
-        <View style={{ paddingLeft: '5%' }} />
-        <View style={{ width: '30%', backgroundColor: 'white', height: '170%' }}>
-          <Text>{userInfo.qualification}</Text>
+
+        <View style={styles.input}>
+          <FontAwesome5 name="building" style={styles.icons}/>
+          <Text style={styles.inputField}>Department: </Text>
+          <Text style={styles.inputValue}>{userInfo.departmentName}</Text>
+        </View>
+
+        <View style={styles.input}>
+          <FontAwesome5 name="user-check" style={styles.icons}/>
+          <Text style={styles.inputField}>Designation: </Text>
+          <Text style={styles.inputValue}>{userInfo.designationName}</Text>
+        </View>
+
+        <View style={styles.input}>
+          <FontAwesome5 name="id-badge" style={styles.icons}/>
+          <Text style={styles.inputField}>Employee Code: </Text>
+          <Text style={styles.inputValue}>{userInfo.code}</Text>
+        </View>
+
+        <View style={styles.input}>
+          <FontAwesome5 name="user-tag" style={styles.icons}/>
+          <Text style={styles.inputField}>Role: </Text>
+          <Text style={styles.inputValue}>{userInfo.permRole.name}</Text>
+        </View>
+
+        <View style={styles.input}>
+          <FontAwesome5 name="mobile-alt" style={styles.icons}/>
+          <Text style={styles.inputField}>Mobile: </Text>
+          <Text style={styles.inputValue}>{userInfo.mobile}</Text>
         </View>
       </View>
-      <View
-        style={{
-          paddingTop: '8%',
-          justifyContent: 'center',
-          flexDirection: 'row',
-        }}>
-        <View style={{ width: '45%', backgroundColor: 'white', height: '170%',borderRadius: 20}}>
-          <Text>{userInfo.mobile}</Text>
-        </View>
-        <View style={{ paddingLeft: '5%' }} />
-        <View style={{ width: '45%', backgroundColor: 'white', height: '170%' }}>
-          <Text>{userInfo.dob}</Text>
-        </View>
-      </View>
-      <View
-        style={{
-          paddingTop: '8%',
-          justifyContent: 'center',
-          flexDirection: 'row',
-        }}>
-        <View style={{ width: '95%', backgroundColor: 'white', height: '170%' }}>
-          <Text placeholder="Hostel Details" />
-        </View>
-      </View>
+      </ScrollView>
     </View>
     // bottom navigation
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#E5E5E5',
+  },
   text_input: {
     padding: 10,
     paddingHorizontal: 20,
@@ -144,4 +151,30 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
   },
+  textFields: {
+    margin: 20
+  },
+  input: {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: 10,
+    backgroundColor: 'white',
+    height: 50,
+    alignItems: 'center',
+    borderRadius: 10,
+    padding: 10
+  },
+  inputField: {
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  inputValue: {
+    fontSize: 18
+  },
+  icons : {
+    fontSize:22,
+    marginRight:10
+
+  },
+
 });
