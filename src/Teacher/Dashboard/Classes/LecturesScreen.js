@@ -1,7 +1,4 @@
-import * as React from 'react';
-
-// import {TextInput} from 'react-native-paper';
-
+import React, {useEffect} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
@@ -35,6 +32,11 @@ export default function LecturesScreen() {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
+
+  
+
+
+
  
   function Live() {
     const [searchQuery, setSearchQuery] = React.useState('');

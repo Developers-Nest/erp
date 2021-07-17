@@ -20,8 +20,6 @@ import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen
 export default function Notification() {
   let userInfo = useSelector(state => state.userInfo);
 
-  const [notifications, setNotifications] = useState([]);
-
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   const [content, setContent] = useState([]);
@@ -38,13 +36,9 @@ export default function Notification() {
         }
       };
 
-      let slug = `/notification?userType=${getUserType()}&department=${
-        userInfo.department
-      }`;
-      console.log('Slug ', slug);
+      let slug = `/notification?userType=${getUserType()}&department=${userInfo.department}`;
       let token = await read('token');
       let res = await get(slug, token);
-      console.log('Res ', res);
       let Content = [];
       res.map(noti => {
         Content.push({
@@ -67,8 +61,8 @@ export default function Notification() {
         duration={400}
         style={styles.header}
         transition="backgroundColor">
-        <View style={styles.iconConatiner}>
           {loadingScreen}
+        <View style={styles.iconConatiner}>
           <FontAwesome5
             name={section.type === 'Event' ? 'video' : 'calendar-day'}
             size={27}
