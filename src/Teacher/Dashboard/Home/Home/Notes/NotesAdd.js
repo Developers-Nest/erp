@@ -76,7 +76,7 @@ export default function AddNotes({navigation}) {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'space-evenly',
             marginTop: 10,
           }}>
           <ModalSelector
@@ -89,6 +89,9 @@ export default function AddNotes({navigation}) {
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
+          <View style={{width:40}}>
+
+          </View>
           <ModalSelector
             data={batches}
             initValue="Batch"
@@ -102,25 +105,18 @@ export default function AddNotes({navigation}) {
         </View>
       </View>
 
-      <View>
-        <Card>
+        <Card style={styles.card1}>
           <Card.Content>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}>
-              {/* <View style={{paddingLeft:10}} /> */}
-            </View>
-            <View style={{padding: 2}} />
-            <TextInput placeholder="Topic " onChange={val => setTopic(val)} />
-            <View style={{padding: 2}} />
-            <View style={{borderWidth: 0.2}} />
-            <View style={{padding: 10}} />
+            <TextInput placeholder="Topic " onChange={val => setTopic(val)}
+            style={{borderBottomWidth:0.5,fontSize:15}} />
             <TextInput
-              placeholder="Discription (optional) "
+              placeholder="Description (optional) "
               onChange={val => setDiscription(val)}
+              style={{height:150,textAlignVertical:'top',marginTop:5,fontSize:15}}
+              multiline
+              numberOfLines={4}
             />
-            <View style={{padding: 10}} />
+            
             <View
               style={{
                 flexDirection: 'row',
@@ -142,23 +138,17 @@ export default function AddNotes({navigation}) {
             </View>
           </Card.Content>
         </Card>
-      </View>
 
-      <View style={{padding: 10}} />
-      <View
-        style={{
-          width: 120,
-          alignContent: 'center',
-          alignItems: 'center',
-          justifyContent: 'space-evenly',
-        }}>
+     
+        <View style={{alignItems:'center'}}>
         <Button
           mode="contained"
-          onPress={() => navigation.navigate('Edit Notes')}>
+          onPress={() => navigation.navigate('Edit Notes')} style={styles.submitButton}>
           Save
         </Button>
+        </View>
       </View>
-    </View>
+  
   );
 }
 
@@ -186,115 +176,33 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   card: {
-    borderColor: '#ccc',
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    borderTopRightRadius: 8,
-    borderTopLeftRadius: 8,
-    justifyContent: 'center',
-    minWidth: 110,
-  },
-  dropdown: {
-    elevation: 3,
-    backgroundColor: 'white',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    borderTopRightRadius: 8,
-    borderTopLeftRadius: 8,
-    justifyContent: 'center',
-    minWidth: 110,
-  },
-  accordion: {margin: 0, padding: 0, backgroundColor: 'white'},
-  image: {
-    minWidth: 100,
-    height: 200,
-  },
-  text_input: {
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
-    height: 50,
-    fontSize: 16,
-    minWidth: 171,
-    backgroundColor: 'white',
-  },
-  card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
+    margin: 0,
+    padding: 0,
+    width: 125
+  },
+ card1: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10,
+    borderRadius:20
 
-    minWidth: 110,
-    elevation: 3,
   },
-  card_title: {fontSize: 18},
-  card_marks: {
-    justifyContent: 'center',
-    backgroundColor: ' rgba(88, 99, 109, 1)',
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    color: 'white',
-  },
-  card_top: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  card_middle: {
-    paddingHorizontal: 20,
-    paddingBottom: 15,
-  },
-  card_bottom: {
-    borderTopColor: 'rgba(88, 99, 109, 0.45)',
-    borderTopWidth: 1,
-    borderRadius: 20,
-    padding: 15,
-    paddingHorizontal: 20,
-  },
-  classes_card: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    backgroundColor: 'white',
-    borderRadius: 8,
-  },
-  classes_cardClass: {
-    fontSize: 20,
-    fontFamily: 'Poppins-Regular',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    color: '#58636D',
-  },
-  classes_cardTime: {
-    fontSize: 12,
-    color: '#5177E7',
-    fontFamily: 'Poppins-Regular',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-  },
-  classes_cardBatch: {
-    fontFamily: 'Poppins',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontSize: 12,
-    paddingVertical: 5,
-    color: '#58636D',
+  submitButton: {
+    margin: 20,
+    backgroundColor:'#5177E7',
+    width:100
+    
   },
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
