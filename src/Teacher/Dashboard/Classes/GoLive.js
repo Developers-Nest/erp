@@ -173,6 +173,8 @@ export default function OnlineLecture() {
             placeholder="URL"
             style={{
               textAlignVertical: 'top',
+              borderBottomWidth:0.5,
+              fontSize:15
             }}
             onChangeText={(val) => setUrl(val)} />
 
@@ -183,15 +185,15 @@ export default function OnlineLecture() {
             style={{
               textAlignVertical: 'top',
               marginTop: 5,
-              height: 150
+              height: 150,
+              fontSize:15
             }}
             onChangeText={(val) => setDescription(val)} />
-
-
+    
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'flex-start',
+              justifyContent: 'space-evenly',
             }}>
 
             {/* date picker */}
@@ -210,7 +212,9 @@ export default function OnlineLecture() {
               onConfirm={handleSubmit}
               onCancel={() => setShowDatePicker(!showdatePicker)}
             />
+            <View style={{width:40}}>
 
+            </View>
             {/* time picker */}
             <Button
               icon="calendar"
@@ -237,7 +241,7 @@ export default function OnlineLecture() {
           fontSize: 17,
           fontFamily: 'Poppins-Regular',
           paddingLeft: 15,
-          marginTop: 15,
+          marginTop: 20,
         }}>
         Reccurence Days
       </Text>
@@ -258,11 +262,11 @@ export default function OnlineLecture() {
                 }}>
                 <View
                   style={{
-                    backgroundColor: recDays[day] == true ? 'green' : 'rgba(42, 187, 155, 1)' ,
+                    backgroundColor: recDays[day] == true ? '#1F7C17' : '#58636D' ,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: 15,
-                    width: 100,
+                    borderRadius: 10,
+                    width: 90,
                     height: 40,
                   }}>
                   <Text style={{ color: 'white' }}>{day}</Text>
@@ -273,8 +277,10 @@ export default function OnlineLecture() {
           ))
         }
       </View>
-      <Button style={styles.submitButton}
-        onPress={handleSaveClass}>Save</Button>
+      <View style={{alignItems:'center'}}>
+      <Button  mode="contained" style={styles.submitButton}
+        onPress={handleSaveClass}>Go Live</Button>
+      </View>
     </View>
   );
 }
@@ -297,10 +303,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
@@ -319,8 +322,9 @@ const styles = StyleSheet.create({
   card1: {
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 5,
-    // height: 310,
+    marginTop: 10,
+    borderRadius:20
+
   },
   input: {
     height: 40,
@@ -334,6 +338,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   submitButton: {
-    margin: 20
-  }
+    margin: 20,
+    backgroundColor:'#5177E7',
+    width:100
+    
+  },
+  
 });
