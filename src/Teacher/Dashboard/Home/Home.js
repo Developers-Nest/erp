@@ -59,6 +59,8 @@ import write from '../../../services/localstorage/write';
 let userInfo;
 
 const Home = ({navigation}) => {
+  let institute = useSelector(state => state.institute);
+
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
   const toggleExpanded = () => {
@@ -94,7 +96,7 @@ const Home = ({navigation}) => {
             style={{
               alignSelf: 'center',
               fontSize: 25,
-              color: 'black',
+              color: institute.themeColor,
               paddingLeft: 20,
               paddingTop: 20,
             }}
@@ -108,7 +110,7 @@ const Home = ({navigation}) => {
             fontWeight: '600',
             alignSelf: 'center',
             paddingLeft: 30,
-            color: 'black',
+            color: institute.themeColor,
           }}>
           {userInfo ? `Hi ${userInfo.firstName}` : `Hi`}
         </Text>
@@ -126,7 +128,7 @@ const Home = ({navigation}) => {
             style={{
               alignSelf: 'center',
               fontSize: 25,
-              color: 'black',
+              color: institute.themeColor,
               paddingRight: 20,
             }}
           />
@@ -161,7 +163,10 @@ const Home = ({navigation}) => {
           <Text style={styles.section_heading}>Upcoming Classes</Text>
         </TouchableOpacity>
         <View style={{marginHorizontal: 30, ...styles.classes_cardWrapper}}>
-          {UpcomingClasses &&
+          {UpcomingClasses.length === 0 ? (
+            <Text>No upcoming classes</Text>
+          ) : (
+            UpcomingClasses &&
             UpcomingClasses.map(
               UpcomingClass =>
                 UpcomingClass.days[0] &&
@@ -182,7 +187,8 @@ const Home = ({navigation}) => {
                     </TouchableOpacity>
                   </View>
                 )),
-            )}
+            )
+          )}
         </View>
         <View style={{height: 30}}></View>
         <View>
