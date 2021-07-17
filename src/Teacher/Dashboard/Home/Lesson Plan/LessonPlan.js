@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5E5E5',
   },
   header: {
-    height: 65,
+    height: 69,
     backgroundColor: 'white',
     flexDirection: 'row',
   },

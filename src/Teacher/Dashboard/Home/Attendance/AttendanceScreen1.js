@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ModalSelector from 'react-native-modal-selector';
@@ -10,10 +10,7 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
-import {
-  Button,
-  RadioButton,
-} from 'react-native-paper';
+import {Button, RadioButton} from 'react-native-paper';
 
 // import { createStackNavigator } from '@react-navigation/stack';
 
@@ -21,22 +18,20 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // helpers
-import getBatch from '../../../../services/helpers/getList/getBatch'
-import getSubject from '../../../../services/helpers/getList/getSubject'
-import getCourse from '../../../../services/helpers/getList/getCourse'
-import read from '../../../../services/localstorage/read'
-import get from '../../../../services/helpers/request/get'
-import patch from '../../../../services/helpers/request/patch'
-import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen'
+import getBatch from '../../../../services/helpers/getList/getBatch';
+import getSubject from '../../../../services/helpers/getList/getSubject';
+import getCourse from '../../../../services/helpers/getList/getCourse';
+import read from '../../../../services/localstorage/read';
+import get from '../../../../services/helpers/request/get';
+import patch from '../../../../services/helpers/request/patch';
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-
-const AttendanceScreen1 = ({ navigation }) => {
-
+const AttendanceScreen1 = ({navigation}) => {
   const [checked, setChecked] = React.useState('first');
 
   // after fetch
-  const [fetched, setFetched] = useState(false)
-  const [studentsList, setStudentsList] = useState({})
+  const [fetched, setFetched] = useState(false);
+  const [studentsList, setStudentsList] = useState({});
 
   // selected values
   const [course, setCourse] = useState(null);
@@ -44,10 +39,9 @@ const AttendanceScreen1 = ({ navigation }) => {
   const [subject, setSubject] = useState(null);
 
   // for interaction with api
-  const [timeStamp, setTimeStamp] = useState('')
-  const [day, setDay] = useState('')
-  const [studentObject, setStudentObject] = useState({})
-
+  const [timeStamp, setTimeStamp] = useState('');
+  const [day, setDay] = useState('');
+  const [studentObject, setStudentObject] = useState({});
 
   // dropdown values
   const [courses, setCourses] = useState([]);
@@ -55,108 +49,106 @@ const AttendanceScreen1 = ({ navigation }) => {
   const [subjects, setSubjects] = useState([]);
 
   // loading screen
-  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   // values after fetch
-  const [attendanceId, setAttendanceId] = useState('')
+  const [attendanceId, setAttendanceId] = useState('');
 
   // on load of the screen
   useEffect(async () => {
-    showLoadingScreen()
+    showLoadingScreen();
     try {
-      let cour = await getCourse()
-      setCourses(cour)
+      let cour = await getCourse();
+      setCourses(cour);
     } catch (err) {
-      alert('Cannot fetch courses!!')
+      alert('Cannot fetch courses!!');
     }
-    hideLoadingScreen()
-
-  }, [])
+    hideLoadingScreen();
+  }, []);
 
   // get list of batches
-  const fetchBatches = async (sc) => {
-    showLoadingScreen()
-    setCourse(sc)
+  const fetchBatches = async sc => {
+    showLoadingScreen();
+    setCourse(sc);
     try {
-      let bat = await getBatch(sc)
-      setBatches(bat)
+      let bat = await getBatch(sc);
+      setBatches(bat);
     } catch (err) {
-      alert('Cannot fetch Batches!!')
+      alert('Cannot fetch Batches!!');
     }
-    hideLoadingScreen()
-  }
+    hideLoadingScreen();
+  };
 
   // get list of subjects
-  const fetchSubjects = async (sb) => {
-    showLoadingScreen()
-    setBatch(sb)
+  const fetchSubjects = async sb => {
+    showLoadingScreen();
+    setBatch(sb);
     try {
-      let sub = await getSubject(course, sb)
-      setSubjects(sub)
+      let sub = await getSubject(course, sb);
+      setSubjects(sub);
     } catch (err) {
-      alert('Cannot fetch Subjects!!')
+      alert('Cannot fetch Subjects!!');
     }
-    hideLoadingScreen()
-  }
+    hideLoadingScreen();
+  };
 
   // get list of students after selecting subject
-  const getList = async (sb) => {
-    showLoadingScreen()
-    setSubject(sb)
+  const getList = async sb => {
+    showLoadingScreen();
+    setSubject(sb);
     try {
-      let timeStamp = new Date().getTime()
-      console.log('TimeStamp ', timeStamp)
-      setTimeStamp('1626287400000')
+      let timeStamp = new Date().getTime();
+      console.log('TimeStamp ', timeStamp);
+      setTimeStamp('1626287400000');
       // todo change timstamp
-      let slug = `/student/attendance/?course=${course}&batch=${batch}&timestamp=1626287400000&subject=${sb}`
-      let token = await read('token')
-      let res = await get(slug, token)
-      setStudentObject(res)
-      setAttendanceId(res._id)  // will be used during list submission
-      setDay(res.day)
-      let students = res.students
-      let studentsMap = {}
-      students.map((student)=>{
+      let slug = `/student/attendance/?course=${course}&batch=${batch}&timestamp=1626287400000&subject=${sb}`;
+      let token = await read('token');
+      let res = await get(slug, token);
+      setStudentObject(res);
+      setAttendanceId(res._id); // will be used during list submission
+      setDay(res.day);
+      let students = res.students;
+      let studentsMap = {};
+      students.map(student => {
         studentsMap[student._id] = {
-          studentName : student.firstName,
-          admissionNumber : student.studentAdmissionNumber,
-          present: student.present
-        }
-      })
-      setStudentsList(studentsMap)
-      setFetched(true)
+          studentName: student.firstName,
+          admissionNumber: student.studentAdmissionNumber,
+          present: student.present,
+        };
+      });
+      setStudentsList(studentsMap);
+      setFetched(true);
     } catch (err) {
-      alert('No Lists found !!')
+      alert('No Lists found !!');
     }
-    hideLoadingScreen()
-  }
-
+    hideLoadingScreen();
+  };
 
   // update attendance status of student
-  const toggleAttendance = (studentId, currentStatus)=>{
-    let updatedStatus
-    if(currentStatus === 'present') updatedStatus = 'absent'
-    else updatedStatus = 'present'
+  const toggleAttendance = (studentId, currentStatus) => {
+    let updatedStatus;
+    if (currentStatus === 'present') updatedStatus = 'absent';
+    else updatedStatus = 'present';
 
     setStudentsList(previousList => {
       return {
-        ... previousList,
+        ...previousList,
         [studentId]: {
-          ... previousList[studentId],
-          present: updatedStatus
-        }
-      }
-    })
-  }
+          ...previousList[studentId],
+          present: updatedStatus,
+        },
+      };
+    });
+  };
 
   // save list
-  const handleSaveList = async()=>{
-    try{
-      let slug = `/student/attendance/${attendanceId}`
-      console.log('Att slug ', slug)
-      let token = await read('token')
-      let list = []
-      studentObject.students.map((student)=>{
+  const handleSaveList = async () => {
+    try {
+      let slug = `/student/attendance/${attendanceId}`;
+      console.log('Att slug ', slug);
+      let token = await read('token');
+      let list = [];
+      studentObject.students.map(student => {
         list.push({
           firstName: student.firstName,
           lastName: student.lastName,
@@ -164,9 +156,9 @@ const AttendanceScreen1 = ({ navigation }) => {
           present: studentsList[student._id].present,
           remarks: student.remarks,
           studentAdmissionNumber: student.studentAdmissionNumber,
-          studentId: student.studentId._id
-        })
-      })
+          studentId: student.studentId._id,
+        });
+      });
       // console.log('Patch List ', list)
       let data = {
         course: course,
@@ -174,14 +166,14 @@ const AttendanceScreen1 = ({ navigation }) => {
         subject: subject,
         timestamp: timeStamp,
         day: day,
-        list: list
-      }
-      let response = await patch(slug, data, token)
-      alert('List Updated!')
-    } catch(err){
-      alert('Cannot update List!')
+        list: list,
+      };
+      let response = await patch(slug, data, token);
+      alert('List Updated!');
+    } catch (err) {
+      alert('Cannot update List!');
     }
-  }
+  };
 
   return (
     <View
@@ -216,49 +208,45 @@ const AttendanceScreen1 = ({ navigation }) => {
             alignSelf: 'center',
             paddingLeft: 30,
             color: 'white',
-            fontFamily: 'NunitoSans-Regular'
+            fontFamily: 'NunitoSans-Regular',
           }}>
           Attendance
         </Text>
-        <View style={{ flex: 1, marginLeft: 20 }}>
+        <View style={{flex: 1, marginLeft: 20}}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('AttendanceScreen2');
+            }}
+            style={{
+              justifyContent: 'center',
+              flex: 1,
+              alignItems: 'center',
+              alignSelf: 'flex-end',
+              paddingRight: 30,
             }}>
-            <MaterialCommunityIcon
-              size={24}
-              color="white"
-              name="eye"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                paddingLeft: 20,
-                paddingTop: 15,
-              }}
-            />
+            <MaterialCommunityIcon size={24} color="white" name="eye" />
+            <Text style={{fontFamily: 'Poppins-Regular', color: '#fff'}}>
+              View
+            </Text>
           </TouchableOpacity>
-          <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff' }}>{'     '}{'       '}{'    '}{'   '}View</Text>
         </View>
       </View>
 
-      <View style={{ padding: 15 }}>
-
+      <View style={{padding: 15}}>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginTop: 10,
             alignContent: 'flex-start',
-            width: '99%'
+            width: '99%',
           }}>
-
           {/* course selector */}
           <ModalSelector
             data={courses}
             initValue="Class"
             onChange={option => {
-              fetchBatches(option.key)
+              fetchBatches(option.key);
             }}
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
@@ -270,7 +258,7 @@ const AttendanceScreen1 = ({ navigation }) => {
             data={batches}
             initValue="Batch"
             onChange={option => {
-              fetchSubjects(option.key)
+              fetchSubjects(option.key);
             }}
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
@@ -282,107 +270,124 @@ const AttendanceScreen1 = ({ navigation }) => {
             data={subjects}
             initValue="Subject"
             onChange={option => {
-              getList(option.key)
+              getList(option.key);
             }}
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
-
         </View>
-        {
-          fetched ? (
-            <ScrollView>
-              <View style={{ marginTop: 6, marginBottom: 150 }}>
-                <View style={{ padding: 5, justifyContent: 'center' }} />
+        {fetched ? (
+          <ScrollView>
+            <View style={{marginTop: 6, marginBottom: 150}}>
+              <View style={{padding: 5, justifyContent: 'center'}} />
 
-                {/* open search */}
-                <View
+              {/* open search */}
+              <View
+                style={{
+                  //make search and card inline
+                  marginLeft: 5,
+                  justifyContent: 'space-between',
+                  width: '95%',
+                  flexDirection: 'row',
+                  ...styles.shadow,
+                }}>
+                <FontAwesome5
+                  name="search"
                   style={{
-                    //make search and card inline
-                    marginLeft: 5,
-                    justifyContent: 'space-between',
-                    width: '95%',
-                    flexDirection: 'row',
-                    ...styles.shadow,
+                    alignSelf: 'center',
+                    fontSize: 11,
+                    color: '#6A6A80',
+                  }}
+                />
+                <TextInput
+                  style={{width: '80%', ...styles.text_input}}
+                  underlineColorAndroid="transparent"
+                  placeholder="Enter student's name"
+                />
+                <TouchableOpacity
+                  style={{
+                    alignSelf: 'center',
                   }}>
                   <FontAwesome5
-                    name="search"
+                    name="filter"
                     style={{
                       alignSelf: 'center',
-                      fontSize: 11,
+                      fontSize: 21,
                       color: '#6A6A80',
-                    }} />
-                  <TextInput
-                    style={{ width: '80%', ...styles.text_input }}
-                    underlineColorAndroid='transparent'
-                    placeholder="Enter student's name"
+                    }}
                   />
-                  <TouchableOpacity
-                    style={{
-                      alignSelf: 'center',
-                    }}>
-                    <FontAwesome5
-                      name="filter"
-                      style={{
-                        alignSelf: 'center',
-                        fontSize: 21,
-                        color: '#6A6A80',
-                      }}
-
-                    />
-                  </TouchableOpacity>
-                </View>
-
-                <View style={{ padding: 10 }} />
-
-
-                {/* starting of Card loop-section,scroll for more number of cards */}
-                <ScrollView>
-                  {
-                    Object.keys(studentsList).map((studentId) => (
-                      <View style={styles.section} key={studentId}>
-                        <View style={styles.details}>
-                          <View style={styles.userinhostels}>
-                            <TouchableOpacity style={styles.differentusers}>
-                              <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>{studentsList[studentId].studentName}</Text>
-                              <View style={{ marginRight: 20 }}>
-                                <RadioButton
-                                  value="first"
-                                  status={ studentsList[studentId].present === 'present' ? 'checked' : 'unchecked'}
-                                  onPress={() => toggleAttendance(studentId, studentsList[studentId].present)}
-                                />
-                              </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.differentusers}>
-                              <Text style={{ fontSize: 14, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
-                                {'  '}Admission No. {studentsList[studentId].admissionNumber}
-                              </Text>
-
-                              <Text style={{ fontSize: 12, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
-                                {new Date().toISOString().slice(0, 10)}
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
-                    ))
-                  }
-
-                </ScrollView>
-                {/* Cards end */}
-
-                <Button onPress={handleSaveList}>Send</Button>
-
+                </TouchableOpacity>
               </View>
-            </ScrollView>
 
-          ) : (null)
-        }
+              <View style={{padding: 10}} />
 
+              {/* starting of Card loop-section,scroll for more number of cards */}
+              <ScrollView>
+                {Object.keys(studentsList).map(studentId => (
+                  <View style={styles.section} key={studentId}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 22,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {studentsList[studentId].studentName}
+                          </Text>
+                          <View style={{marginRight: 20}}>
+                            <RadioButton
+                              value="first"
+                              status={
+                                studentsList[studentId].present === 'present'
+                                  ? 'checked'
+                                  : 'unchecked'
+                              }
+                              onPress={() =>
+                                toggleAttendance(
+                                  studentId,
+                                  studentsList[studentId].present,
+                                )
+                              }
+                            />
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: '#6A6A80',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            {'  '}Admission No.{' '}
+                            {studentsList[studentId].admissionNumber}
+                          </Text>
+
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#6A6A80',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            {new Date().toISOString().slice(0, 10)}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                ))}
+              </ScrollView>
+              {/* Cards end */}
+
+              <Button onPress={handleSaveList}>Send</Button>
+            </View>
+          </ScrollView>
+        ) : null}
       </View>
 
-      <View style={{ padding: 7 }} />
+      <View style={{padding: 7}} />
 
       {/* close list part */}
 
@@ -390,8 +395,6 @@ const AttendanceScreen1 = ({ navigation }) => {
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -414,11 +417,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 12,
 
-
     padding: 10,
     marginLeft: 2,
     marginVertical: 15,
-    width: '99%'
+    width: '99%',
   },
 
   details: {
@@ -426,7 +428,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
 
     borderBottomColor: '#333',
-
   },
   userinhostels: {
     marginTop: 1,
@@ -469,7 +470,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
@@ -487,8 +488,6 @@ const styles = StyleSheet.create({
     minWidth: '30%',
   },
 
-
-
   text_input: {
     paddingHorizontal: 10,
     borderRadius: 10,
@@ -500,7 +499,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -528,7 +527,7 @@ const styles = StyleSheet.create({
   },
   shadow2: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -552,14 +551,13 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    height: 65,
-    marginTop: 0,
+    height: 69,
     backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -574,7 +572,7 @@ const styles = StyleSheet.create({
     minWidth: 110,
     elevation: 3,
   },
-  card_title: { fontSize: 18 },
+  card_title: {fontSize: 18},
   card_marks: {
     justifyContent: 'center',
     backgroundColor: ' rgba(88, 99, 109, 1)',
@@ -649,7 +647,6 @@ const styles = StyleSheet.create({
     paddingTop: 3,
     color: '#211C5A',
   },
-
 });
 
 export default AttendanceScreen1;

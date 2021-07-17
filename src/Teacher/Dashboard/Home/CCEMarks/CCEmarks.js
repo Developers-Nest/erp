@@ -1,25 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView } from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {
-  Searchbar,
-  Appbar,
-  List,
-  Button,
-} from 'react-native-paper';
-import ModalSelector from 'react-native-modal-selector'
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import {Searchbar, Appbar, List, Button} from 'react-native-paper';
+import ModalSelector from 'react-native-modal-selector';
+
+import Icon from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // helpers
-import getBatch from '../../../../services/helpers/getList/getBatch'
-import getCourse from '../../../../services/helpers/getList/getCourse'
-import getSubject from '../../../../services/helpers/getList/getSubject'
-import getTerm from '../../../../services/helpers/getList/getTerm'
-import getAssessesment from '../../../../services/helpers/getList/getAssessesment'
-import get from '../../../../services/helpers/request/get'
-import read from '../../../../services/localstorage/read'
-import getExam from '../../../../services/helpers/getList/getExam'
+import getBatch from '../../../../services/helpers/getList/getBatch';
+import getCourse from '../../../../services/helpers/getList/getCourse';
+import getSubject from '../../../../services/helpers/getList/getSubject';
+import getTerm from '../../../../services/helpers/getList/getTerm';
+import getAssessesment from '../../../../services/helpers/getList/getAssessesment';
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
+import getExam from '../../../../services/helpers/getList/getExam';
 
 // loading screem
-import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js'
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
 
 const MySearchbar = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -34,142 +39,163 @@ const MySearchbar = () => {
     />
   );
 };
-export default function CceMarks() {
-
+export default function CceMarks({navigation}) {
   // dropdown values
-  const [batches, setBatches] = useState([])
-  const [courses, setCourses] = useState([])
-  const [subjects, setSubjects] = useState([])
-  const [terms, setTerms] = useState([])
-  const [assessments, setAssessments] = useState([])
-  const [exams, setExams] = useState([])
+  const [batches, setBatches] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [terms, setTerms] = useState([]);
+  const [assessments, setAssessments] = useState([]);
+  const [exams, setExams] = useState([]);
 
   // selected Values
-  const [course, setCourse] = useState(null)
-  const [batch, setBatch] = useState(null)
-  const [subject, setSubject] = useState(null)
-  const [term, setTerm] = useState(null)
-  const [assessment, setAssessment] = useState(null)
-  const [exam, setExam] = useState(null)
+  const [course, setCourse] = useState(null);
+  const [batch, setBatch] = useState(null);
+  const [subject, setSubject] = useState(null);
+  const [term, setTerm] = useState(null);
+  const [assessment, setAssessment] = useState(null);
+  const [exam, setExam] = useState(null);
 
   // after fetching list
-  const [fetched, setFetched] = useState(false)
-  const [list, setList] = useState([])
+  const [fetched, setFetched] = useState(false);
+  const [list, setList] = useState([]);
 
   // loading screen
-  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   useEffect(async () => {
-    showLoadingScreen()
+    showLoadingScreen();
     try {
-      const response = await getCourse()
-      console.log("Courses CCE ", response)
-      setCourses(response)
+      const response = await getCourse();
+      console.log('Courses CCE ', response);
+      setCourses(response);
     } catch (err) {
-      alert('Cannot get Courses!')
+      alert('Cannot get Courses!');
     }
 
     try {
-      const response = await getTerm()
-      console.log("Terms ", response)
-      setTerms(response)
+      const response = await getTerm();
+      console.log('Terms ', response);
+      setTerms(response);
     } catch (err) {
-      alert('Cannot get Terms!')
+      alert('Cannot get Terms!');
     }
-    hideLoadingScreen()
-  }, [])
-
+    hideLoadingScreen();
+  }, []);
 
   ///////////// get dropdown values ///////////////
-  const getBatches = async (selectedCourse) => {
-    showLoadingScreen()
+  const getBatches = async selectedCourse => {
+    showLoadingScreen();
     try {
-      await setCourse(selectedCourse)
-      const response = await getBatch(selectedCourse)
-      setBatches(response)
+      await setCourse(selectedCourse);
+      const response = await getBatch(selectedCourse);
+      setBatches(response);
     } catch (err) {
-      alert('Cannot get Batches')
+      alert('Cannot get Batches');
     }
-    hideLoadingScreen()
-  }
+    hideLoadingScreen();
+  };
 
-  const getSubjects = async (sc) => {
-    showLoadingScreen()
+  const getSubjects = async sc => {
+    showLoadingScreen();
     try {
-      await setBatch(sc)
-      const response = await getSubject(course, batch)
-      console.log("Subjects response ", response)
-      setSubjects(response)
+      await setBatch(sc);
+      const response = await getSubject(course, batch);
+      console.log('Subjects response ', response);
+      setSubjects(response);
     } catch (err) {
-      alert('Cannot get Subjects')
+      alert('Cannot get Subjects');
     }
-    hideLoadingScreen()
-  }
+    hideLoadingScreen();
+  };
 
-  const getAssessesments = async (st) => {
-    showLoadingScreen()
+  const getAssessesments = async st => {
+    showLoadingScreen();
     try {
-      await setTerm(st)
-      console.log("Selected term ", st)
-      const response = await getAssessesment(st)
+      await setTerm(st);
+      console.log('Selected term ', st);
+      const response = await getAssessesment(st);
 
-      setAssessments(response)
+      setAssessments(response);
     } catch (err) {
-      alert('Cannot get Assessments!!')
+      alert('Cannot get Assessments!!');
     }
-    hideLoadingScreen()
-  }
+    hideLoadingScreen();
+  };
 
-  const getExams = async (ss) => {
-    showLoadingScreen()
+  const getExams = async ss => {
+    showLoadingScreen();
     try {
-      await setSubject(ss)
-      console.log("Selected exam ", ss)
-      const response = await getExam(course, batch, subject, term, assessment)
-      console.log('Exams ', response)
-      setExams(response)
+      await setSubject(ss);
+      console.log('Selected exam ', ss);
+      const response = await getExam(course, batch, subject, term, assessment);
+      console.log('Exams ', response);
+      setExams(response);
     } catch (err) {
-      alert('Cannot get your exams !!')
+      alert('Cannot get your exams !!');
     }
-    hideLoadingScreen()
-  }
+    hideLoadingScreen();
+  };
 
   ///////////// get dropdown values ends ///////////////
 
   const getList = async () => {
-    showLoadingScreen()
+    showLoadingScreen();
     try {
-
-      let slug = `/cce/exam/scholasticMark?course=${course}&batch=${batch}&examname=${exam}&term=${term}&subject=${subject}&assessment=${assessment}`
-      let token = await read('token')
-      let res = await get(slug, token)
-      console.log("Marks list ", res)
-      res = res.students
-      let marksArray = []
-      res.map((data) => {
+      let slug = `/cce/exam/scholasticMark?course=${course}&batch=${batch}&examname=${exam}&term=${term}&subject=${subject}&assessment=${assessment}`;
+      let token = await read('token');
+      let res = await get(slug, token);
+      console.log('Marks list ', res);
+      res = res.students;
+      let marksArray = [];
+      res.map(data => {
         marksArray.push({
           subjectName: data.subjectSub,
           studentAddNum: data.studentAdmissionNumber,
-          mark: data.mark
-        })
-      })
-      setList(res)
-      setFetched(true)
-
+          mark: data.mark,
+        });
+      });
+      setList(res);
+      setFetched(true);
     } catch (err) {
-      alert('No Lists found!!')
+      alert('No Lists found!!');
     }
-    hideLoadingScreen()
-  }
-
+    hideLoadingScreen();
+  };
 
   return (
-    <View style={{ backgroundColor: 'white', height: '100%' }}>
-      <Appbar>
-        <Appbar.BackAction onPress={() => { }} />
-        <Appbar.Content title="CCE Marks" />
-        <Appbar.Action icon="information" onPress={() => { }} />
-      </Appbar>
+    <View style={{backgroundColor: 'white', height: '100%'}}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
+          <Icon
+            size={24}
+            color="white"
+            name="left"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'white',
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
+          />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontStyle: 'normal',
+            fontSize: 28,
+            fontWeight: '600',
+            alignSelf: 'center',
+            paddingLeft: 30,
+            color: 'white',
+            fontFamily: 'NunitoSans-Regular',
+          }}>
+          CCE Marks
+        </Text>
+      </View>
       {loadingScreen}
       <View
         style={{
@@ -181,29 +207,35 @@ export default function CceMarks() {
           flexDirection: 'row',
           justifyContent: 'space-around',
         }}>
-
         {/* course selector */}
         <ModalSelector
           data={courses}
           initValue="Course"
-          onChange={async (option) => {
-            await getBatches(option.key)
+          onChange={async option => {
+            await getBatches(option.key);
           }}
-          style={styles.card,{
-            width: 150,
-          }} />
-
+          style={
+            (styles.card,
+            {
+              width: 150,
+            })
+          }
+        />
 
         {/* batch selector */}
         <ModalSelector
           data={batches}
           initValue="Batch"
-          onChange={async (option) => {
-            await getSubjects(option.key)
+          onChange={async option => {
+            await getSubjects(option.key);
           }}
-          style={styles.card,{
-            width: 150,
-          }} />
+          style={
+            (styles.card,
+            {
+              width: 150,
+            })
+          }
+        />
       </List.Section>
 
       <View
@@ -211,51 +243,68 @@ export default function CceMarks() {
           paddingLeft: 20,
           paddingRight: 20,
         }}>
-        <View style={{padding:8}}/>
+        <View style={{padding: 8}} />
         {/* select term */}
         <ModalSelector
           data={terms}
           initValue="Term"
-          onChange={async (option) => {
-            await getAssessesments(option.key)
+          onChange={async option => {
+            await getAssessesments(option.key);
           }}
-          style={styles.card,{
-            width: "100%",
-          }} />
+          style={
+            (styles.card,
+            {
+              width: '100%',
+            })
+          }
+        />
 
-        <View style={{padding:8}}/>
+        <View style={{padding: 8}} />
         {/* select assessment */}
         <ModalSelector
           data={assessments}
           initValue="Assessments"
-          onChange={async (option) => {
-            setAssessment(option.key)
+          onChange={async option => {
+            setAssessment(option.key);
           }}
-          style={styles.card,{
-            width: "100%",
-          }} />
-        <View style={{padding:8}}/>
+          style={
+            (styles.card,
+            {
+              width: '100%',
+            })
+          }
+        />
+        <View style={{padding: 8}} />
         {/* subject selector */}
         <ModalSelector
           data={subjects}
           initValue="Subjects"
-          onChange={async (option) => {
-            await getExams(option.key)
+          onChange={async option => {
+            await getExams(option.key);
           }}
-          style={styles.card, styles.shadow,{
-            width: "100%",
-          }} />
-        <View style={{padding:8}}/>
+          style={
+            (styles.card,
+            styles.shadow,
+            {
+              width: '100%',
+            })
+          }
+        />
+        <View style={{padding: 8}} />
         {/* exam selector */}
         <ModalSelector
           data={exams}
           initValue="Exams"
-          onChange={async (option) => {
-            setExam(option.key)
+          onChange={async option => {
+            setExam(option.key);
           }}
-          style={styles.card,{
-            width: "100%",
-          }} />
+          style={
+            (styles.card,
+            {
+              width: '100%',
+            })
+          }
+        />
       </View>
 
       <View
@@ -275,9 +324,9 @@ export default function CceMarks() {
           Get
         </Button>
       </View>
-      {
-        fetched ? (
-          list && list.map((data) => (
+      {fetched
+        ? list &&
+          list.map(data => (
             <View>
               <View
                 style={{
@@ -289,20 +338,18 @@ export default function CceMarks() {
                 style={{
                   padding: 5,
                 }}></View>
-              <View style={{ marginTop: 10, ...styles.shadow }}>
+              <View style={{marginTop: 10, ...styles.shadow}}>
                 <View style={styles.card_top}>
                   <View>
                     <Text style={styles.card_title}>{data.studentAddNum}</Text>
-                    <Text style={{ color: 'blue', fontSize: 12 }}>Remarks</Text>
+                    <Text style={{color: 'blue', fontSize: 12}}>Remarks</Text>
                   </View>
                   <View style={styles.card_marks}>
-                    <Text style={{ color: 'white' }}>{data.mark}/50</Text>
+                    <Text style={{color: 'white'}}>{data.mark}/50</Text>
                   </View>
                 </View>
                 <View style={styles.card_middle}>
-                  <Text>
-                    {data.subjectName}
-                  </Text>
+                  <Text>{data.subjectName}</Text>
                 </View>
                 {/* <View style={styles.card_bottom}>
                   <Text style={{ color: 'rgba(176, 67, 5, 1)', fontSize: 12 }}>
@@ -312,13 +359,16 @@ export default function CceMarks() {
               </View>
             </View>
           ))
-        ) : (null)
-      }
-
+        : null}
     </View>
   );
 }
 const styles = StyleSheet.create({
+  header: {
+    height: 69,
+    backgroundColor: 'rgba(0, 73, 159, 1)',
+    flexDirection: 'row',
+  },
   card: {
     shadowColor: '#999',
     shadowOffset: {width: 0, height: 1},
@@ -338,7 +388,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',

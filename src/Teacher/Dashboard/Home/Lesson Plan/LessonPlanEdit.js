@@ -10,6 +10,10 @@ import {
   TextInput,
 } from 'react-native-paper';
 
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+
 export default function LessonPlanAdd({navigation}) {
   const [expanded, setExpanded] = React.useState(true);
   const [text, setText] = React.useState('');
@@ -22,12 +26,14 @@ export default function LessonPlanAdd({navigation}) {
           onPress={() => {
             navigation.navigate('Lesson Plan');
           }}>
-          <FontAwesome5
-            name="chevron-left"
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
             style={{
               alignSelf: 'center',
               fontSize: 25,
-              color: 'blue',
+              color: 'white',
               paddingLeft: 20,
               paddingTop: 20,
             }}
@@ -37,10 +43,11 @@ export default function LessonPlanAdd({navigation}) {
           style={{
             fontStyle: 'normal',
             fontSize: 28,
-            fontFamily: 'NunitoSans-Light',
             fontWeight: '600',
             alignSelf: 'center',
             paddingLeft: 30,
+            color: 'white',
+            fontFamily: 'NunitoSans-Regular',
           }}>
           Edit Lesson Plan
         </Text>
@@ -168,8 +175,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5E5E5',
   },
   header: {
-    height: 65,
-    backgroundColor: 'white',
+    height: 69,
+    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   Drop: {

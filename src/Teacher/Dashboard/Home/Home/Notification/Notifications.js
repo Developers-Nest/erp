@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,61 +6,60 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 // helpers
-import read from '../../../../../services/localstorage/read'
-import get from '../../../../../services/helpers/request/get'
+import read from '../../../../../services/localstorage/read';
+import get from '../../../../../services/helpers/request/get';
 
-import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen'
+import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
 
 export default function Notification() {
+  let userInfo = useSelector(state => state.userInfo);
 
-  let userInfo = useSelector((state) => state.userInfo)
+  const [notifications, setNotifications] = useState([]);
 
-  const [notifications, setNotifications] = useState([])
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
-
-  const [content, setContent] = useState([])
-  const [fetched, setFetched] = useState(false)
+  const [content, setContent] = useState([]);
+  const [fetched, setFetched] = useState(false);
 
   useEffect(async () => {
-    showLoadingScreen()
+    showLoadingScreen();
     try {
-      
-      let getUserType = ()=>{
-        if(typeof(userInfo.userType) === 'string'){
-          return userInfo.userType
-        } else{
-          return userInfo.userType._id
+      let getUserType = () => {
+        if (typeof userInfo.userType === 'string') {
+          return userInfo.userType;
+        } else {
+          return userInfo.userType._id;
         }
-      }
+      };
 
-      let slug = `/notification?userType=${getUserType()}&department=${userInfo.department}`
-      console.log('Slug ', slug)
-      let token = await read('token')
-      let res = await get(slug, token)
-      console.log('Res ', res)
-      let Content = []
-      res.map((noti) => {
+      let slug = `/notification?userType=${getUserType()}&department=${
+        userInfo.department
+      }`;
+      console.log('Slug ', slug);
+      let token = await read('token');
+      let res = await get(slug, token);
+      console.log('Res ', res);
+      let Content = [];
+      res.map(noti => {
         Content.push({
           title: noti.title,
           content: noti.message,
-          type: 'News'
-        })
-      })
-      setContent(Content)
-      setFetched(true)
+          type: 'News',
+        });
+      });
+      setContent(Content);
+      setFetched(true);
     } catch (err) {
-      alert('Cannot get Notifications!!')
+      alert('Cannot get Notifications!!');
     }
-    hideLoadingScreen()
-  }, [])
-
+    hideLoadingScreen();
+  }, []);
 
   function renderHeader(section, _, isActive) {
     return (
@@ -73,7 +72,7 @@ export default function Notification() {
           <FontAwesome5
             name={section.type === 'Event' ? 'video' : 'calendar-day'}
             size={27}
-            style={{ color: '#58636D' }}
+            style={{color: '#58636D'}}
           />
           {section.type === 'Event' ? (
             <Text style={styles.iconText}>Event</Text>
@@ -85,7 +84,11 @@ export default function Notification() {
           <Text style={styles.headerText}>{section.title}</Text>
           {isActive ? (
             <View style={styles.collapseIconContainer}>
-              <FontAwesome5 name="chevron-up" size={14} />
+              <FontAwesome5
+                name="chevron-up"
+                size={14}
+                style={styles.collapseIconIcon}
+              />
             </View>
           ) : (
             <View style={styles.collapseIconContainer}>
@@ -103,7 +106,7 @@ export default function Notification() {
 
   function renderContent(section, _, isActive) {
     return (
-      <Animatable.View duration={100} style={{ paddingHorizontal: 10 }}>
+      <Animatable.View duration={100} style={{paddingHorizontal: 10}}>
         <Text
           animation={isActive ? 'bounceIn' : undefined}
           style={styles.collapseContent}>
@@ -121,25 +124,23 @@ export default function Notification() {
   };
 
   return (
-    <View style={styles.container} >
-      {
-        fetched ? (
-          <ScrollView style={{ padding: 10 }}>
-            <Accordion
-              activeSections={ActiveSections}
-              sections={content}
-              touchableComponent={TouchableOpacity}
-              renderHeader={renderHeader}
-              renderContent={renderContent}
-              duration={400}
-              onChange={setSections}
-              renderAsFlatList={false}
-              containerStyle={styles.cardsWrapper}
-              sectionContainerStyle={styles.card}
-            />
-          </ScrollView>
-        ) : (null)
-      }
+    <View style={styles.container}>
+      {fetched ? (
+        <ScrollView style={{padding: 10}}>
+          <Accordion
+            activeSections={ActiveSections}
+            sections={content}
+            touchableComponent={TouchableOpacity}
+            renderHeader={renderHeader}
+            renderContent={renderContent}
+            duration={400}
+            onChange={setSections}
+            renderAsFlatList={false}
+            containerStyle={styles.cardsWrapper}
+            sectionContainerStyle={styles.card}
+          />
+        </ScrollView>
+      ) : null}
     </View>
   );
 }
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
   card: {
     marginVertical: 10,
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 3,
