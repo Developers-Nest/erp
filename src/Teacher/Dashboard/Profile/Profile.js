@@ -19,6 +19,7 @@ import {
   BottomNavigation,
 } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 // redux
 import { useSelector } from 'react-redux';
@@ -89,31 +90,37 @@ export default function Profile({ navigation }) {
 
       <View style={styles.textFields}>
         <View style={styles.input}>
+          <FontAwesome5 name="user-alt" style={styles.icons}/>
           <Text style={styles.inputField}>Name: </Text>
           <Text style={styles.inputValue}>{userInfo.firstName}</Text>
         </View>
 
         <View style={styles.input}>
+          <FontAwesome5 name="building" style={styles.icons}/>
           <Text style={styles.inputField}>Department: </Text>
           <Text style={styles.inputValue}>{userInfo.departmentName}</Text>
         </View>
 
         <View style={styles.input}>
+          <FontAwesome5 name="user-check" style={styles.icons}/>
           <Text style={styles.inputField}>Designation: </Text>
           <Text style={styles.inputValue}>{userInfo.designationName}</Text>
         </View>
 
         <View style={styles.input}>
+          <FontAwesome5 name="id-badge" style={styles.icons}/>
           <Text style={styles.inputField}>Employee Code: </Text>
           <Text style={styles.inputValue}>{userInfo.code}</Text>
         </View>
 
         <View style={styles.input}>
+          <FontAwesome5 name="user-tag" style={styles.icons}/>
           <Text style={styles.inputField}>Role: </Text>
           <Text style={styles.inputValue}>{userInfo.permRole.name}</Text>
         </View>
 
         <View style={styles.input}>
+          <FontAwesome5 name="mobile-alt" style={styles.icons}/>
           <Text style={styles.inputField}>Mobile: </Text>
           <Text style={styles.inputValue}>{userInfo.mobile}</Text>
         </View>
@@ -160,6 +167,14 @@ const styles = StyleSheet.create({
   inputField: {
     fontWeight: 'bold',
     fontSize: 18
+  },
+  inputValue: {
+    fontSize: 18
+  },
+  icons : {
+    fontSize:22,
+    marginRight:10
+
   },
 
 });
