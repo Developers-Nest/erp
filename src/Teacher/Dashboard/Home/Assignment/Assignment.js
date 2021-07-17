@@ -33,25 +33,8 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Assignment Due"
-        component={AssignmentDue}
-        options={({navigation, route}) => ({
-          headerTitle: 'Assignment Due',
-          // headerStyle: {
-          //   backgroundColor: '#f4511e',
-          // },
-          headerRight: () => (
-            <Icon
-              name="add-circle"
-              size={30}
-              color="#900"
-              onPress={() => navigation.navigate('Assignment Add')}
-            />
-          ),
-        })}
-      />
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Assignment Due" component={AssignmentDue} />
       <Stack.Screen name="Assignment Add" component={AssignmentAdd} />
       <Stack.Screen name="Assignment Edit" component={AssignmentEdit} />
     </Stack.Navigator>

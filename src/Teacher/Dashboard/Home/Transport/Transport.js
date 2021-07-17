@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, TextInput, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {
   Searchbar,
   Appbar,
@@ -10,14 +17,43 @@ import {
   Button,
 } from 'react-native-paper';
 
-export default function Transport() {
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+export default function Transport({navigation}) {
   return (
     <View style={styles.backgroung}>
-      <Appbar>
-        <Appbar.BackAction onPress={() => {}} />
-        <Appbar.Content title="Transport" />
-        <Appbar.Action icon="information" onPress={() => {}} />
-      </Appbar>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'white',
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
+          />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontStyle: 'normal',
+            fontFamily: 'NunitoSans-Regular',
+            fontSize: 28,
+            fontWeight: '600',
+            alignSelf: 'center',
+            paddingLeft: 30,
+            color: 'white',
+          }}>
+          Transport
+        </Text>
+      </View>
       <View style={{padding: 10}} />
       <Card>
         <Card.Content>
@@ -151,6 +187,11 @@ export default function Transport() {
 }
 
 const styles = StyleSheet.create({
+  header: {
+    height: 69,
+    backgroundColor: 'rgba(0, 73, 159, 1)',
+    flexDirection: 'row',
+  },
   backgroung: {
     backgroundColor: '#E5E5E5',
     height: '100%',

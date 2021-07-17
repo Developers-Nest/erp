@@ -7,6 +7,10 @@ import {
   ScrollView,
 } from 'react-native';
 
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 // redux
 import {useSelector} from 'react-redux';
 
@@ -15,7 +19,7 @@ import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 import timeTableBuilder from '../../../../services/helpers/extract/teacherTtDayWiseBuild';
 
-export default function OnlineLecture() {
+export default function OnlineLecture({navigation}) {
   const userInfo = useSelector(state => state.userInfo);
   const [timeTable, setTimeTable] = useState([]);
 
@@ -36,7 +40,40 @@ export default function OnlineLecture() {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsHorizontalScrollIndicator={false}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'white',
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
+          />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontStyle: 'normal',
+            fontSize: 28,
+            fontWeight: '600',
+            alignSelf: 'center',
+            paddingLeft: 30,
+            color: 'white',
+            fontFamily: 'NunitoSans-Regular',
+          }}>
+          Time Table
+        </Text>
+      </View>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        style={{marginTop: 20}}>
         {timeTable &&
           Object.keys(timeTable).map((day, index) => {
             return (
@@ -83,7 +120,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
-    paddingTop: 20,
+  },
+  header: {
+    height: 69,
+    backgroundColor: 'rgba(0, 73, 159, 1)',
+    flexDirection: 'row',
   },
   shadow: {
     marginBottom: 10,

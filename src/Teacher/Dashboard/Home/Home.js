@@ -19,14 +19,18 @@ import {
 import {createStackNavigator} from '@react-navigation/stack';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
+import Collapsible from 'react-native-collapsible';
+
+//icons
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Collapsible from 'react-native-collapsible';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 //drawer navigation
 import Assignment from './Assignment/Assignment';
 import AttendanceStack from './Attendance/AttendanceStack';
+
 // import Attendance from './Attendance/Attendance';
 import Books from './Books/Books';
 import ContentLibrary from './Content Library/ContentLibrary';
@@ -37,6 +41,7 @@ import Subject from './Subject/Subject.js';
 import CceMarks from './CCEMarks/CCEmarks';
 import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
+
 //navigations from home screen
 import Notification from './Home/Notification';
 import Notes from './Home/Notes';
@@ -79,6 +84,54 @@ const Home = ({navigation}) => {
   return (
     <View style={styles.container}>
       {loadingScreen}
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.toggleDrawer();
+          }}>
+          <FontAwesome5
+            name="book"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'black',
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
+          />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontStyle: 'normal',
+            fontSize: 28,
+            fontFamily: 'NunitoSans-Regular',
+            fontWeight: '600',
+            alignSelf: 'center',
+            paddingLeft: 30,
+            color: 'black',
+          }}>
+          {userInfo ? `Hi ${userInfo.firstName}` : `Hi`}
+        </Text>
+
+        <TouchableOpacity
+          style={{
+            justifyContent: 'flex-end',
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+          onPress={() => navigation.navigate('Notification')}>
+          <FontAwesome5
+            name="bell"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'black',
+              paddingRight: 20,
+            }}
+          />
+        </TouchableOpacity>
+      </View>
       <View style={{height: 20}}></View>
       <View style={{marginHorizontal: 30, ...styles.shadow}}>
         <View style={styles.search}>
@@ -91,7 +144,7 @@ const Home = ({navigation}) => {
             style={{
               alignSelf: 'center',
             }}>
-            <Icon
+            <IonIcon
               name="search-sharp"
               style={{
                 alignSelf: 'center',
@@ -104,9 +157,9 @@ const Home = ({navigation}) => {
       </View>
       <ScrollView style={styles.main}>
         <View style={{height: 30}}></View>
-        <View>
+        <TouchableOpacity onPress={() => navigation.navigate('Timetable')}>
           <Text style={styles.section_heading}>Upcoming Classes</Text>
-        </View>
+        </TouchableOpacity>
         <View style={{marginHorizontal: 30, ...styles.classes_cardWrapper}}>
           {UpcomingClasses &&
             UpcomingClasses.map(
@@ -233,47 +286,22 @@ const Home_Route = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={({navigation, route}) => ({
-          headerTitle: userInfo ? `Hi ${userInfo.firstName}` : `Hi`,
-          headerStyle: {
-            height: 70,
-          },
-          headerTitleStyle: {
-            fontSize: 25,
-          },
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Notification');
-              }}>
-              <FontAwesome5
-                name="bell"
-                style={{
-                  alignSelf: 'center',
-                  fontSize: 25,
-                  color: 'black',
-                  paddingRight: 20,
-                }}
-              />
-            </TouchableOpacity>
-          ),
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.toggleDrawer();
-              }}>
-              <FontAwesome5
-                name="book"
-                style={{
-                  alignSelf: 'center',
-                  fontSize: 25,
-                  color: 'black',
-                  paddingLeft: 20,
-                }}
-              />
-            </TouchableOpacity>
-          ),
-        })}
+        options={{headerShown: false}}
+        // options={({navigation, route}) => ({
+        //   headerTitle: userInfo ? `Hi ${userInfo.firstName}` : `Hi`,
+        //   headerStyle: {
+        //     height: 70,
+        //   },
+        //   headerTitleStyle: {
+        //     fontSize: 25,
+        //   },
+        //   headerRight: () => (
+
+        //   ),
+        //   headerLeft: () => (
+
+        //   ),
+        // })}
       />
       <Stack.Screen
         name="Notification"
@@ -285,7 +313,11 @@ const Home_Route = () => {
         component={Notes}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="Timetable" component={Timetable} />
+      <Stack.Screen
+        name="Timetable"
+        component={Timetable}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
@@ -428,6 +460,11 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
+  },
+  header: {
+    height: 69,
+    backgroundColor: 'rgba(249, 249, 249, 1)',
+    flexDirection: 'row',
   },
   search: {
     backgroundColor: 'white',

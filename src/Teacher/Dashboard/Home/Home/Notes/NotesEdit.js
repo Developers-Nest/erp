@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, 
-  Text,TouchableOpacity, TextInput} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 import {
   Searchbar,
   Appbar,
@@ -13,8 +18,11 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ModalSelector from 'react-native-modal-selector';
 
-export default function EditNotes({navigation}) {
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+export default function EditNotes({navigation}) {
   // const [open1, setOpen1] = useState(null);
   const [className, setclassName] = useState(null);
   const [classes, setclasses] = useState([
@@ -33,16 +41,44 @@ export default function EditNotes({navigation}) {
 
   return (
     <View style={styles.container}>
-      
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Add Notes');
+          }}>
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'white',
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
+          />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontStyle: 'normal',
+            fontSize: 28,
+            fontWeight: '600',
+            alignSelf: 'center',
+            paddingLeft: 30,
+            color: 'white',
+            fontFamily: 'NunitoSans-Regular',
+          }}>
+          Edit Notes
+        </Text>
+      </View>
       <View style={{marginHorizontal: 15, marginVertical: 10}}>
-        
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginTop: 10,
           }}>
-          
           <ModalSelector
             data={classes}
             initValue="Class"
@@ -65,27 +101,26 @@ export default function EditNotes({navigation}) {
           />
         </View>
       </View>
-      
-      <View>
-      <Card>
-          <Card.Content>
-          <View style={{
-                flexDirection:"row"
-            }}>
 
-            {/* <View style={{paddingLeft:10}} /> */}
+      <View>
+        <Card>
+          <Card.Content>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              {/* <View style={{paddingLeft:10}} /> */}
             </View>
-            <View style={{ padding: 2 }} />
-            <TextInput 
-            placeholder="Topic "
-            onChange={(val)=>setTopic(val)} />
-            <View style={{ padding: 2 }} />
-            <View style={{ borderWidth: 0.2 }} />
-            <View style={{ padding: 10 }} />
-            <TextInput 
-            placeholder="Discription (optional) "
-            onChange={(val)=>setDiscription(val)}/>
-            <View style={{ padding: 10 }} />
+            <View style={{padding: 2}} />
+            <TextInput placeholder="Topic " onChange={val => setTopic(val)} />
+            <View style={{padding: 2}} />
+            <View style={{borderWidth: 0.2}} />
+            <View style={{padding: 10}} />
+            <TextInput
+              placeholder="Discription (optional) "
+              onChange={val => setDiscription(val)}
+            />
+            <View style={{padding: 10}} />
             <View
               style={{
                 flexDirection: 'row',
@@ -97,7 +132,7 @@ export default function EditNotes({navigation}) {
                 onPress={() => console.log('Pressed')}>
                 Chapter{' '}
               </Button>
-              <View style={{ padding: 10 }} />
+              <View style={{padding: 10}} />
               <Button
                 mode="contained"
                 color="white"
@@ -108,30 +143,28 @@ export default function EditNotes({navigation}) {
           </Card.Content>
         </Card>
         <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-              }}>
-              <Button
-                mode="contained"
-                color="Red"
-                onPress={() => console.log('Pressed')}>
-                Delete
-              </Button>
-              <View style={{ padding: 10 }} />
-              <Button
-                mode="contained"
-                color="Blue"
-                onPress={() => console.log('Pressed')}>
-                Save
-              </Button>
-            </View>
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+          }}>
+          <Button
+            mode="contained"
+            color="red"
+            onPress={() => console.log('Pressed')}>
+            Delete
+          </Button>
+          <View style={{padding: 10}} />
+          <Button
+            mode="contained"
+            color="blue"
+            onPress={() => console.log('Pressed')}>
+            Save
+          </Button>
+        </View>
       </View>
-     
-      <View style={{ padding: 10 }} />
-      
+
+      <View style={{padding: 10}} />
     </View>
-    
   );
 }
 
@@ -143,7 +176,7 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   shadow: {

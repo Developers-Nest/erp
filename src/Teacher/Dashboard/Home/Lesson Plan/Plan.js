@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -18,26 +18,24 @@ import {
   RadioButton,
 } from 'react-native-paper';
 
-import Icon from 'react-native-vector-icons/AntDesign';
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 // helpers
-import get from '../../../../services/helpers/request/get'
-import read from '../../../../services/localstorage/read'
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
 
-export default function LessonPlan({ navigation }) {
-
-  const [data, setData] = useState([])
+export default function LessonPlan({navigation}) {
+  const [data, setData] = useState([]);
 
   useEffect(async () => {
-
-    let slug = '/lessonplanning'
-    const token = await read('token')
-    const response = await get(slug, token)
-    console.log(response)
-    setData(response)
-
-  }, [])
+    let slug = '/lessonplanning';
+    const token = await read('token');
+    const response = await get(slug, token);
+    console.log(response);
+    setData(response);
+  }, []);
 
   return (
     <View
@@ -47,8 +45,8 @@ export default function LessonPlan({ navigation }) {
         justifyContent: 'flex-start',
       }}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => { }}>
-          <Icon
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <AntDesign
             size={24}
             color="white"
             name="left"
@@ -72,25 +70,21 @@ export default function LessonPlan({ navigation }) {
           }}>
           Lesson Plan
         </Text>
-        <View style={{ flex: 1, marginLeft: 20 }}>
+        <View style={{flex: 1, marginLeft: 20}}>
           <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Add Lesson Plan');
+            onPress={() => navigation.navigate('Add Lesson Plan')}
+            style={{
+              justifyContent: 'center',
+              flex: 1,
+              alignItems: 'center',
+              alignSelf: 'flex-end',
+              paddingRight: 30,
             }}>
-            <IonIcon
-              size={24}
-              color="white"
-              name="add-circle-outline"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                paddingLeft: 20,
-                paddingTop: 15,
-              }}
-            />
+            <IonIcon size={24} color="white" name="add-circle-outline" />
+            <Text style={{fontFamily: 'Poppins-Regular', color: '#fff'}}>
+              Add
+            </Text>
           </TouchableOpacity>
-          <Text style={{ paddingLeft: 70, color: '#fff' }}>Add</Text>
         </View>
       </View>
 
@@ -104,7 +98,7 @@ export default function LessonPlan({ navigation }) {
         }}>
         {/* open search */}
 
-        <View style={{ marginTop: 20, ...styles.card }}>
+        <View style={{marginTop: 20, ...styles.card}}>
           <TextInput
             left={<TextInput.Icon name="magnify" />}
             right={<TextInput.Icon name="filter" />}
@@ -128,9 +122,8 @@ export default function LessonPlan({ navigation }) {
       </View>
 
       <ScrollView>
-
-        {
-          data && data.map((plan) => (
+        {data &&
+          data.map(plan => (
             <View style={styles.section} key={data._id}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
@@ -147,10 +140,10 @@ export default function LessonPlan({ navigation }) {
                     </Text>
 
                     <TouchableOpacity
-                      style={{ flexDirection: 'row' }}
+                      style={{flexDirection: 'row'}}
                       onPress={() => {
-                        navigation.navigate('Edit Lesson Plan',{
-                          lessonPlan: plan
+                        navigation.navigate('Edit Lesson Plan', {
+                          lessonPlan: plan,
                         });
                       }}>
                       <Text
@@ -161,7 +154,7 @@ export default function LessonPlan({ navigation }) {
                         }}>
                         Edit
                       </Text>
-                      <Icon size={12} color="#211C5A" name="edit" />
+                      <AntDesign size={12} color="#211C5A" name="edit" />
                     </TouchableOpacity>
                   </View>
                   <TouchableOpacity style={styles.differentusers}>
@@ -205,13 +198,11 @@ export default function LessonPlan({ navigation }) {
                   title="Link"
                   mode="contained"
                   color="#5177E7"
-                  labelStyle={{ color: 'white' }}
+                  labelStyle={{color: 'white'}}
                 />
               </View>
             </View>
-          ))
-        }
-
+          ))}
       </ScrollView>
       {/* Cards end */}
     </View>
@@ -223,6 +214,12 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     flex: 1,
     backgroundColor: '#E5E5E5',
+  },
+
+  header: {
+    height: 69,
+    backgroundColor: 'rgba(0, 73, 159, 1)',
+    flexDirection: 'row',
   },
   section: {
     display: 'flex',
@@ -294,7 +291,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
@@ -316,11 +313,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
 
     justifyContent: 'space-evenly',
-  },
-  header: {
-    height: 65,
-    marginTop: 0,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
-    flexDirection: 'row',
   },
 });

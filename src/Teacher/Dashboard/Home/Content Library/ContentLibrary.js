@@ -13,7 +13,11 @@ import {
 
 import {Container, Content, List, ListItem, Header, Icon} from 'native-base';
 
+//icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import {
   event,
   onChange,
@@ -151,11 +155,52 @@ export default function ContentLibrary({navigation}) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{flex: 1}}>
-        <Appbar>
-          <Appbar.BackAction onPress={() => navigation.navigate('Home')} />
-          <Appbar.Content title="Content Library" />
-          <Appbar.Action icon="plus-circle-outline" />
-        </Appbar>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
+            />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontFamily: 'NunitoSans-Regular',
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
+            Content Library
+          </Text>
+
+          <TouchableOpacity
+            style={{
+              justifyContent: 'flex-end',
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Ionicons
+              name="add-circle"
+              color="#900"
+              style={{
+                fontSize: 35,
+                color: 'white',
+                paddingRight: 20,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.maincontainer}>
           <View
             style={{
@@ -215,6 +260,12 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     flex: 1,
     backgroundColor: '#E5E5E5',
+  },
+
+  header: {
+    height: 69,
+    backgroundColor: 'rgba(0, 73, 159, 1)',
+    flexDirection: 'row',
   },
   bottom: {
     position: 'absolute',
