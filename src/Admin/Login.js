@@ -8,7 +8,6 @@ import {Button, Searchbar, IconButton} from 'react-native-paper';
 // import TeacherDashboard from './Dashboard/Home/Home';
 import DashboardScreen from './Dashboard/Dashboard';
 
-
 export default function Login({navigation}) {
   return (
     <View style={styles.container}>
@@ -45,7 +44,7 @@ export default function Login({navigation}) {
         />
         <Button
           style={styles.button}
-          onPress={() => navigation.navigate('DashboardScreen')}
+          onPress={() => navigation.navigate('Admin Dashboard')}
           labelStyle={{color: 'white'}}
           uppercase={false}
           mode="contained">
