@@ -1,85 +1,92 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {StyleSheet, View, Text, TouchableOpacity,TextInput} from 'react-native';
+
 import {
   Button,
-  List,
   Card,
-  Title,
-  Paragraph,
-  TextInput,
 } from 'react-native-paper';
 
+import ModalSelector from 'react-native-modal-selector';
+// date picker
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 export default function OnlineLecture() {
-  const [expanded, setExpanded] = React.useState(true);
-  const [text, setText] = React.useState('');
-  const handlePress = () => setExpanded(!expanded);
+
+  const [Chapter, setChapter] = useState("Chapter's name");
+  const [Topic, setTopic] = useState('Topic:');
+  const [Discription, setDescription] = useState('Description:')
+  const [showdatePicker, setShowDatePicker] = useState(false)
+
+   // handle form submission
+   let handleSubmit = async(sd) => {
+    showLoadingScreen()
+    console.log("Date ", sd)
+    await setDate(sd.toString())
+    setShowDatePicker(false)
+    hideLoadingScreen()
+  }
+  
 
   return (
     <View style={styles.container}>
-      <View style={styles.Drop}>
-        <List.Section style={{width: 120}}>
-          <List.Accordion
-            title="Class"
-            style={{
-              borderTopRightRadius: 5,
-              borderBottomRightRadius: 5,
-              borderBottomLeftRadius: 5,
-              borderWidth: 0.5,
-              borderTopStartRadius: 5,
-              backgroundColor: 'white',
-            }}>
-            <List.Item title="First item" />
-            <List.Item title="Second item" />
-          </List.Accordion>
-        </List.Section>
+      <View  style={{
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            marginTop: 10,
+          }}>
+                 {/* course selector */}
+                 <ModalSelector
+            // data={courses}
+            initValue="Class"
+            // onChange={option => {
+            //   fetchBatches(option.key)
+            // }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
 
-        <List.Section style={{width: 120}}>
-          <List.Accordion
-            title="Batch"
-            style={{
-              borderTopRightRadius: 5,
-              borderBottomRightRadius: 5,
-              borderBottomLeftRadius: 5,
-              borderWidth: 0.5,
-              borderTopStartRadius: 5,
-              backgroundColor: 'white',
-            }}>
-            <List.Item title="First item" />
-            <List.Item title="Second item" />
-          </List.Accordion>
-        </List.Section>
+          {/* batch selector */}
+          <ModalSelector
+            // data={batches}
+            initValue="Batch"
+            // onChange={option => {
+            //   fetchSubjects(option.key)
+            // }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
 
-        <List.Section style={{width: 120}}>
-          <List.Accordion
-            title="Subject"
-            style={{
-              borderTopRightRadius: 5,
-              borderBottomRightRadius: 5,
-              borderBottomLeftRadius: 5,
-              borderWidth: 0.5,
-              borderTopStartRadius: 5,
-              backgroundColor: 'white',
-            }}>
-            <List.Item title="First item" />
-            <List.Item title="Second item" />
-          </List.Accordion>
-        </List.Section>
+          {/* subject selector */}
+          <ModalSelector
+            // data={subjects}
+            initValue="Subject"
+            // onChange={option => {
+            //   getList(option.key)
+            // }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
       </View>
-      <Card style={styles.card}>
+      <Card style={styles.card1}>
         <Card.Content>
-          <Title style={{fontSize: 16, fontFamily: 'Poppins-Regular'}}>
-            Chapter: Newton's Law of motion
-          </Title>
+        
+        <TextInput
+              placeholder="Chapter : Newton laws of motion"
+              onChange={(val) => setChapter(val)} />
+              
           <View
             style={{
               borderBottomColor: 'black',
               borderBottomWidth: 0.5,
             }}
           />
-          <Title style={{fontSize: 16, fontFamily: 'Poppins-Regular'}}>
-            Topic: First law of motion
-          </Title>
+         
+         <TextInput
+              placeholder="Topic : First law of motion"
+              onChange={(val) => setTopic(val)} />
           <View
             style={{
               borderBottomColor: 'black',
@@ -87,51 +94,47 @@ export default function OnlineLecture() {
             }}
           />
           <TextInput
-            style={{
-              height: 80,
-              textAlignVertical: 'top',
-              backgroundColor: 'white',
-            }}
+            placeholder="Description"
             multiline={true}
-            numberOfLines={10}
-            placeholder="Description (optional)"
-            right={<TextInput.Affix text="/100" />}
-          />
+            numberOfLines={4}
+            style={{ 
+              textAlignVertical: 'top',
+              marginTop:5,
+              height:150
+            }}
+            onChange={(val)=>setDescription(val)}/>
+     
+  
           <View
-            style={{
-              flexDirection: 'row',
-              paddingVertical: 70,
-              alignSelf: 'center',
-            }}>
-            <List.Item
               style={{
-                width: 125,
-                borderWidth: 0.3,
-                borderTopRightRadius: 5,
-                borderBottomRightRadius: 5,
-                borderBottomLeftRadius: 5,
-                borderTopLeftRadius: 5,
-              }}
-              title="Date"
-              right={props => <List.Icon {...props} icon="calendar" />}
-            />
-            <View style={{width: 100}}></View>
-            <TouchableOpacity onPress={() => {}}>
-              <List.Item
-                style={{
-                  width: 100,
-                  borderWidth: 0.3,
-                  alignContent: 'center',
-                  borderTopRightRadius: 5,
-                  borderBottomRightRadius: 5,
-                  borderBottomLeftRadius: 5,
-                  borderTopLeftRadius: 5,
-                }}
-                title="Add Link"
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+              }}>
+              {/* date picker */}
+              <Button
+                icon="calendar"
+                mode="contained"
+                color="white"
+                onPress={() => setShowDatePicker(true)}>
+                Set Deadline
+              </Button>
+
+              <DateTimePickerModal
+                isVisible={showdatePicker}
+                mode="date"
+                onConfirm={handleSubmit}
+                onCancel={()=>setShowDatePicker(!showdatePicker)}
               />
-            </TouchableOpacity>
-          </View>
-        </Card.Content>
+
+              <View style={{ padding: 10 }} />
+              <Button
+                mode="contained"
+                color="white"
+                onPress={() => console.log('Pressed')}>
+                Add file
+              </Button>
+            </View>
+          </Card.Content>
       </Card>
 
       <Text
@@ -250,17 +253,47 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
   },
-  Drop: {
-    marginTop: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
   card: {
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    margin: 0,
+    padding: 0,
+    width:125
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 18,
+    lineHeight: 25,
+    paddingTop: 3,
+    color: '#211C5A',
+  },
+  card1: {
     marginLeft: 10,
     marginRight: 10,
     marginTop: 5,
-    height: 310,
+    // height: 310,
   },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+  },
+
+
   Week: {
     marginTop: 5,
     flexDirection: 'row',
