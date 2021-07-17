@@ -139,61 +139,7 @@ export default function AssignmentsDue({navigation}) {
           <ScrollView>
             {assignments &&
               assignments.map(assignment => (
-                // <View style={styles.section} key={assignment._id}>
-                //   <View style={styles.details}>
-                //     <View style={styles.userinhostels}>
-                //       <View style={styles.differentusers}>
-                //         <Text
-                //           style={{
-                //             fontWeight: 'normal',
-                //             fontSize: 18,
-                //             color: '#211C5A',
-                //           }}>
-                //           {' '}
-                //           {assignment.title || 'Title Not Found'}
-                //         </Text>
-
-                //         <View style={{ flexDirection: 'row' }}>
-
-                //           {/* passin assignment id */}
-                //           <TouchableOpacity
-                //             onPress={() => navigation.navigate('Assignment Edit', {
-                //               assignment: assignment
-                //             })}>
-
-                //             <Text style={{ fontSize: 12, color: '#211C5A' }}>Edit</Text>
-                //             <Icon size={12} color="#211C5A" name="edit" />
-                //           </TouchableOpacity>
-
-                //         </View>
-                //       </View>
-                //       <TouchableOpacity style={styles.differentusers}>
-                //         <Text style={{ fontSize: 12, color: '#5177E7' }}>
-                //           {assignment.course && assignment.course.courseName} -
-                //           {assignment.batch && assignment.batch.batchName}
-                //         </Text>
-
-                //       </TouchableOpacity>
-                //       <TouchableOpacity style={styles.differentusers}>
-                //         <Text style={{ fontSize: 12, color: '#505069' }}>
-                //           {assignment.description || 'Description Not Found'}
-                //         </Text>
-                //       </TouchableOpacity>
-                //     </View>
-                //   </View>
-
-                //   <View style={styles.belowhr}>
-                //     <View style={{ flexDirection: 'column' }}>
-                //       <Text style={{ color: '#B04305', fontSize: 12 }}>
-                //         Due: {assignment.submissionDateString || 'Submission date Not Found'}
-                //       </Text>
-                //       <Text style={{ color: '#58636D', fontSize: 12 }}>
-                //         Saved as Draft
-                //       </Text>
-                //     </View>
-                //   </View>
-                // </View>
-
+            
                 <View style={styles.section} key={assignment._id}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
@@ -285,13 +231,7 @@ export default function AssignmentsDue({navigation}) {
                       </Text>
                     </View>
                     <View style={{marginBottom: 3}}>
-                      {/* <Button
-                    title="Send"
-                    mode="contained"
-                    color="#58636D"
-                    
-                    //   labelStyle={{color:'white'}}
-                  /> */}
+                     
                       <Button
                         style={styles.button}
                         onPress={() =>

@@ -11,35 +11,20 @@ import {
   Keyboard,
 } from 'react-native';
 
-import {Container, Content, List, ListItem, Header, Icon} from 'native-base';
-
-//icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-import {
-  event,
-  onChange,
-  setValue,
-  target,
-  value,
-} from 'react-native-reanimated';
 import {Searchbar, Button, Appbar} from 'react-native-paper';
 
 export default function ContentLibrary({navigation}) {
-  const [activeTab, setActiveTab] = React.useState('Material');
+ 
+  const[showContent,setShowContent]=React.useState('Material');
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
-  function switchTab() {
-    if (activeTab === 'Videos') {
-      setActiveTab('Material');
-    } else {
-      setActiveTab('Videos');
-    }
-  }
+  
   function Material() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -47,10 +32,11 @@ export default function ContentLibrary({navigation}) {
 
     return (
       <View style={styles.container}>
+        <ScrollView>
         <View style={styles.section}>
           <View style={styles.details}>
             <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
+              <View style={styles.differentusers}>
                 <Text
                   style={{
                     fontWeight: 'normal',
@@ -59,11 +45,9 @@ export default function ContentLibrary({navigation}) {
                   }}>
                   Title
                 </Text>
-                <Button>
-                  edit
-                  <FontAwesome5 name={'edit'} size={20} light />
-                </Button>
-              </TouchableOpacity>
+
+
+              </View>
 
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{fontSize: 16, color: 'blue'}}>
@@ -94,6 +78,8 @@ export default function ContentLibrary({navigation}) {
             </View>
           </View>
         </View>
+        <View style={{height:20}}/>
+        </ScrollView>
       </View>
     );
   }
@@ -105,10 +91,11 @@ export default function ContentLibrary({navigation}) {
 
     return (
       <View style={styles.container}>
+        <ScrollView>
         <View style={styles.section}>
           <View style={styles.details}>
             <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
+              <View style={styles.differentusers}>
                 <Text
                   style={{
                     fontWeight: 'normal',
@@ -117,16 +104,16 @@ export default function ContentLibrary({navigation}) {
                   }}>
                   Title
                 </Text>
-                <Button>
-                  edit
-                  <FontAwesome5 name={'edit'} size={20} light />
-                </Button>
-              </TouchableOpacity>
+
+
+              </View>
+
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{fontSize: 16, color: 'blue'}}>
                   course and Batch
                 </Text>
               </TouchableOpacity>
+
               <TouchableOpacity style={styles.differentusers}>
                 <Text style={{fontSize: 16}}>
                   Exams will be conducted via online mode in the upcoming week
@@ -139,6 +126,7 @@ export default function ContentLibrary({navigation}) {
                 <Text style={{fontSize: 16, marginRight: 100}}>
                   Teacher's Name
                 </Text>
+
                 <Button
                   styles={{flexDirection: 'flex-end'}}
                   mode="contained"
@@ -149,9 +137,12 @@ export default function ContentLibrary({navigation}) {
             </View>
           </View>
         </View>
+        <View style={{height:20}}/>
+        </ScrollView>
       </View>
     );
   }
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{flex: 1}}>
@@ -190,15 +181,7 @@ export default function ContentLibrary({navigation}) {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Ionicons
-              name="add-circle"
-              color="#900"
-              style={{
-                fontSize: 35,
-                color: 'white',
-                paddingRight: 20,
-              }}
-            />
+            
           </TouchableOpacity>
         </View>
         <View style={styles.maincontainer}>
@@ -210,45 +193,71 @@ export default function ContentLibrary({navigation}) {
               marginTop: 30,
               justifyContent: 'flex-start',
             }}>
-            <Searchbar
-              placeholder="Enter subject or batch name"
-              onChangeText={onChangeSearch}
-              value={searchQuery}
-              //   containerStyle={{
-              //     width: '60%',
-              //     marginTop: 20,
-              //     marginHorizontal: 70,
-              //   }}
+               {/* open search */}
+          <View
+            style={{
+              justifyContent: 'space-between',
+              width: '95%',
+              flexDirection: 'row',
+              ...styles.shadow,
+            }}>
+            <FontAwesome5
+              name="search"
+              style={{
+                alignSelf: 'center',
+                fontSize: 15,
+                color: '#6A6A80',
+              }}
             />
+
+            <TextInput
+              style={{width: '80%', ...styles.text_input}}
+              placeholder="Enter subject or batch name"
+            />
+            <TouchableOpacity
+              style={{
+                alignSelf: 'center',
+              }}>
+              <FontAwesome5
+                name="filter"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 21,
+                  color: '#6A6A80',
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+          {/* close search */}
           </View>
           <View style={styles.switchTabsView}>
             <TouchableOpacity
               style={{
                 // flex: 1,
-                borderBottomWidth: activeTab == 'Material' ? 2 : 0,
+                borderBottomWidth: showContent == 'Material' ? 2 : 0,
                 borderBottomColor: 'black',
                 paddingHorizontal: 4,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              onPress={() => switchTab()}>
-              <Text style={styles.switchText}>Material</Text>
+              onPress={() => setShowContent('Material')}>
+              <Text style={styles.switchText}> Study Material</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={{
                 // flex: 1,
-                borderBottomWidth: activeTab == 'Videos' ? 2 : 0,
+                borderBottomWidth: showContent == 'Videos' ? 2 : 0,
                 borderBottomColor: 'black',
                 paddingHorizontal: 4,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              onPress={() => switchTab()}>
+              onPress={() => setShowContent('Videos')}>
               <Text style={styles.switchText}>Videos</Text>
             </TouchableOpacity>
           </View>
-          {activeTab === 'Material' ? <Material /> : <Videos />}
+          {showContent === 'Material' ? <Material /> : <Videos />}
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -259,7 +268,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
 
   header: {
@@ -277,15 +286,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    shadowColor: '#333',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.2,
-    elevation: 2,
+    shadowOpacity: 1,
+    elevation: 5,
     marginTop: 14,
-    borderRadius: 12,
+    borderRadius:8,
     paddingLeft: 10,
     paddingRight: 10,
     marginHorizontal: 20,
@@ -338,6 +347,33 @@ const styles = StyleSheet.create({
   maincontainer: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
+  },
+  text_input: {
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    height: 50,
+    fontSize: 16,
+    minWidth: 171,
+    backgroundColor: 'white',
+  },
+
+  shadow: {
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    margin: 0,
+    padding: 0,
+    minWidth: 110,
   },
 });
