@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {Component} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -11,50 +11,37 @@ import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-// helpers
-import get from '../../../../../services/helpers/request/get';
-import read from '../../../../../services/localstorage/read';
+const text =
+  'Exams will be conducted via online mode. All the best. It is requested from the students to maintain the.';
 
-// redux
-import {useSelector} from 'react-redux';
+const CONTENT = [
+  {
+    title: 'Title1',
+    content: text,
+  },
+  {
+    title: 'Title2',
+    content: text,
+  },
+  {
+    title: 'Title3',
+    content: text,
+  },
+];
 
-// loading screen
-import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
-
-export default function Circular() {
-  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
-  const userInfo = useSelector(state => state.userInfo);
-  const [circularList, setCircularList] = useState([]);
-  const [fetched, setFetched] = useState(false);
-
-  let parseDate = myDate => {
-    let d = new Date(myDate);
-    return d.toString().slice(0, 15);
+export default class App extends Component {
+  state = {
+    activeSections: [],
+    collapsed: true,
   };
 
-  useEffect(async () => {
-    showLoadingScreen();
-    try {
-      let token = await read('token');
-      let slug = `/circular?course=${userInfo.course}&batch=${userInfo.batch}`;
-      let res = await get(slug, token);
-      let circularArray = [];
-      res.map(cir => {
-        circularArray.push({
-          title: cir.circularsubject,
-          content: cir.circularContent,
-          time: parseDate(cir.circularDate),
-        });
-      });
-      setCircularList(circularArray);
-      setFetched(true);
-    } catch (err) {
-      alert('Cannot fetch circular!!');
-    }
-    hideLoadingScreen();
-  }, []);
+  setSections = sections => {
+    this.setState({
+      activeSections: sections.includes(undefined) ? [] : sections,
+    });
+  };
 
-  function renderHeader(section, _, isActive) {
+  renderHeader = (section, _, isActive) => {
     return (
       <View duration={400} style={styles.header} transition="backgroundColor">
         <Text style={styles.headerText}>{section.title}</Text>
@@ -66,7 +53,7 @@ export default function Circular() {
               alignSelf: 'flex-end',
               alignItems: 'center',
             }}>
-            <Text style={styles.collapseIconTextTime}>{section.time}</Text>
+            <Text style={styles.collapseIconTextTime}>8 hrs ago</Text>
 
             <View style={styles.collapseIconContainer}>
               <FontAwesome5
@@ -85,7 +72,7 @@ export default function Circular() {
               alignSelf: 'flex-end',
               alignItems: 'center',
             }}>
-            <Text style={styles.collapseIconText}>{section.time}</Text>
+            <Text style={styles.collapseIconText}>8 hrs ago</Text>
             <View style={styles.collapseIconContainer}>
               <FontAwesome5
                 name="chevron-down"
@@ -98,9 +85,9 @@ export default function Circular() {
         )}
       </View>
     );
-  }
+  };
 
-  function renderContent(section, _, isActive) {
+  renderContent(section, _, isActive) {
     return (
       <Animatable.View duration={100} transition="backgroundColor">
         <Text
@@ -112,44 +99,28 @@ export default function Circular() {
     );
   }
 
-  const [ActiveSections, setActiveSections] = useState([]);
-  const [collapsed, setcollapsed] = useState(true);
+  render() {
+    const {activeSections} = this.state;
 
-  const setSections = sections => {
-    setActiveSections(sections.includes(undefined) ? [] : sections);
-  };
-
-  return (
-    <View style={styles.container}>
-      {loadingScreen}
-      {fetched ? (
+    return (
+      <View style={styles.container}>
         <ScrollView style={{padding: 10}}>
-          {circularList.length === 0 ? (
-            <Text
-              style={{
-                marginVertical: 10,
-                marginHorizontal: 30,
-              }}>
-              No Circulars
-            </Text>
-          ) : (
-            <Accordion
-              activeSections={ActiveSections}
-              sections={circularList}
-              touchableComponent={TouchableOpacity}
-              renderHeader={renderHeader}
-              renderContent={renderContent}
-              duration={400}
-              onChange={setSections}
-              renderAsFlatList={false}
-              containerStyle={styles.cardsWrapper}
-              sectionContainerStyle={styles.card}
-            />
-          )}
+          <Accordion
+            activeSections={activeSections}
+            sections={CONTENT}
+            touchableComponent={TouchableOpacity}
+            renderHeader={this.renderHeader}
+            renderContent={this.renderContent}
+            duration={400}
+            onChange={this.setSections}
+            renderAsFlatList={false}
+            containerStyle={styles.cardsWrapper}
+            sectionContainerStyle={styles.card}
+          />
         </ScrollView>
-      ) : null}
-    </View>
-  );
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

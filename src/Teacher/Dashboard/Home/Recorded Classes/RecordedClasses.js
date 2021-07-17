@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,40 +9,104 @@ import {
   TextInput,
   SafeAreaView,
 } from 'react-native';
-import { Card, Button} from 'react-native-paper';
+import { Card, Button } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DropDownPicker from 'react-native-dropdown-picker';
 // import {Dropdown} from 'react-native-material-dropdown-v2-fixed';
 import ModalSelector from 'react-native-modal-selector';
 
-export default function RecordedClasses({navigation}) {
-  
-  // const [open1, setOpen1] = useState(null);
-  const [className, setclassName] = useState(null);
-  const [classes, setclasses] = useState([
-    {label: 'Class1', key: 'Class1'},
-    {label: 'Class2', key: 'Class2'},
-    {label: 'Class3', key: 'Class3'},
-  ]);
+// helpers
+import getCourse from '../../../../services/helpers/getList/getCourse'
+import getBatch from '../../../../services/helpers/getList/getBatch'
+import post from '../../../../services/helpers/request/post'
+import read from '../../../../services/localstorage/read'
 
-  // const [open2, setOpen2] = useState(null);
-  const [batch, setbatch] = useState(null);
-  const [batches, setbatches] = useState([
-    {label: 'Batch1', key: 'Batch1'},
-    {label: 'Batch2', key: 'Batch2'},
-    {label: 'Batch3', key: 'Batch3'},
-  ]);
+// date picker
+import DateTimePickerModal from "react-native-modal-datetime-picker"
 
-  // const [open3, setOpen3] = useState(null);
-  const [subject, setsubject] = useState(null);
-  const [subjects, setsubjects] = useState([
-    {label: 'Subject1', key: 'Subject1'},
-    {label: 'Subject2', key: 'Subject2'},
-    {label: 'Subject3', key: 'Subject3'},
-  ]);
+// loading screen
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen'
+
+
+export default function RecordedClasses({ navigation }) {
+
+  // selected options
+  const [courseName, setcourseName] = useState(null)
+  const [batch, setBatch] = useState(null)
+  const [classRecordedName, setclassRecordedName] = useState(null)
+  const [videoURL, setvideoURL] = useState(null)
+  const [date, setDate] = useState(new Date(1598051730000))
+
+  // dropdown list
+  const [classes, setClasses] = useState([])
+  const [batches, setBatches] = useState([])
+
+  const [showdatePicker, setShowDatePicker] = useState(false)
+
+  // loading screen
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
+  useEffect(async () => {
+    showLoadingScreen()
+    try {
+      let cou = await getCourse()
+      setClasses(cou)
+    } catch (err) {
+      alert('Cannot fetch Courses!!')
+    }
+    hideLoadingScreen()
+  }, [])
+
+  // batches fetch
+  let fetchBatches = async (sc) => {
+    showLoadingScreen()
+    try {
+      setcourseName(sc)
+      let bat = await getBatch(sc)
+      setBatches(bat)
+    } catch (err) {
+      alert('Cannot fetch Batches!!')
+    }
+    hideLoadingScreen()
+  }
+
+  // handle form submission
+  let handleSubmit = async(sd) => {
+    showLoadingScreen()
+    await setDate(sd.toString())
+    setShowDatePicker(false)
+    hideLoadingScreen()
+  }
+
+  let handleSaveClass = async() => {
+    showLoadingScreen()
+    try{
+
+      let slug = `/record`
+      let token = await read('token')
+      let data = {
+        name: classRecordedName,
+        course: courseName,
+        batch: batch,
+        videoUrl: videoURL,
+        date: date
+      }
+      let res = await post(slug, data, token)
+      if(res){
+        alert('Saved!!')
+      } else{
+        throw new Error('Cannot Save')
+      }
+    } catch(err){
+      alert('Cannot Save the class!!')
+    }
+    hideLoadingScreen()
+  }
+
 
   return (
     <View style={styles.container}>
+      {loadingScreen}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Statistics')}>
           <FontAwesome5
@@ -68,8 +132,8 @@ export default function RecordedClasses({navigation}) {
           Recorded Classes
         </Text>
       </View>
-      <View style={{marginHorizontal: 15, marginVertical: 10}}>
-        
+      <View style={{ marginHorizontal: 15, marginVertical: 10 }}>
+
         <View
           style={{
             flexDirection: 'row',
@@ -77,31 +141,24 @@ export default function RecordedClasses({navigation}) {
             marginTop: 10,
           }}>
           
+          {/* course selector */}
           <ModalSelector
             data={classes}
-            initValue="Class"
+            initValue="Courses"
             onChange={option => {
-              setclass(option.key);
+              fetchBatches(option.key)
             }}
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
+
+          {/* batch selector */}
           <ModalSelector
             data={batches}
             initValue="Batch"
             onChange={option => {
-              setbatch(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-          <ModalSelector
-            data={subjects}
-            initValue="Subject"
-            onChange={option => {
-              setsubject(option.key);
+              setBatch(option.key)
             }}
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
@@ -109,53 +166,52 @@ export default function RecordedClasses({navigation}) {
           />
         </View>
       </View>
-      
-      <View>
-      <Card>
-          <Card.Content>
-          <View style={{
-                flexDirection:"row"
-            }}>
 
-            <TextInput 
-            placeholder="Chapter's name "
-            onChange={(val)=>setChapter(val)}/>
-            {/* <View style={{paddingLeft:10}} /> */}
+      <View>
+        <Card>
+          <Card.Content>
+            <View style={{
+              flexDirection: "row"
+            }}>
             </View>
+
+            <TextInput
+              placeholder="Name*"
+              onChangeText={val => setclassRecordedName(val)} />
             <View style={{ padding: 2 }} />
             <View style={{ borderWidth: 0.2 }} />
             <View style={{ padding: 10 }} />
-            <TextInput 
-            placeholder="Topic "
-            onChange={(val)=>setTopic(val)} />
-            <View style={{ padding: 2 }} />
-            <View style={{ borderWidth: 0.2 }} />
-            <View style={{ padding: 10 }} />
-            <TextInput 
-            placeholder="Discription (optional) "
-            onChange={(val)=>setDiscription(val)}/>
-            <View style={{ padding: 10 }} />
+            <TextInput
+              placeholder="Video videoURL (Youtube)*"
+              onChangeText={val => setvideoURL(val)} />
+               <View style={{ padding: 10 }} />
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-around',
               }}>
-              <Button
-                mode="contained"
-                color="white"
-                onPress={() => console.log('Pressed')}>
-                Chapter{' '}
-              </Button>
               <View style={{ padding: 10 }} />
+
+              {/* date picker */}
               <Button
+                icon="calendar"
                 mode="contained"
                 color="white"
-                onPress={() => console.log('Pressed')}>
-                Add Link
+                onPress={() => setShowDatePicker(true)}>
+                Date
               </Button>
+
+              <DateTimePickerModal
+                isVisible={showdatePicker}
+                mode="date"
+                onConfirm={handleSubmit}
+                onCancel={()=>setShowDatePicker(!showdatePicker)}
+              />
+              
             </View>
           </Card.Content>
         </Card>
+        <Button onPress={handleSaveClass}>Submit</Button>
       </View>
     </View>
   );
@@ -208,7 +264,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minWidth: 110,
   },
-  accordion: {margin: 0, padding: 0, backgroundColor: 'white'},
+  accordion: { margin: 0, padding: 0, backgroundColor: 'white' },
   image: {
     minWidth: 100,
     height: 200,
@@ -224,7 +280,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -239,7 +295,7 @@ const styles = StyleSheet.create({
     minWidth: 110,
     elevation: 3,
   },
-  card_title: {fontSize: 18},
+  card_title: { fontSize: 18 },
   card_marks: {
     justifyContent: 'center',
     backgroundColor: ' rgba(88, 99, 109, 1)',

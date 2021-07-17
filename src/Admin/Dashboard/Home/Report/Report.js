@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Button, TextInput } from 'react-native-paper';
+import {Button ,TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {
     StyleSheet,
     Text,
     View,
-
+    
     ScrollView,
     TouchableOpacity,
     Alert,
@@ -32,17 +32,17 @@ export default function Report({ navigation }) {
 
             </View>
 
-            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                <View style={{ width: '90%', marginTop: 20, alignSelf: 'center', ...styles.shadow }}>
-                    <TextInput
-                        multiline
-                        // mode='outlined'
-                        placeholder='Write down your problems here..'
-                        numberOfLines={20}
-                        value={Description}
-                        onChangeText={(Description) => { setDescription(Description) }}
-                        style={{ ...styles.text_input }} />
-                </View>
+<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <View style={{ width: '90%', marginTop: 20, alignSelf: 'center', ...styles.shadow }}>
+                <TextInput
+                    multiline
+                    // mode='outlined'
+                    placeholder='Write down your problems here..'
+                    numberOfLines={20}
+                    value={Description}
+                    onChangeText={(Description) => { setDescription(Description) }}
+                    style={{ ...styles.text_input }} />
+            </View>
             </TouchableWithoutFeedback>
 
             <View style={{ padding: 20 }} />
@@ -63,7 +63,7 @@ export default function Report({ navigation }) {
 const styles = StyleSheet.create({
 
     text_input: {
-
+        
         backgroundColor: 'white',
         fontFamily: 'Poppins-Regular',
     },

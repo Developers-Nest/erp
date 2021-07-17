@@ -7,9 +7,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 // import Teacher from './src/Teacher/Teacher';
 // import Student from './src/Student/Student';
-import Login from './src/Login';
+import StudentTeacherLogin from './src/Login';
+import AdminLogin from './src/Admin/Login';
+
 import StudentDashboard from './src/Student/Dashboard/Dashboard';
 import TeacherDashboard from './src/Teacher/Dashboard/Dashboard';
+import AdminDashboard from './src/Admin/Dashboard/Dashboard';
 
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
@@ -27,24 +30,29 @@ export default function App() {
           {/* <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Teacher Login" component={Teacher} />
           <Stack.Screen name="Student Login" component={Student} /> */}
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Role Based Login" component={RoleBased_Login} />
+          <Stack.Screen
+            name="Student Teacher Login"
+            component={StudentTeacherLogin}
+          />
+          <Stack.Screen name="Admin Login" component={AdminLogin} />
+
           <Stack.Screen name="Teacher Dashboard" component={TeacherDashboard} />
           <Stack.Screen name="Student Dashboard" component={StudentDashboard} />
+          <Stack.Screen name="Admin Dashboard" component={AdminDashboard} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
 }
 
-// function Login({navigation}) {
-//   return (
-//     <View>
-//       <Button onPress={() => navigation.navigate('Teacher Login')}>
-//         Teacher
-//       </Button>
-//       <Button onPress={() => navigation.navigate('Student Login')}>
-//         Student
-//       </Button>
-//     </View>
-//   );
-// }
+function RoleBased_Login({navigation}) {
+  return (
+    <View>
+      <Button onPress={() => navigation.navigate('Student Teacher Login')}>
+        Teacher and students
+      </Button>
+      <Button onPress={() => navigation.navigate('Admin Login')}>Admin</Button>
+    </View>
+  );
+}

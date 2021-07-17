@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {Component} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,74 +6,60 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-// helpers
-import read from '../../../../../services/localstorage/read'
-import get from '../../../../../services/helpers/request/get'
+const text =
+  'This event will be held today atkrhjfbckeirvbikhev place at wjbcferob hours';
 
-import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen'
+const CONTENT = [
+  {
+    title: 'News1',
+    content: text,
+    type: 'News',
+  },
+  {
+    title: 'Event1',
+    content: text,
+    type: 'Event',
+  },
+  {
+    title: 'Event2',
+    content: text,
+    type: 'Event',
+  },
+  {
+    title: 'News2',
+    content: text,
+    type: 'News',
+  },
+];
 
-export default function Notification() {
+export default class App extends Component {
+  state = {
+    activeSections: [],
+    collapsed: true,
+  };
 
-  let userInfo = useSelector((state) => state.userInfo)
+  setSections = sections => {
+    this.setState({
+      activeSections: sections.includes(undefined) ? [] : sections,
+    });
+  };
 
-  const [notifications, setNotifications] = useState([])
-
-  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
-
-  const [content, setContent] = useState([])
-  const [fetched, setFetched] = useState(false)
-
-  useEffect(async () => {
-    showLoadingScreen()
-    try {
-      
-      let getUserType = ()=>{
-        if(typeof(userInfo.userType) === 'string'){
-          return userInfo.userType
-        } else{
-          return userInfo.userType._id
-        }
-      }
-
-      let slug = `/notification?userType=${getUserType()}&department=${userInfo.department}`
-      console.log('Slug ', slug)
-      let token = await read('token')
-      let res = await get(slug, token)
-      console.log('Res ', res)
-      let Content = []
-      res.map((noti) => {
-        Content.push({
-          title: noti.title,
-          content: noti.message,
-          type: 'News'
-        })
-      })
-      setContent(Content)
-      setFetched(true)
-    } catch (err) {
-      alert('Cannot get Notifications!!')
-    }
-    hideLoadingScreen()
-  }, [])
-
-
-  function renderHeader(section, _, isActive) {
+  renderHeader = (section, _, isActive) => {
     return (
       <Animatable.View
         duration={400}
         style={styles.header}
         transition="backgroundColor">
         <View style={styles.iconConatiner}>
-          {loadingScreen}
           <FontAwesome5
             name={section.type === 'Event' ? 'video' : 'calendar-day'}
             size={27}
-            style={{ color: '#58636D' }}
+            style={{color: '#58636D'}}
           />
           {section.type === 'Event' ? (
             <Text style={styles.iconText}>Event</Text>
@@ -85,10 +71,14 @@ export default function Notification() {
           <Text style={styles.headerText}>{section.title}</Text>
           {isActive ? (
             <View style={styles.collapseIconContainer}>
+              <Text style={styles.collapseIconText}>2 min ago</Text>
+
               <FontAwesome5 name="chevron-up" size={14} />
             </View>
           ) : (
             <View style={styles.collapseIconContainer}>
+              <Text style={styles.collapseIconText}>2 min ago</Text>
+
               <FontAwesome5
                 name="chevron-down"
                 size={14}
@@ -99,11 +89,11 @@ export default function Notification() {
         </View>
       </Animatable.View>
     );
-  }
+  };
 
-  function renderContent(section, _, isActive) {
+  renderContent(section, _, isActive) {
     return (
-      <Animatable.View duration={100} style={{ paddingHorizontal: 10 }}>
+      <Animatable.View duration={100} style={{paddingHorizontal: 10}}>
         <Text
           animation={isActive ? 'bounceIn' : undefined}
           style={styles.collapseContent}>
@@ -113,35 +103,28 @@ export default function Notification() {
     );
   }
 
-  const [ActiveSections, setActiveSections] = useState([]);
-  const [collapsed, setcollapsed] = useState(true);
+  render() {
+    const {activeSections} = this.state;
 
-  const setSections = sections => {
-    setActiveSections(sections.includes(undefined) ? [] : sections);
-  };
-
-  return (
-    <View style={styles.container} >
-      {
-        fetched ? (
-          <ScrollView style={{ padding: 10 }}>
-            <Accordion
-              activeSections={ActiveSections}
-              sections={content}
-              touchableComponent={TouchableOpacity}
-              renderHeader={renderHeader}
-              renderContent={renderContent}
-              duration={400}
-              onChange={setSections}
-              renderAsFlatList={false}
-              containerStyle={styles.cardsWrapper}
-              sectionContainerStyle={styles.card}
-            />
-          </ScrollView>
-        ) : (null)
-      }
-    </View>
-  );
+    return (
+      <View style={styles.container}>
+        <ScrollView style={{padding: 10}}>
+          <Accordion
+            activeSections={activeSections}
+            sections={CONTENT}
+            touchableComponent={TouchableOpacity}
+            renderHeader={this.renderHeader}
+            renderContent={this.renderContent}
+            duration={400}
+            onChange={this.setSections}
+            renderAsFlatList={false}
+            containerStyle={styles.cardsWrapper}
+            sectionContainerStyle={styles.card}
+          />
+        </ScrollView>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -173,7 +156,7 @@ const styles = StyleSheet.create({
   card: {
     marginVertical: 10,
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 3,

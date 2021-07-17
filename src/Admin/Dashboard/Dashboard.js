@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
 import {Button, Appbar} from 'react-native-paper';
@@ -12,14 +12,6 @@ import Message from './Message/Message';
 import Profile from './Profile/Profile';
 import Statistics from './Statistics/Statistics';
 import Classes from './Classes/Classes';
-
-// redux
-import { useSelector, useDispatch } from 'react-redux';
-import { INSTITUTE } from '../../reducers/actionType';
-
-// helpers
-import get from '../../services/helpers/request/get'
-import read from '../../services/localstorage/read'
 
 const Tab = createBottomTabNavigator();
 const getTabBarVisibility = route => {
@@ -40,28 +32,7 @@ const getTabBarVisibility = route => {
   return true;
 };
 
-export default function App() {
-
-  let dispatch = useDispatch()
-  const [themeColor, setThemeColor] = useState('rgba(249, 249, 249, 1)')
-
-  useEffect(async()=>{
-    try{
-      let slug = '/institution/teacher'
-      let token = await read('token')
-      let res = await get(slug, token)
-      console.log('Institute Res ', res)
-      dispatch({
-        type: INSTITUTE,
-        institute: res
-      })
-      console.log('Theme color ', res.themeColor)
-      setThemeColor(res.themeColor)
-    } catch(err){
-      alert('Cannot fetch Institute Details!')
-    }
-  },[])
-
+export default function DashboardScreen() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -70,7 +41,7 @@ export default function App() {
           paddingTop: 5,
           borderTopWidth: 0,
           height: 80,
-          backgroundColor: {themeColor},
+          backgroundColor: 'rgba(249, 249, 249, 1)',
         },
         showLabel: false,
         activeTintColor: 'black',

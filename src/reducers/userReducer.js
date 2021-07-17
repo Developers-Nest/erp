@@ -1,4 +1,4 @@
-import {USERINFO} from './actionType'
+import {USERINFO, INSTITUTE} from './actionType'
 
 // initial state
 const initialState = {
@@ -14,6 +14,14 @@ function UserReducer(state = initialState, action) {
             return {
                 ...state,
                 userInfo: action.userInfo
+            }
+
+        case INSTITUTE:
+
+            console.log('INSTITUTE.Redux ', action.institute)
+            return {
+                ...state,
+                institute: action.institute
             }
 
     default:

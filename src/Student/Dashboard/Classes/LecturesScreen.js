@@ -208,6 +208,11 @@ function Recorded() {
   const [RecordedClasses, setRecordedClasses] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
 
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
+
   useEffect(async () => {
     try {
       let slug = `/record/${userInfo.course}/${userInfo.batch}`;
@@ -233,11 +238,11 @@ function Recorded() {
             RecordedClasses.map(RecordedClass => (
               <TouchableOpacity
                 style={styles.section}
-                key={LiveClass._id}
-                onPress={() => Linking.openURL(LiveClass.url)}>
+                key={RecordedClass._id}
+                onPress={() => Linking.openURL(RecordedClass.videoUrl)}>
                 <View style={styles.details}>
                   <View style={styles.userinhostels}>
-                    <TouchableOpacity style={styles.differentusers}>
+                    <View style={styles.differentusers}>
                       <Text
                         style={{
                           fontWeight: 'normal',
@@ -245,7 +250,7 @@ function Recorded() {
                           color: ' rgba(25, 40, 57, 0.7)',
                           fontFamily: 'Poppins-Medium',
                         }}>
-                        {LiveClass.name}
+                        {RecordedClass.name}
                       </Text>
 
                       <MaterialCommunityIcon
@@ -254,10 +259,12 @@ function Recorded() {
                         name="alpha-a"
                         style={{paddingLeft: 7}}
                       />
-                    </TouchableOpacity>
+                    </View>
 
-                    <TouchableOpacity style={styles.differentusers}>
-                      <Text style={styles.teacher}>{LiveClass.teacher}</Text>
+                    <View style={styles.differentusers}>
+                      <Text style={styles.teacher}>
+                        {RecordedClass.teacher}
+                      </Text>
                       <View style={{flexDirection: 'column'}}>
                         <IconEnglish2
                           size={24}
@@ -271,10 +278,10 @@ function Recorded() {
                             color: 'rgba(25, 40, 57, 0.9)',
                             fontFamily: 'Poppins-Medium',
                           }}>
-                          {LiveClass.url}
+                          {parseDate(RecordedClass.date)}
                         </Text>
                       </View>
-                    </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </TouchableOpacity>
