@@ -49,10 +49,10 @@ export default function App() {
 function RoleBased_Login({navigation}) {
   return (
     <View>
-      <Button onPress={() => navigation.navigate('Student Teacher Login')}>
+      <Button onPress={() => navigation.replace('Student Teacher Login')}>
         Teacher and students
       </Button>
-      <Button onPress={() => navigation.navigate('Admin Login')}>Admin</Button>
+      <Button onPress={() => navigation.replace('Admin Login')}>Admin</Button>
     </View>
   );
 }

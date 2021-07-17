@@ -16,7 +16,7 @@ import read from '../src/services/localstorage/read';
 import {USERINFO} from '../src/reducers/actionType';
 
 // loading screen
-import LoadingScreen from './components/LoadingScreen/LoadingScreen'
+import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 
 export default function App({navigation}) {
   const [institutionCode, setInstitutionCode] = useState(null);
@@ -26,10 +26,10 @@ export default function App({navigation}) {
   const dispatch = useDispatch();
 
   // loading screen
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   useEffect(async () => {
-    setLoadingScreen()
+    setLoadingScreen();
     // check for token from local storage
     try {
       let t = await read('token');
@@ -46,18 +46,18 @@ export default function App({navigation}) {
 
       console.log('Role ', r);
       if (r === 'Teacher') {
-        navigation.navigate('Teacher Dashboard');
+        navigation.replace('Teacher Dashboard');
       } else if (r === 'Student') {
-        navigation.navigate('Student Dashboard');
+        navigation.replace('Student Dashboard');
       }
     } catch (err) {
-      alert('Cannot Login !!')
+      alert('Cannot Login !!');
     }
-    hideLoadingScreen()
+    hideLoadingScreen();
   }, []);
 
   const handleSubmit = async () => {
-    setLoadingScreen()
+    setLoadingScreen();
     try {
       const slug = '/user/login';
 
@@ -81,18 +81,18 @@ export default function App({navigation}) {
         await write('token', response.token);
         await write('role', role);
       } catch (err) {
-        alert('Cannot save token to local storage')
+        alert('Cannot save token to local storage');
       }
 
       if (role === 'Teacher') {
-        navigation.navigate('Teacher Dashboard');
+        navigation.replace('Teacher Dashboard');
       } else if (role === 'Student') {
-        navigation.navigate('Student Dashboard');
+        navigation.replace('Student Dashboard');
       }
     } catch (err) {
       console.log(err);
     }
-    hideLoadingScreen()
+    hideLoadingScreen();
   };
 
   return (
