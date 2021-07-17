@@ -105,35 +105,35 @@ export default function Profile({ navigation }) {
           justifyContent: 'center',
           flexDirection: 'row',
         }}>
-        <View style={{ width: '60%', backgroundColor: 'white' }}>
+        <View style={{ width: '60%', backgroundColor: 'white', height: '170%',}}>
           <Text>{userInfo.firstName} </Text>
         </View>
         <View style={{ paddingLeft: '5%' }} />
-        <View style={{ width: '30%', backgroundColor: 'white' }}>
+        <View style={{ width: '30%', backgroundColor: 'white', height: '170%' }}>
           <Text>{userInfo.qualification}</Text>
         </View>
       </View>
       <View
         style={{
-          paddingTop: '5%',
+          paddingTop: '8%',
           justifyContent: 'center',
           flexDirection: 'row',
         }}>
-        <View style={{ width: '45%', backgroundColor: 'white' }}>
+        <View style={{ width: '45%', backgroundColor: 'white', height: '170%',borderRadius:'20px' }}>
           <Text>{userInfo.mobile}</Text>
         </View>
         <View style={{ paddingLeft: '5%' }} />
-        <View style={{ width: '45%', backgroundColor: 'white' }}>
+        <View style={{ width: '45%', backgroundColor: 'white', height: '170%' }}>
           <Text>{userInfo.dob}</Text>
         </View>
       </View>
       <View
         style={{
-          paddingTop: '5%',
+          paddingTop: '8%',
           justifyContent: 'center',
           flexDirection: 'row',
         }}>
-        <View style={{ width: '95%', backgroundColor: 'white' }}>
+        <View style={{ width: '95%', backgroundColor: 'white', height: '170%' }}>
           <Text placeholder="Hostel Details" />
         </View>
       </View>

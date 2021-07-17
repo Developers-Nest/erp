@@ -56,9 +56,11 @@ import get from '../../../services/helpers/request/get';
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 import write from '../../../services/localstorage/write';
 
-let userInfo;
+let userInfo, institute;
 
 const Home = ({navigation}) => {
+  // institute = useSelector(state => state.institute);
+
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
   const toggleExpanded = () => {
@@ -161,7 +163,10 @@ const Home = ({navigation}) => {
           <Text style={styles.section_heading}>Upcoming Classes</Text>
         </TouchableOpacity>
         <View style={{marginHorizontal: 30, ...styles.classes_cardWrapper}}>
-          {UpcomingClasses &&
+          {UpcomingClasses.length === 0 ? (
+            <Text>No upcoming classes</Text>
+          ) : (
+            UpcomingClasses &&
             UpcomingClasses.map(
               UpcomingClass =>
                 UpcomingClass.days[0] &&
@@ -182,7 +187,8 @@ const Home = ({navigation}) => {
                     </TouchableOpacity>
                   </View>
                 )),
-            )}
+            )
+          )}
         </View>
         <View style={{height: 30}}></View>
         <View>

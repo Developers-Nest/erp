@@ -3,9 +3,12 @@ import {View, Text, TouchableOpacity} from 'react-native';
 
 import {Button, Appbar} from 'react-native-paper';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+
+//icons
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 
 import Home from './Home/Home';
 import Message from './Message/Message';
@@ -72,7 +75,8 @@ export default function App() {
           backgroundColor: 'rgba(249, 249, 249, 1)',
         },
         showLabel: false,
-        activeTintColor: 'black',
+        activeTintColor: themeColor,
+        inactiveTintColor: themeColor,
       }}>
       <Tab.Screen
         name="Classes"
@@ -81,7 +85,11 @@ export default function App() {
           tabBarLabel: 'Classes',
           tabBarIcon: ({color, size, focused}) => (
             <View style={{alignItems: 'center'}}>
-              <MaterialCommunityIcons name="video" color={color} size={30} />
+              <MaterialCommunityIcons
+                name={focused ? 'video' : 'video-outline'}
+                color={color}
+                size={focused ? 35 : 30}
+              />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Classes</Text>
               ) : null}
@@ -96,10 +104,10 @@ export default function App() {
           tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
             <View style={{alignItems: 'center'}}>
-              <MaterialCommunityIcons
-                name="chart-bar"
+              <IonIcon
+                name={focused ? 'bar-chart-sharp' : 'bar-chart-outline'}
                 color={color}
-                size={30}
+                size={focused ? 35 : 30}
               />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Statistics</Text>
@@ -115,7 +123,11 @@ export default function App() {
           tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
             <View style={{alignItems: 'center'}}>
-              <Foundation name="home" color={color} size={30} />
+              <IonIcon
+                name={focused ? 'home' : 'home-outline'}
+                color={color}
+                size={focused ? 35 : 30}
+              />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Home</Text>
               ) : null}
@@ -130,9 +142,9 @@ export default function App() {
           tabBarIcon: ({color, size, focused}) => (
             <View style={{alignItems: 'center'}}>
               <MaterialCommunityIcons
-                name="chat-processing-outline"
+                name={focused ? 'chat-processing' : 'chat-processing-outline'}
                 color={color}
-                size={30}
+                size={focused ? 35 : 30}
               />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Message</Text>
@@ -148,9 +160,9 @@ export default function App() {
           tabBarIcon: ({color, size, focused}) => (
             <View style={{alignItems: 'center'}}>
               <MaterialCommunityIcons
-                name="account-circle-outline"
+                name={focused ? 'account-circle' : 'account-circle-outline'}
                 color={color}
-                size={30}
+                size={focused ? 35 : 30}
               />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Profile</Text>
