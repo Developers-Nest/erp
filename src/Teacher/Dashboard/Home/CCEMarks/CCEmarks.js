@@ -96,11 +96,11 @@ export default function CceMarks({navigation}) {
     hideLoadingScreen();
   };
 
-  const getSubjects = async sc => {
+  const getSubjects = async (sb) => {
     showLoadingScreen();
     try {
-      await setBatch(sc);
-      const response = await getSubject(course, batch);
+      await setBatch(sb);
+      const response = await getSubject(course, sb);
       console.log('Subjects response ', response);
       setSubjects(response);
     } catch (err) {
