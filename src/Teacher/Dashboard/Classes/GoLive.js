@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity,TextInput} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
 
 import {
   Button,
@@ -10,131 +10,226 @@ import ModalSelector from 'react-native-modal-selector';
 // date picker
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
+// helpers
+import post from '../../../services/helpers/request/post'
+import read from '../../../services/localstorage/read'
+import getBatch from '../../../services/helpers/getList/getBatch';
+import getCourse from '../../../services/helpers/getList/getCourse';
+import getSubject from '../../../services/helpers/getList/getSubject';
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen'
+
+
 export default function OnlineLecture() {
 
-  const [Chapter, setChapter] = useState("Chapter's name");
-  const [Topic, setTopic] = useState('Topic:');
-  const [Discription, setDescription] = useState('Description:')
-  const [showdatePicker, setShowDatePicker] = useState(false)
+  // input variables
+  const [url, setUrl] = useState(null);
+  const [description, setDescription] = useState(null)
+  const [date, setDate] = useState(null)
+  const [time, setTime] = useState(null)
 
-   // handle form submission
-   let handleSubmit = async(sd) => {
+  // dropdown selected
+  const [course, setCourse] = useState(null)
+  const [batch, setBatch] = useState(null)
+
+  // dropdown values
+  const [courses, setCourses] = useState([])
+  const [batches, setBatches] = useState([])
+
+  // date time picker handle
+  const [showdatePicker, setShowDatePicker] = useState(false)
+  const [showtimePicker, setShowTimePicker] = useState(false)
+
+  // loading screen
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
+  // Recurrence Days 
+  const [recDays, setRecDays] = useState({
+    'Mon': false,
+    'Tue': false,
+    'Wed': false,
+    'Thu': false,
+    'Fri': false,
+    'Sat': false,
+    'Sun': false
+  })
+
+
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      const response = await getCourse();
+      setCourses(response);
+    } catch (err) {
+      alert('Cannot get Courses!');
+    }
+    hideLoadingScreen();
+  }, []);
+
+  // handle date select
+  let handleSubmit = async (sd) => {
     showLoadingScreen()
-    console.log("Date ", sd)
     await setDate(sd.toString())
     setShowDatePicker(false)
     hideLoadingScreen()
   }
-  
+
+  // handle time select
+  let handleSubmit2 = async (sd) => {
+    showLoadingScreen()
+    await setTime(sd.toString())
+    setShowTimePicker(false)
+    hideLoadingScreen()
+  }
+
+
+  // get all batches
+  const getBatches = async (selectedCourse) => {
+    showLoadingScreen();
+    try {
+      await setCourse(selectedCourse);
+      const response = await getBatch(selectedCourse);
+      setBatches(response);
+    } catch (err) {
+      alert('Cannot get Batches');
+    }
+    hideLoadingScreen();
+  };
+
+
+  const handleSaveClass = async()=>{
+    showLoadingScreen()
+    try{
+      let slug = `/liveclass`
+      let token = await read('token')
+
+      let daysArray = []
+      Object.keys(recDays).map((day)=>{
+        daysArray.push({
+          name: day,
+          checked: recDays[day],
+          duration: ""
+        })
+      })
+
+      let data = {
+        batch: batch,
+        course: course,
+        date: date,
+        time: time,
+        url: url,
+        meetingType: 'Other',
+        zoomId: "",
+        days: daysArray,
+        name: description
+      }
+      let response = await post(slug, data,token)
+      if(response){
+        alert('Class Added!')
+      }
+    } catch(err){
+      alert('Cannot Add this Claas!')
+    }
+    hideLoadingScreen()
+  }
 
   return (
     <View style={styles.container}>
-      <View  style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            marginTop: 10,
-          }}>
-                 {/* course selector */}
-                 <ModalSelector
-            // data={courses}
-            initValue="Class"
-            // onChange={option => {
-            //   fetchBatches(option.key)
-            // }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
+      {loadingScreen}
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginTop: 10,
+      }}>
+        {/* course selector */}
+        <ModalSelector
+          data={courses}
+          initValue="Course"
+          onChange={option => {
+            getBatches(option.key)
+          }}
+          style={styles.card}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
 
-          {/* batch selector */}
-          <ModalSelector
-            // data={batches}
-            initValue="Batch"
-            // onChange={option => {
-            //   fetchSubjects(option.key)
-            // }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-
-          {/* subject selector */}
-          <ModalSelector
-            // data={subjects}
-            initValue="Subject"
-            // onChange={option => {
-            //   getList(option.key)
-            // }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
+        {/* batch selector */}
+        <ModalSelector
+          data={batches}
+          initValue="Batch"
+          onChange={option => {
+            setBatch(option.key)
+          }}
+          style={styles.card}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
       </View>
+
+      {/* input details */}
       <Card style={styles.card1}>
         <Card.Content>
-        
+
         <TextInput
-              placeholder="Chapter : Newton laws of motion"
-              onChange={(val) => setChapter(val)} />
-              
-          <View
+            placeholder="URL"
             style={{
-              borderBottomColor: 'black',
-              borderBottomWidth: 0.5,
+              textAlignVertical: 'top',
             }}
-          />
-         
-         <TextInput
-              placeholder="Topic : First law of motion"
-              onChange={(val) => setTopic(val)} />
-          <View
-            style={{
-              borderBottomColor: 'black',
-              borderBottomWidth: 0.5,
-            }}
-          />
+            onChangeText={(val) => setUrl(val)} />
+
           <TextInput
             placeholder="Description"
             multiline={true}
             numberOfLines={4}
-            style={{ 
+            style={{
               textAlignVertical: 'top',
-              marginTop:5,
-              height:150
+              marginTop: 5,
+              height: 150
             }}
-            onChange={(val)=>setDescription(val)}/>
-     
-  
+            onChangeText={(val) => setDescription(val)} />
+
+
           <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-              }}>
-              {/* date picker */}
-              <Button
-                icon="calendar"
-                mode="contained"
-                color="white"
-                onPress={() => setShowDatePicker(true)}>
-                Set Deadline
-              </Button>
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+            }}>
 
-              <DateTimePickerModal
-                isVisible={showdatePicker}
-                mode="date"
-                onConfirm={handleSubmit}
-                onCancel={()=>setShowDatePicker(!showdatePicker)}
-              />
+            {/* date picker */}
+            <Button
+              icon="calendar"
+              mode="contained"
+              color="white"
+              style={{margin: 2}}
+              onPress={() => setShowDatePicker(true)}>
+              Date
+            </Button>
 
-              <View style={{ padding: 10 }} />
-              <Button
-                mode="contained"
-                color="white"
-                onPress={() => console.log('Pressed')}>
-                Add file
-              </Button>
-            </View>
-          </Card.Content>
+            <DateTimePickerModal
+              isVisible={showdatePicker}
+              mode="date"
+              onConfirm={handleSubmit}
+              onCancel={() => setShowDatePicker(!showdatePicker)}
+            />
+
+            {/* time picker */}
+            <Button
+              icon="calendar"
+              mode="contained"
+              color="white"
+              style={{margin: 2}}
+              onPress={() => setShowTimePicker(true)}>
+              Time
+            </Button>
+
+            <DateTimePickerModal
+              isVisible={showtimePicker}
+              mode="time"
+              onConfirm={handleSubmit2}
+              onCancel={() => setShowTimePicker(!showtimePicker)}
+            />
+
+          </View>
+        </Card.Content>
       </Card>
 
       <Text
@@ -147,99 +242,39 @@ export default function OnlineLecture() {
         Reccurence Days
       </Text>
       <View style={styles.Week}>
-        <View style={{marginTop: 15}}>
-          <TouchableOpacity
-            onPress={() => {
-              /* do this */
-            }}>
-            <View
-              style={{
-                backgroundColor: 'green',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 15,
-                width: 60,
-                height: 40,
-              }}>
-              <Text style={{color: 'white'}}>Mon</Text>
+
+        {
+          Object.keys(recDays).map((day) => (
+
+            <View style={{ marginTop: 15 }} key={day}>
+              <TouchableOpacity
+                onPress={() => {
+                  setRecDays(prevRecDays => {
+                    return {
+                      ... prevRecDays,
+                      [day]: !recDays[[day]]
+                    }
+                  })
+                }}>
+                <View
+                  style={{
+                    backgroundColor: recDays[day] == true ? 'green' : 'rgba(42, 187, 155, 1)' ,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 15,
+                    width: 100,
+                    height: 40,
+                  }}>
+                  <Text style={{ color: 'white' }}>{day}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row', marginTop: 15, paddingLeft: 30}}>
-          <TouchableOpacity
-            onPress={() => {
-              /* do this */
-            }}>
-            <View
-              style={{
-                backgroundColor: 'green',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 15,
-                width: 60,
-                height: 40,
-              }}>
-              <Text style={{color: 'white'}}>Tue</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row', marginTop: 15, paddingLeft: 30}}>
-          <TouchableOpacity
-            onPress={() => {
-              /* do this */
-            }}>
-            <View
-              style={{
-                backgroundColor: 'green',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 15,
-                width: 60,
-                height: 40,
-              }}>
-              <Text style={{color: 'white'}}>Wed</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row', marginTop: 15, paddingLeft: 30}}>
-          <TouchableOpacity
-            onPress={() => {
-              /* do this */
-            }}>
-            <View
-              style={{
-                backgroundColor: 'green',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 15,
-                width: 60,
-                height: 40,
-              }}>
-              <Text style={{color: 'white'}}>Thur</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+
+          ))
+        }
       </View>
-      <View style={{alignItems: 'center', marginTop: 30}}>
-        <View style={{}}>
-          <TouchableOpacity
-            onPress={() => {
-              /* do this */
-            }}>
-            <View
-              style={{
-                backgroundColor: 'blue',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 15,
-                width: 100,
-                height: 40,
-              }}>
-              <Text style={{color: 'white'}}>Save</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Button style={styles.submitButton}
+        onPress={handleSaveClass}>Save</Button>
     </View>
   );
 }
@@ -270,7 +305,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     margin: 0,
     padding: 0,
-    width:125
+    width: 125
   },
   SelectedValueSmall: {
     fontFamily: 'Poppins-Regular',
@@ -292,11 +327,13 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
   },
-
-
   Week: {
     marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+    flexWrap: 'wrap'
   },
+  submitButton: {
+    margin: 20
+  }
 });
