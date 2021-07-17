@@ -15,7 +15,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-import {Searchbar, Button, Appbar} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 
 export default function ContentLibrary({navigation}) {
  
