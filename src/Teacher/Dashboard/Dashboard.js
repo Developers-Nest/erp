@@ -44,7 +44,6 @@ const getTabBarVisibility = route => {
 };
 
 export default function App() {
-  let institute = useSelector(state => state.institute);
   let dispatch = useDispatch();
   const [themeColor, setThemeColor] = useState('rgba(249, 249, 249, 1)');
 
@@ -76,8 +75,8 @@ export default function App() {
           backgroundColor: 'rgba(249, 249, 249, 1)',
         },
         showLabel: false,
-        activeTintColor: institute.themeColor,
-        inactiveTintColor: institute.themeColor,
+        activeTintColor: themeColor,
+        inactiveTintColor: themeColor,
       }}>
       <Tab.Screen
         name="Classes"
