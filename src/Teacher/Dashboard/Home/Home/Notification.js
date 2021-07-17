@@ -11,6 +11,11 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Text} from 'react-native-paper';
 
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//stack navigation
 import Notifications from './Notification/Notifications';
 import Circulars from './Notification/Circulars';
 
@@ -28,12 +33,14 @@ export default function Notify({navigation}) {
             onPress={() => {
               navigation.navigate('Home');
             }}>
-            <FontAwesome5
-              name="chevron-left"
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
               style={{
                 alignSelf: 'center',
                 fontSize: 25,
-                color: 'black',
+                color: 'white',
                 paddingLeft: 20,
                 paddingTop: 20,
               }}
@@ -43,14 +50,16 @@ export default function Notify({navigation}) {
             style={{
               fontStyle: 'normal',
               fontSize: 28,
-              fontFamily: 'NunitoSans-Light',
               fontWeight: '600',
               alignSelf: 'center',
               paddingLeft: 30,
+              color: 'white',
+              fontFamily: 'NunitoSans-Regular',
             }}>
             {showContent === 'Circular' ? 'Circular' : 'Notification'}
           </Text>
         </View>
+
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
@@ -114,7 +123,7 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
 

@@ -1,135 +1,237 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
+
 import {
   Button,
-  List,
   Card,
-  Title,
-  Paragraph,
-  TextInput,
 } from 'react-native-paper';
 
+import ModalSelector from 'react-native-modal-selector';
+// date picker
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
+// helpers
+import post from '../../../services/helpers/request/post'
+import read from '../../../services/localstorage/read'
+import getBatch from '../../../services/helpers/getList/getBatch';
+import getCourse from '../../../services/helpers/getList/getCourse';
+import getSubject from '../../../services/helpers/getList/getSubject';
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen'
+
+
 export default function OnlineLecture() {
-  const [expanded, setExpanded] = React.useState(true);
-  const [text, setText] = React.useState('');
-  const handlePress = () => setExpanded(!expanded);
+
+  // input variables
+  const [url, setUrl] = useState(null);
+  const [description, setDescription] = useState(null)
+  const [date, setDate] = useState(null)
+  const [time, setTime] = useState(null)
+
+  // dropdown selected
+  const [course, setCourse] = useState(null)
+  const [batch, setBatch] = useState(null)
+
+  // dropdown values
+  const [courses, setCourses] = useState([])
+  const [batches, setBatches] = useState([])
+
+  // date time picker handle
+  const [showdatePicker, setShowDatePicker] = useState(false)
+  const [showtimePicker, setShowTimePicker] = useState(false)
+
+  // loading screen
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
+  // Recurrence Days 
+  const [recDays, setRecDays] = useState({
+    'Mon': false,
+    'Tue': false,
+    'Wed': false,
+    'Thu': false,
+    'Fri': false,
+    'Sat': false,
+    'Sun': false
+  })
+
+
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      const response = await getCourse();
+      setCourses(response);
+    } catch (err) {
+      alert('Cannot get Courses!');
+    }
+    hideLoadingScreen();
+  }, []);
+
+  // handle date select
+  let handleSubmit = async (sd) => {
+    showLoadingScreen()
+    await setDate(sd.toString())
+    setShowDatePicker(false)
+    hideLoadingScreen()
+  }
+
+  // handle time select
+  let handleSubmit2 = async (sd) => {
+    showLoadingScreen()
+    await setTime(sd.toString())
+    setShowTimePicker(false)
+    hideLoadingScreen()
+  }
+
+
+  // get all batches
+  const getBatches = async (selectedCourse) => {
+    showLoadingScreen();
+    try {
+      await setCourse(selectedCourse);
+      const response = await getBatch(selectedCourse);
+      setBatches(response);
+    } catch (err) {
+      alert('Cannot get Batches');
+    }
+    hideLoadingScreen();
+  };
+
+
+  const handleSaveClass = async()=>{
+    showLoadingScreen()
+    try{
+      let slug = `/liveclass`
+      let token = await read('token')
+
+      let daysArray = []
+      Object.keys(recDays).map((day)=>{
+        daysArray.push({
+          name: day,
+          checked: recDays[day],
+          duration: ""
+        })
+      })
+
+      let data = {
+        batch: batch,
+        course: course,
+        date: date,
+        time: time,
+        url: url,
+        meetingType: 'Other',
+        zoomId: "",
+        days: daysArray,
+        name: description
+      }
+      let response = await post(slug, data,token)
+      if(response){
+        alert('Class Added!')
+      }
+    } catch(err){
+      alert('Cannot Add this Claas!')
+    }
+    hideLoadingScreen()
+  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.Drop}>
-        <List.Section style={{width: 120}}>
-          <List.Accordion
-            title="Class"
-            style={{
-              borderTopRightRadius: 5,
-              borderBottomRightRadius: 5,
-              borderBottomLeftRadius: 5,
-              borderWidth: 0.5,
-              borderTopStartRadius: 5,
-              backgroundColor: 'white',
-            }}>
-            <List.Item title="First item" />
-            <List.Item title="Second item" />
-          </List.Accordion>
-        </List.Section>
+      {loadingScreen}
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginTop: 10,
+      }}>
+        {/* course selector */}
+        <ModalSelector
+          data={courses}
+          initValue="Course"
+          onChange={option => {
+            getBatches(option.key)
+          }}
+          style={styles.card}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
 
-        <List.Section style={{width: 120}}>
-          <List.Accordion
-            title="Batch"
-            style={{
-              borderTopRightRadius: 5,
-              borderBottomRightRadius: 5,
-              borderBottomLeftRadius: 5,
-              borderWidth: 0.5,
-              borderTopStartRadius: 5,
-              backgroundColor: 'white',
-            }}>
-            <List.Item title="First item" />
-            <List.Item title="Second item" />
-          </List.Accordion>
-        </List.Section>
-
-        <List.Section style={{width: 120}}>
-          <List.Accordion
-            title="Subject"
-            style={{
-              borderTopRightRadius: 5,
-              borderBottomRightRadius: 5,
-              borderBottomLeftRadius: 5,
-              borderWidth: 0.5,
-              borderTopStartRadius: 5,
-              backgroundColor: 'white',
-            }}>
-            <List.Item title="First item" />
-            <List.Item title="Second item" />
-          </List.Accordion>
-        </List.Section>
+        {/* batch selector */}
+        <ModalSelector
+          data={batches}
+          initValue="Batch"
+          onChange={option => {
+            setBatch(option.key)
+          }}
+          style={styles.card}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
       </View>
-      <Card style={styles.card}>
+
+      {/* input details */}
+      <Card style={styles.card1}>
         <Card.Content>
-          <Title style={{fontSize: 16, fontFamily: 'Poppins-Regular'}}>
-            Chapter: Newton's Law of motion
-          </Title>
-          <View
+
+        <TextInput
+            placeholder="URL"
             style={{
-              borderBottomColor: 'black',
-              borderBottomWidth: 0.5,
-            }}
-          />
-          <Title style={{fontSize: 16, fontFamily: 'Poppins-Regular'}}>
-            Topic: First law of motion
-          </Title>
-          <View
-            style={{
-              borderBottomColor: 'black',
-              borderBottomWidth: 0.5,
-            }}
-          />
-          <TextInput
-            style={{
-              height: 80,
               textAlignVertical: 'top',
-              backgroundColor: 'white',
+              borderBottomWidth:0.5,
+              fontSize:15
             }}
+            onChangeText={(val) => setUrl(val)} />
+
+          <TextInput
+            placeholder="Description"
             multiline={true}
-            numberOfLines={10}
-            placeholder="Description (optional)"
-            right={<TextInput.Affix text="/100" />}
-          />
+            numberOfLines={4}
+            style={{
+              textAlignVertical: 'top',
+              marginTop: 5,
+              height: 150,
+              fontSize:15
+            }}
+            onChangeText={(val) => setDescription(val)} />
+    
           <View
             style={{
               flexDirection: 'row',
-              paddingVertical: 70,
-              alignSelf: 'center',
+              justifyContent: 'space-evenly',
             }}>
-            <List.Item
-              style={{
-                width: 125,
-                borderWidth: 0.3,
-                borderTopRightRadius: 5,
-                borderBottomRightRadius: 5,
-                borderBottomLeftRadius: 5,
-                borderTopLeftRadius: 5,
-              }}
-              title="Date"
-              right={props => <List.Icon {...props} icon="calendar" />}
+
+            {/* date picker */}
+            <Button
+              icon="calendar"
+              mode="contained"
+              color="white"
+              style={{margin: 2}}
+              onPress={() => setShowDatePicker(true)}>
+              Date
+            </Button>
+
+            <DateTimePickerModal
+              isVisible={showdatePicker}
+              mode="date"
+              onConfirm={handleSubmit}
+              onCancel={() => setShowDatePicker(!showdatePicker)}
             />
-            <View style={{width: 100}}></View>
-            <TouchableOpacity onPress={() => {}}>
-              <List.Item
-                style={{
-                  width: 100,
-                  borderWidth: 0.3,
-                  alignContent: 'center',
-                  borderTopRightRadius: 5,
-                  borderBottomRightRadius: 5,
-                  borderBottomLeftRadius: 5,
-                  borderTopLeftRadius: 5,
-                }}
-                title="Add Link"
-              />
-            </TouchableOpacity>
+            <View style={{width:40}}>
+
+            </View>
+            {/* time picker */}
+            <Button
+              icon="calendar"
+              mode="contained"
+              color="white"
+              style={{margin: 2}}
+              onPress={() => setShowTimePicker(true)}>
+              Time
+            </Button>
+
+            <DateTimePickerModal
+              isVisible={showtimePicker}
+              mode="time"
+              onConfirm={handleSubmit2}
+              onCancel={() => setShowTimePicker(!showtimePicker)}
+            />
+
           </View>
         </Card.Content>
       </Card>
@@ -139,103 +241,45 @@ export default function OnlineLecture() {
           fontSize: 17,
           fontFamily: 'Poppins-Regular',
           paddingLeft: 15,
-          marginTop: 15,
+          marginTop: 20,
         }}>
         Reccurence Days
       </Text>
       <View style={styles.Week}>
-        <View style={{marginTop: 15}}>
-          <TouchableOpacity
-            onPress={() => {
-              /* do this */
-            }}>
-            <View
-              style={{
-                backgroundColor: 'green',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 15,
-                width: 60,
-                height: 40,
-              }}>
-              <Text style={{color: 'white'}}>Mon</Text>
+
+        {
+          Object.keys(recDays).map((day) => (
+
+            <View style={{ marginTop: 15 }} key={day}>
+              <TouchableOpacity
+                onPress={() => {
+                  setRecDays(prevRecDays => {
+                    return {
+                      ... prevRecDays,
+                      [day]: !recDays[[day]]
+                    }
+                  })
+                }}>
+                <View
+                  style={{
+                    backgroundColor: recDays[day] == true ? '#1F7C17' : '#58636D' ,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 10,
+                    width: 90,
+                    height: 40,
+                  }}>
+                  <Text style={{ color: 'white' }}>{day}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row', marginTop: 15, paddingLeft: 30}}>
-          <TouchableOpacity
-            onPress={() => {
-              /* do this */
-            }}>
-            <View
-              style={{
-                backgroundColor: 'green',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 15,
-                width: 60,
-                height: 40,
-              }}>
-              <Text style={{color: 'white'}}>Tue</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row', marginTop: 15, paddingLeft: 30}}>
-          <TouchableOpacity
-            onPress={() => {
-              /* do this */
-            }}>
-            <View
-              style={{
-                backgroundColor: 'green',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 15,
-                width: 60,
-                height: 40,
-              }}>
-              <Text style={{color: 'white'}}>Wed</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row', marginTop: 15, paddingLeft: 30}}>
-          <TouchableOpacity
-            onPress={() => {
-              /* do this */
-            }}>
-            <View
-              style={{
-                backgroundColor: 'green',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 15,
-                width: 60,
-                height: 40,
-              }}>
-              <Text style={{color: 'white'}}>Thur</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+
+          ))
+        }
       </View>
-      <View style={{alignItems: 'center', marginTop: 30}}>
-        <View style={{}}>
-          <TouchableOpacity
-            onPress={() => {
-              /* do this */
-            }}>
-            <View
-              style={{
-                backgroundColor: 'blue',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 15,
-                width: 100,
-                height: 40,
-              }}>
-              <Text style={{color: 'white'}}>Save</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
+      <View style={{alignItems:'center'}}>
+      <Button  mode="contained" style={styles.submitButton}
+        onPress={handleSaveClass}>Go Live</Button>
       </View>
     </View>
   );
@@ -250,20 +294,54 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
   },
-  Drop: {
-    marginTop: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
   card: {
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius:12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    margin: 0,
+    padding: 0,
+    width: 125
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 18,
+    lineHeight: 25,
+    paddingTop: 3,
+    color: '#211C5A',
+  },
+  card1: {
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 5,
-    height: 310,
+    marginTop: 10,
+    borderRadius:20
+
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
   },
   Week: {
     marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+    flexWrap: 'wrap'
   },
+  submitButton: {
+    margin: 20,
+    backgroundColor:'#5177E7',
+    width:100
+    
+  },
+  
 });

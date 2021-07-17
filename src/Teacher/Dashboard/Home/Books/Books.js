@@ -16,10 +16,8 @@ import {
   Keyboard,
 } from 'react-native';
 
-
-export default function IssuedBooksScreen1({ navigation }) {
-
-  const [showContent, setShowContent] = React.useState('Due')
+export default function IssuedBooksScreen1({navigation}) {
+  const [showContent, setShowContent] = React.useState('Due');
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -31,28 +29,55 @@ export default function IssuedBooksScreen1({ navigation }) {
     const onChangeSearch = query => setSearchQuery(query);
 
     return (
-
-
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.section}>
             <View style={styles.details}>
               <View style={styles.userinhostels}>
                 <TouchableOpacity style={styles.differentusers}>
-
                   <Text> </Text>
-                  <Text style={{ fontSize: 10, color: '#505069', fontFamily: 'OpenSans-Regular' }}>ID:45321440</Text>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: '#505069',
+                      fontFamily: 'OpenSans-Regular',
+                    }}>
+                    ID:45321440
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{ fontWeight: 'normal', fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Title</Text>
-
-
+                  <Text
+                    style={{
+                      fontWeight: 'normal',
+                      fontSize: 18,
+                      color: '#211C5A',
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    {' '}
+                    Title
+                  </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{ fontSize: 12, color: "#58626C", fontFamily: 'Poppins-Regular', paddingLeft: 5 }}>Issued: 21May,2021</Text>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: 12, color: '#58636D', fontFamily: 'Poppins-Regular' }}> Due: 21Sept,2021</Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: '#58626C',
+                      fontFamily: 'Poppins-Regular',
+                      paddingLeft: 5,
+                    }}>
+                    Issued: 21May,2021
+                  </Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#58636D',
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {' '}
+                      Due: 21Sept,2021
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -63,18 +88,48 @@ export default function IssuedBooksScreen1({ navigation }) {
               <View style={styles.userinhostels}>
                 <TouchableOpacity style={styles.differentusers}>
                   <Text> </Text>
-                  <Text style={{ fontSize: 10, color: '#505069', fontFamily: 'OpenSans-Regular' }}>ID:45321440</Text>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: '#505069',
+                      fontFamily: 'OpenSans-Regular',
+                    }}>
+                    ID:45321440
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{ fontWeight: 'normal', fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Title</Text>
-
-
+                  <Text
+                    style={{
+                      fontWeight: 'normal',
+                      fontSize: 18,
+                      color: '#211C5A',
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    {' '}
+                    Title
+                  </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{ fontSize: 12, color: "#58626C", fontFamily: 'Poppins-Regular', paddingLeft: 5 }}>Issued: 21May,2021</Text>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: 12, color: '#58636D', fontFamily: 'Poppins-Regular' }}> Due: 21Sept,2021</Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: '#58626C',
+                      fontFamily: 'Poppins-Regular',
+                      paddingLeft: 5,
+                    }}>
+                    Issued: 21May,2021
+                  </Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#58636D',
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {' '}
+                      Due: 21Sept,2021
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -91,7 +146,6 @@ export default function IssuedBooksScreen1({ navigation }) {
     const onChangeSearch = query => setSearchQuery(query);
 
     return (
-
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.section}>
@@ -100,22 +154,47 @@ export default function IssuedBooksScreen1({ navigation }) {
                 <TouchableOpacity style={styles.differentusers}>
                   <Text></Text>
 
-                  <Text style={{ fontSize: 10, color: '#505069', fontFamily: 'OpenSans-Regular' }}>ID:45321440</Text>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: '#505069',
+                      fontFamily: 'OpenSans-Regular',
+                    }}>
+                    ID:45321440
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{ fontWeight: 'normal', fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Title</Text>
-
+                  <Text
+                    style={{
+                      fontWeight: 'normal',
+                      fontSize: 18,
+                      color: '#211C5A',
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    {' '}
+                    Title
+                  </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{ fontSize: 12, color: '#1F7C17', paddingLeft: 5, fontFamily: 'Poppins-Regular' }}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: '#1F7C17',
+                      paddingLeft: 5,
+                      fontFamily: 'Poppins-Regular',
+                    }}>
                     Issued: 21May,2021
                   </Text>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: 12, color: '#B04305', fontFamily: 'Poppins-Regular' }}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#B04305',
+                        fontFamily: 'Poppins-Regular',
+                      }}>
                       Due: 21Sept,2021
                     </Text>
-
                   </View>
                 </TouchableOpacity>
               </View>
@@ -127,23 +206,47 @@ export default function IssuedBooksScreen1({ navigation }) {
                 <TouchableOpacity style={styles.differentusers}>
                   <Text></Text>
 
-                  <Text style={{ fontSize: 10, color: '#505069', fontFamily: 'OpenSans-Regular' }}>ID:45321440</Text>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: '#505069',
+                      fontFamily: 'OpenSans-Regular',
+                    }}>
+                    ID:45321440
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{ fontWeight: 'normal', fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Title</Text>
-
-
+                  <Text
+                    style={{
+                      fontWeight: 'normal',
+                      fontSize: 18,
+                      color: '#211C5A',
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    {' '}
+                    Title
+                  </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{ fontSize: 12, color: '#1F7C17', fontFamily: 'Poppins-Regular', paddingLeft: 5 }}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: '#1F7C17',
+                      fontFamily: 'Poppins-Regular',
+                      paddingLeft: 5,
+                    }}>
                     Issued: 21May,2021
                   </Text>
-                  <View style={{ flexDirection: 'row' }}>
-                    <Text style={{ fontSize: 12, color: '#B04305', fontFamily: 'Poppins-Regular' }}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#B04305',
+                        fontFamily: 'Poppins-Regular',
+                      }}>
                       Due: 21Sept,2021
                     </Text>
-
                   </View>
                 </TouchableOpacity>
               </View>
@@ -151,7 +254,6 @@ export default function IssuedBooksScreen1({ navigation }) {
           </View>
         </ScrollView>
       </View>
-
     );
   }
   return (
@@ -162,13 +264,35 @@ export default function IssuedBooksScreen1({ navigation }) {
         {/* header start */}
 
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => { navigation.goBack(); }}>
-            <Icon size={24} color="white" name="left" style={{ alignSelf: 'center', fontSize: 25, color: 'white', paddingLeft: 20, paddingTop: 20 }} />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Home');
+            }}>
+            <Icon
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
+            />
           </TouchableOpacity>
-          <Text style={{ fontStyle: 'normal', fontFamily: 'NunitoSans-Regular', fontSize: 28, fontWeight: '600', alignSelf: 'center', paddingLeft: 30, color: 'white' }}>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontFamily: 'NunitoSans-Regular',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
             Issued Books
           </Text>
-
         </View>
 
         {/* header ends */}
@@ -180,8 +304,6 @@ export default function IssuedBooksScreen1({ navigation }) {
             marginBottom: 20,
             marginTop: 20,
           }}>
-
-
           {/* open search */}
           <View
             style={{
@@ -193,9 +315,8 @@ export default function IssuedBooksScreen1({ navigation }) {
               flexDirection: 'row',
               ...styles.shadow,
             }}>
-
             <TextInput
-              style={{ width: '80%', ...styles.text_input }}
+              style={{width: '80%', ...styles.text_input}}
               placeholder="Enter book name or ID here"
             />
             <TouchableOpacity
@@ -209,13 +330,9 @@ export default function IssuedBooksScreen1({ navigation }) {
                   fontSize: 21,
                   color: '#505069',
                 }}
-
               />
             </TouchableOpacity>
           </View>
-
-
-
         </View>
 
         {/* close search */}
@@ -274,8 +391,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     marginHorizontal: 20,
-    marginBottom:10
-
+    marginBottom: 10,
   },
 
   details: {
@@ -284,8 +400,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingBottom: 10,
     borderBottomColor: '#333',
-    paddingHorizontal:10
-
+    paddingHorizontal: 10,
   },
   userinhostels: {
     marginBottom: 10,
@@ -301,7 +416,6 @@ const styles = StyleSheet.create({
     fontWeight: '300',
   },
 
-
   search: {
     backgroundColor: 'white',
     color: 'black',
@@ -310,7 +424,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 40,
-    marginBottom:10
+    marginBottom: 10,
   },
   switchText: {
     fontSize: 14,
@@ -318,11 +432,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     fontFamily: 'Poppins-SemiBold',
     fontWeight: 'bold',
-
   },
   maincontainer: {
-    paddingTop: 10,
-    
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
@@ -345,10 +456,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 
-
   shadow: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -365,13 +475,9 @@ const styles = StyleSheet.create({
     minWidth: 110,
   },
 
-
   header: {
-    height: 65,
-    marginTop: -10,
+    height: 69,
     backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
-
   },
-
 });
