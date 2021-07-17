@@ -56,10 +56,10 @@ import get from '../../../services/helpers/request/get';
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 import write from '../../../services/localstorage/write';
 
-let userInfo, institute;
+let userInfo;
 
 const Home = ({navigation}) => {
-  // institute = useSelector(state => state.institute);
+  let institute = useSelector(state => state.institute);
 
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
@@ -99,7 +99,7 @@ const Home = ({navigation}) => {
               color: 'black',
               paddingLeft: 20,
               paddingTop: 20,
-              color: institute.themeColor,
+              color: institute ? institute.themeColor : 'black',
             }}
           />
         </TouchableOpacity>
@@ -111,7 +111,7 @@ const Home = ({navigation}) => {
             fontWeight: '600',
             alignSelf: 'center',
             paddingLeft: 30,
-            color: institute.themeColor,
+            color: institute ? institute.themeColor : 'black',
           }}>
           {userInfo ? `Hi ${userInfo.firstName}` : `Hi`}
         </Text>
@@ -131,7 +131,7 @@ const Home = ({navigation}) => {
               fontSize: 25,
               color: 'black',
               paddingRight: 20,
-              color: institute.themeColor,
+              color: institute ? institute.themeColor : 'black',
             }}
           />
         </TouchableOpacity>

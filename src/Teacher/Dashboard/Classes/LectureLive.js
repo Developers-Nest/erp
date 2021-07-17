@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 
 // import {TextInput} from 'react-native-paper';
 
@@ -32,6 +32,16 @@ const Live=()=> {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
+
+    useEffect(async()=>{
+
+      try{
+
+      } catch(err){
+        alert('Cannot fetch your classes!')
+      }
+
+    })
 
     return (
       <View style={styles.container}>
