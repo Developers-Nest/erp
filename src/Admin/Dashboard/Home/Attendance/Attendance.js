@@ -158,11 +158,11 @@ const AttendanceScreen1 = ({ navigation }) => {
                 fontSize: 25,
                 color: 'white',
                 paddingLeft: 20,
-                paddingTop: 15,
+                paddingTop: 10,
               }}
             />
           </TouchableOpacity>
-          <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff' }}>{'     '}{'       '}{'    '}{'   '}View</Text>
+          <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff' }}>{'      '}{'    '}{'   '}View</Text>
         </View>
       </View>
 

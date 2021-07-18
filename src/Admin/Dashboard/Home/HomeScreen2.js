@@ -37,6 +37,11 @@ import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 const HomeScreen2=({navigation})=>{
 
+  const [collapsed, setCollapsed] = React.useState(true);
+  const toggleExpanded = () => {
+    setCollapsed(!collapsed);
+  };
+
     return(
 <View style={styles.container}>
 <View style={{ height: 20 }}></View>
@@ -63,7 +68,7 @@ const HomeScreen2=({navigation})=>{
   </View>
 </View>
 <ScrollView style={styles.main}>
-  <View style={{ height: 30 }}></View>
+  <View style={{ height: 15 }}/>
   
   <View
       style={{
@@ -72,14 +77,159 @@ const HomeScreen2=({navigation})=>{
         flexWrap: 'wrap',
         justifyContent: 'flex-start',
       }}>
-{/* 
-        1st row started */}
+
+   {/* count of member section begins */}
+
+<View style={styles.count}>
+          <View style={{alignItems:'center'}}>
+          
+
+          <Text
+                style={{
+                  fontWeight: 'normal',
+                  fontSize: 20,
+                  color: '#211C5A',
+                  marginTop:5,
+                  fontFamily:'Poppins-Regular'
+                }}>
+                  957
+              </Text>
+          
+
+          <Text
+                style={{
+                  fontWeight: 'normal',
+                  fontSize: 12,
+                  color: '#211C5A',
+                  marginTop:-5,
+                  fontFamily:'Poppins-Regular'
+                }}>
+          Students
+              </Text>
+          </View>
+        
+      </View>
+      <View style={styles.count}>
+          <View style={{alignItems:'center'}}>
+          
+          <Text
+                style={{
+                  fontWeight: 'normal',
+                  fontSize: 20,
+                  color: '#211C5A',
+                  marginTop:5,
+                  fontFamily:'Poppins-Regular'
+                }}>
+                  128
+              </Text>
+          
+
+          <Text
+                style={{
+                  fontWeight: 'normal',
+                  fontSize: 12,
+                  color: '#211C5A',
+                  marginTop:-5,
+                  fontFamily:'Poppins-Regular'
+                }}>
+                  Faculties
+              </Text>
+          </View>
+        
+      </View>
+
+      <View style={styles.count}>
+          <View style={{alignItems:'center'}}>
+          
+          <Text
+                style={{
+                  fontWeight: 'normal',
+                  fontSize: 20,
+                  color: '#211C5A',
+                  marginTop:5,
+                  fontFamily:'Poppins-Regular'
+                }}>
+                  65
+              </Text>
+          
+
+          <Text
+                style={{
+                  fontWeight: 'normal',
+                  fontSize: 12,
+                  color: '#211C5A',
+                  marginTop:-5,
+                  fontFamily:'Poppins-Regular'
+                }}>
+                  Staffs
+              </Text>
+          </View>
+        
+      </View>
+      {/* count of member section ends */}
+      
+
+      <View style={{width:"100%", paddingTop:15}}>
+          <Text style={styles.section_heading}>New Circular</Text>
+        </View>
+        <View style={{marginHorizontal: 30, ...styles.shadow}}>
+          <View
+            style={{
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+              borderBottomLeftRadius: collapsed ? 8 : 0,
+              borderBottomRightRadius: collapsed ? 8 : 0,
+              ...styles.collapsable_header,
+            }}>
+            <Text style={styles.collapsable_headerText}>Title</Text>
+            {!collapsed ? (
+              <TouchableOpacity
+                style={styles.collapsable_IconContainer}
+                onPress={toggleExpanded}>
+                <FontAwesome5
+                  name="chevron-up"
+                  size={14}
+                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                />
+                <Text style={styles.collapsable_IconText}>Read Less</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.collapsable_IconContainer}
+                onPress={toggleExpanded}>
+                <FontAwesome5
+                  name="chevron-down"
+                  size={14}
+                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                />
+                <Text style={styles.collapsable_IconText}>Read More</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <Collapsible
+            collapsed={collapsed}
+            align="center"
+            style={styles.collapsable_contentWrapper}>
+            <Text style={styles.collapsable_content}>
+              Exams will be conducted via online mode. All the best. It is
+              requested from the students to maintain the.
+            </Text>
+          </Collapsible>
+        </View>
+
+        
+
+{/* Most used section*/}
+
+<View style={{width:"100%", paddingTop:35}}>
+          <Text style={styles.section_heading}>Mostly Used</Text>
+        </View>
       <View style={styles.section}>
           <View style={{alignItems:'center'}}>
           
           <IonIcon
                 size={36.83}
-                color="#0066DA"
+                color="#211C5A"
                 name="library-outline"
                 
               />
@@ -102,7 +252,7 @@ const HomeScreen2=({navigation})=>{
           
           <SimpleLineIcon
                 size={38}
-                color="#0066DA"
+                color="#211C5A"
                 name="graduation"
                 
               />
@@ -126,7 +276,7 @@ const HomeScreen2=({navigation})=>{
           
           <MaterialCommunityIcon
                 size={36.83}
-                color="#0066DA"
+                color="#211C5A"
                 name="briefcase-outline"
                 
               />
@@ -144,167 +294,6 @@ const HomeScreen2=({navigation})=>{
           </View>
         
       </View>
-{/* 
-      1st row ended */}
-
-{/* 3rd row started */}
-
-<View style={styles.section}>
-          <View style={{alignItems:'center'}}>
-          
-          <MaterialCommunityIcon
-                size={36.83}
-                color="#FCBC05"
-                name="clipboard-outline"
-                
-              />
-
-          <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  marginTop:-5,
-                  fontFamily:'Poppins-Regular'
-                }}>
-        Assignment
-              </Text>
-          </View>
-        
-      </View>
-
-
-<View style={styles.section}>
-          <View style={{alignItems:'center'}}>
-          
-          <EntypoIcon
-                size={36.83}
-                color="#FCBC05"
-                name="text-document"
-                
-              />
-
-          <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  marginTop:-5,
-                  fontFamily:'Poppins-Regular'
-                }}>
-        Content Library
-              </Text>
-          </View>
-        
-      </View>
-
-      <View style={styles.section}>
-          <View style={{alignItems:'center'}}>
-          
-          <IonIcon
-                size={36.83}
-                color="#FCBC05"
-                name="book-outline"
-                
-              />
-
-          <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  marginTop:-5,
-                  fontFamily:'Poppins-Regular'
-                }}>
-        Exams
-              </Text>
-          </View>
-        
-      </View>
-
-
-
-{/* 3rd row ended */}
-
-{/* 4th row starts */}
-
-
-  
-<View style={styles.section}>
-          <View style={{alignItems:'center'}}>
-          
-          <FeatherIcon
-                size={36.83}
-                color="#8A06CD"
-                name="calendar"
-                
-              />
-
-          <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  marginTop:-5,
-                  fontFamily:'Poppins-Regular'
-                }}>
-        Attendance
-              </Text>
-          </View>
-        
-      </View>
-
-<View style={styles.section}>
-          <View style={{alignItems:'center'}}>
-          
-          <IonIcon
-                size={36.83}
-                color="#8A06CD"
-                name="document-outline"
-                
-              />
-
-          <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  marginTop:-5,
-                  fontFamily:'Poppins-Regular'
-                }}>
-        Leave
-              </Text>
-          </View>
-        
-      </View>
-
-      
-<View style={styles.section}>
-          <View style={{alignItems:'center'}}>
-          
-          <FeatherIcon
-                size={36.83}
-                color="#8A06CD"
-                name="book"
-                
-              />
-
-          <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  marginTop:-5,
-                  fontFamily:'Poppins-Regular'
-                }}>
-        Results
-              </Text>
-          </View>
-        
-      </View>
-
-
-{/* 4th row ends */}
     </View>
  <View style={{height:30}}/>
 </ScrollView>
@@ -335,6 +324,7 @@ const styles = StyleSheet.create({
       height: 59,
       fontSize: 15,
       fontFamily: 'Poppins-Regular',
+      fontWeight: 'bold',
       paddingTop: 15,
       paddingHorizontal: 10,
       width: '90%',
@@ -490,6 +480,29 @@ const styles = StyleSheet.create({
     section: {
       flexDirection: 'column',
       backgroundColor: '#FFFFFF',
+
+      paddingHorizontal: 13,
+      shadowColor: '#333',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      
+      shadowOpacity: 0.2,
+      elevation: 10,
+      marginTop: 20,
+      borderRadius: 12,
+      marginHorizontal: 10,
+      width: 100,
+      height: 100,
+      //new added
+      alignSelf: 'center',
+      //new added to move english down
+      paddingTop: 20,
+    },
+    count: {
+      flexDirection: 'column',
+      backgroundColor: '#FFFFFF',
   
       paddingHorizontal: 13,
       shadowColor: '#333',
@@ -497,10 +510,11 @@ const styles = StyleSheet.create({
         width: 0,
         height: 1,
       },
+      
       shadowOpacity: 0.2,
       elevation: 10,
       marginTop: 20,
-      borderRadius: 12,
+      borderRadius: 50,
       marginHorizontal: 10,
       width: 100,
       height: 100,
