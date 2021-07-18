@@ -20,10 +20,20 @@ import {
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function Transport({navigation}) {
+  //theming
+  const institute = useSelector(state => state.institute);
+
   return (
     <View style={styles.backgroung}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Home');
@@ -189,7 +199,6 @@ export default function Transport({navigation}) {
 const styles = StyleSheet.create({
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   backgroung: {

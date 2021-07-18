@@ -22,8 +22,10 @@ import ModalSelector from 'react-native-modal-selector';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function EditNotes({navigation}) {
-  // const [open1, setOpen1] = useState(null);
   const [className, setclassName] = useState(null);
   const [classes, setclasses] = useState([
     {label: 'Class1', key: 'Class1'},
@@ -31,17 +33,21 @@ export default function EditNotes({navigation}) {
     {label: 'Class3', key: 'Class3'},
   ]);
 
-  // const [open2, setOpen2] = useState(null);
   const [batch, setbatch] = useState(null);
   const [batches, setbatches] = useState([
     {label: 'Batch1', key: 'Batch1'},
     {label: 'Batch2', key: 'Batch2'},
     {label: 'Batch3', key: 'Batch3'},
   ]);
+  const institute = useSelector(state => state.institute);
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Add Notes');
@@ -89,9 +95,7 @@ export default function EditNotes({navigation}) {
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
-          <View style={{width:40}}>
-
-          </View>
+          <View style={{width: 40}}></View>
           <ModalSelector
             data={batches}
             initValue="Batch"
@@ -105,61 +109,65 @@ export default function EditNotes({navigation}) {
         </View>
       </View>
       <Card style={styles.card1}>
-          <Card.Content>
-            <TextInput placeholder="Topic " onChange={val => setTopic(val)}
-            style={{borderBottomWidth:0.5,fontSize:15}} />
-            <TextInput
-              placeholder="Description (optional) "
-              onChange={val => setDiscription(val)}
-              style={{height:150,textAlignVertical:'top',marginTop:5,fontSize:15}}
-              multiline
-              numberOfLines={4}
-            />
-            
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-              }}>
-              <Button
-                mode="contained"
-                color="white"
-                onPress={() => console.log('Pressed')}>
-                Chapter{' '}
-              </Button>
-              <View style={{padding: 10}} />
-              <Button
-                mode="contained"
-                color="white"
-                onPress={() => console.log('Pressed')}>
-                Add Link
-              </Button>
-            </View>
-          </Card.Content>
-        </Card>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            marginTop:30
-          }}>
-          <Button
-            mode="outlined"
-            color="red"
-            
-            onPress={() => console.log('Pressed')}>
-            Delete
-          </Button>
-          <Button
-            mode="contained"
-            color="#5177E7"
-            onPress={() => console.log('Pressed')}>
-            Save
-          </Button>
-        </View>
-      
+        <Card.Content>
+          <TextInput
+            placeholder="Topic "
+            onChange={val => setTopic(val)}
+            style={{borderBottomWidth: 0.5, fontSize: 15}}
+          />
+          <TextInput
+            placeholder="Description (optional) "
+            onChange={val => setDiscription(val)}
+            style={{
+              height: 150,
+              textAlignVertical: 'top',
+              marginTop: 5,
+              fontSize: 15,
+            }}
+            multiline
+            numberOfLines={4}
+          />
 
-      
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+            }}>
+            <Button
+              mode="contained"
+              color="white"
+              onPress={() => console.log('Pressed')}>
+              Chapter{' '}
+            </Button>
+            <View style={{padding: 10}} />
+            <Button
+              mode="contained"
+              color="white"
+              onPress={() => console.log('Pressed')}>
+              Add Link
+            </Button>
+          </View>
+        </Card.Content>
+      </Card>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          marginTop: 30,
+        }}>
+        <Button
+          mode="outlined"
+          color="red"
+          onPress={() => console.log('Pressed')}>
+          Delete
+        </Button>
+        <Button
+          mode="contained"
+          color="#5177E7"
+          onPress={() => console.log('Pressed')}>
+          Save
+        </Button>
+      </View>
     </View>
   );
 }
@@ -172,7 +180,6 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   shadow: {
@@ -189,24 +196,24 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius:12,
+    borderRadius: 12,
     overflow: 'hidden',
-    width:125
+    width: 125,
   },
   card1: {
     marginLeft: 10,
     marginRight: 10,
     marginTop: 10,
-    borderRadius:20
+    borderRadius: 20,
   },
- 
+
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',

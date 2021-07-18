@@ -23,6 +23,9 @@ import {Searchbar, Button} from 'react-native-paper';
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function AssignmentsDue({navigation}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [assignments, setAssignments] = useState([]);
@@ -41,10 +44,17 @@ export default function AssignmentsDue({navigation}) {
     }
   }, []);
 
+  //theming
+  const institute = useSelector(state => state.institute);
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
-        <View style={styles.header}>
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}>
           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <AntDesign
               size={24}
@@ -139,7 +149,6 @@ export default function AssignmentsDue({navigation}) {
           <ScrollView>
             {assignments &&
               assignments.map(assignment => (
-            
                 <View style={styles.section} key={assignment._id}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
@@ -231,7 +240,6 @@ export default function AssignmentsDue({navigation}) {
                       </Text>
                     </View>
                     <View style={{marginBottom: 3}}>
-                     
                       <Button
                         style={styles.button}
                         onPress={() =>
@@ -262,7 +270,6 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   section: {

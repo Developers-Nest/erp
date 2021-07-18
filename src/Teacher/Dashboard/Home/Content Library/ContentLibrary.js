@@ -10,21 +10,22 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-import AntDesign from 'react-native-vector-icons/AntDesign';
-
 import {Button} from 'react-native-paper';
 
+//icons
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+// redux
+import {useSelector} from 'react-redux';
+
 export default function ContentLibrary({navigation}) {
- 
-  const[showContent,setShowContent]=React.useState('Material');
-
+  const [showContent, setShowContent] = React.useState('Material');
   const [searchQuery, setSearchQuery] = React.useState('');
-
   const onChangeSearch = query => setSearchQuery(query);
-  
+
+  const institute = useSelector(state => state.institute);
+
   function Material() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -33,52 +34,50 @@ export default function ContentLibrary({navigation}) {
     return (
       <View style={styles.container}>
         <ScrollView>
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontWeight: 'normal',
-                    fontSize: 20,
-                    color: '#211C5A',
-                  }}>
-                  Title
-                </Text>
+          <View style={styles.section}>
+            <View style={styles.details}>
+              <View style={styles.userinhostels}>
+                <View style={styles.differentusers}>
+                  <Text
+                    style={{
+                      fontWeight: 'normal',
+                      fontSize: 20,
+                      color: '#211C5A',
+                    }}>
+                    Title
+                  </Text>
+                </View>
 
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text style={{fontSize: 16, color: 'blue'}}>
+                    course and Batch
+                  </Text>
+                </TouchableOpacity>
 
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text style={{fontSize: 16}}>
+                    Exams will be conducted via online mode in the upcoming week
+                    and these are the notes for it so go through them and study
+                    well
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.hey}>
+                  <Text style={{fontSize: 16, marginRight: 100}}>
+                    Teacher's Name
+                  </Text>
+
+                  <Button
+                    styles={{flexDirection: 'flex-end'}}
+                    mode="contained"
+                    onPress={() => console.log('Pressed')}>
+                    Send
+                  </Button>
+                </TouchableOpacity>
               </View>
-
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 16, color: 'blue'}}>
-                  course and Batch
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 16}}>
-                  Exams will be conducted via online mode in the upcoming week
-                  and these are the notes for it so go through them and study
-                  well
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.hey}>
-                <Text style={{fontSize: 16, marginRight: 100}}>
-                  Teacher's Name
-                </Text>
-
-                <Button
-                  styles={{flexDirection: 'flex-end'}}
-                  mode="contained"
-                  onPress={() => console.log('Pressed')}>
-                  Send
-                </Button>
-              </TouchableOpacity>
             </View>
           </View>
-        </View>
-        <View style={{height:20}}/>
+          <View style={{height: 20}} />
         </ScrollView>
       </View>
     );
@@ -92,52 +91,50 @@ export default function ContentLibrary({navigation}) {
     return (
       <View style={styles.container}>
         <ScrollView>
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontWeight: 'normal',
-                    fontSize: 20,
-                    color: '#211C5A',
-                  }}>
-                  Title
-                </Text>
+          <View style={styles.section}>
+            <View style={styles.details}>
+              <View style={styles.userinhostels}>
+                <View style={styles.differentusers}>
+                  <Text
+                    style={{
+                      fontWeight: 'normal',
+                      fontSize: 20,
+                      color: '#211C5A',
+                    }}>
+                    Title
+                  </Text>
+                </View>
 
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text style={{fontSize: 16, color: 'blue'}}>
+                    course and Batch
+                  </Text>
+                </TouchableOpacity>
 
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text style={{fontSize: 16}}>
+                    Exams will be conducted via online mode in the upcoming week
+                    and these are the notes for it so go through them and study
+                    well
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.hey}>
+                  <Text style={{fontSize: 16, marginRight: 100}}>
+                    Teacher's Name
+                  </Text>
+
+                  <Button
+                    styles={{flexDirection: 'flex-end'}}
+                    mode="contained"
+                    onPress={() => console.log('Pressed')}>
+                    Send
+                  </Button>
+                </TouchableOpacity>
               </View>
-
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 16, color: 'blue'}}>
-                  course and Batch
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 16}}>
-                  Exams will be conducted via online mode in the upcoming week
-                  and these are the notes for it so go through them and study
-                  well
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.hey}>
-                <Text style={{fontSize: 16, marginRight: 100}}>
-                  Teacher's Name
-                </Text>
-
-                <Button
-                  styles={{flexDirection: 'flex-end'}}
-                  mode="contained"
-                  onPress={() => console.log('Pressed')}>
-                  Send
-                </Button>
-              </TouchableOpacity>
             </View>
           </View>
-        </View>
-        <View style={{height:20}}/>
+          <View style={{height: 20}} />
         </ScrollView>
       </View>
     );
@@ -146,7 +143,11 @@ export default function ContentLibrary({navigation}) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{flex: 1}}>
-        <View style={styles.header}>
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}>
           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <AntDesign
               size={24}
@@ -180,9 +181,7 @@ export default function ContentLibrary({navigation}) {
               flex: 1,
               flexDirection: 'row',
               alignItems: 'center',
-            }}>
-            
-          </TouchableOpacity>
+            }}></TouchableOpacity>
         </View>
         <View style={styles.maincontainer}>
           <View
@@ -193,42 +192,42 @@ export default function ContentLibrary({navigation}) {
               marginTop: 30,
               justifyContent: 'flex-start',
             }}>
-               {/* open search */}
-          <View
-            style={{
-              justifyContent: 'space-between',
-              width: '95%',
-              flexDirection: 'row',
-              ...styles.shadow,
-            }}>
-            <FontAwesome5
-              name="search"
+            {/* open search */}
+            <View
               style={{
-                alignSelf: 'center',
-                fontSize: 15,
-                color: '#6A6A80',
-              }}
-            />
-
-            <TextInput
-              style={{width: '80%', ...styles.text_input}}
-              placeholder="Enter subject or batch name"
-            />
-            <TouchableOpacity
-              style={{
-                alignSelf: 'center',
+                justifyContent: 'space-between',
+                width: '95%',
+                flexDirection: 'row',
+                ...styles.shadow,
               }}>
               <FontAwesome5
-                name="filter"
+                name="search"
                 style={{
                   alignSelf: 'center',
-                  fontSize: 21,
+                  fontSize: 15,
                   color: '#6A6A80',
                 }}
               />
-            </TouchableOpacity>
-          </View>
-          {/* close search */}
+
+              <TextInput
+                style={{width: '80%', ...styles.text_input}}
+                placeholder="Enter subject or batch name"
+              />
+              <TouchableOpacity
+                style={{
+                  alignSelf: 'center',
+                }}>
+                <FontAwesome5
+                  name="filter"
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 21,
+                    color: '#6A6A80',
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            {/* close search */}
           </View>
           <View style={styles.switchTabsView}>
             <TouchableOpacity
@@ -273,7 +272,6 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   bottom: {
@@ -294,7 +292,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 5,
     marginTop: 14,
-    borderRadius:8,
+    borderRadius: 8,
     paddingLeft: 10,
     paddingRight: 10,
     marginHorizontal: 20,

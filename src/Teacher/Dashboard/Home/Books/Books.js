@@ -3,8 +3,9 @@ import * as React from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import LinearGradient from 'react-native-linear-gradient';
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
-import Icon from 'react-native-vector-icons/AntDesign';
 import {
   StyleSheet,
   Text,
@@ -16,12 +17,16 @@ import {
   Keyboard,
 } from 'react-native';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function IssuedBooksScreen1({navigation}) {
   const [showContent, setShowContent] = React.useState('Due');
-
   const [searchQuery, setSearchQuery] = React.useState('');
-
   const onChangeSearch = query => setSearchQuery(query);
+
+  //theming
+  const institute = useSelector(state => state.institute);
 
   function Submitted() {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -263,12 +268,16 @@ export default function IssuedBooksScreen1({navigation}) {
 
         {/* header start */}
 
-        <View style={styles.header}>
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Home');
             }}>
-            <Icon
+            <AntDesign
               size={24}
               color="white"
               name="left"
@@ -477,7 +486,6 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
 });

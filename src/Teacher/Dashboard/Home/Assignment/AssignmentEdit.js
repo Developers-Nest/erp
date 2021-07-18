@@ -28,10 +28,16 @@ import getCourse from '../../../../services/helpers/getList/getCourse';
 import getSubject from '../../../../services/helpers/getList/getSubject';
 import {red100, white} from 'react-native-paper/lib/typescript/styles/colors';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function EditAssignments({navigation}) {
   const [Chapter, setChapter] = useState("Chapter's name");
   const [Topic, setTopic] = useState('Topic:');
   const [Discription, setDiscription] = useState('Discription:');
+
+  //theming
+  const institute = useSelector(state => state.institute);
 
   // data array
   const [batches, setBatches] = useState([]);
@@ -76,7 +82,11 @@ export default function EditAssignments({navigation}) {
 
   return (
     <View style={{backgroundColor: 'white', height: '100%'}}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity onPress={() => navigation.navigate('Assignment Due')}>
           <AntDesign
             size={24}
@@ -234,7 +244,6 @@ export default function EditAssignments({navigation}) {
 const styles = StyleSheet.create({
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
 });

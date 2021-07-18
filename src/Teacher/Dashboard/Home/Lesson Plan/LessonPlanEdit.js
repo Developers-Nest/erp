@@ -13,8 +13,6 @@ import {
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
 
 import ModalSelector from 'react-native-modal-selector';
 
@@ -29,12 +27,15 @@ import patch from '../../../../services/helpers/request/patch';
 import read from '../../../../services/localstorage/read';
 import getExam from '../../../../services/helpers/getList/getExam';
 
-// redux
 // import {USERINFO} from '../src/reducers/actionType';
 import {USERINFO} from '../../../../reducers/actionType';
 
 // loading screem
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
+
+// redux
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 export default function LessonPlanAdd({navigation}) {
   const [expanded, setExpanded] = React.useState(true);
@@ -111,9 +112,16 @@ export default function LessonPlanAdd({navigation}) {
     hideLoadingScreen();
   }, []);
 
+  //theming
+  const institute = useSelector(state => state.institute);
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         {loadingScreen}
         <TouchableOpacity
           onPress={() => {
@@ -266,7 +274,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   Drop: {

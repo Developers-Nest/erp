@@ -12,8 +12,6 @@ import {
 } from 'react-native';
 import {Button, RadioButton} from 'react-native-paper';
 
-// import { createStackNavigator } from '@react-navigation/stack';
-
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -26,8 +24,14 @@ import get from '../../../../services/helpers/request/get';
 import patch from '../../../../services/helpers/request/patch';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
+// redux
+import {useSelector} from 'react-redux';
+
 const AttendanceScreen1 = ({navigation}) => {
   const [checked, setChecked] = React.useState('first');
+
+  //theming
+  const institute = useSelector(state => state.institute);
 
   // after fetch
   const [fetched, setFetched] = useState(false);
@@ -182,7 +186,11 @@ const AttendanceScreen1 = ({navigation}) => {
         flex: 1,
       }}>
       {loadingScreen}
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Home');
@@ -552,7 +560,6 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   card: {

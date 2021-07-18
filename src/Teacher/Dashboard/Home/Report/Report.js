@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {Button, TextInput} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/AntDesign';
 import {
   StyleSheet,
   Text,
@@ -12,17 +11,29 @@ import {
   Keyboard,
 } from 'react-native';
 
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+// redux
+import {useSelector} from 'react-redux';
+
 export default function Report({navigation}) {
+  //theming
+  const institute = useSelector(state => state.institute);
+
   const [Description, setDescription] = React.useState('');
   return (
     <View style={styles.container}>
-      {/* header opens */}
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Home');
           }}>
-          <Icon
+          <AntDesign
             size={24}
             color="white"
             name="left"
@@ -109,7 +120,6 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   container: {

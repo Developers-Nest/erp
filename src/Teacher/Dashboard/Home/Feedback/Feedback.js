@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-
 import {
   Text,
   TextInput,
@@ -10,21 +9,32 @@ import {
   Title,
   Paragraph,
 } from 'react-native-paper';
+
+//selector
 import ModalSelector from 'react-native-modal-selector';
-import {useState} from 'react';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+// redux
+import {useSelector} from 'react-redux';
 
 export default function Feedback({navigation}) {
   const [type, setType] = useState([]);
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
 
+  //theming
+  const institute = useSelector(state => state.institute);
+
   return (
     <View style={{backgroundColor: '#E5E5E5'}}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Home');
@@ -93,7 +103,6 @@ export default function Feedback({navigation}) {
 const styles = StyleSheet.create({
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
 });

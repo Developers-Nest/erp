@@ -438,12 +438,15 @@ function DrawerContent(props) {
 
 export default function Route() {
   userInfo = useSelector(state => state.userInfo);
-  institute = useSelector(state => state.institute)
+  institute = useSelector(state => state.institute);
   return (
     <DrawerNav.Navigator
       initialRouteName="Home"
       drawerContent={props => <DrawerContent {...props} />}
-      drawerStyle={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
+      drawerStyle={{
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        // marginTop: 69,
+      }}>
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="AttendanceStack" component={AttendanceStack} />

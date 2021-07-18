@@ -13,14 +13,24 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function LessonPlanAdd({navigation}) {
   const [expanded, setExpanded] = React.useState(true);
   const [text, setText] = React.useState('');
   const handlePress = () => setExpanded(!expanded);
 
+  //theming
+  const institute = useSelector(state => state.institute);
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Lesson Plan');
@@ -170,7 +180,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   Drop: {

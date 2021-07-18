@@ -7,28 +7,33 @@ import {
   Keyboard,
 } from 'react-native';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Text} from 'react-native-paper';
 
 //icons
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 //stack navigation
 import Notifications from './Notification/Notifications';
 import Circulars from './Notification/Circulars';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function Notify({navigation}) {
-  // const [activeTab, setActiveTab] = React.useState('Notification');
   const [showContent, setshowContent] = React.useState('Notification');
-  // const [searchQuery, setSearchQuery] = React.useState('');
-  // const onChangeSearch = query => setSearchQuery(query);
+
+  //theming
+  const institute = useSelector(state => state.institute);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <View style={styles.header}>
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Home');
@@ -123,7 +128,7 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
+
     flexDirection: 'row',
   },
 

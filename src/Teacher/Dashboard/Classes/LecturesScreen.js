@@ -1,12 +1,8 @@
 import * as React from 'react';
 
-// import {TextInput} from 'react-native-paper';
+//stack navigation
 import Recorded from './LectureRecorded';
 import Live from './LectureLive';
-
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-
 
 import {
   StyleSheet,
@@ -18,67 +14,125 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  TextInput
+  TextInput,
 } from 'react-native';
 
-export default function LecturesScreen() {
-  const[showContent,setShowContent]=React.useState('Due');
+//icons
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import IonIcons from 'react-native-vector-icons/Ionicons';
 
+// redux
+import {useSelector} from 'react-redux';
+
+export default function LecturesScreen({navigation}) {
+  const [showContent, setShowContent] = React.useState('Due');
   const [activeTab, setActiveTab] = React.useState('Due');
-
   const [searchQuery, setSearchQuery] = React.useState('');
-
   const onChangeSearch = query => setSearchQuery(query);
+
+  //theming
+  const institute = useSelector(state => state.institute);
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
+            />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontFamily: 'NunitoSans-Regular',
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
+            Lectures
+          </Text>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('GoLive')}
+            style={{
+              justifyContent: 'flex-end',
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <IonIcons
+              name="add-circle"
+              color="#900"
+              style={{
+                fontSize: 35,
+                color: 'white',
+                paddingRight: 20,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
         <View
           style={{
             width: '90%',
             marginLeft: 25,
             marginBottom: 20,
           }}>
-         
-{/* open search */}
-<View
-        style={{
-          marginTop: 10,
-         
-          justifyContent: 'space-between',
-          width:'95%',
-          flexDirection: 'row',
-          ...styles.shadow,
-        }}>
-           <FontAwesome5
-          name="search"
-          style={{
-            alignSelf: 'center',
-            fontSize: 15,
-            color: '#6A6A80',
-          }}/>
-       
-        <TextInput
-          style={{width: '80%', ...styles.text_input}}
-          placeholder="Enter subject or batch name"
-        />
-        <TouchableOpacity
-          style={{
-            alignSelf: 'center',
-          }}>
-          <FontAwesome5
-          name="filter"
-          style={{
-            alignSelf: 'center',
-            fontSize: 21,
-            color: '#6A6A80',
-          }}
-        
-          />
-        </TouchableOpacity>
-      </View>
-      {/* close search */}
+          {/* open search */}
+          <View
+            style={{
+              marginTop: 10,
 
-         </View>
+              justifyContent: 'space-between',
+              width: '95%',
+              flexDirection: 'row',
+              ...styles.shadow,
+            }}>
+            <FontAwesome5
+              name="search"
+              style={{
+                alignSelf: 'center',
+                fontSize: 15,
+                color: '#6A6A80',
+              }}
+            />
+
+            <TextInput
+              style={{width: '80%', ...styles.text_input}}
+              placeholder="Enter subject or batch name"
+            />
+            <TouchableOpacity
+              style={{
+                alignSelf: 'center',
+              }}>
+              <FontAwesome5
+                name="filter"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 21,
+                  color: '#6A6A80',
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+          {/* close search */}
+        </View>
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
@@ -211,7 +265,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'rgba(25, 40, 57, 0.63)',
     paddingLeft: 3,
-    fontFamily:'Poppins-Medium'
+    fontFamily: 'Poppins-Medium',
   },
   switchText: {
     fontSize: 14,
@@ -219,14 +273,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   maincontainer: {
-    paddingTop: 10,
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   header: {
     height: 65,
-    marginTop: -10,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   text_input: {
@@ -235,10 +286,9 @@ const styles = StyleSheet.create({
     // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
-    
+
     backgroundColor: 'white',
   },
-
 
   shadow: {
     shadowColor: '#999',
@@ -256,8 +306,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     margin: 0,
     padding: 0,
-    
   },
-
-
 });

@@ -10,12 +10,12 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {Card, Button} from 'react-native-paper';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import DropDownPicker from 'react-native-dropdown-picker';
-// import {Dropdown} from 'react-native-material-dropdown-v2-fixed';
+
+//selector
 import ModalSelector from 'react-native-modal-selector';
 
 //icons
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // helpers
@@ -29,6 +29,9 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 // loading screen
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
+
+// redux
+import {useSelector} from 'react-redux';
 
 export default function RecordedClasses({navigation}) {
   // selected options
@@ -103,10 +106,17 @@ export default function RecordedClasses({navigation}) {
     hideLoadingScreen();
   };
 
+  //theming
+  const institute = useSelector(state => state.institute);
+
   return (
     <View style={styles.container}>
       {loadingScreen}
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <AntDesign
             size={24}
@@ -151,9 +161,7 @@ export default function RecordedClasses({navigation}) {
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
-          <View style={{}}>
-
-          </View>
+          <View style={{}}></View>
           {/* batch selector */}
           <ModalSelector
             data={batches}
@@ -168,53 +176,62 @@ export default function RecordedClasses({navigation}) {
         </View>
       </View>
 
-      
-        <Card style={styles.card1}>
-          <Card.Content>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}></View>
+      <Card style={styles.card1}>
+        <Card.Content>
+          <View
+            style={{
+              flexDirection: 'row',
+            }}></View>
 
-            <TextInput
-              placeholder="Name"
-              onChangeText={val => setclassRecordedName(val)}
-              style={{fontSize:15,borderBottomWidth:0.2}}
-            />
-            <TextInput
-              placeholder="Video URL (Youtube)"
-              onChangeText={val => setvideoURL(val)}
-              style={{height:150,textAlignVertical:'top',marginTop:5,fontSize:15}}
-            />
+          <TextInput
+            placeholder="Name"
+            onChangeText={val => setclassRecordedName(val)}
+            style={{fontSize: 15, borderBottomWidth: 0.2}}
+          />
+          <TextInput
+            placeholder="Video URL (Youtube)"
+            onChangeText={val => setvideoURL(val)}
+            style={{
+              height: 150,
+              textAlignVertical: 'top',
+              marginTop: 5,
+              fontSize: 15,
+            }}
+          />
+          <View style={{padding: 10}} />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+            }}>
             <View style={{padding: 10}} />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-              }}>
-              <View style={{padding: 10}} />
 
-              {/* date picker */}
-              <Button
-                icon="calendar"
-                mode="contained"
-                color="white"
-                onPress={() => setShowDatePicker(true)}>
-                Date
-              </Button>
+            {/* date picker */}
+            <Button
+              icon="calendar"
+              mode="contained"
+              color="white"
+              onPress={() => setShowDatePicker(true)}>
+              Date
+            </Button>
 
-              <DateTimePickerModal
-                isVisible={showdatePicker}
-                mode="date"
-                onConfirm={handleSubmit}
-                onCancel={() => setShowDatePicker(!showdatePicker)}
-              />
-            </View>
-          </Card.Content>
-        </Card>
-        <View style={{alignItems:'center'}}>
-        <Button mode="contained" onPress={handleSaveClass} style={styles.submitButton}>Save</Button>
-        </View>
+            <DateTimePickerModal
+              isVisible={showdatePicker}
+              mode="date"
+              onConfirm={handleSubmit}
+              onCancel={() => setShowDatePicker(!showdatePicker)}
+            />
+          </View>
+        </Card.Content>
+      </Card>
+      <View style={{alignItems: 'center'}}>
+        <Button
+          mode="contained"
+          onPress={handleSaveClass}
+          style={styles.submitButton}>
+          Save
+        </Button>
+      </View>
     </View>
   );
 }
@@ -227,26 +244,24 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
- 
+
   card: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius:12,
+    borderRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
     padding: 0,
-    width: 125
-    
+    width: 125,
   },
   SelectedValueSmall: {
     fontFamily: 'Poppins-Regular',
@@ -261,16 +276,12 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 10,
-    borderRadius:20,
-    borderWidth:0.5
-
+    borderRadius: 20,
+    borderWidth: 0.5,
   },
   submitButton: {
     margin: 20,
-    backgroundColor:'#5177E7',
-    width:100
-    
+    backgroundColor: '#5177E7',
+    width: 100,
   },
-  
-
 });

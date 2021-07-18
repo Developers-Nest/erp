@@ -1,58 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
-
+import React, {useState, useEffect} from 'react';
 import {
-  Button,
-  Card,
-} from 'react-native-paper';
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 
+import {Button, Card} from 'react-native-paper';
+
+//selector
 import ModalSelector from 'react-native-modal-selector';
+
 // date picker
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 // helpers
-import post from '../../../services/helpers/request/post'
-import read from '../../../services/localstorage/read'
+import post from '../../../services/helpers/request/post';
+import read from '../../../services/localstorage/read';
 import getBatch from '../../../services/helpers/getList/getBatch';
 import getCourse from '../../../services/helpers/getList/getCourse';
 import getSubject from '../../../services/helpers/getList/getSubject';
-import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen'
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
-export default function OnlineLecture() {
-
+export default function OnlineLecture({navigation}) {
   // input variables
   const [url, setUrl] = useState(null);
-  const [description, setDescription] = useState(null)
-  const [date, setDate] = useState(null)
-  const [time, setTime] = useState(null)
+  const [description, setDescription] = useState(null);
+  const [date, setDate] = useState(null);
+  const [time, setTime] = useState(null);
 
   // dropdown selected
-  const [course, setCourse] = useState(null)
-  const [batch, setBatch] = useState(null)
+  const [course, setCourse] = useState(null);
+  const [batch, setBatch] = useState(null);
 
   // dropdown values
-  const [courses, setCourses] = useState([])
-  const [batches, setBatches] = useState([])
+  const [courses, setCourses] = useState([]);
+  const [batches, setBatches] = useState([]);
 
   // date time picker handle
-  const [showdatePicker, setShowDatePicker] = useState(false)
-  const [showtimePicker, setShowTimePicker] = useState(false)
+  const [showdatePicker, setShowDatePicker] = useState(false);
+  const [showtimePicker, setShowTimePicker] = useState(false);
 
   // loading screen
-  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  // Recurrence Days 
+  // Recurrence Days
   const [recDays, setRecDays] = useState({
-    'Mon': false,
-    'Tue': false,
-    'Wed': false,
-    'Thu': false,
-    'Fri': false,
-    'Sat': false,
-    'Sun': false
-  })
-
+    Mon: false,
+    Tue: false,
+    Wed: false,
+    Thu: false,
+    Fri: false,
+    Sat: false,
+    Sun: false,
+  });
 
   useEffect(async () => {
     showLoadingScreen();
@@ -66,24 +71,23 @@ export default function OnlineLecture() {
   }, []);
 
   // handle date select
-  let handleSubmit = async (sd) => {
-    showLoadingScreen()
-    await setDate(sd.toString())
-    setShowDatePicker(false)
-    hideLoadingScreen()
-  }
+  let handleSubmit = async sd => {
+    showLoadingScreen();
+    await setDate(sd.toString());
+    setShowDatePicker(false);
+    hideLoadingScreen();
+  };
 
   // handle time select
-  let handleSubmit2 = async (sd) => {
-    showLoadingScreen()
-    await setTime(sd.toString())
-    setShowTimePicker(false)
-    hideLoadingScreen()
-  }
-
+  let handleSubmit2 = async sd => {
+    showLoadingScreen();
+    await setTime(sd.toString());
+    setShowTimePicker(false);
+    hideLoadingScreen();
+  };
 
   // get all batches
-  const getBatches = async (selectedCourse) => {
+  const getBatches = async selectedCourse => {
     showLoadingScreen();
     try {
       await setCourse(selectedCourse);
@@ -95,21 +99,20 @@ export default function OnlineLecture() {
     hideLoadingScreen();
   };
 
+  const handleSaveClass = async () => {
+    showLoadingScreen();
+    try {
+      let slug = `/liveclass`;
+      let token = await read('token');
 
-  const handleSaveClass = async()=>{
-    showLoadingScreen()
-    try{
-      let slug = `/liveclass`
-      let token = await read('token')
-
-      let daysArray = []
-      Object.keys(recDays).map((day)=>{
+      let daysArray = [];
+      Object.keys(recDays).map(day => {
         daysArray.push({
           name: day,
           checked: recDays[day],
-          duration: ""
-        })
-      })
+          duration: '',
+        });
+      });
 
       let data = {
         batch: batch,
@@ -118,34 +121,70 @@ export default function OnlineLecture() {
         time: time,
         url: url,
         meetingType: 'Other',
-        zoomId: "",
+        zoomId: '',
         days: daysArray,
-        name: description
+        name: description,
+      };
+      let response = await post(slug, data, token);
+      if (response) {
+        alert('Class Added!');
       }
-      let response = await post(slug, data,token)
-      if(response){
-        alert('Class Added!')
-      }
-    } catch(err){
-      alert('Cannot Add this Claas!')
+    } catch (err) {
+      alert('Cannot Add this Claas!');
     }
-    hideLoadingScreen()
-  }
+    hideLoadingScreen();
+  };
 
   return (
     <View style={styles.container}>
       {loadingScreen}
-      <View style={{
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        marginTop: 10,
-      }}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Lectures');
+          }}>
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'white',
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
+          />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontStyle: 'normal',
+            fontSize: 28,
+            fontWeight: '600',
+            alignSelf: 'center',
+            paddingLeft: 30,
+            color: 'white',
+            fontFamily: 'NunitoSans-Regular',
+          }}>
+          Go Live
+        </Text>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+          marginTop: 10,
+        }}>
         {/* course selector */}
         <ModalSelector
           data={courses}
           initValue="Course"
           onChange={option => {
-            getBatches(option.key)
+            getBatches(option.key);
           }}
           style={styles.card}
           initValueTextStyle={styles.SelectedValueSmall}
@@ -157,7 +196,7 @@ export default function OnlineLecture() {
           data={batches}
           initValue="Batch"
           onChange={option => {
-            setBatch(option.key)
+            setBatch(option.key);
           }}
           style={styles.card}
           initValueTextStyle={styles.SelectedValueSmall}
@@ -168,15 +207,15 @@ export default function OnlineLecture() {
       {/* input details */}
       <Card style={styles.card1}>
         <Card.Content>
-
-        <TextInput
+          <TextInput
             placeholder="URL"
             style={{
               textAlignVertical: 'top',
-              borderBottomWidth:0.5,
-              fontSize:15
+              borderBottomWidth: 0.5,
+              fontSize: 15,
             }}
-            onChangeText={(val) => setUrl(val)} />
+            onChangeText={val => setUrl(val)}
+          />
 
           <TextInput
             placeholder="Description"
@@ -186,16 +225,16 @@ export default function OnlineLecture() {
               textAlignVertical: 'top',
               marginTop: 5,
               height: 150,
-              fontSize:15
+              fontSize: 15,
             }}
-            onChangeText={(val) => setDescription(val)} />
-    
+            onChangeText={val => setDescription(val)}
+          />
+
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-evenly',
             }}>
-
             {/* date picker */}
             <Button
               icon="calendar"
@@ -212,9 +251,7 @@ export default function OnlineLecture() {
               onConfirm={handleSubmit}
               onCancel={() => setShowDatePicker(!showdatePicker)}
             />
-            <View style={{width:40}}>
-
-            </View>
+            <View style={{width: 40}}></View>
             {/* time picker */}
             <Button
               icon="calendar"
@@ -231,7 +268,6 @@ export default function OnlineLecture() {
               onConfirm={handleSubmit2}
               onCancel={() => setShowTimePicker(!showtimePicker)}
             />
-
           </View>
         </Card.Content>
       </Card>
@@ -246,40 +282,39 @@ export default function OnlineLecture() {
         Reccurence Days
       </Text>
       <View style={styles.Week}>
-
-        {
-          Object.keys(recDays).map((day) => (
-
-            <View style={{ marginTop: 15 }} key={day}>
-              <TouchableOpacity
-                onPress={() => {
-                  setRecDays(prevRecDays => {
-                    return {
-                      ... prevRecDays,
-                      [day]: !recDays[[day]]
-                    }
-                  })
+        {Object.keys(recDays).map(day => (
+          <View style={{marginTop: 15}} key={day}>
+            <TouchableOpacity
+              onPress={() => {
+                setRecDays(prevRecDays => {
+                  return {
+                    ...prevRecDays,
+                    [day]: !recDays[[day]],
+                  };
+                });
+              }}>
+              <View
+                style={{
+                  backgroundColor: recDays[day] == true ? '#1F7C17' : '#58636D',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 10,
+                  width: 90,
+                  height: 40,
                 }}>
-                <View
-                  style={{
-                    backgroundColor: recDays[day] == true ? '#1F7C17' : '#58636D' ,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 10,
-                    width: 90,
-                    height: 40,
-                  }}>
-                  <Text style={{ color: 'white' }}>{day}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-          ))
-        }
+                <Text style={{color: 'white'}}>{day}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ))}
       </View>
-      <View style={{alignItems:'center'}}>
-      <Button  mode="contained" style={styles.submitButton}
-        onPress={handleSaveClass}>Go Live</Button>
+      <View style={{alignItems: 'center'}}>
+        <Button
+          mode="contained"
+          style={styles.submitButton}
+          onPress={handleSaveClass}>
+          Go Live
+        </Button>
       </View>
     </View>
   );
@@ -291,24 +326,23 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 65,
-    backgroundColor: 'white',
     flexDirection: 'row',
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius:12,
+    borderRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
     padding: 0,
-    width: 125
+    width: 125,
   },
   SelectedValueSmall: {
     fontFamily: 'Poppins-Regular',
@@ -323,8 +357,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 10,
-    borderRadius:20
-
+    borderRadius: 20,
   },
   input: {
     height: 40,
@@ -335,13 +368,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   submitButton: {
     margin: 20,
-    backgroundColor:'#5177E7',
-    width:100
-    
+    backgroundColor: '#5177E7',
+    width: 100,
   },
-  
 });

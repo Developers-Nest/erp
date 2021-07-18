@@ -26,6 +26,9 @@ import getExam from '../../../../services/helpers/getList/getExam';
 // loading screem
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
 
+// redux
+import {useSelector} from 'react-redux';
+
 const MySearchbar = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -63,6 +66,9 @@ export default function CceMarks({navigation}) {
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
+  //theming
+  const institute = useSelector(state => state.institute);
+
   useEffect(async () => {
     showLoadingScreen();
     try {
@@ -96,7 +102,7 @@ export default function CceMarks({navigation}) {
     hideLoadingScreen();
   };
 
-  const getSubjects = async (sb) => {
+  const getSubjects = async sb => {
     showLoadingScreen();
     try {
       await setBatch(sb);
@@ -165,7 +171,11 @@ export default function CceMarks({navigation}) {
 
   return (
     <View style={{backgroundColor: 'white', height: '100%'}}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Home');
@@ -366,7 +376,6 @@ export default function CceMarks({navigation}) {
 const styles = StyleSheet.create({
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   card: {

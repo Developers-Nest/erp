@@ -12,10 +12,12 @@ import {
 } from 'react-native';
 import {Button, RadioButton} from 'react-native-paper';
 
-// import { createStackNavigator } from '@react-navigation/stack';
-
+//icons
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+// redux
+import {useSelector} from 'react-redux';
 
 const AttendanceScreen2 = ({navigation}) => {
   const [value, setValue] = useState(null);
@@ -26,7 +28,6 @@ const AttendanceScreen2 = ({navigation}) => {
     {label: 'Class3', key: 'Class3'},
   ]);
 
-  // const [open2, setOpen2] = useState(null);
   const [batch, setbatch] = useState(null);
   const [batches, setbatches] = useState([
     {label: 'Batch1', key: 'Batch1'},
@@ -34,7 +35,6 @@ const AttendanceScreen2 = ({navigation}) => {
     {label: 'Batch3', key: 'Batch3'},
   ]);
 
-  // const [open3, setOpen3] = useState(null);
   const [subject, setsubject] = useState(null);
   const [subjects, setsubjects] = useState([
     {label: 'Subject1', key: 'Subject1'},
@@ -44,6 +44,9 @@ const AttendanceScreen2 = ({navigation}) => {
 
   const [nameMethod, setNameMethod] = useState('Name');
 
+  //theming
+  const institute = useSelector(state => state.institute);
+
   return (
     <View
       style={{
@@ -51,7 +54,11 @@ const AttendanceScreen2 = ({navigation}) => {
         flex: 1,
         // justifyContent: 'flex-start',
       }}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('AttendanceScreen1');
@@ -445,7 +452,6 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   card: {

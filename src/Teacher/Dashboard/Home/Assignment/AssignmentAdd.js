@@ -23,10 +23,16 @@ import getCourse from '../../../../services/helpers/getList/getCourse';
 import getSubject from '../../../../services/helpers/getList/getSubject';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function AddAssignments({navigation}) {
   const [Chapter, setChapter] = useState("Chapter's name");
   const [Topic, setTopic] = useState('Topic:');
   const [Discription, setDiscription] = useState('Discription:');
+
+  //theming
+  const institute = useSelector(state => state.institute);
 
   // data array
   const [batches, setBatches] = useState([]);
@@ -94,7 +100,11 @@ export default function AddAssignments({navigation}) {
 
   return (
     <View style={{backgroundColor: 'white', flex: 1}}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity onPress={() => navigation.navigate('Assignment Due')}>
           <AntDesign
             size={24}
@@ -251,7 +261,6 @@ export default function AddAssignments({navigation}) {
 const styles = StyleSheet.create({
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
 });

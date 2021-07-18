@@ -21,6 +21,8 @@ import timeTableBuilder from '../../../../services/helpers/extract/teacherTtDayW
 
 export default function OnlineLecture({navigation}) {
   const userInfo = useSelector(state => state.userInfo);
+  const institute = useSelector(state => state.institute);
+
   const [timeTable, setTimeTable] = useState([]);
 
   useEffect(async () => {
@@ -40,7 +42,11 @@ export default function OnlineLecture({navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Home');
@@ -123,7 +129,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 69,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
   shadow: {

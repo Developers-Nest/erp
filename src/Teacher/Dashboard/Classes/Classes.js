@@ -1,10 +1,7 @@
 import * as React from 'react';
 
 import {TextInput} from 'react-native-paper';
-import Icon5 from 'react-native-vector-icons/AntDesign';
 
-import IconPhysics1 from 'react-native-vector-icons/Entypo';
-import IconPhysics2 from 'react-native-vector-icons/Ionicons';
 import IconEnglish2 from 'react-native-vector-icons/Feather';
 import IconEnglish1 from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -34,25 +31,8 @@ const Stack = createStackNavigator();
 
 export default function Classes() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Lectures"
-        component={LecturesScreen}
-        options={({navigation, route}) => ({
-          headerTitle: 'Lectures',
-          // headerStyle: {
-          //   backgroundColor: '#f4511e',
-          // },
-          headerRight: () => (
-            <Icon
-              name="add-circle"
-              size={30}
-              color="#900"
-              onPress={() => navigation.navigate('GoLive')}
-            />
-          ),
-        })}
-      />
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Lectures" component={LecturesScreen} />
       <Stack.Screen name="GoLive" component={GoLiveScreen} />
     </Stack.Navigator>
   );

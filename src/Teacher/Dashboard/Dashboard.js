@@ -43,7 +43,7 @@ const getTabBarVisibility = route => {
   return true;
 };
 
-export default function App() {
+export default function Dashboard() {
   let dispatch = useDispatch();
   const [themeColor, setThemeColor] = useState('rgba(249, 249, 249, 1)');
 
