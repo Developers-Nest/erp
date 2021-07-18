@@ -355,65 +355,92 @@ function DrawerContent(props) {
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
         <DrawerItem
-          label={'Home'}
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Home</Text>
+          )}
           onPress={() => props.navigation.navigate('Home')}
         />
         <DrawerItem
-          label={'Content Library'}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Content Library</Text>
+          )}
           onPress={() => props.navigation.navigate('Content Library')}
         />
         <DrawerItem
-          label={'Attendance'}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Attendance</Text>
+          )}
           onPress={() => props.navigation.navigate('AttendanceStack')}
         />
         <DrawerItem
-          label={'Assignment'}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Assignment</Text>
+          )}
           onPress={() => props.navigation.navigate('Assignment')}
         />
         <DrawerItem
-          label={'Lesson Plan'}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Lesson Plan</Text>
+          )}
           onPress={() => props.navigation.navigate('Lesson Plan')}
         />
         <DrawerItem
-          label={'Books'}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Books</Text>
+          )}
           onPress={() => props.navigation.navigate('Books')}
         />
         <DrawerItem
-          label={'Feedback'}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Feedback</Text>
+          )}
           onPress={() => props.navigation.navigate('Feedback')}
         />
         <DrawerItem
-          label={'Transport'}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Transport</Text>
+          )}
           onPress={() => props.navigation.navigate('Transport')}
         />
         <DrawerItem
-          label={'CCE Marks'}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>CCE Marks</Text>
+          )}
           onPress={() => props.navigation.navigate('Cce Marks')}
-          style={styles.drawer_item}
         />
         <DrawerItem
-          label={'Recorded Classes'}
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Recorded Classes</Text>
+          )}
           onPress={() => props.navigation.navigate('Recorded Classes')}
         />
         <DrawerItem
-          label={'Report'}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Report</Text>
+          )}
           onPress={() => props.navigation.navigate('Report')}
         />
       </DrawerContentScrollView>
       <Drawer.Section>
-        <TouchableOpacity
-          style={{backgroundColor: 'red'}}
-          onPress={handleLogout}>
-          <Text
-            style={{
-              fontFamily: 'Poppins-Regular',
-              fontStyle: 'normal',
-              fontWeight: '600',
-              fontSize: 14,
-            }}>
-            Logout
-          </Text>
-        </TouchableOpacity>
+        <Button
+          style={{
+            fontFamily: 'Poppins-Regular',
+            fontStyle: 'normal',
+            fontWeight: '600',
+            fontSize: 14,
+            width: 100,
+            backgroundColor: 'red',
+            margin: 20,
+            marginLeft: 40,
+            backgroundColor: '#B04305',
+            borderRadius: 6,
+          }}
+          onPress={handleLogout}
+          mode="contained">
+          Logout
+        </Button>
       </Drawer.Section>
     </View>
   );
@@ -632,6 +659,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: '600',
-    fontSize: 30,
+    fontSize: 16,
+    paddingLeft: 30,
+    padding: 0,
+    margin: 0,
   },
+  item: {padding: 0, margin: 0},
 });
