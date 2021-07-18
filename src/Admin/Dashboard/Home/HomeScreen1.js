@@ -415,6 +415,7 @@ const styles = StyleSheet.create({
       height: 59,
       fontSize: 15,
       fontFamily: 'Poppins-Regular',
+      fontWeight: 'bold',
       paddingTop: 15,
       paddingHorizontal: 10,
       width: '90%',
