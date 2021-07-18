@@ -41,7 +41,7 @@ import Report from './Report/Report';
 //navigations from home screen
 import Notification from './Home/Notification';
 import Notes from './Home/Notes';
-import Timetable from './Home/Timetable';
+
 
 // redux
 // import { useSelector } from 'react-redux';
@@ -136,7 +136,7 @@ const Home_Route = () => {
         component={Notes}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Timetable" component={Timetable} />
+
     </Stack.Navigator>
   );
 };
