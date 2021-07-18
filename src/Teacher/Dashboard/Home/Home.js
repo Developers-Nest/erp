@@ -353,85 +353,68 @@ function DrawerContent(props) {
 
   return (
     <View style={{flex: 1}}>
-      <Drawer.Section>
-        <Drawer.Item
+      <DrawerContentScrollView {...props}>
+        <DrawerItem
           label={'Home'}
-          style={{fontWeight: '100'}}
           onPress={() => props.navigation.navigate('Home')}
         />
-        <Drawer.Item
+        <DrawerItem
           label={'Content Library'}
           onPress={() => props.navigation.navigate('Content Library')}
         />
-        <Drawer.Item
+        <DrawerItem
           label={'Attendance'}
           onPress={() => props.navigation.navigate('AttendanceStack')}
         />
-        <Drawer.Item
+        <DrawerItem
           label={'Assignment'}
           onPress={() => props.navigation.navigate('Assignment')}
         />
-        <Drawer.Item
+        <DrawerItem
           label={'Lesson Plan'}
           onPress={() => props.navigation.navigate('Lesson Plan')}
         />
-        <Drawer.Item
+        <DrawerItem
           label={'Books'}
           onPress={() => props.navigation.navigate('Books')}
         />
-        <Drawer.Item
+        <DrawerItem
           label={'Feedback'}
           onPress={() => props.navigation.navigate('Feedback')}
         />
-        <Drawer.Item
+        <DrawerItem
           label={'Transport'}
           onPress={() => props.navigation.navigate('Transport')}
         />
-        <Drawer.Item
+        <DrawerItem
           label={'CCE Marks'}
           onPress={() => props.navigation.navigate('Cce Marks')}
+          style={styles.drawer_item}
         />
-        <Drawer.Item
+        <DrawerItem
           label={'Recorded Classes'}
           onPress={() => props.navigation.navigate('Recorded Classes')}
         />
-        <Drawer.Item
+        <DrawerItem
           label={'Report'}
           onPress={() => props.navigation.navigate('Report')}
         />
-      </Drawer.Section>
-      <DrawerContentScrollView
-        contentContainerStyle={{
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          flex: 1,
-          justifyContent: 'flex-end',
-        }}>
-        <TouchableOpacity>
-          <View
-            style={{
-              paddingHorizontal: 10,
-              paddingVertical: 10,
-
-              backgroundColor: '#B04305',
-              borderRadius: 6,
-              marginLeft: 20,
-              marginBottom: 34,
-            }}>
-            <Text
-              style={{
-                fontFamily: 'Poppins-Regular',
-                fontStyle: 'normal',
-                fontWeight: '600',
-                fontSize: 14,
-                color: '#FFFFFF',
-              }}
-              onPress={handleLogout}>
-              Logout
-            </Text>
-          </View>
-        </TouchableOpacity>
       </DrawerContentScrollView>
+      <Drawer.Section>
+        <TouchableOpacity
+          style={{backgroundColor: 'red'}}
+          onPress={handleLogout}>
+          <Text
+            style={{
+              fontFamily: 'Poppins-Regular',
+              fontStyle: 'normal',
+              fontWeight: '600',
+              fontSize: 14,
+            }}>
+            Logout
+          </Text>
+        </TouchableOpacity>
+      </Drawer.Section>
     </View>
   );
 }
@@ -443,10 +426,12 @@ export default function Route() {
     <DrawerNav.Navigator
       initialRouteName="Home"
       drawerContent={props => <DrawerContent {...props} />}
-      drawerStyle={{
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        // marginTop: 69,
-      }}>
+      drawerStyle={
+        {
+          // backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          // marginTop: 69,
+        }
+      }>
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="AttendanceStack" component={AttendanceStack} />
@@ -641,5 +626,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 20,
     paddingTop: 30,
+  },
+  drawer_item: {
+    lineHeight: 24,
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 30,
   },
 });
