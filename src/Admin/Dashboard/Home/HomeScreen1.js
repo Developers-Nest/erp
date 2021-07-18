@@ -77,7 +77,8 @@ const HomeScreen1 = () => {
         1st row started */}
           <TouchableOpacity
             style={styles.section}
-            onPress={() => navigation.navigate('Notification')}>
+   
+            >
             <View style={{alignItems: 'center'}}>
               <IonIcon size={36.83} color="#0066DA" name="library-outline" />
 
