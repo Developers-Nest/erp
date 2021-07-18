@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ModalSelector from 'react-native-modal-selector';
@@ -10,283 +10,345 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
-import {Button, RadioButton} from 'react-native-paper';
+import { Button, RadioButton } from 'react-native-paper';
 
 //icons
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const AttendanceScreen2 = ({navigation}) => {
-  const [value, setValue] = useState(null);
-  const [course, setcourse] = useState(null);
-  const [courses, setcourses] = useState([
-    {label: 'Class1', key: 'Class1'},
-    {label: 'Class2', key: 'Class2'},
-    {label: 'Class3', key: 'Class3'},
-  ]);
+// helpers
+import getBatch from '../../../../services/helpers/getList/getBatch';
+import getSubject from '../../../../services/helpers/getList/getSubject';
+import getCourse from '../../../../services/helpers/getList/getCourse';
+import getMonth from '../../../../services/helpers/getList/getMonth';
+import read from '../../../../services/localstorage/read';
+import get from '../../../../services/helpers/request/get';
+import patch from '../../../../services/helpers/request/patch';
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-  const [batch, setbatch] = useState(null);
-  const [batches, setbatches] = useState([
-    {label: 'Batch1', key: 'Batch1'},
-    {label: 'Batch2', key: 'Batch2'},
-    {label: 'Batch3', key: 'Batch3'},
-  ]);
+const AttendanceScreen2 = ({ navigation }) => {
 
-  const [subject, setsubject] = useState(null);
-  const [subjects, setsubjects] = useState([
-    {label: 'Subject1', key: 'Subject1'},
-    {label: 'Subject2', key: 'Subject2'},
-    {label: 'Subject3', key: 'Subject3'},
-  ]);
+  // current year and month
+  var d = new Date();
+  let year = d.getUTCFullYear()
+  let month = d.getUTCMonth()
+
+
+  // selected dropdown values
+  const [course, setCourse] = useState(null);
+  const [batch, setBatch] = useState(null);
+  const [subject, setSubject] = useState(null);
+  const [monthSelect, setMonthSelect] = useState(month)
+
+  // dropdown values
+  const [batches, setBatches] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [months, setMonths] = useState(getMonth());
+
+  // handle month model open
+  const [openMonthSel, setOpenMonthSel] = useState(false)
+
+  // attendance list
+  const [studentList, setStudentList] = useState([])
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
 
   const [nameMethod, setNameMethod] = useState('Name');
 
   //theming
   const institute = useSelector(state => state.institute);
 
+  // on load of the screen
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      let cour = await getCourse();
+      setCourses(cour);
+    } catch (err) {
+      alert('Cannot fetch courses!!');
+    }
+    hideLoadingScreen();
+  }, []);
+
+  // get list of batches
+  const fetchBatches = async sc => {
+    showLoadingScreen();
+    setCourse(sc);
+    try {
+      let bat = await getBatch(sc);
+      setBatches(bat);
+    } catch (err) {
+      alert('Cannot fetch Batches!!');
+    }
+    hideLoadingScreen();
+  };
+
+  // get list of subjects
+  const fetchSubjects = async (sb) => {
+    showLoadingScreen();
+    setBatch(sb);
+    try {
+      let sub = await getSubject(course, sb);
+      setSubjects(sub);
+    } catch (err) {
+      alert('Cannot fetch Subjects!!');
+    }
+    hideLoadingScreen();
+  };
+
+  // fetch list
+  const fetchList = async (ss, sm=month) => {
+    showLoadingScreen()
+    setSubject(ss)
+    try {
+      let token = await read('token')
+      let slug = `/student/attendance/monthly/?course=${course}&batch=${batch}&year=${year}&month=${sm}&subject=${ss}`
+      let response = await get(slug, token)
+      if(response.length == 0){
+        alert('Inactive Month!!')
+        hideLoadingScreen()
+        return
+      } 
+      setStudentList(response[0].students)
+    } catch (err) {
+      alert('Cannot fetch List')
+    }
+    hideLoadingScreen()
+  }
+
+  // set month from dropdown
+  const fetchMonthAtt = async (sm) => {
+    try {
+      await fetchList(subject, sm)
+    } catch (err) {
+      alert('Cannot fetch !!')
+    }
+
+  }
+
+  const getAttPer = (days) => {
+    let totalPresent = 0
+    let totalWorking = days.length
+    days.map((day) => {
+      if (day.present === "present") totalPresent += 1
+    })
+    let per = (totalPresent / totalWorking) * 100
+    return per.toFixed(2)
+  }
+
+
+
   return (
-    <View
-      style={{
-        backgroundColor: 'rgba(249, 249, 249, 1)',
-        flex: 1,
-        // justifyContent: 'flex-start',
-      }}>
+    <ScrollView>
       <View
         style={{
-          backgroundColor: institute ? institute.themeColor : 'black',
-          ...styles.header,
+          backgroundColor: 'rgba(249, 249, 249, 1)',
+          flex: 1,
+          // justifyContent: 'flex-start',
         }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('AttendanceScreen1');
-          }}>
-          <Icon
-            size={24}
-            color="white"
-            name="left"
-            style={{
-              alignSelf: 'center',
-              fontSize: 25,
-              color: 'white',
-              paddingLeft: 20,
-              paddingTop: 20,
-            }}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontStyle: 'normal',
-            fontSize: 28,
-            fontWeight: '600',
-            alignSelf: 'center',
-            paddingLeft: 30,
-            color: 'white',
-            fontFamily: 'NunitoSans-Regular',
-          }}>
-          Attendance
-        </Text>
-      </View>
-
-      {/* open list part */}
-      <View style={{padding: 15}}>
+        {loadingScreen}
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 10,
-            alignContent: 'flex-start',
-            width: '99%',
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
           }}>
-          <ModalSelector
-            data={courses}
-            initValue="Class1"
-            onChange={option => {
-              // setclass(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-          <ModalSelector
-            data={batches}
-            initValue="Batch1"
-            onChange={option => {
-              // setbatch(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-          <ModalSelector
-            data={subjects}
-            initValue="Subject1"
-            onChange={option => {
-              // setsubject(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-        </View>
-        <ScrollView>
-          <AttendancePart2 />
-        </ScrollView>
-      </View>
-      <View style={{padding: 7}} />
-
-      {/* close list part */}
-    </View>
-  );
-};
-
-const AttendancePart2 = () => {
-  const [nameMethod, setNameMethod] = useState('Name');
-
-  return (
-    <View style={{marginTop: 6}}>
-      <View style={{padding: 5, justifyContent: 'center'}} />
-      {/* open search */}
-      <View
-        style={{
-          marginLeft: 5,
-          justifyContent: 'space-around',
-          width: '95%',
-          flexDirection: 'row',
-          ...styles.shadow,
-        }}>
-        <FontAwesome5
-          name="search"
-          style={{
-            alignSelf: 'center',
-            fontSize: 11,
-            color: '#6A6A80',
-          }}
-        />
-        <TextInput
-          style={{width: '70%', ...styles.text_input}}
-          placeholder="Enter student's name"
-        />
-        <TouchableOpacity
-          style={{
-            alignSelf: 'center',
-            flexDirection: 'column',
-          }}>
-          <FontAwesome5
-            name="calendar"
-            style={{
-              alignSelf: 'center',
-              // paddingRight:20,
-              // marginRight:20,
-              fontSize: 20,
-              color: '#6A6A80',
-            }}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('AttendanceScreen1');
+            }}>
+            <Icon
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
+            />
+          </TouchableOpacity>
           <Text
             style={{
-              fontFamily: 'Poppins-Medium',
-              fontSize: 12,
-              color: '#6A6A80',
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+              fontFamily: 'NunitoSans-Regular',
             }}>
-            This Month
+            Attendance
           </Text>
-        </TouchableOpacity>
+        </View>
+
+        {/* open list part */}
+        <View style={{ padding: 15 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginTop: 10,
+              alignContent: 'flex-start',
+              width: '99%',
+            }}>
+            <ModalSelector
+              data={courses}
+              initValue="Course"
+              onChange={option => {
+                fetchBatches(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
+            <ModalSelector
+              data={batches}
+              initValue="Batch"
+              onChange={option => {
+                fetchSubjects(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
+            <ModalSelector
+              data={subjects}
+              initValue="Subject"
+              onChange={option => {
+                fetchList(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
+          </View>
+          <ScrollView>
+            <View style={{ marginTop: 6 }}>
+              <View style={{ padding: 5, justifyContent: 'center' }} />
+              {/* open search */}
+              <View
+                style={{
+                  marginLeft: 5,
+                  justifyContent: 'space-around',
+                  width: '95%',
+                  flexDirection: 'row',
+                  ...styles.shadow,
+                }}>
+                <FontAwesome5
+                  name="search"
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 11,
+                    color: '#6A6A80',
+                  }}
+                />
+                <TextInput
+                  style={{ width: '70%', ...styles.text_input }}
+                  placeholder="Enter student's name"
+                />
+
+                <ModalSelector
+                  data={months}
+                  initValue={
+                    <View
+                      style={{
+                        alignSelf: 'center',
+                        flexDirection: 'column',
+                      }}>
+                      <FontAwesome5
+                        name="calendar"
+                        style={{
+                          alignSelf: 'center',
+                          // paddingRight:20,
+                          // marginRight:20,
+                          fontSize: 20,
+                          color: '#6A6A80',
+                        }}
+                      />
+                      <Text
+                        style={{
+                          fontFamily: 'Poppins-Medium',
+                          fontSize: 12,
+                          color: '#6A6A80',
+                        }}>
+                        This Month
+                      </Text>
+                    </View>
+                  }
+                  onChange={option => {
+                    fetchMonthAtt(option.key)
+                  }}
+                  visible={openMonthSel}
+                  style={{}}
+                  initValueTextStyle={styles.SelectedValueSmall}
+                  selectTextStyle={styles.SelectedValueSmall}
+                />
+
+
+
+              </View>
+
+              <View style={{ padding: 10 }} />
+
+              {
+                studentList && studentList.map((st) => (
+                  <View style={styles.section} key={st._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels2}>
+                        <TouchableOpacity
+                          style={styles.differentusers}
+                          onPress={() => {
+                            setNameMethod('Name');
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 22,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-regular',
+                            }}>
+                            {' '}
+                            {st.studentId ? st.studentId.firstName : 'Not Found'}
+                          </Text>
+
+                          <Text
+                            style={{
+                              fontSize: 22,
+                              paddingTop: 20,
+                              color: '#000000',
+                              fontFamily: 'Poppins-regular',
+                            }}>
+                            {getAttPer(st.days)} %
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              marginLeft: 5,
+                              color: '#6A6A80',
+                              fontFamily: 'Poppins-regular',
+                            }}>
+                            {''} Admission No: {st.studentAdmissionNumber}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                ))}
+
+              {/* Cards end */}
+            </View>
+          </ScrollView>
+        </View>
+        <View style={{ padding: 7 }} />
+        {/* close list part */}
       </View>
-
-      <View style={{padding: 10}} />
-
-      {/* starting of Card loop-section,scroll for more number of cards */}
-      <ScrollView>
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels2}>
-              <TouchableOpacity
-                style={styles.differentusers}
-                onPress={() => {
-                  setNameMethod('Name');
-                }}>
-                <Text
-                  style={{
-                    fontSize: 22,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-regular',
-                  }}>
-                  {' '}
-                  Balram
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 22,
-                    paddingTop: 20,
-                    color: '#000000',
-                    fontFamily: 'Poppins-regular',
-                  }}>
-                  78%
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    marginLeft: 5,
-                    color: '#6A6A80',
-                    fontFamily: 'Poppins-regular',
-                  }}>
-                  {''} Roll No.
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels2}>
-              <TouchableOpacity
-                style={styles.differentusers}
-                onPress={() => {
-                  setNameMethod('Name');
-                }}>
-                <Text
-                  style={{
-                    fontSize: 22,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-regular',
-                  }}>
-                  {' '}
-                  Balram
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 22,
-                    paddingTop: 20,
-                    color: '#000000',
-                    fontFamily: 'Poppins-regular',
-                  }}>
-                  78%
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    marginLeft: 5,
-                    color: '#6A6A80',
-                    fontFamily: 'Poppins-regular',
-                  }}>
-                  {''} Roll No.
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-      {/* Cards end */}
-    </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -370,7 +432,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
@@ -399,7 +461,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -427,7 +489,7 @@ const styles = StyleSheet.create({
   },
   shadow2: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -456,7 +518,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -471,7 +533,7 @@ const styles = StyleSheet.create({
     minWidth: 110,
     elevation: 3,
   },
-  card_title: {fontSize: 18},
+  card_title: { fontSize: 18 },
   card_marks: {
     justifyContent: 'center',
     backgroundColor: ' rgba(88, 99, 109, 1)',
