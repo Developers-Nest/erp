@@ -39,8 +39,7 @@ import CceMarks from './CCEMarks/CCEmarks';
 import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
 //navigations from home screen
-import Notification from './Home/Notification';
-import Notes from './Home/Notes';
+
 
 
 // redux
@@ -95,7 +94,7 @@ const Home_Route = () => {
           headerRight: () => (
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('Notification');
+   
               }}>
               <FontAwesome5
                 name="bell"
@@ -126,16 +125,7 @@ const Home_Route = () => {
           ),
         })}
       />
-      <Stack.Screen
-        name="Notification"
-        component={Notification}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Notes"
-        component={Notes}
-        options={{ headerShown: false }}
-      />
+    
 
     </Stack.Navigator>
   );
