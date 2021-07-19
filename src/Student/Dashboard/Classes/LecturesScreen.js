@@ -1,15 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import {Linking} from 'react-native';
+import React, { useState, useEffect } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import Icon from 'react-native-vector-icons/Foundation';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
-import IconPhysics2 from 'react-native-vector-icons/Ionicons';
 import IconEnglish2 from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+// icons (if required)
+import Icon from 'react-native-vector-icons/Foundation';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+import IconPhysics2 from 'react-native-vector-icons/Ionicons';
 import IconBio1 from 'react-native-vector-icons/FontAwesome5';
 import IconBio2 from 'react-native-vector-icons/FontAwesome5';
+
+// loading screen
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen'
 
 import {
   StyleSheet,
@@ -17,19 +20,23 @@ import {
   View,
   ScrollView,
   TextInput,
-  ImageBackground,
-  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Linking
 } from 'react-native';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // helpers
 import get from '../../../services/helpers/request/get';
 import read from '../../../services/localstorage/read';
+
+let parseDate = myDate => {
+  let d = new Date(myDate);
+  return d.toString().slice(0, 15);
+};
 
 export default function LecturesScreen() {
   const [showContent, setShowContent] = React.useState('Live');
@@ -68,7 +75,7 @@ export default function LecturesScreen() {
             />
 
             <TextInput
-              style={{width: '80%', ...styles.text_input}}
+              style={{ width: '80%', ...styles.text_input }}
               placeholder="Enter subject or batch name"
             />
             <TouchableOpacity
@@ -126,7 +133,10 @@ function Live() {
   const [LiveClasses, setLiveClasses] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
 
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
   useEffect(async () => {
+    setLoadingScreen()
     try {
       let slug = `/liveclass/${userInfo.course}/${userInfo.batch}`;
       let token = await read('token');
@@ -136,10 +146,12 @@ function Live() {
     } catch (err) {
       alert('Cannot fetch your Live Classes !!\n' + err);
     }
+    hideLoadingScreen()
   }, []);
 
   return (
     <View style={styles.container}>
+      {loadingScreen}
       <ScrollView>
         <View
           style={{
@@ -170,18 +182,18 @@ function Live() {
                         size={27}
                         color="rgba(25, 40, 57, 0.63)"
                         name="alpha-a"
-                        style={{paddingLeft: 7}}
+                        style={{ paddingLeft: 7 }}
                       />
                     </View>
 
                     <View style={styles.differentusers}>
-                      <Text style={styles.teacher}>{LiveClass.teacher}</Text>
-                      <View style={{flexDirection: 'column'}}>
+                      <Text style={styles.teacher}>{LiveClass.date ? parseDate(LiveClass.date) : null}</Text>
+                      <View style={{ flexDirection: 'column' }}>
                         <IconEnglish2
                           size={24}
                           color="#B04305"
                           name="radio"
-                          style={{paddingLeft: 7}}
+                          style={{ paddingLeft: 7 }}
                         />
                         <Text
                           style={{
@@ -208,12 +220,10 @@ function Recorded() {
   const [RecordedClasses, setRecordedClasses] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
 
-  let parseDate = myDate => {
-    let d = new Date(myDate);
-    return d.toString().slice(0, 15);
-  };
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
 
   useEffect(async () => {
+    setLoadingScreen()
     try {
       let slug = `/record/${userInfo.course}/${userInfo.batch}`;
       let token = await read('token');
@@ -223,10 +233,12 @@ function Recorded() {
     } catch (err) {
       alert('Cannot fetch your Live Classes !!\n' + err);
     }
+    hideLoadingScreen()
   }, []);
 
   return (
     <View style={styles.container}>
+      {loadingScreen}
       <ScrollView>
         <View
           style={{
@@ -257,20 +269,20 @@ function Recorded() {
                         size={27}
                         color="rgba(25, 40, 57, 0.63)"
                         name="alpha-a"
-                        style={{paddingLeft: 7}}
+                        style={{ paddingLeft: 7 }}
                       />
                     </View>
 
                     <View style={styles.differentusers}>
                       <Text style={styles.teacher}>
-                        {RecordedClass.teacher}
+                        {parseDate(RecordedClass.date)}
                       </Text>
-                      <View style={{flexDirection: 'column'}}>
+                      <View style={{ flexDirection: 'column' }}>
                         <IconEnglish2
                           size={24}
                           color="#B04305"
                           name="radio"
-                          style={{paddingLeft: 7}}
+                          style={{ paddingLeft: 7 }}
                         />
                         <Text
                           style={{
@@ -278,7 +290,7 @@ function Recorded() {
                             color: 'rgba(25, 40, 57, 0.9)',
                             fontFamily: 'Poppins-Medium',
                           }}>
-                          {parseDate(RecordedClass.date)}
+
                         </Text>
                       </View>
                     </View>
@@ -306,7 +318,7 @@ const styles = StyleSheet.create({
 
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
@@ -422,7 +434,7 @@ const styles = StyleSheet.create({
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
