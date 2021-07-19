@@ -29,7 +29,7 @@ import {Searchbar, Button, Appbar} from 'react-native-paper';
 import OccurenceEdit from './OccurenceEdit';
 import Occurence2 from './Occurence2';
 
-export default function Occurence({nav}) {
+export default function Occurence({navigation}) {
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -112,7 +112,7 @@ export default function Occurence({nav}) {
       <View style={{flex: 1}}>
         <Appbar>
           <Appbar.BackAction 
-        //   onPress={() => navigation.navigate('Home')} 
+          onPress={() => navigation.goBack()} 
           />
           <Appbar.Content title="Occurence Register" />
           <Appbar.Action icon="plus-circle-outline" />
