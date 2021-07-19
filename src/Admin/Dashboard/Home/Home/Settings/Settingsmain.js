@@ -6,7 +6,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 //dropdown
 import ModalSelector from 'react-native-modal-selector';
 //navigate
-import AddVisitors from './Addvisitors';
+import AddVisitors from './AddVisitors';
 
 import {
   StyleSheet,

@@ -22,7 +22,7 @@ import {
 } from 'react-native-paper';
 
 import Settingsmain from './Settings/Settingsmain';
-import AddVisitors from './Settings/Addvisitors';
+import AddVisitors from './Settings/AddVisitors';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
@@ -32,8 +32,6 @@ export default function Settings() {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="SettingUsers" component={Settingsmain} />
-      
-
       <Stack.Screen name="AddVisitors" component={AddVisitors} />
     </Stack.Navigator>
   );
