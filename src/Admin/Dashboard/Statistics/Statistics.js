@@ -14,6 +14,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {createStackNavigator} from '@react-navigation/stack';
 
 import ExamReport from './ExamReport/ExamReport';
+import Attendance from '../Home/Attendance/Attendance.js';
 const Statistics = ({navigation}) => {
   return (
     <View style={styles.container}>
@@ -52,9 +53,14 @@ const Statistics = ({navigation}) => {
       <ScrollView>
         <View style={{alignItems: 'center'}}>
           <Text style={styles.heading}>Attendance</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={() => {
+            // console.log("att");
+            navigation.navigate('Attendance');
+          }}>
             <Image
               style={styles.image}
+              
               source={{
                 uri: 'https://images.unsplash.com/photo-1496450681664-3df85efbd29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=750&q=80',
               }}
@@ -63,6 +69,7 @@ const Statistics = ({navigation}) => {
           <Text style={styles.heading}>Reports</Text>
           <TouchableOpacity
             onPress={() => {
+              // console.log("report")
               navigation.navigate('Exam Report');
             }}>
             <Image
@@ -85,6 +92,7 @@ export default function Statistics_Routes() {
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Statistics" component={Statistics} />
       <Stack.Screen name="Exam Report" component={ExamReport} />
+      <Stack.Screen name="Attendance" component={Attendance} />
     </Stack.Navigator>
   );
 }

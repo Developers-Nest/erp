@@ -148,7 +148,7 @@ const AttendanceScreen1 = ({navigation}) => {
   // save list
   const handleSaveList = async () => {
     try {
-      let slug = `/admin/attendance/${attendanceId}`;
+      let slug = `/student/attendance/${attendanceId}`;
       console.log('Att slug ', slug);
       let token = await read('token');
       let list = [];

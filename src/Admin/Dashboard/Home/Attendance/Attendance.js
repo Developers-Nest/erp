@@ -28,646 +28,648 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AttendanceScreen1 from './AttendanceScreen1'
+import AttendanceScreen2 from './AttendanceScreen2'
 
 const Stack = createStackNavigator();
 
 export default function Attendance() {
   return (
-    <Stack.Navigator headerMode="none">
+    <Stack.Navigator defa headerMode="none">
       <Stack.Screen name="AttendanceScreen1" component={AttendanceScreen1} />
       <Stack.Screen name="AttendanceScreen2" component={AttendanceScreen2} />
     </Stack.Navigator>
   );
 }
 
-const AttendanceScreen1 = ({ navigation }) => {
-  // const [open, setOpen] = useState(null);
-  // const [value, setValue] = useState(null);
-  // const [items, setItems] = useState([
-  //   { label: 'Final Reports', value: 'Final Reports' },
-  //   { label: 'Mid Term', value: 'Mid Term' },
-  // ]);
+// const AttendanceScreen1 = ({ navigation }) => {
+//   // const [open, setOpen] = useState(null);
+//   // const [value, setValue] = useState(null);
+//   // const [items, setItems] = useState([
+//   //   { label: 'Final Reports', value: 'Final Reports' },
+//   //   { label: 'Mid Term', value: 'Mid Term' },
+//   // ]);
 
-  // const [open1, setOpen1] = useState(null);
-  // const [value1, setValue1] = useState(null);
-  // const [items1, setItems1] = useState([
-  //   { label: 'Class1', value: 'Class1' },
-  //   { label: 'Class2', value: 'Class2' },
-  //   { label: 'Class3', value: 'Class3' },
-  // ]);
+//   // const [open1, setOpen1] = useState(null);
+//   // const [value1, setValue1] = useState(null);
+//   // const [items1, setItems1] = useState([
+//   //   { label: 'Class1', value: 'Class1' },
+//   //   { label: 'Class2', value: 'Class2' },
+//   //   { label: 'Class3', value: 'Class3' },
+//   // ]);
 
-  // const [open2, setOpen2] = useState(null);
-  // const [value2, setValue2] = useState(null);
-  // const [items2, setItems2] = useState([
-  //   { label: 'Batch1', value: 'Batch1' },
-  //   { label: 'Batch2', value: 'Batch2' },
-  //   { label: 'Batch3', value: 'Batch3' },
-  // ]);
+//   // const [open2, setOpen2] = useState(null);
+//   // const [value2, setValue2] = useState(null);
+//   // const [items2, setItems2] = useState([
+//   //   { label: 'Batch1', value: 'Batch1' },
+//   //   { label: 'Batch2', value: 'Batch2' },
+//   //   { label: 'Batch3', value: 'Batch3' },
+//   // ]);
 
-  // const [open3, setOpen3] = useState(null);
-  // const [value3, setValue3] = useState(null);
-  // const [items3, setItems3] = useState([
-  //   { label: 'Subject1', value: 'Subject1' },
-  //   { label: 'Subject2', value: 'Subject2' },
-  //   { label: 'Subject3', value: 'Subject3' },
-  // ]);
-  const [checked, setChecked] = React.useState('first');
+//   // const [open3, setOpen3] = useState(null);
+//   // const [value3, setValue3] = useState(null);
+//   // const [items3, setItems3] = useState([
+//   //   { label: 'Subject1', value: 'Subject1' },
+//   //   { label: 'Subject2', value: 'Subject2' },
+//   //   { label: 'Subject3', value: 'Subject3' },
+//   // ]);
+//   const [checked, setChecked] = React.useState('first');
 
-  const [checked2, setChecked2] = React.useState('');
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Final Reports', key: 'Final Reports'},
-    {label: 'Mid Term', key: 'Mid Term'},
-  ]);
+//   const [checked2, setChecked2] = React.useState('');
+//   const [value, setValue] = useState(null);
+//   const [items, setItems] = useState([
+//     {label: 'Final Reports', key: 'Final Reports'},
+//     {label: 'Mid Term', key: 'Mid Term'},
+//   ]);
 
-  // const [open1, setOpen1] = useState(null);
-  const [className, setclassName] = useState(null);
-  const [classes, setclasses] = useState([
-    {label: 'Class1', key: 'Class1'},
-    {label: 'Class2', key: 'Class2'},
-    {label: 'Class3', key: 'Class3'},
-  ]);
+//   // const [open1, setOpen1] = useState(null);
+//   const [className, setclassName] = useState(null);
+//   const [classes, setclasses] = useState([
+//     {label: 'Class1', key: 'Class1'},
+//     {label: 'Class2', key: 'Class2'},
+//     {label: 'Class3', key: 'Class3'},
+//   ]);
 
-  // const [open2, setOpen2] = useState(null);
-  const [batch, setbatch] = useState(null);
-  const [batches, setbatches] = useState([
-    {label: 'Batch1', key: 'Batch1'},
-    {label: 'Batch2', key: 'Batch2'},
-    {label: 'Batch3', key: 'Batch3'},
-  ]);
+//   // const [open2, setOpen2] = useState(null);
+//   const [batch, setbatch] = useState(null);
+//   const [batches, setbatches] = useState([
+//     {label: 'Batch1', key: 'Batch1'},
+//     {label: 'Batch2', key: 'Batch2'},
+//     {label: 'Batch3', key: 'Batch3'},
+//   ]);
 
-  // const [open3, setOpen3] = useState(null);
-  const [subject, setsubject] = useState(null);
-  const [subjects, setsubjects] = useState([
-    {label: 'Subject1', key: 'Subject1'},
-    {label: 'Subject2', key: 'Subject2'},
-    {label: 'Subject3', key: 'Subject3'},
-  ]);
-
-
-
-
-  return (
-    <View
-      style={{
-        backgroundColor: '#E5E5E5',
-        flex: 1,
-        // justifyContent: 'flex-start',
-      }}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Home');
-          }}>
-          <Icon
-            size={24}
-            color="white"
-            name="left"
-            style={{
-              alignSelf: 'center',
-              fontSize: 25,
-              color: 'white',
-              paddingLeft: 20,
-              paddingTop: 20,
-            }}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontStyle: 'normal',
-            fontSize: 28,
-            fontWeight: '600',
-            alignSelf: 'center',
-            paddingLeft: 30,
-            color: 'white',
-            fontFamily: 'NunitoSans-Regular'
-          }}>
-          Attendance
-        </Text>
-        <View style={{ flex: 1, marginLeft: 20 }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('AttendanceScreen2');
-            }}>
-            <MaterialCommunityIcon
-              size={24}
-              color="white"
-              name="eye"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                paddingLeft: 20,
-                paddingTop: 10,
-              }}
-            />
-          </TouchableOpacity>
-          <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff' }}>{'      '}{'    '}{'   '}View</Text>
-        </View>
-      </View>
-
-
-
-      {/* 
-<AttendanceTakeHeader/> */}
-      {/* open list part */}
+//   // const [open3, setOpen3] = useState(null);
+//   const [subject, setsubject] = useState(null);
+//   const [subjects, setsubjects] = useState([
+//     {label: 'Subject1', key: 'Subject1'},
+//     {label: 'Subject2', key: 'Subject2'},
+//     {label: 'Subject3', key: 'Subject3'},
+//   ]);
 
 
 
 
-
-      <View style={{ padding: 15 }}>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 10,
-            alignContent: 'flex-start',
-            width: '99%'
-          }}>
-          {/* <DropDownPicker
-            zIndex={1000}
-            open={open1}
-            value={value1}
-            items={items1}
-            setOpen={setOpen1}
-            setValue={setValue1}
-            setItems={setItems1}
-            style={styles.shadow}
-            containerStyle={{ width: '30%' }}
-            placeholder="Class"
-          />
-          <DropDownPicker
-            zIndex={1000}
-            defaultIndex={0}
-            open={open2}
-            value={value2}
-            items={items2}
-            setOpen={setOpen2}
-            setValue={setValue2}
-            setItems={setItems2}
-            style={styles.shadow}
-            containerStyle={{ width: '30%' }}
-            placeholder="Batch"
-          />
-          <DropDownPicker
-            zIndex={1000}
-            defaultIndex={0}
-            open={open3}
-            value={value3}
-            items={items3}
-            setOpen={setOpen3}
-            setValue={setValue3}
-            setItems={setItems3}
-            style={{
-              ...styles.shadow,
-            }}
-            containerStyle={{ width: '30%' }}
-            placeholder="Subject"
-          /> */}
-           <ModalSelector
-            data={classes}
-            initValue="Class1"
-            onChange={option => {
-              // setclass(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-          <ModalSelector
-            data={batches}
-            initValue="Batch1"
-            onChange={option => {
-              // setbatch(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-          <ModalSelector
-            data={subjects}
-            initValue="Subject1"
-            onChange={option => {
-              // setsubject(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-
-        </View>
-        <ScrollView>
-        <View style={{ marginTop: 6 }}>
-      <View style={{ padding: 5, justifyContent: 'center' }} />
-
-      {/* open search */}
-      <View
-        style={{
-          //make search and card inline
-          marginLeft: 5,
-          justifyContent: 'space-between',
-          width: '95%',
-          flexDirection: 'row',
-          ...styles.shadow,
-        }}>
-        <FontAwesome5
-          name="search"
-          style={{
-            alignSelf: 'center',
-            fontSize: 11,
-            color: '#6A6A80',
-          }} />
-        <TextInput
-          style={{ width: '80%', ...styles.text_input }}
-          underlineColorAndroid='transparent'
-          placeholder="Enter student's name"
-        />
-        <TouchableOpacity
-          style={{
-            alignSelf: 'center',
-          }}>
-          <FontAwesome5
-            name="filter"
-            style={{
-              alignSelf: 'center',
-              fontSize: 21,
-              color: '#6A6A80',
-            }}
-
-          />
-        </TouchableOpacity>
-      </View>
-
-      <View style={{ padding: 10 }} />
+//   return (
+//     <View
+//       style={{
+//         backgroundColor: '#E5E5E5',
+//         flex: 1,
+//         // justifyContent: 'flex-start',
+//       }}>
+//       <View style={styles.header}>
+//         <TouchableOpacity
+//           onPress={() => {
+//             navigation.navigate('Home');
+//           }}>
+//           <Icon
+//             size={24}
+//             color="white"
+//             name="left"
+//             style={{
+//               alignSelf: 'center',
+//               fontSize: 25,
+//               color: 'white',
+//               paddingLeft: 20,
+//               paddingTop: 20,
+//             }}
+//           />
+//         </TouchableOpacity>
+//         <Text
+//           style={{
+//             fontStyle: 'normal',
+//             fontSize: 28,
+//             fontWeight: '600',
+//             alignSelf: 'center',
+//             paddingLeft: 30,
+//             color: 'white',
+//             fontFamily: 'NunitoSans-Regular'
+//           }}>
+//           Attendance
+//         </Text>
+//         <View style={{ flex: 1, marginLeft: 20 }}>
+//           <TouchableOpacity
+//             onPress={() => {
+//               navigation.navigate('AttendanceScreen2');
+//             }}>
+//             <MaterialCommunityIcon
+//               size={24}
+//               color="white"
+//               name="eye"
+//               style={{
+//                 alignSelf: 'center',
+//                 fontSize: 25,
+//                 color: 'white',
+//                 paddingLeft: 20,
+//                 paddingTop: 10,
+//               }}
+//             />
+//           </TouchableOpacity>
+//           <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff' }}>{'      '}{'    '}{'   '}View</Text>
+//         </View>
+//       </View>
 
 
-      {/* starting of Card loop-section,scroll for more number of cards */}
-      <ScrollView>
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Name</Text>
-                <View style={{marginRight:20}}>
-                <RadioButton
-                  value="first"
-                  status={checked === 'first' ? 'checked' : 'unchecked'}
-                  onPress={() => setChecked('first')}
-                />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{ fontSize: 14, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
-                  {'  '}Roll No.
-                </Text>
 
-                <Text style={{ fontSize: 12, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
-                  21 May,2021
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+//       {/* 
+// <AttendanceTakeHeader/> */}
+//       {/* open list part */}
 
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Name</Text>
-                <View style={{marginRight:20}}>
-                <RadioButton
+
+
+
+
+//       <View style={{ padding: 15 }}>
+
+//         <View
+//           style={{
+//             flexDirection: 'row',
+//             justifyContent: 'space-between',
+//             marginTop: 10,
+//             alignContent: 'flex-start',
+//             width: '99%'
+//           }}>
+//           {/* <DropDownPicker
+//             zIndex={1000}
+//             open={open1}
+//             value={value1}
+//             items={items1}
+//             setOpen={setOpen1}
+//             setValue={setValue1}
+//             setItems={setItems1}
+//             style={styles.shadow}
+//             containerStyle={{ width: '30%' }}
+//             placeholder="Class"
+//           />
+//           <DropDownPicker
+//             zIndex={1000}
+//             defaultIndex={0}
+//             open={open2}
+//             value={value2}
+//             items={items2}
+//             setOpen={setOpen2}
+//             setValue={setValue2}
+//             setItems={setItems2}
+//             style={styles.shadow}
+//             containerStyle={{ width: '30%' }}
+//             placeholder="Batch"
+//           />
+//           <DropDownPicker
+//             zIndex={1000}
+//             defaultIndex={0}
+//             open={open3}
+//             value={value3}
+//             items={items3}
+//             setOpen={setOpen3}
+//             setValue={setValue3}
+//             setItems={setItems3}
+//             style={{
+//               ...styles.shadow,
+//             }}
+//             containerStyle={{ width: '30%' }}
+//             placeholder="Subject"
+//           /> */}
+//            <ModalSelector
+//             data={classes}
+//             initValue="Class1"
+//             onChange={option => {
+//               // setclass(option.key);
+//             }}
+//             style={styles.card}
+//             initValueTextStyle={styles.SelectedValueSmall}
+//             selectTextStyle={styles.SelectedValueSmall}
+//           />
+//           <ModalSelector
+//             data={batches}
+//             initValue="Batch1"
+//             onChange={option => {
+//               // setbatch(option.key);
+//             }}
+//             style={styles.card}
+//             initValueTextStyle={styles.SelectedValueSmall}
+//             selectTextStyle={styles.SelectedValueSmall}
+//           />
+//           <ModalSelector
+//             data={subjects}
+//             initValue="Subject1"
+//             onChange={option => {
+//               // setsubject(option.key);
+//             }}
+//             style={styles.card}
+//             initValueTextStyle={styles.SelectedValueSmall}
+//             selectTextStyle={styles.SelectedValueSmall}
+//           />
+
+//         </View>
+//         <ScrollView>
+//         <View style={{ marginTop: 6 }}>
+//       <View style={{ padding: 5, justifyContent: 'center' }} />
+
+//       {/* open search */}
+//       <View
+//         style={{
+//           //make search and card inline
+//           marginLeft: 5,
+//           justifyContent: 'space-between',
+//           width: '95%',
+//           flexDirection: 'row',
+//           ...styles.shadow,
+//         }}>
+//         <FontAwesome5
+//           name="search"
+//           style={{
+//             alignSelf: 'center',
+//             fontSize: 11,
+//             color: '#6A6A80',
+//           }} />
+//         <TextInput
+//           style={{ width: '80%', ...styles.text_input }}
+//           underlineColorAndroid='transparent'
+//           placeholder="Enter student's name"
+//         />
+//         <TouchableOpacity
+//           style={{
+//             alignSelf: 'center',
+//           }}>
+//           <FontAwesome5
+//             name="filter"
+//             style={{
+//               alignSelf: 'center',
+//               fontSize: 21,
+//               color: '#6A6A80',
+//             }}
+
+//           />
+//         </TouchableOpacity>
+//       </View>
+
+//       <View style={{ padding: 10 }} />
+
+
+//       {/* starting of Card loop-section,scroll for more number of cards */}
+//       <ScrollView>
+//         <View style={styles.section}>
+//           <View style={styles.details}>
+//             <View style={styles.userinhostels}>
+//               <TouchableOpacity style={styles.differentusers}>
+//                 <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Name</Text>
+//                 <View style={{marginRight:20}}>
+//                 <RadioButton
+//                   value="first"
+//                   status={checked === 'first' ? 'checked' : 'unchecked'}
+//                   onPress={() => setChecked('first')}
+//                 />
+//                 </View>
+//               </TouchableOpacity>
+//               <TouchableOpacity style={styles.differentusers}>
+//                 <Text style={{ fontSize: 14, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
+//                   {'  '}Roll No.
+//                 </Text>
+
+//                 <Text style={{ fontSize: 12, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
+//                   21 May,2021
+//                 </Text>
+//               </TouchableOpacity>
+//             </View>
+//           </View>
+//         </View>
+
+//         <View style={styles.section}>
+//           <View style={styles.details}>
+//             <View style={styles.userinhostels}>
+//               <TouchableOpacity style={styles.differentusers}>
+//                 <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Name</Text>
+//                 <View style={{marginRight:20}}>
+//                 <RadioButton
     
-                  value="second"
-                  status={checked2 === 'second' ? 'checked' : 'unchecked'}
-                  onPress={() => setChecked2('second')}
-                />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{ fontSize: 14, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
-                  {'  '}Roll No.
-                </Text>
+//                   value="second"
+//                   status={checked2 === 'second' ? 'checked' : 'unchecked'}
+//                   onPress={() => setChecked2('second')}
+//                 />
+//                 </View>
+//               </TouchableOpacity>
+//               <TouchableOpacity style={styles.differentusers}>
+//                 <Text style={{ fontSize: 14, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
+//                   {'  '}Roll No.
+//                 </Text>
 
-                <Text style={{ fontSize: 12, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
-                  21 May,2021
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-
-      </ScrollView>
-      {/* Cards end */}
-
-    </View>
-        </ScrollView>
-      </View>
+//                 <Text style={{ fontSize: 12, color: '#6A6A80', fontFamily: 'Poppins-Medium' }}>
+//                   21 May,2021
+//                 </Text>
+//               </TouchableOpacity>
+//             </View>
+//           </View>
+//         </View>
 
 
+//       </ScrollView>
+//       {/* Cards end */}
+
+//     </View>
+//         </ScrollView>
+//       </View>
 
 
 
 
-      <View style={{ padding: 7 }} />
-
-      {/* close list part */}
-
-      {/* Cards end */}
-    </View>
-  );
-};
 
 
+//       <View style={{ padding: 7 }} />
 
-const AttendanceScreen2 = ({ navigation }) => {
+//       {/* close list part */}
+
+//       {/* Cards end */}
+//     </View>
+//   );
+// };
+
+
+
+// const AttendanceScreen2 = ({ navigation }) => {
   
-  const [value, setValue] = useState(null);
-  const [className, setclassName] = useState(null);
-  const [classes, setclasses] = useState([
-    {label: 'Class1', key: 'Class1'},
-    {label: 'Class2', key: 'Class2'},
-    {label: 'Class3', key: 'Class3'},
-  ]);
+//   const [value, setValue] = useState(null);
+//   const [className, setclassName] = useState(null);
+//   const [classes, setclasses] = useState([
+//     {label: 'Class1', key: 'Class1'},
+//     {label: 'Class2', key: 'Class2'},
+//     {label: 'Class3', key: 'Class3'},
+//   ]);
 
-  // const [open2, setOpen2] = useState(null);
-  const [batch, setbatch] = useState(null);
-  const [batches, setbatches] = useState([
-    {label: 'Batch1', key: 'Batch1'},
-    {label: 'Batch2', key: 'Batch2'},
-    {label: 'Batch3', key: 'Batch3'},
-  ]);
+//   // const [open2, setOpen2] = useState(null);
+//   const [batch, setbatch] = useState(null);
+//   const [batches, setbatches] = useState([
+//     {label: 'Batch1', key: 'Batch1'},
+//     {label: 'Batch2', key: 'Batch2'},
+//     {label: 'Batch3', key: 'Batch3'},
+//   ]);
 
-  // const [open3, setOpen3] = useState(null);
-  const [subject, setsubject] = useState(null);
-  const [subjects, setsubjects] = useState([
-    {label: 'Subject1', key: 'Subject1'},
-    {label: 'Subject2', key: 'Subject2'},
-    {label: 'Subject3', key: 'Subject3'},
-  ]);
-
-
-
-  const [nameMethod, setNameMethod] = useState('Name');
-
-  return (
-    <View
-      style={{
-        backgroundColor: '#E5E5E5',
-        flex: 1,
-        // justifyContent: 'flex-start',
-      }}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('AttendanceScreen1');
-          }}>
-          <Icon
-            size={24}
-            color="white"
-            name="left"
-            style={{
-              alignSelf: 'center',
-              fontSize: 25,
-              color: 'white',
-              paddingLeft: 20,
-              paddingTop: 20,
-            }}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontStyle: 'normal',
-            fontSize: 28,
-            fontWeight: '600',
-            alignSelf: 'center',
-            paddingLeft: 30,
-            color: 'white',
-            fontFamily: 'NunitoSans-Regular'
-          }}>
-          Attendance
-        </Text>
-
-      </View>
-
-      {/* open list part */}
-      <View style={{ padding: 15 }}>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 10,
-            alignContent: 'flex-start',
-            width: '99%'
-          }}>
-          {/* <DropDownPicker
-            zIndex={1000}
-            open={open1}
-            value={value1}
-            items={items1}
-            setOpen={setOpen1}
-            setValue={setValue1}
-            setItems={setItems1}
-            style={styles.shadow}
-            containerStyle={{ width: '30%' }}
-            placeholder="Class"
-          />
-          <DropDownPicker
-            zIndex={1000}
-            defaultIndex={0}
-            open={open2}
-            value={value2}
-            items={items2}
-            setOpen={setOpen2}
-            setValue={setValue2}
-            setItems={setItems2}
-            style={styles.shadow}
-            containerStyle={{ width: '30%' }}
-            placeholder="Batch"
-          />
-          <DropDownPicker
-            zIndex={1000}
-            defaultIndex={0}
-            open={open3}
-            value={value3}
-            items={items3}
-            setOpen={setOpen3}
-            setValue={setValue3}
-            setItems={setItems3}
-            style={{
-              ...styles.shadow,
-            }}
-            containerStyle={{ width: '30%' }}
-            placeholder="Subject"
-          /> */}
-
-<ModalSelector
-            data={classes}
-            initValue="Class1"
-            onChange={option => {
-              // setclass(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-          <ModalSelector
-            data={batches}
-            initValue="Batch1"
-            onChange={option => {
-              // setbatch(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-          <ModalSelector
-            data={subjects}
-            initValue="Subject1"
-            onChange={option => {
-              // setsubject(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-
-        </View>
-        <ScrollView>
-          {/* {value !== null &&
-            value1 !== null &&
-            value2 !== null &&
-            value3 !== null ? (
-            <AttendancePart2 />
-          ) : (
-            <AttendancePart2 />
-          )} */}
-
-          <AttendancePart2/>
-        </ScrollView>
-      </View>
-      <View style={{ padding: 7 }} />
-
-      {/* close list part */}
-
-    </View>
-  );
-};
+//   // const [open3, setOpen3] = useState(null);
+//   const [subject, setsubject] = useState(null);
+//   const [subjects, setsubjects] = useState([
+//     {label: 'Subject1', key: 'Subject1'},
+//     {label: 'Subject2', key: 'Subject2'},
+//     {label: 'Subject3', key: 'Subject3'},
+//   ]);
 
 
-const AttendancePart2 = () => {
 
-  const [nameMethod, setNameMethod] = useState('Name');
+//   const [nameMethod, setNameMethod] = useState('Name');
 
-  return (
+//   return (
+//     <View
+//       style={{
+//         backgroundColor: '#E5E5E5',
+//         flex: 1,
+//         // justifyContent: 'flex-start',
+//       }}>
+//       <View style={styles.header}>
+//         <TouchableOpacity
+//           onPress={() => {
+//             navigation.navigate('AttendanceScreen1');
+//           }}>
+//           <Icon
+//             size={24}
+//             color="white"
+//             name="left"
+//             style={{
+//               alignSelf: 'center',
+//               fontSize: 25,
+//               color: 'white',
+//               paddingLeft: 20,
+//               paddingTop: 20,
+//             }}
+//           />
+//         </TouchableOpacity>
+//         <Text
+//           style={{
+//             fontStyle: 'normal',
+//             fontSize: 28,
+//             fontWeight: '600',
+//             alignSelf: 'center',
+//             paddingLeft: 30,
+//             color: 'white',
+//             fontFamily: 'NunitoSans-Regular'
+//           }}>
+//           Attendance
+//         </Text>
 
-    <View style={{ marginTop: 6 }}>
+//       </View>
 
-      <View style={{ padding: 5, justifyContent: 'center' }} />
-      {/* open search */}
-      <View
-        style={{
-          marginLeft: 5,
-          justifyContent: 'space-around',
-          width: '95%',
-          flexDirection: 'row',
-          ...styles.shadow,
-        }}>
-        <FontAwesome5
-          name="search"
-          style={{
-            alignSelf: 'center',
-            fontSize: 11,
-            color: '#6A6A80',
-          }} />
-        <TextInput
-          style={{ width: '70%', ...styles.text_input }}
-          placeholder="Enter student's name"
-        />
-        <TouchableOpacity
-          style={{
-            alignSelf: 'center',
-            flexDirection: 'column'
-          }}>
+//       {/* open list part */}
+//       <View style={{ padding: 15 }}>
 
-          <FontAwesome5
-            name="calendar"
-            style={{
-              alignSelf: 'center',
-              // paddingRight:20,
-              // marginRight:20,
-              fontSize: 20,
-              color: '#6A6A80',
-            }}
+//         <View
+//           style={{
+//             flexDirection: 'row',
+//             justifyContent: 'space-between',
+//             marginTop: 10,
+//             alignContent: 'flex-start',
+//             width: '99%'
+//           }}>
+//           {/* <DropDownPicker
+//             zIndex={1000}
+//             open={open1}
+//             value={value1}
+//             items={items1}
+//             setOpen={setOpen1}
+//             setValue={setValue1}
+//             setItems={setItems1}
+//             style={styles.shadow}
+//             containerStyle={{ width: '30%' }}
+//             placeholder="Class"
+//           />
+//           <DropDownPicker
+//             zIndex={1000}
+//             defaultIndex={0}
+//             open={open2}
+//             value={value2}
+//             items={items2}
+//             setOpen={setOpen2}
+//             setValue={setValue2}
+//             setItems={setItems2}
+//             style={styles.shadow}
+//             containerStyle={{ width: '30%' }}
+//             placeholder="Batch"
+//           />
+//           <DropDownPicker
+//             zIndex={1000}
+//             defaultIndex={0}
+//             open={open3}
+//             value={value3}
+//             items={items3}
+//             setOpen={setOpen3}
+//             setValue={setValue3}
+//             setItems={setItems3}
+//             style={{
+//               ...styles.shadow,
+//             }}
+//             containerStyle={{ width: '30%' }}
+//             placeholder="Subject"
+//           /> */}
 
-          />
-          <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 12, color: '#6A6A80' }}>This Month</Text>
-        </TouchableOpacity>
-      </View>
+// <ModalSelector
+//             data={classes}
+//             initValue="Class1"
+//             onChange={option => {
+//               // setclass(option.key);
+//             }}
+//             style={styles.card}
+//             initValueTextStyle={styles.SelectedValueSmall}
+//             selectTextStyle={styles.SelectedValueSmall}
+//           />
+//           <ModalSelector
+//             data={batches}
+//             initValue="Batch1"
+//             onChange={option => {
+//               // setbatch(option.key);
+//             }}
+//             style={styles.card}
+//             initValueTextStyle={styles.SelectedValueSmall}
+//             selectTextStyle={styles.SelectedValueSmall}
+//           />
+//           <ModalSelector
+//             data={subjects}
+//             initValue="Subject1"
+//             onChange={option => {
+//               // setsubject(option.key);
+//             }}
+//             style={styles.card}
+//             initValueTextStyle={styles.SelectedValueSmall}
+//             selectTextStyle={styles.SelectedValueSmall}
+//           />
 
-      <View style={{ padding: 10 }} />
+//         </View>
+//         <ScrollView>
+//           {/* {value !== null &&
+//             value1 !== null &&
+//             value2 !== null &&
+//             value3 !== null ? (
+//             <AttendancePart2 />
+//           ) : (
+//             <AttendancePart2 />
+//           )} */}
 
+//           <AttendancePart2/>
+//         </ScrollView>
+//       </View>
+//       <View style={{ padding: 7 }} />
 
-      {/* starting of Card loop-section,scroll for more number of cards */}
-      <ScrollView>
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels2}>
-              <TouchableOpacity
-                style={styles.differentusers}
-                onPress={() => {
-                  setNameMethod('Name');
-                }}>
-                <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-regular' }}> Balram</Text>
+//       {/* close list part */}
 
-                <Text style={{ fontSize: 22, paddingTop: 20, color: '#000000', fontFamily: 'Poppins-regular' }}>
-
-                  78%
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{ fontSize: 14, marginLeft: 5, color: '#6A6A80', fontFamily: 'Poppins-regular' }}>
-                  {''} Roll No.
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels2}>
-              <TouchableOpacity
-                style={styles.differentusers}
-                onPress={() => {
-                  setNameMethod('Name');
-                }}>
-                <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-regular' }}> Balram</Text>
-
-                <Text style={{ fontSize: 22, paddingTop: 20, color: '#000000', fontFamily: 'Poppins-regular' }}>
-
-                  78%
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{ fontSize: 14, marginLeft: 5, color: '#6A6A80', fontFamily: 'Poppins-regular' }}>
-                  {''} Roll No.
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+//     </View>
+//   );
+// };
 
 
-      </ScrollView>
-      {/* Cards end */}
+// const AttendancePart2 = () => {
 
-    </View>
-  );
-};
+//   const [nameMethod, setNameMethod] = useState('Name');
+
+//   return (
+
+//     <View style={{ marginTop: 6 }}>
+
+//       <View style={{ padding: 5, justifyContent: 'center' }} />
+//       {/* open search */}
+//       <View
+//         style={{
+//           marginLeft: 5,
+//           justifyContent: 'space-around',
+//           width: '95%',
+//           flexDirection: 'row',
+//           ...styles.shadow,
+//         }}>
+//         <FontAwesome5
+//           name="search"
+//           style={{
+//             alignSelf: 'center',
+//             fontSize: 11,
+//             color: '#6A6A80',
+//           }} />
+//         <TextInput
+//           style={{ width: '70%', ...styles.text_input }}
+//           placeholder="Enter student's name"
+//         />
+//         <TouchableOpacity
+//           style={{
+//             alignSelf: 'center',
+//             flexDirection: 'column'
+//           }}>
+
+//           <FontAwesome5
+//             name="calendar"
+//             style={{
+//               alignSelf: 'center',
+//               // paddingRight:20,
+//               // marginRight:20,
+//               fontSize: 20,
+//               color: '#6A6A80',
+//             }}
+
+//           />
+//           <Text style={{ fontFamily: 'Poppins-Medium', fontSize: 12, color: '#6A6A80' }}>This Month</Text>
+//         </TouchableOpacity>
+//       </View>
+
+//       <View style={{ padding: 10 }} />
+
+
+//       {/* starting of Card loop-section,scroll for more number of cards */}
+//       <ScrollView>
+//         <View style={styles.section}>
+//           <View style={styles.details}>
+//             <View style={styles.userinhostels2}>
+//               <TouchableOpacity
+//                 style={styles.differentusers}
+//                 onPress={() => {
+//                   setNameMethod('Name');
+//                 }}>
+//                 <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-regular' }}> Balram</Text>
+
+//                 <Text style={{ fontSize: 22, paddingTop: 20, color: '#000000', fontFamily: 'Poppins-regular' }}>
+
+//                   78%
+//                 </Text>
+//               </TouchableOpacity>
+//               <TouchableOpacity style={styles.differentusers}>
+//                 <Text style={{ fontSize: 14, marginLeft: 5, color: '#6A6A80', fontFamily: 'Poppins-regular' }}>
+//                   {''} Roll No.
+//                 </Text>
+//               </TouchableOpacity>
+//             </View>
+//           </View>
+//         </View>
+
+//         <View style={styles.section}>
+//           <View style={styles.details}>
+//             <View style={styles.userinhostels2}>
+//               <TouchableOpacity
+//                 style={styles.differentusers}
+//                 onPress={() => {
+//                   setNameMethod('Name');
+//                 }}>
+//                 <Text style={{ fontSize: 22, color: '#211C5A', fontFamily: 'Poppins-regular' }}> Balram</Text>
+
+//                 <Text style={{ fontSize: 22, paddingTop: 20, color: '#000000', fontFamily: 'Poppins-regular' }}>
+
+//                   78%
+//                 </Text>
+//               </TouchableOpacity>
+//               <TouchableOpacity style={styles.differentusers}>
+//                 <Text style={{ fontSize: 14, marginLeft: 5, color: '#6A6A80', fontFamily: 'Poppins-regular' }}>
+//                   {''} Roll No.
+//                 </Text>
+//               </TouchableOpacity>
+//             </View>
+//           </View>
+//         </View>
+
+
+//       </ScrollView>
+//       {/* Cards end */}
+
+//     </View>
+//   );
+// };
 
 const styles = StyleSheet.create({
   container: {
