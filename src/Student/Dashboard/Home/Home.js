@@ -1,23 +1,24 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Linking,
   TextInput,
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
-import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
+import { Text, Searchbar, Card, Button, Drawer } from 'react-native-paper';
 import {
   createDrawerNavigator,
   useIsDrawerOpen,
   DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
-import {createStackNavigator} from '@react-navigation/stack';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -41,7 +42,22 @@ import Notification from './Home/Notification';
 import Notes from './Home/Notes';
 import Timetable from './Home/Timetable';
 
-const Home = ({navigation}) => {
+// redux
+import { useSelector } from 'react-redux';
+
+// helpers
+import read from '../../../services/localstorage/read'
+import get from '../../../services/helpers/request/get'
+
+// loadingScreen
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen'
+
+let parseDate = myDate => {
+  let d = new Date(myDate);
+  return d.toString().slice(0, 15);
+};
+
+const Home = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
   const toggleExpanded = () => {
@@ -49,13 +65,47 @@ const Home = ({navigation}) => {
   };
   const onChangeSearch = query => setSearchQuery(query);
 
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
+  const [assignments, setAssignements] = useState([])
+  const [books, setBooks] = useState([])
+  const [notes, setNotes] = useState([])
+
+
+
+  useEffect(async () => {
+
+    try {
+      let slug = '/note/studentAssignment'
+      let token = await read('token')
+      const res = await get(slug, token)
+      console.log('Assignments ', res)
+      setAssignements(res)
+    } catch (err) {
+      alert('Cannot fetch Assignements!!')
+    }
+
+    try {
+
+      let slug = '/note'
+      let token = await read('token')
+      const ress = await get(slug, token)
+      console.log('Notes ', ress)
+      setNotes(ress)
+    } catch (err) {
+      alert('Cannot fetch Notes!!')
+    }
+
+  }, [])
+
   return (
     <View style={styles.container}>
-      <View style={{height: 20}}></View>
-      <View style={{marginHorizontal: 30, ...styles.shadow}}>
+      {loadingScreen}
+      <View style={{ height: 20 }}></View>
+      <View style={{ marginHorizontal: 30, ...styles.shadow }}>
         <View style={styles.search}>
           <TextInput
-            style={{...styles.search_input}}
+            style={{ ...styles.search_input }}
             placeholder="Live class, fees and more"
           />
 
@@ -75,11 +125,11 @@ const Home = ({navigation}) => {
         </View>
       </View>
       <ScrollView style={styles.main}>
-        <View style={{height: 30}}></View>
+        <View style={{ height: 30 }}></View>
         <View>
           <Text style={styles.section_heading}>Upcoming Classes</Text>
         </View>
-        <View style={{marginHorizontal: 30, ...styles.classes_cardWrapper}}>
+        <View style={{ marginHorizontal: 30, ...styles.classes_cardWrapper }}>
           {[1, 2, 3].map((element, index) => {
             return (
               <TouchableOpacity
@@ -95,11 +145,11 @@ const Home = ({navigation}) => {
             );
           })}
         </View>
-        <View style={{height: 30}}></View>
+        <View style={{ height: 30 }}></View>
         <View>
           <Text style={styles.section_heading}>New Circular</Text>
         </View>
-        <View style={{marginHorizontal: 30, ...styles.shadow}}>
+        <View style={{ marginHorizontal: 30, ...styles.shadow }}>
           <View
             style={{
               borderTopLeftRadius: 8,
@@ -116,7 +166,7 @@ const Home = ({navigation}) => {
                 <FontAwesome5
                   name="chevron-up"
                   size={14}
-                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                  style={{ color: 'rgba(62, 104, 228, 0.9)' }}
                 />
                 <Text style={styles.collapsable_IconText}>Read Less</Text>
               </TouchableOpacity>
@@ -127,7 +177,7 @@ const Home = ({navigation}) => {
                 <FontAwesome5
                   name="chevron-down"
                   size={14}
-                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                  style={{ color: 'rgba(62, 104, 228, 0.9)' }}
                 />
                 <Text style={styles.collapsable_IconText}>Read More</Text>
               </TouchableOpacity>
@@ -143,42 +193,67 @@ const Home = ({navigation}) => {
             </Text>
           </Collapsible>
         </View>
+
+        {/* assignment section */}
         <ScrollView
-          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
+          contentContainerStyle={{ ...styles.card_Wrapper, marginHorizontal: 10 }}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          <View style={{marginHorizontal: 10}}>
-            <Text style={styles.card_heading}>Assignment</Text>
-            <View style={styles.shadow}>
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => navigation.navigate('Assignment')}>
-                <Text style={styles.card_row1}>Subject</Text>
-                <Text style={styles.card_row2}>Title</Text>
-                <Text style={styles.card_row3}>Due:21 May,2021</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{marginHorizontal: 10}}>
-            <Text style={styles.card_heading}>Books</Text>
-            <View style={styles.shadow}>
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => navigation.navigate('Books')}>
-                <Text style={styles.card_row1}>Name</Text>
-                <Text style={styles.card_row2}>ID:451236</Text>
-                <Text style={styles.card_row3}>Due:21 May,2021</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{marginHorizontal: 10}}>
+          {
+            assignments && assignments.map((assignment) => (
+              <View style={{ marginHorizontal: 10 }}>
+                <Text style={styles.card_heading}>Assignment</Text>
+                <View style={styles.shadow}>
+                  <TouchableOpacity
+                    style={styles.card}
+                    onPress={() => Linking.openURL(assignment.url)}>
+                    <Text style={styles.card_row1}>{assignment.subject ? assignment.subject.name : null}</Text>
+                    <Text style={styles.card_row2}>{assignment.title}</Text>
+                    <Text style={styles.card_row3}>Due: {parseDate(assignment.submissionDate).slice(0,10)}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+            ))
+          }
+        </ScrollView>
+
+        {/* books section */}
+        <ScrollView
+          contentContainerStyle={{ ...styles.card_Wrapper, marginHorizontal: 10 }}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}>
+          {
+            notes && notes.map((note) => (
+              <View style={{ marginHorizontal: 10 }}>
+                <Text style={styles.card_heading}>Notes</Text>
+                <View style={styles.shadow}>
+                  <TouchableOpacity
+                    style={styles.card}
+                    onPress={()=> Linking.openURL(note.url)}
+                    >
+                    <Text style={styles.card_row1}>{note.title}</Text>
+                    <Text style={styles.card_row2}>{note.subject ? note.subject.name : null}</Text>
+                    <Text style={styles.card_row3}>{note.course ? note.course.courseName : null}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))
+          }
+        </ScrollView>
+
+        {/* books section */}
+        <ScrollView contentContainerStyle={{ ...styles.card_Wrapper, marginHorizontal: 10 }}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}>
+          <View style={{ marginHorizontal: 10 }}>
             <Text style={styles.card_heading}>Fees</Text>
             <View style={styles.shadow}>
               <TouchableOpacity
                 style={styles.card}
                 onPress={() => navigation.navigate('Fees')}>
-                <Text style={styles.card_row1}>Fees</Text>
-                <Text style={styles.card_row2}>Rs 500</Text>
+                <Text style={styles.card_row1}>Books</Text>
+                <Text style={styles.card_row2}>New Book</Text>
                 <Text style={styles.card_row3}>Due:21 May,2021</Text>
               </TouchableOpacity>
             </View>
@@ -197,7 +272,7 @@ const Home_Route = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={({navigation, route}) => ({
+        options={({ navigation, route }) => ({
           headerTitle: 'Hi Youuu',
           headerStyle: {
             height: 70,
@@ -242,17 +317,17 @@ const Home_Route = () => {
       <Stack.Screen
         name="Notification"
         component={Notification}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Notes"
         component={Notes}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Timetable"
         component={Timetable}
-        // options={{headerShown: false}}
+      // options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
@@ -279,7 +354,7 @@ export default function Route() {
     <DrawerNav.Navigator
       initialRouteName="Home"
       drawerContent={props => <DrawerContent {...props} />}
-      drawerStyle={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
+      drawerStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}>
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="ContentStack" component={ContentStack} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
@@ -296,11 +371,11 @@ export default function Route() {
 
 function DrawerContent(props) {
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <Drawer.Section>
         <Drawer.Item
           label={'Home'}
-          style={{fontWeight: '100'}}
+          style={{ fontWeight: '100' }}
           onPress={() => props.navigation.navigate('Home')}
         />
         <Drawer.Item
@@ -329,7 +404,7 @@ function DrawerContent(props) {
         />
         <Drawer.Item
           label={'Transport'}
-          style={{color: 'white'}}
+          style={{ color: 'white' }}
           onPress={() => props.navigation.navigate('Transport')}
         />
         <Drawer.Item
