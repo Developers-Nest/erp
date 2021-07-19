@@ -40,20 +40,20 @@ export default function App() {
         component={LecturesScreen}
         options={({navigation, route}) => ({
           headerTitle: 'Lectures',
-          // headerStyle: {
-          //   backgroundColor: '#f4511e',
-          // },
-          headerRight: () => (
-            <Icon
-              name="add-circle"
-              size={30}
-              color="#900"
-              onPress={() => navigation.navigate('GoLive')}
-            />
-          ),
+          // // headerStyle: {
+          // //   backgroundColor: '#f4511e',
+          // // },
+          // headerRight: () => (
+          //   <Icon
+          //     name="add-circle"
+          //     size={30}
+          //     color="#900"
+          //     onPress={() => navigation.navigate('GoLive')}
+          //   />
+          // ),
         })}
       />
-      <Stack.Screen name="GoLive" component={GoLiveScreen} />
+      {/* <Stack.Screen name="GoLive" component={GoLiveScreen} /> */}
     </Stack.Navigator>
   );
 }

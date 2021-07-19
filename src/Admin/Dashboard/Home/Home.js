@@ -38,7 +38,9 @@ import Subject from './Subject/Subject.js';
 import CceMarks from './CCEMarks/CCEmarks';
 import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
-//navigations from home screen
+//navigations from home screen second screen
+
+import SettingUsers from './Home/Settings';
 
 
 
@@ -125,7 +127,11 @@ const Home_Route = () => {
           ),
         })}
       />
-    
+    <Stack.Screen
+        name="Settings"
+        component={SettingUsers}
+        options={{headerShown: false}}
+      />
 
     </Stack.Navigator>
   );
