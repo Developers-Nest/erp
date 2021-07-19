@@ -353,85 +353,95 @@ function DrawerContent(props) {
 
   return (
     <View style={{flex: 1}}>
-      <Drawer.Section>
-        <Drawer.Item
-          label={'Home'}
-          style={{fontWeight: '100'}}
+      <DrawerContentScrollView {...props}>
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Home</Text>
+          )}
           onPress={() => props.navigation.navigate('Home')}
         />
-        <Drawer.Item
-          label={'Content Library'}
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Content Library</Text>
+          )}
           onPress={() => props.navigation.navigate('Content Library')}
         />
-        <Drawer.Item
-          label={'Attendance'}
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Attendance</Text>
+          )}
           onPress={() => props.navigation.navigate('AttendanceStack')}
         />
-        <Drawer.Item
-          label={'Assignment'}
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Assignment</Text>
+          )}
           onPress={() => props.navigation.navigate('Assignment')}
         />
-        <Drawer.Item
-          label={'Lesson Plan'}
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Lesson Plan</Text>
+          )}
           onPress={() => props.navigation.navigate('Lesson Plan')}
         />
-        <Drawer.Item
-          label={'Books'}
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Books</Text>
+          )}
           onPress={() => props.navigation.navigate('Books')}
         />
-        <Drawer.Item
-          label={'Feedback'}
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Feedback</Text>
+          )}
           onPress={() => props.navigation.navigate('Feedback')}
         />
-        <Drawer.Item
-          label={'Transport'}
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Transport</Text>
+          )}
           onPress={() => props.navigation.navigate('Transport')}
         />
-        <Drawer.Item
-          label={'CCE Marks'}
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>CCE Marks</Text>
+          )}
           onPress={() => props.navigation.navigate('Cce Marks')}
         />
-        <Drawer.Item
-          label={'Recorded Classes'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Recorded Classes</Text>
+          )}
           onPress={() => props.navigation.navigate('Recorded Classes')}
         />
-        <Drawer.Item
-          label={'Report'}
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Report</Text>
+          )}
           onPress={() => props.navigation.navigate('Report')}
         />
-      </Drawer.Section>
-      <DrawerContentScrollView
-        contentContainerStyle={{
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          flex: 1,
-          justifyContent: 'flex-end',
-        }}>
-        <TouchableOpacity>
-          <View
-            style={{
-              paddingHorizontal: 10,
-              paddingVertical: 10,
-
-              backgroundColor: '#B04305',
-              borderRadius: 6,
-              marginLeft: 20,
-              marginBottom: 34,
-            }}>
-            <Text
-              style={{
-                fontFamily: 'Poppins-Regular',
-                fontStyle: 'normal',
-                fontWeight: '600',
-                fontSize: 14,
-                color: '#FFFFFF',
-              }}
-              onPress={handleLogout}>
-              Logout
-            </Text>
-          </View>
-        </TouchableOpacity>
       </DrawerContentScrollView>
+      <Drawer.Section>
+        <Button
+          style={{
+            fontFamily: 'Poppins-Regular',
+            fontStyle: 'normal',
+            fontWeight: '600',
+            fontSize: 14,
+            width: 100,
+            backgroundColor: 'red',
+            margin: 20,
+            marginLeft: 40,
+            backgroundColor: '#B04305',
+            borderRadius: 6,
+          }}
+          onPress={handleLogout}
+          mode="contained">
+          Logout
+        </Button>
+      </Drawer.Section>
     </View>
   );
 }
@@ -443,10 +453,12 @@ export default function Route() {
     <DrawerNav.Navigator
       initialRouteName="Home"
       drawerContent={props => <DrawerContent {...props} />}
-      drawerStyle={{
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        // marginTop: 69,
-      }}>
+      drawerStyle={
+        {
+          // backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          // marginTop: 69,
+        }
+      }>
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="AttendanceStack" component={AttendanceStack} />
@@ -642,4 +654,15 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingTop: 30,
   },
+  drawer_item: {
+    lineHeight: 24,
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 16,
+    paddingLeft: 30,
+    padding: 0,
+    margin: 0,
+  },
+  item: {padding: 0, margin: 0},
 });
