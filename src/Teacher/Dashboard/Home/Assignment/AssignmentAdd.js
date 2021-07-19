@@ -22,15 +22,16 @@ import getBatch from '../../../../services/helpers/getList/getBatch';
 import getCourse from '../../../../services/helpers/getList/getCourse';
 import getSubject from '../../../../services/helpers/getList/getSubject';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
+import patch from '../../../../services/helpers/request/patch';
+import post from '../../../../services/helpers/request/post';
 
 // redux
 import {useSelector} from 'react-redux';
 
-export default function AddAssignments({navigation}) {
-  const [Chapter, setChapter] = useState("Chapter's name");
-  const [Topic, setTopic] = useState('Topic:');
-  const [Discription, setDiscription] = useState('Discription:');
+//file picker
+import FilePickerManager from 'react-native-file-picker';
 
+export default function AddAssignments({navigation}) {
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -44,10 +45,13 @@ export default function AddAssignments({navigation}) {
   const [course, setCourse] = useState(null);
   const [subject, setSubject] = useState(null);
   const [date, setDate] = useState(new Date(1598051730000));
+  const [dateString, setDateString] = useState(
+    new Date(1598051730000).toString(),
+  );
 
   // input values
-  const [title, setTitle] = useState(null);
-  const [desc, setDesc] = useState(null);
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
 
   const [showdatePicker, setShowDatePicker] = useState(false);
 
@@ -89,13 +93,52 @@ export default function AddAssignments({navigation}) {
     hideLoadingScreen();
   };
 
-  // handle form submission
-  let handleSubmit = async sd => {
+  let handleDatePicker = async date => {
     showLoadingScreen();
-    console.log('Date ', sd);
-    await setDate(sd.toString());
+    console.log('Date ', date);
+    await setDateString(date.toString());
+    await setDate(date.toString());
     setShowDatePicker(false);
     hideLoadingScreen();
+  };
+  // handle form submission
+  let handleSubmit = async () => {
+    try {
+      let slug = `/note/addAssignment`;
+      console.log('Assignment slug ', slug);
+      let token = await read('token');
+      let data = {
+        title: title,
+        description: desc,
+        file: File,
+        course: course,
+        batch: batch,
+        subject: subject,
+        submissionDate: date,
+        submissionDateString: dateString,
+      };
+      console.log('data ', data);
+      let response = await patch(slug, data, token);
+      console.log('response ', response);
+    } catch (err) {
+      alert('Cannot create Assignment! ' + err);
+    }
+  };
+
+  const [File, setFile] = React.useState(null);
+
+  const filePicker = () => {
+    FilePickerManager.showFilePicker(null, response => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled file picker');
+      } else if (response.error) {
+        console.log('FilePickerManager Error: ', response.error);
+      } else {
+        setFile(response);
+      }
+    });
   };
 
   return (
@@ -186,22 +229,24 @@ export default function AddAssignments({navigation}) {
                 flexDirection: 'row',
               }}>
               <TextInput
-                placeholder="Chapter's name "
-                onChange={val => setChapter(val)}
+                placeholder="Assignment Title"
+                onChangeText={title => setTitle(title)}
+                defaultValue={title}
               />
               {/* <View style={{paddingLeft:10}} /> */}
             </View>
             <View style={{padding: 2}} />
             <View style={{borderWidth: 0.2}} />
             <View style={{padding: 10}} />
-            <TextInput placeholder="Topic " onChange={val => setTopic(val)} />
+            <TextInput placeholder="Topic " />
             <View style={{padding: 2}} />
             <View style={{borderWidth: 0.2}} />
             <View style={{padding: 10}} />
 
             <TextInput
-              placeholder="Discription (optional) "
-              onChange={val => setDiscription(val)}
+              placeholder="Discription"
+              onChangeText={val => setDesc(val)}
+              defaultValue={desc}
             />
             <View style={{padding: 40}} />
 
@@ -222,7 +267,7 @@ export default function AddAssignments({navigation}) {
               <DateTimePickerModal
                 isVisible={showdatePicker}
                 mode="date"
-                onConfirm={handleSubmit}
+                onConfirm={handleDatePicker}
                 onCancel={() => setShowDatePicker(!showdatePicker)}
               />
 
@@ -230,7 +275,7 @@ export default function AddAssignments({navigation}) {
               <Button
                 mode="contained"
                 color="white"
-                onPress={() => console.log('Pressed')}>
+                onPress={() => filePicker()}>
                 Add file
               </Button>
             </View>
