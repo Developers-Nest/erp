@@ -173,10 +173,14 @@ const HomeScreen1 = () => {
               </Text>
             </View>
           </View>
-
+          
           <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
-              <IonIcon size={36.83} color="#34A853" name="settings-outline" />
+            <TouchableOpacity style={{alignItems: 'center'}}
+            onPress={() => {
+              navigation.navigate('Settings');
+            }}>
+              <IonIcon size={36.83} color="#34A853" name="settings-outline" 
+               />
 
               <Text
                 style={{
@@ -188,7 +192,7 @@ const HomeScreen1 = () => {
                 }}>
                 Settings
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           {/* 
