@@ -41,6 +41,7 @@ import Report from './Report/Report';
 //navigations from home screen second screen
 
 import SettingUsers from './Home/Settings';
+import Occurence from '../Occurence/Occurence';
 
 
 
@@ -208,7 +209,7 @@ function DrawerContent(props) {
         />
          <Drawer.Item
           label={'Occurrence'}
-          onPress={() => Alert.alert('Add Occurence screen')}
+          onPress={() => props.navigation.navigate('Occurence')}
         />
          <Drawer.Item
           label={'Placement Details'}
@@ -287,6 +288,7 @@ export default function Route() {
       <DrawerNav.Screen name="Cce Marks" component={CceMarks} />
       <DrawerNav.Screen name="Recorded Classes" component={RecordedClasses} />
       <DrawerNav.Screen name="Report" component={Report} />
+      <DrawerNav.Screen name="Occurence" component={Occurence} />
       {/* <DrawerNav.Screen name="Cce Marks" component={CceMarks} /> */}
       {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
     </DrawerNav.Navigator>

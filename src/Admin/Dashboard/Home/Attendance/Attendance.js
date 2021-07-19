@@ -29,13 +29,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AttendanceScreen1 from './AttendanceScreen1'
-import AttendanceScreen2 from './AttendanceScreen2'
-
+import AttendanceScreen2 from './AttendanceScreen1'
 const Stack = createStackNavigator();
 
 export default function Attendance() {
   return (
-    <Stack.Navigator defa headerMode="none">
+    <Stack.Navigator headerMode="none">
       <Stack.Screen name="AttendanceScreen1" component={AttendanceScreen1} />
       <Stack.Screen name="AttendanceScreen2" component={AttendanceScreen2} />
     </Stack.Navigator>
