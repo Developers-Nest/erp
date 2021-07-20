@@ -101,13 +101,13 @@ export default function ContentLibrary({ navigation }) {
                       </TouchableOpacity>
 
                       <TouchableOpacity style={styles.hey}>
-                        <Text style={{ fontSize: 16, marginRight: 100 }}>
+                        <Text style={{ fontSize: 16 }}>
                           Created By: {sm.createdBy ? sm.createdBy : 'Not Available'}
                         </Text>
                         {
                           sm.insertfile != "null" ? (
                             <Button
-                              styles={{ flexDirection: 'flex-end' }}
+                              styles={{ marginRight:20 }}
                               color={institute ? institute.themeColor : 'blue'}
                               mode="contained"
                               onPress={() => Linking.openURL(sm.insertfile)}>
@@ -173,7 +173,7 @@ export default function ContentLibrary({ navigation }) {
                       </TouchableOpacity>
 
                       <TouchableOpacity style={styles.hey}>
-                        <Text style={{ fontSize: 16, marginRight: 100 }}>
+                        <Text style={{ fontSize: 16 }}>
                           Created By: {vm.createdBy ? vm.createdBy : 'Not Available'}
                         </Text>
                         {
