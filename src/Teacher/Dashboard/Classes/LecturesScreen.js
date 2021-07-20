@@ -88,6 +88,8 @@ export default function LecturesScreen({navigation}) {
             />
           </TouchableOpacity>
         </View>
+
+        <ScrollView>
         <View
           style={{
             width: '90%',
@@ -95,6 +97,7 @@ export default function LecturesScreen({navigation}) {
             marginBottom: 20,
           }}>
           {/* open search */}
+
           <View
             style={{
               marginTop: 10,
@@ -160,6 +163,7 @@ export default function LecturesScreen({navigation}) {
         </View>
 
         {showContent === 'Live' ? <Live /> : <Recorded />}
+        </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -286,7 +290,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
-
+     color:'black',
     backgroundColor: 'white',
   },
 
