@@ -69,9 +69,9 @@ const HomeScreen1 = () => {
         <View
           style={{
             flexDirection: 'row',
-            marginLeft: 20,
+           
             flexWrap: 'wrap',
-            justifyContent: 'flex-start',
+            justifyContent: 'center',
           }}>
           {/* 
         1st row started */}
