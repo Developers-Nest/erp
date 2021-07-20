@@ -80,10 +80,15 @@ export default function Attendance({navigation}) {
         hideLoadingScreen();
         return;
       }
+
+      const studentFound = student => {
+        setadmNo(student.studentAdmissionNumber);
+        setdays(student.days);
+      };
       response[0] &&
         response[0].students.map(student =>
           student.studentId && student.studentId._id === userInfo._id
-            ? setdays(student.days) && setadmNo(student.studentAdmissionNumber)
+            ? studentFound(student)
             : null,
         );
     } catch (err) {
@@ -188,7 +193,7 @@ export default function Attendance({navigation}) {
                   <TouchableOpacity style={styles.differentusers}>
                     <Text
                       style={{fontSize: 14, marginLeft: 5, color: '#6A6A80'}}>
-                      Roll No.
+                      {'Roll No. '}
                       {admNo}
                     </Text>
                   </TouchableOpacity>
