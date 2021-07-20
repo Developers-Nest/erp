@@ -193,7 +193,7 @@ export default function Attendance({navigation}) {
                   <TouchableOpacity style={styles.differentusers}>
                     <Text
                       style={{fontSize: 14, marginLeft: 5, color: '#6A6A80'}}>
-                      {'Roll No. '}
+                      {'Admission Number: '}
                       {admNo}
                     </Text>
                   </TouchableOpacity>
