@@ -195,7 +195,7 @@ const AttendanceScreen2 = ({ navigation }) => {
               justifyContent: 'space-between',
               marginTop: 10,
               alignContent: 'flex-start',
-              width: '99%',
+              width: '100%',
             }}>
             <ModalSelector
               data={courses}

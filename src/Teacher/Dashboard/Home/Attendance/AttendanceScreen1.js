@@ -248,7 +248,7 @@ const AttendanceScreen1 = ({navigation}) => {
             justifyContent: 'space-between',
             marginTop: 10,
             alignContent: 'flex-start',
-            width: '95%',
+            width: '100%',
           }}>
           {/* course selector */}
           <ModalSelector
