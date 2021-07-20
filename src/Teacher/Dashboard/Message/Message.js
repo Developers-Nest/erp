@@ -9,56 +9,16 @@ import {
   Alert,
   Image,
 } from 'react-native';
-// import { Feather as Icon, MaterialIcons as MIcon } from '@expo/vector-icons';
-
-// npm i @react-navigation/bottom-tabs
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-// import Swiper from 'react-native-swiper'
-import Swiper from 'react-native-swiper';
 
 
-const Chats = () => {
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+
+const Chats = ({navigation}) => {
   
 
-  const [stories, setStories] = useState([
-    {
-      userImage: 'https://randomuser.me/api/portraits/men/60.jpg',
-      userName: 'Brayden Willis',
-      storyImage:
-        'https://images.pexels.com/photos/4726898/pexels-photo-4726898.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      isSeen: false,
-      
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/women/81.jpg',
-      userName: 'Sophie Price',
-      storyImage:
-        'https://images.pexels.com/photos/5257534/pexels-photo-5257534.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      isSeen: false,
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/men/79.jpg',
-      userName: 'Rick Perry',
-      storyImage:
-        'https://images.pexels.com/photos/3380805/pexels-photo-3380805.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      isSeen: false,
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/men/85.jpg',
-      userName: 'Dave Pena',
-      storyImage:
-        'https://images.pexels.com/photos/315755/pexels-photo-315755.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      isSeen: false,
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/women/74.jpg',
-      userName: 'Layla Kennedy',
-      storyImage:
-        'https://images.pexels.com/photos/33287/dog-viszla-close.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-      isSeen: false,
-    },
-  ]);
 
   const [messages, setMessages] = useState([
     {
@@ -78,12 +38,12 @@ const Chats = () => {
       userName: 'Deepsi',
       message: {
         sender: 'You',
-        text: 'Kaisan baa?',
+        text: 'Kaisan baa 😊😇?',
         seenByYou: true,
         seenByUser: false,
       },
       time: '03:32 PM',
-      isTyping: true,
+      // isTyping: true,
     },
     {
       userImage: 'https://randomuser.me/api/portraits/men/33.jpg',
@@ -153,16 +113,6 @@ const Chats = () => {
     },
   ]);
 
-  const [currentStoryView, setCurrentStoryView] = useState(stories);
-  const [storyModalVisible, setStoryModalVisible] = useState(false);
-
-  // if (!loaded) {
-  //   return (
-  //     <View>
-  //       <Text>Loading...</Text>
-  //     </View>
-  //   );
-  // }
 
   return (
     <View style={{ flex: 1 }}>
@@ -185,12 +135,31 @@ const Chats = () => {
             alignItems: 'center',
           }}
         >
+
+<TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 10,
+              
+              }}
+            />
+          </TouchableOpacity>
+          
           <Text
             style={{
               marginLeft: 14,
               fontSize: 22,
               color: '#fff',
-             
+             fontFamily:'Poppins-Regular'
             }}
           >
             Messages
@@ -250,34 +219,24 @@ const Chats = () => {
                 );
               }}
             >
-              {/* <TouchableOpacity
-                onPress={() => {
-                  let chatStory = stories.filter(
-                    (story) => story.userName === chat.userName
-                  );
-                  if (chatStory.length > 0) {
-                    setCurrentStoryView(chatStory);
-                    setStoryModalVisible(true);
-                  }
-                }}
-              > */}
+              
                 <Image
                   style={{
                     width: 60,
                     height: 60,
                     borderRadius: 100,
-                    borderWidth:
-                      stories.filter(
-                        (story) => story.userName === chat.userName
-                      ).length > 0
-                        ? 4
-                        : null,
-                    borderColor:
-                      stories.filter(
-                        (story) => story.userName === chat.userName
-                      ).length > 0
-                        ? '#3c40c6'
-                        : null,
+                    // borderWidth:
+                    //   stories.filter(
+                    //     (story) => story.userName === chat.userName
+                    //   ).length > 0
+                    //     ? 4
+                    //     : null,
+                    // borderColor:
+                    //   stories.filter(
+                    //     (story) => story.userName === chat.userName
+                    //   ).length > 0
+                    //     ? '#3c40c6'
+                    //     : null,
                   }}
                   source={{
                     uri: chat.userImage,
@@ -293,7 +252,8 @@ const Chats = () => {
                 >
                   <Text
                     style={{
-                      
+                      fontWeight:'650',
+                      fontFamily:'Poppins-Regular',
                       fontSize: 18,
                     }}
                   >
@@ -342,91 +302,44 @@ const Chats = () => {
                       {chat.message.text}
                     </Text>
                   )}
-                  {/* {chat.message.sender === 'You' ? (
+                 
+                 {
+                
+                 
+                 /*
+                 CONDITION FOR ICONS FOR FOUR DIFFERENT CONDITIONS(TWO FOR SENDER AND TWO FOR ME)
+                 1st condition:
+                 for icons:
+
+                 if I am the sender,icons are like whatsapp:read and not read according to the key and value
+                 2nd condition:
+                 if sender is at the other side and he/she sent the message:
+                 if seenbyme(seenByYou)-then no icon placed,return null,
+                 if not seen by me,unread,then new icon is returned in place of that */}
+                 
+                  {chat.message.sender === 'You' ? (
                     chat.message.seenByUser ? (
-                      // <MIcon name='done-all' size={16} color='#3c40c6' />
+                       <MaterialIcon name='done-all' size={16} color='#3c40c6' />
                     ) : (
-                      // <MIcon name='done' size={16} color={'#555'} />
+                       <MaterialIcon name='done' size={16} color={'#555'} />
                     )
-                  ) : null} */}
+                  ) :
+                  (
+                    chat.message.seenByYou ? (
+                       null
+                    ) : (
+                        <EntypoIcon name='new' size={16} color='blue'/>
+                    )
+                  ) 
+                  // <EntypoIcon name='new' size={16} color='blue'/>
+                  }
                 </View>
               </View>
             </TouchableOpacity>
           ))}
         </View>
         <View style={{ height: 20 }}></View>
-        {/* Story Modal */}
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={storyModalVisible}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <TouchableOpacity
-                style={{
-                  position: 'absolute',
-                  top: 8,
-                  right: 8,
-                  zIndex: 1,
-                  backgroundColor: 'rgba(51, 51, 51, 0.3)',
-                  borderRadius: 100,
-                  padding: 2,
-                }}
-                onPress={() => {
-                  setStoryModalVisible(false);
-                }}
-              >
-                {/* <Icon name='x' color='#fafafa' size={26} /> */}
-              </TouchableOpacity>
-              <Swiper
-                showsButtons={true}
-                style={{ height: '100%' }}
-                loop={false}
-                showsPagination={false}
-              >
-                {currentStoryView.map((story) => (
-                  <View style={{ alignItems: 'center' }}>
-                    <View
-                      style={{
-                        position: 'absolute',
-                        zIndex: 2,
-                        bottom: 10,
-                        left: 10,
-                        backgroundColor: 'rgba(51, 51, 51, 0.3)',
-                        padding: 10,
-                        borderRadius: 10,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <Image
-                        style={styles.storyUserImage}
-                        source={{ uri: story.userImage }}
-                      />
-                      <Text
-                        style={{
-                          color: '#fff',
-                          marginLeft: 10,
-                          fontSize: 16,
-                        }}
-                      >
-                        {story.userName}
-                      </Text>
-                    </View>
-                    <Image
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                      }}
-                      source={{ uri: story.storyImage }}
-                    />
-                  </View>
-                ))}
-              </Swiper>
-            </View>
-          </View>
-        </Modal>
+        
       </ScrollView>
     </View>
   );
