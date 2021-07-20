@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -35,54 +35,62 @@ import {useSelector} from 'react-redux';
 
 //helpers
 import getMonth from '../../../../services/helpers/getList/getMonth';
+import getYear from '../../../../services/helpers/getList/getYear';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 import read from '../../../../services/localstorage/read';
 import get from '../../../../services/helpers/request/get';
 
 const Stack = createStackNavigator();
 
-export default function Attendance() {
+export default function Attendance({navigation}) {
+  //initial value
   var d = new Date();
-  let year = d.getUTCFullYear();
-  let month = d.getUTCMonth();
+  let currentyear = d.getUTCFullYear();
+  let currentmonth = d.getUTCMonth();
 
-  const [days, setdays] = useState([]);
-  const [months, setMonths] = useState(getMonth());
-  const userInfo = useSelector(state => state.userInfo);
-
-  // handle month model open
+  //loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  const fetchList = async mnth => {
+  //list values
+  const [months, setMonths] = useState(getMonth());
+  const [years, setYears] = useState(getYear());
+
+  //selected values
+  const [yearSelected, setyearSelected] = useState(currentyear);
+  const [monthSelected, setmonthSelected] = useState(currentmonth);
+
+  const [days, setdays] = useState([]);
+  const [admNo, setadmNo] = useState();
+
+  const userInfo = useSelector(state => state.userInfo);
+
+  // on load of the screen
+  useEffect(async () => {
+    showLoadingScreen();
     try {
-      showLoadingScreen();
-      // setMonthSelect(mnth);
       let token = await read('token');
-      let slug = `/student/attendance/monthly/?course=${userInfo.course}&year=${year}&month=${mnth}`;
+      let slug = `/student/attendance/monthly/?course=${userInfo.course}&year=${yearSelected}&month=${monthSelected}`;
+      console.log('student attendance slug', slug);
+
       let response = await get(slug, token);
       console.log('student attendance', response);
+      setdays([]);
       if (response.length == 0) {
         alert('Inactive Month!!');
         hideLoadingScreen();
         return;
       }
-      // alert(userInfo._id);
-
-      // setStudentList(response[0].students);
-      // for (let i = 0; i < response[0].students.length; i++) {
-      //   if()
-      // }
       response[0] &&
         response[0].students.map(student =>
           student.studentId && student.studentId._id === userInfo._id
-            ? setdays(student.days)
+            ? setdays(student.days) && setadmNo(student.studentAdmissionNumber)
             : null,
         );
     } catch (err) {
       alert('Cannot fetch List ' + err);
     }
     hideLoadingScreen();
-  };
+  }, [yearSelected, monthSelected]);
 
   return (
     <View
@@ -94,7 +102,7 @@ export default function Attendance() {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('AttendanceScreen1');
+            navigation.navigate('Home');
           }}>
           <Icon
             size={24}
@@ -121,23 +129,35 @@ export default function Attendance() {
           Attendance
         </Text>
       </View>
-      <View style={{padding: 10, justifyContent: 'center'}} />
 
       <View style={{padding: 7}} />
 
       <View
         style={{
-          width: '89%',
-          marginLeft: 20,
           marginBottom: 10,
+          justifyContent: 'space-between',
+          flexDirection: 'row',
+          margin: 20,
         }}>
-        <View style={{marginTop: 10, ...styles.card}}>
+        <View style={{marginTop: 10, width: 150, ...styles.card}}>
+          <ModalSelector
+            data={years}
+            onChange={option => {
+              setyearSelected(option.key + 2020);
+            }}
+            initValue="This Year"
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+        </View>
+
+        <View style={{marginTop: 10, width: 150, ...styles.card}}>
           <ModalSelector
             data={months}
             onChange={option => {
-              fetchList(option.key);
+              setmonthSelected(option.key);
             }}
-            style={{}}
+            initValue="This Month"
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -145,30 +165,38 @@ export default function Attendance() {
       </View>
 
       <ScrollView>
-        {days.map(day => (
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 22, color: '#211C5A'}}>
-                    {'Day: '}
-                    {day && day.name}
-                  </Text>
+        {days.length == 0 ? (
+          <Text style={{alignSelf: 'center'}}>
+            No attendance listed this month
+          </Text>
+        ) : (
+          days.map(day => (
+            <View style={styles.section} key={day._id}>
+              <View style={styles.details}>
+                <View style={styles.userinhostels}>
+                  <TouchableOpacity style={styles.differentusers}>
+                    <Text style={{fontSize: 22, color: '#211C5A'}}>
+                      {'Day: '}
+                      {day && day.name}
+                    </Text>
 
-                  <Text
-                    style={{fontSize: 22, paddingTop: 22, color: '#000000'}}>
-                    {day && day.present}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text style={{fontSize: 14, marginLeft: 5, color: '#6A6A80'}}>
-                    Roll No.
-                  </Text>
-                </TouchableOpacity>
+                    <Text
+                      style={{fontSize: 22, paddingTop: 22, color: '#000000'}}>
+                      {day.present === 'present' ? 'Present' : 'Absent'}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.differentusers}>
+                    <Text
+                      style={{fontSize: 14, marginLeft: 5, color: '#6A6A80'}}>
+                      Roll No.
+                      {admNo}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        ))}
+          ))
+        )}
       </ScrollView>
     </View>
   );
@@ -276,6 +304,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
 
     justifyContent: 'space-evenly',
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
   },
 
   // container: {
