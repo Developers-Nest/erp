@@ -215,6 +215,10 @@ function DrawerContent(props) {
           label={'Placement Details'}
           onPress={() => Alert.alert('Add Placement Details')}
         />
+        <Drawer.Item
+          label={'Report'}
+          onPress={() => props.navigation.navigate('Report')}
+        /> 
        
 {/*        
         <Drawer.Item

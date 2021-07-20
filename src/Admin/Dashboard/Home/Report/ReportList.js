@@ -7,8 +7,9 @@ import {
     TouchableWithoutFeedback
 } from 'react-native';
 import { Card, Title } from 'react-native-paper';
+import FeesPaidReport from './FeesPaidReport';
 
-export default function ReportList() {
+export default function ReportList({navigation}) {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -18,7 +19,11 @@ export default function ReportList() {
             </View>
             <View style={styles.CardContainer}>
                 
-                <TouchableWithoutFeedback onPress={()=>{}}>
+                <TouchableWithoutFeedback 
+                onPress={() => {
+                    navigation.navigate('StudentReport');
+                  }}
+                >
                 <Card style={styles.card}>
                     <Card.Content>
                         <Title style={styles.title}>Student Details</Title>
@@ -26,7 +31,11 @@ export default function ReportList() {
                 </Card>
                 </TouchableWithoutFeedback>
 
-                <TouchableWithoutFeedback onPress={()=>{}}>
+                <TouchableWithoutFeedback 
+                 onPress={() => {
+                    navigation.navigate('AbsenteesReport');
+                  }}
+                >
                 <Card style={styles.card}>
                     <Card.Content>
                         <Title style={styles.title}>Absentees Report</Title>
@@ -35,7 +44,11 @@ export default function ReportList() {
                 </TouchableWithoutFeedback>
 
 
-                <TouchableWithoutFeedback onPress={()=>{}}>
+                <TouchableWithoutFeedback 
+                 onPress={() => {
+                    navigation.navigate('FessPaidReport');
+                  }}
+                >
                 <Card style={styles.card}>
                     <Card.Content>
                         <Title style={styles.title}>Fees Paid Report</Title>
@@ -44,7 +57,11 @@ export default function ReportList() {
                 </TouchableWithoutFeedback>
 
 
-                <TouchableWithoutFeedback onPress={()=>{}}>
+                <TouchableWithoutFeedback 
+                 onPress={() => {
+                    navigation.navigate('FeesDueReport');
+                  }}
+                >
                 <Card style={styles.card}>
                     <Card.Content>
                         <Title style={styles.title}>Fees Due Report</Title>
