@@ -14,66 +14,52 @@ import {
   Alert,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function ChatScreen1({ navigation }) {
   const [chatUser] = useState({
-    name: 'Robert Henry',
-    profile_image: 'https://randomuser.me/api/portraits/men/0.jpg',
+    name: 'Sarah',
+    profile_image: 'https://randomuser.me/api/portraits/women/79.jpg',
     last_seen: 'online',
   });
 
   const [currentUser] = useState({
-    name: 'John Doe',
+    name: 'Deepsi',
   });
 
   const [messages, setMessages] = useState([
-    { sender: 'John Doe', message: 'Hey there!', time: '6:01 PM' },
+    { sender: 'Deepsi', message: 'Hey there!', time: '6:01 PM' },
     {
-      sender: 'Robert Henry',
-      message: 'Hello, how are you doing?',
+      sender: 'Sarah',
+      message: 'This event will be held today and it is requested for you to come and also bring your family with you',
       time: '6:02 PM',
     },
     {
-      sender: 'John Doe',
-      message: 'I am good, how about you?',
+      sender: 'Deepsi',
+      message: 'Yeah sure',
       time: '6:02 PM',
     },
     {
-      sender: 'John Doe',
+      sender: 'Deepsi',
       message: `😊😇`,
       time: '6:02 PM',
     },
     {
-      sender: 'Robert Henry',
-      message: `Can't wait to meet you.`,
+      sender: 'Deepsi',
+      message: `The event was too good`,
       time: '6:03 PM',
     },
     {
-      sender: 'John Doe',
-      message: `That's great, when are you coming?`,
+      sender: 'Deepsi',
+      message: `Well Done`,
       time: '6:03 PM',
     },
     {
-      sender: 'Robert Henry',
-      message: `This weekend.`,
+      sender: 'Sarah',
+      message: `Thank you so much.`,
       time: '6:03 PM',
     },
-    {
-      sender: 'Robert Henry',
-      message: `Around 4 to 6 PM.`,
-      time: '6:04 PM',
-    },
-    {
-      sender: 'John Doe',
-      message: `Great, don't forget to bring me some mangoes.`,
-      time: '6:05 PM',
-    },
-    {
-      sender: 'Robert Henry',
-      message: `Sure!`,
-      time: '6:05 PM',
-    },
-  ]);
+   ]);
 
   const [inputMessage, setInputMessage] = useState('');
 
@@ -104,22 +90,48 @@ export default function ChatScreen1({ navigation }) {
     setInputMessage('');
   }
 
-  useEffect(() => {
-    navigation.setOptions({
-      title: '',
-      headerLeft: () => (
-        <View style={styles.headerLeft}>
-          <TouchableOpacity
-            style={{ paddingRight: 10 }}
+  
+
+
+  return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+      
+
+<View
+        style={{
+          height: 70,
+          backgroundColor: '#fff',
+        }}
+      >
+        <View
+          style={{
+            // marginTop: Number(StatusBar.currentHeight),
+            marginTop: 10,
+            // backgroundColor: 'red',
+            // paddingVertical: 20,
+            paddingHorizontal: 10,
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+
+<TouchableOpacity
             onPress={() => {
               navigation.goBack();
-            }}
-          >
-            <Icon
-              name='angle-left'
-              type='font-awesome'
-              size={30}
-              color='#fff'
+            }}>
+            <AntDesign
+              size={24}
+              color="#505069"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 24.02,
+               
+                paddingLeft: 10,
+              
+              }}
             />
           </TouchableOpacity>
           <Image
@@ -128,35 +140,21 @@ export default function ChatScreen1({ navigation }) {
           />
           <View
             style={{
-              paddingLeft: 10,
+              marginLeft: 20,
+
               justifyContent: 'center',
+ 
             }}
           >
-            <Text style={{ color: '#fff', fontWeight: '700', fontSize: 18 }}>
+            <Text style={{ color: '#505069', fontWeight: '600', fontSize: 28,fontFamily:'NunitoSans-Regular' }}>
               {chatUser.name}
             </Text>
-            <Text style={{ color: '#fff', fontWeight: '300' }}>
+            <Text style={{ color: 'black', fontWeight: '300' }}>
               {chatUser.last_seen}
             </Text>
           </View>
         </View>
-      ),
-      headerRight: () => (
-        <TouchableOpacity
-          style={{ paddingRight: 10 }}
-          onPress={() => {
-            Alert.alert('Audio Call', 'Audio Call Button Pressed');
-          }}
-        >
-          <Icon name='call' size={28} color='#fff' />
-        </TouchableOpacity>
-      ),
-    });
-  }, []);
-
-  return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
+      </View>
         <FlatList
           style={{ backgroundColor: '#f2f2ff' }}
           inverted={true}
@@ -167,24 +165,25 @@ export default function ChatScreen1({ navigation }) {
                 <View
                   style={{
                     maxWidth: Dimensions.get('screen').width * 0.8,
-                    backgroundColor: '#3a6ee8',
+                    backgroundColor:  item.sender === currentUser.name ?'#62525D' : '#505069',
                     alignSelf:
                       item.sender === currentUser.name
                         ? 'flex-end'
                         : 'flex-start',
                     marginHorizontal: 10,
                     padding: 10,
-                    borderRadius: 8,
+                    borderRadius: 25,
                     borderBottomLeftRadius:
-                      item.sender === currentUser.name ? 8 : 0,
+                      item.sender === currentUser.name ? 25 : 0,
                     borderBottomRightRadius:
-                      item.sender === currentUser.name ? 0 : 8,
+                      item.sender === currentUser.name ? 0 : 25,
                   }}
                 >
                   <Text
                     style={{
-                      color: '#fff',
-                      fontSize: 16,
+                      color: '#FFFFFF',
+                      fontSize: 14,
+                      fontFamily:'Poppins-Regular'
                     }}
                   >
                     {item.message}
@@ -238,7 +237,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  userProfileImage: { height: '100%', aspectRatio: 1, borderRadius: 100 },
+  userProfileImage: { height: '80%', aspectRatio: 1, borderRadius: 100 ,marginLeft:20,marginBottom:5},
   container: {
     flex: 1,
     backgroundColor: '#f2f2ff',
