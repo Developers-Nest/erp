@@ -187,6 +187,7 @@ const AttendanceScreen2 = ({ navigation }) => {
         </View>
 
         {/* open list part */}
+        <ScrollView>
         <View style={{ padding: 15 }}>
           <View
             style={{
@@ -345,6 +346,7 @@ const AttendanceScreen2 = ({ navigation }) => {
             </View>
           </ScrollView>
         </View>
+        </ScrollView>
         <View style={{ padding: 7 }} />
         {/* close list part */}
       </View>

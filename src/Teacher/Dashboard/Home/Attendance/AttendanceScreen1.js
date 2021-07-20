@@ -240,6 +240,7 @@ const AttendanceScreen1 = ({navigation}) => {
         </View>
       </View>
 
+<ScrollView>
       <View style={{padding: 15}}>
         <View
           style={{
@@ -286,7 +287,7 @@ const AttendanceScreen1 = ({navigation}) => {
           />
         </View>
         {fetched ? (
-          <ScrollView>
+          
             <View style={{marginTop: 6, marginBottom: 150}}>
               <View style={{padding: 5, justifyContent: 'center'}} />
 
@@ -391,10 +392,10 @@ const AttendanceScreen1 = ({navigation}) => {
 
               <Button onPress={handleSaveList}>Send</Button>
             </View>
-          </ScrollView>
+          
         ) : null}
       </View>
-
+      </ScrollView>
       <View style={{padding: 7}} />
 
       {/* close list part */}
