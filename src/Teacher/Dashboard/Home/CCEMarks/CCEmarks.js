@@ -215,7 +215,7 @@ export default function CceMarks({navigation}) {
       <List.Section
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-around',
+          justifyContent: 'space-evenly',
         }}>
         {/* course selector */}
         <ModalSelector
