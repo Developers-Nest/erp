@@ -4,7 +4,9 @@ import {
   View,
   Text,
   TextInput,
+  ScrollView,
   TouchableOpacity,
+  ScrollViewBase,
 } from 'react-native';
 import {
   Searchbar,
@@ -81,7 +83,7 @@ export default function EditAssignments({navigation}) {
   };
 
   return (
-    <View style={{backgroundColor: 'white', height: '100%'}}>
+    <View style={{backgroundColor: 'rgba(249, 249, 249, 1)', height: '100%'}}>
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -115,7 +117,8 @@ export default function EditAssignments({navigation}) {
         </Text>
       </View>
       <View style={{padding: 10}} />
-      <View
+      <ScrollView>
+              <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-evenly',
@@ -162,7 +165,7 @@ export default function EditAssignments({navigation}) {
           paddingLeft: 11,
           paddingRight: 11,
         }}>
-        <Card>
+        <Card style={styles.card1}>
           <Card.Content>
             <View
               style={{
@@ -237,6 +240,8 @@ export default function EditAssignments({navigation}) {
           Delete
         </Button>
       </View>
+      </ScrollView>
+
     </View>
   );
 }
@@ -245,5 +250,15 @@ const styles = StyleSheet.create({
   header: {
     height: 69,
     flexDirection: 'row',
+  },
+  card1: {
+  
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 5,
+   
   },
 });
