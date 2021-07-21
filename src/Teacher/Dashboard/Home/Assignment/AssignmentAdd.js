@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {Card, Button} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
@@ -142,7 +143,7 @@ export default function AddAssignments({navigation}) {
   };
 
   return (
-    <View style={{backgroundColor: 'white', flex: 1}}>
+    <View style={{    backgroundColor: 'rgba(249, 249, 249, 1)', flex: 1}}>
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -176,6 +177,7 @@ export default function AddAssignments({navigation}) {
         </Text>
       </View>
       <View style={{padding: 10}} />
+      <ScrollView>
       <View
         style={{
           flexDirection: 'row',
@@ -222,7 +224,7 @@ export default function AddAssignments({navigation}) {
           paddingLeft: 11,
           paddingRight: 11,
         }}>
-        <Card>
+        <Card style={styles.card1}>
           <Card.Content>
             <View
               style={{
@@ -299,6 +301,7 @@ export default function AddAssignments({navigation}) {
           Save
         </Button>
       </View>
+      </ScrollView>
     </View>
   );
 }
@@ -307,5 +310,15 @@ const styles = StyleSheet.create({
   header: {
     height: 69,
     flexDirection: 'row',
+  },
+  card1: {
+  
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 5,
+   
   },
 });
