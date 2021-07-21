@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from 'react-native';
 
 import {Button, Card} from 'react-native-paper';
@@ -173,6 +174,7 @@ export default function OnlineLecture({navigation}) {
           Go Live
         </Text>
       </View>
+      <ScrollView>
       <View
         style={{
           flexDirection: 'row',
@@ -316,13 +318,14 @@ export default function OnlineLecture({navigation}) {
           Go Live
         </Button>
       </View>
+      </ScrollView>
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   header: {
     height: 65,
@@ -358,6 +361,12 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 10,
     borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 1,
+    shadowRadius: 12,
+    elevation: 5,
+   
   },
   input: {
     height: 40,
