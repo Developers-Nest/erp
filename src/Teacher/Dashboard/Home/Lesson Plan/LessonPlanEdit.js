@@ -153,6 +153,7 @@ export default function LessonPlanAdd({navigation}) {
           Edit Lesson Plan
         </Text>
       </View>
+      <View style={{padding:15}}/>
       <View style={styles.Drop}>
         <ModalSelector
           data={course}
@@ -161,6 +162,9 @@ export default function LessonPlanAdd({navigation}) {
             setSelectedCourse(crs);
             BatchData(crs.key);
           }}
+          style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
         />
 
         <ModalSelector
@@ -170,6 +174,9 @@ export default function LessonPlanAdd({navigation}) {
             setSelectedBatch(bth);
             SubjectData(selectedCourse.key, bth.key);
           }}
+          style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
         />
 
         <ModalSelector
@@ -178,8 +185,12 @@ export default function LessonPlanAdd({navigation}) {
           onChange={sbj => {
             setSelectedSubject(sbj);
           }}
+          style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
         />
       </View>
+      <View style={{padding:15}}/>
       <Card style={styles.card}>
         <Card.Content>
           <TextInput
@@ -290,5 +301,31 @@ const styles = StyleSheet.create({
   Week: {
     marginTop: 5,
     flexDirection: 'row',
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
+  },
+  card_picker: {
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+
+    minWidth: 110,
+    elevation: 3,
   },
 });

@@ -68,13 +68,16 @@ export default function Feedback({navigation}) {
       <View style={{padding: 10}} />
       <View style={{paddingHorizontal:20}}>
 
-      <View style={{backgroundColor: 'white', justifyContent:'space-evenly'}}>
+      <View>
         <ModalSelector
           data={type}
           initValue="Type"
           onChange={option => {
             getSubjects(option.key);
           }}
+          style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
         />
       </View>
       <View style={{padding: 10}} />
@@ -107,5 +110,31 @@ const styles = StyleSheet.create({
   header: {
     height: 69,
     flexDirection: 'row',
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
+  },
+  card_picker: {
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+
+    minWidth: 110,
+    elevation: 3,
   },
 });

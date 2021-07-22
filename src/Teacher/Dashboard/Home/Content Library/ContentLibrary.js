@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 5,
-    borderTopWidth: 1,
+    borderTopWidth: 0.5,
   },
   differentusers: {
     flexDirection: 'row',

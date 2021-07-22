@@ -20,6 +20,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 import Collapsible from 'react-native-collapsible';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 //icons
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -91,7 +92,18 @@ const Home = ({navigation}) => {
           onPress={() => {
             navigation.toggleDrawer();
           }}>
-          <FontAwesome5
+            <MaterialIcon
+                name="align-horizontal-left"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 35,
+                  color: 'black',
+                  paddingLeft: 20,
+                  paddingTop:20,
+                  color: institute ? institute.themeColor : 'black',
+                }}
+              />
+          {/* <FontAwesome5
             name="book"
             style={{
               alignSelf: 'center',
@@ -101,7 +113,7 @@ const Home = ({navigation}) => {
               paddingTop: 20,
               color: institute ? institute.themeColor : 'black',
             }}
-          />
+          /> */}
         </TouchableOpacity>
         <Text
           style={{

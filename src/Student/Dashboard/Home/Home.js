@@ -24,6 +24,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 //drawer navigation
 // import Assignment from './Assignment/Assignment';
@@ -113,14 +114,17 @@ const Home = ({ navigation }) => {
             style={{
               alignSelf: 'center',
             }}>
-            <Icon
-              name="search-sharp"
-              style={{
-                alignSelf: 'center',
-                fontSize: 30,
-                color: 'black',
-              }}
-            />
+            <MaterialIcon
+                name="align-horizontal-left"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 35,
+                  color: 'black',
+                  paddingLeft: 20,
+                  paddingTop:20,
+                  color: institute ? institute.themeColor : 'black',
+                }}
+              />
           </TouchableOpacity>
         </View>
       </View>

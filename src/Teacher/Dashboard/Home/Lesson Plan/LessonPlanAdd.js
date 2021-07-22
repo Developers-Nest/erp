@@ -10,6 +10,8 @@ import {
   TextInput,
 } from 'react-native-paper';
 
+import ModalSelector from 'react-native-modal-selector';
+import loadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
@@ -20,6 +22,19 @@ export default function LessonPlanAdd({navigation}) {
   const [expanded, setExpanded] = React.useState(true);
   const [text, setText] = React.useState('');
   const handlePress = () => setExpanded(!expanded);
+
+  const [batches, setBatches] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+
+  // selected values
+  const [batch, setBatch] = useState(null);
+  const [course, setCourse] = useState(null);
+  const [subject, setSubject] = useState(null);
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [dateString, setDateString] = useState(
+    new Date(1598051730000).toString(),
+  );
 
   //theming
   const institute = useSelector(state => state.institute);
@@ -61,54 +76,52 @@ export default function LessonPlanAdd({navigation}) {
           Add Lesson Plan
         </Text>
       </View>
-      <View style={styles.Drop}>
-        <List.Section style={{width: 120}}>
-          <List.Accordion
-            title="Class"
-            style={{
-              borderTopRightRadius: 5,
-              borderBottomRightRadius: 5,
-              borderBottomLeftRadius: 5,
-              borderWidth: 0.5,
-              borderTopStartRadius: 5,
-              backgroundColor: 'white',
-            }}>
-            <List.Item title="First item" />
-            <List.Item title="Second item" />
-          </List.Accordion>
-        </List.Section>
+      <View style={{padding:15}} />
+      <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            marginTop: 10,
+            alignContent: 'flex-start',
+            width: '100%',
+          }}>
+          {/* course selector */}
+          <ModalSelector
+            data={courses}
+            initValue="Class"
+            onChange={option => {
+              fetchBatches(option.key);
+            }}
+            style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
 
-        <List.Section style={{width: 120}}>
-          <List.Accordion
-            title="Batch"
-            style={{
-              borderTopRightRadius: 5,
-              borderBottomRightRadius: 5,
-              borderBottomLeftRadius: 5,
-              borderWidth: 0.5,
-              borderTopStartRadius: 5,
-              backgroundColor: 'white',
-            }}>
-            <List.Item title="First item" />
-            <List.Item title="Second item" />
-          </List.Accordion>
-        </List.Section>
-        <List.Section style={{width: 120}}>
-          <List.Accordion
-            title="Subject"
-            style={{
-              borderTopRightRadius: 5,
-              borderBottomRightRadius: 5,
-              borderBottomLeftRadius: 5,
-              borderWidth: 0.5,
-              borderTopStartRadius: 5,
-              backgroundColor: 'white',
-            }}>
-            <List.Item title="First item" />
-            <List.Item title="Second item" />
-          </List.Accordion>
-        </List.Section>
-      </View>
+          {/* batch selector */}
+          <ModalSelector
+            data={batches}
+            initValue="Batch"
+            onChange={option => {
+              fetchSubjects(option.key);
+            }}
+            style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+
+          {/* subject selector */}
+          <ModalSelector
+            data={subjects}
+            initValue="Subject"
+            onChange={option => {
+              getList(option.key);
+            }}
+            style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+        </View>
+        <View style={{padding:15}}/>
       <Card style={styles.card}>
         <Card.Content>
           <Title style={{fontSize: 16, fontFamily: 'Poppins-Regular'}}>
@@ -197,5 +210,31 @@ const styles = StyleSheet.create({
     marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
+  },
+  card_picker: {
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+
+    minWidth: 110,
+    elevation: 3,
   },
 });

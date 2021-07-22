@@ -224,12 +224,9 @@ export default function CceMarks({navigation}) {
           onChange={async option => {
             await getBatches(option.key);
           }}
-          style={
-            (styles.card,
-            {
-              width: 150,
-            })
-          }
+          style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
         />
 
         {/* batch selector */}
@@ -239,12 +236,9 @@ export default function CceMarks({navigation}) {
           onChange={async option => {
             await getSubjects(option.key);
           }}
-          style={
-            (styles.card,
-            {
-              width: 150,
-            })
-          }
+          style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
         />
       </List.Section>
 
@@ -261,12 +255,9 @@ export default function CceMarks({navigation}) {
           onChange={async option => {
             await getAssessesments(option.key);
           }}
-          style={
-            (styles.card,
-            {
-              width: '100%',
-            })
-          }
+          style={styles.card_picker}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
         />
 
         <View style={{padding: 8}} />
@@ -277,12 +268,9 @@ export default function CceMarks({navigation}) {
           onChange={async option => {
             setAssessment(option.key);
           }}
-          style={
-            (styles.card,
-            {
-              width: '100%',
-            })
-          }
+          style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
         />
         <View style={{padding: 8}} />
         {/* subject selector */}
@@ -292,13 +280,9 @@ export default function CceMarks({navigation}) {
           onChange={async option => {
             await getExams(option.key);
           }}
-          style={
-            (styles.card,
-            styles.shadow,
-            {
-              width: '100%',
-            })
-          }
+          style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
         />
         <View style={{padding: 8}} />
         {/* exam selector */}
@@ -308,12 +292,9 @@ export default function CceMarks({navigation}) {
           onChange={async option => {
             setExam(option.key);
           }}
-          style={
-            (styles.card,
-            {
-              width: '100%',
-            })
-          }
+          style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
         />
       </View>
 
@@ -438,5 +419,31 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     paddingLeft: 11,
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
+  },
+  card_picker: {
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+
+    minWidth: 110,
+    elevation: 3,
   },
 });
