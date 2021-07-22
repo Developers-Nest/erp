@@ -130,9 +130,9 @@ export default function EditAssignments({navigation}) {
             setCourse(option.key);
             getBatches();
           }}
-          style={styles.card_picker}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
+          style={{
+            width: 120,
+          }}
         />
 
         <ModalSelector
@@ -142,9 +142,9 @@ export default function EditAssignments({navigation}) {
             setBatch(option.key);
             getSubjects();
           }}
-          style={styles.card_picker}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
+          style={{
+            width: 120,
+          }}
         />
 
         <ModalSelector
@@ -153,9 +153,9 @@ export default function EditAssignments({navigation}) {
           onChange={option => {
             setSubject(option.key);
           }}
-          style={styles.card_picker}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
+          style={{
+            width: 120,
+          }}
         />
       </View>
 
@@ -260,31 +260,5 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 5,
    
-  },
-  SelectedValueSmall: {
-    fontFamily: 'Poppins-Regular',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    fontSize: 18,
-    lineHeight: 30,
-    paddingTop: 3,
-    color: '#211C5A',
-  },
-  card_picker: {
-    shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
-    backgroundColor: 'white',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
-    overflow: 'hidden',
-    justifyContent: 'center',
-
-    minWidth: 110,
-    elevation: 3,
   },
 });
