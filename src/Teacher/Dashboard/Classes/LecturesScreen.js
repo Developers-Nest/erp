@@ -92,12 +92,14 @@ export default function LecturesScreen({navigation}) {
         <ScrollView>
         <View
           style={{
-            width: '90%',
-            marginLeft: 25,
+            // width: '99%',
+            alignItems:'center',
+            marginTop:10,
             marginBottom: 20,
           }}>
           {/* open search */}
 
+          <View style={{width:'90%',alignItems:'center'}}>
           <View
             style={{
               marginTop: 10,
@@ -133,6 +135,7 @@ export default function LecturesScreen({navigation}) {
                 }}
               />
             </TouchableOpacity>
+          </View>
           </View>
           {/* close search */}
         </View>
@@ -279,6 +282,7 @@ const styles = StyleSheet.create({
   maincontainer: {
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
+   
   },
   header: {
     height: 65,
