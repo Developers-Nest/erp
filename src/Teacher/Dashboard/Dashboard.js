@@ -77,6 +77,7 @@ export default function Dashboard() {
         showLabel: false,
         activeTintColor: themeColor,
         inactiveTintColor: themeColor,
+        keyboardHidesTabBar: true,
       }}>
       <Tab.Screen
         name="Classes"
@@ -84,7 +85,7 @@ export default function Dashboard() {
         options={{
           tabBarLabel: 'Classes',
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', width: 100}}>
               <MaterialCommunityIcons
                 name={focused ? 'video' : 'video-outline'}
                 color={color}
@@ -103,7 +104,7 @@ export default function Dashboard() {
         options={({route}) => ({
           tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', width: 100}}>
               <IonIcon
                 name={focused ? 'bar-chart-sharp' : 'bar-chart-outline'}
                 color={color}
@@ -122,7 +123,7 @@ export default function Dashboard() {
         options={({route}) => ({
           tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', width: 100}}>
               <IonIcon
                 name={focused ? 'home' : 'home-outline'}
                 color={color}
@@ -140,7 +141,7 @@ export default function Dashboard() {
         component={Message}
         options={{
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', width: 100}}>
               <MaterialCommunityIcons
                 name={focused ? 'chat-processing' : 'chat-processing-outline'}
                 color={color}
@@ -158,7 +159,7 @@ export default function Dashboard() {
         component={Profile}
         options={{
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', width: 100}}>
               <MaterialCommunityIcons
                 name={focused ? 'account-circle' : 'account-circle-outline'}
                 color={color}

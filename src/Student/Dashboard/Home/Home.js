@@ -261,7 +261,7 @@ const Home = ({navigation}) => {
           showsHorizontalScrollIndicator={false}>
           {assignments &&
             assignments.map(assignment => (
-              <View style={{marginHorizontal: 10}}>
+              <View style={{marginHorizontal: 10}} key={assignment._id}>
                 <Text style={styles.card_heading}>Assignment</Text>
                 <View style={styles.shadow}>
                   <TouchableOpacity
@@ -287,7 +287,7 @@ const Home = ({navigation}) => {
           showsHorizontalScrollIndicator={false}>
           {notes &&
             notes.map(note => (
-              <View style={{marginHorizontal: 10}}>
+              <View style={{marginHorizontal: 10}} key={note._id}>
                 <Text style={styles.card_heading}>Notes</Text>
                 <View style={styles.shadow}>
                   <TouchableOpacity
@@ -435,6 +435,7 @@ function DrawerContent(props) {
           label={({focused, color}) => (
             <Text style={styles.drawer_item}>Report</Text>
           )}
+          onPress={() => props.navigation.navigate('Report')}
         />
         <TouchableOpacity>
           <Button

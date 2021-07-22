@@ -27,7 +27,13 @@ import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function OnlineLecture({navigation}) {
+  //theme
+  let institute = useSelector(state => state.institute);
+
   // input variables
   const [url, setUrl] = useState(null);
   const [description, setDescription] = useState(null);
@@ -175,149 +181,150 @@ export default function OnlineLecture({navigation}) {
         </Text>
       </View>
       <ScrollView>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginTop: 10,
-        }}>
-        {/* course selector */}
-        <ModalSelector
-          data={courses}
-          initValue="Course"
-          onChange={option => {
-            getBatches(option.key);
-          }}
-          style={styles.card}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-
-        {/* batch selector */}
-        <ModalSelector
-          data={batches}
-          initValue="Batch"
-          onChange={option => {
-            setBatch(option.key);
-          }}
-          style={styles.card}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-      </View>
-
-      {/* input details */}
-      <Card style={styles.card1}>
-        <Card.Content>
-          <TextInput
-            placeholder="URL"
-            style={{
-              textAlignVertical: 'top',
-              borderBottomWidth: 0.5,
-              fontSize: 15,
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            marginTop: 10,
+          }}>
+          {/* course selector */}
+          <ModalSelector
+            data={courses}
+            initValue="Course"
+            onChange={option => {
+              getBatches(option.key);
             }}
-            onChangeText={val => setUrl(val)}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
           />
 
-          <TextInput
-            placeholder="Description"
-            multiline={true}
-            numberOfLines={4}
-            style={{
-              textAlignVertical: 'top',
-              marginTop: 5,
-              height: 150,
-              fontSize: 15,
+          {/* batch selector */}
+          <ModalSelector
+            data={batches}
+            initValue="Batch"
+            onChange={option => {
+              setBatch(option.key);
             }}
-            onChangeText={val => setDescription(val)}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
           />
+        </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-            }}>
-            {/* date picker */}
-            <Button
-              icon="calendar"
-              mode="contained"
-              color="white"
-              style={{margin: 2}}
-              onPress={() => setShowDatePicker(true)}>
-              Date
-            </Button>
-
-            <DateTimePickerModal
-              isVisible={showdatePicker}
-              mode="date"
-              onConfirm={handleSubmit}
-              onCancel={() => setShowDatePicker(!showdatePicker)}
+        {/* input details */}
+        <Card style={styles.card1}>
+          <Card.Content>
+            <TextInput
+              placeholder="URL"
+              style={{
+                textAlignVertical: 'top',
+                borderBottomWidth: 0.5,
+                fontSize: 15,
+              }}
+              onChangeText={val => setUrl(val)}
             />
-            <View style={{width: 40}}></View>
-            {/* time picker */}
-            <Button
-              icon="calendar"
-              mode="contained"
-              color="white"
-              style={{margin: 2}}
-              onPress={() => setShowTimePicker(true)}>
-              Time
-            </Button>
 
-            <DateTimePickerModal
-              isVisible={showtimePicker}
-              mode="time"
-              onConfirm={handleSubmit2}
-              onCancel={() => setShowTimePicker(!showtimePicker)}
+            <TextInput
+              placeholder="Description"
+              multiline={true}
+              numberOfLines={4}
+              style={{
+                textAlignVertical: 'top',
+                marginTop: 5,
+                height: 150,
+                fontSize: 15,
+              }}
+              onChangeText={val => setDescription(val)}
             />
-          </View>
-        </Card.Content>
-      </Card>
 
-      <Text
-        style={{
-          fontSize: 17,
-          fontFamily: 'Poppins-Regular',
-          paddingLeft: 15,
-          marginTop: 20,
-        }}>
-        Reccurence Days
-      </Text>
-      <View style={styles.Week}>
-        {Object.keys(recDays).map(day => (
-          <View style={{marginTop: 15}} key={day}>
-            <TouchableOpacity
-              onPress={() => {
-                setRecDays(prevRecDays => {
-                  return {
-                    ...prevRecDays,
-                    [day]: !recDays[[day]],
-                  };
-                });
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
               }}>
-              <View
-                style={{
-                  backgroundColor: recDays[day] == true ? '#1F7C17' : '#58636D',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 10,
-                  width: 90,
-                  height: 40,
+              {/* date picker */}
+              <Button
+                icon="calendar"
+                mode="contained"
+                color="white"
+                style={{margin: 2}}
+                onPress={() => setShowDatePicker(true)}>
+                Date
+              </Button>
+
+              <DateTimePickerModal
+                isVisible={showdatePicker}
+                mode="date"
+                onConfirm={handleSubmit}
+                onCancel={() => setShowDatePicker(!showdatePicker)}
+              />
+              <View style={{width: 40}}></View>
+              {/* time picker */}
+              <Button
+                icon="calendar"
+                mode="contained"
+                color="white"
+                style={{margin: 2}}
+                onPress={() => setShowTimePicker(true)}>
+                Time
+              </Button>
+
+              <DateTimePickerModal
+                isVisible={showtimePicker}
+                mode="time"
+                onConfirm={handleSubmit2}
+                onCancel={() => setShowTimePicker(!showtimePicker)}
+              />
+            </View>
+          </Card.Content>
+        </Card>
+
+        <Text
+          style={{
+            fontSize: 17,
+            fontFamily: 'Poppins-Regular',
+            paddingLeft: 15,
+            marginTop: 20,
+          }}>
+          Reccurence Days
+        </Text>
+        <View style={styles.Week}>
+          {Object.keys(recDays).map(day => (
+            <View style={{marginTop: 15}} key={day}>
+              <TouchableOpacity
+                onPress={() => {
+                  setRecDays(prevRecDays => {
+                    return {
+                      ...prevRecDays,
+                      [day]: !recDays[[day]],
+                    };
+                  });
                 }}>
-                <Text style={{color: 'white'}}>{day}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
-      <View style={{alignItems: 'center'}}>
-        <Button
-          mode="contained"
-          style={styles.submitButton}
-          onPress={handleSaveClass}>
-          Go Live
-        </Button>
-      </View>
+                <View
+                  style={{
+                    backgroundColor:
+                      recDays[day] == true ? '#1F7C17' : '#58636D',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 10,
+                    width: 90,
+                    height: 40,
+                  }}>
+                  <Text style={{color: 'white'}}>{day}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+        <View style={{alignItems: 'center'}}>
+          <Button
+            mode="contained"
+            style={styles.submitButton}
+            onPress={handleSaveClass}>
+            Go Live
+          </Button>
+        </View>
       </ScrollView>
     </View>
   );
@@ -366,7 +373,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 12,
     elevation: 5,
-   
   },
   input: {
     height: 40,

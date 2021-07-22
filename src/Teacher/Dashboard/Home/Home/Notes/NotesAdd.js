@@ -26,6 +26,9 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import {useSelector} from 'react-redux';
 
 export default function AddNotes({navigation}) {
+  const [topic, setTopic] = useState(null);
+  const [desc, setDescription] = useState(null);
+
   const [className, setclassName] = useState(null);
   const [classes, setclasses] = useState([
     {label: 'Class1', key: 'Class1'},
@@ -90,7 +93,7 @@ export default function AddNotes({navigation}) {
             data={classes}
             initValue="Class"
             onChange={option => {
-              setclass(option.key);
+              setclassName(option.key);
             }}
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
@@ -119,7 +122,7 @@ export default function AddNotes({navigation}) {
           />
           <TextInput
             placeholder="Description (optional) "
-            onChange={val => setDiscription(val)}
+            onChange={val => setDescription(val)}
             style={{
               height: 150,
               textAlignVertical: 'top',

@@ -105,7 +105,7 @@ export default function Profile({navigation}) {
             <FontAwesome5
               name="user-alt"
               style={{
-                color: institute.themeColor,
+                color: institute ? institute.themeColor : 'black',
                 fontSize: 22,
                 marginRight: 10,
               }}
@@ -118,7 +118,7 @@ export default function Profile({navigation}) {
             <FontAwesome5
               name="building"
               style={{
-                color: institute.themeColor,
+                color: institute ? institute.themeColor : 'black',
                 fontSize: 22,
                 marginRight: 10,
               }}
@@ -131,7 +131,7 @@ export default function Profile({navigation}) {
             <FontAwesome5
               name="user-check"
               style={{
-                color: institute.themeColor,
+                color: institute ? institute.themeColor : 'black',
                 fontSize: 22,
                 marginRight: 10,
               }}
@@ -144,7 +144,7 @@ export default function Profile({navigation}) {
             <FontAwesome5
               name="id-badge"
               style={{
-                color: institute.themeColor,
+                color: institute ? institute.themeColor : 'black',
                 fontSize: 22,
                 marginRight: 10,
               }}
@@ -157,7 +157,7 @@ export default function Profile({navigation}) {
             <FontAwesome5
               name="user-tag"
               style={{
-                color: institute.themeColor,
+                color: institute ? institute.themeColor : 'black',
                 fontSize: 22,
                 marginRight: 10,
               }}
@@ -170,7 +170,7 @@ export default function Profile({navigation}) {
             <FontAwesome5
               name="mobile-alt"
               style={{
-                color: institute.themeColor,
+                color: institute ? institute.themeColor : 'black',
                 fontSize: 22,
                 marginRight: 10,
               }}
