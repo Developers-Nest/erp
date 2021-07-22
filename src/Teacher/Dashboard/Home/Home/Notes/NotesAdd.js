@@ -114,12 +114,12 @@ export default function AddNotes({navigation}) {
         <Card.Content>
           <TextInput
             placeholder="Topic "
-            // onChange={val => setTopic(val)}
+            onChange={val => setTopic(val)}
             style={{borderBottomWidth: 0.5, fontSize: 15}}
           />
           <TextInput
             placeholder="Description (optional) "
-            // onChange={val => setDiscription(val)}
+            onChange={val => setDiscription(val)}
             style={{
               height: 150,
               textAlignVertical: 'top',
