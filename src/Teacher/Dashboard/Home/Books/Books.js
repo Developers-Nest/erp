@@ -308,18 +308,17 @@ export default function IssuedBooksScreen1({navigation}) {
 
         <View
           style={{
-           alignItems:'center',
+            width: '90%',
+            marginLeft: 25,
             marginBottom: 20,
             marginTop: 20,
           }}>
           {/* open search */}
-          <View style={{width:'90%',alignItems:'center'}}>
-        
           <View
             style={{
-             
+              marginTop: 10,
               //make search and card in same line
-            
+              marginLeft: 5,
               justifyContent: 'space-between',
               width: '95%',
               flexDirection: 'row',
@@ -342,7 +341,6 @@ export default function IssuedBooksScreen1({navigation}) {
                 }}
               />
             </TouchableOpacity>
-          </View>
           </View>
         </View>
 
@@ -458,7 +456,7 @@ const styles = StyleSheet.create({
   },
 
   text_input: {
-    // paddingHorizontal: 20,
+    paddingHorizontal: 20,
     borderRadius: 10,
     // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,

@@ -101,16 +101,14 @@ export default function AssignmentsDue({navigation}) {
             />
           </TouchableOpacity>
         </View>
-
         <View
           style={{
-            // width: '90%',
-           alignItems:'center',
+            width: '90%',
+            marginLeft: 25,
             marginBottom: 30,
             marginTop: 30,
           }}>
           {/* open search */}
-          <View style={{width:'90%',alignItems:'center'}}>
           <View
             style={{
               justifyContent: 'space-between',
@@ -146,7 +144,6 @@ export default function AssignmentsDue({navigation}) {
             </TouchableOpacity>
           </View>
           {/* close search */}
-        </View>
         </View>
         <View style={styles.container}>
           <ScrollView>

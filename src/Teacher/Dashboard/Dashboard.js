@@ -73,13 +73,10 @@ export default function Dashboard() {
           borderTopWidth: 0,
           height: 80,
           backgroundColor: 'rgba(249, 249, 249, 1)',
-          position: 'absolute',
-          bottom: 0,
         },
         showLabel: false,
         activeTintColor: themeColor,
         inactiveTintColor: themeColor,
-        keyboardHidesTabBar: true,
       }}>
       <Tab.Screen
         name="Classes"
@@ -87,7 +84,7 @@ export default function Dashboard() {
         options={{
           tabBarLabel: 'Classes',
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center', width: 100}}>
+            <View style={{alignItems: 'center'}}>
               <MaterialCommunityIcons
                 name={focused ? 'video' : 'video-outline'}
                 color={color}
@@ -106,7 +103,7 @@ export default function Dashboard() {
         options={({route}) => ({
           tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center', width: 100}}>
+            <View style={{alignItems: 'center'}}>
               <IonIcon
                 name={focused ? 'bar-chart-sharp' : 'bar-chart-outline'}
                 color={color}
@@ -125,7 +122,7 @@ export default function Dashboard() {
         options={({route}) => ({
           tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center', width: 100}}>
+            <View style={{alignItems: 'center'}}>
               <IonIcon
                 name={focused ? 'home' : 'home-outline'}
                 color={color}
@@ -143,7 +140,7 @@ export default function Dashboard() {
         component={Message}
         options={{
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center', width: 100}}>
+            <View style={{alignItems: 'center'}}>
               <MaterialCommunityIcons
                 name={focused ? 'chat-processing' : 'chat-processing-outline'}
                 color={color}
@@ -161,7 +158,7 @@ export default function Dashboard() {
         component={Profile}
         options={{
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center', width: 100}}>
+            <View style={{alignItems: 'center'}}>
               <MaterialCommunityIcons
                 name={focused ? 'account-circle' : 'account-circle-outline'}
                 color={color}
