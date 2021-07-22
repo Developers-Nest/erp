@@ -92,12 +92,12 @@ export default function LecturesScreen({navigation}) {
         <ScrollView>
         <View
           style={{
-            width: '90%',
-            marginLeft: 25,
+            alignItems:'center',
             marginBottom: 20,
+            marginTop:10,
           }}>
           {/* open search */}
-
+<View style={{alignItems:'center',width:'90%'}}>
           <View
             style={{
               marginTop: 10,
@@ -133,6 +133,7 @@ export default function LecturesScreen({navigation}) {
                 }}
               />
             </TouchableOpacity>
+          </View>
           </View>
           {/* close search */}
         </View>
