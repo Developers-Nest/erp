@@ -94,11 +94,12 @@ export default function LecturesScreen({navigation}) {
           style={{
             // width: '99%',
             alignItems:'center',
-     
+            marginTop:10,
             marginBottom: 20,
           }}>
           {/* open search */}
 
+          <View style={{width:'90%',alignItems:'center'}}>
           <View
             style={{
               marginTop: 10,
@@ -134,6 +135,7 @@ export default function LecturesScreen({navigation}) {
                 }}
               />
             </TouchableOpacity>
+          </View>
           </View>
           {/* close search */}
         </View>
