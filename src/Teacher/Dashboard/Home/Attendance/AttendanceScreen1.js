@@ -245,7 +245,7 @@ const AttendanceScreen1 = ({navigation}) => {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'space-evenly',
             marginTop: 10,
             alignContent: 'flex-start',
             width: '100%',

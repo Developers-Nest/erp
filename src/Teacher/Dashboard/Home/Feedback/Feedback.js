@@ -66,7 +66,9 @@ export default function Feedback({navigation}) {
         </Text>
       </View>
       <View style={{padding: 10}} />
-      <View style={{backgroundColor: 'white'}}>
+      <View style={{paddingHorizontal:20}}>
+
+      <View style={{backgroundColor: 'white', justifyContent:'space-evenly'}}>
         <ModalSelector
           data={type}
           initValue="Type"
@@ -96,6 +98,7 @@ export default function Feedback({navigation}) {
           />
         </Card.Content>
       </Card>
+      </View>
     </View>
   );
 }
