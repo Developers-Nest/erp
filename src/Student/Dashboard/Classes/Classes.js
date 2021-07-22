@@ -34,26 +34,9 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Lectures"
-        component={LecturesScreen}
-        options={({navigation, route}) => ({
-          headerTitle: 'Lectures',
-          // // headerStyle: {
-          // //   backgroundColor: '#f4511e',
-          // // },
-          // headerRight: () => (
-          //   <Icon
-          //     name="add-circle"
-          //     size={30}
-          //     color="#900"
-          //     onPress={() => navigation.navigate('GoLive')}
-          //   />
-          // ),
-        })}
-      />
-      {/* <Stack.Screen name="GoLive" component={GoLiveScreen} /> */}
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Lectures" component={LecturesScreen} />
+      <Stack.Screen name="GoLive" component={GoLiveScreen} />
     </Stack.Navigator>
   );
 }

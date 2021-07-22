@@ -7,6 +7,9 @@ import {
   ScrollView,
 } from 'react-native';
 
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 // redux
 import {useSelector} from 'react-redux';
 
@@ -15,7 +18,10 @@ import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 import timeTableBuilder from '../../../../services/helpers/extract/teacherTtDayWiseBuild';
 
-export default function OnlineLecture() {
+export default function Timetable({navigation}) {
+  //theming
+  const institute = useSelector(state => state.institute);
+
   const userInfo = useSelector(state => state.userInfo);
   const [timeTable, setTimeTable] = useState([]);
 
@@ -36,6 +42,41 @@ export default function OnlineLecture() {
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'white',
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
+          />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontStyle: 'normal',
+            fontSize: 28,
+            fontWeight: '600',
+            alignSelf: 'center',
+            paddingLeft: 30,
+            color: 'white',
+            fontFamily: 'NunitoSans-Regular',
+          }}>
+          Time Table
+        </Text>
+      </View>
       <ScrollView showsHorizontalScrollIndicator={false}>
         {timeTable &&
           Object.keys(timeTable).map((day, index) => {
@@ -83,7 +124,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
-    paddingTop: 20,
+  },
+  header: {
+    height: 69,
+    flexDirection: 'row',
   },
   shadow: {
     marginBottom: 10,

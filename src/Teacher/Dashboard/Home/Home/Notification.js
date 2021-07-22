@@ -128,7 +128,6 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-
     flexDirection: 'row',
   },
 

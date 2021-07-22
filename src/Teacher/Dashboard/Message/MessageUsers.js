@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,24 +10,24 @@ import {
   Image,
 } from 'react-native';
 
-
+//icons
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
+// redux
+import {useSelector} from 'react-redux';
+
 const Chats = ({navigation}) => {
+  navigationByCondition = item => {
+    const {navigation} = props.navigation;
 
-    navigationByCondition = (item) => {
-        const {navigation} = props.navigation;
-    
-        if (chat.userName==='Sarah') {
-          navigation.navigate('ChatScreen1');
-        } else {
-          navigation.navigate('Chats');
-        }
-      };
-    
-
+    if (chat.userName === 'Sarah') {
+      navigation.navigate('ChatScreen1');
+    } else {
+      navigation.navigate('Chats');
+    }
+  };
 
   const [messages, setMessages] = useState([
     {
@@ -39,7 +39,6 @@ const Chats = ({navigation}) => {
         seenByYou: true,
         seenByUser: true,
       },
-      
 
       time: 'now',
     },
@@ -123,71 +122,66 @@ const Chats = ({navigation}) => {
     },
   ]);
 
+  //theming
+  const institute = useSelector(state => state.institute);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       {/* Header */}
       <View
         style={{
-          height: 70,
-          backgroundColor: '#3c40c6',
-        }}
-      >
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'white',
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
+          />
+        </TouchableOpacity>
         <View
           style={{
-            // marginTop: Number(StatusBar.currentHeight),
-            marginTop: 10,
-            // backgroundColor: 'red',
-            // paddingVertical: 20,
-            paddingHorizontal: 10,
             flex: 1,
             flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-
-<TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Home');
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                paddingLeft: 10,
-              
-              }}
-            />
-          </TouchableOpacity>
-          
+            justifyContent: 'space-between',
+          }}>
           <Text
             style={{
-              marginLeft: 14,
-              fontSize: 22,
-              color: '#fff',
-             fontFamily:'Poppins-Regular'
-            }}
-          >
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontFamily: 'NunitoSans-Light',
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
             Messages
           </Text>
         </View>
       </View>
-      <View style={{height:20}}/>
+      <View style={{height: 20}} />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Stories */}
-        
+
         {/* Chats View */}
-        <View style={{ flex: 1 }}>
-          {messages.map((chat) => (
+        <View style={{flex: 1}}>
+          {messages.map(chat => (
             <TouchableOpacity
               style={{
                 marginTop: 10,
-                alignSelf:'center',
-                borderRadius:8,
+                alignSelf: 'center',
+                borderRadius: 8,
                 paddingHorizontal: 10,
                 paddingVertical: 10,
                 flexDirection: 'row',
@@ -196,27 +190,24 @@ const Chats = ({navigation}) => {
                 borderBottomWidth: 1,
                 borderBottomColor: '#dfe4ea',
                 shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 1,
-    elevation: 5,
-    width:'92%'
-    
+                shadowOffset: {
+                  width: 0,
+                  height: 1,
+                },
+                shadowOpacity: 1,
+                elevation: 5,
+                width: '92%',
               }}
-//for message of sarah
+              //for message of sarah
 
+              //       onPress={
 
-        //       onPress={
-                  
-        //         chat.userName == 'Sarah'
-        //         ? navigation.navigate('ChatScreen1'):
-        //     navigation.navigate('Chats')
-        // }
+              //         chat.userName == 'Sarah'
+              //         ? navigation.navigate('ChatScreen1'):
+              //     navigation.navigate('Chats')
+              // }
 
-       onPress={()=>navigation.navigate('ChatScreen1')}
-          
+              onPress={() => navigation.navigate('ChatScreen1')}
               onLongPress={() => {
                 Alert.alert(
                   'Delete Chat?',
@@ -231,75 +222,66 @@ const Chats = ({navigation}) => {
                       text: 'Yes',
                       onPress: () => {
                         let newChats = messages.filter(
-                          (m) => m.userName !== chat.userName
+                          m => m.userName !== chat.userName,
                         );
                         setMessages(newChats);
                       },
                     },
                   ],
-                  { cancelable: false }
+                  {cancelable: false},
                 );
-              }}
-            >
-              
-                <Image
-                  style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 100,
-                    // borderWidth:
-                    //   stories.filter(
-                    //     (story) => story.userName === chat.userName
-                    //   ).length > 0
-                    //     ? 4
-                    //     : null,
-                    // borderColor:
-                    //   stories.filter(
-                    //     (story) => story.userName === chat.userName
-                    //   ).length > 0
-                    //     ? '#3c40c6'
-                    //     : null,
-                  }}
-                  source={{
-                    uri: chat.userImage,
-                  }}
-                />
+              }}>
+              <Image
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 100,
+                  // borderWidth:
+                  //   stories.filter(
+                  //     (story) => story.userName === chat.userName
+                  //   ).length > 0
+                  //     ? 4
+                  //     : null,
+                  // borderColor:
+                  //   stories.filter(
+                  //     (story) => story.userName === chat.userName
+                  //   ).length > 0
+                  //     ? '#3c40c6'
+                  //     : null,
+                }}
+                source={{
+                  uri: chat.userImage,
+                }}
+              />
               {/* </TouchableOpacity> */}
-              <View style={{ flex: 1, paddingHorizontal: 10 }}>
+              <View style={{flex: 1, paddingHorizontal: 10}}>
                 <View
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
-                      fontWeight:'650',
-                      fontFamily:'Poppins-Regular',
+                      fontWeight: '650',
+                      fontFamily: 'Poppins-Regular',
                       fontSize: 18,
-                    }}
-                  >
+                    }}>
                     {chat.userName}
                   </Text>
-                  <Text style={{  fontSize: 14 }}>
-                    {chat.time}
-                  </Text>
+                  <Text style={{fontSize: 14}}>{chat.time}</Text>
                 </View>
                 <View
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                  }}
-                >
+                  }}>
                   {chat.isTyping ? (
                     <Text
                       style={{
-    
                         color: 'green',
                         fontSize: 16,
-                      }}
-                    >
+                      }}>
                       typing...
                     </Text>
                   ) : (
@@ -312,23 +294,19 @@ const Chats = ({navigation}) => {
                               : 'OpenSans-Regular'
                             : 'NunitoSans-Regular',
 
-                            color:
+                        color:
                           chat.message.sender !== 'You'
                             ? chat.message.seenByYou
                               ? 'black'
                               : 'blue'
                             : 'grey',
                         fontSize: 16,
-                      }}
-                    >
+                      }}>
                       {chat.message.text}
                     </Text>
                   )}
-                 
-                 {
-                
-                 
-                 /*
+
+                  {/*
                  CONDITION FOR ICONS FOR FOUR DIFFERENT CONDITIONS(TWO FOR SENDER AND TWO FOR ME)
                  1st condition:
                  for icons:
@@ -338,36 +316,33 @@ const Chats = ({navigation}) => {
                  if sender is at the other side and he/she sent the message:
                  if seenbyme(seenByYou)-then no icon placed,return null,
                  if not seen by me,unread,then new icon is returned in place of that */}
-                 
-                  {chat.message.sender === 'You' ? (
-                    chat.message.seenByUser ? (
-                       <MaterialIcon name='done-all' size={16} color='#3c40c6' />
-                    ) : (
-                       <MaterialIcon name='done' size={16} color={'#555'} />
+
+                  {
+                    chat.message.sender === 'You' ? (
+                      chat.message.seenByUser ? (
+                        <MaterialIcon
+                          name="done-all"
+                          size={16}
+                          color="#3c40c6"
+                        />
+                      ) : (
+                        <MaterialIcon name="done" size={16} color={'#555'} />
+                      )
+                    ) : chat.message.seenByYou ? null : (
+                      <EntypoIcon name="new" size={16} color="blue" />
                     )
-                  ) :
-                  (
-                    chat.message.seenByYou ? (
-                       null
-                    ) : (
-                        <EntypoIcon name='new' size={16} color='blue'/>
-                    )
-                  ) 
-                  // <EntypoIcon name='new' size={16} color='blue'/>
+                    // <EntypoIcon name='new' size={16} color='blue'/>
                   }
                 </View>
               </View>
             </TouchableOpacity>
           ))}
         </View>
-        <View style={{ height: 20 }}></View>
-        
+        <View style={{height: 20}}></View>
       </ScrollView>
     </View>
   );
 };
-
-
 
 export default Chats;
 
@@ -379,6 +354,10 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     overflow: 'hidden',
+  },
+  header: {
+    height: 69,
+    flexDirection: 'row',
   },
   storyContentView: {
     width: 90,

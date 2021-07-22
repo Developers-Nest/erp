@@ -73,8 +73,6 @@ export default function Dashboard() {
           borderTopWidth: 0,
           height: 80,
           backgroundColor: 'rgba(249, 249, 249, 1)',
-          position: 'absolute',
-          bottom: 0,
         },
         showLabel: false,
         activeTintColor: themeColor,

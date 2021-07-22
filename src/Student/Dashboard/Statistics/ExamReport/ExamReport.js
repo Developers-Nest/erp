@@ -9,10 +9,11 @@ import {
   TextInput,
 } from 'react-native';
 
+//icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import DropDownPicker from 'react-native-dropdown-picker';
-// import {Dropdown} from 'react-native-material-dropdown-v2-fixed';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
+//selector
 import ModalSelector from 'react-native-modal-selector';
 
 export default function ExamReport({navigation}) {
@@ -24,30 +25,47 @@ export default function ExamReport({navigation}) {
   ]);
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Statistics')}>
-          <FontAwesome5
-            name="chevron-left"
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Statistics');
+          }}>
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
             style={{
               alignSelf: 'center',
               fontSize: 25,
-              color: 'black',
+              color: 'white',
               paddingLeft: 20,
               paddingTop: 20,
             }}
           />
         </TouchableOpacity>
-        <Text
+        <View
           style={{
-            fontStyle: 'normal',
-            fontSize: 28,
-            fontFamily: 'NunitoSans-Light',
-            fontWeight: '600',
-            alignSelf: 'center',
-            paddingLeft: 30,
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}>
-          Exam Reports
-        </Text>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontFamily: 'NunitoSans-Light',
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
+            Exam Reports
+          </Text>
+        </View>
       </View>
       <View style={{padding: 15}}>
         {/* <DropDownPicker
@@ -190,7 +208,6 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'white',
     flexDirection: 'row',
   },
 

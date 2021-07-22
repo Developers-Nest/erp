@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,10 +13,10 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
+import {Icon} from 'react-native-elements';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-export default function ChatScreen1({ navigation }) {
+export default function ChatScreen1({navigation}) {
   const [chatUser] = useState({
     name: 'Sarah',
     profile_image: 'https://randomuser.me/api/portraits/women/79.jpg',
@@ -28,10 +28,11 @@ export default function ChatScreen1({ navigation }) {
   });
 
   const [messages, setMessages] = useState([
-    { sender: 'Deepsi', message: 'Hey there!', time: '6:01 PM' },
+    {sender: 'Deepsi', message: 'Hey there!', time: '6:01 PM'},
     {
       sender: 'Sarah',
-      message: 'This event will be held today and it is requested for you to come and also bring your family with you',
+      message:
+        'This event will be held today and it is requested for you to come and also bring your family with you',
       time: '6:02 PM',
     },
     {
@@ -59,7 +60,7 @@ export default function ChatScreen1({ navigation }) {
       message: `Thank you so much.`,
       time: '6:03 PM',
     },
-   ]);
+  ]);
 
   const [inputMessage, setInputMessage] = useState('');
 
@@ -90,82 +91,78 @@ export default function ChatScreen1({ navigation }) {
     setInputMessage('');
   }
 
-  
-
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-      
-
-<View
-        style={{
-          height: 70,
-          backgroundColor: '#fff',
-        }}
-      >
         <View
           style={{
-            // marginTop: Number(StatusBar.currentHeight),
-            marginTop: 10,
-            // backgroundColor: 'red',
-            // paddingVertical: 20,
-            paddingHorizontal: 10,
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-
-<TouchableOpacity
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <AntDesign
-              size={24}
-              color="#505069"
-              name="left"
-              style={{
-                alignSelf: 'center',
-                fontSize: 24.02,
-               
-                paddingLeft: 10,
-              
-              }}
-            />
-          </TouchableOpacity>
-          <Image
-            style={styles.userProfileImage}
-            source={{ uri: chatUser.profile_image }}
-          />
+            height: 70,
+            backgroundColor: '#fff',
+          }}>
           <View
             style={{
-              marginLeft: 20,
+              // marginTop: Number(StatusBar.currentHeight),
+              marginTop: 10,
+              // backgroundColor: 'red',
+              // paddingVertical: 20,
+              paddingHorizontal: 10,
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <AntDesign
+                size={24}
+                color="#505069"
+                name="left"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 24.02,
 
-              justifyContent: 'center',
- 
-            }}
-          >
-            <Text style={{ color: '#505069', fontWeight: '600', fontSize: 28,fontFamily:'NunitoSans-Regular' }}>
-              {chatUser.name}
-            </Text>
-            <Text style={{ color: 'black', fontWeight: '300' }}>
-              {chatUser.last_seen}
-            </Text>
+                  paddingLeft: 10,
+                }}
+              />
+            </TouchableOpacity>
+            <Image
+              style={styles.userProfileImage}
+              source={{uri: chatUser.profile_image}}
+            />
+            <View
+              style={{
+                marginLeft: 20,
+
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  color: '#505069',
+                  fontWeight: '600',
+                  fontSize: 28,
+                  fontFamily: 'NunitoSans-Regular',
+                }}>
+                {chatUser.name}
+              </Text>
+              <Text style={{color: 'black', fontWeight: '300'}}>
+                {chatUser.last_seen}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
         <FlatList
-          style={{ backgroundColor: '#f2f2ff' }}
+          style={{backgroundColor: '#f2f2ff'}}
           inverted={true}
           data={JSON.parse(JSON.stringify(messages)).reverse()}
-          renderItem={({ item }) => (
+          renderItem={({item}) => (
             <TouchableWithoutFeedback>
-              <View style={{ marginTop: 6 }}>
+              <View style={{marginTop: 6}}>
                 <View
                   style={{
                     maxWidth: Dimensions.get('screen').width * 0.8,
-                    backgroundColor:  item.sender === currentUser.name ?'#62525D' : '#505069',
+                    backgroundColor:
+                      item.sender === currentUser.name ? '#62525D' : '#505069',
                     alignSelf:
                       item.sender === currentUser.name
                         ? 'flex-end'
@@ -177,15 +174,13 @@ export default function ChatScreen1({ navigation }) {
                       item.sender === currentUser.name ? 25 : 0,
                     borderBottomRightRadius:
                       item.sender === currentUser.name ? 0 : 25,
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: '#FFFFFF',
                       fontSize: 14,
-                      fontFamily:'Poppins-Regular'
-                    }}
-                  >
+                      fontFamily: 'Poppins-Regular',
+                    }}>
                     {item.message}
                   </Text>
                   <Text
@@ -193,8 +188,7 @@ export default function ChatScreen1({ navigation }) {
                       color: '#dfe4ea',
                       fontSize: 14,
                       alignSelf: 'flex-end',
-                    }}
-                  >
+                    }}>
                     {item.time}
                   </Text>
                 </View>
@@ -203,13 +197,13 @@ export default function ChatScreen1({ navigation }) {
           )}
         />
 
-        <View style={{ paddingVertical: 10 }}>
+        <View style={{paddingVertical: 10}}>
           <View style={styles.messageInputView}>
             <TextInput
               defaultValue={inputMessage}
               style={styles.messageInput}
-              placeholder='Message'
-              onChangeText={(text) => setInputMessage(text)}
+              placeholder="Message"
+              onChangeText={text => setInputMessage(text)}
               onSubmitEditing={() => {
                 sendMessage();
               }}
@@ -218,9 +212,8 @@ export default function ChatScreen1({ navigation }) {
               style={styles.messageSendView}
               onPress={() => {
                 sendMessage();
-              }}
-            >
-              <Icon name='send' type='material' />
+              }}>
+              <Icon name="send" type="material" />
             </TouchableOpacity>
           </View>
         </View>
@@ -237,7 +230,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  userProfileImage: { height: '80%', aspectRatio: 1, borderRadius: 100 ,marginLeft:20,marginBottom:5},
+  userProfileImage: {
+    height: '80%',
+    aspectRatio: 1,
+    borderRadius: 100,
+    marginLeft: 20,
+    marginBottom: 5,
+  },
   container: {
     flex: 1,
     backgroundColor: '#f2f2ff',

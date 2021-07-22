@@ -22,7 +22,9 @@ import {
   value,
 } from 'react-native-reanimated';
 import {Searchbar, Button} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/AntDesign';
+
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // helpers
 import get from '../../../../services/helpers/request/get';
@@ -278,9 +280,16 @@ export default function AssignmentStudentDue({navigation}) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => {}}>
-            <Icon
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Home');
+            }}>
+            <AntDesign
               size={24}
               color="white"
               name="left"
@@ -288,27 +297,30 @@ export default function AssignmentStudentDue({navigation}) {
                 alignSelf: 'center',
                 fontSize: 25,
                 color: 'white',
-                paddingTop: 8,
-                paddingRight: 10,
+                paddingLeft: 20,
+                paddingTop: 20,
               }}
             />
           </TouchableOpacity>
-          <Text
+          <View
             style={{
-              fontStyle: 'normal',
-              fontFamily: 'NunitoSans-Regular',
-              fontSize: 28,
-              fontWeight: '600',
-              color: 'white',
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
             }}>
-            Assignments
-          </Text>
-          {/* <View style={{flex:1,marginLeft:20}}>
-    <TouchableOpacity onPress={()=>{}}>
-    <Ionicons name="add-circle-outline" style={{alignSelf:'center',fontSize:25,color:'white',paddingLeft:20,paddingTop:15}}/>
-    </TouchableOpacity>
-    <Text style={{paddingLeft:20,color:'#fff'}}>Issue Books</Text>
-    </View> */}
+            <Text
+              style={{
+                fontStyle: 'normal',
+                fontSize: 28,
+                fontFamily: 'NunitoSans-Light',
+                fontWeight: '600',
+                alignSelf: 'center',
+                paddingLeft: 30,
+                color: 'white',
+              }}>
+              Assignments
+            </Text>
+          </View>
         </View>
 
         <View
@@ -494,11 +506,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5E5E5',
   },
   header: {
-    height: 65,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
+    height: 69,
     flexDirection: 'row',
-    // justifyContent:'flex-start'   ,
-    padding: 10,
   },
   button: {
     backgroundColor: 'rgba(81, 119, 231, 1)',

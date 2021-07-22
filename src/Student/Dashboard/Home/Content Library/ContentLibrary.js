@@ -13,27 +13,26 @@ import {
 
 import {Container, Content, List, ListItem, Header, Icon} from 'native-base';
 
+//icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {
-  event,
-  onChange,
-  setValue,
-  target,
-  value,
-} from 'react-native-reanimated';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import {Searchbar, Button, Appbar} from 'react-native-paper';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function ContentLibrary({navigation}) {
-  const [activeTab, setActiveTab] = React.useState('Material');
+  //theming
+  const institute = useSelector(state => state.institute);
 
   const [searchQuery, setSearchQuery] = React.useState('');
-
   const onChangeSearch = query => setSearchQuery(query);
-  
-  const[setContent,setShowContent]=React.useState('Materials');
+
+  const [setContent, setShowContent] = React.useState('Materials');
+
   function Material() {
     const [searchQuery, setSearchQuery] = React.useState('');
-
     const onChangeSearch = query => setSearchQuery(query);
 
     return (
@@ -216,10 +215,49 @@ export default function ContentLibrary({navigation}) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{flex: 1}}>
-        <Appbar>
-          <Appbar.BackAction onPress={() => {navigation.goBack();}} />
-          <Appbar.Content title="Content Library" />
-        </Appbar>
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ContentSubject');
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
+            />
+          </TouchableOpacity>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Text
+              style={{
+                fontStyle: 'normal',
+                fontSize: 28,
+                fontFamily: 'NunitoSans-Light',
+                fontWeight: '600',
+                alignSelf: 'center',
+                paddingLeft: 30,
+                color: 'white',
+              }}>
+              Content Library
+            </Text>
+          </View>
+        </View>
+
         <View style={styles.maincontainer}>
           <View
             style={{
@@ -274,9 +312,12 @@ export default function ContentLibrary({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 10,
     flex: 1,
     backgroundColor: '#E5E5E5',
+  },
+  header: {
+    height: 69,
+    flexDirection: 'row',
   },
   bottom: {
     position: 'absolute',

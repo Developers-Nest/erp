@@ -6,34 +6,46 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Text} from 'react-native-paper';
 
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//stack navigation
 import Notifications from './Notification/Notifications';
 import Circulars from './Notification/Circulars';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function Notify({navigation}) {
-  // const [activeTab, setActiveTab] = React.useState('Notification');
+  //theming
+  const institute = useSelector(state => state.institute);
+
   const [showContent, setshowContent] = React.useState('Notification');
-  // const [searchQuery, setSearchQuery] = React.useState('');
-  // const onChangeSearch = query => setSearchQuery(query);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <View style={styles.header}>
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Home');
             }}>
-            <FontAwesome5
-              name="chevron-left"
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
               style={{
                 alignSelf: 'center',
                 fontSize: 25,
-                color: 'black',
+                color: 'white',
                 paddingLeft: 20,
                 paddingTop: 20,
               }}
@@ -43,10 +55,11 @@ export default function Notify({navigation}) {
             style={{
               fontStyle: 'normal',
               fontSize: 28,
-              fontFamily: 'NunitoSans-Light',
               fontWeight: '600',
               alignSelf: 'center',
               paddingLeft: 30,
+              color: 'white',
+              fontFamily: 'NunitoSans-Regular',
             }}>
             {showContent === 'Circular' ? 'Circular' : 'Notification'}
           </Text>
@@ -88,6 +101,10 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomColor: '#333',
   },
+  header: {
+    height: 69,
+    flexDirection: 'row',
+  },
 
   switchTabsView: {
     flexDirection: 'row',
@@ -110,12 +127,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
-  },
-
-  header: {
-    height: 69,
-    backgroundColor: 'white',
-    flexDirection: 'row',
   },
 
   cardsWrapper: {

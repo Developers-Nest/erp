@@ -17,6 +17,11 @@ import {
   TextInput,
 } from 'react-native-paper';
 import {createStackNavigator} from '@react-navigation/stack';
+
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+//step indicator
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import StepIndicator from 'react-native-step-indicator';
 
@@ -61,17 +66,23 @@ export default function Fees({navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
-            navigation.goBack();
+            navigation.navigate('Home');
           }}>
-          <FontAwesome5
-            name="chevron-left"
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
             style={{
               alignSelf: 'center',
               fontSize: 25,
-              color: 'black',
+              color: 'white',
               paddingLeft: 20,
               paddingTop: 20,
             }}
@@ -81,10 +92,10 @@ export default function Fees({navigation}) {
           style={{
             fontStyle: 'normal',
             fontSize: 28,
-            fontFamily: 'NunitoSans-Light',
             fontWeight: '600',
             alignSelf: 'center',
             paddingLeft: 30,
+            color: 'white',
           }}>
           Fees
         </Text>
@@ -150,7 +161,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 69,
-    backgroundColor: 'white',
     flexDirection: 'row',
   },
   shadow: {

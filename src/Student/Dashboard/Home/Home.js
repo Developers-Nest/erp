@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,23 +10,24 @@ import {
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
-import { Text, Searchbar, Card, Button, Drawer } from 'react-native-paper';
+import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
 import {
   createDrawerNavigator,
   useIsDrawerOpen,
   DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
+//icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 //drawer navigation
-// import Assignment from './Assignment/Assignment';
 import AssignmentStudent from './AssignmentStudent/AssignmentStudent';
 import Attendance from './Attendance/Attendance';
 import Books from './Books/Books';
@@ -43,21 +44,24 @@ import Notes from './Home/Notes';
 import Timetable from './Home/Timetable';
 
 // redux
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 // helpers
-import read from '../../../services/localstorage/read'
-import get from '../../../services/helpers/request/get'
+import read from '../../../services/localstorage/read';
+import get from '../../../services/helpers/request/get';
 
 // loadingScreen
-import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen'
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
 let parseDate = myDate => {
   let d = new Date(myDate);
   return d.toString().slice(0, 15);
 };
 
-const Home = ({ navigation }) => {
+let userInfo;
+
+const Home = ({navigation}) => {
+  let institute = useSelector(state => state.institute);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
   const toggleExpanded = () => {
@@ -65,47 +69,103 @@ const Home = ({ navigation }) => {
   };
   const onChangeSearch = query => setSearchQuery(query);
 
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  const [assignments, setAssignements] = useState([])
-  const [books, setBooks] = useState([])
-  const [notes, setNotes] = useState([])
-
-
+  const [assignments, setAssignements] = useState([]);
+  const [books, setBooks] = useState([]);
+  const [notes, setNotes] = useState([]);
 
   useEffect(async () => {
-
     try {
-      let slug = '/note/studentAssignment'
-      let token = await read('token')
-      const res = await get(slug, token)
-      console.log('Assignments ', res)
-      setAssignements(res)
+      let slug = '/note/studentAssignment';
+      let token = await read('token');
+      const res = await get(slug, token);
+      console.log('Assignments ', res);
+      setAssignements(res);
     } catch (err) {
-      alert('Cannot fetch Assignements!!')
+      alert('Cannot fetch Assignements!!');
     }
 
     try {
-
-      let slug = '/note'
-      let token = await read('token')
-      const ress = await get(slug, token)
-      console.log('Notes ', ress)
-      setNotes(ress)
+      let slug = '/note';
+      let token = await read('token');
+      const ress = await get(slug, token);
+      console.log('Notes ', ress);
+      setNotes(ress);
     } catch (err) {
-      alert('Cannot fetch Notes!!')
+      alert('Cannot fetch Notes!!');
     }
-
-  }, [])
+  }, []);
 
   return (
     <View style={styles.container}>
       {loadingScreen}
-      <View style={{ height: 20 }}></View>
-      <View style={{ marginHorizontal: 30, ...styles.shadow }}>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.toggleDrawer();
+          }}>
+          <MaterialIcon
+            name="align-horizontal-left"
+            style={{
+              alignSelf: 'center',
+              fontSize: 35,
+              color: 'black',
+              paddingLeft: 20,
+              paddingTop: 20,
+              color: institute ? institute.themeColor : 'black',
+            }}
+          />
+          {/* <FontAwesome5
+            name="book"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'black',
+              paddingLeft: 20,
+              paddingTop: 20,
+              color: institute ? institute.themeColor : 'black',
+            }}
+          /> */}
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontStyle: 'normal',
+            fontSize: 28,
+            fontFamily: 'NunitoSans-Regular',
+            fontWeight: '600',
+            alignSelf: 'center',
+            paddingLeft: 30,
+            color: institute ? institute.themeColor : 'black',
+          }}>
+          {userInfo ? `Hi ${userInfo.firstName}` : `Hi`}
+        </Text>
+
+        <TouchableOpacity
+          style={{
+            justifyContent: 'flex-end',
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+          onPress={() => navigation.navigate('Notification')}>
+          <FontAwesome5
+            name="bell"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'black',
+              paddingRight: 20,
+              color: institute ? institute.themeColor : 'black',
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={{paddingTop: 10}}></View>
+      <View style={{marginHorizontal: 30, ...styles.shadow}}>
         <View style={styles.search}>
           <TextInput
-            style={{ ...styles.search_input }}
+            style={{...styles.search_input}}
             placeholder="Live class, fees and more"
           />
 
@@ -125,11 +185,11 @@ const Home = ({ navigation }) => {
         </View>
       </View>
       <ScrollView style={styles.main}>
-        <View style={{ height: 30 }}></View>
+        <View style={{height: 30}}></View>
         <View>
           <Text style={styles.section_heading}>Upcoming Classes</Text>
         </View>
-        <View style={{ marginHorizontal: 30, ...styles.classes_cardWrapper }}>
+        <View style={{marginHorizontal: 30, ...styles.classes_cardWrapper}}>
           {[1, 2, 3].map((element, index) => {
             return (
               <TouchableOpacity
@@ -145,11 +205,11 @@ const Home = ({ navigation }) => {
             );
           })}
         </View>
-        <View style={{ height: 30 }}></View>
+        <View style={{height: 30}}></View>
         <View>
           <Text style={styles.section_heading}>New Circular</Text>
         </View>
-        <View style={{ marginHorizontal: 30, ...styles.shadow }}>
+        <View style={{marginHorizontal: 30, ...styles.shadow}}>
           <View
             style={{
               borderTopLeftRadius: 8,
@@ -166,7 +226,7 @@ const Home = ({ navigation }) => {
                 <FontAwesome5
                   name="chevron-up"
                   size={14}
-                  style={{ color: 'rgba(62, 104, 228, 0.9)' }}
+                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
                 />
                 <Text style={styles.collapsable_IconText}>Read Less</Text>
               </TouchableOpacity>
@@ -177,7 +237,7 @@ const Home = ({ navigation }) => {
                 <FontAwesome5
                   name="chevron-down"
                   size={14}
-                  style={{ color: 'rgba(62, 104, 228, 0.9)' }}
+                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
                 />
                 <Text style={styles.collapsable_IconText}>Read More</Text>
               </TouchableOpacity>
@@ -196,57 +256,62 @@ const Home = ({ navigation }) => {
 
         {/* assignment section */}
         <ScrollView
-          contentContainerStyle={{ ...styles.card_Wrapper, marginHorizontal: 10 }}
+          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          {
-            assignments && assignments.map((assignment) => (
-              <View style={{ marginHorizontal: 10 }}>
+          {assignments &&
+            assignments.map(assignment => (
+              <View style={{marginHorizontal: 10}}>
                 <Text style={styles.card_heading}>Assignment</Text>
                 <View style={styles.shadow}>
                   <TouchableOpacity
                     style={styles.card}
                     onPress={() => Linking.openURL(assignment.url)}>
-                    <Text style={styles.card_row1}>{assignment.subject ? assignment.subject.name : null}</Text>
+                    <Text style={styles.card_row1}>
+                      {assignment.subject ? assignment.subject.name : null}
+                    </Text>
                     <Text style={styles.card_row2}>{assignment.title}</Text>
-                    <Text style={styles.card_row3}>Due: {parseDate(assignment.submissionDate).slice(0,10)}</Text>
+                    <Text style={styles.card_row3}>
+                      Due: {parseDate(assignment.submissionDate).slice(0, 10)}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
-
-            ))
-          }
+            ))}
         </ScrollView>
 
         {/* books section */}
         <ScrollView
-          contentContainerStyle={{ ...styles.card_Wrapper, marginHorizontal: 10 }}
+          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          {
-            notes && notes.map((note) => (
-              <View style={{ marginHorizontal: 10 }}>
+          {notes &&
+            notes.map(note => (
+              <View style={{marginHorizontal: 10}}>
                 <Text style={styles.card_heading}>Notes</Text>
                 <View style={styles.shadow}>
                   <TouchableOpacity
                     style={styles.card}
-                    onPress={()=> Linking.openURL(note.url)}
-                    >
+                    onPress={() => Linking.openURL(note.url)}>
                     <Text style={styles.card_row1}>{note.title}</Text>
-                    <Text style={styles.card_row2}>{note.subject ? note.subject.name : null}</Text>
-                    <Text style={styles.card_row3}>{note.course ? note.course.courseName : null}</Text>
+                    <Text style={styles.card_row2}>
+                      {note.subject ? note.subject.name : null}
+                    </Text>
+                    <Text style={styles.card_row3}>
+                      {note.course ? note.course.courseName : null}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
-            ))
-          }
+            ))}
         </ScrollView>
 
         {/* books section */}
-        <ScrollView contentContainerStyle={{ ...styles.card_Wrapper, marginHorizontal: 10 }}
+        <ScrollView
+          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          <View style={{ marginHorizontal: 10 }}>
+          <View style={{marginHorizontal: 10}}>
             <Text style={styles.card_heading}>Fees</Text>
             <View style={styles.shadow}>
               <TouchableOpacity
@@ -272,62 +337,22 @@ const Home_Route = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={({ navigation, route }) => ({
-          headerTitle: 'Hi Youuu',
-          headerStyle: {
-            height: 70,
-          },
-          headerTitleStyle: {
-            fontSize: 25,
-          },
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Notification');
-              }}>
-              <FontAwesome5
-                name="bell"
-                style={{
-                  alignSelf: 'center',
-                  fontSize: 25,
-                  color: 'black',
-                  paddingRight: 20,
-                }}
-              />
-            </TouchableOpacity>
-          ),
-          headerLeft: () => (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.toggleDrawer();
-              }}>
-              <FontAwesome5
-                name="book"
-                style={{
-                  alignSelf: 'center',
-                  fontSize: 25,
-                  color: 'black',
-                  paddingLeft: 20,
-                }}
-              />
-            </TouchableOpacity>
-          ),
-        })}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Notification"
         component={Notification}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Notes"
         component={Notes}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Timetable"
         component={Timetable}
-      // options={{headerShown: false}}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
@@ -349,16 +374,105 @@ const getTabBarVisibility = route => {
   return false;
 };
 
+function DrawerContent(props) {
+  return (
+    <View style={{flex: 1}}>
+      <DrawerContentScrollView {...props}>
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Home</Text>
+          )}
+          onPress={() => props.navigation.navigate('Home')}
+        />
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Content Library</Text>
+          )}
+          onPress={() => props.navigation.navigate('ContentStack')}
+        />
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Attendance</Text>
+          )}
+          onPress={() => props.navigation.navigate('Attendance')}
+        />
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Fees</Text>
+          )}
+          onPress={() => props.navigation.navigate('Fees')}
+        />
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Assignment</Text>
+          )}
+          onPress={() => props.navigation.navigate('AssignmentStudent')}
+        />
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Books</Text>
+          )}
+          onPress={() => props.navigation.navigate('Books')}
+        />
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Feedback</Text>
+          )}
+          onPress={() => props.navigation.navigate('Feedback')}
+        />
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Transport</Text>
+          )}
+          onPress={() => props.navigation.navigate('Transport')}
+        />
+        <DrawerItem
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Report</Text>
+          )}
+        />
+        <TouchableOpacity>
+          <Button
+            style={{
+              fontFamily: 'Poppins-Regular',
+              fontStyle: 'normal',
+              fontWeight: '600',
+              fontSize: 14,
+              width: 100,
+              backgroundColor: 'red',
+              margin: 20,
+              marginLeft: 40,
+              backgroundColor: '#B04305',
+              borderRadius: 6,
+            }}
+            mode="contained">
+            Logout
+          </Button>
+        </TouchableOpacity>
+      </DrawerContentScrollView>
+    </View>
+  );
+}
+
 export default function Route() {
+  userInfo = useSelector(state => state.userInfo);
+  institute = useSelector(state => state.institute);
   return (
     <DrawerNav.Navigator
       initialRouteName="Home"
-      drawerContent={props => <DrawerContent {...props} />}
-      drawerStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}>
+      drawerContent={props => <DrawerContent {...props} />}>
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="ContentStack" component={ContentStack} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
-      <DrawerNav.Screen name="AssignmentStudent" component={AssignmentStudent} />
+      <DrawerNav.Screen
+        name="AssignmentStudent"
+        component={AssignmentStudent}
+      />
       <DrawerNav.Screen name="Books" component={Books} />
       <DrawerNav.Screen name="Fees" component={Fees} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
@@ -369,83 +483,6 @@ export default function Route() {
   );
 }
 
-function DrawerContent(props) {
-  return (
-    <View style={{ flex: 1 }}>
-      <Drawer.Section>
-        <Drawer.Item
-          label={'Home'}
-          style={{ fontWeight: '100' }}
-          onPress={() => props.navigation.navigate('Home')}
-        />
-        <Drawer.Item
-          label={'Content Library'}
-          onPress={() => props.navigation.navigate('ContentStack')}
-        />
-        <Drawer.Item
-          label={'Attendance'}
-          onPress={() => props.navigation.navigate('Attendance')}
-        />
-        <Drawer.Item
-          label={'Fees'}
-          onPress={() => props.navigation.navigate('Fees')}
-        />
-        <Drawer.Item
-          label={'Assignment'}
-          onPress={() => props.navigation.navigate('AssignmentStudent')}
-        />
-        <Drawer.Item
-          label={'Books'}
-          onPress={() => props.navigation.navigate('Books')}
-        />
-        <Drawer.Item
-          label={'Feedback'}
-          onPress={() => props.navigation.navigate('Feedback')}
-        />
-        <Drawer.Item
-          label={'Transport'}
-          style={{ color: 'white' }}
-          onPress={() => props.navigation.navigate('Transport')}
-        />
-        <Drawer.Item
-          label={'Report'}
-          onPress={() => props.navigation.navigate('Report')}
-        />
-      </Drawer.Section>
-      <DrawerContentScrollView
-        contentContainerStyle={{
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          flex: 1,
-          justifyContent: 'flex-end',
-        }}>
-        <TouchableOpacity>
-          <View
-            style={{
-              paddingHorizontal: 10,
-              paddingVertical: 10,
-
-              backgroundColor: '#B04305',
-              borderRadius: 6,
-              marginLeft: 20,
-              marginBottom: 34,
-            }}>
-            <Text
-              style={{
-                fontFamily: 'Poppins-Regular',
-                fontStyle: 'normal',
-                fontWeight: '600',
-                fontSize: 14,
-                color: '#FFFFFF',
-              }}>
-              Logout
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </DrawerContentScrollView>
-    </View>
-  );
-}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -453,6 +490,11 @@ const styles = StyleSheet.create({
   },
   main: {
     flex: 1,
+  },
+  header: {
+    height: 69,
+    backgroundColor: 'rgba(249, 249, 249, 1)',
+    flexDirection: 'row',
   },
   search: {
     backgroundColor: 'white',
@@ -617,4 +659,15 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingTop: 30,
   },
+  drawer_item: {
+    lineHeight: 24,
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 16,
+    paddingLeft: 30,
+    padding: 0,
+    margin: 0,
+  },
+  item: {padding: 0, margin: 0},
 });

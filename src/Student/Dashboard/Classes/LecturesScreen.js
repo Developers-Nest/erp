@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import IconEnglish2 from 'react-native-vector-icons/Feather';
@@ -12,7 +12,7 @@ import IconBio1 from 'react-native-vector-icons/FontAwesome5';
 import IconBio2 from 'react-native-vector-icons/FontAwesome5';
 
 // loading screen
-import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen'
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
 import {
   StyleSheet,
@@ -23,11 +23,15 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  Linking
+  Linking,
 } from 'react-native';
 
 // redux
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
+
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import IonIcons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import get from '../../../services/helpers/request/get';
@@ -38,7 +42,7 @@ let parseDate = myDate => {
   return d.toString().slice(0, 15);
 };
 
-export default function LecturesScreen() {
+export default function LecturesScreen({navigation}) {
   const [showContent, setShowContent] = React.useState('Live');
   const [activeTab, setActiveTab] = React.useState('Live');
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -50,49 +54,54 @@ export default function LecturesScreen() {
       <View style={styles.maincontainer}>
         <View
           style={{
-            width: '90%',
-            marginLeft: 25,
-            marginBottom: 20,
-            // marginTop: 30,
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
           }}>
-          {/* open search */}
-          <View
-            style={{
-              marginTop: 10,
-
-              justifyContent: 'space-between',
-              width: '95%',
-              flexDirection: 'row',
-              ...styles.shadow,
-            }}>
-            <FontAwesome5
-              name="search"
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
               style={{
                 alignSelf: 'center',
-                fontSize: 15,
-                color: '#6A6A80',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
               }}
             />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontFamily: 'NunitoSans-Regular',
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
+            Lectures
+          </Text>
 
-            <TextInput
-              style={{ width: '80%', ...styles.text_input }}
-              placeholder="Enter subject or batch name"
-            />
-            <TouchableOpacity
+          <TouchableOpacity
+            onPress={() => navigation.navigate('GoLive')}
+            style={{
+              justifyContent: 'flex-end',
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <IonIcons
+              name="add-circle"
+              color="#900"
               style={{
-                alignSelf: 'center',
-              }}>
-              <FontAwesome5
-                name="filter"
-                style={{
-                  alignSelf: 'center',
-                  fontSize: 21,
-                  color: '#6A6A80',
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-          {/* close search */}
+                fontSize: 35,
+                color: 'white',
+                paddingRight: 20,
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.switchTabsView}>
           <TouchableOpacity
@@ -133,10 +142,10 @@ function Live() {
   const [LiveClasses, setLiveClasses] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
 
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   useEffect(async () => {
-    setLoadingScreen()
+    setLoadingScreen();
     try {
       let slug = `/liveclass/${userInfo.course}/${userInfo.batch}`;
       let token = await read('token');
@@ -146,7 +155,7 @@ function Live() {
     } catch (err) {
       alert('Cannot fetch your Live Classes !!\n' + err);
     }
-    hideLoadingScreen()
+    hideLoadingScreen();
   }, []);
 
   return (
@@ -182,18 +191,20 @@ function Live() {
                         size={27}
                         color="rgba(25, 40, 57, 0.63)"
                         name="alpha-a"
-                        style={{ paddingLeft: 7 }}
+                        style={{paddingLeft: 7}}
                       />
                     </View>
 
                     <View style={styles.differentusers}>
-                      <Text style={styles.teacher}>{LiveClass.date ? parseDate(LiveClass.date) : null}</Text>
-                      <View style={{ flexDirection: 'column' }}>
+                      <Text style={styles.teacher}>
+                        {LiveClass.date ? parseDate(LiveClass.date) : null}
+                      </Text>
+                      <View style={{flexDirection: 'column'}}>
                         <IconEnglish2
                           size={24}
                           color="#B04305"
                           name="radio"
-                          style={{ paddingLeft: 7 }}
+                          style={{paddingLeft: 7}}
                         />
                         <Text
                           style={{
@@ -220,10 +231,10 @@ function Recorded() {
   const [RecordedClasses, setRecordedClasses] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
 
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   useEffect(async () => {
-    setLoadingScreen()
+    setLoadingScreen();
     try {
       let slug = `/record/${userInfo.course}/${userInfo.batch}`;
       let token = await read('token');
@@ -233,7 +244,7 @@ function Recorded() {
     } catch (err) {
       alert('Cannot fetch your Live Classes !!\n' + err);
     }
-    hideLoadingScreen()
+    hideLoadingScreen();
   }, []);
 
   return (
@@ -269,7 +280,7 @@ function Recorded() {
                         size={27}
                         color="rgba(25, 40, 57, 0.63)"
                         name="alpha-a"
-                        style={{ paddingLeft: 7 }}
+                        style={{paddingLeft: 7}}
                       />
                     </View>
 
@@ -277,21 +288,19 @@ function Recorded() {
                       <Text style={styles.teacher}>
                         {parseDate(RecordedClass.date)}
                       </Text>
-                      <View style={{ flexDirection: 'column' }}>
+                      <View style={{flexDirection: 'column'}}>
                         <IconEnglish2
                           size={24}
                           color="#B04305"
                           name="radio"
-                          style={{ paddingLeft: 7 }}
+                          style={{paddingLeft: 7}}
                         />
                         <Text
                           style={{
                             fontSize: 10,
                             color: 'rgba(25, 40, 57, 0.9)',
                             fontFamily: 'Poppins-Medium',
-                          }}>
-
-                        </Text>
+                          }}></Text>
                       </View>
                     </View>
                   </View>
@@ -311,14 +320,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
 
-  maincontainer: {
-    flex: 1,
-    // justifyContent:'flex-start'
-  },
-
   card: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
@@ -399,6 +403,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 40,
+    paddingTop: 20,
   },
   teacher: {
     fontSize: 14,
@@ -412,14 +417,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   maincontainer: {
-    paddingTop: 10,
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   header: {
-    height: 65,
-    marginTop: -10,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
+    height: 69,
     flexDirection: 'row',
   },
   text_input: {
@@ -434,7 +436,7 @@ const styles = StyleSheet.create({
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',

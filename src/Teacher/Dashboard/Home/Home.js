@@ -26,6 +26,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 //drawer navigation
 import Assignment from './Assignment/Assignment';
@@ -91,7 +92,18 @@ const Home = ({navigation}) => {
           onPress={() => {
             navigation.toggleDrawer();
           }}>
-          <FontAwesome5
+          <MaterialIcon
+            name="align-horizontal-left"
+            style={{
+              alignSelf: 'center',
+              fontSize: 35,
+              color: 'black',
+              paddingLeft: 20,
+              paddingTop: 20,
+              color: institute ? institute.themeColor : 'black',
+            }}
+          />
+          {/* <FontAwesome5
             name="book"
             style={{
               alignSelf: 'center',
@@ -101,7 +113,7 @@ const Home = ({navigation}) => {
               paddingTop: 20,
               color: institute ? institute.themeColor : 'black',
             }}
-          />
+          /> */}
         </TouchableOpacity>
         <Text
           style={{
@@ -422,26 +434,26 @@ function DrawerContent(props) {
           )}
           onPress={() => props.navigation.navigate('Report')}
         />
+        <TouchableOpacity>
+          <Button
+            style={{
+              fontFamily: 'Poppins-Regular',
+              fontStyle: 'normal',
+              fontWeight: '600',
+              fontSize: 14,
+              width: 100,
+              backgroundColor: 'red',
+              margin: 20,
+              marginLeft: 40,
+              backgroundColor: '#B04305',
+              borderRadius: 6,
+            }}
+            onPress={handleLogout}
+            mode="contained">
+            Logout
+          </Button>
+        </TouchableOpacity>
       </DrawerContentScrollView>
-      <Drawer.Section>
-        <Button
-          style={{
-            fontFamily: 'Poppins-Regular',
-            fontStyle: 'normal',
-            fontWeight: '600',
-            fontSize: 14,
-            width: 100,
-            backgroundColor: 'red',
-            margin: 20,
-            marginLeft: 40,
-            backgroundColor: '#B04305',
-            borderRadius: 6,
-          }}
-          onPress={handleLogout}
-          mode="contained">
-          Logout
-        </Button>
-      </Drawer.Section>
     </View>
   );
 }

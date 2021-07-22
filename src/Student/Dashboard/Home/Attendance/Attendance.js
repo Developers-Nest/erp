@@ -23,7 +23,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 
 //icons
-import Icon from 'react-native-vector-icons/AntDesign';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -43,6 +43,9 @@ import get from '../../../../services/helpers/request/get';
 const Stack = createStackNavigator();
 
 export default function Attendance({navigation}) {
+  //theming
+  const institute = useSelector(state => state.institute);
+
   //initial value
   var d = new Date();
   let currentyear = d.getUTCFullYear();
@@ -104,12 +107,16 @@ export default function Attendance({navigation}) {
         flex: 1,
         justifyContent: 'flex-start',
       }}>
-      <View style={styles.header}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Home');
           }}>
-          <Icon
+          <AntDesign
             size={24}
             color="white"
             name="left"
@@ -215,6 +222,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#E5E5E5',
   },
+  header: {
+    height: 69,
+    flexDirection: 'row',
+  },
   section: {
     display: 'flex',
     flexDirection: 'column',
@@ -318,110 +329,5 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     paddingTop: 3,
     color: '#211C5A',
-  },
-
-  // container: {
-  //   paddingTop: 10,
-  //   flex: 1,
-  //   backgroundColor: '#E5E5E5',
-  // },
-  // section: {
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   backgroundColor: '#fff',
-  //   shadowColor: '#333',
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 1,
-  //   },
-  //   shadowOpacity: 0.2,
-  //   elevation: 2,
-  //   marginTop: 14,
-  //   borderRadius: 12,
-  //   paddingLeft: 10,
-  //   paddingRight: 10,
-  //   marginHorizontal: 20,
-  // },
-
-  // details: {
-  //   display: 'flex',
-  //   flexDirection: 'column',
-  //   marginTop: 3,
-  //   paddingBottom: 10,
-  //   borderBottomColor: '#333',
-  //   // borderBottomWidth: 1,
-  // },
-  // userinhostels: {
-  //   marginTop: 10,
-  // },
-  // differentusers: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   padding: 2,
-  //   justifyContent: 'space-between',
-  // },
-  // userstext: {
-  //   fontSize: 16,
-  //   paddingVertical: 4,
-  //   fontWeight: '300',
-  // },
-  // belowhr: {
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  //   marginTop: 10,
-  //   justifyContent: 'space-between',
-  //   paddingBottom: 10,
-  //   borderBottomColor: '#333',
-  //   //borderBottomWidth:1,
-  // },
-  // search: {
-  //   backgroundColor: 'white',
-  //   color: 'black',
-  // },
-  // switchTabsView: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   paddingHorizontal: 40,
-  // },
-  // switchText: {
-  //   fontSize: 14,
-  //   color: '#58636D',
-  //   paddingHorizontal: 5,
-  // },
-  // maincontainer: {
-  //   paddingTop: 10,
-  //   flex: 1,
-  //   backgroundColor: '#E5E5E5',
-  // },
-  // card: {
-  //   shadowColor: '#999',
-  //   shadowOffset: {width: 0, height: 1},
-  //   shadowOpacity: 0.5,
-  //   shadowRadius: 12,
-  //   elevation: 5,
-  //   backgroundColor: 'white',
-  //   borderColor: '#ccc',
-  //   borderWidth: 1,
-  //   borderBottomLeftRadius: 12,
-  //   borderBottomRightRadius: 12,
-  //   borderTopRightRadius: 12,
-  //   borderTopLeftRadius: 12,
-  //   overflow: 'hidden',
-  //   justifyContent: 'center',
-  //   margin: 0,
-  //   padding: 0,
-  //   minWidth: '30%',
-  // },
-  // Drop: {
-  //   marginTop: 5,
-  //   flexDirection: 'row',
-
-  //   justifyContent: 'space-evenly',
-  // },
-  header: {
-    height: 65,
-    marginTop: 0,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
-    flexDirection: 'row',
   },
 });

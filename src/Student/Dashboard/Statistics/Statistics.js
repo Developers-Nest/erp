@@ -8,8 +8,11 @@ import {
 } from 'react-native';
 
 import {Text} from 'react-native-paper';
+
+//icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -17,14 +20,23 @@ import ExamReport from './ExamReport/ExamReport';
 const Statistics = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <FontAwesome5
-            name="chevron-left"
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
             style={{
               alignSelf: 'center',
               fontSize: 25,
-              color: 'black',
+              color: 'white',
               paddingLeft: 20,
               paddingTop: 20,
             }}
@@ -40,10 +52,11 @@ const Statistics = ({navigation}) => {
             style={{
               fontStyle: 'normal',
               fontSize: 28,
-              fontFamily: 'NunitoSans-Regular',
+              fontFamily: 'NunitoSans-Light',
               fontWeight: '600',
               alignSelf: 'center',
               paddingLeft: 30,
+              color: 'white',
             }}>
             Statistics
           </Text>
@@ -96,7 +109,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 69,
-    backgroundColor: 'white',
     flexDirection: 'row',
   },
   image: {

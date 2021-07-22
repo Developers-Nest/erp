@@ -25,7 +25,13 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+// redux
+import {useSelector} from 'react-redux';
+
 export default function ContentSubject({navigation}) {
+  //theming
+  const institute = useSelector(state => state.institute);
+
   return (
     <View
       style={{
@@ -33,8 +39,15 @@ export default function ContentSubject({navigation}) {
         flex: 1,
         justifyContent: 'flex-start',
       }}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => {navigation.goBack();}}>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}>
           <Icon
             size={24}
             color="white"
@@ -59,18 +72,26 @@ export default function ContentSubject({navigation}) {
           }}>
           Content Library
         </Text>
-        <FontAwesome5
-
-          name="align-left"
-          size={30}
+        <TouchableOpacity
+          onPress={() => navigation.navigate('GoLive')}
           style={{
-            alignSelf: 'center',
-            fontSize: 25,
-            color: 'white',
-            paddingLeft: 20,
-          }}
-          onPress={() => {navigation.navigate('ContentLibrary');}}
-        />
+            justifyContent: 'flex-end',
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <FontAwesome5
+            name="align-left"
+            size={30}
+            style={{
+              color: 'white',
+              paddingRight: 20,
+            }}
+            onPress={() => {
+              navigation.navigate('ContentLibrary');
+            }}
+          />
+        </TouchableOpacity>
       </View>
 
       <ScrollView>
@@ -342,8 +363,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 65,
-    marginTop: 0,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
 });
