@@ -319,7 +319,7 @@ export default function IssuedBooksScreen1({navigation}) {
             style={{
              
               //make search and card in same line
-             
+            
               justifyContent: 'space-between',
               width: '95%',
               flexDirection: 'row',
@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
   },
 
   text_input: {
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     borderRadius: 10,
     // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
