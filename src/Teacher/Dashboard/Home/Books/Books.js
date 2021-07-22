@@ -308,17 +308,18 @@ export default function IssuedBooksScreen1({navigation}) {
 
         <View
           style={{
-            width: '90%',
-            marginLeft: 25,
+           alignItems:'center',
             marginBottom: 20,
             marginTop: 20,
           }}>
           {/* open search */}
+          <View style={{width:'90%',alignItems:'center'}}>
+        
           <View
             style={{
-              marginTop: 10,
+             
               //make search and card in same line
-              marginLeft: 5,
+             
               justifyContent: 'space-between',
               width: '95%',
               flexDirection: 'row',
@@ -341,6 +342,7 @@ export default function IssuedBooksScreen1({navigation}) {
                 }}
               />
             </TouchableOpacity>
+          </View>
           </View>
         </View>
 
