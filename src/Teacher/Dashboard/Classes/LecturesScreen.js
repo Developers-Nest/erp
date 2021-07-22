@@ -92,9 +92,8 @@ export default function LecturesScreen({navigation}) {
         <ScrollView>
         <View
           style={{
-            // width: '99%',
-            alignItems:'center',
-     
+            width: '90%',
+            marginLeft: 25,
             marginBottom: 20,
           }}>
           {/* open search */}
@@ -280,7 +279,6 @@ const styles = StyleSheet.create({
   maincontainer: {
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
-   
   },
   header: {
     height: 65,
