@@ -84,7 +84,7 @@ export default function LecturesScreen({navigation}) {
             Lectures
           </Text>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => navigation.navigate('GoLive')}
             style={{
               justifyContent: 'flex-end',
@@ -101,7 +101,7 @@ export default function LecturesScreen({navigation}) {
                 paddingRight: 20,
               }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View style={styles.switchTabsView}>
           <TouchableOpacity
