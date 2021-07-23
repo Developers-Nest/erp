@@ -236,7 +236,7 @@ const Home = ({ navigation }) => {
         </View>
         {
           circulars && circulars.length > 0 ? circulars.map((circular) => (
-            <View style={{ marginHorizontal: 30, ...styles.shadow }}>
+            <View style={{ marginHorizontal: 30, ...styles.shadow }} key={circular._id}>
               <View
                 style={{
                   borderTopLeftRadius: 8,

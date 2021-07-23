@@ -6,22 +6,13 @@ import {
   View,
   TextInput,
   ScrollView,
-  ImageBackground,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   Linking,
 } from 'react-native';
-import AssignmentSubmit from './AssignmentSubmit';
 
-import {
-  event,
-  onChange,
-  setValue,
-  target,
-  value,
-} from 'react-native-reanimated';
-import {Searchbar, Button} from 'react-native-paper';
+import { Button} from 'react-native-paper';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -29,6 +20,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
+import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -36,16 +28,21 @@ import {useSelector} from 'react-redux';
 export default function AssignmentStudentDue({navigation}) {
   const [assignments, setAssignments] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
+  const institute = useSelector(state => state.institute)
+
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
   useEffect(async () => {
+    setLoadingScreen()
     try {
       let slug = `/note/assignment?batch=${userInfo.batch}&course=${userInfo.course}`;
       let token = await read('token');
       const response = await get(slug, token);
-      console.log(response);
       setAssignments(response);
     } catch (err) {
       alert('Cannot fetch your assignments !!');
     }
+    hideLoadingScreen()
   }, []);
 
   function isAssignmentDone(assignment) {
@@ -92,6 +89,7 @@ export default function AssignmentStudentDue({navigation}) {
 
     return (
       <View style={styles.container}>
+        {loadingScreen}
         <ScrollView>
           {assignments &&
             assignments.map(assignment =>
@@ -117,7 +115,7 @@ export default function AssignmentStudentDue({navigation}) {
                         <Text
                           style={{
                             fontSize: 12,
-                            color: '#5177E7',
+                            color: institute ? institute.themeColor : '#5177E7',
                             fontFamily: 'Poppins-Medium',
                           }}>
                           {'  '}
@@ -161,6 +159,7 @@ export default function AssignmentStudentDue({navigation}) {
                         fontFamily: 'Poppins-Regular',
                         fontWeight: 'bold',
                       }}
+                      color= {institute? institute.themeColor : 'blue'}
                       uppercase={false}
                       mode="contained">
                       Submit
@@ -206,7 +205,7 @@ export default function AssignmentStudentDue({navigation}) {
                         <Text
                           style={{
                             fontSize: 12,
-                            color: '#5177E7',
+                            color: institute ? institute.themeColor : '#5177E7',
                             fontFamily: 'Poppins-Medium',
                           }}>
                           {'  '}
@@ -242,7 +241,7 @@ export default function AssignmentStudentDue({navigation}) {
                   <View style={styles.belowhr}>
                     <Text
                       style={{
-                        color: '#58636D',
+                        color: '#5177E7',
                         fontSize: 12,
                         fontFamily: 'Poppins-Medium',
                       }}>
@@ -510,7 +509,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   button: {
-    backgroundColor: 'rgba(81, 119, 231, 1)',
     alignSelf: 'flex-end',
     marginTop: -8,
     color: 'white',

@@ -6,26 +6,12 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
-  Button,
-  TextInput,
-  RadioButton,
-} from 'react-native-paper';
 
 //navigation
 import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 //selector
 import ModalSelector from 'react-native-modal-selector';
@@ -40,9 +26,8 @@ import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 import read from '../../../../services/localstorage/read';
 import get from '../../../../services/helpers/request/get';
 
-const Stack = createStackNavigator();
-
 export default function Attendance({navigation}) {
+
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -107,6 +92,7 @@ export default function Attendance({navigation}) {
         flex: 1,
         justifyContent: 'flex-start',
       }}>
+        {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
