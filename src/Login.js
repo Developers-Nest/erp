@@ -35,20 +35,22 @@ export default function App({navigation}) {
       let t = await read('token');
       let r = await read('role');
 
-      // get user information
-      const response = await get('/user', t);
-      console.log('Use Effect ', response);
+      if(t && r){
+        // get user information
+        const response = await get('/user', t);
+        console.log('Use Effect ', response);
 
-      dispatch({
-        type: USERINFO,
-        userInfo: response,
-      });
+        dispatch({
+          type: USERINFO,
+          userInfo: response,
+        });
 
-      console.log('Role ', r);
-      if (r === 'Teacher') {
-        navigation.replace('Teacher Dashboard');
-      } else if (r === 'Student') {
-        navigation.replace('Student Dashboard');
+        console.log('Role ', r);
+        if (r === 'Teacher') {
+          navigation.replace('Teacher Dashboard');
+        } else if (r === 'Student') {
+          navigation.replace('Student Dashboard');
+        }
       }
     } catch (err) {
       alert('Cannot Login !!');

@@ -358,10 +358,20 @@ const getTabBarVisibility = route => {
   return false;
 };
 
+
+const handleLogout = async() => {
+  try{
+    let res = await write('token', 'null')
+    if(res){
+      // navigate to login page
+    } else throw new Error('Cannot Logout!!')
+  } catch(err){
+    alert('Cannot Logout!!')
+  }
+}
+
+
 function DrawerContent(props) {
-  let handleLogout = async () => {
-    await write('token', null);
-  };
 
   return (
     <View style={{flex: 1}}>

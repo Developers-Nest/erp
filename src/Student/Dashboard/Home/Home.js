@@ -48,6 +48,7 @@ import {useSelector} from 'react-redux';
 
 // helpers
 import read from '../../../services/localstorage/read';
+import write from '../../../services/localstorage/write';
 import get from '../../../services/helpers/request/get';
 
 // loadingScreen
@@ -374,6 +375,18 @@ const getTabBarVisibility = route => {
   return false;
 };
 
+const handleLogout = async() => {
+  try{
+    let res = await write('token', 'null')
+    if(res){
+      // navigate to login page
+    } else throw new Error('Cannot Logout!!')
+  } catch(err){
+    console.log('Logout ', err)
+    alert('Cannot Logout!!')
+  }
+}
+
 function DrawerContent(props) {
   return (
     <View style={{flex: 1}}>
@@ -451,7 +464,8 @@ function DrawerContent(props) {
               backgroundColor: '#B04305',
               borderRadius: 6,
             }}
-            mode="contained">
+            mode="contained"
+            onPress={handleLogout}>
             Logout
           </Button>
         </TouchableOpacity>
