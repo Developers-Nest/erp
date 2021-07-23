@@ -229,12 +229,13 @@ const AttendanceScreen2 = ({ navigation }) => {
             />
           </View>
           <ScrollView>
-            <View style={{ marginTop: 6 }}>
-              <View style={{ padding: 5, justifyContent: 'center' }} />
+            <View style={{ marginTop: 20 }}>
+            {/* <View style={{alignItems:'center'}}></View> */}
+              <View style={{ padding: 5, alignItems:'center' }} >
               {/* open search */}
               <View
                 style={{
-                  marginLeft: 5,
+                 
                   justifyContent: 'space-around',
                   width: '95%',
                   flexDirection: 'row',
@@ -246,6 +247,8 @@ const AttendanceScreen2 = ({ navigation }) => {
                     alignSelf: 'center',
                     fontSize: 11,
                     color: '#6A6A80',
+                    marginLeft:10,
+                    marginTop:3
                   }}
                 />
                 <TextInput
@@ -292,6 +295,7 @@ const AttendanceScreen2 = ({ navigation }) => {
 
 
 
+              </View>
               </View>
 
               <View style={{ padding: 10 }} />
@@ -454,6 +458,7 @@ const styles = StyleSheet.create({
 
   text_input: {
     paddingHorizontal: 10,
+    marginTop:5,
     borderRadius: 10,
     // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,

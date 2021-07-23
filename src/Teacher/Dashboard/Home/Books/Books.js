@@ -308,11 +308,11 @@ export default function IssuedBooksScreen1({navigation}) {
 
         <View
           style={{
-            width: '90%',
-            marginLeft: 25,
+            alignItems:'center',
             marginBottom: 20,
             marginTop: 20,
           }}>
+            <View style={{alignItems:'center',width:'90%'}}>
           {/* open search */}
           <View
             style={{
@@ -341,6 +341,7 @@ export default function IssuedBooksScreen1({navigation}) {
                 }}
               />
             </TouchableOpacity>
+          </View>
           </View>
         </View>
 
@@ -456,7 +457,7 @@ const styles = StyleSheet.create({
   },
 
   text_input: {
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     borderRadius: 10,
     // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
