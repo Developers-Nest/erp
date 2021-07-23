@@ -243,7 +243,7 @@ const Home = ({ navigation }) => {
                       <Text style={styles.classes_cardClass}>
                         {period.subject.toUpperCase()}
                       </Text>
-                      <Text style={styles.classes_cardTime}>
+                      <Text style={styles.classes_cardTime} style={{color: institute.themeColor || 'blue'}}>
                         {`${period.startTime} - ${period.endTime}`}
                       </Text>
                       <Text style={styles.classes_cardBatch}>
