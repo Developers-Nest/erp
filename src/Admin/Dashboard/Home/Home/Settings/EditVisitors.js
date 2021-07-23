@@ -1,17 +1,4 @@
-// import React from 'react';
-// import {View} from 'react-native';
-
-// import {Text} from 'react-native-paper';
-
-// export default function AddVisitors({navigation}) {
-//   return (
-//     <View>
-//       <Text>Add Visitors</Text>
-//     </View>
-//   );
-// }
-
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -21,7 +8,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-const AddVisitors = ({navigation}) => {
+
+const EditVisitors = ({navigation}) => {
 
 
 
@@ -41,7 +29,7 @@ const AddVisitors = ({navigation}) => {
     };
     const handleConfirm = (date) => {
         console.warn("A date has been picked: ", date.toString());
-        setDate(date.getDate() + " " + dateMonths[date.getMonth()+1] + " " + date.getFullYear())
+        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
         hideDatePicker();
     };
 
@@ -51,15 +39,14 @@ const AddVisitors = ({navigation}) => {
 
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
             {/* <ModalSelector
-             
+
                 initValue="Add Visitor"
-                
+
                 style={styles.card}
                 initValueTextStyle={styles.SelectedValue}
                 selectTextStyle={styles.SelectedValue}
-            />
-             */}
-
+            /> */}
+            
 <View style={styles.header}
           // style={{
           //   backgroundColor: institute ? institute.themeColor : 'black',
@@ -97,8 +84,10 @@ const AddVisitors = ({navigation}) => {
             Add Visitors
           </Text>
         </View>
+
 <ScrollView>
-            
+
+
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
 
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
@@ -180,7 +169,7 @@ const AddVisitors = ({navigation}) => {
                     <TouchableOpacity style={styles.pickdate1}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder="13.00"
-                        
+
 
                         />
                         <Feather size={18} color="black" name="calendar"
@@ -194,6 +183,9 @@ const AddVisitors = ({navigation}) => {
 
                 </View>
                 <View style={styles.fixToText}>
+                    <Pressable style={styles.button1} >
+                        <Text style={styles.text1}>Delete</Text>
+                    </Pressable>
                     <Pressable style={styles.button} >
                         <Text style={styles.text}>Save</Text>
                     </Pressable>
@@ -215,8 +207,35 @@ const styles = StyleSheet.create({
 
 
     },
+    button1: {
+
+    marginTop:0,
+    marginBottom:0,
+       
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        alignSelf: 'flex-end',
+        padding: 3,
+        paddingHorizontal: 25,
+        paddingVertical:2,
+        borderRadius: 4,
+        marginRight: 30,
+        height:46,
+        borderColor:'#d2691e',
+        borderWidth:1.5
+        
+    },
+    text1: {
+      fontSize: 18,
+      fontWeight: '500',
+      lineHeight: 21,
+      letterSpacing: 0.25,
+      color: '#d2691e',
+    },
     button: {
 
+        
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,
@@ -253,7 +272,7 @@ const styles = StyleSheet.create({
         borderWidth: 0.3,
 
     },
-    
+
     section_heading: {
         fontFamily: 'Poppins-Regular',
         fontSize: 12,
@@ -288,7 +307,7 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'center',
         color: 'rgba(88, 99, 109, 0.85)',
-       
+
         marginBottom: 5,
     },
     section_heading2: {
@@ -302,7 +321,7 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'center',
         marginRight: 35,
-        
+
 
         color: 'rgba(88, 99, 109, 0.85)',
 
@@ -368,10 +387,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 27,
         padding: 10,
-        backgroundColor:"#8a2be2",
+        backgroundColor: "#8a2be2",
         color: '#211C5A',
-      },
-      SelectedValueSmall: {
+    },
+    SelectedValueSmall: {
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
         fontWeight: '500',
@@ -379,10 +398,9 @@ const styles = StyleSheet.create({
         lineHeight: 30,
         paddingTop: 3,
         color: 'white',
-      },
-      
+    },
 
-      header: {
+    header: {
         height: 69,
         flexDirection: 'row',
         backgroundColor:'#FF5733'
@@ -393,4 +411,4 @@ const styles = StyleSheet.create({
 
 
 
-export default AddVisitors;
+export default EditVisitors;
