@@ -4,7 +4,11 @@ async function write(key, value){
 
     if(!key || !value) return new Error('write.js: Inavlid Format')
 
-    await AsyncStorage.setItem(key, value)
+    if(value === 'null') {
+        await AsyncStorage.removeItem(key)
+    } else {
+        await AsyncStorage.setItem(key, value)
+    }
 
     return true
 }
