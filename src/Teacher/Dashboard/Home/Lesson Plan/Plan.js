@@ -20,6 +20,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
+import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 
 // redux
 import { useSelector } from 'react-redux';
@@ -27,16 +28,24 @@ import { useSelector } from 'react-redux';
 export default function LessonPlan({ navigation }) {
   const [data, setData] = useState([]);
 
-  useEffect(async () => {
-    let slug = '/lessonplanning';
-    const token = await read('token');
-    const response = await get(slug, token);
-    console.log('Plan ', response)
-    setData(response);
-  }, []);
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
 
   //theming
   const institute = useSelector(state => state.institute);
+
+  useEffect(async () => {
+    setLoadingScreen()
+    try{
+      let slug = '/lessonplanning';
+      const token = await read('token');
+      const response = await get(slug, token);
+      console.log('Plan ', response)
+      setData(response)
+    } catch(err){
+      alert('Cannot fetch !!')
+    }
+    hideLoadingScreen()
+  }, []);
 
   return (
     <View
@@ -45,6 +54,7 @@ export default function LessonPlan({ navigation }) {
         flex: 1,
         justifyContent: 'flex-start'
       }}>
+        {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -141,7 +151,7 @@ export default function LessonPlan({ navigation }) {
                         color: '#211C5A',
                       }}>
                       {' '}
-                      {plan.topic || 'Topic not found'}
+                      {plan.topic || 'Topic: N/A'}
                     </Text>
 
                     <TouchableOpacity
@@ -169,7 +179,7 @@ export default function LessonPlan({ navigation }) {
                         color: institute.themeColor || '#505069',
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {plan.name || 'Subject not found'}
+                      {plan.name || 'Subject: N/A'}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.differentusers}>
@@ -180,7 +190,7 @@ export default function LessonPlan({ navigation }) {
                         paddingRight: 15,
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {plan.description || 'Description not found'}
+                      {plan.description || 'Description: N/A'}
                     </Text>
 
                     {/* <Text style={styles.userstext}>Graded</Text> */}

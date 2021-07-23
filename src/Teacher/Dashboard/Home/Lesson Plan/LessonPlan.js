@@ -1,14 +1,5 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {
-  Button,
-  List,
-  Card,
-  Title,
-  Paragraph,
-  TextInput,
-} from 'react-native-paper';
+import React from 'react';
+import {StyleSheet} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import LessonPlan from './Plan';
 import LessonPlanAdd from './LessonPlanAdd';
