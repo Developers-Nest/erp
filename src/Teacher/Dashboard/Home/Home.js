@@ -19,6 +19,7 @@ import {
 import {createStackNavigator} from '@react-navigation/stack';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
+import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
 
 //icons
@@ -358,21 +359,18 @@ const getTabBarVisibility = route => {
   return false;
 };
 
-
-const handleLogout = async() => {
-  try{
-    let res = await write('token', 'null')
-    if(res){
-      // navigate to login page
-    } else throw new Error('Cannot Logout!!')
-  } catch(err){
-    alert('Cannot Logout!!')
-  }
-}
-
-
 function DrawerContent(props) {
-
+  const handleLogout = async () => {
+    // const navigation = useNavigation();
+    try {
+      let res = await write('token', 'null');
+      if (res) {
+        props.navigation.navigate('Role Based Login');
+      } else throw new Error('Cannot Logout!!');
+    } catch (err) {
+      alert('Cannot Logout!!' + err);
+    }
+  };
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
