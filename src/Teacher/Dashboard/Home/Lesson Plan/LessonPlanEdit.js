@@ -293,8 +293,8 @@
 //   },
 // });
 
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {
   Button,
@@ -323,16 +323,16 @@ import read from '../../../../services/localstorage/read';
 import getExam from '../../../../services/helpers/getList/getExam';
 
 // import {USERINFO} from '../src/reducers/actionType';
-import {USERINFO} from '../../../../reducers/actionType';
+import { USERINFO } from '../../../../reducers/actionType';
 
 // loading screem
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
 
 // redux
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-export default function LessonPlanAdd({navigation}) {
+export default function LessonPlanAdd({ navigation }) {
   const [expanded, setExpanded] = React.useState(true);
   const [text, setText] = React.useState('');
   const handlePress = () => setExpanded(!expanded);
@@ -448,7 +448,7 @@ export default function LessonPlanAdd({navigation}) {
           Edit Lesson Plan
         </Text>
       </View>
-      <View style={{padding: 15}} />
+      <View style={{ padding: 15 }} />
       <View style={styles.Drop}>
         <ModalSelector
           data={course}
@@ -485,7 +485,7 @@ export default function LessonPlanAdd({navigation}) {
           selectTextStyle={styles.SelectedValueSmall}
         />
       </View>
-      <View style={{padding: 15}} />
+      <View style={{ padding: 15 }} />
       <Card style={styles.card}>
         <Card.Content>
           <TextInput
@@ -561,12 +561,14 @@ export default function LessonPlanAdd({navigation}) {
         </Card.Content>
       </Card>
       <View
-        style={{justifyContent: 'center', marginTop: 50, flexDirection: 'row'}}>
-        <Button mode="outlined" onPress={() => {}}>
+        style={{ justifyContent: 'center', marginTop: 50, flexDirection: 'row' }}>
+        <Button mode="outlined" onPress={() => { }} 
+        color = {institute.themeColor}
+        >
           Delete
         </Button>
-        <View style={{width: 50}}></View>
-        <Button mode="contained" onPress={() => updatePlan()}>
+        <View style={{ width: 50 }}></View>
+        <Button mode="contained" onPress={() => updatePlan()} style={{ backgroundColor: institute.themeColor }}>
           Save
         </Button>
       </View>
@@ -608,7 +610,7 @@ const styles = StyleSheet.create({
   },
   card_picker: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',

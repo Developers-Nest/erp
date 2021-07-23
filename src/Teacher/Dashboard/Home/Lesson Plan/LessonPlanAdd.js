@@ -200,7 +200,7 @@
 //   },
 // });
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -209,7 +209,7 @@ import {
   TextInput,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {Button, List, Card, Title, Paragraph} from 'react-native-paper';
+import { Button, List, Card, Title, Paragraph } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
 import loadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
@@ -217,9 +217,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function LessonPlanAdd({navigation}) {
+export default function LessonPlanAdd({ navigation }) {
   const [expanded, setExpanded] = React.useState(true);
   const [text, setText] = React.useState('');
   const handlePress = () => setExpanded(!expanded);
@@ -277,7 +277,7 @@ export default function LessonPlanAdd({navigation}) {
           Add Lesson Plan
         </Text>
       </View>
-      <View style={{padding: 15}} />
+      <View style={{ padding: 15 }} />
       <View
         style={{
           flexDirection: 'row',
@@ -322,7 +322,7 @@ export default function LessonPlanAdd({navigation}) {
           selectTextStyle={styles.SelectedValueSmall}
         />
       </View>
-      <View style={{padding: 15}} />
+      <View style={{ padding: 15 }} />
       <View
         style={{
           paddingLeft: 11,
@@ -340,18 +340,18 @@ export default function LessonPlanAdd({navigation}) {
               />
               {/* <View style={{paddingLeft:10}} /> */}
             </View>
-            <View style={{padding: 2}} />
-            <View style={{borderWidth: 0.2}} />
-            <View style={{padding: 10}} />
+            <View style={{ padding: 2 }} />
+            <View style={{ borderWidth: 0.2 }} />
+            <View style={{ padding: 10 }} />
             <TextInput placeholder="Topic " onChange={val => setTopic(val)} />
-            <View style={{padding: 2}} />
-            <View style={{borderWidth: 0.2}} />
-            <View style={{padding: 10}} />
+            <View style={{ padding: 2 }} />
+            <View style={{ borderWidth: 0.2 }} />
+            <View style={{ padding: 10 }} />
             <TextInput
               placeholder="Discription (optional) "
               onChange={val => setDiscription(val)}
             />
-            <View style={{padding: 40}} />
+            <View style={{ padding: 40 }} />
             <View
               style={{
                 flexDirection: 'row',
@@ -364,7 +364,7 @@ export default function LessonPlanAdd({navigation}) {
                 onPress={() => console.log('Pressed')}>
                 13:00{' '}
               </Button>
-              <View style={{padding: 10}} />
+              <View style={{ padding: 10 }} />
               <Button
                 mode="contained"
                 color="white"
@@ -375,8 +375,8 @@ export default function LessonPlanAdd({navigation}) {
           </Card.Content>
         </Card>
       </View>
-      <View style={{alignItems: 'center', marginTop: 50}}>
-        <Button mode="contained" onPress={() => {}}>
+      <View style={{ alignItems: 'center', marginTop: 50 }}>
+        <Button mode="contained" onPress={() => { }} style={{ backgroundColor: institute.themeColor }}>
           Save
         </Button>
       </View>
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
   card1: {
     borderRadius: 20,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 1,
     shadowRadius: 12,
     elevation: 5,
@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
   },
   card_picker: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
