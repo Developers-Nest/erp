@@ -32,7 +32,7 @@ export default function Settings() {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="SettingUsers" component={Settingsmain} />
-      <Stack.Screen name="Addvisitors" component={AddVisitors} />
+      <Stack.Screen name="AddVisitors" component={AddVisitors} />
     </Stack.Navigator>
   );
 }
