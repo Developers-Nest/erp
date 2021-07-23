@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,16 +6,11 @@ import {
   TouchableOpacity,
   ScrollView,
   Button,
+  Linking
 } from 'react-native';
+
 import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
   TextInput,
-  RadioButton,
 } from 'react-native-paper';
 
 //icons
@@ -25,31 +20,41 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
+import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function LessonPlan({navigation}) {
+export default function LessonPlan({ navigation }) {
   const [data, setData] = useState([]);
 
-  useEffect(async () => {
-    let slug = '/lessonplanning';
-    const token = await read('token');
-    const response = await get(slug, token);
-    console.log(response);
-    setData(response);
-  }, []);
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
 
   //theming
   const institute = useSelector(state => state.institute);
+
+  useEffect(async () => {
+    setLoadingScreen()
+    try{
+      let slug = '/lessonplanning';
+      const token = await read('token');
+      const response = await get(slug, token);
+      console.log('Plan ', response)
+      setData(response)
+    } catch(err){
+      alert('Cannot fetch !!')
+    }
+    hideLoadingScreen()
+  }, []);
 
   return (
     <View
       style={{
         backgroundColor: '#E5E5E5',
         flex: 1,
-        justifyContent: 'flex-start',
+        justifyContent: 'flex-start'
       }}>
+        {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -80,7 +85,7 @@ export default function LessonPlan({navigation}) {
           }}>
           Lesson Plan
         </Text>
-        <View style={{flex: 1, marginLeft: 20}}>
+        <View style={{ flex: 1, marginLeft: 20 }}>
           <TouchableOpacity
             onPress={() => navigation.navigate('Add Lesson Plan')}
             style={{
@@ -91,7 +96,7 @@ export default function LessonPlan({navigation}) {
               paddingRight: 30,
             }}>
             <IonIcon size={24} color="white" name="add-circle-outline" />
-            <Text style={{fontFamily: 'Poppins-Regular', color: '#fff'}}>
+            <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff' }}>
               Add
             </Text>
           </TouchableOpacity>
@@ -108,7 +113,7 @@ export default function LessonPlan({navigation}) {
         }}>
         {/* open search */}
 
-        <View style={{marginTop: 20, ...styles.card}}>
+        <View style={{ marginTop: 20, ...styles.card }}>
           <TextInput
             left={<TextInput.Icon name="magnify" />}
             right={<TextInput.Icon name="filter" />}
@@ -134,7 +139,7 @@ export default function LessonPlan({navigation}) {
       <ScrollView>
         {data &&
           data.map(plan => (
-            <View style={styles.section} key={data._id}>
+            <View style={styles.section} key={plan._id}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
                   <View style={styles.differentusers}>
@@ -146,11 +151,11 @@ export default function LessonPlan({navigation}) {
                         color: '#211C5A',
                       }}>
                       {' '}
-                      {plan.topic || 'Topic not found'}
+                      {plan.topic || 'Topic: N/A'}
                     </Text>
 
                     <TouchableOpacity
-                      style={{flexDirection: 'row'}}
+                      style={{ flexDirection: 'row' }}
                       onPress={() => {
                         navigation.navigate('Edit Lesson Plan', {
                           lessonPlan: plan,
@@ -171,10 +176,10 @@ export default function LessonPlan({navigation}) {
                     <Text
                       style={{
                         fontSize: 12,
-                        color: '#505069',
+                        color: institute.themeColor || '#505069',
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {plan.name || 'Subject not found'}
+                      {plan.name || 'Subject: N/A'}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.differentusers}>
@@ -185,7 +190,7 @@ export default function LessonPlan({navigation}) {
                         paddingRight: 15,
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {plan.description || 'Description not found'}
+                      {plan.description || 'Description: N/A'}
                     </Text>
 
                     {/* <Text style={styles.userstext}>Graded</Text> */}
@@ -205,10 +210,11 @@ export default function LessonPlan({navigation}) {
                 </Text>
 
                 <Button
-                  title="Link"
+                  title="URL"
                   mode="contained"
-                  color="#5177E7"
-                  labelStyle={{color: 'white'}}
+                  color={ institute.themeColor || "#5177E7"}
+                  labelStyle={{ color: 'white' }}
+                  onPress={()=> Linking.openURL(plan.url)}
                 />
               </View>
             </View>
@@ -300,7 +306,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,

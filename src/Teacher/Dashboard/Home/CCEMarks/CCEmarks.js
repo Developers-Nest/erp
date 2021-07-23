@@ -516,7 +516,6 @@ export default function CceMarks({navigation}) {
     showLoadingScreen();
     try {
       const response = await getCourse();
-      console.log('Courses CCE ', response);
       setCourses(response);
     } catch (err) {
       alert('Cannot get Courses!');
@@ -524,7 +523,6 @@ export default function CceMarks({navigation}) {
 
     try {
       const response = await getTerm();
-      console.log('Terms ', response);
       setTerms(response);
     } catch (err) {
       alert('Cannot get Terms!');
@@ -550,7 +548,6 @@ export default function CceMarks({navigation}) {
     try {
       await setBatch(sb);
       const response = await getSubject(course, sb);
-      console.log('Subjects response ', response);
       setSubjects(response);
     } catch (err) {
       alert('Cannot get Subjects');
@@ -562,7 +559,6 @@ export default function CceMarks({navigation}) {
     showLoadingScreen();
     try {
       await setTerm(st);
-      console.log('Selected term ', st);
       const response = await getAssessesment(st);
 
       setAssessments(response);
@@ -576,9 +572,7 @@ export default function CceMarks({navigation}) {
     showLoadingScreen();
     try {
       await setSubject(ss);
-      console.log('Selected exam ', ss);
-      const response = await getExam(course, batch, subject, term, assessment);
-      console.log('Exams ', response);
+      const response = await getExam(course, batch, ss, term, assessment);
       setExams(response);
     } catch (err) {
       alert('Cannot get your exams !!');
@@ -594,7 +588,6 @@ export default function CceMarks({navigation}) {
       let slug = `/cce/exam/scholasticMark?course=${course}&batch=${batch}&examname=${exam}&term=${term}&subject=${subject}&assessment=${assessment}`;
       let token = await read('token');
       let res = await get(slug, token);
-      console.log('Marks list ', res);
       res = res.students;
       let marksArray = [];
       res.map(data => {
@@ -749,7 +742,7 @@ export default function CceMarks({navigation}) {
         }}>
         <Button
           mode="contained"
-          color="#5177E7"
+          color={ institute.themeColor || "#5177E7"}
           onPress={getList}
           style={{
             width: 90,

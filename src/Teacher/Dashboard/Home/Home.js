@@ -6,6 +6,7 @@ import {
   ScrollView,
   SafeAreaView,
   TextInput,
+  Linking,
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
@@ -73,7 +74,17 @@ const Home = ({navigation}) => {
 
   const [UpcomingClasses, setUpcomingClasses] = useState([]);
 
+  const [circulars, setCirculars] = useState([]);
+  const [assignments, setAssignments] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
+
   useEffect(async () => {
+    setLoadingScreen();
     try {
       let slug = `/timetable/upcomingTimetable`;
       let token = await read('token');
@@ -83,6 +94,45 @@ const Home = ({navigation}) => {
     } catch (err) {
       alert('Cannot fetch your Upcoming Timetable !!');
     }
+
+    try {
+      let slug = '/note/assignment';
+      let token = await read('token');
+      const response = await get(slug, token);
+      console.log(response);
+      setAssignments(response);
+    } catch (err) {
+      alert('Cannot fetch your assignments !!');
+    }
+
+    try {
+      let slug = '/subject';
+      let token = await read('token');
+      const response = await get(slug, token);
+      console.log(response);
+      setSubjects(response);
+    } catch (err) {
+      alert('Cannot fetch your assignments !!');
+    }
+
+    try {
+      let token = await read('token');
+      let slug = `/circular?department=${userInfo.department}`;
+      let res = await get(slug, token);
+      let circularArray = [];
+      res.map(cir => {
+        circularArray.push({
+          title: cir.circularsubject,
+          content: cir.circularContent,
+          time: parseDate(cir.circularDate),
+        });
+      });
+      setCirculars(circularArray);
+    } catch (err) {
+      alert('Cannot fetch circular!!');
+    }
+
+    hideLoadingScreen();
   }, []);
 
   return (
@@ -191,9 +241,11 @@ const Home = ({navigation}) => {
                       style={styles.classes_card}
                       onPress={() => navigation.navigate('Timetable')}>
                       <Text style={styles.classes_cardClass}>
-                        {period.subject}
+                        {period.subject.toUpperCase()}
                       </Text>
-                      <Text style={styles.classes_cardTime}>
+                      <Text
+                        style={styles.classes_cardTime}
+                        style={{color: institute.themeColor || 'blue'}}>
                         {`${period.startTime} - ${period.endTime}`}
                       </Text>
                       <Text style={styles.classes_cardBatch}>
@@ -209,66 +261,125 @@ const Home = ({navigation}) => {
         <View>
           <Text style={styles.section_heading}>New Circular</Text>
         </View>
-        <View style={{marginHorizontal: 30, ...styles.shadow}}>
-          <View
-            style={{
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-              borderBottomLeftRadius: collapsed ? 8 : 0,
-              borderBottomRightRadius: collapsed ? 8 : 0,
-              ...styles.collapsable_header,
-            }}>
-            <Text style={styles.collapsable_headerText}>Title</Text>
-            {!collapsed ? (
-              <TouchableOpacity
-                style={styles.collapsable_IconContainer}
-                onPress={toggleExpanded}>
-                <FontAwesome5
-                  name="chevron-up"
-                  size={14}
-                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
-                />
-                <Text style={styles.collapsable_IconText}>Read Less</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.collapsable_IconContainer}
-                onPress={toggleExpanded}>
-                <FontAwesome5
-                  name="chevron-down"
-                  size={14}
-                  style={{color: 'rgba(62, 104, 228, 0.9)'}}
-                />
-                <Text style={styles.collapsable_IconText}>Read More</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          <Collapsible
-            collapsed={collapsed}
-            align="center"
-            style={styles.collapsable_contentWrapper}>
-            <Text style={styles.collapsable_content}>
-              Exams will be conducted via online mode. All the best. It is
-              requested from the students to maintain the.
-            </Text>
-          </Collapsible>
-        </View>
+        {circulars && circulars.length > 0 ? (
+          circulars.map(circular => (
+            <View style={{marginHorizontal: 30, ...styles.shadow}}>
+              <View
+                style={{
+                  borderTopLeftRadius: 8,
+                  borderTopRightRadius: 8,
+                  borderBottomLeftRadius: collapsed ? 8 : 0,
+                  borderBottomRightRadius: collapsed ? 8 : 0,
+                  ...styles.collapsable_header,
+                }}>
+                <Text style={styles.collapsable_headerText}>
+                  {circular.title}
+                </Text>
+                {!collapsed ? (
+                  <TouchableOpacity
+                    style={styles.collapsable_IconContainer}
+                    onPress={toggleExpanded}>
+                    <FontAwesome5
+                      name="chevron-up"
+                      size={14}
+                      style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                    />
+                    <Text style={styles.collapsable_IconText}>Read Less</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.collapsable_IconContainer}
+                    onPress={toggleExpanded}>
+                    <FontAwesome5
+                      name="chevron-down"
+                      size={14}
+                      style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                    />
+                    <Text style={styles.collapsable_IconText}>
+                      {circular.content}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+              <Collapsible
+                collapsed={collapsed}
+                align="center"
+                style={styles.collapsable_contentWrapper}>
+                <Text style={styles.collapsable_content}>
+                  Exams will be conducted via online mode. All the best. It is
+                  requested from the students to maintain the.
+                </Text>
+              </Collapsible>
+            </View>
+          ))
+        ) : (
+          <Text style={{marginLeft: 30}}>No Active Circulars</Text>
+        )}
+
         <ScrollView
           contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          <View style={{marginHorizontal: 10}}>
-            <Text style={styles.card_heading}>Assignment</Text>
-            <View style={styles.shadow}>
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => navigation.navigate('Assignment')}>
-                <Text style={styles.card_row1}>Subject</Text>
-                <Text style={styles.card_row2}>Title</Text>
-                <Text style={styles.card_row3}>Due:21 May,2021</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          {assignments &&
+            assignments.map(assignment => (
+              <View style={{marginHorizontal: 10}} key={assignment._id}>
+                <Text style={styles.card_heading}>Assignment</Text>
+                <View style={styles.shadow}>
+                  <TouchableOpacity
+                    style={styles.card}
+                    onPress={() => Linking.openURL(assignment.url)}>
+                    <Text style={styles.card_row1}>
+                      {assignment.subject
+                        ? assignment.subject.name.toUpperCase()
+                        : 'N/A'}
+                    </Text>
+                    <Text style={styles.card_row2}>
+                      {assignment.title ? assignment.title : 'N/A'}
+                    </Text>
+                    <Text style={styles.card_row3}>
+                      Due:{' '}
+                      {assignment.submissionDate
+                        ? assignment.submissionDate.slice(0, 10)
+                        : 'N/A'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+        </ScrollView>
+
+        <ScrollView
+          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}>
+          {subjects &&
+            subjects.map(subject => (
+              <View style={{marginHorizontal: 10}} key={subject._id}>
+                <Text style={styles.card_heading}>Subjects</Text>
+                <View style={styles.shadow}>
+                  <TouchableOpacity
+                    style={styles.card}
+                    onPress={() => navigation.navigate('Notes')}>
+                    <Text style={styles.card_row1}>
+                      {subject.name ? subject.name.toUpperCase() : null}
+                    </Text>
+                    <Text style={styles.card_row2}>
+                      Code: {subject.code ? subject.code : null}
+                    </Text>
+                    <Text style={styles.card_row3}>
+                      Desc:{' '}
+                      {subject.description ? subject.description[5] : 'N/A'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+        </ScrollView>
+
+        <ScrollView
+          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}>
           <View style={{marginHorizontal: 10}}>
             <Text style={styles.card_heading}>Books</Text>
             <View style={styles.shadow}>
@@ -278,18 +389,6 @@ const Home = ({navigation}) => {
                 <Text style={styles.card_row1}>Name</Text>
                 <Text style={styles.card_row2}>ID:451236</Text>
                 <Text style={styles.card_row3}>Due:21 May,2021</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{marginHorizontal: 10}}>
-            <Text style={styles.card_heading}>Notes</Text>
-            <View style={styles.shadow}>
-              <TouchableOpacity
-                style={styles.card}
-                onPress={() => navigation.navigate('Notes')}>
-                <Text style={styles.card_row1}>Latest</Text>
-                <Text style={styles.card_row2}>Batch and Course</Text>
-                <Text style={styles.card_row3}>Chapter</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -450,10 +549,9 @@ function DrawerContent(props) {
               fontWeight: '600',
               fontSize: 14,
               width: 100,
-              backgroundColor: 'red',
               margin: 20,
               marginLeft: 40,
-              backgroundColor: '#B04305',
+              backgroundColor: institute.themeColor || '#B04305',
               borderRadius: 6,
             }}
             onPress={handleLogout}
@@ -667,7 +765,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: 'rgba(176, 67, 5, 0.75)',
+    color: institute.themeColor || 'rgba(176, 67, 5, 0.75)',
   },
   card_Wrapper: {
     paddingHorizontal: 10,
