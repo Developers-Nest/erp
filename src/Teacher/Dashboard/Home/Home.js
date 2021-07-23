@@ -243,7 +243,7 @@ const Home = ({ navigation }) => {
                       <Text style={styles.classes_cardClass}>
                         {period.subject.toUpperCase()}
                       </Text>
-                      <Text style={styles.classes_cardTime} style={{color: institute.themeColor || 'blue'}}>
+                      <Text style={styles.classes_cardTime} style={{color: institute ? institute.themeColor : 'black' || 'blue'}}>
                         {`${period.startTime} - ${period.endTime}`}
                       </Text>
                       <Text style={styles.classes_cardBatch}>
@@ -322,7 +322,7 @@ const Home = ({ navigation }) => {
                     onPress={() => Linking.openURL(assignment.url)}>
                     <Text style={styles.card_row1}>{assignment.subject ? assignment.subject.name.toUpperCase() : 'N/A'}</Text>
                     <Text style={styles.card_row2}>{assignment.title ? assignment.title : 'N/A'}</Text>
-                    <Text style={styles.card_row3}>Due: {assignment.submissionDate ? assignment.submissionDate.slice(0, 10) : 'N/A'}</Text>
+                    <Text style={styles.card_row3, { color: institute? institute.themeColor : 'blue'}}>Due: {assignment.submissionDate ? assignment.submissionDate.slice(0, 10) : 'N/A'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -345,7 +345,7 @@ const Home = ({ navigation }) => {
                     onPress={() => navigation.navigate('Notes')}>
                     <Text style={styles.card_row1}>{subject.name ? subject.name.toUpperCase() : null}</Text>
                     <Text style={styles.card_row2}>Code: {subject.code ? subject.code : null}</Text>
-                    <Text style={styles.card_row3}>Desc: {subject.description ? subject.description[5] : 'N/A'}</Text>
+                    <Text style={styles.card_row3, { color: institute? institute.themeColor : 'blue'}}>Desc: {subject.description ? subject.description[5] : 'N/A'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -366,7 +366,7 @@ const Home = ({ navigation }) => {
                 onPress={() => navigation.navigate('Books')}>
                 <Text style={styles.card_row1}>Name</Text>
                 <Text style={styles.card_row2}>ID:451236</Text>
-                <Text style={styles.card_row3}>Due:21 May,2021</Text>
+                <Text style={styles.card_row3, { color: institute? institute.themeColor : 'blue'}}>Due:21 May,2021</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -452,6 +452,8 @@ const handleLogout = async () => {
 
 function DrawerContent(props) {
 
+  let institute = useSelector((state) => state.institute)
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -533,7 +535,7 @@ function DrawerContent(props) {
               width: 100,
               margin: 20,
               marginLeft: 40,
-              backgroundColor: institute.themeColor || '#B04305',
+              backgroundColor: institute ? institute.themeColor : 'black',
               borderRadius: 6,
             }}
             onPress={handleLogout}
@@ -548,7 +550,6 @@ function DrawerContent(props) {
 
 export default function Route() {
   userInfo = useSelector(state => state.userInfo);
-  institute = useSelector(state => state.institute);
   return (
     <DrawerNav.Navigator
       initialRouteName="Home"
@@ -747,7 +748,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    color: institute.themeColor || 'rgba(176, 67, 5, 0.75)',
+    // color: 'rgba(176, 67, 5, 0.75)',
   },
   card_Wrapper: {
     paddingHorizontal: 10,

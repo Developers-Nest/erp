@@ -742,7 +742,7 @@ export default function CceMarks({navigation}) {
         }}>
         <Button
           mode="contained"
-          color={ institute.themeColor || "#5177E7"}
+          color={ institute ? institute.themeColor : "#5177E7"}
           onPress={getList}
           style={{
             width: 90,
