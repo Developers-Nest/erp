@@ -77,25 +77,26 @@ const HomeScreen1 = () => {
         1st row started */}
           <TouchableOpacity style={styles.section}>
             <View style={{alignItems: 'center'}}>
-            <TouchableOpacity style={{alignItems: 'center'}}
-            onPress={() => {
-              navigation.navigate('Library');
-            }}>
-              <IonIcon size={36.83} color="#0066DA" name="library-outline" />
-
-              <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  marginTop: -5,
-                  fontFamily: 'Poppins-Regular',
+              <TouchableOpacity
+                style={{alignItems: 'center'}}
+                onPress={() => {
+                  navigation.navigate('Library');
                 }}>
-                Library
-              </Text>
+                <IonIcon size={36.83} color="#0066DA" name="library-outline" />
+
+                <Text
+                  style={{
+                    fontWeight: 'normal',
+                    fontSize: 12,
+                    color: '#211C5A',
+                    marginTop: -5,
+                    fontFamily: 'Poppins-Regular',
+                  }}>
+                  Library
+                </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.section}>
             <View style={{alignItems: 'center'}}>
               <SimpleLineIcon size={38} color="#0066DA" name="graduation" />

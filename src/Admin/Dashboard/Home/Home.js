@@ -43,7 +43,6 @@ import Occurence from '../Occurence/Occurence';
 
 import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
-import Occurence from '../Occurence/Occurence';
 import Library from './Home/Library';
 
 // redux
@@ -129,7 +128,11 @@ const Home_Route = () => {
         component={SettingUsers}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="Timetable" component={Timetable} />
+      <Stack.Screen
+        name="Timetable"
+        component={Timetable}
+        options={{headerShown: false}}
+      />
       {/* library */}
       <Stack.Screen
         name="Library"
