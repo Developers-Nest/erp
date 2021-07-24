@@ -84,24 +84,6 @@ export default function LecturesScreen({navigation}) {
             Lectures
           </Text>
 
-          {/* <TouchableOpacity
-            onPress={() => navigation.navigate('GoLive')}
-            style={{
-              justifyContent: 'flex-end',
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <IonIcons
-              name="add-circle"
-              color="#900"
-              style={{
-                fontSize: 35,
-                color: 'white',
-                paddingRight: 20,
-              }}
-            />
-          </TouchableOpacity> */}
         </View>
         <View style={styles.switchTabsView}>
           <TouchableOpacity
@@ -141,6 +123,7 @@ function Live() {
 
   const [LiveClasses, setLiveClasses] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
+  const institute = useSelector(state => state.institute)
 
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
@@ -196,13 +179,13 @@ function Live() {
                     </View>
 
                     <View style={styles.differentusers}>
-                      <Text style={styles.teacher}>
+                      <Text style={styles.teacher, {color: institute? institute.themeColor : 'blue'}}>
                         {LiveClass.date ? parseDate(LiveClass.date) : null}
                       </Text>
                       <View style={{flexDirection: 'column'}}>
                         <IconEnglish2
                           size={24}
-                          color="#B04305"
+                          color={ institute? institute.themeColor : "#B04305"}
                           name="radio"
                           style={{paddingLeft: 7}}
                         />
@@ -285,13 +268,13 @@ function Recorded() {
                     </View>
 
                     <View style={styles.differentusers}>
-                      <Text style={styles.teacher}>
+                      <Text style={styles.teacher, {color: institute? institute.themeColor: 'black'}}>
                         {parseDate(RecordedClass.date)}
                       </Text>
                       <View style={{flexDirection: 'column'}}>
                         <IconEnglish2
                           size={24}
-                          color="#B04305"
+                          color={ institute? institute.themeColor : "#B04305"}
                           name="radio"
                           style={{paddingLeft: 7}}
                         />
@@ -407,7 +390,6 @@ const styles = StyleSheet.create({
   },
   teacher: {
     fontSize: 14,
-    color: 'rgba(25, 40, 57, 0.63)',
     paddingLeft: 3,
     fontFamily: 'Poppins-Medium',
   },
