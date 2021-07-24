@@ -53,6 +53,7 @@ const Recorded = () => {
   const [RecordedClasses, setRecordedClasses] = useState([]);
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
   const userInfo = useSelector(state => state.userInfo);
+  const institute = useSelector(state => state.institute)
 
   // dropdown selected values
   const [batch, setBatch] = useState(null);
@@ -175,13 +176,13 @@ const Recorded = () => {
                     </View>
 
                     <View style={styles.differentusers}>
-                      <Text style={styles.teacher}>
+                      <Text style={styles.teacher, {color: institute? institute.themeColor : 'black'}}>
                         {parseDate(RecordedClass.date)}
                       </Text>
                       <View style={{flexDirection: 'column'}}>
                         <IconEnglish2
                           size={24}
-                          color="#B04305"
+                          color={ institute? institute.themeColor : "#B04305"}
                           name="radio"
                           style={{paddingLeft: 7}}
                         />
@@ -199,269 +200,6 @@ const Recorded = () => {
             ))}
         </View>
       </ScrollView>
-      {/* <ScrollView>
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-            }}>
-            <View style={styles.section}>
-              <View style={styles.details}>
-                <View style={styles.userinhostels}>
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontWeight: 'normal',
-                        fontSize: 22,
-                        color: ' rgba(25, 40, 57, 0.7)',
-                        fontFamily:'Poppins-Medium'
-                      }}>
-                     
-                      English
-                    </Text>
-
-                    <MaterialCommunityIcon
-                      size={27}
-                      color="rgba(25, 40, 57, 0.63)"
-                      name="alpha-a"
-                      style={{paddingLeft: 7}}
-                    />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text style={styles.teacher}>Teacher</Text>
-                    <View style={{flexDirection: 'column'}}>
-                      <IconEnglish2
-                        size={24}
-                        color="#B04305"
-                        name="radio"
-                        style={{paddingLeft: 7}}
-                      />
-                      <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
-                        {' '}{' '}{' '}
-                        Class
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-            <View style={styles.section}>
-              <View style={styles.details}>
-                <View style={styles.userinhostels}>
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontWeight: 'normal',
-                        fontSize: 22,
-                        fontFamily:'Poppins-Medium',
-                        color: ' rgba(25, 40, 57, 0.7)',
-                      }}>
-                      {' '}
-                      Hindi
-                    </Text>
-                  
-                    <MaterialCommunityIcon
-                      size={27}
-                      color="rgba(25, 40, 57, 0.63)"
-                      name="alpha-a"
-                      style={{paddingLeft: 7}}
-                    />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text style={styles.teacher}>Teacher</Text>
-                    <View style={{flexDirection: 'column'}}>
-                      <Icon
-                        size={24}
-                        color="#1F7C17"
-                        name="clipboard-notes"
-                        style={{paddingLeft: 7}}
-                      />
-                      <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
-                        {' '}{' '}
-                        Test
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <View style={styles.details}>
-                <View style={styles.userinhostels}>
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontWeight: 'normal',
-                        fontSize: 22,
-                        color: ' rgba(25, 40, 57, 0.7)',
-                        fontFamily:'Poppins-Medium'
-                      }}>
-                      {' '}
-                      Physics
-                    </Text>
-
-                    <EntypoIcon
-                      size={27}
-                      color="rgba(25, 40, 57, 0.63)"
-                      name="tree"
-                      style={{paddingLeft: 7}}
-                    />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text style={styles.teacher}>Teacher</Text>
-                    <View style={{flexDirection: 'column'}}>
-                      <IconPhysics2
-                        size={24}
-                        color="#EFB086"
-                        name="ios-hand-left"
-                        style={{paddingLeft: 7}}
-                      />
-                      <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
-                        {' '}
-                        Doubts
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.section}>
-              <View style={styles.details}>
-                <View style={styles.userinhostels}>
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontWeight: 'normal',
-                        fontSize: 22,
-                        color: ' rgba(25, 40, 57, 0.7)',
-                        fontFamily:'Poppins-Medium'
-                      }}>
-                      {' '}
-                      Biology
-                    </Text>
-
-                    <IconBio1
-                      size={27}
-                      color="greyrgba(25, 40, 57, 0.63)"
-                      name="microscope"
-                      
-                    />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text style={styles.teacher}>Teacher</Text>
-                    <View style={{flexDirection: 'column'}}>
-                      <IconBio2
-                        size={24}
-                        color="rgba(93, 109, 116, 1)"
-                        name="chalkboard-teacher"
-                        
-                      />
-                      <Text
-                        style={{fontSize: 10,  fontFamily:'Poppins-Medium',color: 'rgba(25, 40, 57, 0.9)'}}>
-                        {' '}{' '}{' '}
-                        Viva
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-            <View style={styles.section}>
-              <View style={styles.details}>
-                <View style={styles.userinhostels}>
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontWeight: 'normal',
-                        fontSize: 22,
-                        color: ' rgba(25, 40, 57, 0.7)',
-                        fontFamily:'Poppins-Medium'
-                      }}>
-                     
-                      Maths
-                    </Text>
-
-                    <MaterialCommunityIcon
-                      size={27}
-                      color="rgba(25, 40, 57, 0.63)"
-                      name="function-variant"
-                      style={{paddingLeft: 7}}
-                    />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text style={styles.teacher}>Teacher</Text>
-                    <View style={{flexDirection: 'column'}}>
-                      <IconEnglish2
-                        size={24}
-                        color="#B04305"
-                        name="radio"
-                        style={{paddingLeft: 7}}
-                      />
-                      <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
-                        {' '}{' '}{' '}
-                        Class
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-            <View style={styles.section}>
-              <View style={styles.details}>
-                <View style={styles.userinhostels}>
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontWeight: 'normal',
-                        fontSize: 22,
-                        color: ' rgba(25, 40, 57, 0.7)',
-                        fontFamily:'Poppins-Medium'
-                      }}>
-                     
-                      Chemistry
-                    </Text>
-
-                    <MaterialCommunityIcon
-                      size={27}
-                      color="rgba(25, 40, 57, 0.63)"
-                      name="molecule"
-                      style={{paddingLeft: 7}}
-                    />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text style={styles.teacher}>Teacher</Text>
-                    <View style={{flexDirection: 'column'}}>
-                      <EntypoIcon
-                        size={24}
-                        color="#3854B7"
-                        name="lab-flask"
-                        style={{paddingLeft: 7}}
-                      />
-                      <Text
-                        style={{fontSize: 10, color: 'rgba(25, 40, 57, 0.9)', fontFamily:'Poppins-Medium'}}>
-                        {' '}{' '}{' '}{'  '}
-                        Lab
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </View>
-        </ScrollView> */}
     </View>
   );
 };
@@ -564,7 +302,6 @@ const styles = StyleSheet.create({
   },
   teacher: {
     fontSize: 14,
-    color: 'rgba(25, 40, 57, 0.63)',
     paddingLeft: 3,
     fontFamily: 'Poppins-Medium',
   },

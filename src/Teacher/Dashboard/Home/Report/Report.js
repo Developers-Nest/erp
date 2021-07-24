@@ -88,6 +88,7 @@ export default function Report({navigation}) {
         style={styles.button}
         onPress={() => Alert.alert('Report Submitted')}
         labelStyle={{color: 'white'}}
+        color={institute ? institute.themeColor : 'blue'}
         uppercase={false}
         mode="contained">
         Submit
@@ -128,9 +129,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
   button: {
-    backgroundColor: '#5177E7',
     alignSelf: 'flex-end',
-    //   marginTop: 10,
     color: '#F9F9F9',
     padding: 3,
     paddingHorizontal: 5,

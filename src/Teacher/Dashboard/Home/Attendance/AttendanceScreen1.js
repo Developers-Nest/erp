@@ -390,7 +390,7 @@ const AttendanceScreen1 = ({navigation}) => {
               </ScrollView>
               {/* Cards end */}
 
-              <Button onPress={handleSaveList}>Send</Button>
+              <Button onPress={handleSaveList} color={institute ? institute.themeColor : 'blue'} mode="contained">Save</Button>
             </View>
           
         ) : null}
