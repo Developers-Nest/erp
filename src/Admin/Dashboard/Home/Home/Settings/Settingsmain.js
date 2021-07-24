@@ -200,7 +200,7 @@ export default function Settingsmain({ navigation }) {
                   />
                 </View>
                 <View>
-                  <Text style={{ color: '#505069', fontFamily: 'Poppins-Regular', fontSize: 12.8855 }}>{'       '}SMS</Text>
+                  <Text style={{ color: '#505069', fontFamily: 'Poppins-Regular', fontSize: 12.8855 }}>{'        '}SMS</Text>
                 </View>
               </View>
 

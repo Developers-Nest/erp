@@ -3,16 +3,19 @@ import {
     StyleSheet,
     View,
     Text,
-    ScrollView
+    ScrollView,
+    TouchableOpacity
     
 } from 'react-native';
 import { Searchbar,Button,Card, Title} from 'react-native-paper';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import ModalSelector from 'react-native-modal-selector';
 // date picker
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
-export default function FeesPaidReport() {
+
+export default function FeesPaidReport({navigation}) {
 
     const [className, setclassName] = useState(null);
     const [classes, setclasses] = useState([
@@ -51,11 +54,46 @@ export default function FeesPaidReport() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={{ color: 'white', fontSize: 28 }}>
-                    Fees Paids Report
-                </Text>
-            </View>
+                     
+<View style={styles.header}
+          // style={{
+          //   backgroundColor: institute ? institute.themeColor : 'black',
+          //   ...styles.header,
+          // }}
+          
+          >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ReportList');
+            }}>
+                
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
+            />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontFamily: 'NunitoSans-Regular',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
+            Fees Paid Report
+          </Text>
+        </View> 
+ 
             <View style={styles.CardContainer}>
                 <View
                     style={{
@@ -150,8 +188,9 @@ const styles = StyleSheet.create({
 
     header: {
         height: 65,
-        backgroundColor: 'black'
-    },
+        flexDirection: 'row',
+        backgroundColor:'#FF5733'
+      },
     CardContainer: {
         marginTop: 10,
         flexDirection: 'column',

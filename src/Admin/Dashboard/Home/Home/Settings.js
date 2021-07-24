@@ -1,26 +1,4 @@
 import React, { useState } from 'react';
-
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import DropDownPicker from 'react-native-dropdown-picker';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
-import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
-  Button,
-  TextInput,
-  RadioButton
-} from 'react-native-paper';
-
 import Settingsmain from './Settings/Settingsmain';
 import AddVisitors from './Settings/AddVisitors';
 import EditVisitors from './Settings/EditVisitors';
