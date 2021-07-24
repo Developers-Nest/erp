@@ -3,16 +3,17 @@ import {
     StyleSheet,
     View,
     Text,
-    ScrollView
+    ScrollView,
+    TouchableOpacity
     
 } from 'react-native';
 import { Searchbar,Button,Card, Title} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 // date picker
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
-
-export default function StudentReport() {
+export default function StudentReport({navigation}) {
 
     const [className, setclassName] = useState(null);
     const [classes, setclasses] = useState([
@@ -65,11 +66,45 @@ export default function StudentReport() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={{ color: 'white', fontSize: 28 }}>
-                    student Report
-                </Text>
-            </View>
+                     
+<View style={styles.header}
+          // style={{
+          //   backgroundColor: institute ? institute.themeColor : 'black',
+          //   ...styles.header,
+          // }}
+          
+          >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ReportList');
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
+            />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontFamily: 'NunitoSans-Regular',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
+            Student Report
+          </Text>
+        </View> 
+ 
             <View style={styles.ModalContainer}>
                     <ModalSelector
                         data={classes}
@@ -235,8 +270,9 @@ const styles = StyleSheet.create({
 
     header: {
         height: 65,
-        backgroundColor: 'black'
-    },
+        flexDirection: 'row',
+        backgroundColor:'#FF5733'
+      },
     ModalContainer: {
         marginTop: 10,
         flexDirection: 'column',

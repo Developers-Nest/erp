@@ -4,20 +4,54 @@ import {
     StyleSheet,
     View,
     Text,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    TouchableOpacity
 } from 'react-native';
 import { Card, Title } from 'react-native-paper';
 import FeesPaidReport from './FeesPaidReport';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
 export default function ReportList({navigation}) {
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={{ color: 'white', fontSize: 28 }}>
-                    Report List
-                </Text>
-            </View>
-            <View style={styles.CardContainer}>
+           
+<View style={styles.header}
+          // style={{
+          //   backgroundColor: institute ? institute.themeColor : 'black',
+          //   ...styles.header,
+          // }}
+          
+          >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Home');
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
+            />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontFamily: 'NunitoSans-Regular',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
+            Report List
+          </Text>
+        </View> 
+        <View style={styles.CardContainer}>
                 
                 <TouchableWithoutFeedback 
                 onPress={() => {
@@ -46,7 +80,7 @@ export default function ReportList({navigation}) {
 
                 <TouchableWithoutFeedback 
                  onPress={() => {
-                    navigation.navigate('FessPaidReport');
+                    navigation.navigate('FeesPaidReport');
                   }}
                 >
                 <Card style={styles.card}>
@@ -83,8 +117,9 @@ const styles = StyleSheet.create({
 
     header: {
         height: 65,
-        backgroundColor: 'black'
-    },
+        flexDirection: 'row',
+        backgroundColor:'#FF5733'
+      },
     CardContainer: {
         marginTop: 10,
 

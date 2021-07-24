@@ -53,12 +53,10 @@ export default function Dashboard() {
       let slug = '/institution/student';
       let token = await read('token');
       let res = await get(slug, token);
-      console.log('Institute Res ', res);
       dispatch({
         type: INSTITUTE,
         institute: res,
       });
-      console.log('Theme color ', res.themeColor);
       setThemeColor(res.themeColor);
     } catch (err) {
       alert('Cannot fetch Institute Details!');

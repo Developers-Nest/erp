@@ -1,8 +1,9 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 //for users section icons
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 //dropdown
 import ModalSelector from 'react-native-modal-selector';
 //navigate
@@ -19,44 +20,44 @@ import {
   Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {CheckBox} from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
+import { useSelector } from 'react-redux';
 
-
-export default function Settingsmain({navigation}) {
+export default function Settingsmain({ navigation }) {
   const [showContent, setShowContent] = React.useState('Users');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
   //theming
-//   const institute = useSelector(state => state.institute);
+  const institute = useSelector(state => state.institute);
 
-  
+
   // const [open1, setOpen1] = useState(null);
   const [className, setclassName] = useState(null);
   const [classes, setclasses] = useState([
-    {label: 'Class1', key: 'Class1'},
-    {label: 'Class2', key: 'Class2'},
-    {label: 'Class3', key: 'Class3'},
+    { label: 'Class1', key: 'Class1' },
+    { label: 'Class2', key: 'Class2' },
+    { label: 'Class3', key: 'Class3' },
   ]);
 
   // const [open2, setOpen2] = useState(null);
   const [batch, setbatch] = useState(null);
   const [batches, setbatches] = useState([
-    {label: 'Batch1', key: 'Batch1'},
-    {label: 'Batch2', key: 'Batch2'},
-    {label: 'Batch3', key: 'Batch3'},
+    { label: 'Batch1', key: 'Batch1' },
+    { label: 'Batch2', key: 'Batch2' },
+    { label: 'Batch3', key: 'Batch3' },
   ]);
 
   // const [open3, setOpen3] = useState(null);
   const [subject, setsubject] = useState(null);
   const [subjects, setsubjects] = useState([
-    {label: 'Subject1', key: 'Subject1'},
-    {label: 'Subject2', key: 'Subject2'},
-    {label: 'Subject3', key: 'Subject3'},
+    { label: 'Subject1', key: 'Subject1' },
+    { label: 'Subject2', key: 'Subject2' },
+    { label: 'Subject3', key: 'Subject3' },
   ]);
 
   //for checkboxes
-  const [checkBoxValue, setCheckBoxValue]= useState(false);
+  const [checkBoxValue, setCheckBoxValue] = useState(false);
   function Visitors() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -65,91 +66,91 @@ export default function Settingsmain({navigation}) {
     return (
       <View style={styles.container}>
         <ScrollView>
-{/* new section */}
+          {/* new section */}
 
-<View style={styles.section}>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            marginHorizontal: -5,
-                          }}>
-                          {' '}
-                          Visitor Name
-                          {/* {assignment.title || 'Title Not Found'} */}
-                        </Text>
-                      </View>
-                      <TouchableOpacity style={styles.differentusers}
-                     >
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#58636D',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          Category
-                        </Text>
-                        {/*                 
-                    <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
-                      </TouchableOpacity>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 10,
-                            color: '#505069',
-                            fontFamily: 'OpenSans-Regular',
-                          }}>
-                         
-                    {''} Visit to
-                        </Text>
-
-
-
-                        <TouchableOpacity
-                          style={{flexDirection: 'row'}}
-                          onPress={()=>(navigation.navigate("AddVisitors"))}
-                          
-                          >
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: '#211C5A',
-                              fontFamily: 'Poppins-Regular',
-                            }}>
-                            Edit
-                          </Text>
-                          <Icon
-                            size={12}
-                            color="#211C5A"
-                            name="edit"
-                            style={{paddingTop: 2, paddingRight: 10}}
-                          />
-                        </TouchableOpacity>
-                        {/* <Text style={styles.userstext}>Graded</Text> */}
-                      </View>
-                    </View>
-                  </View>
-
-                  <View style={styles.belowhr}>
-                      
-                      <Text
-                        style={{
-                          color: '#211C5A',
-                          fontSize: 12,
-                          fontFamily: 'Poppins-Regular',
-                          
-                        }}>
-                        Purpose
-                      </Text>
-                    
-                   
-                  </View>
+          <View style={styles.section}>
+            <View style={styles.details}>
+              <View style={styles.userinhostels}>
+                <View style={styles.differentusers}>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      color: '#211C5A',
+                      fontFamily: 'Poppins-Regular',
+                      marginHorizontal: -5,
+                    }}>
+                    {' '}
+                    Visitor Name
+                    {/* {assignment.title || 'Title Not Found'} */}
+                  </Text>
                 </View>
-         
+                <TouchableOpacity style={styles.differentusers}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: '#58636D',
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    Category
+                  </Text>
+                  {/*                 
+                    <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
+                </TouchableOpacity>
+                <View style={styles.differentusers}>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: '#505069',
+                      fontFamily: 'OpenSans-Regular',
+                    }}>
+
+                    {''} Visit to
+                  </Text>
+
+
+
+                  <TouchableOpacity
+                    style={{ flexDirection: 'row' }}
+                    onPress={() => (navigation.navigate("EditVisitors"))}
+
+                  >
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#211C5A',
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      Edit
+                    </Text>
+                    <Icon
+                      size={12}
+                      color="#211C5A"
+                      name="edit"
+                      style={{ paddingTop: 2, paddingRight: 10 }}
+                    />
+                  </TouchableOpacity>
+                  {/* <Text style={styles.userstext}>Graded</Text> */}
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.belowhr}>
+
+              <Text
+                style={{
+                  color: '#211C5A',
+                  fontSize: 12,
+                  fontFamily: 'Poppins-Regular',
+
+                }}>
+                Purpose
+              </Text>
+
+
+            </View>
+          </View>
+
         </ScrollView>
       </View>
     );
@@ -164,130 +165,144 @@ export default function Settingsmain({navigation}) {
       <View style={styles.container}>
         <ScrollView>
 
-    <View style={{height:30}}/>
-    {/* //for logo inside bubble */}
-<View style={{flexDirection:'row',padding:30,alignSelf:'flex-start'}}>
-<View style={{flexDirection:'column',marginRight:30,paddingRight:20}}>
-       <View style={styles.iconbubble}>
-       <MaterialCommunityIcon
-              size={38.5}
-              color="black"
-              name="gmail"
-            />
-       </View>
-       <View>
-           <Text style={{color:'#505069',fontFamily:'Poppins-Regular',fontSize:12.8855}}>{'      '}Email</Text>
-       </View>
-</View>
-<View style={{flexDirection:'column',marginRight:20,paddingRight:20}}>
-       <View style={styles.iconbubble}>
-       <MaterialCommunityIcon
-              size={38.5}
-              color="black"
-              name="chat-processing"
-            />
-       </View>
-       <View>
-           <Text style={{color:'#505069',fontFamily:'Poppins-Regular',fontSize:12.8855}}>{'       '}SMS</Text>
-       </View>
-</View>
 
-<View style={{flexDirection:'column',marginRight:20,paddingRight:20}}>
-       <View style={styles.iconbubble}>
-       <MaterialCommunityIcon
-              size={38.5}
-              color="black"
-              name="lock"
-            />
-       </View>
-       <View>
-           <Text style={{color:'#505069',fontFamily:'Poppins-Regular',fontSize:12.8855}}>Reset Password</Text>
-       </View>
-</View>
+          {/* //for logo inside bubble */}
+<View style={{height:20}}/>
+          {/* <View style={{  padding: 30 }}> */}
+            <View style={{
+              flexDirection: 'row',justifyContent:'space-between'
+             
+
+            }}>
+
+              <View style={{
+                flexDirection: 'column',marginLeft:25
+                
+
+              }}>
+                <View style={styles.iconbubble}>
+                  <MaterialCommunityIcon
+                    size={38.5}
+                    color="black"
+                    name="gmail"
+                  />
+                </View>
+                <View>
+                  <Text style={{ color: '#505069', fontFamily: 'Poppins-Regular', fontSize: 12.8855 }}>{'      '}Email</Text>
+                </View>
+              </View>
+              <View style={{ flexDirection: 'column' }}>
+                <View style={styles.iconbubble}>
+                  <MaterialCommunityIcon
+                    size={38.5}
+                    color="black"
+                    name="chat-processing"
+                  />
+                </View>
+                <View>
+                  <Text style={{ color: '#505069', fontFamily: 'Poppins-Regular', fontSize: 12.8855 }}>{'        '}SMS</Text>
+                </View>
+              </View>
+
+              <View style={{ flexDirection: 'column' }}>
+                <View style={styles.iconbubble}>
+                  <MaterialCommunityIcon
+                    size={38.5}
+                    color="black"
+                    name="lock"
+                  />
+                </View>
+                <View>
+                  <Text style={{ color: '#505069', fontFamily: 'Poppins-Regular',marginRight:3, fontSize: 12.8855 }}>Reset Password</Text>
+                </View>
+              </View>
 
 
-       </View>
+            </View>
 
-    {/* all icons and text placed above*/}
-    <View style={{height:10}}/>
-    <CheckBox
-                     containerStyle={{marginTop:-9}}
-                     checked={checkBoxValue} 
-                     title={'Select All'}
-                     onPress={()=>setCheckBoxValue(!checkBoxValue)}
-                     /> 
 
- {/* new card start */}
- <View style={styles.section}>
-                  <View style={styles.details2}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            
-                            // marginHorizontal: -5,
-                          }}>
-                          
-                          {' '}Name
+          
 
-                        </Text>
+          {/* all icons and text placed above*/}
+          <View style={{ height: 30 }} />
+          <CheckBox
+            containerStyle={{ marginTop: -9 }}
+            checked={checkBoxValue}
+            title={'Select All'}
+            onPress={() => setCheckBoxValue(!checkBoxValue)}
+          />
 
-                      </View>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#58636D',
-                            fontFamily: 'Poppins-Regular',
-                            marginTop:-15
-                            
-                          }}>
-                         {''} Username
-                                                  </Text>
-                     <CheckBox
-                     containerStyle={{marginTop:-9}}
-                     checked={checkBoxValue} 
-                     onPress={()=>setCheckBoxValue(!checkBoxValue)}
-                     />                  
-                    {/* <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
-                      </View>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#58636D',
-                            fontFamily: 'Poppins-Regular',
-                            marginTop:-15
-                          }}>
-                             {''} Code
-                        </Text>
+          {/* new card start */}
+          <View style={styles.section}>
+            <View style={styles.details2}>
+              <View style={styles.userinhostels}>
+                <View style={styles.differentusers}>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      color: '#211C5A',
+                      fontFamily: 'Poppins-Regular',
 
-                        {/* <Text style={styles.userstext}>Graded</Text> */}
-                      </TouchableOpacity>
-                    </View>
-                  </View>
+                      // marginHorizontal: -5,
+                    }}>
+
+                    {' '}Name
+
+                  </Text>
 
                 </View>
+                <View style={styles.differentusers}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: '#58636D',
+                      fontFamily: 'Poppins-Regular',
+                      marginTop: -15
 
-               {/* new card ends */}
-           </ScrollView>
+                    }}>
+                    {''} Username
+                  </Text>
+                  <CheckBox
+                    containerStyle={{ marginTop: -9 }}
+                    checked={checkBoxValue}
+                    onPress={() => setCheckBoxValue(!checkBoxValue)}
+                  />
+                  {/* <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
+                </View>
+                <TouchableOpacity style={styles.differentusers}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: '#58636D',
+                      fontFamily: 'Poppins-Regular',
+                      marginTop: -15
+                    }}>
+                    {''} Code
+                  </Text>
+
+                  {/* <Text style={styles.userstext}>Graded</Text> */}
+                </TouchableOpacity>
+              </View>
+            </View>
+
+          </View>
+
+          {/* new card ends */}
+        </ScrollView>
       </View>
     );
   }
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
-       
+
 
         {/* header start */}
 
         <View
           style={{
-            // backgroundColor: institute ? institute.themeColor : 'black',
-            backgroundColor:'blue',
+            backgroundColor: institute ? institute.themeColor : '#FF5733',
+            // backgroundColor:'blue',
             ...styles.header,
           }}>
           <TouchableOpacity
@@ -300,10 +315,11 @@ export default function Settingsmain({navigation}) {
               name="left"
               style={{
                 alignSelf: 'center',
+
                 fontSize: 25,
                 color: 'white',
                 paddingLeft: 20,
-                paddingTop: 20,
+                marginTop: 22,
               }}
             />
           </TouchableOpacity>
@@ -314,80 +330,107 @@ export default function Settingsmain({navigation}) {
               fontSize: 28,
               fontWeight: '600',
               alignSelf: 'center',
-              paddingLeft: 30,
+              marginLeft: 30,
               color: 'white',
             }}>
             Settings
+
           </Text>
+          {showContent === 'Users' ? null :
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate('AddVisitors')}
+              style={{
+                justifyContent: 'flex-end',
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 5 }}>
+                <Ionicons
+                  name="add-circle"
+                  color="#900"
+                  style={{
+                    fontSize: 35,
+                    color: 'white',
+                    paddingRight: 20,
+                  }}
+                />
+                <Text style={{ color: '#fff', fontFamily: 'Poppins-Regular', fontSize: 12 }}>Add Visitors</Text>
+              </View>
+            </TouchableOpacity>
+          }
+
         </View>
 
         {/* header ends */}
 
 
-        <View style={{ padding: 15 }}/>
-
-<View
-  style={{
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 10,
-    alignContent: 'flex-start',
-    // width: '100%'
-  }}>
- 
-   <ModalSelector
-    data={classes}
-    initValue="Usertype"
-    onChange={option => {
-      // setclass(option.key);
-    }}
-    style={styles.card}
-    initValueTextStyle={styles.SelectedValueSmall}
-    selectTextStyle={styles.SelectedValueSmall}
-  />
- 
-  <ModalSelector
-    data={subjects}
-    initValue="Department"
-    onChange={option => {
-      // setsubject(option.key);
-    }}
-    style={styles.card}
-    initValueTextStyle={styles.SelectedValueSmall}
-    selectTextStyle={styles.SelectedValueSmall}
-  />
-
-</View>
-        {/* tabs section open */}
-  
-  <View style={{height:30}}/>
-
-        <View style={styles.switchTabsView}>
-          <TouchableOpacity
+        <View style={{ padding: 15 }} />
+        <ScrollView>
+          <View
             style={{
-              borderBottomWidth: showContent == 'Users' ? 1 : 0,
-              borderBottomColor: 'rgba(176, 67, 5, 1)',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => setShowContent('Users')}>
-            <Text style={styles.switchTextDue}>Users</Text>
-          </TouchableOpacity>
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              marginTop: 10,
+              alignContent: 'flex-start',
+              // width: '100%'
+            }}>
 
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: showContent == 'Visitors' ? 1 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => setShowContent('Visitors')}>
-            <Text style={styles.switchText}>Visitors</Text>
-          </TouchableOpacity>
-        </View>
-        {showContent === 'Users' ? <Users /> : <Visitors />}
+            <ModalSelector
+              data={classes}
+              initValue="Usertype"
+              onChange={option => {
+                // setclass(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
+
+            <ModalSelector
+              data={subjects}
+              initValue="Department"
+              onChange={option => {
+                // setsubject(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
+
+          </View>
+          {/* tabs section open */}
+
+          <View style={{ height: 30 }} />
+
+          <View style={styles.switchTabsView}>
+            <TouchableOpacity
+              style={{
+                borderBottomWidth: showContent == 'Users' ? 1 : 0,
+                borderBottomColor: 'rgba(176, 67, 5, 1)',
+                paddingHorizontal: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setShowContent('Users')}>
+              <Text style={styles.switchTextDue}>Users</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                borderBottomWidth: showContent == 'Visitors' ? 1 : 0,
+                borderBottomColor: '#58636D',
+                paddingHorizontal: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setShowContent('Visitors')}>
+              <Text style={styles.switchText}>Visitors</Text>
+            </TouchableOpacity>
+          </View>
+          {showContent === 'Users' ? <Users /> : <Visitors />}
+        </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -425,9 +468,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderBottomColor: '#333',
     paddingHorizontal: 20,
-    borderBottomWidth:1
+    borderBottomWidth: 1
   },
- 
+
   details2: {
     display: 'flex',
     flexDirection: 'column',
@@ -435,13 +478,13 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomColor: '#333',
     paddingHorizontal: 20,
-  
+
   },
- 
+
   belowhr: {
     display: 'flex',
     flexDirection: 'row',
-   paddingHorizontal:20,
+    paddingHorizontal: 20,
     justifyContent: 'space-between',
     paddingBottom: 10,
     borderBottomColor: '#333',
@@ -503,7 +546,7 @@ const styles = StyleSheet.create({
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -523,6 +566,7 @@ const styles = StyleSheet.create({
   header: {
     height: 69,
     flexDirection: 'row',
+    alignContent: 'center'
   },
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
@@ -545,29 +589,28 @@ const styles = StyleSheet.create({
 
   //for users
 
-  iconbubble:{
+  iconbubble: {
     width: 80,
     height: 80,
     backgroundColor: '#fff',
     borderRadius: 1000,
-    alignSelf: 'center',
-    display: 'flex',
+    // alignSelf: 'center',
+    // display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    top: -50,
-    marginBottom: -50,
+    justifyContent: 'space-around',
+   
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity:1,
-    shadowRadius:1.41,
-    elevation:5
+    shadowOpacity: 1,
+    shadowRadius: 1.41,
+    elevation: 5
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -582,6 +625,6 @@ const styles = StyleSheet.create({
     width: 170,
     elevation: 3,
   },
-  
+
 
 });

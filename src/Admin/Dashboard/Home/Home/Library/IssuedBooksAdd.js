@@ -1,15 +1,3 @@
-// import React from 'react';
-// import {View} from 'react-native';
-
-// import {Text} from 'react-native-paper';
-
-// export default function AddVisitors({navigation}) {
-//   return (
-//     <View>
-//       <Text>Add Visitors</Text>
-//     </View>
-//   );
-// }
 
 import React,{useState} from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
@@ -21,12 +9,18 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-const AddVisitors = ({navigation}) => {
+const IssuedBooksAdd = ({navigation}) => {
 
-
+    const [category, setcategory] = useState([
+        { label: 'Fiction', key: 'Fiction' },
+        { label: 'Philosophy', key: 'Philosophy' },
+        { label: 'history', key: 'History' },
+      ]);
+    
 
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('29 May 2021')
+    const [dateissued, setDateissued] = React.useState('21 May 2021')
     let index = 0;
     const dateMonths = {
         1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
@@ -40,8 +34,13 @@ const AddVisitors = ({navigation}) => {
         setDatePickerVisibility(false);
     };
     const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date.toString());
+        // console.warn("A date has been picked: ", date.toString());
         setDate(date.getDate() + " " + dateMonths[date.getMonth()+1] + " " + date.getFullYear())
+        hideDatePicker();
+    };
+    const handleConfirmissued = (dateissued) => {
+        // console.warn("A date has been picked: ", dateissued.toString());
+        setDateissued(dateissued.getDate() + " " + dateMonths[dateissued.getMonth()+1] + " " + dateissued.getFullYear())
         hideDatePicker();
     };
 
@@ -69,7 +68,7 @@ const AddVisitors = ({navigation}) => {
           >
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('SettingUsers');
+              navigation.navigate('Home');
             }}>
             <AntDesign
               size={24}
@@ -94,22 +93,23 @@ const AddVisitors = ({navigation}) => {
               paddingLeft: 30,
               color: 'white',
             }}>
-            Add Visitors
+            Issue Books
           </Text>
         </View>
 <ScrollView>
             
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
 
-                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                {/* <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Vechile No.</Text>
-                </View>
+                </View> */}
 
-                <View style={{ marginHorizontal: 10, ...styles.shadow }}>
+                <View style={{ marginHorizontal: 10,paddingTop:20, ...styles.shadow }}>
+
                     <View style={styles.search}>
                         <TextInput
-                            style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
-                            placeholder="Search User's name to add"
+                            style={{ marginTop:10,...styles.search_input, fontFamily: 'Poppins-Regular' }}
+                            placeholder="Enter book name or ID here"
 
                         />
                         <TouchableOpacity
@@ -130,32 +130,50 @@ const AddVisitors = ({navigation}) => {
                     </View>
                 </View>
 
-                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Visitor's Name </Text>
-                    <Text style={styles.section_heading2}>Relation</Text>
+                
+                <View style={{ flexDirection: 'row' ,justifyContent:'center',paddingTop:15}} >
+
+                <ModalSelector
+              data={category}
+              initValue="Select User Type"
+              onChange={option => {
+                // setclass(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValue}
+              selectTextStyle={styles.SelectedValue}
+            />
+              
                 </View>
-                <View style={{ flexDirection: 'row' }} >
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Shian Manzoor"
-
-
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Brother"
-
-                    />
-
-                </View>
+                {/* 3rd row starts */}
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Date </Text>
-                    <Text style={styles.section_heading1}>Time</Text>
+                    <Text style={styles.section_heading}>Issued On </Text>
+                    <Text style={styles.section_heading1}>Due On</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row' }} >
 
+                    <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
+                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
+                            placeholder={dateissued}
+
+                        />
+                        <Feather size={18} color="black" name="calendar"
+                            style={{
+                                marginTop: 16,
+                                marginRight: 0,
+                            }}
+
+
+                        ></Feather>
+                        <DateTimePickerModal
+                            isVisible={isDatePickerVisible}
+                            style={styles.pickdate}
+                            mode="date"
+                            onConfirm={handleConfirmissued}
+                            onCancel={hideDatePicker}
+                        />
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={date}
@@ -177,20 +195,6 @@ const AddVisitors = ({navigation}) => {
                             onCancel={hideDatePicker}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.pickdate1}>
-                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                            placeholder="13.00"
-                        
-
-                        />
-                        <Feather size={18} color="black" name="calendar"
-                            style={{
-                                marginTop: 16,
-                                marginRight: 0,
-                            }}
-                        ></Feather>
-                    </TouchableOpacity>
-
 
                 </View>
                 <View style={styles.fixToText}>
@@ -361,26 +365,49 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
 
     },
-    SelectedValue: {
+    // SelectedValue: {
+    //     fontFamily: 'Poppins-Regular',
+    //     fontStyle: 'normal',
+    //     fontWeight: 'normal',
+    //     fontSize: 18,
+    //     lineHeight: 27,
+    //     padding: 10,
+    //     color: 'rgba(88, 99, 109, 0.85)',
+    //   },
+      SelectedValue: {
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: 18,
-        lineHeight: 27,
-        padding: 10,
-        backgroundColor:"#8a2be2",
-        color: '#211C5A',
-      },
-      SelectedValueSmall: {
-        fontFamily: 'Poppins-Regular',
-        fontStyle: 'normal',
+        fontWeight:'200',
         fontWeight: '500',
-        fontSize: 18,
+        fontSize: 14,
         lineHeight: 30,
         paddingTop: 3,
-        color: 'white',
+        color: 'rgba(88, 99, 109, 0.85)',
       },
-      
+    
+  card: {
+    shadowColor: '#999',
+    height:50,
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    // justifyContent: 'center',
+    // alignContent:'center',
+    margin: 0,
+    padding: 0,
+
+   width:'94%'
+  },
+   
 
       header: {
         height: 69,
@@ -393,4 +420,4 @@ const styles = StyleSheet.create({
 
 
 
-export default AddVisitors;
+export default IssuedBooksAdd;
