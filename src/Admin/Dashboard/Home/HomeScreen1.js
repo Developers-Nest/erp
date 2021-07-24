@@ -69,16 +69,13 @@ const HomeScreen1 = () => {
         <View
           style={{
             flexDirection: 'row',
-           
+
             flexWrap: 'wrap',
             justifyContent: 'center',
           }}>
           {/* 
         1st row started */}
-          <TouchableOpacity
-            style={styles.section}
-   
-            >
+          <TouchableOpacity style={styles.section}>
             <View style={{alignItems: 'center'}}>
               <IonIcon size={36.83} color="#0066DA" name="library-outline" />
 
@@ -154,7 +151,11 @@ const HomeScreen1 = () => {
           </View>
 
           <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Timetable');
+              }}>
               <MaterialCommunityIcon
                 size={36.83}
                 color="#34A853"
@@ -171,16 +172,16 @@ const HomeScreen1 = () => {
                 }}>
                 Time Table
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
-          
+
           <View style={styles.section}>
-            <TouchableOpacity style={{alignItems: 'center'}}
-            onPress={() => {
-              navigation.navigate('Settings');
-            }}>
-              <IonIcon size={36.83} color="#34A853" name="settings-outline" 
-               />
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Settings');
+              }}>
+              <IonIcon size={36.83} color="#34A853" name="settings-outline" />
 
               <Text
                 style={{
