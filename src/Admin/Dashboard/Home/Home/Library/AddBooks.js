@@ -51,7 +51,7 @@ const [condition, setcondition] = useState([
 
 
 
-        <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+        <View style={{ justifyContent: 'center', alignContent: 'center' ,   backgroundColor: 'rgba(249, 249, 249, 1)', }}>
            
             
 <View style={styles.header}
@@ -98,19 +98,19 @@ const [condition, setcondition] = useState([
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
 
    {/* 1st row */}
-   <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+   <View style={{ width: "100%", paddingTop: 20, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>ISBN Number </Text>
                     <Text style={styles.section_heading1}>Added On</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }} >
 
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input,styles.shadow]}
                         placeholder="978-0-13-60197"
 
 
                     />
-                    <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
+                    <TouchableOpacity style={[styles.pickdate,styles.shadow]} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={date}
 
@@ -140,12 +140,12 @@ const [condition, setcondition] = useState([
 
   {/* 2nd row starts */}
 
-                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                <View style={{ width: "100%", marginTop: 20, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Name of the Book</Text>
                 </View>
 
-                <View style={{ marginHorizontal: 10, ...styles.shadow }}>
-                    <View style={styles.search}>
+                <View style={{ marginHorizontal: 10 }}>
+                    <View style={[styles.search,styles.shadow]}>
                         <TextInput
                             style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
                             placeholder="Harry Potter and Goblet of Fire"
@@ -155,20 +155,20 @@ const [condition, setcondition] = useState([
                 </View>
 {/* 2nd row ends
 3rd row starts */}
-                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                <View style={{ width: "100%", marginTop: 20,flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Edition </Text>
                     <Text style={styles.section_heading1}>Author</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }} >
 
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input,styles.shadow]}
                         placeholder="First"
 
 
                     />
                     <TextInput
-                        style={styles.input}
+                       style={[styles.input,styles.shadow]}
                         placeholder="J.K. Rowling"
 
                     />
@@ -177,7 +177,7 @@ const [condition, setcondition] = useState([
     {/* 3rd row ends
     4th row starts */}
 
-<View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+<View style={{ width: "100%", marginTop: 20, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Category </Text>
                     <Text style={styles.section_heading4}>Publisher</Text>
                 </View>
@@ -203,7 +203,7 @@ const [condition, setcondition] = useState([
                     /> */}
                     {/* <View style={styles.search}> */}
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input,styles.shadow]}
                         placeholder="Evergreen Publications"
 
                     />
@@ -215,7 +215,7 @@ const [condition, setcondition] = useState([
 
 {/* 5th row starts */}
 
-<View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+<View style={{ width: "100%",marginTop: 20,flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Shelf No. </Text>
                     <Text style={styles.section_heading1}>{'          '}Condition</Text>
                     <Text style={styles.section_heading1}>No. of Copies</Text>
@@ -223,7 +223,7 @@ const [condition, setcondition] = useState([
                 <View style={{ flexDirection: 'row' }} >
 
                     <TextInput
-                        style={styles.input}
+                       style={[styles.input,styles.shadow]}
                         placeholder="78-A"
 
 
@@ -240,7 +240,7 @@ const [condition, setcondition] = useState([
               selectTextStyle={styles.SelectedValueSmall}
             />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input,styles.shadow]}
                         placeholder="450"
 
                     />
@@ -256,20 +256,20 @@ const [condition, setcondition] = useState([
 
 
 {/* 6th row starts */}
-<View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+<View style={{ width: "100%", marginTop: 20,flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Book Position </Text>
                     <Text style={styles.section_heading1}>Language</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }} >
 
                     <TextInput
-                        style={styles.input}
+                       style={[styles.input,styles.shadow]}
                         placeholder="45-B,78-A"
 
 
                     />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input,styles.shadow]}
                         placeholder="English"
 
                     />
@@ -279,20 +279,20 @@ const [condition, setcondition] = useState([
                 6th row ends
                 7th row starts */}
 
-<View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+<View style={{ width: "100%", marginTop: 20, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Price of per copy </Text>
                     <Text style={styles.section_heading2}>Bill No.</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }} >
 
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input,styles.shadow]}
                         placeholder="699.00 Rs"
 
 
                     />
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input,styles.shadow]}
                         placeholder="GSTIN45616465"
 
                     />
@@ -326,9 +326,10 @@ const styles = StyleSheet.create({
     container: {
         alignContent: 'center',
         justifyContent: 'center',
-
+      
 
     },
+     
     button1: {
 
     marginTop:0,
@@ -389,9 +390,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingHorizontal: 20,
-        borderColor: '#58636D',
-        borderRadius: 8,
-        borderWidth: 0.3,
+        // borderColor: '#58636D',
+        // borderRadius: 8,
+        // borderWidth: 0.3,
 
     },
 
@@ -496,34 +497,32 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         paddingHorizontal: 20,
         backgroundColor: 'white',
-        borderColor: '#58636D',
         borderRadius: 8,
-        borderWidth: 0.3,
+        // borderColor: '#58636D',
+       
+        // borderWidth: 0.35,
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontFamily: 'Poppins-Regular',
-
-
-    },
-    inputfourthrow: {
-        flex: 1,
-        height: 50,
-        margin: 12,
-        width: 120,
-        marginTop: 0,
-        marginBottom: 0,
-        paddingHorizontal: 20,
-        backgroundColor: 'white',
-        borderColor: '#58636D',
-        borderRadius: 8,
-        borderWidth: 0.3,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        fontFamily: 'Poppins-Regular',
-
+        
 
     },
 
+    shadow: {
+        elevation: 2,
+        borderRadius: 0,
+        backgroundColor: 'transparent',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+      },
+      
+    
+   
     pickdate: {
         width: 120,
         fontFamily: 'Poppins-Regular',
@@ -531,9 +530,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#58636D',
         borderRadius: 8,
-        borderWidth: 0.3,
+        // borderWidth: 0.3,
         marginLeft: 12,
-        marginRight: 0,
+        marginRight: 10,
         paddingHorizontal: 20,
 
         flex: 1,
@@ -569,19 +568,19 @@ const styles = StyleSheet.create({
       },
     
   card: {
-    shadowColor: '#999',
+    shadowColor: '#000',
     height:50,
     shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.2,
     shadowRadius: 12,
-    elevation: 5,
+    elevation: 2,
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
     overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
