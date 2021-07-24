@@ -8,6 +8,8 @@ import {
   TextInput,
 } from 'react-native';
 
+import ModalSelector from 'react-native-modal-selector';
+
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -20,27 +22,57 @@ import {useSelector} from 'react-redux';
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 import timeTableBuilder from '../../../../services/helpers/extract/teacherTtDayWiseBuild';
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
 export default function OnlineLecture({navigation}) {
   const userInfo = useSelector(state => state.userInfo);
   const institute = useSelector(state => state.institute);
 
+  const [teacherlist, setTeacherlist] = useState([]);
   const [timeTable, setTimeTable] = useState([]);
 
-  //   useEffect(async () => {
-  //     try {
-  //       let slug = `/timetable/${userInfo._id}`;
-  //       let token = await read('token');
-  //       let response = await get(slug, token);
+  // loading screem
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  //       /// build timetable day-wise ///
-  //       let tt = timeTableBuilder(response);
-  //       console.log(tt);
-  //       setTimeTable(tt);
-  //     } catch (err) {
-  //       alert('Cannot Display your timetable!!');
-  //     }
-  //   }, []);
+  // on load of the screen
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      let slug = `/employee`;
+      let token = await read('token');
+      console.log(token);
+
+      let response = await get(slug, token);
+
+      const list = [];
+      for (let i = 0; i < response.length; i++) {
+        list.push({
+          key: response[i]._id,
+          label: response[i].firstName,
+        });
+        setTeacherlist(list);
+        console.log(teacherlist);
+      }
+    } catch (err) {
+      alert('Cannot fetch courses!!');
+    }
+    hideLoadingScreen();
+  }, []);
+
+  const fetchTimetable = async id => {
+    try {
+      let slug = `/timetable/${id}`;
+      let token = await read('token');
+      let response = await get(slug, token);
+
+      /// build timetable day-wise ///
+      let tt = timeTableBuilder(response);
+      console.log(tt);
+      setTimeTable(tt);
+    } catch (err) {
+      alert('Cannot Display your timetable!!');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -84,12 +116,12 @@ export default function OnlineLecture({navigation}) {
         style={{marginTop: 20}}>
         <View style={{marginHorizontal: 30, ...styles.shadow}}>
           <View style={styles.search}>
-            <TextInput
+            {/* <TextInput
               style={{...styles.search_input}}
               placeholder="Enter teacher’s name here"
-            />
+            /> */}
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 alignSelf: 'center',
               }}>
@@ -101,50 +133,57 @@ export default function OnlineLecture({navigation}) {
                   color: 'black',
                 }}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            <ModalSelector
+              data={teacherlist}
+              initValue="Select Teacher"
+              onChange={option => {
+                fetchTimetable(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
           </View>
         </View>
-        {/* {timeTable &&
+        {timeTable &&
           Object.keys(timeTable).map((day, index) => {
-            return ( */}
-        <View style={styles.section}>
-          <View style={styles.shadow}>
-            <View style={styles.card_headingContainer}>
-              <Text style={styles.card_heading}>
-                {/* {day} */}
-                Some day
-              </Text>
-            </View>
-          </View>
-          <View style={styles.classes_cardWrapper}>
-            {/* {timeTable[day].length == 0 ? (
+            return (
+              <View style={styles.section}>
+                <View style={styles.shadow}>
+                  <View style={styles.card_headingContainer}>
+                    <Text style={styles.card_heading}>{day}</Text>
+                  </View>
+                </View>
+                <View style={styles.classes_cardWrapper}>
+                  {timeTable[day].length == 0 ? (
                     <Text>No Classes</Text>
                   ) : (
                     timeTable[day].map((slots, index) => {
                       return slots.map(slot => {
-                        return ( */}
-            <TouchableOpacity style={styles.shadow}>
-              <View style={styles.classes_card}>
-                <Text style={styles.classes_cardClass}>{'Class'}</Text>
-                <Text style={styles.classes_cardTime}>
-                  {/* {`${slot.startTime} - ${slot.endTime}`} */}
-                  start time - end time
-                </Text>
-                <Text style={styles.classes_cardBatch}>
-                  {/* {slot.subjectId &&
-                                  slot.subjectId.name.toUpperCase()} */}
-                  subject
-                </Text>
-              </View>
-            </TouchableOpacity>
-            {/* );
+                        return (
+                          <TouchableOpacity style={styles.shadow}>
+                            <View style={styles.classes_card}>
+                              <Text style={styles.classes_cardClass}>
+                                {'Class'}
+                              </Text>
+                              <Text style={styles.classes_cardTime}>
+                                {`${slot.startTime} - ${slot.endTime}`}
+                              </Text>
+                              <Text style={styles.classes_cardBatch}>
+                                {slot.subjectId &&
+                                  slot.subjectId.name.toUpperCase()}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        );
                       });
                     })
-                  )} */}
-          </View>
-        </View>
-        {/* );
-          })} */}
+                  )}
+                </View>
+              </View>
+            );
+          })}
       </ScrollView>
     </View>
   );
