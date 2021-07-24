@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -12,15 +12,15 @@ import HomeScreen2 from './HomeScreen2';
 import HomeScreen1 from './HomeScreen1';
 import Swiper from 'react-native-swiper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Text, Searchbar, Card, Button, Drawer } from 'react-native-paper';
+import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
 import {
   createDrawerNavigator,
   useIsDrawerOpen,
   DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -42,23 +42,21 @@ import Occurence from '../Occurence/Occurence';
 //navigations from home screen second screen
 
 import SettingUsers from './Home/Settings';
+import Timetable from './Home/Timetable';
 import Library from './Home/Library';
-
-
-
 
 // redux
 // import { useSelector } from 'react-redux';
 
 // let userInfo;
 
-var styles1={
-  wrapper:{},
-  slide1:{flex:1,},
-  slide2:{flex:1},
-}
+var styles1 = {
+  wrapper: {},
+  slide1: {flex: 1},
+  slide2: {flex: 1},
+};
 
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
   const toggleExpanded = () => {
@@ -69,14 +67,12 @@ const Home = ({ navigation }) => {
   return (
     <Swiper style={styles1.wrapper} showsButtons loop={false}>
       <View style={styles1.slide1}>
-        <HomeScreen2/>
+        <HomeScreen2 />
       </View>
       <View style={styles1.slide2}>
-        <HomeScreen1/>
+        <HomeScreen1 />
       </View>
-
     </Swiper>
- 
   );
 };
 
@@ -88,7 +84,7 @@ const Home_Route = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={({ navigation, route }) => ({
+        options={({navigation, route}) => ({
           headerTitle: 'Hi Saawan!',
           headerStyle: {
             height: 70,
@@ -97,10 +93,7 @@ const Home_Route = () => {
             fontSize: 25,
           },
           headerRight: () => (
-            <TouchableOpacity
-              onPress={() => {
-   
-              }}>
+            <TouchableOpacity onPress={() => {}}>
               <FontAwesome5
                 name="bell"
                 style={{
@@ -130,13 +123,18 @@ const Home_Route = () => {
           ),
         })}
       />
-    <Stack.Screen
+      <Stack.Screen
         name="Settings"
         component={SettingUsers}
         options={{headerShown: false}}
       />
-{/* library */}
-<Stack.Screen
+      <Stack.Screen
+        name="Timetable"
+        component={Timetable}
+        options={{headerShown: false}}
+      />
+      {/* library */}
+      <Stack.Screen
         name="Library"
         component={Library}
         options={{headerShown: false}}
@@ -163,11 +161,11 @@ const getTabBarVisibility = route => {
 
 function DrawerContent(props) {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Drawer.Section>
         <Drawer.Item
           label={'Home'}
-          style={{ fontWeight: '100' }}
+          style={{fontWeight: '100'}}
           onPress={() => props.navigation.navigate('Home')}
         />
         <Drawer.Item
@@ -178,9 +176,9 @@ function DrawerContent(props) {
           label={'Hostel'}
           onPress={() => props.navigation.navigate('Attendance')}
         />
-         <Drawer.Item
+        <Drawer.Item
           label={'Events'}
-          onPress={() =>Alert.alert('Add Events screen')}
+          onPress={() => Alert.alert('Add Events screen')}
         />
         <Drawer.Item
           label={'Bulk SMS'}
@@ -190,18 +188,17 @@ function DrawerContent(props) {
           label={'Task Manager'}
           onPress={() => Alert.alert('Add Task Manager screen')}
         />
-       
-       <Drawer.Item
+
+        <Drawer.Item
           label={'Payment Slip'}
           onPress={() => Alert.alert('Add Payment slip screen')}
         />
 
-<Drawer.Item
+        <Drawer.Item
           label={'Quick Payment'}
           onPress={() => Alert.alert('Add quick payment screen')}
         />
-       
-       
+
         <Drawer.Item
           label={'Lesson Plan'}
           onPress={() => props.navigation.navigate('Lesson Plan')}
@@ -214,20 +211,20 @@ function DrawerContent(props) {
           label={'Feedback'}
           onPress={() => props.navigation.navigate('Feedback')}
         />
-         <Drawer.Item
+        <Drawer.Item
           label={'Occurrence'}
           onPress={() => props.navigation.navigate('Occurence')}
         />
-         <Drawer.Item
+        <Drawer.Item
           label={'Placement Details'}
           onPress={() => Alert.alert('Add Placement Details')}
         />
         <Drawer.Item
           label={'Report'}
           onPress={() => props.navigation.navigate('Report')}
-        /> 
-       
-{/*        
+        />
+
+        {/*        
         <Drawer.Item
           label={'Transport'}
           onPress={() => props.navigation.navigate('Transport')}
@@ -287,7 +284,7 @@ export default function Route() {
     <DrawerNav.Navigator
       initialRouteName="Home"
       drawerContent={props => <DrawerContent {...props} />}
-      drawerStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}>
+      drawerStyle={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
@@ -343,7 +340,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   shadow: {
-
     elevation: 5,
     borderRadius: 8,
     backgroundColor: 'transparent',
@@ -358,7 +354,7 @@ const styles = StyleSheet.create({
   classes_cardWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    flexWrap:'wrap'
+    flexWrap: 'wrap',
   },
   classes_card: {
     justifyContent: 'center',
@@ -535,5 +531,4 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomColor: '#333',
   },
-  
 });
