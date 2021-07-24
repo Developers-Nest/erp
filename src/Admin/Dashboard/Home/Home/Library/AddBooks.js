@@ -42,7 +42,7 @@ const [condition, setcondition] = useState([
         setDatePickerVisibility(false);
     };
     const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date.toString());
+        // console.warn("A date has been picked: ", date.toString());
         setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
         hideDatePicker();
     };
@@ -306,7 +306,9 @@ const [condition, setcondition] = useState([
                     <Pressable style={styles.button1} >
                         <Text style={styles.text1}>Delete</Text>
                     </Pressable>
-                    <Pressable style={styles.button} >
+                    <Pressable style={styles.button}  onPress={() => {
+              navigation.navigate('IssuedBooksAdd');
+            }}>
                         <Text style={styles.text}>CheckOut</Text>
                     </Pressable>
 
