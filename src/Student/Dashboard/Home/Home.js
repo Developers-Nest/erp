@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -10,15 +10,15 @@ import {
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
-import { Text, Searchbar, Card, Button, Drawer } from 'react-native-paper';
+import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
 import {
   createDrawerNavigator,
   useIsDrawerOpen,
   DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 //icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -44,12 +44,13 @@ import Notes from './Home/Notes';
 import Timetable from './Home/Timetable';
 
 // redux
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 // helpers
 import read from '../../../services/localstorage/read';
 import write from '../../../services/localstorage/write';
 import get from '../../../services/helpers/request/get';
+import timeTableBuilder from '../../../services/helpers/extract/teacherTtDayWiseBuild';
 
 // loadingScreen
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
@@ -58,10 +59,18 @@ let parseDate = myDate => {
   let d = new Date(myDate);
   return d.toString().slice(0, 15);
 };
-
+let daylist = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday ',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
 let userInfo;
 
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
   let institute = useSelector(state => state.institute);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
@@ -75,7 +84,8 @@ const Home = ({ navigation }) => {
   const [assignments, setAssignements] = useState([]);
   const [books, setBooks] = useState([]);
   const [notes, setNotes] = useState([]);
-  const [circulars, setCirculars] = useState([])
+  const [circulars, setCirculars] = useState([]);
+  const [timeTable, setTimeTable] = useState([]);
 
   let parseDate = myDate => {
     let d = new Date(myDate);
@@ -83,6 +93,7 @@ const Home = ({ navigation }) => {
   };
 
   useEffect(async () => {
+    //fetch assignments
     try {
       let slug = '/note/studentAssignment';
       let token = await read('token');
@@ -92,7 +103,7 @@ const Home = ({ navigation }) => {
     } catch (err) {
       alert('Cannot fetch Assignements!!');
     }
-
+    //fetch notes
     try {
       let slug = '/note';
       let token = await read('token');
@@ -102,7 +113,7 @@ const Home = ({ navigation }) => {
     } catch (err) {
       alert('Cannot fetch Notes!!');
     }
-
+    //fetch circular
     try {
       let token = await read('token');
       let slug = `/circular?course=${userInfo.course}&batch=${userInfo.batch}`;
@@ -119,12 +130,25 @@ const Home = ({ navigation }) => {
     } catch (err) {
       alert('Cannot fetch circular!!');
     }
+    //fetch timetable
+    try {
+      let slug = `/timetable/names/${userInfo.course}/${userInfo.batch}`;
+      let token = await read('token');
+      let response = await get(slug, token);
 
+      /// build timetable day-wise ///
+      let tt = timeTableBuilder(response);
+      console.log(tt);
+      setTimeTable(tt);
+    } catch (err) {
+      alert('Cannot Display your timetable!! ' + err);
+    }
   }, []);
 
   return (
     <View style={styles.container}>
       {loadingScreen}
+      {console.log(timeTable)}
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
@@ -186,11 +210,11 @@ const Home = ({ navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      <View style={{ paddingTop: 10 }}></View>
-      <View style={{ marginHorizontal: 30, ...styles.shadow }}>
+      <View style={{paddingTop: 10}}></View>
+      <View style={{marginHorizontal: 30, ...styles.shadow}}>
         <View style={styles.search}>
           <TextInput
-            style={{ ...styles.search_input }}
+            style={{...styles.search_input}}
             placeholder="Live class, fees and more"
           />
 
@@ -210,33 +234,48 @@ const Home = ({ navigation }) => {
         </View>
       </View>
       <ScrollView style={styles.main}>
-        <View style={{ height: 30 }}></View>
+        <View style={{height: 30}}></View>
         <View>
           <Text style={styles.section_heading}>Upcoming Classes</Text>
         </View>
-        <View style={{ marginHorizontal: 30, ...styles.classes_cardWrapper }}>
-          {[1, 2, 3].map((element, index) => {
-            return (
-              <TouchableOpacity
-                style={styles.shadow}
-                key={index}
-                onPress={() => navigation.navigate('Timetable')}>
-                <View style={styles.classes_card}>
-                  <Text style={styles.classes_cardClass}>{'Class'}</Text>
-                  <Text style={styles.classes_cardTime}>{'09:30-10:30'}</Text>
-                  <Text style={styles.classes_cardBatch}>{'Batch'}</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-        <View style={{ height: 30 }}></View>
+        <ScrollView
+          contentContainerStyle={styles.classes_cardWrapper}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}>
+          {timeTable[daylist[new Date().getDay()]].length == 0 ? (
+            <Text style={{marginLeft: 10}}>No Classes</Text>
+          ) : (
+            timeTable[daylist[new Date().getDay()]].map((slots, index) => {
+              return slots.map(slot => {
+                return (
+                  <TouchableOpacity style={styles.shadow} key={index}>
+                    <View style={styles.classes_card}>
+                      <Text style={styles.classes_cardClass}>
+                        {slot.subjectId && slot.subjectId.name.toUpperCase()}
+                      </Text>
+                      <Text style={styles.classes_cardTime}>
+                        {`${slot.startTime} - ${slot.endTime}`}
+                      </Text>
+                      <Text style={styles.classes_cardBatch}>
+                        {`${slot.faculty}`}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              });
+            })
+          )}
+        </ScrollView>
+
+        <View style={{height: 30}}></View>
         <View>
           <Text style={styles.section_heading}>New Circular</Text>
         </View>
-        {
-          circulars && circulars.length > 0 ? circulars.map((circular) => (
-            <View style={{ marginHorizontal: 30, ...styles.shadow }} key={circular._id}>
+        {circulars && circulars.length > 0 ? (
+          circulars.map(circular => (
+            <View
+              style={{marginHorizontal: 30, ...styles.shadow}}
+              key={circular._id}>
               <View
                 style={{
                   borderTopLeftRadius: 8,
@@ -245,7 +284,9 @@ const Home = ({ navigation }) => {
                   borderBottomRightRadius: collapsed ? 8 : 0,
                   ...styles.collapsable_header,
                 }}>
-                <Text style={styles.collapsable_headerText}>{circular.title}</Text>
+                <Text style={styles.collapsable_headerText}>
+                  {circular.title}
+                </Text>
                 {!collapsed ? (
                   <TouchableOpacity
                     style={styles.collapsable_IconContainer}
@@ -253,7 +294,7 @@ const Home = ({ navigation }) => {
                     <FontAwesome5
                       name="chevron-up"
                       size={14}
-                      style={{ color: 'rgba(62, 104, 228, 0.9)' }}
+                      style={{color: 'rgba(62, 104, 228, 0.9)'}}
                     />
                     <Text style={styles.collapsable_IconText}>Read Less</Text>
                   </TouchableOpacity>
@@ -264,7 +305,11 @@ const Home = ({ navigation }) => {
                     <FontAwesome5
                       name="chevron-down"
                       size={14}
-                      style={{ color: institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)' }}
+                      style={{
+                        color: institute
+                          ? institute.themeColor
+                          : 'rgba(62, 104, 228, 0.9)',
+                      }}
                     />
                     <Text style={styles.collapsable_IconText}>Read More</Text>
                   </TouchableOpacity>
@@ -279,18 +324,19 @@ const Home = ({ navigation }) => {
                 </Text>
               </Collapsible>
             </View>
-          )) : (<Text style={{ marginLeft: 30 }}>No Active Circulars</Text>)
-        }
-
+          ))
+        ) : (
+          <Text style={{marginLeft: 30}}>No Active Circulars</Text>
+        )}
 
         {/* assignment section */}
         <ScrollView
-          contentContainerStyle={{ ...styles.card_Wrapper, marginHorizontal: 10 }}
+          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           {assignments &&
             assignments.map(assignment => (
-              <View style={{ marginHorizontal: 10 }} key={assignment._id}>
+              <View key={assignment._id}>
                 <Text style={styles.card_heading}>Assignment</Text>
                 <View style={styles.shadow}>
                   <TouchableOpacity
@@ -300,7 +346,15 @@ const Home = ({ navigation }) => {
                       {assignment.subject ? assignment.subject.name : null}
                     </Text>
                     <Text style={styles.card_row2}>{assignment.title}</Text>
-                    <Text style={styles.card_row3, { color: institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)' }}>
+                    <Text
+                      style={
+                        (styles.card_row3,
+                        {
+                          color: institute
+                            ? institute.themeColor
+                            : 'rgba(62, 104, 228, 0.9)',
+                        })
+                      }>
                       Due: {parseDate(assignment.submissionDate).slice(0, 10)}
                     </Text>
                   </TouchableOpacity>
@@ -311,12 +365,12 @@ const Home = ({ navigation }) => {
 
         {/* books section */}
         <ScrollView
-          contentContainerStyle={{ ...styles.card_Wrapper, marginHorizontal: 10 }}
+          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           {notes &&
             notes.map(note => (
-              <View style={{ marginHorizontal: 10 }} key={note._id}>
+              <View key={note._id}>
                 <Text style={styles.card_heading}>Notes</Text>
                 <View style={styles.shadow}>
                   <TouchableOpacity
@@ -326,7 +380,15 @@ const Home = ({ navigation }) => {
                     <Text style={styles.card_row2}>
                       {note.subject ? note.subject.name : null}
                     </Text>
-                    <Text style={styles.card_row3, { color: institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)' }}>
+                    <Text
+                      style={
+                        (styles.card_row3,
+                        {
+                          color: institute
+                            ? institute.themeColor
+                            : 'rgba(62, 104, 228, 0.9)',
+                        })
+                      }>
                       {note.course ? note.course.courseName : null}
                     </Text>
                   </TouchableOpacity>
@@ -337,10 +399,10 @@ const Home = ({ navigation }) => {
 
         {/* books section */}
         <ScrollView
-          contentContainerStyle={{ ...styles.card_Wrapper, marginHorizontal: 10 }}
+          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          <View style={{ marginHorizontal: 10 }}>
+          <View>
             <Text style={styles.card_heading}>Fees</Text>
             <View style={styles.shadow}>
               <TouchableOpacity
@@ -348,7 +410,17 @@ const Home = ({ navigation }) => {
                 onPress={() => navigation.navigate('Fees')}>
                 <Text style={styles.card_row1}>Books</Text>
                 <Text style={styles.card_row2}>New Book</Text>
-                <Text style={styles.card_row3, { color: institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)' }}>Due:21 May,2021</Text>
+                <Text
+                  style={
+                    (styles.card_row3,
+                    {
+                      color: institute
+                        ? institute.themeColor
+                        : 'rgba(62, 104, 228, 0.9)',
+                    })
+                  }>
+                  Due:21 May,2021
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -366,22 +438,22 @@ const Home_Route = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Notification"
         component={Notification}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Notes"
         component={Notes}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Timetable"
         component={Timetable}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
@@ -416,63 +488,63 @@ function DrawerContent(props) {
     }
   };
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
         <DrawerItem
           style={styles.item}
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Home</Text>
           )}
           onPress={() => props.navigation.navigate('Home')}
         />
         <DrawerItem
           style={styles.item}
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Content Library</Text>
           )}
           onPress={() => props.navigation.navigate('ContentStack')}
         />
         <DrawerItem
           style={styles.item}
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Attendance</Text>
           )}
           onPress={() => props.navigation.navigate('Attendance')}
         />
         <DrawerItem
           style={styles.item}
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Fees</Text>
           )}
           onPress={() => props.navigation.navigate('Fees')}
         />
         <DrawerItem
           style={styles.item}
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Assignment</Text>
           )}
           onPress={() => props.navigation.navigate('AssignmentStudent')}
         />
         <DrawerItem
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Books</Text>
           )}
           onPress={() => props.navigation.navigate('Books')}
         />
         <DrawerItem
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Feedback</Text>
           )}
           onPress={() => props.navigation.navigate('Feedback')}
         />
         <DrawerItem
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Transport</Text>
           )}
           onPress={() => props.navigation.navigate('Transport')}
         />
         <DrawerItem
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Report</Text>
           )}
           onPress={() => props.navigation.navigate('Report')}
@@ -577,10 +649,12 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     shadowRadius: 8,
+    marginHorizontal: 10,
   },
   classes_cardWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    paddingBottom: 20,
+    marginHorizontal: 10,
   },
   classes_card: {
     justifyContent: 'center',
@@ -589,6 +663,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: 'white',
     borderRadius: 8,
+    paddingVertical: 15,
   },
   classes_cardClass: {
     fontSize: 20,
@@ -697,7 +772,7 @@ const styles = StyleSheet.create({
   card_Wrapper: {
     paddingHorizontal: 10,
     paddingBottom: 20,
-    paddingTop: 30,
+    paddingTop: 20,
   },
   drawer_item: {
     lineHeight: 24,
@@ -709,5 +784,5 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
   },
-  item: { padding: 0, margin: 0 },
+  item: {padding: 0, margin: 0},
 });
