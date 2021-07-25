@@ -69,6 +69,7 @@ let daylist = [
   'Saturday',
 ];
 let userInfo;
+let today = daylist[new Date().getDay()];
 
 const Home = ({navigation}) => {
   let institute = useSelector(state => state.institute);
@@ -242,10 +243,11 @@ const Home = ({navigation}) => {
           contentContainerStyle={styles.classes_cardWrapper}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
-          {timeTable[daylist[new Date().getDay()]].length == 0 ? (
+          {timeTable[today] && timeTable[today].length == 0 ? (
             <Text style={{marginLeft: 10}}>No Classes</Text>
           ) : (
-            timeTable[daylist[new Date().getDay()]].map((slots, index) => {
+            timeTable[today] &&
+            timeTable[today].map((slots, index) => {
               return slots.map(slot => {
                 return (
                   <TouchableOpacity style={styles.shadow} key={index}>
