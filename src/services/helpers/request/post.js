@@ -8,8 +8,8 @@ async function post(slug, data, token=null, server=0){
     let url
     if(server>0){
       url = CHATBASEURL + slug
-    } else BASEURL + slug
-    
+    } else url=BASEURL + slug
+
     let response = await fetch(url, {
         method: 'POST',
         headers: {
