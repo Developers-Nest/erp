@@ -323,7 +323,7 @@
 //   },
 // });
 
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -332,14 +332,15 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {Card, Button} from 'react-native-paper';
+import { Card, Button } from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // date picker
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+import DocumentPickerHandle from 'react-native-document-picker';
 
 // helpers
 import get from '../../../../services/helpers/request/get';
@@ -348,16 +349,20 @@ import getBatch from '../../../../services/helpers/getList/getBatch';
 import getCourse from '../../../../services/helpers/getList/getCourse';
 import getSubject from '../../../../services/helpers/getList/getSubject';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
-import patch from '../../../../services/helpers/request/patch';
 import post from '../../../../services/helpers/request/post';
+import RNFetchBlob from 'rn-fetch-blob'
+import formDataPost from '../../../../services/helpers/request/formDataPost'
+
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-//file picker
-import FilePickerManager from 'react-native-file-picker';
 
-export default function AddAssignments({navigation}) {
+const RNFS = require("react-native-fs");
+
+
+
+export default function AddAssignments({ navigation }) {
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -380,6 +385,8 @@ export default function AddAssignments({navigation}) {
   const [desc, setDesc] = useState('');
 
   const [showdatePicker, setShowDatePicker] = useState(false);
+
+  const [file, setFile] = React.useState(null);
 
   // loading screem
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
@@ -429,46 +436,64 @@ export default function AddAssignments({navigation}) {
   };
   // handle form submission
   let handleSubmit = async () => {
+
+    showLoadingScreen()
+
     try {
       let slug = `/note/addAssignment`;
       console.log('Assignment slug ', slug);
       let token = await read('token');
-      let data = {
-        title: title,
-        description: desc,
-        file: File,
-        course: course,
-        batch: batch,
-        subject: subject,
-        submissionDate: date,
-        submissionDateString: dateString,
-      };
-      console.log('data ', data);
-      let response = await patch(slug, data, token);
-      console.log('response ', response);
+
+      console.log('File ', file)
+      if (file != null) {
+
+        const data = new FormData();
+        data.append('title', title);
+        data.append('description', desc);
+        data.append('file', file);
+        data.append('course', course);
+        data.append('batch', batch);
+        data.append('subject', subject);
+        data.append('submissionDate', date);
+        data.append('submissionDateString', dateString);
+
+        let response = await formDataPost(slug, data, token)
+        console.log("Response ", response)
+
+        if (response.url) {
+          console.log('Response ', response)
+          alert('Assignment Uploaded!!')
+        } else {
+          console.log('Cannot upload file ', response)
+          throw new Error('Cannot upload file')
+        }
+      } else {
+        throw new Error('File not selected!!')
+      }
+
     } catch (err) {
       alert('Cannot create Assignment! ' + err);
     }
+
+    hideLoadingScreen()
   };
 
-  const [File, setFile] = React.useState(null);
+  const filePicker = async () => {
 
-  const filePicker = () => {
-    FilePickerManager.showFilePicker(null, response => {
-      console.log('Response = ', response);
+    const res = await DocumentPickerHandle.pick({
+      type: [DocumentPickerHandle.types.pdf],
+    })
+    console.log('Response ', res)
+    setFile(res)
 
-      if (response.didCancel) {
-        console.log('User cancelled file picker');
-      } else if (response.error) {
-        console.log('FilePickerManager Error: ', response.error);
-      } else {
-        setFile(response);
-      }
-    });
+    //  -- do not remove following 2 lines (for debugging) -- 
+    // const fileName = res.uri.replace("file://", "")
+    // setFile(fileName)
+
   };
 
   return (
-    <View style={{backgroundColor: 'rgba(249, 249, 249, 1)', flex: 1}}>
+    <View style={{ backgroundColor: 'rgba(249, 249, 249, 1)', flex: 1 }}>
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -501,7 +526,7 @@ export default function AddAssignments({navigation}) {
           Add Assignment
         </Text>
       </View>
-      <View style={{padding: 10}} />
+      <View style={{ padding: 10 }} />
       <ScrollView>
         <View
           style={{
@@ -543,7 +568,7 @@ export default function AddAssignments({navigation}) {
           />
         </View>
 
-        <View style={{padding: 10}} />
+        <View style={{ padding: 10 }} />
         <View
           style={{
             paddingLeft: 11,
@@ -562,20 +587,20 @@ export default function AddAssignments({navigation}) {
                 />
                 {/* <View style={{paddingLeft:10}} /> */}
               </View>
+              <View style={{ padding: 2 }} />
+              <View style={{ borderWidth: 0.2 }} />
+              <View style={{ padding: 10 }} />
+              {/* <TextInput placeholder="Topic " />
               <View style={{padding: 2}} />
               <View style={{borderWidth: 0.2}} />
-              <View style={{padding: 10}} />
-              <TextInput placeholder="Topic " />
-              <View style={{padding: 2}} />
-              <View style={{borderWidth: 0.2}} />
-              <View style={{padding: 10}} />
+              <View style={{padding: 10}} /> */}
 
               <TextInput
                 placeholder="Discription"
                 onChangeText={val => setDesc(val)}
                 defaultValue={desc}
               />
-              <View style={{padding: 40}} />
+              <View style={{ padding: 40 }} />
 
               <View
                 style={{
@@ -588,7 +613,7 @@ export default function AddAssignments({navigation}) {
                   mode="contained"
                   color="white"
                   onPress={() => setShowDatePicker(true)}>
-                  Set Deadline
+                  {dateString ? dateString.slice(0, 10) : 'Set Deadline'}
                 </Button>
 
                 <DateTimePickerModal
@@ -598,18 +623,18 @@ export default function AddAssignments({navigation}) {
                   onCancel={() => setShowDatePicker(!showdatePicker)}
                 />
 
-                <View style={{padding: 10}} />
+                <View style={{ padding: 10 }} />
                 <Button
                   mode="contained"
-                  color="white"
+                  color={file ? "green" : "white"}
                   onPress={() => filePicker()}>
-                  Add file
+                  {file ? 'Selected' : 'Add File'}
                 </Button>
               </View>
             </Card.Content>
           </Card>
         </View>
-        <View style={{padding: 20}} />
+        <View style={{ padding: 20 }} />
         <View
           style={{
             justifyContent: 'center',
@@ -617,7 +642,6 @@ export default function AddAssignments({navigation}) {
           }}>
           <Button
             mode="contained"
-            onPress={() => console.log('Pressed')}
             style={{
               width: 90,
             }}
@@ -639,14 +663,14 @@ const styles = StyleSheet.create({
   card1: {
     borderRadius: 20,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 1,
     shadowRadius: 12,
     elevation: 5,
   },
   card_picker: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',

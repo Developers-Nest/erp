@@ -643,6 +643,7 @@ export default function LecturesScreen() {
         <TextInput
           style={{width: '80%', ...styles.text_input}}
           placeholder="Enter subject or batch name"
+          placeholderTextColor='grey'
         />
         <TouchableOpacity
           style={{

@@ -69,36 +69,34 @@ const HomeScreen1 = () => {
         <View
           style={{
             flexDirection: 'row',
-           
+
             flexWrap: 'wrap',
             justifyContent: 'center',
           }}>
           {/* 
         1st row started */}
-          <View
-            style={styles.section}
-   
-            >
+          <TouchableOpacity style={styles.section}>
             <View style={{alignItems: 'center'}}>
-            <TouchableOpacity style={{alignItems: 'center'}}
-            onPress={() => {
-              navigation.navigate('Library');
-            }}>
-              <IonIcon size={36.83} color="#0066DA" name="library-outline" />
-
-              <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  marginTop: -5,
-                  fontFamily: 'Poppins-Regular',
+              <TouchableOpacity
+                style={{alignItems: 'center'}}
+                onPress={() => {
+                  navigation.navigate('Library');
                 }}>
-                Library
-              </Text>
+                <IonIcon size={36.83} color="#0066DA" name="library-outline" />
+
+                <Text
+                  style={{
+                    fontWeight: 'normal',
+                    fontSize: 12,
+                    color: '#211C5A',
+                    marginTop: -5,
+                    fontFamily: 'Poppins-Regular',
+                  }}>
+                  Library
+                </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.section}>
             <View style={{alignItems: 'center'}}>
               <SimpleLineIcon size={38} color="#0066DA" name="graduation" />
@@ -159,7 +157,11 @@ const HomeScreen1 = () => {
           </View>
 
           <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Timetable');
+              }}>
               <MaterialCommunityIcon
                 size={36.83}
                 color="#34A853"
@@ -176,16 +178,16 @@ const HomeScreen1 = () => {
                 }}>
                 Time Table
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
-          
+
           <View style={styles.section}>
-            <TouchableOpacity style={{alignItems: 'center'}}
-            onPress={() => {
-              navigation.navigate('Settings');
-            }}>
-              <IonIcon size={36.83} color="#34A853" name="settings-outline" 
-               />
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Settings');
+              }}>
+              <IonIcon size={36.83} color="#34A853" name="settings-outline" />
 
               <Text
                 style={{

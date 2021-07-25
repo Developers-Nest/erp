@@ -10,7 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 
 
-const AddBooks = ({navigation}) => {
+const EditBooks = ({navigation}) => {
 
    
    //for category in 4th row
@@ -88,7 +88,7 @@ const [condition, setcondition] = useState([
               paddingLeft: 30,
               color: 'white',
             }}>
-            Add Books
+            Edit Books
           </Text>
         </View>
 
@@ -303,9 +303,9 @@ const [condition, setcondition] = useState([
 
 
                 <View style={styles.fixToText}>
-                    {/* <Pressable style={styles.button1} >
+                    <Pressable style={styles.button1} >
                         <Text style={styles.text1}>Delete</Text>
-                    </Pressable> */}
+                    </Pressable>
                     <Pressable style={styles.button}  onPress={() => {
               navigation.navigate('IssuedBooksAdd');
             }}>
@@ -594,4 +594,4 @@ const styles = StyleSheet.create({
 
 
 
-export default AddBooks;
+export default EditBooks;

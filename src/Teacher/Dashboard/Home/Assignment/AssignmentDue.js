@@ -624,6 +624,7 @@ export default function AssignmentsDue({navigation}) {
                         onPress={() =>
                           Alert.alert('Assignment Successfully sent')
                         }
+                        color={institute ? institute.themeColor : 'blue'}
                         labelStyle={{color: 'white'}}
                         uppercase={false}
                         mode="contained">
@@ -744,8 +745,6 @@ const styles = StyleSheet.create({
     minWidth: 110,
   },
   button: {
-    backgroundColor: '#58636D',
-
     color: '#F9F9F9',
     padding: 3,
     paddingHorizontal: 5,

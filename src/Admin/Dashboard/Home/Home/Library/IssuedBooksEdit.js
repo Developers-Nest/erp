@@ -9,7 +9,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-const IssuedBooksAdd = ({navigation}) => {
+const IssuedBooksEdit = ({navigation}) => {
 
     const [category, setcategory] = useState([
         { label: 'Fiction', key: 'Fiction' },
@@ -197,13 +197,26 @@ const IssuedBooksAdd = ({navigation}) => {
                     </TouchableOpacity>
 
                 </View>
-                <View style={styles.fixToText}>
+                {/* <View style={styles.fixToText}>
                     <Pressable style={styles.button} >
                         <Text style={styles.text}>Save</Text>
                     </Pressable>
 
 
+                </View> */}
+                <View style={styles.fixToText}>
+                    <Pressable style={styles.button1} >
+                        <Text style={styles.text1}>Delete</Text>
+                    </Pressable>
+                    <Pressable style={styles.button}  onPress={() => {
+              navigation.navigate('IssuedBooksAdd');
+            }}>
+                        <Text style={styles.text}>Save</Text>
+                    </Pressable>
+
+
                 </View>
+
 
             </View>
             </ScrollView>
@@ -219,24 +232,51 @@ const styles = StyleSheet.create({
 
 
     },
-    button: {
+    button1: {
 
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 25,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: '#5177E7',
-    },
-    text: {
-        fontSize: 18,
-        lineHeight: 21,
-        fontWeight: '500',
-        letterSpacing: 0.25,
-        color: 'white',
-    },
-
+        marginTop:0,
+        marginBottom:0,
+           
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'transparent',
+            alignSelf: 'flex-end',
+            padding: 3,
+            paddingHorizontal: 25,
+            paddingVertical:2,
+            borderRadius: 4,
+            marginRight: 30,
+            height:46,
+            borderColor:'#d2691e',
+            borderWidth:1.5
+            
+        },
+        text1: {
+          fontSize: 18,
+          fontWeight: '500',
+          lineHeight: 21,
+          letterSpacing: 0.25,
+          color: '#d2691e',
+        },
+        button: {
+    
+            
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingVertical: 12,
+            paddingHorizontal: 25,
+            borderRadius: 4,
+            elevation: 3,
+            backgroundColor: '#5177E7',
+        },
+        text: {
+            fontSize: 18,
+            lineHeight: 21,
+            fontWeight: '500',
+            letterSpacing: 0.25,
+            color: 'white',
+        },
+    
     fixToText: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -420,4 +460,4 @@ const styles = StyleSheet.create({
 
 
 
-export default IssuedBooksAdd;
+export default IssuedBooksEdit;

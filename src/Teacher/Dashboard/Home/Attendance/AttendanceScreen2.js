@@ -335,7 +335,7 @@ const AttendanceScreen2 = ({ navigation }) => {
                             style={{
                               fontSize: 14,
                               marginLeft: 5,
-                              color: '#6A6A80',
+                              color: institute? institute.themeColor : '#6A6A80',
                               fontFamily: 'Poppins-regular',
                             }}>
                             {''} Admission No: {st.studentAdmissionNumber}

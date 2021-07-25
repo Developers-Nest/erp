@@ -228,6 +228,7 @@ export default function RecordedClasses({navigation}) {
         <Button
           mode="contained"
           onPress={handleSaveClass}
+          color={institute ? institute.themeColor : '#5177E7'}
           style={styles.submitButton}>
           Save
         </Button>
@@ -281,7 +282,6 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     margin: 20,
-    backgroundColor: '#5177E7',
     width: 100,
   },
 });
