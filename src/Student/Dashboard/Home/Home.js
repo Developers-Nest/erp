@@ -502,6 +502,13 @@ function DrawerContent(props) {
         <DrawerItem
           style={styles.item}
           label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Timetable</Text>
+          )}
+          onPress={() => props.navigation.navigate('Timetable')}
+        />
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Content Library</Text>
           )}
           onPress={() => props.navigation.navigate('ContentStack')}
