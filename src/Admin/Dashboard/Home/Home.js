@@ -45,6 +45,8 @@ import Timetable from './Home/Timetable';
 import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
 
+//helpers
+import write from '../../../services/localstorage/write';
 // redux
 // import { useSelector } from 'react-redux';
 
@@ -165,9 +167,20 @@ const getTabBarVisibility = route => {
 };
 
 function DrawerContent(props) {
+  const handleLogout = async () => {
+    // const navigation = useNavigation();
+    try {
+      let res = await write('token', 'null');
+      if (res) {
+        props.navigation.navigate('Role Based Login');
+      } else throw new Error('Cannot Logout!!');
+    } catch (err) {
+      alert('Cannot Logout!!' + err);
+    }
+  };
   return (
     <View style={{flex: 1}}>
-      <Drawer.Section>
+      <DrawerContentScrollView {...props}>
         <Drawer.Item
           label={'Home'}
           style={{fontWeight: '100'}}
@@ -246,36 +259,25 @@ function DrawerContent(props) {
           label={'Report'}
           onPress={() => props.navigation.navigate('Report')}
         /> */}
-      </Drawer.Section>
-      <DrawerContentScrollView
-        contentContainerStyle={{
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          flex: 1,
-          justifyContent: 'flex-end',
-        }}>
-        <TouchableOpacity>
-          <View
-            style={{
-              paddingHorizontal: 10,
-              paddingVertical: 10,
 
-              backgroundColor: '#B04305',
+        <TouchableOpacity>
+          <Button
+            style={{
+              fontFamily: 'Poppins-Regular',
+              fontStyle: 'normal',
+              fontWeight: '600',
+              fontSize: 14,
+              width: 100,
+              margin: 20,
+              marginLeft: 40,
+              // backgroundColor: institute ? institute.themeColor : 'black',
+              backgroundColor: 'dodgerblue',
               borderRadius: 6,
-              marginLeft: 20,
-              marginBottom: 34,
-            }}>
-            <Text
-              style={{
-                fontFamily: 'Poppins-Regular',
-                fontStyle: 'normal',
-                fontWeight: '600',
-                fontSize: 14,
-                color: '#FFFFFF',
-              }}>
-              Logout
-            </Text>
-          </View>
+            }}
+            onPress={handleLogout}
+            mode="contained">
+            Logout
+          </Button>
         </TouchableOpacity>
       </DrawerContentScrollView>
     </View>

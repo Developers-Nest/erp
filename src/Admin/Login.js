@@ -128,6 +128,35 @@ export default function Login({navigation}) {
   // loading screen
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
+  useEffect(async () => {
+    setLoadingScreen();
+    // check for token from local storage
+    try {
+      let t = await read('token');
+      let r = await read('role');
+
+      if (t && r) {
+        //get details
+        const slug_info = '/admin';
+        const response_info = await get('/admin', t);
+        dispatch({
+          type: USERINFO,
+          userInfo: response_info,
+        });
+
+        let role = response_info.role;
+        await write('role', role);
+
+        if (role === 'admin') {
+          navigation.replace('Admin Dashboard');
+        }
+      }
+    } catch (err) {
+      alert('Cannot Login !!');
+    }
+    hideLoadingScreen();
+  }, []);
+
   const handleSubmit = async () => {
     setLoadingScreen();
     try {
@@ -142,22 +171,28 @@ export default function Login({navigation}) {
       // post request
       const response = await post(slug, data);
       console.log(response);
-      // let role = response.userType.name;
-      // console.log(role);
-      // dispatch({
-      //   type: USERINFO,
-      //   userInfo: response,
-      // });
 
-      // write token to local storage
       try {
         await write('token', response.token);
-        // await write('role', role);
+        if (response.token !== null) {
+          //get details
+          const slug_info = '/admin';
+          const response_info = await get('/admin', response.token);
+          dispatch({
+            type: USERINFO,
+            userInfo: response_info,
+          });
+
+          let role = response_info.role;
+          await write('role', role);
+
+          if (role === 'admin') {
+            navigation.replace('Admin Dashboard');
+          }
+        }
       } catch (err) {
         alert('Cannot save token to local storage');
       }
-
-      navigation.replace('Admin Dashboard');
     } catch (err) {
       console.log(err);
     }
