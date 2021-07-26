@@ -5,6 +5,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import LinearGradient from 'react-native-linear-gradient';
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 import {
   StyleSheet,
@@ -15,6 +16,8 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Touchable,
+  Alert,
 } from 'react-native';
 
 // redux
@@ -32,12 +35,49 @@ export default function Booksrequest({navigation}) {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
+    const RightActions = () => {
+      return (
+        <TouchableOpacity 
+        onPress={() => {
+          Alert.alert('Rejected');
+        }}>
+        <View style={styles.iconbubblereject}>
+        <FontAwesome5
+                         size={38.5}
+                         color="white"
+                         name="trash-alt"
+                       />
+                       
+                       <Text style={{color:'white'}}>Reject</Text>
+                     </View>   
+                     </TouchableOpacity> 
+      )
+     }
+     //for left action swipe:
+     const LeftActions = () => {
+      return (
+        <TouchableOpacity 
+        onPress={() => {
+          Alert.alert('Approved');
+        }}
+        >
+        <View style={styles.iconbubbleapprove}>
+        <FontAwesome5
+          size={38.5}
+          color="white"
+          name="check-circle"
+        />
+        <Text style={{color:'white'}}>Approve</Text>
+      </View>
+</TouchableOpacity>
+      )
+     }
 
     return (
       <View style={styles.container}>
         <ScrollView>
       <View style={{flexDirection:'row',justifyContent:'center'}}>
-
+      <Swipeable renderLeftActions={LeftActions} renderRightActions={RightActions}>
 <View style={styles.section}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
@@ -48,7 +88,7 @@ export default function Booksrequest({navigation}) {
                             color: '#211C5A',
                             fontFamily: 'Poppins-Regular',
                             marginHorizontal: -5,
-                            marginRight:100,
+                            marginRight:150,
                             paddingRight:50
                           }}>
                           {' '}
@@ -111,8 +151,11 @@ export default function Booksrequest({navigation}) {
                     </View>
                   </View>
                 </View>
+
+</Swipeable>
+                {/* close swipeable */}
    {/* for reject and approve icon */}
-   <View style={styles.iconbubblereject}>
+   {/* <View style={styles.iconbubblereject}>
    <FontAwesome5
                     size={38.5}
                     color="white"
@@ -120,95 +163,7 @@ export default function Booksrequest({navigation}) {
                   />
                   
                   <Text style={{color:'white'}}>Reject</Text>
-                </View>
-
-
-   </View>
-
-   <View style={{flexDirection:'row',justifyContent:'center'}}>
-   <View style={styles.iconbubbleapprove}>
-                  <FontAwesome5
-                    size={38.5}
-                    color="white"
-                    name="check-circle"
-                  />
-                  <Text style={{color:'white'}}>Approve</Text>
-                </View>
-                <View style={styles.section}>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            marginHorizontal: -5,
-                            marginRight:100,
-                            paddingRight:50
-                          }}>
-                          {' '}
-                          Title
-                        </Text>
-
-                        <TouchableOpacity
-                          style={{flexDirection: 'row'}}
-                          >
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: '#211C5A',
-                              fontFamily: 'Poppins-Medium',
-                            }}>
-                            Book No.
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#5177E7',
-                            fontFamily: 'Poppins-Medium',
-                          }}>
-                            User
-                        </Text>
-                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#505069',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          User Type
-                        </Text>
-
-                       </TouchableOpacity>
-                    </View>
-                  </View>
-
-                  <View style={styles.belowhr}>
-                    <View style={{flexDirection: 'column'}}>
-                      <Text
-                        style={{
-                          color: '#B04305',
-                          fontSize: 12,
-                          fontFamily: 'Poppins-Medium',
-                        }}>
-                       {'    '}Requested On:{''}21 May,2021
-                        {/* {assignment.submissionDateString ||
-                          'Submission date Not Found'} */}
-                      </Text>
-                      
-                    </View>
-                    <View style={{marginBottom: 3}}>
-<Text>Urgent</Text>
-                    </View>
-                  </View>
-                </View>
-   {/* for reject and approve icon */}
-   
+                </View> */}
 
 
    </View>
@@ -454,10 +409,13 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     elevation: 5,
-    // marginTop: 14,
+    // marginTop: 5,
     borderRadius: 8,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingHorizontal:10,
+    marginLeft:5,
+    marginRight:5,
+    // paddingLeft: 10,
+    // paddingRight: 10,
     
     // marginHorizontal: 20,
     marginBottom: 20,
@@ -575,7 +533,7 @@ const styles = StyleSheet.create({
   },
   iconbubblereject: {
     width: 80,
-    height: 125,
+    height: 123,
     backgroundColor: 'red',
     // borderRadius: 1000,
     // alignSelf: 'center',
@@ -595,7 +553,7 @@ const styles = StyleSheet.create({
 
   iconbubbleapprove: {
     width: 80,
-    height: 125,
+    height: 123,
     backgroundColor: 'green',
     // borderRadius: 1000,
     // alignSelf: 'center',
