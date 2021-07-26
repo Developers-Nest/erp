@@ -47,8 +47,9 @@ import Attendance from './Attendance/Attendance';
 
 //helpers
 import write from '../../../services/localstorage/write';
-// redux
-// import { useSelector } from 'react-redux';
+
+//redux
+import {useSelector} from 'react-redux';
 
 // let userInfo;
 
@@ -81,6 +82,7 @@ const Home = ({navigation}) => {
 const Stack = createStackNavigator();
 
 const Home_Route = () => {
+  const institute = useSelector(state => state.institute);
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -90,9 +92,11 @@ const Home_Route = () => {
           headerTitle: 'Hi Saawan!',
           headerStyle: {
             height: 70,
+            backgroundColor: 'rgba(249, 249, 249, 1)',
           },
           headerTitleStyle: {
             fontSize: 25,
+            color: institute ? institute.themeColor : 'black',
           },
           headerRight: () => (
             <TouchableOpacity onPress={() => {}}>
@@ -101,7 +105,7 @@ const Home_Route = () => {
                 style={{
                   alignSelf: 'center',
                   fontSize: 25,
-                  color: 'black',
+                  color: institute ? institute.themeColor : 'black',
                   paddingRight: 20,
                 }}
               />
@@ -117,7 +121,7 @@ const Home_Route = () => {
                 style={{
                   alignSelf: 'center',
                   fontSize: 35,
-                  color: 'black',
+                  color: institute ? institute.themeColor : 'black',
                   paddingLeft: 20,
                 }}
               />
@@ -178,67 +182,109 @@ function DrawerContent(props) {
       alert('Cannot Logout!!' + err);
     }
   };
+  const institute = useSelector(state => state.institute);
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
-        <Drawer.Item
-          label={'Home'}
-          style={{fontWeight: '100'}}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Home</Text>
+          )}
           onPress={() => props.navigation.navigate('Home')}
         />
-        <Drawer.Item
-          label={'Academics'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Academics</Text>
+          )}
           onPress={() => props.navigation.navigate('Content Library')}
         />
-        <Drawer.Item
-          label={'Hostel'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Hostel</Text>
+          )}
           onPress={() => props.navigation.navigate('Attendance')}
         />
-        <Drawer.Item
-          label={'Events'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Events</Text>
+          )}
           onPress={() => Alert.alert('Add Events screen')}
         />
-        <Drawer.Item
-          label={'Bulk SMS'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Bulk SMS</Text>
+          )}
           onPress={() => Alert.alert('Add SMS screen')}
         />
-        <Drawer.Item
-          label={'Task Manager'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Task Manager</Text>
+          )}
           onPress={() => Alert.alert('Add Task Manager screen')}
         />
 
-        <Drawer.Item
-          label={'Payment Slip'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Payment Slip</Text>
+          )}
           onPress={() => Alert.alert('Add Payment slip screen')}
         />
 
-        <Drawer.Item
-          label={'Quick Payment'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Quick Payment</Text>
+          )}
           onPress={() => Alert.alert('Add quick payment screen')}
         />
 
-        <Drawer.Item
-          label={'Lesson Plan'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Lesson Plan</Text>
+          )}
           onPress={() => props.navigation.navigate('Lesson Plan')}
         />
-        <Drawer.Item
-          label={'Online Exams'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Online Exams</Text>
+          )}
           onPress={() => props.navigation.navigate('Books')}
         />
-        <Drawer.Item
-          label={'Feedback'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Feedback</Text>
+          )}
           onPress={() => props.navigation.navigate('Feedback')}
         />
-        <Drawer.Item
-          label={'Occurrence'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Occurrence</Text>
+          )}
           onPress={() => props.navigation.navigate('Occurence')}
         />
-        <Drawer.Item
-          label={'Placement Details'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Placement Details</Text>
+          )}
           onPress={() => Alert.alert('Add Placement Details')}
         />
-        <Drawer.Item
-          label={'Report'}
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Report</Text>
+          )}
           onPress={() => props.navigation.navigate('Report')}
         />
 
@@ -270,8 +316,7 @@ function DrawerContent(props) {
               width: 100,
               margin: 20,
               marginLeft: 40,
-              // backgroundColor: institute ? institute.themeColor : 'black',
-              backgroundColor: 'dodgerblue',
+              backgroundColor: institute ? institute.themeColor : 'black',
               borderRadius: 6,
             }}
             onPress={handleLogout}
@@ -538,4 +583,15 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomColor: '#333',
   },
+  drawer_item: {
+    lineHeight: 24,
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    fontSize: 16,
+    paddingLeft: 30,
+    padding: 0,
+    margin: 0,
+  },
+  item: {padding: 0, margin: 0},
 });
