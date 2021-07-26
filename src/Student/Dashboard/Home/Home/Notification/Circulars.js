@@ -5,8 +5,10 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 
+import {Button} from 'react-native-paper';
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -44,6 +46,7 @@ export default function Circular() {
           title: cir.circularsubject,
           content: cir.circularContent,
           time: parseDate(cir.circularDate),
+          url: cir.url,
         });
       });
       setCircularList(circularArray);
@@ -108,6 +111,16 @@ export default function Circular() {
           animation={isActive ? 'bounceIn' : undefined}>
           {section.content}
         </Text>
+        <Button
+          mode="contained"
+          style={{
+            borderWidth: 0.5,
+            borderColor: institute ? institute.themeColor : 'black',
+          }}
+          color={institute ? institute.themeColor : 'black'}
+          onPress={() => Linking.openURL(section.url)}>
+          Download Circular
+        </Button>
       </Animatable.View>
     );
   }
