@@ -267,7 +267,11 @@ const HomeScreen1 = () => {
           {/* 4th row starts */}
 
           <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Attendance');
+              }}>
               <FeatherIcon size={36.83} color="#8A06CD" name="calendar" />
 
               <Text
@@ -280,7 +284,7 @@ const HomeScreen1 = () => {
                 }}>
                 Attendance
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.section}>

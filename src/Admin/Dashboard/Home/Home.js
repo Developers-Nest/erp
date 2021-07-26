@@ -28,7 +28,6 @@ import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 //drawer navigation
-import Attendance from './Attendance/Attendance';
 import Books from './Books/Books';
 import ContentLibrary from './Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
@@ -39,11 +38,12 @@ import CceMarks from './CCEMarks/CCEmarks';
 import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
 import Occurence from '../Occurence/Occurence';
-//navigations from home screen second screen
 
+//navigations from home screen second screen
 import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
 import Library from './Home/Library';
+import Attendance from './Attendance/Attendance';
 
 // redux
 // import { useSelector } from 'react-redux';
@@ -137,6 +137,11 @@ const Home_Route = () => {
       <Stack.Screen
         name="Library"
         component={Library}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Attendance"
+        component={Attendance}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
