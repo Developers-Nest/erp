@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -16,11 +16,17 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const Chats = ({navigation}) => {
+// helpers
+import post from '../../../services/helpers/request/post'
+import write from '../../../services/localstorage/write'
+import read from '../../../services/localstorage/read'
+import get from '../../../services/helpers/request/get'
+
+const Chats = ({ navigation }) => {
   navigationByCondition = item => {
-    const {navigation} = props.navigation;
+    const { navigation } = props.navigation;
 
     if (chat.userName === 'Sarah') {
       navigation.navigate('ChatScreen1');
@@ -125,8 +131,57 @@ const Chats = ({navigation}) => {
   //theming
   const institute = useSelector(state => state.institute);
 
+  const userInfo = useSelector(state => state.userInfo)
+
+  useEffect(async () => {
+
+    try {
+      let email = userInfo.email
+      let password = userInfo.password
+
+      if (email && password) {
+
+        let data = { username: email, password: password }
+
+        let slug = '/login'
+        let response = await post(slug, data, null, 1)
+        await write('chatToken', response.accessToken)
+        await write('chatUser', response._id)
+
+        console.log('LOGIN ', response)
+        console.log('Token ', response.accessToken)
+
+      } else {
+        throw new Error('Email/ Password not available')
+      }
+
+    } catch (err) {
+      console.log(err)
+      alert('Cannot get chats!!')
+    }
+
+    try{
+      let chatToken = await read('chatToken')
+      let userId = await read('chatUser')
+      console.log('Chat Token ', chatToken)
+  
+      if (chatToken) {
+        let slug = `/chat/loadchatlist?userId=${userId}`
+        let res = await get(slug, chatToken, 1)
+        console.log('Res ', res)
+        setMessages(res)
+      } else {
+        throw new Error('Cannot fetch chat list!!')
+      }
+
+    } catch(err){
+      console.log('Chat List error ', err)
+    }
+
+  }, [])
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       {/* Header */}
       <View
         style={{
@@ -170,12 +225,12 @@ const Chats = ({navigation}) => {
           </Text>
         </View>
       </View>
-      <View style={{height: 20}} />
+      <View style={{ height: 20 }} />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Stories */}
 
         {/* Chats View */}
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           {messages.map(chat => (
             <TouchableOpacity
               style={{
@@ -206,16 +261,17 @@ const Chats = ({navigation}) => {
               //         ? navigation.navigate('ChatScreen1'):
               //     navigation.navigate('Chats')
               // }
-
+              key = {chat.chatHeadId}
               onPress={() => navigation.navigate('ChatScreen1')}
+
               onLongPress={() => {
                 Alert.alert(
                   'Delete Chat?',
-                  `Do you want to delete ${chat.userName}'s chats?`,
+                  `Do you want to delete ${chat.chatHeadName}'s chats?`,
                   [
                     {
                       text: 'Cancel',
-                      onPress: () => {},
+                      onPress: () => { },
                       style: 'cancel',
                     },
                     {
@@ -228,9 +284,11 @@ const Chats = ({navigation}) => {
                       },
                     },
                   ],
-                  {cancelable: false},
+                  { cancelable: false },
                 );
               }}>
+
+
               <Image
                 style={{
                   width: 60,
@@ -253,8 +311,10 @@ const Chats = ({navigation}) => {
                   uri: chat.userImage,
                 }}
               />
+
+
               {/* </TouchableOpacity> */}
-              <View style={{flex: 1, paddingHorizontal: 10}}>
+              <View style={{ flex: 1, paddingHorizontal: 10 }}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -266,9 +326,9 @@ const Chats = ({navigation}) => {
                       fontFamily: 'Poppins-Regular',
                       fontSize: 18,
                     }}>
-                    {chat.userName}
+                    {chat.chatHeadName}
                   </Text>
-                  <Text style={{fontSize: 14}}>{chat.time}</Text>
+                  <Text style={{ fontSize: 14 }}>{chat.time}</Text>
                 </View>
                 <View
                   style={{
@@ -288,21 +348,22 @@ const Chats = ({navigation}) => {
                     <Text
                       style={{
                         fontFamily:
-                          chat.message.sender !== 'You'
-                            ? chat.message.seenByYou
+                          chat.senderId !== 'You'
+                            ? chat.messageStatus
                               ? 'Poppins-Regular'
                               : 'OpenSans-Regular'
                             : 'NunitoSans-Regular',
 
                         color:
-                          chat.message.sender !== 'You'
-                            ? chat.message.seenByYou
+                          chat.senderId !== 'You'
+                            ? chat.messageStatus
                               ? 'black'
                               : 'blue'
                             : 'grey',
                         fontSize: 16,
-                      }}>
-                      {chat.message.text}
+                      }}
+                      >
+                      {chat.chatMessages ? chat.chatMessages.messageContent : ''}
                     </Text>
                   )}
 
@@ -318,8 +379,8 @@ const Chats = ({navigation}) => {
                  if not seen by me,unread,then new icon is returned in place of that */}
 
                   {
-                    chat.message.sender === 'You' ? (
-                      chat.message.seenByUser ? (
+                    chat.senderId === 'You' ? (
+                      chat.messageStatus ? (
                         <MaterialIcon
                           name="done-all"
                           size={16}
@@ -328,7 +389,7 @@ const Chats = ({navigation}) => {
                       ) : (
                         <MaterialIcon name="done" size={16} color={'#555'} />
                       )
-                    ) : chat.message.seenByYou ? null : (
+                    ) : chat.messageStatus ? null : (
                       <EntypoIcon name="new" size={16} color="blue" />
                     )
                     // <EntypoIcon name='new' size={16} color='blue'/>
@@ -337,8 +398,9 @@ const Chats = ({navigation}) => {
               </View>
             </TouchableOpacity>
           ))}
+
         </View>
-        <View style={{height: 20}}></View>
+        <View style={{ height: 20 }}></View>
       </ScrollView>
     </View>
   );

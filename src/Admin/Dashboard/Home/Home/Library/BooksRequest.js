@@ -1,7 +1,7 @@
 import * as React from 'react';
 // import { TextInput } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -21,129 +21,12 @@ import {
 import {useSelector} from 'react-redux';
 
 export default function Booksrequest({navigation}) {
-  const [showContent, setShowContent] = React.useState('Due');
+  const [showContent, setShowContent] = React.useState('Unreviewed');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
   //theming
   const institute = useSelector(state => state.institute);
-
-  function Reviewed() {
-    const [searchQuery, setSearchQuery] = React.useState('');
-
-    const onChangeSearch = query => setSearchQuery(query);
-
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text> </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: '#505069',
-                      fontFamily: 'OpenSans-Regular',
-                    }}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#58626C',
-                      fontFamily: 'Poppins-Regular',
-                      paddingLeft: 5,
-                    }}>
-                    Issued: 21May,2021
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#58636D',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      {' '}
-                      Due: 21Sept,2021
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text> </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: '#505069',
-                      fontFamily: 'OpenSans-Regular',
-                    }}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#58626C',
-                      fontFamily: 'Poppins-Regular',
-                      paddingLeft: 5,
-                    }}>
-                    Issued: 21May,2021
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#58636D',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      {' '}
-                      Due: 21Sept,2021
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </ScrollView>
-      </View>
-    );
-  }
 
   function Unreviewed() {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -153,110 +36,280 @@ export default function Booksrequest({navigation}) {
     return (
       <View style={styles.container}>
         <ScrollView>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text></Text>
+      <View style={{flexDirection:'row',justifyContent:'center'}}>
 
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: '#505069',
-                      fontFamily: 'OpenSans-Regular',
-                    }}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-                </TouchableOpacity>
+<View style={styles.section}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            marginHorizontal: -5,
+                            marginRight:100,
+                            paddingRight:50
+                          }}>
+                          {' '}
+                          Title
+                        </Text>
 
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#1F7C17',
-                      paddingLeft: 5,
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    Issued: 21May,2021
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#B04305',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      Due: 21Sept,2021
-                    </Text>
+                        <TouchableOpacity
+                          style={{flexDirection: 'row'}}
+                          >
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            Book No.
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#5177E7',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                            User
+                        </Text>
+                       </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#505069',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          User Type
+                        </Text>
+
+                       </TouchableOpacity>
+                    </View>
                   </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text></Text>
 
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: '#505069',
-                      fontFamily: 'OpenSans-Regular',
-                    }}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#1F7C17',
-                      fontFamily: 'Poppins-Regular',
-                      paddingLeft: 5,
-                    }}>
-                    Issued: 21May,2021
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#B04305',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      Due: 21Sept,2021
-                    </Text>
+                  <View style={styles.belowhr}>
+                    <View style={{flexDirection: 'column'}}>
+                      <Text
+                        style={{
+                          color: '#B04305',
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                      {'  '}  Requested On:{''}21 May,2021
+                        {/* {assignment.submissionDateString ||
+                          'Submission date Not Found'} */}
+                      </Text>
+                      
+                    </View>
+                    <View style={{marginBottom: 3}}>
+<Text>Urgent</Text>
+                    </View>
                   </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+                </View>
+   {/* for reject and approve icon */}
+   <View style={styles.iconbubblereject}>
+   <FontAwesome5
+                    size={38.5}
+                    color="white"
+                    name="trash-alt"
+                  />
+                  
+                  <Text style={{color:'white'}}>Reject</Text>
+                </View>
+
+
+   </View>
+
+   <View style={{flexDirection:'row',justifyContent:'center'}}>
+   <View style={styles.iconbubbleapprove}>
+                  <FontAwesome5
+                    size={38.5}
+                    color="white"
+                    name="check-circle"
+                  />
+                  <Text style={{color:'white'}}>Approve</Text>
+                </View>
+                <View style={styles.section}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            marginHorizontal: -5,
+                            marginRight:100,
+                            paddingRight:50
+                          }}>
+                          {' '}
+                          Title
+                        </Text>
+
+                        <TouchableOpacity
+                          style={{flexDirection: 'row'}}
+                          >
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            Book No.
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#5177E7',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                            User
+                        </Text>
+                       </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#505069',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          User Type
+                        </Text>
+
+                       </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  <View style={styles.belowhr}>
+                    <View style={{flexDirection: 'column'}}>
+                      <Text
+                        style={{
+                          color: '#B04305',
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                       {'    '}Requested On:{''}21 May,2021
+                        {/* {assignment.submissionDateString ||
+                          'Submission date Not Found'} */}
+                      </Text>
+                      
+                    </View>
+                    <View style={{marginBottom: 3}}>
+<Text>Urgent</Text>
+                    </View>
+                  </View>
+                </View>
+   {/* for reject and approve icon */}
+   
+
+
+   </View>
+        </ScrollView>
+      </View>
+    );
+  }
+
+  function Reviewed() {
+    const [searchQuery, setSearchQuery] = React.useState('');
+
+    const onChangeSearch = query => setSearchQuery(query);
+
+    return (
+      <View style={styles.container}>
+        <ScrollView>
+
+        <View style={styles.sectionreviewed}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            marginHorizontal: -5,
+                            marginRight:100,
+                            paddingRight:50
+                          }}>
+                          {' '}
+                          Title
+                        </Text>
+
+                        <TouchableOpacity
+                          style={{flexDirection: 'row'}}
+                          >
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            Book No.
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#5177E7',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                            User
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: 'green',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                           Approved
+                        </Text>
+
+
+                       </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#505069',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          User Type
+                        </Text>
+
+                       </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  <View style={styles.belowhr}>
+                    <View style={{flexDirection: 'column'}}>
+                      <Text
+                        style={{
+                          color: '#B04305',
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                      {'  '}  Requested On:{''}21 May,2021
+                        {/* {assignment.submissionDateString ||
+                          'Submission date Not Found'} */}
+                      </Text>
+                      
+                    </View>
+                    <View style={{marginBottom: 3}}>
+<Text>Urgent</Text>
+                    </View>
+                  </View>
+                </View>
+
         </ScrollView>
       </View>
     );
@@ -270,12 +323,12 @@ export default function Booksrequest({navigation}) {
 
         <View
           style={{
-            backgroundColor: institute ? institute.themeColor : 'black',
+            backgroundColor: institute ? institute.themeColor :'#FF5733',
             ...styles.header,
           }}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Home');
+              navigation.navigate('LibraryMain');
             }}>
             <AntDesign
               size={24}
@@ -326,7 +379,8 @@ export default function Booksrequest({navigation}) {
             }}>
             <TextInput
               style={{width: '80%', ...styles.text_input}}
-              placeholder="Enter book name or ID here"
+              placeholder="Enter book's title here"
+  
             />
             <TouchableOpacity
               style={{
@@ -348,11 +402,12 @@ export default function Booksrequest({navigation}) {
         {/* close search */}
 
         {/* tabs section open */}
+        <ScrollView>
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
               borderBottomWidth: showContent == 'Unreviewed' ? 1 : 0,
-              borderBottomColor: 'rgba(176, 67, 5, 1)',
+              borderBottomColor: '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
@@ -374,6 +429,7 @@ export default function Booksrequest({navigation}) {
           </TouchableOpacity>
         </View>
         {showContent === 'Unreviewed' ? <Unreviewed /> : <Reviewed />}
+        </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -385,7 +441,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
+  
+ 
   section: {
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    elevation: 5,
+    // marginTop: 14,
+    borderRadius: 8,
+    paddingLeft: 10,
+    paddingRight: 10,
+    
+    // marginHorizontal: 20,
+    marginBottom: 20,
+  },
+
+  sectionreviewed: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
@@ -400,17 +478,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingLeft: 10,
     paddingRight: 10,
+    
     marginHorizontal: 20,
     marginBottom: 10,
   },
 
+ 
   details: {
     display: 'flex',
     flexDirection: 'column',
     marginTop: 4,
-    paddingBottom: 10,
+    // paddingBottom: 10,
     borderBottomColor: '#333',
     paddingHorizontal: 10,
+    borderBottomWidth:0.5
   },
   userinhostels: {
     marginBottom: 10,
@@ -425,7 +506,15 @@ const styles = StyleSheet.create({
     // paddingVertical: 4,
     fontWeight: '300',
   },
-
+  belowhr: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 10,
+    justifyContent: 'space-between',
+    paddingBottom: 10,
+    borderBottomColor: '#333',
+    //borderBottomWidth:1,
+  },
   search: {
     backgroundColor: 'white',
     color: 'black',
@@ -483,6 +572,45 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
     minWidth: 110,
+  },
+  iconbubblereject: {
+    width: 80,
+    height: 125,
+    backgroundColor: 'red',
+    // borderRadius: 1000,
+    // alignSelf: 'center',
+    // display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+   
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 1.41,
+    elevation: 5
+  },
+
+  iconbubbleapprove: {
+    width: 80,
+    height: 125,
+    backgroundColor: 'green',
+    // borderRadius: 1000,
+    // alignSelf: 'center',
+    // display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+   
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 1.41,
+    elevation: 5
   },
 
   header: {
