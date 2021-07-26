@@ -125,6 +125,7 @@ const Home = ({navigation}) => {
           title: cir.circularsubject,
           content: cir.circularContent,
           time: parseDate(cir.circularDate),
+          url: cir.url,
         });
       });
       setCirculars(circularArray);
@@ -212,7 +213,7 @@ const Home = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={{paddingTop: 10}}></View>
-      <View style={{marginHorizontal: 30, ...styles.shadow}}>
+      <View style={{...styles.shadow}}>
         <View style={styles.search}>
           <TextInput
             style={{...styles.search_input}}
@@ -276,7 +277,9 @@ const Home = ({navigation}) => {
         {circulars && circulars.length > 0 ? (
           circulars.map(circular => (
             <View
-              style={{marginHorizontal: 30, ...styles.shadow}}
+              style={{
+                ...styles.shadow,
+              }}
               key={circular._id}>
               <View
                 style={{
@@ -296,7 +299,11 @@ const Home = ({navigation}) => {
                     <FontAwesome5
                       name="chevron-up"
                       size={14}
-                      style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                      style={{
+                        color: institute
+                          ? institute.themeColor
+                          : 'rgba(62, 104, 228, 0.9)',
+                      }}
                     />
                     <Text style={styles.collapsable_IconText}>Read Less</Text>
                   </TouchableOpacity>
@@ -324,6 +331,16 @@ const Home = ({navigation}) => {
                 <Text style={styles.collapsable_content}>
                   {circular.content}
                 </Text>
+                <Button
+                  mode="contained"
+                  style={{
+                    borderWidth: 0.5,
+                    borderColor: institute ? institute.themeColor : 'black',
+                  }}
+                  color={institute ? institute.themeColor : 'black'}
+                  onPress={() => Linking.openURL(circular.url)}>
+                  Download Circular
+                </Button>
               </Collapsible>
             </View>
           ))
@@ -333,7 +350,7 @@ const Home = ({navigation}) => {
 
         {/* assignment section */}
         <ScrollView
-          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
+          contentContainerStyle={{...styles.card_Wrapper}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           {assignments &&
@@ -367,7 +384,7 @@ const Home = ({navigation}) => {
 
         {/* books section */}
         <ScrollView
-          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
+          contentContainerStyle={{...styles.card_Wrapper}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           {notes &&
@@ -399,9 +416,9 @@ const Home = ({navigation}) => {
             ))}
         </ScrollView>
 
-        {/* books section */}
+        {/* fees section */}
         <ScrollView
-          contentContainerStyle={{...styles.card_Wrapper, marginHorizontal: 10}}
+          contentContainerStyle={{...styles.card_Wrapper}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           <View>
@@ -498,6 +515,13 @@ function DrawerContent(props) {
             <Text style={styles.drawer_item}>Home</Text>
           )}
           onPress={() => props.navigation.navigate('Home')}
+        />
+        <DrawerItem
+          style={styles.item}
+          label={({focused, color}) => (
+            <Text style={styles.drawer_item}>Timetable</Text>
+          )}
+          onPress={() => props.navigation.navigate('Timetable')}
         />
         <DrawerItem
           style={styles.item}
@@ -651,7 +675,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     shadowRadius: 8,
-    marginHorizontal: 10,
+    marginHorizontal: 30,
   },
   classes_cardWrapper: {
     paddingHorizontal: 10,
@@ -739,7 +763,7 @@ const styles = StyleSheet.create({
     paddingVertical: 35,
   },
   card_heading: {
-    paddingLeft: 20,
+    paddingLeft: 40,
     fontFamily: 'Poppins-Regular',
     fontSize: 12,
     fontStyle: 'normal',
@@ -772,7 +796,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   card_Wrapper: {
-    paddingHorizontal: 10,
     paddingBottom: 20,
     paddingTop: 20,
   },
