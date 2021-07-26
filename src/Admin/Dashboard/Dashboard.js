@@ -1,38 +1,56 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
 import {Button, Appbar} from 'react-native-paper';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Foundation from 'react-native-vector-icons/Foundation';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
+//icons
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Foundation from 'react-native-vector-icons/Foundation';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+
+//bottom navigation
 import Home from './Home/Home';
 import Message from './Message/Message';
 import Profile from './Profile/Profile';
 import Statistics from './Statistics/Statistics';
 import Classes from './Classes/Classes';
 
+// redux
+import {useSelector, useDispatch} from 'react-redux';
+import {INSTITUTE} from '../../reducers/actionType';
+
+// helpers
+import get from '../../services/helpers/request/get';
+import read from '../../services/localstorage/read';
+
 const Tab = createBottomTabNavigator();
 const getTabBarVisibility = route => {
-  // const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home Route';
-  // if (
-  //   routeName !== 'Home' &&
-  //   routeName !== 'Statistics' &&
-  //   routeName !== 'Classes' &&
-  //   routeName !== 'Profile' &&
-  //   routeName !== 'Message'
-  // ) {
-  //   // alert(routeName);
-
-  //   return false;
-  // }
-  // // alert(routeName);
-
   return true;
 };
 
 export default function DashboardScreen() {
+  let dispatch = useDispatch();
+  const [themeColor, setThemeColor] = useState('black');
+
+  useEffect(async () => {
+    try {
+      let slug = '/institution';
+      let token = await read('token');
+      let res = await get(slug, token);
+      console.log('Institute Res ', res);
+      dispatch({
+        type: INSTITUTE,
+        institute: res,
+      });
+      console.log('Theme color ', res.themeColor);
+      setThemeColor(res.themeColor);
+    } catch (err) {
+      alert('Cannot fetch Institute Details!');
+    }
+  }, []);
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -44,7 +62,9 @@ export default function DashboardScreen() {
           backgroundColor: 'rgba(249, 249, 249, 1)',
         },
         showLabel: false,
-        activeTintColor: 'black',
+        activeTintColor: themeColor,
+        inactiveTintColor: themeColor,
+        keyboardHidesTabBar: true,
       }}>
       <Tab.Screen
         name="Classes"
@@ -52,8 +72,12 @@ export default function DashboardScreen() {
         options={{
           tabBarLabel: 'Classes',
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center'}}>
-              <MaterialCommunityIcons name="video" color={color} size={30} />
+            <View style={{alignItems: 'center', width: 100}}>
+              <MaterialCommunityIcons
+                name={focused ? 'video' : 'video-outline'}
+                color={color}
+                size={focused ? 35 : 30}
+              />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Classes</Text>
               ) : null}
@@ -67,11 +91,11 @@ export default function DashboardScreen() {
         options={({route}) => ({
           tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center'}}>
-              <MaterialCommunityIcons
-                name="chart-bar"
+            <View style={{alignItems: 'center', width: 100}}>
+              <IonIcon
+                name={focused ? 'bar-chart-sharp' : 'bar-chart-outline'}
                 color={color}
-                size={30}
+                size={focused ? 35 : 30}
               />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Statistics</Text>
@@ -86,8 +110,12 @@ export default function DashboardScreen() {
         options={({route}) => ({
           tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center'}}>
-              <Foundation name="home" color={color} size={30} />
+            <View style={{alignItems: 'center', width: 100}}>
+              <IonIcon
+                name={focused ? 'home' : 'home-outline'}
+                color={color}
+                size={focused ? 35 : 30}
+              />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Home</Text>
               ) : null}
@@ -100,11 +128,11 @@ export default function DashboardScreen() {
         component={Message}
         options={{
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', width: 100}}>
               <MaterialCommunityIcons
-                name="chat-processing-outline"
+                name={focused ? 'chat-processing' : 'chat-processing-outline'}
                 color={color}
-                size={30}
+                size={focused ? 35 : 30}
               />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Message</Text>
@@ -118,11 +146,11 @@ export default function DashboardScreen() {
         component={Profile}
         options={{
           tabBarIcon: ({color, size, focused}) => (
-            <View style={{alignItems: 'center'}}>
+            <View style={{alignItems: 'center', width: 100}}>
               <MaterialCommunityIcons
-                name="account-circle-outline"
+                name={focused ? 'account-circle' : 'account-circle-outline'}
                 color={color}
-                size={30}
+                size={focused ? 35 : 30}
               />
               {focused ? (
                 <Text style={{color: color, fontSize: 12}}>Profile</Text>
