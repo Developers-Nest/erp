@@ -29,7 +29,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 //drawer navigation
 import Books from './Books/Books';
-import ContentLibrary from './Content Library/ContentLibrary';
+import ContentLibrary from './Home/Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
 import LessonPlan from './Lesson Plan/LessonPlan';
 import Transport from './Transport/Transport';
@@ -150,6 +150,11 @@ const Home_Route = () => {
         component={Attendance}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="Content Library"
+        component={ContentLibrary}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
@@ -198,7 +203,7 @@ function DrawerContent(props) {
           label={({focused, color}) => (
             <Text style={styles.drawer_item}>Academics</Text>
           )}
-          onPress={() => props.navigation.navigate('Content Library')}
+          onPress={() => Alert.alert('Add Academics screen')}
         />
         <DrawerItem
           style={styles.item}
