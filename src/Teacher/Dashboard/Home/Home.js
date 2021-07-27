@@ -51,7 +51,8 @@ import Notes from './Home/Notes';
 import Timetable from './Home/Timetable';
 
 // redux
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {SETNOTICATIONS, NOTREADNOTIFICATIONS}  from '../../../reducers/actionType'
 
 // helpers
 import read from '../../../services/localstorage/read';
@@ -63,7 +64,7 @@ let userInfo;
 
 const Home = ({navigation}) => {
   let institute = useSelector(state => state.institute);
-
+  const dispatch = useDispatch()
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
   const toggleExpanded = () => {
@@ -77,6 +78,10 @@ const Home = ({navigation}) => {
   const [circulars, setCirculars] = useState([]);
   const [assignments, setAssignments] = useState([]);
   const [subjects, setSubjects] = useState([]);
+  const [notifications, setNotifications] = useState([])
+  
+  // unread notifications count
+  let notReadNotifications = useSelector(state => state.count)
 
   let parseDate = myDate => {
     let d = new Date(myDate);
@@ -99,7 +104,6 @@ const Home = ({navigation}) => {
       let slug = '/note/assignment';
       let token = await read('token');
       const response = await get(slug, token);
-      console.log(response);
       setAssignments(response);
     } catch (err) {
       alert('Cannot fetch your assignments !!');
@@ -109,7 +113,6 @@ const Home = ({navigation}) => {
       let slug = '/subject';
       let token = await read('token');
       const response = await get(slug, token);
-      console.log(response);
       setSubjects(response);
     } catch (err) {
       alert('Cannot fetch your assignments !!');
@@ -132,7 +135,58 @@ const Home = ({navigation}) => {
       alert('Cannot fetch circular!!');
     }
 
+    try {
+      let getUserType = () => {
+        if (typeof(userInfo.userType) === 'string') {
+          return userInfo.userType;
+        } else {
+          return userInfo.userType._id;
+        }
+      };
+
+      let slug = `/notification?userType=${getUserType()}&department=${userInfo.department}`;
+      let token = await read('token');
+      let res = await get(slug, token);
+      let Content = [];
+      let currentUser = userInfo._id
+      let count = 0
+      await res.map(noti => {
+        let found=false
+        noti && noti.isReadBy.map((read)=>{
+          if(read==currentUser){
+            found=true
+          }
+        })
+        if(!found) count+=1
+        Content.push({
+          title: noti.title,
+          content: noti.message,
+          type: 'News',
+          _id: noti._id,
+          isRead: found?true:false 
+        });
+        console.log('Count ', count)
+      });
+
+      dispatch({
+        type: NOTREADNOTIFICATIONS,
+        count: count
+      })
+
+      setNotifications(Content);
+      
+      // notification count in redux store
+      dispatch({
+        type: SETNOTICATIONS,
+        notificatons: Content
+      })
+
+    } catch (err) {
+      console.log('Notification error ', err)
+      alert('Cannot get Notifications!!');
+    }
     hideLoadingScreen();
+    console.log('Not Read Notifications ', notReadNotifications)
   }, []);
 
   return (
@@ -286,7 +340,7 @@ const Home = ({navigation}) => {
                     <FontAwesome5
                       name="chevron-up"
                       size={14}
-                      style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                      style={{color: institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)'}}
                     />
                     <Text style={styles.collapsable_IconText}>Read Less</Text>
                   </TouchableOpacity>
@@ -297,10 +351,10 @@ const Home = ({navigation}) => {
                     <FontAwesome5
                       name="chevron-down"
                       size={14}
-                      style={{color: 'rgba(62, 104, 228, 0.9)'}}
+                      style={{color: institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)'}}
                     />
                     <Text style={styles.collapsable_IconText}>
-                      {circular.content}
+                      Read More
                     </Text>
                   </TouchableOpacity>
                 )}
@@ -310,8 +364,7 @@ const Home = ({navigation}) => {
                 align="center"
                 style={styles.collapsable_contentWrapper}>
                 <Text style={styles.collapsable_content}>
-                  Exams will be conducted via online mode. All the best. It is
-                  requested from the students to maintain the.
+                {circular.content}
                 </Text>
               </Collapsible>
             </View>
