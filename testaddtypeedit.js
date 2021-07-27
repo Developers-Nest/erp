@@ -10,45 +10,6 @@ import Evillcons from 'react-native-vector-icons/Feather';
 const testhostel = () => {
 
 
-
-    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-    const [date, setDate] = React.useState('29 May 2021')
-
-    const [isDatePickerVisible1, setDatePickerVisibility1] = React.useState(false);
-    const [date1, setDate1] = React.useState('29 May 2021')
-
-    const showDatePicker1 = () => {
-        setDatePickerVisibility1(true);
-    };
-
-    const hideDatePicker1 = () => {
-        setDatePickerVisibility1(false);
-    };
-    const handleConfirm1 = (date1) => {
-        console.warn("A date has been picked: ", date1.toString());
-        setDate1(date1.getDate() + " " + dateMonths[date1.getMonth() + 1] + " " + date1.getFullYear())
-        hideDatePicker1();
-    };
-
-
-    let index = 0;
-    const dateMonths = {
-        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
-    }
-
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
-    const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date.toString());
-        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
-        hideDatePicker();
-    };
-
     return (
 
 
@@ -56,7 +17,7 @@ const testhostel = () => {
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
             <ModalSelector
 
-                initValue="Hostel Allocation"
+                initValue="Add Type"
 
 
                 initValueTextStyle={styles.SelectedValue}
@@ -67,37 +28,23 @@ const testhostel = () => {
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
 
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Name</Text>
+                    <Text style={styles.section_heading}>Add Feedback Type</Text>
                 </View>
 
                 <View style={{ marginHorizontal: 10, ...styles.shadow }}>
                     <View style={styles.search}>
                         <TextInput
-                            style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
-                            placeholder="Search User's name to add"
+                            style={{ ...styles.search_input, fontFamily: 'Poppins-Regular', color: '#505069' }}
+                            placeholder="Annual feedback forum"
 
                         />
-                        <TouchableOpacity
-                            style={{
-                                alignSelf: 'center',
 
-                            }}>
-                            <Icon
-                                name="search-sharp"
-                                style={{
-                                    alignSelf: 'center',
-                                    fontSize: 25,
-                                    color: 'black',
-
-                                }}
-                            />
-                        </TouchableOpacity>
                     </View>
                 </View>
 
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Hostel Type </Text>
-                    <Text style={styles.section_heading2}>Hostel Name</Text>
+                    <Text style={styles.section_heading}> Feedback For </Text>
+                    <Text style={styles.section_heading2}> Status </Text>
                 </View>
                 <View style={{ flexDirection: 'row' }} >
 
@@ -106,7 +53,7 @@ const testhostel = () => {
 
 
 
-                        initValue="Type"
+                        initValue="Student"
 
                         style={styles.card}
 
@@ -118,7 +65,7 @@ const testhostel = () => {
                     >
                         <View style={{ marginTop: 10, flexDirection: 'row' }}>
 
-                            <Text style={styles.text2}>Type</Text>
+                            <Text style={styles.text2}>Student</Text>
                             <Evillcons size={25} color='#505069' name='chevron-down'
                                 style={{
 
@@ -136,70 +83,60 @@ const testhostel = () => {
 
 
                     </ModalSelector>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nilgiri"
 
-                    />
+                    <ModalSelector
 
+
+
+
+                        initValue="Active"
+
+                        style={styles.card1}
+
+
+                        initValueTextStyle={styles.SelectedValueSmall}
+                    //selectTextStyle={styles.SelectedValueSmall}
+
+
+                    >
+                        <View style={{ marginTop: 10, flexDirection: 'row' }}>
+
+                            <Text style={styles.text2}>Active</Text>
+                            <Evillcons size={25} color='#505069' name='chevron-down'
+                                style={{
+
+                                    marginLeft: 70,
+
+
+
+                                }}>
+
+                            </Evillcons>
+
+                        </View>
+
+
+
+
+                    </ModalSelector>
                 </View>
-                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Registration </Text>
-                    <Text style={styles.section_heading1}>Vacating</Text>
-                </View>
-
-                <View style={{ flexDirection: 'row' }} >
-
-                    <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
-                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                            placeholder={date}
-
-                        />
-                        <Feather size={18} color="black" name="calendar"
-                            style={{
-                                marginTop: 16,
-                                marginRight: 0,
-                            }}
 
 
-                        ></Feather>
-                        <DateTimePickerModal
-                            isVisible={isDatePickerVisible}
-                            style={styles.pickdate}
-                            mode="date"
-                            onConfirm={handleConfirm}
-                            onCancel={hideDatePicker}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.pickdate1} onPress={showDatePicker1} >
-                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                            placeholder={date1}
-
-                        />
-                        <Feather size={18} color="black" name="calendar"
-                            style={{
-                                marginTop: 16,
-                                marginRight: 0,
-                            }}
 
 
-                        ></Feather>
-                        <DateTimePickerModal
-                            isVisible={isDatePickerVisible1}
-                            style={styles.pickdate}
-                            mode="date"
-                            onConfirm={handleConfirm1}
-                            onCancel={hideDatePicker1}
-                        />
-                    </TouchableOpacity>
 
-
-                </View>
                 <View style={styles.fixToText}>
-                    
+
+
+                    <Pressable style={styles.button1} >
+                        <Text style={styles.text1}>Delete</Text>
+                    </Pressable>
+
                     <Pressable style={styles.button} >
                         <Text style={styles.text}>Save</Text>
                     </Pressable>
+
+
 
 
                 </View>
@@ -231,49 +168,49 @@ const styles = StyleSheet.create({
     },
     button1: {
 
-        marginTop:0,
-        marginBottom:0,
-           
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-            alignSelf: 'flex-end',
-            padding: 3,
-            paddingHorizontal: 25,
-            paddingVertical:2,
-            borderRadius: 4,
-            marginRight: 30,
-            height:46,
-            borderColor:'#d2691e',
-            borderWidth:1.5
-            
-        },
-        button: {
+        marginTop: 0,
+        marginBottom: 0,
 
-        
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingVertical: 12,
-            paddingHorizontal: 25,
-            borderRadius: 4,
-            elevation: 3,
-            backgroundColor: '#5177E7',
-        },
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        alignSelf: 'flex-end',
+        padding: 3,
+        paddingHorizontal: 25,
+        paddingVertical: 2,
+        borderRadius: 4,
+        marginRight: 30,
+        height: 46,
+        borderColor: '#d2691e',
+        borderWidth: 1.5
 
-        text1: {
-            fontSize: 18,
-            fontWeight: '500',
-            lineHeight: 21,
-            letterSpacing: 0.25,
-            color: '#d2691e',
-          },
-        text: {
-            fontSize: 18,
-            lineHeight: 21,
-            fontWeight: '500',
-            letterSpacing: 0.25,
-            color: 'white',
-        },
+    },
+    button: {
+
+
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 25,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: '#5177E7',
+    },
+
+    text1: {
+        fontSize: 18,
+        fontWeight: '500',
+        lineHeight: 21,
+        letterSpacing: 0.25,
+        color: '#d2691e',
+    },
+    text: {
+        fontSize: 18,
+        lineHeight: 21,
+        fontWeight: '500',
+        letterSpacing: 0.25,
+        color: 'white',
+    },
 
     fixToText: {
         flexDirection: 'row',
@@ -314,7 +251,7 @@ const styles = StyleSheet.create({
         height: 50,
         fontSize: 15,
 
-
+        color: '#505069',
         paddingTop: 5,
         paddingHorizontal: 0,
         width: '90%',
@@ -345,7 +282,7 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'center',
         marginRight: 35,
-        marginLeft: 35,
+        marginLeft: 0,
 
 
         color: 'rgba(88, 99, 109, 0.85)',
@@ -444,6 +381,32 @@ const styles = StyleSheet.create({
 
 
     },
+    card1: {
+
+        width: 170,
+        height: 50,
+
+        shadowColor: '#999',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        backgroundColor: 'white',
+        borderColor: '#58636D',
+
+
+        overflow: 'hidden',
+        justifyContent: 'center',
+        borderRadius: 8,
+        borderWidth: 0.3,
+        marginLeft: 10,
+        marginRight: 20,
+
+        //flexDirection: 'row',
+        justifyContent: 'space-between'
+
+
+
+
+    },
     SelectedValueSmall: {
 
         fontFamily: 'Poppins-Regular',
@@ -457,6 +420,8 @@ const styles = StyleSheet.create({
 
 
     },
+
+
 
 
 

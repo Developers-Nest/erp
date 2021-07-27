@@ -23,12 +23,8 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 //redux
 import {useSelector} from 'react-redux';
 
-//helpers
-import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
-import get from '../../../../../services/helpers/request/get';
-import read from '../../../../../services/localstorage/read';
 
-const AddVisitors = ({navigation}) => {
+const AddVisitorsHostel = ({navigation}) => {
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -59,7 +55,7 @@ const AddVisitors = ({navigation}) => {
   };
 
   const handleConfirm = date => {
-    console.warn('A date has been picked: ', date.toString());
+
     setDate(
       date.getDate() +
         ' ' +
@@ -79,7 +75,7 @@ const AddVisitors = ({navigation}) => {
         }}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('SettingUsers');
+            navigation.navigate('VisitorsList');
           }}>
           <AntDesign
             size={24}
@@ -186,7 +182,7 @@ const AddVisitors = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.fixToText}>
-            <Pressable style={styles.button}>
+            <Pressable style={styles.button} onPress={() => navigation.navigate('EditVisitorsHostel')}>
               <Text style={styles.text}>Save</Text>
             </Pressable>
           </View>
@@ -358,4 +354,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddVisitors;
+export default AddVisitorsHostel;

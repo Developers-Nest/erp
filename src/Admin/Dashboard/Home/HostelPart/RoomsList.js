@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
+import { View, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
@@ -10,18 +10,66 @@ import check from 'react-native-vector-icons/Ionicons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Button } from 'react-native-paper';
+import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
 
-const testvisitorlist = () => {
+import { useSelector } from 'react-redux';
+
+const RoomsList = ({ navigation }) => {
+
+    //theming
+    const institute = useSelector(state => state.institute);
+
     return (
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-            <ModalSelector
+            {/* header start */}
 
-                initValue="Visitor List"
+            <View
+                style={{
+                    backgroundColor: institute ? institute.themeColor : '#FF5733',
+                    ...styles.header,
+                }}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('AllocatedListHostel');
+                    }}>
+                    <AntDesign
+                        size={24}
+                        color="white"
+                        name="left"
+                        style={{
+                            alignSelf: 'center',
+                            fontSize: 25,
+                            color: 'white',
+                            paddingLeft: 20,
+                            paddingTop: 20,
+                        }}
+                    />
+                </TouchableOpacity>
+                <Text
+                    style={{
+                        fontStyle: 'normal',
+                        fontFamily: 'NunitoSans-Regular',
+                        fontSize: 28,
+                        fontWeight: '600',
+                        alignSelf: 'center',
+                        paddingLeft: 30,
+                        color: 'white',
+                    }}>
+                    Rooms List
+                </Text>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('AllocatedListHostel')}
+                    style={{
+                        justifyContent: 'flex-end',
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                </TouchableOpacity>
+            </View>
 
-                //style={styles.card}
-                initValueTextStyle={styles.SelectedValue}
-            //selectTextStyle={styles.SelectedValue}
-            />
+            {/* header ends */}
+
 
             <View style={{ marginHorizontal: 10, ...styles.shadow }}>
                 <View style={styles.search}>
@@ -48,7 +96,112 @@ const testvisitorlist = () => {
                 </View>
             </View>
 
+            <TouchableWithoutFeedback onPress={() => {
+              navigation.navigate('VisitorsList');}}
+           >
 
+                <View style={styles.section} >
+                    <View style={styles.details}>
+                        <View style={styles.userinhostels}>
+                            <View style={styles.differentusers}>
+                                <Text
+                                    style={{
+                                        fontSize: 18,
+                                        color: '#211C5A',
+                                        fontFamily: 'Poppins-Regular',
+                                        marginHorizontal: -5,
+                                    }}>
+
+                                    Hostel Name
+
+                                </Text>
+
+                                <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
+                                    302, 3rd floor
+                                </Text>
+
+
+                                {/* */}
+                            </View>
+                            <TouchableOpacity style={styles.differentusers}>
+                                <Text
+                                    style={{
+                                        fontSize: 12,
+                                        color: '#5177E7',
+                                        fontFamily: 'Poppins-Medium',
+                                    }}>
+
+                                </Text>
+
+
+                            </TouchableOpacity>
+                            {/* <TouchableOpacity style={styles.differentusers}>
+                            <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
+                                User Type
+                            </Text>
+                        </TouchableOpacity> */}
+
+
+
+                            <TouchableOpacity style={styles.differentusers}>
+                                <Text
+                                    style={{
+                                        fontSize: 14,
+                                        color: '#211C5A',
+                                        fontFamily: 'Poppins-Regular',
+                                    }}>
+                                    Hostel Type
+
+                                </Text>
+
+
+
+
+                            </TouchableOpacity>
+
+                        </View>
+                    </View>
+
+
+
+
+                    <View style={styles.belowhr}>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text
+                                style={{
+                                    color: '#B04305',
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins-Medium',
+                                }}>
+
+                            </Text>
+                            <Text
+                                style={{
+                                    color: '#211C5A',
+
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins-Regular',
+                                }}>
+                                Beds: 456
+                            </Text>
+                        </View>
+                        <View style={{ marginTop: 15 }}>
+                            <Text
+                                style={{
+                                    color: '#211C5A',
+
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins-Regular',
+                                }}>
+                                Amount: 24,000 Rs
+                            </Text>
+
+                        </View>
+                    </View>
+
+
+                </View>
+            </TouchableWithoutFeedback>
 
             <View style={styles.section} >
                 <View style={styles.details}>
@@ -62,12 +215,12 @@ const testvisitorlist = () => {
                                     marginHorizontal: -5,
                                 }}>
 
-                                User
+                                Hostel Name
 
                             </Text>
 
                             <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
-                                402,3rd floor
+                                302, 3rd floor
                             </Text>
 
 
@@ -85,46 +238,30 @@ const testvisitorlist = () => {
 
 
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.differentusers}>
+                        {/* <TouchableOpacity style={styles.differentusers}>
                             <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
-                                Type
+                                User Type
                             </Text>
+                        </TouchableOpacity> */}
+
+
+
+                        <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    color: '#211C5A',
+                                    fontFamily: 'Poppins-Regular',
+                                }}>
+                                Hostel Type
+
+                            </Text>
+
+
+
+
                         </TouchableOpacity>
 
-                        
-
-                            <TouchableOpacity style={styles.differentusers}>
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: '#505069',
-                                        fontFamily: 'Poppins-Regular',
-                                    }}>
-                                    Relationship
-
-                                </Text>
-
-                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: '#211C5A',
-                                        fontFamily: 'Poppins-Regular',
-                                        marginTop: 5,
-                                    }}>
-                                    Edit
-                                </Text>
-                                <Icon1
-                                    size={12}
-                                    backgroundColor=" #211C5A"
-                                    name="edit"
-                                    style={{ paddingTop: 7, paddingRight: 12 }}
-                                />
-                            </TouchableOpacity> 
-
-
-                            </TouchableOpacity>
-                       
                     </View>
                 </View>
 
@@ -148,7 +285,7 @@ const testvisitorlist = () => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                            Date: 21 May,2021
+                            Beds: 456
                         </Text>
                     </View>
                     <View style={{ marginTop: 15 }}>
@@ -159,7 +296,7 @@ const testvisitorlist = () => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                            Time: 09:00
+                            Amount: 24,000 Rs
                         </Text>
 
                     </View>
@@ -168,124 +305,6 @@ const testvisitorlist = () => {
 
             </View>
 
-
-            <View style={styles.section} >
-                <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                        <View style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 18,
-                                    color: '#211C5A',
-                                    fontFamily: 'Poppins-Regular',
-                                    marginHorizontal: -5,
-                                }}>
-
-                                User
-
-                            </Text>
-
-                            <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
-                                402,3rd floor
-                            </Text>
-
-
-                            {/* */}
-                        </View>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#5177E7',
-                                    fontFamily: 'Poppins-Medium',
-                                }}>
-
-                            </Text>
-
-
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
-                                Type
-                            </Text>
-                        </TouchableOpacity>
-
-                        
-
-                            <TouchableOpacity style={styles.differentusers}>
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: '#505069',
-                                        fontFamily: 'Poppins-Regular',
-                                    }}>
-                                    Relationship
-
-                                </Text>
-
-                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: '#211C5A',
-                                        fontFamily: 'Poppins-Regular',
-                                        marginTop: 5,
-                                    }}>
-                                    Edit
-                                </Text>
-                                <Icon1
-                                    size={12}
-                                    backgroundColor=" #211C5A"
-                                    name="edit"
-                                    style={{ paddingTop: 7, paddingRight: 12 }}
-                                />
-                            </TouchableOpacity> 
-
-
-                            </TouchableOpacity>
-                       
-                    </View>
-                </View>
-
-
-
-
-                <View style={styles.belowhr}>
-                    <View style={{ flexDirection: 'column' }}>
-                        <Text
-                            style={{
-                                color: '#B04305',
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Medium',
-                            }}>
-
-                        </Text>
-                        <Text
-                            style={{
-                                color: '#211C5A',
-
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-                            Date: 21 May,2021
-                        </Text>
-                    </View>
-                    <View style={{ marginTop: 15 }}>
-                        <Text
-                            style={{
-                                color: '#211C5A',
-
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-                            Time: 09:00
-                        </Text>
-
-                    </View>
-                </View>
-
-
-            </View>
 
 
 
@@ -377,14 +396,14 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.8,
     },
     userinhostels: {
-        marginTop:10,
+        marginTop: 10,
     },
 
     differentusers: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        
+
     },
     userstext: {
         fontSize: 16,
@@ -409,9 +428,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 5,
     },
+    header: {
+        height: 69,
+        flexDirection: 'row',
+    },
 
 
 });
 
-export default testvisitorlist;
+export default RoomsList;
 
