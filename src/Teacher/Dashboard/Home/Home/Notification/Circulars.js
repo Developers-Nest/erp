@@ -77,7 +77,9 @@ export default function Circular() {
                 color={'rgba(62, 104, 228, 0.9)'}
               />
               <Text style={styles.collapseIconText}>Read Less</Text>
+              
             </View>
+            
           </View>
         ) : (
           <View
@@ -96,6 +98,7 @@ export default function Circular() {
               />
               <Text style={styles.collapseIconText}>Read More</Text>
             </View>
+           
           </View>
         )}
       </View>
@@ -110,6 +113,16 @@ export default function Circular() {
           animation={isActive ? 'bounceIn' : undefined}>
           {section.content}
         </Text>
+        <TouchableOpacity>
+        <View style={{justifyContent:'flex-end',flexDirection:'row'}}>
+        <Text style={styles.collapseIconText1}>download</Text>
+        <FontAwesome5
+                name="file-download"
+                size={20}
+                color={'rgba(62, 104, 228, 0.9)'}
+              />
+              </View>
+              </TouchableOpacity>
       </Animatable.View>
     );
   }
@@ -154,6 +167,7 @@ const styles = StyleSheet.create({
   content: {
     padding: 10,
     /* BODY-12 */
+   
 
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
@@ -219,6 +233,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 14,
     color: '#58636D',
+  },
+  collapseIconText1: {
+    fontSize: 10,
+    fontWeight: '600',
+    fontFamily: 'OpenSans-Regular',
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 14,
+    color: '#58636D',
+    marginRight:5
   },
   collapseIconTextTime: {
     fontSize: 10,
