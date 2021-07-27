@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -21,6 +21,8 @@ import IconBio2 from 'react-native-vector-icons/FontAwesome5';
 
 import * as Animatable from 'react-native-animatable';
 import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
+
+//navigation
 import {
   createDrawerNavigator,
   useIsDrawerOpen,
@@ -30,21 +32,45 @@ import {
 import {createStackNavigator} from '@react-navigation/stack';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
+//icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
 import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // redux
 import {useSelector} from 'react-redux';
 
+// helpers
+import read from '../../../services/localstorage/read';
+import get from '../../../services/helpers/request/get';
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
+
 const HomeScreen2 = ({navigation}) => {
   const institute = useSelector(state => state.institute);
 
   const [collapsed, setCollapsed] = React.useState(true);
+  const [counts, setCounts] = React.useState([]);
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
+
+  // loading screem
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+  // on load of the screen
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      let slug = `/admin/counts`;
+      let token = await read('token');
+      let response = await get(slug, token);
+      setCounts(response);
+    } catch (err) {
+      alert('Cannot get Study Material!!');
+    }
+
+    hideLoadingScreen();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -93,7 +119,7 @@ const HomeScreen2 = ({navigation}) => {
                   marginTop: 5,
                   fontFamily: 'Poppins-Regular',
                 }}>
-                957
+                {counts && counts.studentCount}
               </Text>
 
               <Text
@@ -120,7 +146,7 @@ const HomeScreen2 = ({navigation}) => {
                   marginTop: 5,
                   fontFamily: 'Poppins-Regular',
                 }}>
-                128
+                {counts && counts.employeeCount}
               </Text>
 
               <Text
@@ -148,7 +174,7 @@ const HomeScreen2 = ({navigation}) => {
                   marginTop: 5,
                   fontFamily: 'Poppins-Regular',
                 }}>
-                65
+                {counts && counts.classCount}
               </Text>
 
               <Text
@@ -160,7 +186,7 @@ const HomeScreen2 = ({navigation}) => {
                   marginTop: -5,
                   fontFamily: 'Poppins-Regular',
                 }}>
-                Staffs
+                Classes
               </Text>
             </View>
           </View>
