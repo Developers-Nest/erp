@@ -24,8 +24,31 @@ import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
+
+
 export default function TransportDestinationList() {
-    const [SMS_for, setSMS_for] = useState([]);
+
+    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+    const [date, setDate] = React.useState('21 May 2021')
+    let index = 0;
+    const dateMonths = {
+        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
+    }
+
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+    const handleConfirm = (date) => {
+        // console.warn("A date has been picked: ", date.toString());
+        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
+        hideDatePicker();
+    };
+
+
   return (
     <View style={styles.backgroung}>
       <Appbar>
@@ -79,11 +102,25 @@ export default function TransportDestinationList() {
                 </View>
                 <View style={styles.Card}>
                     <View style={styles.CardContent}>
-                        <Feather size={18} color="black" name="calendar"
-                            style={{
-                                marginTop: 16,
-                                marginRight: 0,
-                            }}></Feather>
+                        <TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
+                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
+                                placeholder={date}
+
+                            />
+                            <Feather size={18} color="black" name="calendar"
+                                style={{
+                                    marginTop: 10,
+                                    marginRight: 0,
+                                }}
+                            ></Feather>
+                            <DateTimePickerModal
+                                isVisible={isDatePickerVisible}
+                                style={styles.pickdate}
+                                mode="date"
+                                onConfirm={handleConfirm}
+                                onCancel={hideDatePicker}
+                            />
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -268,4 +305,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         width: '90%',
       },
+      pickdate: {
+        width: 120,
+        fontFamily: 'Poppins-Regular',
+        height: 50,
+        backgroundColor: 'white',
+        borderColor: '#58636D',
+        borderRadius: 8,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
 });

@@ -24,7 +24,10 @@ import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
+
+
 export default function TransportDestinationList() {
+
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('21 May 2021')
     let index = 0;
@@ -44,11 +47,13 @@ export default function TransportDestinationList() {
         setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
         hideDatePicker();
     };
+
+
   return (
     <View style={styles.backgroung}>
       <Appbar>
         <Appbar.BackAction onPress={() => {}} />
-        <Appbar.Content title="Edit Vehicle" />
+        <Appbar.Content title="Add Driver" />
       </Appbar>
       <ScrollView>
       <View style={{padding:10}}/>
@@ -97,7 +102,7 @@ export default function TransportDestinationList() {
                 </View>
                 <View style={styles.Card}>
                     <View style={styles.CardContent}>
-                    <TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
+                        <TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                                 placeholder={date}
 
@@ -121,66 +126,71 @@ export default function TransportDestinationList() {
             </View>
 
             <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row',alignContent:'flex-start',justifyContent:'space-evenly'}}>
-                <Text style={styles.section_heading1}>Max Seats </Text>
-                <Text style={styles.section_heading2}>Name of the driver</Text>
+                <Text style={styles.section_heading}>Name </Text>
+                <Text style={styles.section_heading}>Phone No.</Text>
             </View>
 
         
             <View style={{flexDirection:'row',justifyContent:'space-evenly', paddingBottom:10}}>
-                <View style={styles.Card1}>
+                <View style={styles.Card}>
                     <View style={styles.CardContent}>
                     <TextInput
                 style={{...styles.search_input }}
-                placeholder="Seats"
+                placeholder="Vehicle No."
                 />
                     </View>
                 </View>
-                <View style={styles.Card2}>
+                <View style={styles.Card}>
                     <View style={styles.CardContent}>
                     <TextInput
                 style={{...styles.search_input }}
-                placeholder="Driver's name"
+                placeholder="Track ID"
                 />
                     </View>
                 </View>
             </View>
 
-            <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row',alignContent:'flex-start',justifyContent:'space-evenly'}}>
-                <Text style={styles.section_heading1}>Max Allowed</Text>
-                <Text style={styles.section_heading2}>Phone no. of the driver</Text>
+            <View style={{ width: "100%", paddingTop: 10,paddingLeft:'7%', flexDirection: 'row'}}>
+                <Text style={styles.section_heading3}>Current Address</Text>
             </View>
 
         
             <View style={{flexDirection:'row',justifyContent:'space-evenly', paddingBottom:10}}>
-                <View style={styles.Card1}>
+                <View style={styles.Card3}>
                     <View style={styles.CardContent}>
                     <TextInput
                 style={{...styles.search_input }}
-                placeholder="Allowed"
+                placeholder="Enter current address"
                 />
                     </View>
                 </View>
-                <View style={styles.Card2}>
+                
+            </View>
+
+
+            <View style={{ width: "100%", paddingTop: 10,paddingLeft:'7%', flexDirection: 'row'}}>
+                <Text style={styles.section_heading3}>Permanent Address</Text>
+            </View>
+
+        
+            <View style={{flexDirection:'row',justifyContent:'space-evenly', paddingBottom:10}}>
+                <View style={styles.Card3}>
                     <View style={styles.CardContent}>
                     <TextInput
                 style={{...styles.search_input }}
-                placeholder="Phone no."
+                placeholder="Enter permanent address"
                 />
                     </View>
                 </View>
+                
             </View>
 
             <View
                 style={{
-                    justifyContent: 'space-evenly',
+                    justifyContent: 'center',
                     alignItems: 'center',
                     padding:20,
-                    flexDirection:'row',
-
                 }}>
-                <Button style={{width:90}} color="#B04305"  mode="contained" onPress={() => console.log('Pressed')}>
-                    DELETE
-                </Button>
                 <Button style={{width:90}} color="#5177E7" mode="contained" onPress={() => console.log('Pressed')}>
                     SAVE
                 </Button>
@@ -250,7 +260,17 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'left',
         color: 'rgba(88, 99, 109, 0.85)',
-        
+        marginBottom: 5,
+    },
+    section_heading3: {
+        fontFamily: 'Poppins-Regular',
+        fontSize: 12,
+        width:210,
+        fontStyle: 'normal',
+        fontWeight: '600',
+        lineHeight: 18,
+        textAlign: 'left',
+        color: 'rgba(88, 99, 109, 0.85)',
         marginBottom: 5,
     },
       card_picker: {
@@ -295,6 +315,15 @@ const styles = StyleSheet.create({
         borderColor: '#00499F',
         borderRadius: 8,
       },
+      Card3: {
+        backgroundColor: 'white',
+        width:'85%',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        paddingHorizontal:10,
+        borderColor: '#00499F',
+        borderRadius: 8,
+      },
       CardContent: {
         borderRadius: 8,
         height: 59,
@@ -305,7 +334,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         width: '90%',
       },
-    pickdate: {
+      pickdate: {
         width: 120,
         fontFamily: 'Poppins-Regular',
         height: 50,

@@ -24,38 +24,44 @@ import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
+
+
 export default function TransportDestinationList() {
-    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-    const [date, setDate] = React.useState('21 May 2021')
+
+    const [isTimePickerVisible, setTimePickerVisibility] = React.useState(false);
+    const [Time, setTime] = React.useState('15:00')
     let index = 0;
     const dateMonths = {
         1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
     }
 
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
+    const showTimePicker = () => {
+        setTimePickerVisibility(true);
     };
 
     const hideDatePicker = () => {
-        setDatePickerVisibility(false);
+        setTimePickerVisibility(false);
     };
     const handleConfirm = (date) => {
         // console.warn("A date has been picked: ", date.toString());
-        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
-        hideDatePicker();
+        setTime(Time.getTime() + " " + TimeMonths[Time.getHour() + 1] + ":" + Time.getMinute())
+        hideTimePicker();
     };
+
+
   return (
     <View style={styles.backgroung}>
       <Appbar>
         <Appbar.BackAction onPress={() => {}} />
-        <Appbar.Content title="Edit Vehicle" />
+        <Appbar.Content title="Add Destination" />
       </Appbar>
       <ScrollView>
       <View style={{padding:10}}/>
 
+
             <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row',alignContent:'flex-start',justifyContent:'space-evenly'}}>
-                <Text style={styles.section_heading}>Vehicle No. </Text>
-                <Text style={styles.section_heading}>Track ID</Text>
+                <Text style={styles.section_heading}>Route Code </Text>
+                <Text style={styles.section_heading}>Stop Time</Text>
             </View>
 
         
@@ -64,42 +70,15 @@ export default function TransportDestinationList() {
                     <View style={styles.CardContent}>
                     <TextInput
                 style={{...styles.search_input }}
-                placeholder="Vehicle No."
+                placeholder="Route Code"
                 />
                     </View>
                 </View>
                 <View style={styles.Card}>
                     <View style={styles.CardContent}>
-                    <TextInput
-                style={{...styles.search_input }}
-                placeholder="Track ID"
-                />
-                    </View>
-                </View>
-            </View>
-
-
-
-            <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row',alignContent:'flex-start',justifyContent:'space-evenly'}}>
-                <Text style={styles.section_heading}>License No. </Text>
-                <Text style={styles.section_heading}>Date</Text>
-            </View>
-
-        
-            <View style={{flexDirection:'row',justifyContent:'space-evenly', paddingBottom:10}}>
-                <View style={styles.Card}>
-                    <View style={styles.CardContent}>
-                    <TextInput
-                style={{...styles.search_input }}
-                placeholder="License No."
-                />
-                    </View>
-                </View>
-                <View style={styles.Card}>
-                    <View style={styles.CardContent}>
-                    <TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
+                        <TouchableOpacity style={[styles.pickdate]} onPress={showTimePicker}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                placeholder={date}
+                                placeholder={Time}
 
                             />
                             <Feather size={18} color="black" name="calendar"
@@ -109,9 +88,9 @@ export default function TransportDestinationList() {
                                 }}
                             ></Feather>
                             <DateTimePickerModal
-                                isVisible={isDatePickerVisible}
+                                isVisible={isTimePickerVisible}
                                 style={styles.pickdate}
-                                mode="date"
+                                mode='time'
                                 onConfirm={handleConfirm}
                                 onCancel={hideDatePicker}
                             />
@@ -121,66 +100,71 @@ export default function TransportDestinationList() {
             </View>
 
             <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row',alignContent:'flex-start',justifyContent:'space-evenly'}}>
-                <Text style={styles.section_heading1}>Max Seats </Text>
-                <Text style={styles.section_heading2}>Name of the driver</Text>
+                <Text style={styles.section_heading}>Fees Type </Text>
+                <Text style={styles.section_heading}>Fees Amount</Text>
             </View>
 
         
             <View style={{flexDirection:'row',justifyContent:'space-evenly', paddingBottom:10}}>
-                <View style={styles.Card1}>
+                <View style={styles.Card}>
                     <View style={styles.CardContent}>
                     <TextInput
                 style={{...styles.search_input }}
-                placeholder="Seats"
+                placeholder="Fee Type"
                 />
                     </View>
                 </View>
-                <View style={styles.Card2}>
+                <View style={styles.Card}>
                     <View style={styles.CardContent}>
                     <TextInput
                 style={{...styles.search_input }}
-                placeholder="Driver's name"
+                placeholder="Fees Amount"
                 />
                     </View>
                 </View>
             </View>
 
-            <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row',alignContent:'flex-start',justifyContent:'space-evenly'}}>
-                <Text style={styles.section_heading1}>Max Allowed</Text>
-                <Text style={styles.section_heading2}>Phone no. of the driver</Text>
+            <View style={{ width: "100%", paddingTop: 10,paddingLeft:'7%', flexDirection: 'row'}}>
+                <Text style={styles.section_heading3}>Pick Up Address</Text>
             </View>
 
         
             <View style={{flexDirection:'row',justifyContent:'space-evenly', paddingBottom:10}}>
-                <View style={styles.Card1}>
+                <View style={styles.Card3}>
                     <View style={styles.CardContent}>
                     <TextInput
                 style={{...styles.search_input }}
-                placeholder="Allowed"
+                placeholder="Enter pick-up address"
                 />
                     </View>
                 </View>
-                <View style={styles.Card2}>
+                
+            </View>
+
+
+            <View style={{ width: "100%", paddingTop: 10,paddingLeft:'7%', flexDirection: 'row'}}>
+                <Text style={styles.section_heading3}>Drop Address</Text>
+            </View>
+
+        
+            <View style={{flexDirection:'row',justifyContent:'space-evenly', paddingBottom:10}}>
+                <View style={styles.Card3}>
                     <View style={styles.CardContent}>
                     <TextInput
                 style={{...styles.search_input }}
-                placeholder="Phone no."
+                placeholder="Enter drop address"
                 />
                     </View>
                 </View>
+                
             </View>
 
             <View
                 style={{
-                    justifyContent: 'space-evenly',
+                    justifyContent: 'center',
                     alignItems: 'center',
                     padding:20,
-                    flexDirection:'row',
-
                 }}>
-                <Button style={{width:90}} color="#B04305"  mode="contained" onPress={() => console.log('Pressed')}>
-                    DELETE
-                </Button>
                 <Button style={{width:90}} color="#5177E7" mode="contained" onPress={() => console.log('Pressed')}>
                     SAVE
                 </Button>
@@ -250,7 +234,17 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'left',
         color: 'rgba(88, 99, 109, 0.85)',
-        
+        marginBottom: 5,
+    },
+    section_heading3: {
+        fontFamily: 'Poppins-Regular',
+        fontSize: 12,
+        width:210,
+        fontStyle: 'normal',
+        fontWeight: '600',
+        lineHeight: 18,
+        textAlign: 'left',
+        color: 'rgba(88, 99, 109, 0.85)',
         marginBottom: 5,
     },
       card_picker: {
@@ -295,6 +289,15 @@ const styles = StyleSheet.create({
         borderColor: '#00499F',
         borderRadius: 8,
       },
+      Card3: {
+        backgroundColor: 'white',
+        width:'85%',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        paddingHorizontal:10,
+        borderColor: '#00499F',
+        borderRadius: 8,
+      },
       CardContent: {
         borderRadius: 8,
         height: 59,
@@ -305,7 +308,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         width: '90%',
       },
-    pickdate: {
+      pickdate: {
         width: 120,
         fontFamily: 'Poppins-Regular',
         height: 50,
