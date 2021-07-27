@@ -7,7 +7,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import Evillcons from 'react-native-vector-icons/Feather';
 
-const testhostel = () => {
+const EditType = () => {
 
 
     return (
@@ -430,4 +430,4 @@ const styles = StyleSheet.create({
 
 
 
-export default testhostel;
+export default EditType;
