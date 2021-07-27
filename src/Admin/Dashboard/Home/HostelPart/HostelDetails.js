@@ -11,12 +11,12 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Button } from 'react-native-paper';
 
-const testallocation = () => {
+const HostelDetails = ({navigation}) => {
     return (
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
             <ModalSelector
 
-                initValue="Allocation List"
+                initValue="Hostel Details"
 
                 //style={styles.card}
                 initValueTextStyle={styles.SelectedValue}
@@ -62,12 +62,12 @@ const testallocation = () => {
                                     marginHorizontal: -5,
                                 }}>
 
-                                User
+                                Hostel Name
 
                             </Text>
 
                             <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
-                                402,3rd floor
+                            Ph:7879428976
                             </Text>
 
 
@@ -85,11 +85,11 @@ const testallocation = () => {
 
 
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.differentusers}>
+                        {/* <TouchableOpacity style={styles.differentusers}>
                             <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
                                 User Type
                             </Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         
 
@@ -97,10 +97,10 @@ const testallocation = () => {
                                 <Text
                                     style={{
                                         fontSize: 12,
-                                        color: '#505069',
+                                        color: '#211C5A',
                                         fontFamily: 'Poppins-Regular',
                                     }}>
-                                    Hostel
+                                    Address
 
                                 </Text>
 
@@ -111,15 +111,16 @@ const testallocation = () => {
                                         color: '#211C5A',
                                         fontFamily: 'Poppins-Regular',
                                         marginTop: 5,
+                                        marginHorizontal:8
                                     }}>
-                                    Edit
+                                    Type
                                 </Text>
-                                <Icon1
+                                {/* <Icon1
                                     size={12}
                                     backgroundColor=" #211C5A"
                                     name="edit"
                                     style={{ paddingTop: 7, paddingRight: 12 }}
-                                />
+                                /> */}
                             </TouchableOpacity> 
 
 
@@ -148,7 +149,7 @@ const testallocation = () => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                            Register: 21 May,2021
+                            Uday Singh
                         </Text>
                     </View>
                     <View style={{ marginTop: 15 }}>
@@ -159,7 +160,7 @@ const testallocation = () => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                            Vacate: 21 Sept,2021
+                           Ph:7879428976
                         </Text>
 
                     </View>
@@ -181,12 +182,12 @@ const testallocation = () => {
                                     marginHorizontal: -5,
                                 }}>
 
-                                User
+                                Hostel Name
 
                             </Text>
 
                             <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
-                                402,3rd floor
+                            Ph:7879428976
                             </Text>
 
 
@@ -204,11 +205,11 @@ const testallocation = () => {
 
 
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.differentusers}>
+                        {/* <TouchableOpacity style={styles.differentusers}>
                             <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
                                 User Type
                             </Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         
 
@@ -216,10 +217,10 @@ const testallocation = () => {
                                 <Text
                                     style={{
                                         fontSize: 12,
-                                        color: '#505069',
+                                        color: '#211C5A',
                                         fontFamily: 'Poppins-Regular',
                                     }}>
-                                    Hostel
+                                    Address
 
                                 </Text>
 
@@ -230,16 +231,16 @@ const testallocation = () => {
                                         color: '#211C5A',
                                         fontFamily: 'Poppins-Regular',
                                         marginTop: 5,
+                                        marginHorizontal:8
                                     }}>
-                                    Edit
+                                    Type
                                 </Text>
-                                <Icon1
+                                {/* <Icon1
                                     size={12}
-                                    
-                                    color="#211C5A"
+                                    backgroundColor=" #211C5A"
                                     name="edit"
-                                    style={{ paddingTop: 7, paddingRight: 12}}
-                                />
+                                    style={{ paddingTop: 7, paddingRight: 12 }}
+                                /> */}
                             </TouchableOpacity> 
 
 
@@ -268,7 +269,7 @@ const testallocation = () => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                            Register: 21 May,2021
+                            Uday Singh
                         </Text>
                     </View>
                     <View style={{ marginTop: 15 }}>
@@ -279,7 +280,7 @@ const testallocation = () => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                            Vacate: 21 Sept,2021
+                           Ph:7879428976
                         </Text>
 
                     </View>
@@ -287,6 +288,7 @@ const testallocation = () => {
 
 
             </View>
+
 
 
 
@@ -414,5 +416,5 @@ const styles = StyleSheet.create({
 
 });
 
-export default testallocation;
+export default HostelDetails;
 

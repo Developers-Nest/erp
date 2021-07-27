@@ -7,7 +7,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import Evillcons from 'react-native-vector-icons/Feather';
 
-const testhostel = () => {
+const HostelAllocationAdd = () => {
 
 
 
@@ -465,4 +465,4 @@ const styles = StyleSheet.create({
 
 
 
-export default testhostel;
+export default HostelAllocationAdd;

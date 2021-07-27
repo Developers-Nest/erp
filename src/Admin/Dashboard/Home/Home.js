@@ -39,6 +39,9 @@ import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
 import Occurence from '../Occurence/Occurence';
 
+//new and final for navigation only for drawer not from menu
+import Hostel from './HostelPart/Hostel';
+
 //navigations from home screen second screen
 import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
@@ -210,7 +213,7 @@ function DrawerContent(props) {
           label={({focused, color}) => (
             <Text style={styles.drawer_item}>Hostel</Text>
           )}
-          onPress={() => props.navigation.navigate('Attendance')}
+          onPress={() => props.navigation.navigate('Hostel')}
         />
         <DrawerItem
           style={styles.item}
@@ -345,6 +348,7 @@ export default function Route() {
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
+      <DrawerNav.Screen name="Hostel" component={Hostel} />
       {/* <DrawerNav.Screen name="Assignment" component={Assignment} /> */}
       <DrawerNav.Screen name="Lesson Plan" component={LessonPlan} />
       <DrawerNav.Screen name="Books" component={Books} />
