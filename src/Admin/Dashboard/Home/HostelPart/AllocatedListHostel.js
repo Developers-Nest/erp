@@ -166,7 +166,7 @@ const AllocatedListHostel = ({navigation}) => {
 
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
+                            <Text style={{ fontSize: 12, color: '#505069', fontFamily: 'openSans' }}>
                                 User Type
                             </Text>
                         </TouchableOpacity>
@@ -285,7 +285,7 @@ const AllocatedListHostel = ({navigation}) => {
 
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
+                            <Text style={{ fontSize: 12, color: '#505069', fontFamily: 'openSans' }}>
                                 User Type
                             </Text>
                         </TouchableOpacity>

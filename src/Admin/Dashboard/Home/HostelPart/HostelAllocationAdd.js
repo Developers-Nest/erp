@@ -31,7 +31,6 @@ const HostelAllocationAdd = ({navigation}) => {
         setDatePickerVisibility1(false);
     };
     const handleConfirm1 = (date1) => {
-        console.warn("A date has been picked: ", date1.toString());
         setDate1(date1.getDate() + " " + dateMonths[date1.getMonth() + 1] + " " + date1.getFullYear())
         hideDatePicker1();
     };
@@ -50,7 +49,6 @@ const HostelAllocationAdd = ({navigation}) => {
         setDatePickerVisibility(false);
     };
     const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date.toString());
         setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
         hideDatePicker();
     };
