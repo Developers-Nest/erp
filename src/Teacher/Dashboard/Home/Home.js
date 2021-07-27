@@ -702,6 +702,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingHorizontal: 10,
     width: '90%',
+    color: 'black'
   },
   section_heading: {
     fontFamily: 'Poppins-Regular',
