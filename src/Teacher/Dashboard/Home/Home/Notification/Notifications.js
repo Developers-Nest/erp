@@ -107,7 +107,7 @@ export default function Notification() {
           )}
         </View>
         <View style={styles.titleContainer}>
-          <Text style={styles.headerText}>{ section.title }  ({ section.isRead ? 'Read' : 'Unread'})</Text>
+          <Text style={styles.headerText}>{ section.title }</Text>
           {isActive ? (
             <View style={styles.collapseIconContainer}>
               <FontAwesome5
@@ -131,7 +131,7 @@ export default function Notification() {
   }
 
   function renderContent(section, _, isActive) {
-    
+
     if(!section.isRead){
       markRead(section._id)
       section.isRead = true

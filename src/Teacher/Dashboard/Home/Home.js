@@ -254,7 +254,10 @@ const Home = ({navigation}) => {
             }}
             
           />
-          <Badge style={{backgroundColor:'blue',marginBottom:35,marginRight:10}}>3</Badge>
+          <Badge 
+            style={{backgroundColor: institute? institute.themeColor : 'blue',marginBottom:35,marginRight:10}}>
+              {notReadNotifications}
+            </Badge>
 
         </TouchableOpacity>
       </View>
