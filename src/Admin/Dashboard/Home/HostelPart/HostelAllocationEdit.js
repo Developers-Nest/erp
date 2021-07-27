@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput, Alert } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -11,11 +11,11 @@ import AntDesign from 'react-native-vector-icons/AntDesign';//for users section 
 
 import { useSelector } from 'react-redux';
 
-const HostelAllocationAdd = ({navigation}) => {
+const HostelAllocationEdit = ({ navigation }) => {
 
 
- //theming
- const institute = useSelector(state => state.institute);
+    //theming
+    const institute = useSelector(state => state.institute);
 
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('29 May 2021')
@@ -60,54 +60,54 @@ const HostelAllocationAdd = ({navigation}) => {
 
 
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-                         {/* header start */}
+            {/* header start */}
 
-        <View
-          style={{
-            backgroundColor: institute ? institute.themeColor : '#FF5733',
-            ...styles.header,
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('AllocatedListHostel');
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                paddingLeft: 20,
-                paddingTop: 20,
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontFamily: 'NunitoSans-Regular',
-              fontSize: 28,
-              fontWeight: '600',
-              alignSelf: 'center',
-              paddingLeft: 30,
-              color: 'white',
-            }}>
-            Hostel Allocation
-          </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('AllocatedListHostel')}
-            style={{
-              justifyContent: 'flex-end',
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-           </TouchableOpacity>
-        </View>
+            <View
+                style={{
+                    backgroundColor: institute ? institute.themeColor : '#FF5733',
+                    ...styles.header,
+                }}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('AllocatedListHostel');
+                    }}>
+                    <AntDesign
+                        size={24}
+                        color="white"
+                        name="left"
+                        style={{
+                            alignSelf: 'center',
+                            fontSize: 25,
+                            color: 'white',
+                            paddingLeft: 20,
+                            paddingTop: 20,
+                        }}
+                    />
+                </TouchableOpacity>
+                <Text
+                    style={{
+                        fontStyle: 'normal',
+                        fontFamily: 'NunitoSans-Regular',
+                        fontSize: 28,
+                        fontWeight: '600',
+                        alignSelf: 'center',
+                        paddingLeft: 30,
+                        color: 'white',
+                    }}>
+                    Hostel Allocation
+                </Text>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('AllocatedListHostel')}
+                    style={{
+                        justifyContent: 'flex-end',
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                </TouchableOpacity>
+            </View>
 
-        {/* header ends */}
+            {/* header ends */}
 
 
 
@@ -242,10 +242,21 @@ const HostelAllocationAdd = ({navigation}) => {
 
 
                 </View>
-                <View style={styles.fixToText}>
-                    
-                    <Pressable style={styles.button}  onPress={() => navigation.navigate('HostelAllocationEdit')}
-           >
+                {/* <View style={styles.fixToText}>
+
+                    <Pressable style={styles.button} onPress={() => navigation.navigate('RoomsList')}
+                    >
+                        <Text style={styles.text}>Save</Text>
+                    </Pressable>
+
+
+                </View> */}
+
+<View style={styles.fixToText}>
+                    <Pressable style={styles.button1} onPress={() => Alert.alert('Deleted')}>
+                        <Text style={styles.text1}>Delete</Text>
+                    </Pressable>
+                    <Pressable style={styles.button} onPress={() => navigation.navigate('RoomsList')} >
                         <Text style={styles.text}>Save</Text>
                     </Pressable>
 
@@ -279,49 +290,49 @@ const styles = StyleSheet.create({
     },
     button1: {
 
-        marginTop:0,
-        marginBottom:0,
-           
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-            alignSelf: 'flex-end',
-            padding: 3,
-            paddingHorizontal: 25,
-            paddingVertical:2,
-            borderRadius: 4,
-            marginRight: 30,
-            height:46,
-            borderColor:'#d2691e',
-            borderWidth:1.5
-            
-        },
-        button: {
+        marginTop: 0,
+        marginBottom: 0,
 
-        
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingVertical: 12,
-            paddingHorizontal: 25,
-            borderRadius: 4,
-            elevation: 3,
-            backgroundColor: '#5177E7',
-        },
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        alignSelf: 'flex-end',
+        padding: 3,
+        paddingHorizontal: 25,
+        paddingVertical: 2,
+        borderRadius: 4,
+        marginRight: 30,
+        height: 46,
+        borderColor: '#d2691e',
+        borderWidth: 1.5
 
-        text1: {
-            fontSize: 18,
-            fontWeight: '500',
-            lineHeight: 21,
-            letterSpacing: 0.25,
-            color: '#d2691e',
-          },
-        text: {
-            fontSize: 18,
-            lineHeight: 21,
-            fontWeight: '500',
-            letterSpacing: 0.25,
-            color: 'white',
-        },
+    },
+    button: {
+
+
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 25,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: '#5177E7',
+    },
+
+    text1: {
+        fontSize: 18,
+        fontWeight: '500',
+        lineHeight: 21,
+        letterSpacing: 0.25,
+        color: '#d2691e',
+    },
+    text: {
+        fontSize: 18,
+        lineHeight: 21,
+        fontWeight: '500',
+        letterSpacing: 0.25,
+        color: 'white',
+    },
 
     fixToText: {
         flexDirection: 'row',
@@ -509,11 +520,11 @@ const styles = StyleSheet.create({
     header: {
         height: 69,
         flexDirection: 'row',
-      },
+    },
 
 });
 
 
 
 
-export default HostelAllocationAdd;
+export default HostelAllocationEdit;
