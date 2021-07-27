@@ -103,7 +103,7 @@ const Home_Route = () => {
           },
           headerRight: () => (
             <TouchableOpacity onPress={() => {}}>
-              <Badge style={{marginRight:10,backgroundColor:'blue'}}>3</Badge>
+              <Badge style={{marginRight:10,marginBottom:-12,backgroundColor:'#007FFF'}}>3</Badge>
               <FontAwesome5
                 name="bell"
                 style={{

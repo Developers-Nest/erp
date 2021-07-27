@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput ,TouchableWithoutFeedback} from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
@@ -111,7 +111,10 @@ const HostelDetails = ({navigation}) => {
                 </View>
             </View>
 
-
+<TouchableWithoutFeedback
+ onPress={() => navigation.navigate('HostelRequest')}
+           
+>
 
             <View style={styles.section} >
                 <View style={styles.details}>
@@ -231,6 +234,7 @@ const HostelDetails = ({navigation}) => {
 
 
             </View>
+            </TouchableWithoutFeedback>
 
 
             <View style={styles.section} >
