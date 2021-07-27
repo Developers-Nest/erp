@@ -16,14 +16,12 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import ModalSelector from 'react-native-modal-selector';
 
 export default function ExamReport({navigation}) {
-  // const [open, setOpen] = useState(null);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
     {label: 'Final Reports', key: 'Final Reports'},
     {label: 'Mid Term', key: 'Mid Term'},
   ]);
 
-  // const [open1, setOpen1] = useState(null);
   const [className, setclassName] = useState(null);
   const [classes, setclasses] = useState([
     {label: 'Class1', key: 'Class1'},
@@ -31,7 +29,6 @@ export default function ExamReport({navigation}) {
     {label: 'Class3', key: 'Class3'},
   ]);
 
-  // const [open2, setOpen2] = useState(null);
   const [batch, setbatch] = useState(null);
   const [batches, setbatches] = useState([
     {label: 'Batch1', key: 'Batch1'},
@@ -39,7 +36,6 @@ export default function ExamReport({navigation}) {
     {label: 'Batch3', key: 'Batch3'},
   ]);
 
-  // const [open3, setOpen3] = useState(null);
   const [subject, setsubject] = useState(null);
   const [subjects, setsubjects] = useState([
     {label: 'Subject1', key: 'Subject1'},
@@ -47,6 +43,7 @@ export default function ExamReport({navigation}) {
     {label: 'Subject3', key: 'Subject3'},
   ]);
 
+  //selected values
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -158,7 +155,7 @@ export default function ExamReport({navigation}) {
             data={classes}
             initValue="Class1"
             onChange={option => {
-              setclass(option.key);
+              setclassName(option.key);
             }}
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
