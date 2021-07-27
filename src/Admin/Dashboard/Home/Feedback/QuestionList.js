@@ -12,7 +12,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
-const testquestionlist = () => {
+const QuestionList = () => {
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -518,4 +518,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default testquestionlist;
+export default QuestionList;
