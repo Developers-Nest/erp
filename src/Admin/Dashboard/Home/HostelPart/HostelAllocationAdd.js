@@ -7,9 +7,15 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import Evillcons from 'react-native-vector-icons/Feather';
 
-const HostelAllocationAdd = () => {
+import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
+
+import { useSelector } from 'react-redux';
+
+const HostelAllocationAdd = ({navigation}) => {
 
 
+ //theming
+ const institute = useSelector(state => state.institute);
 
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('29 May 2021')
@@ -54,14 +60,55 @@ const HostelAllocationAdd = () => {
 
 
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-            <ModalSelector
+                         {/* header start */}
 
-                initValue="Hostel Allocation"
-
-
-                initValueTextStyle={styles.SelectedValue}
-                selectTextStyle={styles.SelectedValue}
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : '#FF5733',
+            ...styles.header,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('AllocatedListHostel');
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
             />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontFamily: 'NunitoSans-Regular',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
+            Hostel Allocation
+          </Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AllocatedListHostel')}
+            style={{
+              justifyContent: 'flex-end',
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+           </TouchableOpacity>
+        </View>
+
+        {/* header ends */}
+
 
 
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
@@ -458,7 +505,10 @@ const styles = StyleSheet.create({
 
     },
 
-
+    header: {
+        height: 69,
+        flexDirection: 'row',
+      },
 
 });
 

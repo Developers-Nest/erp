@@ -1,27 +1,90 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
+
+import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Icon1 from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
-import Icon2 from 'react-native-vector-icons/Ionicons';
-import Evillcons from 'react-native-vector-icons/Feather';
-import check from 'react-native-vector-icons/Ionicons';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Button } from 'react-native-paper';
+
+
+import { useSelector } from 'react-redux';
 
 const HostelDetails = ({navigation}) => {
+    //theming
+  const institute = useSelector(state => state.institute);
+
     return (
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-            <ModalSelector
+             {/* header start */}
 
-                initValue="Hostel Details"
-
-                //style={styles.card}
-                initValueTextStyle={styles.SelectedValue}
-            //selectTextStyle={styles.SelectedValue}
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : '#FF5733',
+            ...styles.header,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Home');
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
             />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontFamily: 'NunitoSans-Regular',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
+            Hostel Details
+          </Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AllocatedListHostel')}
+            style={{
+              justifyContent: 'flex-end',
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 5 }}>
+              {/* <Ionicons
+                  name="add-circle"
+                  color="#900"
+                  style={{
+                    fontSize: 35,
+                    color: 'white',
+                    paddingRight: 20,
+                  }}
+                /> */}
+              <MaterialIcon
+                name="align-horizontal-left"
+                color="#900"
+                style={{
+                  fontSize: 35,
+                  color: 'white',
+                  paddingRight: 20,
+                }}
+              />
+
+
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        {/* header ends */}
 
             <View style={{ marginHorizontal: 10, ...styles.shadow }}>
                 <View style={styles.search}>
@@ -412,7 +475,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         borderRadius: 5,
     },
-
+    header: {
+        height: 69,
+        flexDirection: 'row',
+      },
+     
 
 });
 
