@@ -7,10 +7,11 @@ import {
   SafeAreaView,
   Linking,
   TextInput,
+  
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
-import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
+import {Text, Searchbar, Card, Button, Drawer,Badge} from 'react-native-paper';
 import {
   createDrawerNavigator,
   useIsDrawerOpen,
@@ -204,12 +205,14 @@ const Home = ({navigation}) => {
             name="bell"
             style={{
               alignSelf: 'center',
-              fontSize: 25,
+              fontSize: 30,
               color: 'black',
-              paddingRight: 20,
+              marginTop:5,
+              
               color: institute ? institute.themeColor : 'black',
             }}
           />
+          <Badge style={{backgroundColor:'blue',marginBottom:35,marginRight:10}}>3</Badge>
         </TouchableOpacity>
       </View>
       <View style={{paddingTop: 10}}></View>

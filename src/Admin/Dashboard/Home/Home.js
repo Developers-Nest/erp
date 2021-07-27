@@ -12,7 +12,7 @@ import HomeScreen2 from './HomeScreen2';
 import HomeScreen1 from './HomeScreen1';
 import Swiper from 'react-native-swiper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
+import {Text, Badge, Button, Drawer} from 'react-native-paper';
 import {
   createDrawerNavigator,
   useIsDrawerOpen,
@@ -103,15 +103,19 @@ const Home_Route = () => {
           },
           headerRight: () => (
             <TouchableOpacity onPress={() => {}}>
+              <Badge style={{marginRight:10,backgroundColor:'blue'}}>3</Badge>
               <FontAwesome5
                 name="bell"
                 style={{
                   alignSelf: 'center',
-                  fontSize: 25,
+                  fontSize: 30,
                   color: institute ? institute.themeColor : 'black',
                   paddingRight: 20,
+                  marginBottom:10
+                  
                 }}
               />
+              
             </TouchableOpacity>
           ),
           headerLeft: () => (
@@ -184,7 +188,7 @@ function DrawerContent(props) {
     try {
       let res = await write('token', 'null');
       if (res) {
-        props.navigation.navigate('Role Based Login');
+        props.navigation.replace('Role Based Login');
       } else throw new Error('Cannot Logout!!');
     } catch (err) {
       alert('Cannot Logout!!' + err);
