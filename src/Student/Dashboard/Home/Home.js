@@ -503,7 +503,7 @@ function DrawerContent(props) {
     try {
       let res = await write('token', 'null');
       if (res) {
-        props.navigation.navigate('Role Based Login');
+        props.navigation.replace('Role Based Login');
       } else throw new Error('Cannot Logout!!');
     } catch (err) {
       alert('Cannot Logout!!' + err);
