@@ -229,7 +229,11 @@ const HomeScreen1 = () => {
           </View>
 
           <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Content Library');
+              }}>
               <EntypoIcon size={36.83} color="#FCBC05" name="text-document" />
 
               <Text
@@ -242,7 +246,7 @@ const HomeScreen1 = () => {
                 }}>
                 Content Library
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.section}>

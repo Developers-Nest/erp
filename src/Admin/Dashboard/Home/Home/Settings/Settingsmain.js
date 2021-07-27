@@ -1,13 +1,4 @@
 import React, {useState, useEffect} from 'react';
-//icons
-import AntDesign from 'react-native-vector-icons/AntDesign';
-//for users section icons
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-//dropdown
-import ModalSelector from 'react-native-modal-selector';
-//navigate
-import AddVisitors from './AddVisitors';
 
 import {
   StyleSheet,
@@ -19,13 +10,27 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+
+//dropdown
+import ModalSelector from 'react-native-modal-selector';
+
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+//checkbox
 import {CheckBox} from 'react-native-elements';
+
+//redux
 import {useSelector} from 'react-redux';
 
+//helpers
 import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
 import get from '../../../../../services/helpers/request/get';
 import read from '../../../../../services/localstorage/read';
+
 export default function Settingsmain({navigation}) {
   const [showContent, setShowContent] = React.useState('Users');
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -60,6 +65,7 @@ export default function Settingsmain({navigation}) {
 
   //for checkboxes
   const [checkBoxValue, setCheckBoxValue] = useState(false);
+
   function Visitors() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -94,18 +100,18 @@ export default function Settingsmain({navigation}) {
           {/* new section */}
           {visitors.map(visitor => {
             return (
-              <View style={styles.section}>
+              <View style={styles.section} key={visitor._id}>
                 <View style={styles.details}>
                   <View style={styles.userinhostels}>
                     <View style={styles.differentusers}>
                       <Text
                         style={{
                           fontSize: 18,
-                          color: '#211C5A',
+                          color: institute ? institute.themeColor : '#FF5733',
                           fontFamily: 'Poppins-Regular',
                           marginHorizontal: -5,
                         }}>
-                        {}
+                        {' '}
                         {visitor.name}
                         {/* {assignment.title || 'Title Not Found'} */}
                       </Text>
@@ -138,14 +144,14 @@ export default function Settingsmain({navigation}) {
                         <Text
                           style={{
                             fontSize: 12,
-                            color: '#211C5A',
+                            color: institute ? institute.themeColor : '#211C5A',
                             fontFamily: 'Poppins-Regular',
                           }}>
                           Edit
                         </Text>
                         <Icon
                           size={12}
-                          color="#211C5A"
+                          color={institute ? institute.themeColor : '#FF5733'}
                           name="edit"
                           style={{paddingTop: 2, paddingRight: 10}}
                         />
@@ -158,7 +164,7 @@ export default function Settingsmain({navigation}) {
                 <View style={styles.belowhr}>
                   <Text
                     style={{
-                      color: '#211C5A',
+                      color: institute ? institute.themeColor : '#FF5733',
                       fontSize: 12,
                       fontFamily: 'Poppins-Regular',
                     }}>

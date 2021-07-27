@@ -12,7 +12,7 @@ import HomeScreen2 from './HomeScreen2';
 import HomeScreen1 from './HomeScreen1';
 import Swiper from 'react-native-swiper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
+import {Text, Badge, Button, Drawer} from 'react-native-paper';
 import {
   createDrawerNavigator,
   useIsDrawerOpen,
@@ -29,7 +29,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 //drawer navigation
 import Books from './Books/Books';
-import ContentLibrary from './Content Library/ContentLibrary';
+import ContentLibrary from './Home/Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
 import LessonPlan from './Lesson Plan/LessonPlan';
 import Transport from './Transport/Transport';
@@ -38,6 +38,9 @@ import CceMarks from './CCEMarks/CCEmarks';
 import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
 import Occurence from '../Occurence/Occurence';
+
+//new and final for navigation only for drawer not from menu
+import Hostel from './HostelPart/Hostel';
 
 //navigations from home screen second screen
 import SettingUsers from './Home/Settings';
@@ -100,15 +103,19 @@ const Home_Route = () => {
           },
           headerRight: () => (
             <TouchableOpacity onPress={() => {}}>
+              <Badge style={{marginRight:10,marginBottom:-12,backgroundColor:'#007FFF'}}>3</Badge>
               <FontAwesome5
                 name="bell"
                 style={{
                   alignSelf: 'center',
-                  fontSize: 25,
+                  fontSize: 30,
                   color: institute ? institute.themeColor : 'black',
                   paddingRight: 20,
+                  marginBottom:10
+                  
                 }}
               />
+              
             </TouchableOpacity>
           ),
           headerLeft: () => (
@@ -150,6 +157,11 @@ const Home_Route = () => {
         component={Attendance}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="Content Library"
+        component={ContentLibrary}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
@@ -176,7 +188,7 @@ function DrawerContent(props) {
     try {
       let res = await write('token', 'null');
       if (res) {
-        props.navigation.navigate('Role Based Login');
+        props.navigation.replace('Role Based Login');
       } else throw new Error('Cannot Logout!!');
     } catch (err) {
       alert('Cannot Logout!!' + err);
@@ -198,14 +210,14 @@ function DrawerContent(props) {
           label={({focused, color}) => (
             <Text style={styles.drawer_item}>Academics</Text>
           )}
-          onPress={() => props.navigation.navigate('Content Library')}
+          onPress={() => Alert.alert('Add Academics screen')}
         />
         <DrawerItem
           style={styles.item}
           label={({focused, color}) => (
             <Text style={styles.drawer_item}>Hostel</Text>
           )}
-          onPress={() => props.navigation.navigate('Attendance')}
+          onPress={() => props.navigation.navigate('Hostel')}
         />
         <DrawerItem
           style={styles.item}
@@ -340,6 +352,7 @@ export default function Route() {
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
+      <DrawerNav.Screen name="Hostel" component={Hostel} />
       {/* <DrawerNav.Screen name="Assignment" component={Assignment} /> */}
       <DrawerNav.Screen name="Lesson Plan" component={LessonPlan} />
       <DrawerNav.Screen name="Books" component={Books} />
