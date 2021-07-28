@@ -1,60 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-
 // helpers
-import get from '../../../../../services/helpers/request/get'
-import read from '../../../../../services/localstorage/read'
+import get from '../../../../../services/helpers/request/get';
+import read from '../../../../../services/localstorage/read';
 
 // redux
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 // loading screen
 import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
 
 export default function Circular() {
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+  const userInfo = useSelector(state => state.userInfo);
+  const [circularList, setCircularList] = useState([]);
+  const [fetched, setFetched] = useState(false);
 
-  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen()
-  const userInfo = useSelector((state) => state.userInfo)
-  const [circularList, setCircularList] = useState([])
-  const [fetched, setFetched] = useState(false)
-
-  let parseDate = (myDate)=>{
-    let d = new Date(myDate)
-    return d.toString().slice(0, 15)
-  }
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
 
   useEffect(async () => {
-    showLoadingScreen()
+    showLoadingScreen();
     try {
-      let token = await read('token')
-      let slug = `/circular?department=${userInfo.department}`
-      let res = await get(slug, token)
-      let circularArray = []
-      res.map((cir) => {
+      let token = await read('token');
+      let slug = `/circular?department=${userInfo.department}`;
+      let res = await get(slug, token);
+      let circularArray = [];
+      res.map(cir => {
         circularArray.push({
           title: cir.circularsubject,
           content: cir.circularContent,
-          time: parseDate(cir.circularDate)
-        })
-      })
-      setCircularList(circularArray)
-      setFetched(true)
+          time: parseDate(cir.circularDate),
+          url: cir.url,
+        });
+      });
+      setCircularList(circularArray);
+      setFetched(true);
     } catch (err) {
-      alert('Cannot fetch circular!!')
+      alert('Cannot fetch circular!!');
     }
-    hideLoadingScreen()
-  }, [])
+    hideLoadingScreen();
+  }, []);
 
   function renderHeader(section, _, isActive) {
     return (
@@ -77,9 +77,7 @@ export default function Circular() {
                 color={'rgba(62, 104, 228, 0.9)'}
               />
               <Text style={styles.collapseIconText}>Read Less</Text>
-              
             </View>
-            
           </View>
         ) : (
           <View
@@ -98,7 +96,6 @@ export default function Circular() {
               />
               <Text style={styles.collapseIconText}>Read More</Text>
             </View>
-           
           </View>
         )}
       </View>
@@ -113,16 +110,16 @@ export default function Circular() {
           animation={isActive ? 'bounceIn' : undefined}>
           {section.content}
         </Text>
-        <TouchableOpacity>
-        <View style={{justifyContent:'flex-end',flexDirection:'row'}}>
-        <Text style={styles.collapseIconText1}>download</Text>
-        <FontAwesome5
-                name="file-download"
-                size={20}
-                color={'rgba(62, 104, 228, 0.9)'}
-              />
-              </View>
-              </TouchableOpacity>
+        <TouchableOpacity onPress={() => Linking.openURL(section.url)}>
+          <View style={{justifyContent: 'flex-end', flexDirection: 'row'}}>
+            <Text style={styles.collapseIconText1}>download</Text>
+            <FontAwesome5
+              name="file-download"
+              size={20}
+              color={'rgba(62, 104, 228, 0.9)'}
+            />
+          </View>
+        </TouchableOpacity>
       </Animatable.View>
     );
   }
@@ -137,24 +134,22 @@ export default function Circular() {
   return (
     <View style={styles.container}>
       {loadingScreen}
-      {
-        fetched ? (
-          <ScrollView style={{ padding: 10 }}>
-            <Accordion
-              activeSections={ActiveSections}
-              sections={circularList}
-              touchableComponent={TouchableOpacity}
-              renderHeader={renderHeader}
-              renderContent={renderContent}
-              duration={400}
-              onChange={setSections}
-              renderAsFlatList={false}
-              containerStyle={styles.cardsWrapper}
-              sectionContainerStyle={styles.card}
-            />
-          </ScrollView>
-        ) : (null)
-      }
+      {fetched ? (
+        <ScrollView style={{padding: 10}}>
+          <Accordion
+            activeSections={ActiveSections}
+            sections={circularList}
+            touchableComponent={TouchableOpacity}
+            renderHeader={renderHeader}
+            renderContent={renderContent}
+            duration={400}
+            onChange={setSections}
+            renderAsFlatList={false}
+            containerStyle={styles.cardsWrapper}
+            sectionContainerStyle={styles.card}
+          />
+        </ScrollView>
+      ) : null}
     </View>
   );
 }
@@ -167,7 +162,6 @@ const styles = StyleSheet.create({
   content: {
     padding: 10,
     /* BODY-12 */
-   
 
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
@@ -204,7 +198,7 @@ const styles = StyleSheet.create({
   card: {
     marginVertical: 10,
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 3,
@@ -242,7 +236,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 14,
     color: '#58636D',
-    marginRight:5
+    marginRight: 5,
   },
   collapseIconTextTime: {
     fontSize: 10,
