@@ -26,7 +26,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
 
-export default function TransportDestinationList() {
+export default function EditDriver() {
 
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('21 May 2021')

@@ -20,7 +20,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auto } from 'async';
 
-export default function TransportVehicleList() {
+export default function TransportDriverList() {
   return (
     <View style={styles.backgroung}>
       <Appbar>

@@ -489,6 +489,14 @@ const styles = StyleSheet.create({
         borderBottomColor: '#333',
         borderBottomWidth: 0.5,
       },
+      belowhr: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: 10,
+        justifyContent: 'space-between',
+        paddingBottom: 10,
+        borderBottomColor: '#333',
+      },
       userinhostels: {
         marginTop: 10,
       },
@@ -518,5 +526,27 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingBottom: 10,
         borderBottomColor: '#333',
+      },
+      details: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginTop: 10,
+        paddingBottom: 0,
+        borderBottomColor: '#333',
+        borderBottomWidth: 0.5,
+      },
+      userinhostels: {
+        marginTop: 10,
+      },
+      differentusers: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 2,
+        justifyContent: 'space-between',
+      },
+      userstext: {
+        fontSize: 16,
+        paddingVertical: 4,
+        fontWeight: '300',
       },
 });

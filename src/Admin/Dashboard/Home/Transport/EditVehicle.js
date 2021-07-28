@@ -24,7 +24,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
-export default function TransportDestinationList() {
+export default function EditVehicle() {
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('21 May 2021')
     let index = 0;
