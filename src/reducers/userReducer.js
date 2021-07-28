@@ -1,27 +1,36 @@
-import {USERINFO, INSTITUTE} from './actionType'
+import {USERINFO, INSTITUTE, SETNOTICATIONS, NOTREADNOTIFICATIONS} from './actionType'
 
 // initial state
 const initialState = {
-    
+    count: 0
 };
 
 // action reducer
 function UserReducer(state = initialState, action) {
     switch(action.type) {
         case USERINFO:
-            console.log("USERINFO.Redux ", action.userInfo)
-
             return {
                 ...state,
                 userInfo: action.userInfo
             }
 
         case INSTITUTE:
-
-            console.log('INSTITUTE.Redux ', action.institute)
             return {
                 ...state,
                 institute: action.institute
+            }
+
+        case SETNOTICATIONS:
+            console.log('Notifications.Redux ', action.notificatons)
+            return {
+                ... state,
+                notificatons: action.notificatons
+            }
+        case NOTREADNOTIFICATIONS:
+            console.log('Not Read Notification count ', action.count)
+            return {
+                ... state,
+                count: action.count
             }
 
     default:

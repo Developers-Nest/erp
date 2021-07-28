@@ -7,7 +7,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import Evillcons from 'react-native-vector-icons/Feather';
 
-const testaddquestion = () => {
+const AddType = () => {
 
 
     return (
@@ -17,7 +17,7 @@ const testaddquestion = () => {
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
             <ModalSelector
 
-                initValue="Add Questions"
+                initValue="Add Type"
 
 
                 initValueTextStyle={styles.SelectedValue}
@@ -31,60 +31,20 @@ const testaddquestion = () => {
                     <Text style={styles.section_heading}>Add Feedback Type</Text>
                 </View>
 
-                <ModalSelector>
+                <View style={{ marginHorizontal: 10, ...styles.shadow }}>
+                    <View style={styles.search}>
+                        <TextInput
+                            style={{ ...styles.search_input, fontFamily: 'Poppins-Regular', color: '#505069' }}
+                            placeholder="Annual feedback forum"
 
-                    <View style={{ marginHorizontal: 10, ...styles.shadow }}>
-                        <View style={styles.search}>
-                            <TextInput
-                                style={{ ...styles.search_input, fontFamily: 'Poppins-Regular', color: '#505069' }}
-                                placeholder="Annual feedback forum"
+                        />
 
-                            />
-                            <Evillcons size={25} color='#505069' name='chevron-down'
-                                style={{
-
-                                    marginLeft: 20,
-                                    marginTop: 10,
-
-
-
-                                }}>
-
-                            </Evillcons>
-
-                        </View>
                     </View>
-                </ModalSelector>
-
-
-
-
-                <View>
-                    <Text style={styles.section_heading}> Feedback Question </Text>
-
-
-
                 </View>
-
-
-
-
-
-                <View>
-                    <TextInput style={{ width: 348, borderRadius: 8, borderWidth: 0.2, backgroundColor: '#FFFFFF', marginLeft: 15, paddingBottom: 120 }}
-                        placeholder="Write your feedback question here"
-                    >
-                    </TextInput>
-                </View>
-
-
-
-
-
 
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Status</Text>
-
+                    <Text style={styles.section_heading}> Feedback For </Text>
+                    <Text style={styles.section_heading2}> Status </Text>
                 </View>
                 <View style={{ flexDirection: 'row' }} >
 
@@ -93,9 +53,45 @@ const testaddquestion = () => {
 
 
 
-                        initValue="Active"
+                        initValue="Student"
 
                         style={styles.card}
+
+
+                        initValueTextStyle={styles.SelectedValueSmall}
+                    //selectTextStyle={styles.SelectedValueSmall}
+
+
+                    >
+                        <View style={{ marginTop: 10, flexDirection: 'row' }}>
+
+                            <Text style={styles.text2}>Student</Text>
+                            <Evillcons size={25} color='#505069' name='chevron-down'
+                                style={{
+
+                                    marginLeft: 70,
+
+
+
+                                }}>
+
+                            </Evillcons>
+
+                        </View>
+
+
+
+
+                    </ModalSelector>
+
+                    <ModalSelector
+
+
+
+
+                        initValue="Active"
+
+                        style={styles.card1}
 
 
                         initValueTextStyle={styles.SelectedValueSmall}
@@ -123,8 +119,6 @@ const testaddquestion = () => {
 
 
                     </ModalSelector>
-
-
                 </View>
 
 
@@ -132,7 +126,6 @@ const testaddquestion = () => {
 
 
                 <View style={styles.fixToText}>
-
 
 
                     
@@ -160,18 +153,6 @@ const styles = StyleSheet.create({
 
 
     },
-
-    input1: {
-
-        fontSize: 14,
-        fontFamily: 'Poppins-Regular',
-        textAlign: 'left',
-        color: '#505069',
-        paddingHorizontal: 20,
-
-
-    },
-
     text2: {
         fontFamily: 'Poppins-Regular',
         fontSize: 14,
@@ -260,7 +241,6 @@ const styles = StyleSheet.create({
         color: 'rgba(88, 99, 109, 0.85)',
         paddingHorizontal: 15,
         marginBottom: 5,
-        marginTop: 20,
     },
 
     search_input: {
@@ -391,7 +371,6 @@ const styles = StyleSheet.create({
         borderWidth: 0.3,
         marginLeft: 15,
         marginRight: 20,
-        marginTop: 10,
 
         //flexDirection: 'row',
         justifyContent: 'space-between'
@@ -442,9 +421,11 @@ const styles = StyleSheet.create({
 
 
 
+
+
 });
 
 
 
 
-export default testaddquestion;
+export default AddType;

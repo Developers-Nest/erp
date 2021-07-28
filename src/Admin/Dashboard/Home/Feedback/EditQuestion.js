@@ -6,8 +6,18 @@ import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import Evillcons from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const testaddquestion = () => {
+
+
+import { useSelector } from 'react-redux';
+
+
+const EditQuestion = ({navigation}) => {
+
+//theming
+const institute = useSelector(state => state.institute);
 
 
     return (
@@ -15,14 +25,83 @@ const testaddquestion = () => {
 
 
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-            <ModalSelector
+                 {/* header start */}
 
-                initValue="Add Questions"
+   <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : '#FF5733',
+            // backgroundColor:'blue',
+            ...styles.header,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Home');
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
 
-
-                initValueTextStyle={styles.SelectedValue}
-                selectTextStyle={styles.SelectedValue}
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                marginTop: 22,
+              }}
             />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontFamily: 'NunitoSans-Regular',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              marginLeft: 30,
+              color: 'white',
+            }}>
+            Add Question
+          </Text>
+          
+            <TouchableOpacity
+              onPress={() => navigation.navigate('QuestionList')}
+              style={{
+                justifyContent: 'flex-end',
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  marginRight: 5,
+                }}>
+                <MaterialCommunityIcon
+                  name="eye"
+                  color="#900"
+                  style={{
+                    fontSize: 30,
+                    color: 'white',
+                    paddingRight: 20,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontFamily: 'Poppins-Regular',
+                    fontSize: 12,
+                  }}>
+                  VIEW LIST
+                </Text>
+              </View>
+            </TouchableOpacity>
+          
+        </View>
+
+        {/* header ends */}
+
 
 
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
@@ -442,11 +521,14 @@ const styles = StyleSheet.create({
 
     },
 
-
+    header: {
+        height: 69,
+        flexDirection: 'row',
+      },
 
 });
 
 
 
 
-export default testaddquestion;
+export default EditQuestion;
