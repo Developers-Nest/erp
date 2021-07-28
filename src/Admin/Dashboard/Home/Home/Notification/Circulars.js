@@ -109,7 +109,6 @@ export default function Circular() {
           style={styles.content}
           animation={isActive ? 'bounceIn' : undefined}>
           {section.content}
-          {alert(section.url)}
         </Text>
         <TouchableOpacity onPress={() => Linking.openURL(section.url)}>
           <View style={{justifyContent: 'flex-end', flexDirection: 'row'}}>
