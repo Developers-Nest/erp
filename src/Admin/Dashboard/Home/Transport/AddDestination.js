@@ -26,7 +26,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
 
-export default function TransportDestinationList() {
+export default function AddDestination() {
 
     const [isTimePickerVisible, setTimePickerVisibility] = React.useState(false);
     const [Time, setTime] = React.useState('15:00')
