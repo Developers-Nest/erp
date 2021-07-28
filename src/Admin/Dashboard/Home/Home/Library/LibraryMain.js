@@ -24,7 +24,7 @@ import {
 import { useSelector } from 'react-redux';
 
 export default function LibraryMain({ navigation }) {
-  const [showContent, setShowContent] = React.useState('Due');
+  const [showContent, setShowContent] = React.useState('IssuedBooks');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
