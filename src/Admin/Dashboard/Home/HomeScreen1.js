@@ -251,6 +251,13 @@ const HomeScreen1 = () => {
 
           <View style={styles.section}>
             <View style={{alignItems: 'center'}}>
+            
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Exams');
+              }}>
+            
               <IonIcon size={36.83} color="#FCBC05" name="book-outline" />
 
               <Text
@@ -263,6 +270,7 @@ const HomeScreen1 = () => {
                 }}>
                 Exams
               </Text>
+              </TouchableOpacity>
             </View>
           </View>
 

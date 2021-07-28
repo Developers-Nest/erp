@@ -47,6 +47,7 @@ import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
 import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
+import Exams from './Home/Exams';
 
 import Notification from './Home/Notification';
 
@@ -162,6 +163,13 @@ const Home_Route = () => {
         component={Library}
         options={{headerShown: false}}
       />
+      
+      <Stack.Screen
+        name="Exams"
+        component={Exams}
+        options={{headerShown: false}}
+      />
+     
       <Stack.Screen
         name="Attendance"
         component={Attendance}
