@@ -5,121 +5,99 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Linking,
 } from 'react-native';
-
+import {useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 // helpers
-import get from '../../../../../services/helpers/request/get';
 import read from '../../../../../services/localstorage/read';
+import get from '../../../../../services/helpers/request/get';
 
-// redux
-import {useSelector} from 'react-redux';
-
-// loading screen
 import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
 
-export default function Circular() {
-  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
-  const userInfo = useSelector(state => state.userInfo);
-  const [circularList, setCircularList] = useState([]);
-  const [fetched, setFetched] = useState(false);
+export default function Notification() {
+  let userInfo = useSelector(state => state.userInfo);
 
-  let parseDate = myDate => {
-    let d = new Date(myDate);
-    return d.toString().slice(0, 15);
-  };
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+  const [content, setContent] = useState([]);
+  const [fetched, setFetched] = useState(false);
 
   useEffect(async () => {
     showLoadingScreen();
     try {
+      let slug = `/notification`;
       let token = await read('token');
-      let slug = `/circular?department=${userInfo.department}`;
       let res = await get(slug, token);
-      let circularArray = [];
-      res.map(cir => {
-        circularArray.push({
-          title: cir.circularsubject,
-          content: cir.circularContent,
-          time: parseDate(cir.circularDate),
-          url: cir.url,
+      let Content = [];
+      res.map(noti => {
+        Content.push({
+          title: noti.title,
+          content: noti.message,
+          type: 'News',
         });
       });
-      setCircularList(circularArray);
+      setContent(Content);
       setFetched(true);
     } catch (err) {
-      alert('Cannot fetch circular!!');
+      alert('Cannot get Notifications!!');
     }
     hideLoadingScreen();
   }, []);
 
   function renderHeader(section, _, isActive) {
     return (
-      <View duration={400} style={styles.header} transition="backgroundColor">
-        <Text style={styles.headerText}>{section.title}</Text>
-        {isActive ? (
-          <View
-            style={{
-              justifyContent: 'space-between',
-              flexDirection: 'column',
-              alignSelf: 'flex-end',
-              alignItems: 'center',
-            }}>
-            <Text style={styles.collapseIconTextTime}>{section.time}</Text>
-
+      <Animatable.View
+        duration={400}
+        style={styles.header}
+        transition="backgroundColor">
+        {loadingScreen}
+        <View style={styles.iconConatiner}>
+          <FontAwesome5
+            name={section.type === 'Event' ? 'video' : 'calendar-day'}
+            size={27}
+            style={{color: '#58636D'}}
+          />
+          {section.type === 'Event' ? (
+            <Text style={styles.iconText}>Event</Text>
+          ) : (
+            <Text style={styles.iconText}>News</Text>
+          )}
+        </View>
+        <View style={styles.titleContainer}>
+          <Text style={styles.headerText}>{section.title}</Text>
+          {isActive ? (
             <View style={styles.collapseIconContainer}>
               <FontAwesome5
                 name="chevron-up"
                 size={14}
-                color={'rgba(62, 104, 228, 0.9)'}
+                style={styles.collapseIconIcon}
               />
-              <Text style={styles.collapseIconText}>Read Less</Text>
             </View>
-          </View>
-        ) : (
-          <View
-            style={{
-              justifyContent: 'space-between',
-              flexDirection: 'column',
-              alignSelf: 'flex-end',
-              alignItems: 'center',
-            }}>
-            <Text style={styles.collapseIconText}>{section.time}</Text>
+          ) : (
             <View style={styles.collapseIconContainer}>
               <FontAwesome5
                 name="chevron-down"
                 size={14}
-                color={'rgba(62, 104, 228, 0.9)'}
+                style={styles.collapseIconIcon}
               />
-              <Text style={styles.collapseIconText}>Read More</Text>
             </View>
-          </View>
-        )}
-      </View>
+          )}
+        </View>
+      </Animatable.View>
     );
   }
 
   function renderContent(section, _, isActive) {
     return (
-      <Animatable.View duration={100} transition="backgroundColor">
+      <Animatable.View duration={100} style={{paddingHorizontal: 10}}>
         <Text
-          style={styles.content}
-          animation={isActive ? 'bounceIn' : undefined}>
+          animation={isActive ? 'bounceIn' : undefined}
+          style={styles.collapseContent}>
           {section.content}
         </Text>
-        <TouchableOpacity onPress={() => Linking.openURL(section.url)}>
-          <View style={{justifyContent: 'flex-end', flexDirection: 'row'}}>
-            <Text style={styles.collapseIconText1}>download</Text>
-            <FontAwesome5
-              name="file-download"
-              size={20}
-              color={'rgba(62, 104, 228, 0.9)'}
-            />
-          </View>
-        </TouchableOpacity>
       </Animatable.View>
     );
   }
@@ -133,12 +111,11 @@ export default function Circular() {
 
   return (
     <View style={styles.container}>
-      {loadingScreen}
       {fetched ? (
         <ScrollView style={{padding: 10}}>
           <Accordion
             activeSections={ActiveSections}
-            sections={circularList}
+            sections={content}
             touchableComponent={TouchableOpacity}
             renderHeader={renderHeader}
             renderContent={renderContent}
@@ -159,33 +136,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
-  content: {
-    padding: 10,
-    /* BODY-12 */
 
-    fontFamily: 'Poppins-Regular',
-    fontStyle: 'normal',
-    fontWeight: '500',
-    fontSize: 12,
-    lineHeight: 18,
-
-    color: '#00499F',
-  },
   header: {
     backgroundColor: 'white',
-    padding: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    flex: 1,
   },
   headerText: {
-    textAlign: 'center',
     fontSize: 18,
     fontWeight: '500',
 
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
-    lineHeight: 27,
+    fontSize: 18,
 
     color: '#211C5A',
   },
@@ -213,37 +175,44 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     paddingHorizontal: 10,
   },
-  collapseIconContainer: {
-    justifyContent: 'center',
-    alignSelf: 'flex-end',
+  iconText: {
+    fontSize: 9,
+    fontWeight: '600',
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+  },
+  iconConatiner: {
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: 5,
+    padding: 10,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flex: 1,
+    padding: 10,
+  },
+  collapseIconContainer: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   collapseIconText: {
     fontSize: 10,
     fontWeight: '600',
     fontFamily: 'OpenSans-Regular',
-    fontStyle: 'normal',
-    fontWeight: '600',
-    lineHeight: 14,
-    color: '#58636D',
-  },
-  collapseIconText1: {
     fontSize: 10,
-    fontWeight: '600',
-    fontFamily: 'OpenSans-Regular',
     fontStyle: 'normal',
     fontWeight: '600',
-    lineHeight: 14,
-    color: '#58636D',
-    marginRight: 5,
   },
-  collapseIconTextTime: {
-    fontSize: 10,
-    fontFamily: 'OpenSans-Regular',
+  collapseIconIcon: {
+    color: 'rgba(62, 104, 228, 0.9)',
+  },
+  collapseContent: {
+    fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
-    fontWeight: '600',
-    lineHeight: 14,
-    color: '#58636D',
+    fontWeight: '500',
+    fontSize: 12,
+
+    color: '#00499F',
   },
 });

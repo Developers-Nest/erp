@@ -48,6 +48,8 @@ import Timetable from './Home/Timetable';
 import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
 
+import Notification from './Home/Notification';
+
 //helpers
 import write from '../../../services/localstorage/write';
 
@@ -102,8 +104,18 @@ const Home_Route = () => {
             color: institute ? institute.themeColor : 'black',
           },
           headerRight: () => (
-            <TouchableOpacity onPress={() => {}}>
-              <Badge style={{marginRight:10,marginBottom:-12,backgroundColor:'#007FFF'}}>3</Badge>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Notification');
+              }}>
+              <Badge
+                style={{
+                  marginRight: 10,
+                  marginBottom: -12,
+                  backgroundColor: '#007FFF',
+                }}>
+                3
+              </Badge>
               <FontAwesome5
                 name="bell"
                 style={{
@@ -111,11 +123,9 @@ const Home_Route = () => {
                   fontSize: 30,
                   color: institute ? institute.themeColor : 'black',
                   paddingRight: 20,
-                  marginBottom:10
-                  
+                  marginBottom: 10,
                 }}
               />
-              
             </TouchableOpacity>
           ),
           headerLeft: () => (
@@ -160,6 +170,11 @@ const Home_Route = () => {
       <Stack.Screen
         name="Content Library"
         component={ContentLibrary}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={Notification}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

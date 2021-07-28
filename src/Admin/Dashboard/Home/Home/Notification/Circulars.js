@@ -37,7 +37,7 @@ export default function Circular() {
     showLoadingScreen();
     try {
       let token = await read('token');
-      let slug = `/circular?department=${userInfo.department}`;
+      let slug = `/circular`;
       let res = await get(slug, token);
       let circularArray = [];
       res.map(cir => {
@@ -109,6 +109,7 @@ export default function Circular() {
           style={styles.content}
           animation={isActive ? 'bounceIn' : undefined}>
           {section.content}
+          {alert(section.url)}
         </Text>
         <TouchableOpacity onPress={() => Linking.openURL(section.url)}>
           <View style={{justifyContent: 'flex-end', flexDirection: 'row'}}>
