@@ -21,11 +21,16 @@ import {
 import Icon from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
+//redux
+import {useSelector} from 'react-redux';
+
 // helpers
 import get from '../../../../services/helpers/request/get'
 import read from '../../../../services/localstorage/read'
 
 export default function LessonPlan({ navigation }) {
+//theming
+const institute = useSelector(state => state.institute);
 
   const [data, setData] = useState([])
 
@@ -46,8 +51,15 @@ export default function LessonPlan({ navigation }) {
         flex: 1,
         justifyContent: 'flex-start',
       }}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => { }}>
+      <View 
+      style={{
+        backgroundColor: institute ? institute.themeColor : '#FF5733',
+        // backgroundColor:'blue',
+        ...styles.header,
+    }}
+      
+      >
+        <TouchableOpacity onPress={() => {navigation.navigate('Subjects')}}>
           <Icon
             size={24}
             color="white"
@@ -72,27 +84,7 @@ export default function LessonPlan({ navigation }) {
           }}>
           Lesson Plan
         </Text>
-        <View style={{ flex: 1, marginLeft: 20 }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Add Lesson Plan');
-            }}>
-            <IonIcon
-              size={24}
-              color="white"
-              name="add-circle-outline"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                paddingLeft: 20,
-                paddingTop: 15,
-              }}
-            />
-          </TouchableOpacity>
-          <Text style={{ paddingLeft: 70, color: '#fff' }}>Add</Text>
         </View>
-      </View>
 
       {/* 
 <AttendanceTakeHeader/> */}
@@ -146,23 +138,6 @@ export default function LessonPlan({ navigation }) {
                       {plan.topic || 'Topic not found'}
                     </Text>
 
-                    <TouchableOpacity
-                      style={{ flexDirection: 'row' }}
-                      onPress={() => {
-                        navigation.navigate('Edit Lesson Plan',{
-                          lessonPlan: plan
-                        });
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: '#58636D',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Edit
-                      </Text>
-                      <Icon size={12} color="#211C5A" name="edit" />
-                    </TouchableOpacity>
                   </View>
                   <TouchableOpacity style={styles.differentusers}>
                     <Text
@@ -204,7 +179,7 @@ export default function LessonPlan({ navigation }) {
                 <Button
                   title="Link"
                   mode="contained"
-                  color="#5177E7"
+                  color={ institute ? institute.themeColor : "#5177E7"}
                   labelStyle={{ color: 'white' }}
                 />
               </View>
@@ -320,7 +295,6 @@ const styles = StyleSheet.create({
   header: {
     height: 65,
     marginTop: 0,
-    backgroundColor: 'rgba(0, 73, 159, 1)',
     flexDirection: 'row',
   },
 });

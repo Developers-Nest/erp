@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, ImageBackground, Button, TouchableOpacity } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -70,7 +71,9 @@ export default function Subjects({navigation}) {
             <ScrollView>
 
                 {/* <View style={styles.maincontainer}>     */}
-
+<TouchableWithoutFeedback  onPress={() => {
+                        navigation.navigate('LessonPlan');
+                    }}>
                 <View style={styles.section}>
                     <View style={styles.details}>
 
@@ -93,7 +96,7 @@ export default function Subjects({navigation}) {
 
 
                 </View>
-                
+                </TouchableWithoutFeedback>          
                 <View style={styles.section}>
                     <View style={styles.details}>
 

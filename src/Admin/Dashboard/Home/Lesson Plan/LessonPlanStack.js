@@ -12,18 +12,15 @@ import {
 import {createStackNavigator} from '@react-navigation/stack';
 import Subjects from './Subjects';
 import LessonPlan from './Plan';
-import LessonPlanAdd from './LessonPlanAdd';
-import LessonPlanEdit from './LessonPlanEdit';
-
 const Stack = createStackNavigator();
 
 export default function LessonPlanStack() {
   return (
     <Stack.Navigator headerMode="none">
-            <Stack.Screen name="Subjects" component={Subjects} />
-      <Stack.Screen name="Lesson Plan" component={LessonPlan} />
-      <Stack.Screen name="Add Lesson Plan" component={LessonPlanAdd} />
-      <Stack.Screen name="Edit Lesson Plan" component={LessonPlanEdit} />
+                    <Stack.Screen name="Subjects" component={Subjects} />
+      <Stack.Screen name="LessonPlan" component={LessonPlan} />
+
+  
     </Stack.Navigator>
   );
 }
