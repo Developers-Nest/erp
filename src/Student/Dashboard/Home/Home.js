@@ -260,7 +260,7 @@ const Home = ({navigation}) => {
                       <Text style={styles.classes_cardClass}>
                         {slot.subjectId && slot.subjectId.name.toUpperCase()}
                       </Text>
-                      <Text style={styles.classes_cardTime}>
+                      <Text style={styles.classes_cardTime, {color: institute? institute.themeColor : 'blue'}}>
                         {`${slot.startTime} - ${slot.endTime}`}
                       </Text>
                       <Text style={styles.classes_cardBatch}>
@@ -683,9 +683,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   classes_cardWrapper: {
-    paddingHorizontal: 10,
     paddingBottom: 20,
-    marginHorizontal: 10,
   },
   classes_card: {
     justifyContent: 'center',
@@ -705,7 +703,6 @@ const styles = StyleSheet.create({
   },
   classes_cardTime: {
     fontSize: 12,
-    color: '#5177E7',
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: 'normal',
