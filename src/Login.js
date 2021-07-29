@@ -38,7 +38,6 @@ export default function App({navigation}) {
       if(t && r){
         // get user information
         const response = await get('/user', t);
-        console.log('Use Effect ', response);
 
         dispatch({
           type: USERINFO,
@@ -70,12 +69,14 @@ export default function App({navigation}) {
       };
 
       // post request
-      const response = await post(slug, data);
+      let response = await post(slug, data);
       let role = response.userType.name;
+
+      let res = await get('/user', response.token);
 
       dispatch({
         type: USERINFO,
-        userInfo: response,
+        userInfo: res,
       });
 
       // write token to local storage
@@ -93,6 +94,7 @@ export default function App({navigation}) {
       }
     } catch (err) {
       console.log(err);
+      alert('Cannot Login '+ err)
     }
     hideLoadingScreen();
   };
@@ -109,6 +111,7 @@ export default function App({navigation}) {
           <TextInput
             style={styles.text_input1}
             placeholder="Institution Code"
+            placeholderTextColor="black"
             mode="outlined"
             onChangeText={code => setInstitutionCode(code)}
           />
@@ -125,12 +128,14 @@ export default function App({navigation}) {
           style={styles.text_input}
           placeholder="Email or Username"
           mode="outlined"
+          placeholderTextColor="black"
           onChangeText={username => setUsername(username)}
         />
         <TextInput
           style={styles.text_input}
           placeholder="Password"
           mode="outlined"
+          placeholderTextColor="black"
           secureTextEntry={true}
           onChangeText={password => setPassword(password)}
         />
@@ -168,6 +173,7 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 16,
     minWidth: 171,
+    color: 'black'
   },
   text_input1: {
     paddingHorizontal: 20,
@@ -176,6 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'rgba(249, 249, 249, 1)',
     width: 171,
+    color: 'black'
   },
   textinput_search: {
     justifyContent: 'space-between',
