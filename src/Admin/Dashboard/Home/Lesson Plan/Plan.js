@@ -197,19 +197,20 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   section: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    shadowColor: '#333',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.2,
-    elevation: 2,
+    shadowOpacity: 1,
+    elevation: 5,
     marginTop: 14,
     borderRadius: 12,
     paddingLeft: 10,
@@ -265,12 +266,13 @@ const styles = StyleSheet.create({
   maincontainer: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   card: {
-    shadowColor: '#999',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 1,
     shadowRadius: 12,
     elevation: 5,
     backgroundColor: 'white',
