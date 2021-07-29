@@ -29,8 +29,8 @@ const Stack = createStackNavigator();
 export default function ContentStack() {
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name="ContentSubject" component={ContentSubject} />
       <Stack.Screen name="ContentLibrary" component={ContentLibrary} />
+      {/* <Stack.Screen name="ContentSubject" component={ContentSubject} /> */}
     </Stack.Navigator>
   );
 }
