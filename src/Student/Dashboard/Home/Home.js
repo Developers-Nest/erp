@@ -221,6 +221,7 @@ const Home = ({navigation}) => {
           <TextInput
             style={{...styles.search_input}}
             placeholder="Live class, fees and more"
+            placeholderTextColor="black" 
           />
 
           <TouchableOpacity
@@ -655,6 +656,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingHorizontal: 10,
     width: '90%',
+    color: 'black'
   },
   section_heading: {
     fontFamily: 'Poppins-Regular',

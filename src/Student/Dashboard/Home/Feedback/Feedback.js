@@ -137,6 +137,8 @@ export default function Feedback({navigation}) {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
 
+  const [feedback, setFeedback] = useState('')
+
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -207,7 +209,8 @@ export default function Feedback({navigation}) {
           <Card.Content>
             <TextInput
               placeholder="Write down your feedback question here..... "
-              onChange={val => setDiscription(val)}
+              placeholderTextColor="black"
+              onChangeText={val => setFeedback(val)}
               style={{backgroundColor: 'white'}}
             />
           </Card.Content>

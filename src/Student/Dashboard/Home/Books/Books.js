@@ -282,6 +282,7 @@ export default function BooksStudent({ navigation }) {
             <TextInput
               style={{ width: '80%', ...styles.text_input }}
               placeholder="Enter book name or ID here"
+              placeholderTextColor="black"
             />
             <TouchableOpacity
               style={{
@@ -410,11 +411,11 @@ const styles = StyleSheet.create({
   text_input: {
     paddingHorizontal: 20,
     borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
     minWidth: 171,
     backgroundColor: 'white',
+    color: 'black'
   },
 
   shadow: {
