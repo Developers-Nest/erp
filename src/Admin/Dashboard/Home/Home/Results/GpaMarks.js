@@ -12,6 +12,7 @@ import {
 
 import DropDownPicker from 'react-native-dropdown-picker';
 import ModalSelector from 'react-native-modal-selector';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function GpaMarks({navigation})
 {
@@ -29,8 +30,9 @@ export default function GpaMarks({navigation})
       <Appbar.Action icon="information" onPress={() => {navigation.navigate('CceMarks')}} />
     </Appbar.Header>
       </View>
-      <View style={{padding: 10}} />
-
+      <ScrollView>
+      <View style={{padding: 15}}>
+      
         {/* select Subject */}
         <ModalSelector
           data={Subject}
@@ -38,9 +40,9 @@ export default function GpaMarks({navigation})
         //   onChange={async (option) => {
         //     setAssessment(option.key)
         //   }}
-          style={styles.card,{
-            width: "100%",
-          }} />
+        style={styles.card_picker1}
+        initValueTextStyle={styles.SelectedValueSmall}
+        selectTextStyle={styles.SelectedValueSmall} />
       
       <View style={{padding:8}}/>
         {/* select assessment Name */}
@@ -50,9 +52,9 @@ export default function GpaMarks({navigation})
         //   onChange={async (option) => {
         //     setAssessment(option.key)
         //   }}
-          style={styles.card,{
-            width: "100%",
-          }} />
+        style={styles.card_picker1}
+        initValueTextStyle={styles.SelectedValueSmall}
+        selectTextStyle={styles.SelectedValueSmall} />
         <View style={{padding:8}}/>
         {/* subject selector */}
         <ModalSelector
@@ -61,9 +63,9 @@ export default function GpaMarks({navigation})
         //   onChange={async (option) => {
         //     await getExams(option.key)
         //   }}
-          style={styles.card, styles.shadow,{
-            width: "100%",
-          }} />
+        style={styles.card_picker1}
+        initValueTextStyle={styles.SelectedValueSmall}
+        selectTextStyle={styles.SelectedValueSmall}/>
         <View style={{padding:8}}/>
         {/* exam selector */}
         <ModalSelector
@@ -72,9 +74,9 @@ export default function GpaMarks({navigation})
         //   onChange={async (option) => {
         //     setExam(option.key)
         //   }}
-          style={styles.card,{
-            width: "100%",
-          }} />
+        style={styles.card_picker1}
+        initValueTextStyle={styles.SelectedValueSmall}
+        selectTextStyle={styles.SelectedValueSmall} />
       <View style={{justifyContent:"center",alignItems:"center",padding:30}}>
             <Button
             mode="contained"
@@ -112,6 +114,9 @@ export default function GpaMarks({navigation})
                   </Text>
                 </View>
               </View>
+              <View style={{padding:30}}/>
+              </View>
+              </ScrollView>
     </View>
   );
 };
@@ -160,5 +165,29 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     paddingLeft: 11,
+  },
+  card_picker1: {
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    elevation: 3,
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
   },
 });
