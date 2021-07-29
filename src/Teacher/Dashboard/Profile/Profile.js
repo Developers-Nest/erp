@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -15,16 +15,63 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // redux
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import { USERINFO } from '../../../reducers/actionType';
+
+// helpers
+import patch from '../../../services/helpers/request/patch'
+import read from '../../../services/localstorage/read'  
+import LoaderHook from '../../../components/LoadingScreen/LoadingScreen';
 
 export default function Profile({navigation}) {
   const userInfo = useSelector(state => state.userInfo);
 
   //theming
   const institute = useSelector(state => state.institute);
+  const dispatch = useDispatch()
 
   const [modalVisible, setModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
+
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+  // for updating
+  const [uemail, setUemail] = useState(null)
+  const [ufirstName, setUfirstName] = useState(null)
+  const [ulastName, setULastName] = useState(null)
+  const [upaddress, setUpAddress] = useState(null)
+
+  useEffect(()=>{
+    setUemail(userInfo.email)
+    setUfirstName(userInfo.firstName)
+    setULastName(userInfo.lastName)
+    setUpAddress(userInfo.permanentAddress)
+  },[])
+
+  let updateProfile = async()=>{
+    setLoadingScreen()
+    setModalVisible(!modalVisible)
+    try{
+      let slug = '/user'
+      let token = await read('token')
+      let data = {
+        email: uemail,
+        firstName: ufirstName,
+        lastName: ulastName,
+        presentAddress: upaddress
+      }
+      console.log('Update Profile Data ', data)
+      let response = await patch(slug, data, token)
+      console.log('Profile Update Response ', response)
+      if(response){
+        alert('Profile Updated!!')
+      } else throw new Error('Some Error occured!!')
+    } catch(err){
+      alert('Cannot Update '+err)
+    }
+    hideLoadingScreen()
+  }
+
  
   return (
     <View style={styles.container}>
@@ -50,6 +97,7 @@ export default function Profile({navigation}) {
             }}
           />
         </TouchableOpacity>
+        {loadingScreen}
         <View
           style={{
             flex: 1,
@@ -93,24 +141,24 @@ export default function Profile({navigation}) {
           <Text style={{marginTop:20}}>Enter Email</Text>
           <ScrollView>
           <TextInput placeholder={userInfo.email}
-                                   value={inputValue} style={styles.textInput} 
-                                   onChangeText={(value) => setInputValue(value)} />
+                                   value={uemail} style={styles.textInput} 
+                                   onChangeText={(value) => setUemail(value)} />
            <Text style={{marginTop:20}}>First Name</Text>
             <TextInput placeholder={userInfo.firstName} 
-                                   value={inputValue} style={styles.textInput} 
-                                   onChangeText={(value) => setInputValue(value)} />
+                                   value={ufirstName} style={styles.textInput} 
+                                   onChangeText={(value) => setUfirstName(value)} />
              <Text style={{marginTop:20}}>Last Name</Text>
             <TextInput placeholder={userInfo.lastName}
-                                   value={inputValue} style={styles.textInput} 
-                                   onChangeText={(value) => setInputValue(value)} />
+                                   value={ulastName} style={styles.textInput} 
+                                   onChangeText={(value) => setULastName(value)} />
              <Text style={{marginTop:20}}>Present Address</Text>
             <TextInput placeholder={userInfo.presentAddress} 
-                                   value={inputValue} style={styles.textInput} 
-                                   onChangeText={(value) => setInputValue(value)} />
+                                   value={upaddress} style={styles.textInput} 
+                                   onChangeText={(value) => setUpAddress(value)} />
             </ScrollView>
             <View style={{flexDirection:'row',justifyContent:'space-evenly',margin:20}}>
-            <Button mode="outlined"  color="red" onPress={() => setModalVisible(!modalVisible)}>Cancel</Button>
-            <Button mode="contained" color="blue" >Save</Button>
+            <Button mode="outlined"  color={ institute?institute.themeColor : "red"} onPress={() => setModalVisible(!modalVisible)}>Cancel</Button>
+            <Button mode="contained" color={ institute?institute.themeColor : "blue"} onPress={updateProfile} >Save</Button>
             </View>
           </View>
         </View>
@@ -119,13 +167,14 @@ export default function Profile({navigation}) {
     <View style={{flexDirection:'row',justifyContent:'flex-end',marginEnd:30}}>
       <TouchableOpacity onPress={() => setModalVisible(true)}>
       <Text>
-      Edit Profile
-      </Text>
+      Edit Profile 
+      &nbsp;
       <FontAwesome5
               name="edit"
               size={20}
-              color={'rgba(62, 104, 228, 0.9)'}
+              color={institute? institute.themeColor : 'rgba(62, 104, 228, 0.9)'}
             />
+            </Text>
       </TouchableOpacity>
       </View> 
 
@@ -301,5 +350,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0, 0, 0, 0.2)",
     borderWidth: 1,
     marginBottom: 8,
+    color: 'black'
 },
 });
