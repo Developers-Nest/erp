@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -12,15 +12,15 @@ import HomeScreen2 from './HomeScreen2';
 import HomeScreen1 from './HomeScreen1';
 import Swiper from 'react-native-swiper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import {Text, Badge, Button, Drawer} from 'react-native-paper';
+import { Text, Badge, Button, Drawer } from 'react-native-paper';
 import {
   createDrawerNavigator,
   useIsDrawerOpen,
   DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
-import {createStackNavigator} from '@react-navigation/stack';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -48,6 +48,7 @@ import Timetable from './Home/Timetable';
 import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
 import Exams from './Home/Exams';
+import Results from './Home/Results';
 
 import Notification from './Home/Notification';
 
@@ -55,17 +56,17 @@ import Notification from './Home/Notification';
 import write from '../../../services/localstorage/write';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // let userInfo;
 
 var styles1 = {
   wrapper: {},
-  slide1: {flex: 1},
-  slide2: {flex: 1},
+  slide1: { flex: 1 },
+  slide2: { flex: 1 },
 };
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
   const toggleExpanded = () => {
@@ -94,7 +95,7 @@ const Home_Route = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={({navigation, route}) => ({
+        options={({ navigation, route }) => ({
           headerTitle: 'Hi Saawan!',
           headerStyle: {
             height: 70,
@@ -150,40 +151,44 @@ const Home_Route = () => {
       <Stack.Screen
         name="Settings"
         component={SettingUsers}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Timetable"
         component={Timetable}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       {/* library */}
       <Stack.Screen
         name="Library"
         component={Library}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
-      
+
       <Stack.Screen
         name="Exams"
         component={Exams}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
-     
+      <Stack.Screen
+        name="Results"
+        component={Results}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Attendance"
         component={Attendance}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Content Library"
         component={ContentLibrary}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Notification"
         component={Notification}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -219,46 +224,46 @@ function DrawerContent(props) {
   };
   const institute = useSelector(state => state.institute);
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Home</Text>
           )}
           onPress={() => props.navigation.navigate('Home')}
         />
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Academics</Text>
           )}
           onPress={() => Alert.alert('Add Academics screen')}
         />
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Hostel</Text>
           )}
           onPress={() => props.navigation.navigate('Hostel')}
         />
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Events</Text>
           )}
           onPress={() => Alert.alert('Add Events screen')}
         />
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Bulk SMS</Text>
           )}
           onPress={() => Alert.alert('Add SMS screen')}
         />
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Task Manager</Text>
           )}
           onPress={() => Alert.alert('Add Task Manager screen')}
@@ -266,7 +271,7 @@ function DrawerContent(props) {
 
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Payment Slip</Text>
           )}
           onPress={() => Alert.alert('Add Payment slip screen')}
@@ -274,7 +279,7 @@ function DrawerContent(props) {
 
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Quick Payment</Text>
           )}
           onPress={() => Alert.alert('Add quick payment screen')}
@@ -282,42 +287,42 @@ function DrawerContent(props) {
 
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Lesson Plan</Text>
           )}
           onPress={() => props.navigation.navigate('Lesson Plan')}
         />
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Online Exams</Text>
           )}
           onPress={() => props.navigation.navigate('Books')}
         />
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Feedback</Text>
           )}
           onPress={() => props.navigation.navigate('Feedback')}
         />
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Occurrence</Text>
           )}
           onPress={() => props.navigation.navigate('Occurence')}
         />
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Placement Details</Text>
           )}
           onPress={() => Alert.alert('Add Placement Details')}
         />
         <DrawerItem
           style={styles.item}
-          label={({focused, color}) => (
+          label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Report</Text>
           )}
           onPress={() => props.navigation.navigate('Report')}
@@ -371,7 +376,7 @@ export default function Route() {
     <DrawerNav.Navigator
       initialRouteName="Home"
       drawerContent={props => <DrawerContent {...props} />}
-      drawerStyle={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
+      drawerStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}>
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
@@ -629,5 +634,5 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
   },
-  item: {padding: 0, margin: 0},
+  item: { padding: 0, margin: 0 },
 });
