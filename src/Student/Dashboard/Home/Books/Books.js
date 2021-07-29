@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {TextInput} from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { TextInput } from 'react-native-paper';
 
 import {
   StyleSheet,
@@ -11,23 +11,56 @@ import {
   Keyboard,
 } from 'react-native';
 
-import LinearGradient from 'react-native-linear-gradient';
-
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function BooksStudent({navigation}) {
+//helpers
+import get from '../../../../services/helpers/request/get'
+import read from '../../../../services/localstorage/read'
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen'
+
+export default function BooksStudent({ navigation }) {
+  const userInfo = useSelector(state => state.userInfo)
   //theming
   const institute = useSelector(state => state.institute);
 
   const [showContent, setShowContent] = React.useState('Due');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
+
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
+  const [dueBooks, setDueBooks] = useState([])
+  const [clearedBooks, setClearedBooks] = useState([])
+
+  useEffect(async () => {
+    setLoadingScreen()
+    try {
+      let slug = `/library/issue?userId=${userInfo._id}`
+      const token = await read('token')
+      const res = await get(slug, token)
+      console.log("Books ", res)
+      let due = []
+      let cleared = []
+      res && res.map((book) => {
+        if (book.returned) {
+          cleared.push(book)
+        } else due.push(book)
+      })
+      console.log('Due ', due)
+      console.log('Cleared ', cleared)
+      setDueBooks(due)
+      setClearedBooks(cleared)
+    } catch (err) {
+      alert('Cannot get Books!!')
+    }
+    hideLoadingScreen()
+  }, [])
 
   function Cleared() {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -37,110 +70,62 @@ export default function BooksStudent({navigation}) {
     return (
       <View style={styles.container}>
         <ScrollView>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text> </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: '#505069',
-                      fontFamily: 'OpenSans-Regular',
-                    }}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-                </TouchableOpacity>
+          {
+            clearedBooks.length > 0 ? clearedBooks.map((book) => (
+              <View style={styles.section} key={book._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text> </Text>
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color: '#505069',
+                          fontFamily: 'OpenSans-Regular',
+                        }}>
+                        ID: {book.bookNumber}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {' '}
+                        {book.bookName ? book.bookName.title : 'N/A'}
+                      </Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#58626C',
-                      fontFamily: 'Poppins-Regular',
-                      paddingLeft: 5,
-                    }}>
-                    Issued: 21May,2021
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#58636D',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      {' '}
-                      Due: 21Sept,2021
-                    </Text>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58626C',
+                          fontFamily: 'Poppins-Regular',
+                          paddingLeft: 5,
+                        }}>
+                        Issued: {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                      </Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#58636D',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          Due: {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
-                </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          </View>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text> </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: '#505069',
-                      fontFamily: 'OpenSans-Regular',
-                    }}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#58626C',
-                      fontFamily: 'Poppins-Regular',
-                      paddingLeft: 5,
-                    }}>
-                    Issued: 21May,2021
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#58636D',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      {' '}
-                      Due: 21Sept,2021
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+            )) : (<Text style={{display: 'flex', textAlign: 'center'}}>Nothing to Display!</Text>)
+          }
         </ScrollView>
       </View>
     );
@@ -154,110 +139,62 @@ export default function BooksStudent({navigation}) {
     return (
       <View style={styles.container}>
         <ScrollView>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text></Text>
+          {
+            dueBooks.length > 0 ? dueBooks.map((book) => (
+              <View style={styles.section} key={book._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text> </Text>
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color: '#505069',
+                          fontFamily: 'OpenSans-Regular',
+                        }}>
+                        ID: {book.bookNumber}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {' '}
+                        {book.bookName ? book.bookName.title : 'N/A'}
+                      </Text>
+                    </TouchableOpacity>
 
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: '#505069',
-                      fontFamily: 'OpenSans-Regular',
-                    }}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#1F7C17',
-                      paddingLeft: 5,
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    Issued: 21May,2021
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#B04305',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      Due: 21Sept,2021
-                    </Text>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58626C',
+                          fontFamily: 'Poppins-Regular',
+                          paddingLeft: 5,
+                        }}>
+                        Issued: {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                      </Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#58636D',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          Due: {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
-                </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          </View>
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text></Text>
-
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: '#505069',
-                      fontFamily: 'OpenSans-Regular',
-                    }}>
-                    ID:45321440
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontWeight: 'normal',
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {' '}
-                    Title
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#1F7C17',
-                      fontFamily: 'Poppins-Regular',
-                      paddingLeft: 5,
-                    }}>
-                    Issued: 21May,2021
-                  </Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#B04305',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      Due: 21Sept,2021
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+            )) : (<Text style={{display: 'flex', textAlign: 'center'}}>No Dues!!</Text>)
+          }
         </ScrollView>
       </View>
     );
@@ -268,7 +205,6 @@ export default function BooksStudent({navigation}) {
         {/* <IssuedBooksheader /> */}
 
         {/* header start */}
-
         <View
           style={{
             backgroundColor: institute ? institute.themeColor : 'black',
@@ -324,7 +260,7 @@ export default function BooksStudent({navigation}) {
         </View>
 
         {/* header ends */}
-
+        {loadingScreen}
         <View
           style={{
             width: '90%',
@@ -344,7 +280,7 @@ export default function BooksStudent({navigation}) {
               ...styles.shadow,
             }}>
             <TextInput
-              style={{width: '80%', ...styles.text_input}}
+              style={{ width: '80%', ...styles.text_input }}
               placeholder="Enter book name or ID here"
             />
             <TouchableOpacity
@@ -483,7 +419,7 @@ const styles = StyleSheet.create({
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
