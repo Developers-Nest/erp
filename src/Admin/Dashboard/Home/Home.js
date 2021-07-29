@@ -31,14 +31,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Books from './Books/Books';
 import ContentLibrary from './Home/Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
-import LessonPlan from './Lesson Plan/LessonPlan';
+
 import Transport from './Transport/Transport';
 import Subject from './Subject/Subject.js';
 import CceMarks from './CCEMarks/CCEmarks';
 import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
 import Occurence from '../Occurence/Occurence';
-
+import LessonPlanStack from './Lesson Plan/LessonPlanStack';
 //new and final for navigation only for drawer not from menu
 import Hostel from './HostelPart/Hostel';
 
@@ -57,6 +57,7 @@ import write from '../../../services/localstorage/write';
 
 //redux
 import { useSelector } from 'react-redux';
+// import LessonPlanStack from './Lesson Plan/LessonPlanStack';
 
 // let userInfo;
 
@@ -290,7 +291,7 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Lesson Plan</Text>
           )}
-          onPress={() => props.navigation.navigate('Lesson Plan')}
+          onPress={() => props.navigation.navigate('LessonPlanStack')}
         />
         <DrawerItem
           style={styles.item}
@@ -382,7 +383,7 @@ export default function Route() {
       <DrawerNav.Screen name="Attendance" component={Attendance} />
       <DrawerNav.Screen name="Hostel" component={Hostel} />
       {/* <DrawerNav.Screen name="Assignment" component={Assignment} /> */}
-      <DrawerNav.Screen name="Lesson Plan" component={LessonPlan} />
+      <DrawerNav.Screen name="LessonPlanStack" component={LessonPlanStack} />
       <DrawerNav.Screen name="Books" component={Books} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
       <DrawerNav.Screen name="Transport" component={Transport} />
