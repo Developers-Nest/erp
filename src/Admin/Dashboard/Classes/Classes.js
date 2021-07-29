@@ -38,20 +38,7 @@ export default function App() {
       <Stack.Screen
         name="Lectures"
         component={LecturesScreen}
-        options={({navigation, route}) => ({
-          headerTitle: 'Lectures',
-          // headerStyle: {
-          //   backgroundColor: '#f4511e',
-          // },
-          headerRight: () => (
-            <Icon
-              name="add-circle"
-              size={30}
-              color="#900"
-              onPress={() => navigation.navigate('GoLive')}
-            />
-          ),
-        })}
+        options={{ headerShown: false }}
       />
       <Stack.Screen name="GoLive" component={GoLiveScreen} />
     </Stack.Navigator>
