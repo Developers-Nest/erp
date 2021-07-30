@@ -7,15 +7,19 @@ import {
   Image,
   ScrollView,
   TextInput,
-  SafeAreaView,
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import DropDownPicker from 'react-native-dropdown-picker';
-// import {Dropdown} from 'react-native-material-dropdown-v2-fixed';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import ModalSelector from 'react-native-modal-selector';
 
+import { useSelector } from 'react-redux';
+
 export default function ExamReport({navigation}) {
+
+  const userInfo = useSelector(state => state.userInfo)
+  const institute = useSelector(state => state.institute)
+
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
     {label: 'Final Reports', key: 'Final Reports'},
@@ -46,59 +50,49 @@ export default function ExamReport({navigation}) {
   //selected values
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Statistics')}>
-          <FontAwesome5
-            name="chevron-left"
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
+      <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Statistics');
+          }}>
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
             style={{
               alignSelf: 'center',
               fontSize: 25,
-              color: 'black',
+              color: 'white',
               paddingLeft: 20,
               paddingTop: 20,
             }}
           />
         </TouchableOpacity>
-        <Text
+        <View
           style={{
-            fontStyle: 'normal',
-            fontSize: 28,
-            fontFamily: 'NunitoSans-Regular',
-            fontWeight: '600',
-            alignSelf: 'center',
-            paddingLeft: 30,
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}>
-          Exam Reports
-        </Text>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontFamily: 'NunitoSans-Light',
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+            }}>
+            Exam Reports
+          </Text>
+        </View>
       </View>
       <View style={{marginHorizontal: 15, marginVertical: 10}}>
-        {/* <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          style={styles.dropdown}
-          labelStyle={{
-            fontSize: 20,
-            paddingHorizontal: 15,
-            marginVertical: 10,
-            fontFamily: 'Poppins-Regular',
-            fontStyle: 'normal',
-            fontWeight: '500',
-          }}
-          arrowStyle={{marginRight: 10}}
-          placeholder="Final Report"
-          placeholderStyle={{
-            fontSize: 20,
-            paddingHorizontal: 15,
-            marginVertical: 10,
-            fontFamily: 'Poppins-Regular',
-            fontStyle: 'normal',
-            fontWeight: '500',
-          }}
-        /> */}
         <ModalSelector
           data={items}
           initValue="Final Exam"
@@ -115,42 +109,7 @@ export default function ExamReport({navigation}) {
             justifyContent: 'space-between',
             marginTop: 10,
           }}>
-          {/* <DropDownPicker
-            zIndex={1000}
-            open={open1}
-            value={class}
-            items={classes}
-            setOpen={setOpen1}
-            setValue={setclass}
-            setItems={setclasses}
-            style={styles.dropdown}
-            containerStyle={{width: '30%'}}
-            placeholder="Class"
-          />
-          <DropDownPicker
-            defaultIndex={0}
-            open={open2}
-            value={batch}
-            items={batches}
-            setOpen={setOpen2}
-            setValue={setbatch}
-            setItems={setbatches}
-            style={styles.dropdown}
-            containerStyle={{width: '30%'}}
-            placeholder="Batch"
-          />
-          <DropDownPicker
-            defaultIndex={0}
-            open={open3}
-            value={subject}
-            items={subjects}
-            setOpen={setOpen3}
-            setValue={setsubject}
-            setItems={setsubjects}
-            style={styles.dropdown}
-            containerStyle={{width: '30%'}}
-            placeholder="Subject"
-          /> */}
+      
           <ModalSelector
             data={classes}
             initValue="Class1"
@@ -304,7 +263,6 @@ const styles = StyleSheet.create({
 
   header: {
     height: 69,
-    backgroundColor: 'white',
     flexDirection: 'row',
   },
   shadow: {

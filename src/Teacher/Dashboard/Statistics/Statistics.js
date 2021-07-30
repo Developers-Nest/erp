@@ -10,8 +10,6 @@ import {
 import {Text} from 'react-native-paper';
 
 //icons
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //stack navigation

@@ -267,6 +267,7 @@ const Home = ({navigation}) => {
           <TextInput
             style={{...styles.search_input}}
             placeholder="Live class, fees and more"
+            placeholderTextColor="black"
           />
 
           <TouchableOpacity
