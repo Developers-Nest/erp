@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,8 +13,19 @@ import {
 
 import {Container, Content, List, ListItem, Header, Icon} from 'native-base';
 
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
+// loading screen
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
+
+// helpers
+import get from '../../../services/helpers/request/get';
+import read from '../../../services/localstorage/read';
+import getCourse from '../../../services/helpers/getList/getCourse';
+import getBatch from '../../../services/helpers/getList/getBatch';
+
+// redux
+import {useSelector} from 'react-redux';
 
 const Stack = createStackNavigator();
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -30,103 +41,110 @@ import OccurenceEdit from './OccurenceEdit';
 import Occurence2 from './Occurence2';
 
 export default function Occurence({navigation}) {
-
-  const [searchQuery, setSearchQuery] = React.useState('');
-
-  const onChangeSearch = query => setSearchQuery(query);
-  function Material({navigation}) {
-    const [searchQuery, setSearchQuery] = React.useState('');
-
-    const onChangeSearch = query => setSearchQuery(query);
-
-    return (
-        <>
-         <View
-            style={{
-              width: '90%',
-              marginLeft: 25,
-              marginBottom: 10,
-              marginTop: 30,
-              justifyContent: 'flex-start',
-            }}>
-          </View>
-        <Searchbar
-        placeholder="Enter subject or batch name"
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-      />
-      <View style={styles.container}>
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity
-              style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontWeight: 'normal',
-                    fontSize: 20,
-                    color: '#211C5A',
-                  }}>
-                  Title
-                </Text>
-                <Button 
-              onPress={
-                  ()=>navigation.navigate('OccurenceEdit')
-              }>
-                  edit{' '}
-                  <FontAwesome5 name={'edit'} size={20} light />
-                </Button>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 16, color: 'blue'}}>
-                  19 July, 2021
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity 
-              onPress={
-                  ()=>navigation.navigate('Occurence2')
-              } style={styles.differentusers}>
-                <Text style={{fontSize: 16}}>
-                  Exams will be conducted via online mode in the upcoming week
-                  and these are the notes for it so go through them and study
-                  well
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </View>
-      </>
-    );
-  }
-
-  function Videos({navigation}) {
-    const [searchQuery, setSearchQuery] = React.useState('');
-
-    const onChangeSearch = query => setSearchQuery(query);
-  }
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={{flex: 1}}>
         <Appbar>
-          <Appbar.BackAction 
-          onPress={() => navigation.goBack()} 
-          />
+          <Appbar.BackAction onPress={() => navigation.goBack()} />
           <Appbar.Content title="Occurence Register" />
           <Appbar.Action icon="plus-circle-outline" />
         </Appbar>
 
         <View style={styles.maincontainer}>
-    <Stack.Navigator headerMode="none">
-    <Stack.Screen name="Occurence" component={Material} />
-    <Stack.Screen name="OccurenceEdit" component={OccurenceEdit} />
-    <Stack.Screen name="Occurence2" component={Occurence2} />
-  </Stack.Navigator>
+          <Stack.Navigator headerMode="none">
+            <Stack.Screen name="Occurence" component={Occurance} />
+            <Stack.Screen name="OccurenceEdit" component={OccurenceEdit} />
+            <Stack.Screen name="Occurence2" component={Occurence2} />
+          </Stack.Navigator>
         </View>
       </View>
     </TouchableWithoutFeedback>
+  );
+}
+
+function Occurance({navigation}) {
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
+
+  const [list, setlist] = useState([]);
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+  const userInfo = useSelector(state => state.userInfo);
+  const institute = useSelector(state => state.institute);
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const onChangeSearch = query => setSearchQuery(query);
+
+  //fetch list
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      let slug = `/occurrence`;
+      let token = await read('token');
+      let response = await get(slug, token);
+      console.log('Response ', response);
+      setlist(response);
+    } catch (err) {
+      alert('Cannot fetch your Live Classes !!\n');
+    }
+    hideLoadingScreen();
+  }, []);
+
+  return (
+    <>
+      <View
+        style={{
+          width: '90%',
+          marginLeft: 25,
+          marginBottom: 10,
+          marginTop: 30,
+          justifyContent: 'flex-start',
+        }}></View>
+      <Searchbar
+        placeholder="Enter subject or batch name"
+        onChangeText={onChangeSearch}
+        value={searchQuery}
+      />
+      <View style={styles.container}>
+        {list &&
+          list.map(occurance => (
+            <View style={styles.section} key={occurance._id}>
+              <View style={styles.details}>
+                <View style={styles.userinhostels}>
+                  <TouchableOpacity style={styles.differentusers}>
+                    <Text
+                      style={{
+                        fontWeight: 'normal',
+                        fontSize: 20,
+                        color: '#211C5A',
+                      }}>
+                      {occurance.firstname}
+                    </Text>
+                    <Button
+                      onPress={() => navigation.navigate('OccurenceEdit')}>
+                      edit <FontAwesome5 name={'edit'} size={20} light />
+                    </Button>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={styles.differentusers}>
+                    <Text style={{fontSize: 16, color: 'blue'}}>
+                      {parseDate(occurance.date)}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Occurence2')}
+                    style={styles.differentusers}>
+                    <Text style={{fontSize: 16}}>{occurance.remarks}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          ))}
+      </View>
+    </>
   );
 }
 

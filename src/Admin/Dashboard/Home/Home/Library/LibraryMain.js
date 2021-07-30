@@ -1,5 +1,4 @@
-
-import * as React from 'react';
+import React, { useState,useEffect } from 'react';
 // import { TextInput } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -20,7 +19,10 @@ import {
   Keyboard,
 } from 'react-native';
 
-// redux
+// helpers
+import get from '../../../../../services/helpers/request/get';
+import read from '../../../../../services/localstorage/read';
+//redux
 import { useSelector } from 'react-redux';
 
 export default function LibraryMain({ navigation }) {
@@ -130,6 +132,22 @@ export default function LibraryMain({ navigation }) {
   }
 
   function IssuedBooks() {
+    const [issuedbooks, setissuedbooks] = useState([]);
+  
+  
+    useEffect(async () => {
+        try {
+          let slug = '/library/issue';
+          let token = await read('token');
+          const response = await get(slug, token);
+          console.log(response);
+          setissuedbooks(response);
+        } catch (err) {
+          alert('Cannot fetch issued books list !!');
+        }
+      }, []);
+    
+  
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
@@ -150,9 +168,11 @@ export default function LibraryMain({ navigation }) {
           </Text>
         </TouchableOpacity>
         <ScrollView>
+        {issuedbooks &&
+              issuedbooks.map(issuedbooks => (
 
 
-          <View style={styles.section}>
+          <View style={styles.section} key={issuedbooks._id}>
             <View style={styles.details}>
               <View style={styles.userinhostels}>
                 <View style={styles.differentusers}>
@@ -164,7 +184,8 @@ export default function LibraryMain({ navigation }) {
 
                     }}>
                     {' '}
-                    Title
+                    {/* Title */}
+                    {issuedbooks.bookName.title}
                   </Text>
 
                   <View
@@ -176,7 +197,9 @@ export default function LibraryMain({ navigation }) {
                         color: '#211C5A',
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      Status
+                      {/* Status */}
+                      {/* //returned in place  of institution,but boolean value */}
+{issuedbooks.department.institution}
                     </Text>
                   </View>
                 </View>
@@ -187,7 +210,7 @@ export default function LibraryMain({ navigation }) {
                       color: '#5177E7',
                       fontFamily: 'Poppins-Medium',
                     }}>
-                    {' '} Teacher
+                    {' '} {issuedbooks.userType.name}
                   </Text>
                 </View>
                 <View style={styles.differentusers}>
@@ -197,7 +220,9 @@ export default function LibraryMain({ navigation }) {
                       color: '#505069',
                       fontFamily: 'Poppins-Regular',
                     }}>
-                    {'  '}Bulk Issue
+                    {'  '}
+                    {/* Bulk Issue */}
+                    {issuedbooks.bookName.copies}
                   </Text>
                   <TouchableOpacity
                     style={{ flexDirection: 'row' }}
@@ -232,7 +257,7 @@ export default function LibraryMain({ navigation }) {
                   fontFamily: 'Poppins-Regular',
                   paddingLeft: 5,
                 }}>
-                Issued: 21May,2021
+                Issued:{issuedbooks.bookName.purchaseDate.slice(0, 10)}
               </Text>
               <Text
                 style={{
@@ -240,12 +265,12 @@ export default function LibraryMain({ navigation }) {
                   color: '#B04305',
                   fontFamily: 'Poppins-Regular',
                 }}>
-                Due: 21Sept,2021
+                Due: {issuedbooks.dueDate.slice(0, 10)}
               </Text>
             </View>
           </View>
 
-
+              ))}
 
 
         </ScrollView>
@@ -423,6 +448,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     marginHorizontal: 20,
     marginBottom: 10,
+    
   },
 
   details: {
@@ -432,6 +458,7 @@ const styles = StyleSheet.create({
     // paddingBottom: 10,
     borderBottomColor: '#333',
     paddingHorizontal: 10,
+    paddingVertical:10,
     borderBottomWidth: 0.5
   },
   // userinhostels: {
