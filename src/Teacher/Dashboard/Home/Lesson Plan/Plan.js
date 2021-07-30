@@ -151,7 +151,7 @@ export default function LessonPlan({ navigation }) {
                         color: '#211C5A',
                       }}>
                       {' '}
-                      {plan.topic || 'Topic: N/A'}
+                      {'Topic: '+plan.topic || 'Topic: N/A'}
                     </Text>
 
                     <TouchableOpacity
@@ -167,22 +167,22 @@ export default function LessonPlan({ navigation }) {
                           color: '#58636D',
                           fontFamily: 'Poppins-Regular',
                         }}>
-                        Edit
+                        Edit &nbsp;
                       </Text>
                       <AntDesign size={12} color="#211C5A" name="edit" />
                     </TouchableOpacity>
                   </View>
-                  <TouchableOpacity style={styles.differentusers}>
+                  <View style={styles.differentusers}>
                     <Text
                       style={{
                         fontSize: 12,
                         color: institute.themeColor || '#505069',
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {plan.name || 'Subject: N/A'}
+                      { plan.subject ? 'Subject: ' + plan.subject.name : 'Subject: N/A' || 'Subject: N/A'}
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.differentusers}>
+                  </View>
+                  <View style={styles.differentusers}>
                     <Text
                       style={{
                         fontSize: 12,
@@ -190,11 +190,11 @@ export default function LessonPlan({ navigation }) {
                         paddingRight: 15,
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {plan.description || 'Description: N/A'}
+                      {'Description: '+plan.description || 'Description: N/A'}
                     </Text>
 
                     {/* <Text style={styles.userstext}>Graded</Text> */}
-                  </TouchableOpacity>
+                  </View>
                 </View>
               </View>
 
@@ -210,7 +210,7 @@ export default function LessonPlan({ navigation }) {
                 </Text>
 
                 <Button
-                  title="URL"
+                  title="Link"
                   mode="contained"
                   color={ institute.themeColor || "#5177E7"}
                   labelStyle={{ color: 'white' }}
@@ -252,6 +252,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     marginHorizontal: 20,
+    marginBottom: 30
   },
 
   details: {
