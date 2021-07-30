@@ -120,7 +120,7 @@ const RoomsList = ({ navigation }) => {
             <TouchableWithoutFeedback onPress={() => {
               navigation.navigate('VisitorsList');}}
            >
-               <>
+               <View>
 
 {listroom &&
               listroom.map(listroom => (
@@ -221,7 +221,7 @@ const RoomsList = ({ navigation }) => {
 
                 </View>
               ))}
-              </>
+              </View>
             </TouchableWithoutFeedback>
 
 
