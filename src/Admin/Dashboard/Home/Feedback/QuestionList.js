@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
+import React, { useState ,useEffect} from 'react';
+import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput, ScrollView } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
@@ -12,7 +12,38 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
+// helpers
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
+//redux
+import { useSelector } from 'react-redux';
+
+
 const QuestionList = () => {
+    const institute = useSelector(state => state.institute);
+
+    
+      const [questionlist, setquestionlist] = useState([]);
+    
+  
+  
+      useEffect(async () => {
+        try {
+          let slug = '/feedback/question?';
+          let token = await read('token');
+          const response = await get(slug, token);
+          console.log(response);
+          setquestionlist(response);
+        } catch (err) {
+          alert('Cannot fetch added books list !!');
+        }
+      }, []);
+    
+  
+    const [searchQuery, setSearchQuery] = React.useState('');
+
+    const onChangeSearch = query => setSearchQuery(query);
+
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -64,7 +95,7 @@ const QuestionList = () => {
                         <TextInput
                             style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
                             placeholder="Enter feedback type here"
-
+                            placeholderTextColor="grey"
                         />
                         <TouchableOpacity
                             style={{
@@ -94,9 +125,10 @@ const QuestionList = () => {
 
             </View>
 
-
-
-
+<ScrollView>
+<View style={{marginBottom:50}}>
+                {questionlist &&
+              questionlist.map(questionlist => (
 
 
             <View style={styles.section} >
@@ -111,7 +143,8 @@ const QuestionList = () => {
                                     marginHorizontal: -5,
                                 }}>
 
-                                Feedback Type
+                                {/* Feedback Type */}
+                                {questionlist.feedbacktype.feedbacktype}
 
                             </Text>
 
@@ -131,7 +164,7 @@ const QuestionList = () => {
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.differentusers}>
                             <Text style={{ fontSize: 12, color: ' #505069' }}>
-                            For: Students
+                            For: {questionlist.feedbacktype.feedbackfor}
                             </Text>
                         </TouchableOpacity>
 
@@ -142,9 +175,7 @@ const QuestionList = () => {
                                     color: '#505069',
                                     fontFamily: 'Poppins-Regular',
                                 }}>
-                                Exams will be conducted via online mode in the upcoming week
-                                and these are notes for it.So,go through them and study well
-
+{questionlist.question}
                             </Text>
 
 
@@ -169,7 +200,7 @@ const QuestionList = () => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                            Active
+                          {questionlist.status}
                         </Text>
                     </View>
 
@@ -202,110 +233,11 @@ const QuestionList = () => {
 
             </View>
 
+))}
+</View>
+<View style={{height:20}}/>
+</ScrollView>
 
-
-            <View style={styles.section} >
-                <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                        <View style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 16,
-                                    color: '#211C5A',
-                                    fontFamily: 'Poppins-Regular',
-                                    marginHorizontal: -5,
-                                }}>
-
-                                Feedback Type
-
-                            </Text>
-
-
-                        </View>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#5177E7',
-                                    fontFamily: 'Poppins-Medium',
-                                }}>
-
-                            </Text>
-
-
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: ' #505069' }}>
-                            For: Students
-                            </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#505069',
-                                    fontFamily: 'Poppins-Regular',
-                                }}>
-                                Exams will be conducted via online mode in the upcoming week
-                                and these are notes for it.So,go through them and study well
-
-                            </Text>
-
-
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                <View style={styles.belowhr}>
-                    <View style={{ flexDirection: 'column' }}>
-                        <Text
-                            style={{
-                                color: '#B04305',
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Medium',
-                            }}>
-
-                        </Text>
-                        <Text
-                            style={{
-                                color: '#505069',
-
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-                            Inactive
-                        </Text>
-                    </View>
-
-                    <View style={{ marginTop: 15 }}>
-                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#211C5A',
-                                    fontFamily: 'Poppins-Regular',
-                                    marginTop: 5,
-                                }}>
-                                Edit
-                            </Text>
-                            <Icon1
-                                size={12}
-                                backgroundColor=" #211C5A"
-                                name="edit"
-                                style={{ paddingTop: 7, paddingRight: 12 }}
-                            />
-                        </TouchableOpacity>
-
-
-                    </View>
-
-
-                </View>
-
-
-
-            </View>
 
 
         </View>
@@ -331,7 +263,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         height: 50,
         fontSize: 15,
-
+color:'black',
 
         paddingTop: 5,
         paddingHorizontal: 0,
@@ -363,11 +295,12 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 1,
         elevation: 5,
-        marginTop: 14,
+       
         borderRadius: 12,
         paddingLeft: 10,
         paddingRight: 10,
         marginHorizontal: 20,
+        marginVertical:10
     },
     details: {
         display: 'flex',
