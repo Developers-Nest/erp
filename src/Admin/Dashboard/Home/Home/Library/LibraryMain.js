@@ -219,7 +219,7 @@ export default function LibraryMain({ navigation }) {
                       }}>
                       {/* Status */}
                       {/* //returned in place  of institution,but boolean value */}
-{issuedbooks.department.institution}
+{issuedbooks.institution}
                     </Text>
                   </View>
                 </View>
