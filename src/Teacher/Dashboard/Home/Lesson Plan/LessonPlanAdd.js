@@ -141,7 +141,7 @@ export default function LessonPlanAdd({ navigation }) {
               color: 'white',
               fontFamily: 'NunitoSans-Regular',
             }}>
-            Edit Lesson Plan
+            Add Lesson Plan
           </Text>
         </View>
         <View style={{ padding: 15 }} />
