@@ -120,6 +120,7 @@ const HostelAllocationAdd = ({ navigation }) => {
 
     // usertype === 'Teacher'
     let fetchEmployees = async (sd) => {
+        showLoadingScreen()
         try {
             setSelectedDepartment(sd)
             let slug = `/employee?department=${sd}`
@@ -139,6 +140,7 @@ const HostelAllocationAdd = ({ navigation }) => {
         } catch (err) {
             alert('Cannot fetch Employess!')
         }
+        hideLoadingScreen()
     }
 
     // usertype === 'Student'
@@ -236,9 +238,10 @@ const HostelAllocationAdd = ({ navigation }) => {
 
     // submit form
     const handleSubmit = async () => {
-
+        showLoadingScreen()
         if (!userType || !date || !date1) {
             alert('All fields are required!')
+            hideLoadingScreen()
             return
         }
 
@@ -289,10 +292,12 @@ const HostelAllocationAdd = ({ navigation }) => {
         } catch (err) {
             alert('Error!! ' + err)
         }
+        hideLoadingScreen()
     }
 
     return (
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+            {loadingScreen}
             {/* header start */}
             <View
                 style={{
