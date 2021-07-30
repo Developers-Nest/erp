@@ -34,6 +34,22 @@ export default function LibraryMain({ navigation }) {
   const institute = useSelector(state => state.institute);
 
   function AddedBooks() {
+    const [addedbooks, setaddedbooks] = useState([]);
+  
+  
+    useEffect(async () => {
+        try {
+          let slug = '/library/books';
+          let token = await read('token');
+          const response = await get(slug, token);
+          console.log(response);
+          setaddedbooks(response);
+        } catch (err) {
+          alert('Cannot fetch added books list !!');
+        }
+      }, []);
+    
+  
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
@@ -53,8 +69,12 @@ export default function LibraryMain({ navigation }) {
         </TouchableOpacity>
 
         <ScrollView>
+        {addedbooks &&
+              addedbooks.map(addedbooks => (
 
-          <View style={styles.section}>
+
+       
+          <View style={styles.section} key={addedbooks._id}>
             <View style={styles.details}>
               <View style={styles.userinhostels}>
                 <View style={styles.differentusers}>
@@ -65,7 +85,7 @@ export default function LibraryMain({ navigation }) {
                       fontFamily: 'Poppins-Regular',
                     }}>
                     {' '}
-                    Title
+                    {addedbooks.title}
                   </Text>
 
 
@@ -77,7 +97,7 @@ export default function LibraryMain({ navigation }) {
                       color: '#505069',
                       fontFamily: 'Poppins-Regular',
                     }}>
-                    {'  '}ISBN Number
+                    {'  '}{addedbooks.isbn}
                   </Text>
                   <TouchableOpacity
                     style={{ flexDirection: 'row' }}
@@ -112,7 +132,7 @@ export default function LibraryMain({ navigation }) {
                   fontFamily: 'Poppins-Regular',
                   paddingLeft: 5,
                 }}>
-                Issued: 21May,2021
+                Issued:{addedbooks.purchaseDate.slice(0, 10)}
               </Text>
               <Text
                 style={{
@@ -120,12 +140,12 @@ export default function LibraryMain({ navigation }) {
                   color: '#505069',
                   fontFamily: 'Poppins-Regular',
                 }}>
-                Book No.
+                {addedbooks.bookNumber}
               </Text>
 
             </View>
           </View>
-
+              ))}
         </ScrollView>
       </View>
     );
@@ -373,6 +393,7 @@ export default function LibraryMain({ navigation }) {
               <TextInput
                 style={{ width: '80%', ...styles.text_input }}
                 placeholder="Enter book name or ID here"
+                placeholderTextColor="grey"
               />
               <TouchableOpacity
                 style={{
@@ -398,25 +419,26 @@ export default function LibraryMain({ navigation }) {
           <TouchableOpacity
             style={{
               borderBottomWidth: showContent == 'IssuedBooks' ? 1 : 0,
-              borderBottomColor: 'rgba(176, 67, 5, 1)',
+              borderBottomColor:  showContent=='IssuedBooks'?'rgba(176, 67, 5, 1)':'#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => setShowContent('IssuedBooks')}>
-            <Text style={styles.switchTextDue}>Issued Books</Text>
+              <Text style={[styles.switchText],[{ color:showContent=='IssuedBooks'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600'}]}>Issued Books</Text>
+        
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{
               borderBottomWidth: showContent == 'AddedBooks' ? 1 : 0,
-              borderBottomColor: '#58636D',
+              borderBottomColor: showContent=='AddedBooks'?'rgba(176, 67, 5, 1)':'#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => setShowContent('AddedBooks')}>
-            <Text style={styles.switchText}>Added Books</Text>
+      <Text style={[styles.switchText],[{ color:showContent=='AddedBooks'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600'}]}>Added Books</Text>
           </TouchableOpacity>
         </View>
         {showContent === 'IssuedBooks' ? <IssuedBooks /> : <AddedBooks />}
@@ -487,7 +509,6 @@ const styles = StyleSheet.create({
   },
   switchText: {
     fontSize: 14,
-    color: '#58636D',
     paddingHorizontal: 5,
     fontFamily: 'Poppins-SemiBold',
     fontWeight: 'bold',
@@ -513,6 +534,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     minWidth: 171,
     backgroundColor: 'white',
+    color:'black'
   },
 
   shadow: {
