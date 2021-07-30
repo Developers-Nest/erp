@@ -282,6 +282,7 @@ export default function ContentLibrary({ navigation }) {
                 <TextInput
                   style={{ width: '80%', ...styles.text_input }}
                   placeholder="Enter subject or batch name"
+                  placeholderTextColor="black"
                 />
                 <TouchableOpacity
                   style={{
@@ -425,6 +426,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     minWidth: 171,
     backgroundColor: 'white',
+    color: 'black'
   },
 
   shadow: {

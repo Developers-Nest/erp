@@ -1,387 +1,249 @@
-// import React, {useState} from 'react';
-// import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-// import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-// import {
-//   Button,
-//   List,
-//   Card,
-//   Title,
-//   Paragraph,
-//   TextInput,
-// } from 'react-native-paper';
-
-// import AntDesign from 'react-native-vector-icons/AntDesign';
-// import IonIcon from 'react-native-vector-icons/Ionicons';
-
-// // redux
-// import {useSelector} from 'react-redux';
-
-// export default function LessonPlanAdd({navigation}) {
-//   const [expanded, setExpanded] = React.useState(true);
-//   const [text, setText] = React.useState('');
-//   const handlePress = () => setExpanded(!expanded);
-
-//   //theming
-//   const institute = useSelector(state => state.institute);
-
-//   return (
-//     <View style={styles.container}>
-//       <View
-//         style={{
-//           backgroundColor: institute ? institute.themeColor : 'black',
-//           ...styles.header,
-//         }}>
-//         <TouchableOpacity
-//           onPress={() => {
-//             navigation.navigate('Lesson Plan');
-//           }}>
-//           <AntDesign
-//             size={24}
-//             color="white"
-//             name="left"
-//             style={{
-//               alignSelf: 'center',
-//               fontSize: 25,
-//               color: 'white',
-//               paddingLeft: 20,
-//               paddingTop: 20,
-//             }}
-//           />
-//         </TouchableOpacity>
-//         <Text
-//           style={{
-//             fontStyle: 'normal',
-//             fontSize: 28,
-//             fontWeight: '600',
-//             alignSelf: 'center',
-//             paddingLeft: 30,
-//             color: 'white',
-//             fontFamily: 'NunitoSans-Regular',
-//           }}>
-//           Add Lesson Plan
-//         </Text>
-//       </View>
-//       <View style={styles.Drop}>
-//         <List.Section style={{width: 120}}>
-//           <List.Accordion
-//             title="Class"
-//             style={{
-//               borderTopRightRadius: 5,
-//               borderBottomRightRadius: 5,
-//               borderBottomLeftRadius: 5,
-//               borderWidth: 0.5,
-//               borderTopStartRadius: 5,
-//               backgroundColor: 'white',
-//             }}>
-//             <List.Item title="First item" />
-//             <List.Item title="Second item" />
-//           </List.Accordion>
-//         </List.Section>
-
-//         <List.Section style={{width: 120}}>
-//           <List.Accordion
-//             title="Batch"
-//             style={{
-//               borderTopRightRadius: 5,
-//               borderBottomRightRadius: 5,
-//               borderBottomLeftRadius: 5,
-//               borderWidth: 0.5,
-//               borderTopStartRadius: 5,
-//               backgroundColor: 'white',
-//             }}>
-//             <List.Item title="First item" />
-//             <List.Item title="Second item" />
-//           </List.Accordion>
-//         </List.Section>
-//         <List.Section style={{width: 120}}>
-//           <List.Accordion
-//             title="Subject"
-//             style={{
-//               borderTopRightRadius: 5,
-//               borderBottomRightRadius: 5,
-//               borderBottomLeftRadius: 5,
-//               borderWidth: 0.5,
-//               borderTopStartRadius: 5,
-//               backgroundColor: 'white',
-//             }}>
-//             <List.Item title="First item" />
-//             <List.Item title="Second item" />
-//           </List.Accordion>
-//         </List.Section>
-//       </View>
-//       <Card style={styles.card}>
-//         <Card.Content>
-//           <Title style={{fontSize: 16, fontFamily: 'Poppins-Regular'}}>
-//             Chapter: Newton's Law of motion
-//           </Title>
-//           <View
-//             style={{
-//               borderBottomColor: 'black',
-//               borderBottomWidth: 0.5,
-//             }}
-//           />
-//           <Title style={{fontSize: 16, fontFamily: 'Poppins-Regular'}}>
-//             Topic: First law of motion
-//           </Title>
-//           <View
-//             style={{
-//               borderBottomColor: 'black',
-//               borderBottomWidth: 0.5,
-//             }}
-//           />
-//           <TextInput
-//             style={{
-//               height: 80,
-//               textAlignVertical: 'top',
-//               backgroundColor: 'white',
-//             }}
-//             multiline={true}
-//             numberOfLines={10}
-//             placeholder="Description (optional)"
-//             right={<TextInput.Affix text="/100" />}
-//           />
-//           <TouchableOpacity
-//             onPress={() => {
-//               /* do this */
-//             }}>
-//             <View
-//               style={{
-//                 flexDirection: 'row',
-//                 paddingVertical: 70,
-//                 alignSelf: 'flex-end',
-//               }}>
-//               <List.Item
-//                 style={{
-//                   width: 100,
-//                   borderWidth: 0.3,
-//                   borderTopRightRadius: 5,
-//                   borderBottomRightRadius: 5,
-//                   borderBottomLeftRadius: 5,
-//                   borderTopLeftRadius: 5,
-//                 }}
-//                 title="Add Link"
-//               />
-//             </View>
-//           </TouchableOpacity>
-//         </Card.Content>
-//       </Card>
-//       <View style={{alignItems: 'center', marginTop: 50}}>
-//         <Button mode="contained" onPress={() => {}}>
-//           Save
-//         </Button>
-//       </View>
-//     </View>
-//   );
-// }
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#E5E5E5',
-//   },
-//   header: {
-//     height: 69,
-//     flexDirection: 'row',
-//   },
-//   Drop: {
-//     marginTop: 5,
-//     flexDirection: 'row',
-//     justifyContent: 'space-evenly',
-//   },
-//   card: {
-//     marginLeft: 10,
-//     marginRight: 10,
-//     marginTop: 5,
-//     height: 310,
-//   },
-//   Week: {
-//     marginTop: 5,
-//     flexDirection: 'row',
-//     justifyContent: 'space-evenly',
-//   },
-// });
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
+  Button,
+  Card,
   TextInput,
-} from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Button, List, Card, Title, Paragraph } from 'react-native-paper';
+} from 'react-native-paper'
 
-import ModalSelector from 'react-native-modal-selector';
-import loadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import IonIcon from 'react-native-vector-icons/Ionicons';
+//icons
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import ModalSelector from 'react-native-modal-selector'
+
+// helpers
+import getBatch from '../../../../services/helpers/getList/getBatch'
+import getCourse from '../../../../services/helpers/getList/getCourse'
+import getSubject from '../../../../services/helpers/getList/getSubject'
+import post from '../../../../services/helpers/request/post'
+import read from '../../../../services/localstorage/read'
+
+// loading screem
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js'
 
 // redux
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
+import { ScrollView } from 'react-native-gesture-handler'
 
 export default function LessonPlanAdd({ navigation }) {
-  const [expanded, setExpanded] = React.useState(true);
-  const [text, setText] = React.useState('');
-  const handlePress = () => setExpanded(!expanded);
+  const [course, setCourse] = useState([])
+  const [batch, setBatch] = useState([])
+  const [subject, setSubject] = useState([])
 
-  const [batches, setBatches] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null)
+  const [selectedBatch, setSelectedBatch] = useState(null)
+  const [selectedSubject, setSelectedSubject] = useState(null)
+  const [lectureCode, setlectureCode] = useState(null)
+  const [description, setDescription] = useState(null)
+  const [url, setUrl] = useState(null)
+  const [topic, setTopic] = useState(null)
 
-  // selected values
-  const [batch, setBatch] = useState(null);
-  const [course, setCourse] = useState(null);
-  const [subject, setSubject] = useState(null);
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [dateString, setDateString] = useState(
-    new Date(1598051730000).toString(),
-  );
+  // loading screen
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+
+  const BatchData = async idx => {
+    setLoadingScreen()
+    try {
+      setSelectedCourse(idx)
+      let batchdata = await getBatch(idx)
+      setBatch(batchdata)
+    } catch (err) {
+      console.log('Batch data', err)
+    }
+    hideLoadingScreen()
+  }
+  const SubjectData = async (batch) => {
+    setLoadingScreen()
+    try {
+      setSelectedBatch(batch)
+      let subjectdata = await getSubject(course, batch)
+      setSubject(subjectdata)
+    } catch (err) {
+      console.log('subject data', err)
+    }
+    hideLoadingScreen()
+  }
+
+  const addPlan = async () => {
+    if (!course || !batch || !subject) {
+      alert('All fields are Mandatory!!')
+      return
+    }
+
+    try {
+      const token = await read('token')
+      let slug = '/lessonplanning'
+      let data = {
+        list: [{
+          batch: [selectedBatch],
+          code: lectureCode,
+          description: description,
+          subject: selectedSubject,
+          topic: topic,
+          url: url,
+          course: selectedCourse
+        }]
+      }
+      const response = await post(slug, data, token)
+      if (response.message === "Added") {
+        alert('Lesson Plan Added!!')
+      } else throw new Error('Cannot Add')
+    } catch (err) {
+      alert('Error: ' + err)
+    }
+  }
+  useEffect(async () => {
+    setLoadingScreen()
+
+    try {
+      let coursedata = await getCourse()
+      setCourse(coursedata)
+    } catch (err) {
+      console.log('Use Effect Error ', err)
+    }
+    hideLoadingScreen()
+  }, [])
 
   //theming
-  const institute = useSelector(state => state.institute);
+  const institute = useSelector(state => state.institute)
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          backgroundColor: institute ? institute.themeColor : 'black',
-          ...styles.header,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Lesson Plan');
-          }}>
-          <AntDesign
-            size={24}
-            color="white"
-            name="left"
-            style={{
-              alignSelf: 'center',
-              fontSize: 25,
-              color: 'white',
-              paddingLeft: 20,
-              paddingTop: 20,
-            }}
-          />
-        </TouchableOpacity>
-        <Text
+        <View
           style={{
-            fontStyle: 'normal',
-            fontSize: 28,
-            fontWeight: '600',
-            alignSelf: 'center',
-            paddingLeft: 30,
-            color: 'white',
-            fontFamily: 'NunitoSans-Regular',
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
           }}>
-          Add Lesson Plan
-        </Text>
-      </View>
-      <View style={{ padding: 15 }} />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-          marginTop: 10,
-          alignContent: 'flex-start',
-          width: '100%',
-        }}>
-        {/* course selector */}
-        <ModalSelector
-          data={courses}
-          initValue="Class"
-          onChange={option => {
-            fetchBatches(option.key);
-          }}
-          style={styles.card_picker}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-
-        {/* batch selector */}
-        <ModalSelector
-          data={batches}
-          initValue="Batch"
-          onChange={option => {
-            fetchSubjects(option.key);
-          }}
-          style={styles.card_picker}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-
-        {/* subject selector */}
-        <ModalSelector
-          data={subjects}
-          initValue="Subject"
-          onChange={option => {
-            getList(option.key);
-          }}
-          style={styles.card_picker}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-      </View>
-      <View style={{ padding: 15 }} />
-      <View
-        style={{
-          paddingLeft: 11,
-          paddingRight: 11,
-        }}>
-        <Card style={styles.card1}>
-          <Card.Content>
-            <View
+          {loadingScreen}
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Lesson Plan')
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
               style={{
-                flexDirection: 'row',
-              }}>
-              <TextInput
-                placeholder="Chapter's name "
-                onChange={val => setChapter(val)}
-              />
-              {/* <View style={{paddingLeft:10}} /> */}
-            </View>
-            <View style={{ padding: 2 }} />
-            <View style={{ borderWidth: 0.2 }} />
-            <View style={{ padding: 10 }} />
-            <TextInput placeholder="Topic " onChange={val => setTopic(val)} />
-            <View style={{ padding: 2 }} />
-            <View style={{ borderWidth: 0.2 }} />
-            <View style={{ padding: 10 }} />
-            <TextInput
-              placeholder="Discription (optional) "
-              onChange={val => setDiscription(val)}
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
             />
-            <View style={{ padding: 40 }} />
-            <View
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+              fontFamily: 'NunitoSans-Regular',
+            }}>
+            Edit Lesson Plan
+          </Text>
+        </View>
+        <View style={{ padding: 15 }} />
+        <View style={styles.Drop}>
+          <ModalSelector
+            data={course}
+            initValue="Course"
+            onChange={crs => {
+              BatchData(crs.key)
+            }}
+            style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+
+          <ModalSelector
+            data={batch}
+            initValue="Batch"
+            onChange={bth => {
+              SubjectData(bth.key)
+            }}
+            style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+
+          <ModalSelector
+            data={subject}
+            initValue="Subject"
+            onChange={sbj => {
+              setSelectedSubject(sbj.key)
+            }}
+            style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+        </View>
+        <ScrollView>
+        <View style={{ padding: 15 }} />
+        <Card style={styles.card}>
+          <Card.Content>
+            <TextInput
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-              }}>
-              <Button
-                icon="calendar"
-                mode="contained"
-                color="white"
-                onPress={() => console.log('Pressed')}>
-                13:00{' '}
-              </Button>
-              <View style={{ padding: 10 }} />
-              <Button
-                mode="contained"
-                color="white"
-                onPress={() => console.log('Pressed')}>
-                Add file
-              </Button>
-            </View>
+                height: 80,
+                textAlignVertical: 'top',
+                backgroundColor: 'white',
+              }}
+              multiline={true}
+              onChangeText={txt => setlectureCode(txt)}
+              numberOfLines={10}
+              placeholder="Lecture Code"
+              right={<TextInput.Affix text="/100" />}
+            />
+            <TextInput
+              style={{
+                height: 80,
+                textAlignVertical: 'top',
+                backgroundColor: 'white',
+              }}
+              multiline={true}
+              onChangeText={txt => setTopic(txt)}
+              numberOfLines={10}
+              placeholder="Topic"
+              right={<TextInput.Affix text="/100" />}
+            />
+            <TextInput
+              style={{
+                height: 80,
+                textAlignVertical: 'top',
+                backgroundColor: 'white',
+              }}
+              onChangeText={txt => setUrl(txt)}
+              multiline={true}
+              numberOfLines={10}
+              placeholder="URL"
+              right={<TextInput.Affix text="/100" />}
+            />
+            <TextInput
+              style={{
+                height: 80,
+                textAlignVertical: 'top',
+                backgroundColor: 'white',
+              }}
+              multiline={true}
+              onChangeText={desc => setDescription(desc)}
+              numberOfLines={10}
+              placeholder="Description"
+              right={<TextInput.Affix text="/100" />}
+            />
           </Card.Content>
         </Card>
-      </View>
-      <View style={{ alignItems: 'center', marginTop: 50 }}>
-        <Button mode="contained" onPress={() => { }} style={{ backgroundColor: institute.themeColor }}>
-          Save
-        </Button>
-      </View>
+
+        <View
+          style={{ justifyContent: 'center', marginTop: 20, flexDirection: 'row' }}>
+          <View style={{ width: 50 }}></View>
+          <Button mode="contained" onPress={addPlan} style={{ backgroundColor: institute.themeColor }}>
+            Save
+          </Button>
+        </View>
+      </ScrollView>
     </View>
-  );
+  )
 }
 const styles = StyleSheet.create({
   container: {
@@ -401,20 +263,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 5,
-    height: 310,
-  },
-  card1: {
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 1,
-    shadowRadius: 12,
-    elevation: 5,
+    // height: 310,
   },
   Week: {
     marginTop: 5,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
   },
   SelectedValueSmall: {
     fontFamily: 'Poppins-Regular',
@@ -442,4 +295,4 @@ const styles = StyleSheet.create({
     minWidth: 110,
     elevation: 3,
   },
-});
+})
