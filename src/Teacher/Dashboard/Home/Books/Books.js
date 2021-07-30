@@ -364,7 +364,7 @@ export default function BooksStudent({ navigation }) {
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Due')}>
-            <Text style={[styles.switchText],[{ color:showContent=='Due'?'rgba(176, 67, 5, 1)':'#58636D',}]}>Due</Text>
+            <Text style={[styles.switchText],[{ color:showContent=='Due'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600'}]}>Due</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -376,7 +376,7 @@ export default function BooksStudent({ navigation }) {
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Cleared')}>
-            <Text style={[styles.switchText],[{ color:showContent=='Cleared'?'rgba(176, 67, 5, 1)':'#58636D',}]}>Cleared</Text>
+            <Text style={[styles.switchText],[{ color:showContent=='Cleared'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600'}]}>Cleared</Text>
           </TouchableOpacity>
         </View>
         {showContent === 'Due' ? <Due /> : <Cleared />}
@@ -406,8 +406,7 @@ const styles = StyleSheet.create({
     marginTop: 14,
     marginBottom:10,
     borderRadius: 12,
-    paddingLeft: 10,
-    paddingRight: 10,
+ 
     marginHorizontal: 20,
   },
 
@@ -417,6 +416,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingBottom: 10,
     borderBottomColor: '#333',
+    paddingHorizontal:20,
   },
   userinhostels: {
     marginBottom: 10,
@@ -443,10 +443,9 @@ const styles = StyleSheet.create({
   },
   switchText: {
     fontSize: 14,
-    // color: '#58636D',
     paddingHorizontal: 5,
-    fontFamily: 'Poppins-Regular',
-    fontWeight: 'bold',
+    fontFamily:'Poppins-Regular',
+   
     
   },
   maincontainer: {
