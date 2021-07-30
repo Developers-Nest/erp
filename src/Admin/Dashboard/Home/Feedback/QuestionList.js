@@ -131,7 +131,7 @@ const QuestionList = () => {
               questionlist.map(questionlist => (
 
 
-            <View style={styles.section} >
+            <View style={styles.section}  key={questionlist._id}>
                 <View style={styles.details}>
                     <View style={styles.userinhostels}>
                         <View style={styles.differentusers}>
