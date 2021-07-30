@@ -6,6 +6,7 @@ import {
   Text,
   Pressable,
   TextInput,
+  ScrollView,
 } from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
@@ -154,6 +155,7 @@ const AllocatedListHostel = ({navigation}) => {
           <TextInput
             style={{...styles.search_input, fontFamily: 'Poppins-Regular'}}
             placeholder="Enter hostel name here"
+            placeholderTextColor="grey"
           />
           <TouchableOpacity
             style={{
@@ -170,10 +172,12 @@ const AllocatedListHostel = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
+      {/* <View style={{height:30}}/> */}
+<ScrollView>
       {allocationlist
         ? allocationlist &&
           allocationlist.map(allocation => (
-            <View style={styles.section} key={allocation._id}>
+            <View style={styles.section} key={allocationlist._id}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
                   <View style={styles.differentusers}>
@@ -290,9 +294,14 @@ const AllocatedListHostel = ({navigation}) => {
                 </View>
               </View>
             </View>
+            
           ))
         : null}
+         <View style={{height:60}}/>
+ </ScrollView>
+
     </View>
+  
   );
 };
 
@@ -321,7 +330,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 50,
     fontSize: 15,
-
+    color:'black',
     paddingTop: 5,
     paddingHorizontal: 0,
     width: '90%',
@@ -350,6 +359,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 2.0,
     elevation: 10,
     marginTop: 14,
+    marginBottom:10,
     borderRadius: 12,
     paddingLeft: 10,
     paddingRight: 10,

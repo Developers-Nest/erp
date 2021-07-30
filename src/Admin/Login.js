@@ -211,6 +211,7 @@ export default function Login({navigation}) {
           <TextInput
             style={styles.text_input1}
             placeholder="Institution Code"
+            placeholderTextColor='grey'
             mode="outlined"
             onChangeText={code => setInstitutionCode(code)}
           />
@@ -226,12 +227,14 @@ export default function Login({navigation}) {
         <TextInput
           style={styles.text_input}
           placeholder="Email or Username"
+          placeholderTextColor='grey'
           mode="outlined"
           onChangeText={email => setemail(email)}
         />
         <TextInput
           style={styles.text_input}
           placeholder="Password"
+          placeholderTextColor='grey'
           mode="outlined"
           secureTextEntry={true}
           onChangeText={password => setPassword(password)}
@@ -266,6 +269,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginVertical: 10,
     borderRadius: 10,
+    color:'black',
     backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
@@ -274,6 +278,7 @@ const styles = StyleSheet.create({
   text_input1: {
     paddingHorizontal: 20,
     height: 50,
+    color:'black',
     fontSize: 16,
     borderRadius: 10,
     backgroundColor: 'rgba(249, 249, 249, 1)',
@@ -282,6 +287,7 @@ const styles = StyleSheet.create({
   textinput_search: {
     justifyContent: 'space-between',
     flexDirection: 'row',
+    color:'black',
   },
   search_icon: {padding: 0, margin: 0, alignSelf: 'flex-end'},
   button: {

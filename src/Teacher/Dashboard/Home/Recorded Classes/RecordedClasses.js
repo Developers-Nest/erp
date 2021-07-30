@@ -40,6 +40,7 @@ export default function RecordedClasses({navigation}) {
   const [classRecordedName, setclassRecordedName] = useState(null);
   const [videoURL, setvideoURL] = useState(null);
   const [date, setDate] = useState(new Date(1598051730000));
+  const [dateSelected, setDateSelected] = useState(false)
 
   // dropdown list
   const [classes, setClasses] = useState([]);
@@ -79,6 +80,7 @@ export default function RecordedClasses({navigation}) {
     showLoadingScreen();
     await setDate(sd.toString());
     setShowDatePicker(false);
+    setDateSelected(true)
     hideLoadingScreen();
   };
 
@@ -185,17 +187,20 @@ export default function RecordedClasses({navigation}) {
 
           <TextInput
             placeholder="Name"
+            placeholderTextColor="black"
             onChangeText={val => setclassRecordedName(val)}
-            style={{fontSize: 15, borderBottomWidth: 0.2}}
+            style={{fontSize: 15, borderBottomWidth: 0.2, color: 'black'}}
           />
           <TextInput
             placeholder="Video URL (Youtube)"
+            placeholderTextColor="black"
             onChangeText={val => setvideoURL(val)}
             style={{
               height: 150,
               textAlignVertical: 'top',
               marginTop: 5,
               fontSize: 15,
+              color: 'black'
             }}
           />
           <View style={{padding: 10}} />
@@ -212,7 +217,7 @@ export default function RecordedClasses({navigation}) {
               mode="contained"
               color="white"
               onPress={() => setShowDatePicker(true)}>
-              Date
+              { dateSelected ? date.slice(0, 10) : 'Date' }
             </Button>
 
             <DateTimePickerModal

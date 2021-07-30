@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -12,10 +12,30 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Button } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
 
+// helpers
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
+//redux
 import { useSelector } from 'react-redux';
 
 const RoomsList = ({ navigation }) => {
-
+    const [searchQuery, setSearchQuery] = useState('');
+    const [listroom, setRoomsList] = useState([]);
+  
+    const onChangeSearch = query => setSearchQuery(query);
+  
+    useEffect(async () => {
+        try {
+          let slug = '/hostel/hostelRoom';
+          let token = await read('token');
+          const response = await get(slug, token);
+          console.log(response);
+          setRoomsList(response);
+        } catch (err) {
+          alert('Cannot fetch your rooms list !!');
+        }
+      }, []);
+    
     //theming
     const institute = useSelector(state => state.institute);
 
@@ -69,13 +89,14 @@ const RoomsList = ({ navigation }) => {
             </View>
 
             {/* header ends */}
-
+<View style={{height:10}}/>
 
             <View style={{ marginHorizontal: 10, ...styles.shadow }}>
                 <View style={styles.search}>
                     <TextInput
                         style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
                         placeholder="Enter hostel name here"
+                        placeholderTextColor='grey'
 
                     />
                     <TouchableOpacity
@@ -95,12 +116,15 @@ const RoomsList = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-
+<View style={{height:15}}/>
             <TouchableWithoutFeedback onPress={() => {
               navigation.navigate('VisitorsList');}}
            >
+               <View>
 
-                <View style={styles.section} >
+{listroom &&
+              listroom.map(listroom => (
+                <View style={styles.section} key={listroom._id}>
                     <View style={styles.details}>
                         <View style={styles.userinhostels}>
                             <View style={styles.differentusers}>
@@ -112,18 +136,18 @@ const RoomsList = ({ navigation }) => {
                                         marginHorizontal: -5,
                                     }}>
 
-                                    Hostel Name
-
+                                    {/* Hostel Name */}
+   {''} {listroom.hostelName.name || 'Hostel name Not Found'}
                                 </Text>
 
                                 <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
-                                    302, 3rd floor
+                                    {listroom.roomNo}, {listroom.floorName}
                                 </Text>
 
 
                                 {/* */}
                             </View>
-                            <TouchableOpacity style={styles.differentusers}>
+                            <View style={styles.differentusers}>
                                 <Text
                                     style={{
                                         fontSize: 12,
@@ -134,30 +158,25 @@ const RoomsList = ({ navigation }) => {
                                 </Text>
 
 
-                            </TouchableOpacity>
-                            {/* <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
-                                User Type
-                            </Text>
-                        </TouchableOpacity> */}
+                            </View>
 
 
 
-                            <TouchableOpacity style={styles.differentusers}>
+
+                            <View style={styles.differentusers}>
                                 <Text
                                     style={{
                                         fontSize: 14,
                                         color: '#211C5A',
                                         fontFamily: 'Poppins-Regular',
                                     }}>
-                                    Hostel Type
+                                   {listroom.hostelType.name}
 
                                 </Text>
 
 
 
-
-                            </TouchableOpacity>
+</View>
 
                         </View>
                     </View>
@@ -182,7 +201,7 @@ const RoomsList = ({ navigation }) => {
                                     fontSize: 12,
                                     fontFamily: 'Poppins-Regular',
                                 }}>
-                                Beds: 456
+                                Beds:{listroom.beds}
                             </Text>
                         </View>
                         <View style={{ marginTop: 15 }}>
@@ -193,7 +212,7 @@ const RoomsList = ({ navigation }) => {
                                     fontSize: 12,
                                     fontFamily: 'Poppins-Regular',
                                 }}>
-                                Amount: 24,000 Rs
+                                Amount: {listroom.amount} Rs
                             </Text>
 
                         </View>
@@ -201,109 +220,10 @@ const RoomsList = ({ navigation }) => {
 
 
                 </View>
+              ))}
+              </View>
             </TouchableWithoutFeedback>
 
-            <View style={styles.section} >
-                <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                        <View style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 18,
-                                    color: '#211C5A',
-                                    fontFamily: 'Poppins-Regular',
-                                    marginHorizontal: -5,
-                                }}>
-
-                                Hostel Name
-
-                            </Text>
-
-                            <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
-                                302, 3rd floor
-                            </Text>
-
-
-                            {/* */}
-                        </View>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#5177E7',
-                                    fontFamily: 'Poppins-Medium',
-                                }}>
-
-                            </Text>
-
-
-                        </TouchableOpacity>
-                        {/* <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
-                                User Type
-                            </Text>
-                        </TouchableOpacity> */}
-
-
-
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 14,
-                                    color: '#211C5A',
-                                    fontFamily: 'Poppins-Regular',
-                                }}>
-                                Hostel Type
-
-                            </Text>
-
-
-
-
-                        </TouchableOpacity>
-
-                    </View>
-                </View>
-
-
-
-
-                <View style={styles.belowhr}>
-                    <View style={{ flexDirection: 'column' }}>
-                        <Text
-                            style={{
-                                color: '#B04305',
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Medium',
-                            }}>
-
-                        </Text>
-                        <Text
-                            style={{
-                                color: '#211C5A',
-
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-                            Beds: 456
-                        </Text>
-                    </View>
-                    <View style={{ marginTop: 15 }}>
-                        <Text
-                            style={{
-                                color: '#211C5A',
-
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-                            Amount: 24,000 Rs
-                        </Text>
-
-                    </View>
-                </View>
-
-
-            </View>
 
 
 
@@ -348,7 +268,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         height: 50,
         fontSize: 15,
-
+color:'black',
 
         paddingTop: 5,
         paddingHorizontal: 0,
@@ -394,6 +314,7 @@ const styles = StyleSheet.create({
         paddingBottom: 0,
         borderBottomColor: 'rgba(88, 99, 109, 0.45)',
         borderBottomWidth: 0.8,
+        paddingHorizontal:10
     },
     userinhostels: {
         marginTop: 10,
@@ -417,6 +338,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingBottom: 10,
         borderBottomColor: '#333',
+        paddingHorizontal:10
         //borderBottomWidth:1,
     },
 
