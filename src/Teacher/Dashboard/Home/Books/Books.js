@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TextInput } from 'react-native-paper';
+// import { TextInput } from 'react-native-paper';
 
 import {
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  TextInput
 } from 'react-native';
 
 //icons
@@ -332,7 +333,7 @@ export default function BooksStudent({ navigation }) {
             <TextInput
               style={{ width: '80%', ...styles.text_input }}
               placeholder="Enter book name or ID here"
-              placeholderTextColor="black"
+              placeholderTextColor="grey"
             />
             <TouchableOpacity
               style={{
@@ -363,19 +364,19 @@ export default function BooksStudent({ navigation }) {
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Due')}>
-            <Text style={styles.switchTextDue}>Due</Text>
+            <Text style={[styles.switchText],[{ color:showContent=='Due'?'rgba(176, 67, 5, 1)':'#58636D',}]}>Due</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{
               borderBottomWidth: showContent == 'Cleared' ? 1 : 0,
-              borderBottomColor: '#58636D',
+              borderBottomColor: showContent=='Cleared'?'rgba(176, 67, 5, 1)':'#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Cleared')}>
-            <Text style={styles.switchText}>Cleared</Text>
+            <Text style={[styles.switchText],[{ color:showContent=='Cleared'?'rgba(176, 67, 5, 1)':'#58636D',}]}>Cleared</Text>
           </TouchableOpacity>
         </View>
         {showContent === 'Due' ? <Due /> : <Cleared />}
@@ -388,20 +389,22 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   section: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    shadowColor: '#333',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.2,
-    elevation: 2,
+    shadowOpacity: 1,
+    elevation: 5,
     marginTop: 14,
+    marginBottom:10,
     borderRadius: 12,
     paddingLeft: 10,
     paddingRight: 10,
@@ -440,23 +443,17 @@ const styles = StyleSheet.create({
   },
   switchText: {
     fontSize: 14,
-    color: '#58636D',
+    // color: '#58636D',
     paddingHorizontal: 5,
-    fontFamily: 'Poppins-SemiBold',
+    fontFamily: 'Poppins-Regular',
     fontWeight: 'bold',
+    
   },
   maincontainer: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
 
-  switchTextDue: {
-    fontSize: 14,
-    color: '#B04305',
-    paddingHorizontal: 5,
-    fontFamily: 'Poppins-SemiBold',
-    fontWeight: 'bold',
-  },
 
   text_input: {
     paddingHorizontal: 20,
