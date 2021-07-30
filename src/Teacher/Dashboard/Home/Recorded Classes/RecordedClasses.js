@@ -4,10 +4,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
-  ScrollView,
   TextInput,
-  SafeAreaView,
 } from 'react-native';
 import {Card, Button} from 'react-native-paper';
 
@@ -15,7 +12,6 @@ import {Card, Button} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 
 //icons
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // helpers
@@ -85,6 +81,10 @@ export default function RecordedClasses({navigation}) {
   };
 
   let handleSaveClass = async () => {
+    if(!classRecordedName || !courseName || !batch || !videoURL || !date){
+      alert('All fields are Required!!')
+      return
+    }
     showLoadingScreen();
     try {
       let slug = `/record`;

@@ -119,6 +119,7 @@ export default function LecturesScreen({navigation}) {
             <TextInput
               style={{width: '80%', ...styles.text_input}}
               placeholder="Enter subject or batch name"
+              placeholderTextColor="black"
             />
             <TouchableOpacity
               style={{
