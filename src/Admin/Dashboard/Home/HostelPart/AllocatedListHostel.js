@@ -154,6 +154,7 @@ const AllocatedListHostel = ({navigation}) => {
           <TextInput
             style={{...styles.search_input, fontFamily: 'Poppins-Regular'}}
             placeholder="Enter hostel name here"
+            placeholderTextColor="grey"
           />
           <TouchableOpacity
             style={{
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 50,
     fontSize: 15,
-
+    color:'black',
     paddingTop: 5,
     paddingHorizontal: 0,
     width: '90%',
