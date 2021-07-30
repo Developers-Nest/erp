@@ -237,6 +237,7 @@ const AllocatedListHostel = ({navigation}) => {
                     </Text>
 
                     <TouchableOpacity
+                      onPress={() => navigation.navigate('HostelAllocationEdit')}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
