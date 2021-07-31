@@ -49,6 +49,7 @@ import Attendance from './Attendance/Attendance';
 
 import Results from './Home/Results';
 import Leave from './Home/Leave';
+import Employees from './Home/Employees';
 //assignment(same to teacher)
 import Assignment from './Home/Assignment';
 
@@ -207,6 +208,11 @@ const Home_Route = () => {
         component={Leave}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="Employees"
+        component={Employees}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
@@ -345,24 +351,7 @@ function DrawerContent(props) {
           onPress={() => props.navigation.navigate('Report')}
         />
 
-        {/*        
-        <Drawer.Item
-          label={'Transport'}
-          onPress={() => props.navigation.navigate('Transport')}
-        />
-        <Drawer.Item
-          label={'CCE Marks'}
-          onPress={() => props.navigation.navigate('Cce Marks')}
-        />
-        <Drawer.Item
-          label={'Recorded Classes'}
-          onPress={() => props.navigation.navigate('Recorded Classes')}
-        />
-        <Drawer.Item
-          label={'Report'}
-          onPress={() => props.navigation.navigate('Report')}
-        /> */}
-
+      
         <TouchableOpacity>
           <Button
             style={{
