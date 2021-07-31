@@ -1,29 +1,15 @@
 import React, {useEffect, useState} from 'react';
-
-// import {TextInput} from 'react-native-paper';
-
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-import Icon from 'react-native-vector-icons/Foundation';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
-import IconPhysics2 from 'react-native-vector-icons/Ionicons';
 import IconEnglish2 from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import IconBio1 from 'react-native-vector-icons/FontAwesome5';
-import IconBio2 from 'react-native-vector-icons/FontAwesome5';
 
 import {
   StyleSheet,
   Text,
   View,
   ScrollView,
-  ImageBackground,
-  Button,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TextInput,
+  Linking
 } from 'react-native';
 
 //selector
@@ -110,6 +96,7 @@ const Recorded = () => {
 
   return (
     <View style={styles.container}>
+      {loadingScreen}
       <View
         style={{
           marginBottom: 10,
@@ -153,7 +140,7 @@ const Recorded = () => {
               <TouchableOpacity
                 style={styles.section}
                 key={RecordedClass._id}
-                onPress={() => Linking.openURL(RecordedClass.videoUrl)}>
+                onPress={() => RecordedClass.videoUrl ? Linking.openURL(RecordedClass.videoUrl) : alert('URL Not found!!')}>
                 <View style={styles.details}>
                   <View style={styles.userinhostels}>
                     <View style={styles.differentusers}>

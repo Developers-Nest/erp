@@ -1,29 +1,15 @@
 import React, {useEffect, useState} from 'react';
 
-// import {TextInput} from 'react-native-paper';
-
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-import Icon from 'react-native-vector-icons/Foundation';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
-import IconPhysics2 from 'react-native-vector-icons/Ionicons';
 import IconEnglish2 from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import IconBio1 from 'react-native-vector-icons/FontAwesome5';
-import IconBio2 from 'react-native-vector-icons/FontAwesome5';
 
 import {
   StyleSheet,
   Text,
   View,
   ScrollView,
-  ImageBackground,
-  Button,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TextInput,
+  Linking
 } from 'react-native';
 
 //selector
@@ -118,6 +104,7 @@ const Live = () => {
           flexDirection: 'row',
           margin: 20,
         }}>
+          {loadingScreen}
         <View style={{marginTop: 10, width: 150, ...styles.card}}>
           <ModalSelector
             data={courses}
@@ -152,7 +139,9 @@ const Live = () => {
           {LiveClasses &&
             LiveClasses.map(LiveClass => (
               <TouchableOpacity
-                onPress={() => Linking.openURL(LiveClass.url)}
+                onPress={() => LiveClass.url ? 
+                  Linking.openURL(LiveClass.url)
+                : alert('Url Not found!!')}
                 style={styles.section}
                 key={LiveClass._id}>
                 <View style={styles.details}>
@@ -165,7 +154,7 @@ const Live = () => {
                           color: ' rgba(25, 40, 57, 0.7)',
                           fontFamily: 'Poppins-Medium',
                         }}>
-                        {LiveClass.name}
+                        {LiveClass.name.slice(0,12)}
                       </Text>
 
                       <MaterialCommunityIcon
