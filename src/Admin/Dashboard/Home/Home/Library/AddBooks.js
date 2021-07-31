@@ -107,12 +107,16 @@ const [condition, setcondition] = useState([
                     <TextInput
                         style={[styles.input,styles.shadow]}
                         placeholder="978-0-13-60197"
+                        placeholderTextColor='grey'
+                        color='black'
 
 
                     />
                     <TouchableOpacity style={[styles.pickdate,styles.shadow]} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={date}
+                            placeholderTextColor='grey'
+                            color='black'
 
                         />
                         <Feather size={18} color="black" name="calendar"
@@ -149,6 +153,8 @@ const [condition, setcondition] = useState([
                         <TextInput
                             style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
                             placeholder="Harry Potter and Goblet of Fire"
+                            placeholderTextColor='grey'
+                            color='black'
 
                         />
                     </View>
@@ -164,13 +170,15 @@ const [condition, setcondition] = useState([
                     <TextInput
                         style={[styles.input,styles.shadow]}
                         placeholder="First"
-
+                        placeholderTextColor='grey'
+                        color='black'
 
                     />
                     <TextInput
                        style={[styles.input,styles.shadow]}
                         placeholder="J.K. Rowling"
-
+                        placeholderTextColor='grey'
+                        color='black'
                     />
 
                 </View>
@@ -205,6 +213,8 @@ const [condition, setcondition] = useState([
                     <TextInput
                         style={[styles.input,styles.shadow]}
                         placeholder="Evergreen Publications"
+                        placeholderTextColor='grey'
+                        color='black'
 
                     />
                     {/* </View> */}
@@ -225,7 +235,8 @@ const [condition, setcondition] = useState([
                     <TextInput
                        style={[styles.input,styles.shadow]}
                         placeholder="78-A"
-
+                        placeholderTextColor='grey'
+                        color='black'
 
                     />
                     
@@ -242,7 +253,8 @@ const [condition, setcondition] = useState([
                     <TextInput
                         style={[styles.input,styles.shadow]}
                         placeholder="450"
-
+                        placeholderTextColor='grey'
+                        color='black'
                     />
 
                 </View>
@@ -265,12 +277,15 @@ const [condition, setcondition] = useState([
                     <TextInput
                        style={[styles.input,styles.shadow]}
                         placeholder="45-B,78-A"
-
+                        placeholderTextColor='grey'
+                        color='black'
 
                     />
                     <TextInput
                         style={[styles.input,styles.shadow]}
                         placeholder="English"
+                        placeholderTextColor='grey'
+                        color='black'
 
                     />
 
@@ -288,13 +303,15 @@ const [condition, setcondition] = useState([
                     <TextInput
                         style={[styles.input,styles.shadow]}
                         placeholder="699.00 Rs"
-
+                        placeholderTextColor='grey'
+                        color='black'
 
                     />
                     <TextInput
                         style={[styles.input,styles.shadow]}
                         placeholder="GSTIN45616465"
-
+                        placeholderTextColor='grey'
+                        color='black'
                     />
 
                 </View>

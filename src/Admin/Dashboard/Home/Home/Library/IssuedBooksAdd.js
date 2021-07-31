@@ -110,6 +110,8 @@ const IssuedBooksAdd = ({navigation}) => {
                         <TextInput
                             style={{ marginTop:10,...styles.search_input, fontFamily: 'Poppins-Regular' }}
                             placeholder="Enter book name or ID here"
+                            placeholderTextColor='grey'
+                            color='black'
 
                         />
                         <TouchableOpacity
@@ -156,6 +158,8 @@ const IssuedBooksAdd = ({navigation}) => {
                     <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={dateissued}
+                            placeholderTextColor='grey'
+                            color='black'
 
                         />
                         <Feather size={18} color="black" name="calendar"
@@ -177,7 +181,8 @@ const IssuedBooksAdd = ({navigation}) => {
                     <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={date}
-
+                            placeholderTextColor='grey'
+                            color='black'
                         />
                         <Feather size={18} color="black" name="calendar"
                             style={{

@@ -108,6 +108,11 @@ export default function OnlineLecture({navigation}) {
 
   const handleSaveClass = async () => {
     showLoadingScreen();
+    if(!batch || !course || !date || !time || !url || !daysArray || !description){
+      alert('All fields are required!!')
+      hideLoadingScreen()
+      return
+    }
     try {
       let slug = `/liveclass`;
       let token = await read('token');
@@ -320,7 +325,7 @@ export default function OnlineLecture({navigation}) {
         <View style={{alignItems: 'center'}}>
           <Button
             mode="contained"
-            style={styles.submitButton}
+            style={{backgroundColor: institute? institute.themeColor : 'blue', ...styles.submitButton}}
             onPress={handleSaveClass}>
             Go Live
           </Button>
@@ -387,7 +392,6 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     margin: 20,
-    backgroundColor: '#5177E7',
     width: 100,
   },
 });

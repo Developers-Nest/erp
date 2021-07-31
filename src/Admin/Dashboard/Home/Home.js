@@ -46,12 +46,17 @@ import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
 import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
-import Exams from './Home/Exams';
+
 import Results from './Home/Results';
+import Leave from './Home/Leave';
+import Employees from './Home/Employees';
 //assignment(same to teacher)
 import Assignment from './Home/Assignment';
 
 import Notification from './Home/Notification';
+
+//navigation from home menu and drawer navigation too
+import Exams from './Home/Exams';
 
 //helpers
 import write from '../../../services/localstorage/write';
@@ -198,6 +203,16 @@ const Home_Route = () => {
         component={Notification}
         options={{ headerShown: false }}
       />
+ <Stack.Screen
+        name="Leave"
+        component={Leave}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Employees"
+        component={Employees}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
@@ -305,7 +320,7 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Online Exams</Text>
           )}
-          onPress={() => props.navigation.navigate('Books')}
+          onPress={() => props.navigation.navigate('Exams')}
         />
         <DrawerItem
           style={styles.item}
@@ -336,24 +351,7 @@ function DrawerContent(props) {
           onPress={() => props.navigation.navigate('Report')}
         />
 
-        {/*        
-        <Drawer.Item
-          label={'Transport'}
-          onPress={() => props.navigation.navigate('Transport')}
-        />
-        <Drawer.Item
-          label={'CCE Marks'}
-          onPress={() => props.navigation.navigate('Cce Marks')}
-        />
-        <Drawer.Item
-          label={'Recorded Classes'}
-          onPress={() => props.navigation.navigate('Recorded Classes')}
-        />
-        <Drawer.Item
-          label={'Report'}
-          onPress={() => props.navigation.navigate('Report')}
-        /> */}
-
+      
         <TouchableOpacity>
           <Button
             style={{
@@ -391,7 +389,7 @@ export default function Route() {
       <DrawerNav.Screen name="Hostel" component={Hostel} />
       {/* <DrawerNav.Screen name="Assignment" component={Assignment} /> */}
       <DrawerNav.Screen name="LessonPlanStack" component={LessonPlanStack} />
-      <DrawerNav.Screen name="Books" component={Books} />
+      <DrawerNav.Screen name="Exams" component={Exams} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
       <DrawerNav.Screen name="Transport" component={Transport} />
       <DrawerNav.Screen name="Cce Marks" component={CceMarks} />

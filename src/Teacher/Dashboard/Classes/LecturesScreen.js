@@ -9,8 +9,6 @@ import {
   Text,
   View,
   ScrollView,
-  ImageBackground,
-  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
