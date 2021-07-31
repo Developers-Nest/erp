@@ -32,6 +32,13 @@ const AddVisitors = ({navigation}) => {
   //theming
   const institute = useSelector(state => state.institute);
 
+    //for category in 4th row
+    const [category, setcategory] = useState([
+      { label: 'Student', key: 'Student' },
+      { label: 'Teacher', key: 'Teacher' },
+      { label: 'Clerk', key: 'Clerk' },
+    ]);
+  
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [date, setDate] = React.useState('29 May 2021');
   let index = 0;
@@ -59,7 +66,7 @@ const AddVisitors = ({navigation}) => {
   };
 
   const handleConfirm = date => {
-    console.warn('A date has been picked: ', date.toString());
+    // console.warn('A date has been picked: ', date.toString());
     setDate(
       date.getDate() +
         ' ' +
@@ -109,86 +116,93 @@ const AddVisitors = ({navigation}) => {
       </View>
       <ScrollView>
         <View style={{justifyContent: 'space-around', alignContent: 'center'}}>
-          <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
-            <Text style={styles.section_heading}>Vehicle No.</Text>
-          </View>
+      
+<View style={{ width: "100%", marginTop: 20, flexDirection: 'row' }}>
+<Text style={styles.section_heading}>Category </Text>
+            <Text style={styles.section_heading1}>Purpose</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }} >
 
-          <View style={{marginHorizontal: 10, ...styles.shadow}}>
-            <View style={styles.search}>
-              <TextInput
-                style={styles.search_input}
-                placeholder="Search User's name to add"
-              />
-              <TouchableOpacity
-                style={{
-                  alignSelf: 'center',
-                }}>
-                <Icon
-                  name="search-sharp"
-                  style={{
-                    alignSelf: 'center',
-                    fontSize: 25,
-                    color: 'black',
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
+<View style={{paddingHorizontal:10}}>
+                    <ModalSelector
+              data={category}
+              initValue="Student"
+              onChange={option => {
+                // setclass(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
+    </View>       
+                    {/* <TextInput
+                        style={styles.input}
+                        placeholder="First"
+
+
+                    /> */}
+                    {/* <View style={styles.search}> */}
+                    <TextInput
+                        style={[styles.input,styles.shadow]}
+                        placeholder="Casual Meet"
+                        placeholderTextColor='grey'
+
+                    />
+                    {/* </View> */}
+
+                </View>
+
 
           <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
             <Text style={styles.section_heading}>Visitor's Name </Text>
-            <Text style={styles.section_heading2}>Relation</Text>
+            <Text style={styles.section_heading1}>Phone Number</Text>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <TextInput style={styles.input} placeholder="Shian Manzoor" />
-            <TextInput style={styles.input} placeholder="Brother" />
+            <TextInput
+                                               placeholderTextColor='grey' style={[styles.input,styles.shadow]} placeholder="Shian Manzoor" />
+            <TextInput 
+                                              placeholderTextColor='grey'  style={[styles.input,styles.shadow]} placeholder="Brother" />
           </View>
           <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
-            <Text style={styles.section_heading}>Date </Text>
-            <Text style={styles.section_heading1}>Time</Text>
+            <Text style={styles.section_heading}>Whom To Meet </Text>
+            <Text style={styles.section_heading2}>Date</Text>
           </View>
 
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
-              <TextInput
-                style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
-                placeholder={date}
-              />
-              <Feather
-                size={18}
-                color="black"
-                name="calendar"
-                style={{
-                  marginTop: 16,
-                  marginRight: 0,
-                }}></Feather>
-              <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                style={styles.pickdate}
-                mode="date"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.pickdate1}>
-              <TextInput
-                style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
-                placeholder="13.00"
-              />
-              <Feather
-                size={18}
-                color="black"
-                name="calendar"
-                style={{
-                  marginTop: 16,
-                  marginRight: 0,
-                }}></Feather>
-            </TouchableOpacity>
+          <TextInput 
+                                          placeholderTextColor='grey'      style={[styles.input,styles.shadow]} placeholder="Safi Ahmed" />
+           <TouchableOpacity style={[styles.pickdate,styles.shadow]} onPress={showDatePicker}>
+                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
+                            placeholder={date}                         placeholderTextColor='grey'
+
+                        />
+                        <Feather size={18} color="black" name="calendar"
+                            style={{
+                                marginTop: 16,
+                                marginRight: 0,
+                            }}
+
+
+                        ></Feather>
+                        <DateTimePickerModal
+                            isVisible={isDatePickerVisible}
+                            style={styles.pickdate}
+                            mode="date"
+                            onConfirm={handleConfirm}
+                            onCancel={hideDatePicker}
+                        />
+                    </TouchableOpacity>
+               
           </View>
           <View style={styles.fixToText}>
-            <Pressable style={styles.button}>
+            
+            <Pressable style={[styles.button]}  
+            onPress={() => {
+            navigation.navigate('EditVisitors');
+          }}>
               <Text style={styles.text}>Save</Text>
             </Pressable>
+         
           </View>
         </View>
       </ScrollView>
@@ -201,6 +215,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
+ 
   button: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -208,6 +223,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     borderRadius: 4,
     elevation: 3,
+    //color:institute ? institute.themeColor : "#5177E7",
     backgroundColor: '#5177E7',
   },
   text: {
@@ -299,6 +315,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
+
   input: {
     flex: 1,
     height: 50,
@@ -308,29 +325,55 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     paddingHorizontal: 20,
     backgroundColor: 'white',
-    borderColor: '#58636D',
     borderRadius: 8,
-    borderWidth: 0.3,
+    // borderColor: '#58636D',
+   
+    // borderWidth: 0.35,
     flexDirection: 'row',
     justifyContent: 'space-between',
     fontFamily: 'Poppins-Regular',
-  },
+    
 
-  pickdate: {
+},
+
+shadow: {
+    elevation: 2,
+    borderRadius: 0,
+    backgroundColor: 'transparent',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+  },
+  
+
+
+pickdate: {
     width: 120,
     fontFamily: 'Poppins-Regular',
     height: 50,
     backgroundColor: 'white',
     borderColor: '#58636D',
     borderRadius: 8,
-    borderWidth: 0.3,
+    // borderWidth: 0.3,
     marginLeft: 12,
-    marginRight: 0,
+    marginRight: 10,
     paddingHorizontal: 20,
 
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+
+},
+
+
+header: {
+    height: 69,
+    flexDirection: 'row',
+
   },
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
@@ -339,23 +382,41 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 27,
     padding: 10,
-    backgroundColor: '#8a2be2',
-    color: '#211C5A',
+    color: 'rgba(88, 99, 109, 0.85)',
   },
   SelectedValueSmall: {
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
+    fontWeight:'200',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 14,
     lineHeight: 30,
     paddingTop: 3,
-    color: 'white',
+    color: 'rgba(88, 99, 109, 0.85)',
   },
 
-  header: {
-    height: 69,
-    flexDirection: 'row',
-  },
+card: {
+shadowColor: '#000',
+height:50,
+shadowOffset: {width: 0, height: 1},
+shadowOpacity: 0.2,
+shadowRadius: 12,
+elevation: 2,
+backgroundColor: 'white',
+borderColor: '#ccc',
+borderWidth: 1,
+borderBottomLeftRadius: 8,
+borderBottomRightRadius: 8,
+borderTopRightRadius: 8,
+borderTopLeftRadius: 8,
+overflow: 'hidden',
+justifyContent: 'center',
+margin: 0,
+padding: 0,
+
+minWidth: '48%',
+},
+
 });
 
 export default AddVisitors;
