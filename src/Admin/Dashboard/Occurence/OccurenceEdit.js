@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -16,9 +16,42 @@ import {Searchbar, Button, Appbar} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 // date picker
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-export default function OccurenceEdit({navigation}) {
-  const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-  const [date, setDate] = React.useState('17 July 2021');
+
+// loading screen
+import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
+
+// helpers
+import get from '../../../services/helpers/request/get';
+import post from '../../../services/helpers/request/post';
+import read from '../../../services/localstorage/read';
+import getCourse from '../../../services/helpers/getList/getCourse';
+import getBatch from '../../../services/helpers/getList/getBatch';
+
+// redux
+import {useSelector} from 'react-redux';
+
+export default function OccurenceEdit({route, navigation}) {
+  // loading screen
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+  //edit values
+  const [date, setdate] = React.useState(route.params.date);
+  const [employeeID, setemployeeID] = React.useState(route.params.employeeID);
+  const [employeeName, setemployeeName] = React.useState(
+    route.params.employeeName,
+  );
+  const [remarks, setremarks] = React.useState(route.params.remarks);
+
+  //date picker
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
+
+  //date display
+  const [datedisplay, setdatedisplay] = useState(parseDate(route.params.date));
+
+  //date picker
   let index = 0;
   const dateMonths = {
     1: 'Jan',
@@ -34,19 +67,9 @@ export default function OccurenceEdit({navigation}) {
     11: 'Nov',
     12: 'Dec',
   };
-  const data = [
-    {key: index++, section: true, label: 'Fruits'},
-    {key: index++, label: 'Red Apples'},
-    {key: index++, label: 'Cherries'},
-    {
-      key: index++,
-      label: 'Cranberries',
-      accessibilityLabel: 'Tap here for cranberries',
-    },
-    // etc...
-    // Can also add additional custom keys which are passed to the onChange callback
-    {key: index++, label: 'Vegetable', customKey: 'Not a fruit'},
-  ];
+
+  const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -54,19 +77,56 @@ export default function OccurenceEdit({navigation}) {
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
-  const handleConfirm = date => {
+
+  const handleConfirm = data => {
     console.warn('A date has been picked: ', date.toString());
+    setdatedisplay(parseDate(data.toString()));
     setDate(
-      date.getDate() +
-        ' ' +
-        dateMonths[date.getMonth()] +
-        ' ' +
-        date.getFullYear(),
+      data.getFullYear() +
+        '-' +
+        twodigit(data.getMonth() + 1) +
+        '-' +
+        twodigit(data.getDate()) +
+        'T' +
+        +twodigit(data.getHours()) +
+        ':' +
+        twodigit(data.getMinutes()) +
+        ':' +
+        twodigit(data.getSeconds()) +
+        '.' +
+        threedigit(data.getMilliseconds()) +
+        'Z',
     );
     hideDatePicker();
   };
+
+  //modal data
+  const [emp, setEmp] = React.useState([]);
+
+  //on load
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      let slug = `/employee`;
+      let token = await read('token');
+      let response = await get(slug, token);
+      console.log('Response ', response);
+      let list = [];
+      response.map(employee => {
+        list.push({
+          key: employee._id,
+          label: employee.firstName,
+        });
+      });
+      setEmp(list);
+    } catch (err) {
+      alert('Cannot fetch employee list !!\n' + err);
+    }
+    hideLoadingScreen();
+  }, []);
+
   return (
-    <View>
+    <ScrollView>
       <Appbar>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Occurence Register" />
@@ -83,14 +143,14 @@ export default function OccurenceEdit({navigation}) {
         }}>
         <View style={styles.pickdate}>
           <ModalSelector
-            initValue="Name"
+            initValue={employeeName}
             style={{
               marginTop: 10,
               width: 100,
               shadowOpacity: 0,
               borderWidth: 0,
             }}
-            data={data}
+            data={emp}
           />
           <Icon
             size={24}
@@ -103,7 +163,7 @@ export default function OccurenceEdit({navigation}) {
         </View>
         <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
           <Text style={{marginTop: 20, marginLeft: 10}}>
-            {date}
+            {datedisplay}
             {'  '}
           </Text>
           <Icon
@@ -127,18 +187,16 @@ export default function OccurenceEdit({navigation}) {
         style={{
           width: '90%',
           margin: 10,
-          flex: 1,
           flexDirection: 'row',
           //  alignContent:'center',
           justifyContent: 'center',
-          marginTop: 100,
         }}>
         <TextInput
           multiline
           // mode='outlined'
           placeholder="Write your remarks"
           numberOfLines={20}
-          // value={Description}
+          value={remarks}
           // onChangeText={(Description) => { setDescription(Description) }}
           style={styles.text_input}
         />
@@ -147,7 +205,6 @@ export default function OccurenceEdit({navigation}) {
       <TouchableOpacity style={styles.btn}>
         <Text
           style={{
-            flex: 1,
             flexDirection: 'row',
             marginTop: 8,
             marginLeft: 22,
@@ -158,7 +215,7 @@ export default function OccurenceEdit({navigation}) {
           {'Save'}
         </Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -173,7 +230,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#5177E7',
     alignContent: 'center',
     alignSelf: 'center',
-    marginTop: 220,
     borderRadius: 5,
     shadowColor: 'black',
     elevation: 5,
@@ -182,12 +238,10 @@ const styles = StyleSheet.create({
   text_input: {
     justifyContent: 'flex-start',
     alignItems: 'center',
-    minHeight: 200,
     alignSelf: 'center',
     width: '90%',
     color: 'grey',
     marginLeft: 20,
-    marginTop: 150,
     padding: 20,
     backgroundColor: 'white',
     fontFamily: 'Poppins-Regular',

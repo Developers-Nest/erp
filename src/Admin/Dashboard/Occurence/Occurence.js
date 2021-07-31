@@ -121,7 +121,8 @@ function Occurance({navigation}) {
                     <Button
                       onPress={() =>
                         navigation.navigate('OccurenceEdit', {
-                          name: occurance.firstname,
+                          employeeID: occurance.employeeName._id,
+                          employeeName: occurance.employeeName.firstName,
                           date: occurance.date,
                           remarks: occurance.remarks,
                         })
