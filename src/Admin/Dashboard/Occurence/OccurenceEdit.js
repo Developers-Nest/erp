@@ -22,7 +22,7 @@ import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
 // helpers
 import get from '../../../services/helpers/request/get';
-import post from '../../../services/helpers/request/post';
+import patch from '../../../services/helpers/request/patch';
 import read from '../../../services/localstorage/read';
 import getCourse from '../../../services/helpers/getList/getCourse';
 import getBatch from '../../../services/helpers/getList/getBatch';
@@ -35,7 +35,13 @@ export default function OccurenceEdit({route, navigation}) {
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   //edit values
-  const [date, setdate] = React.useState(route.params.date);
+  const [id, setID] = React.useState(route.params.id);
+  const [v, setv] = React.useState(route.params.v);
+  const [institution, setinstitution] = React.useState(
+    route.params.institution,
+  );
+
+  const [date, setDate] = React.useState(route.params.date);
   const [employeeID, setemployeeID] = React.useState(route.params.employeeID);
   const [employeeName, setemployeeName] = React.useState(
     route.params.employeeName,
@@ -100,6 +106,34 @@ export default function OccurenceEdit({route, navigation}) {
     hideDatePicker();
   };
 
+  const twodigit = num => {
+    return ('0' + num).slice(-2);
+  };
+  const threedigit = num => {
+    return ('00' + num).slice(-3);
+  };
+  // save details
+  const HandleSubmit = async () => {
+    try {
+      let slug = `/occurrence/${id}`;
+      console.log('Occurance slug', slug);
+      let token = await read('token');
+      let data = {
+        date: date,
+        employeeName: employeeID,
+        institution: institution,
+        remarks: remarks,
+        id: id,
+        __v: v,
+      };
+      console.log(data);
+      let response = await patch(slug, data, token);
+      alert('occurance updated!');
+    } catch (err) {
+      alert('Cannot update occurance!' + err);
+    }
+  };
+
   //modal data
   const [emp, setEmp] = React.useState([]);
 
@@ -150,6 +184,9 @@ export default function OccurenceEdit({route, navigation}) {
               shadowOpacity: 0,
               borderWidth: 0,
             }}
+            onChange={option => {
+              setemployeeID(option.key);
+            }}
             data={emp}
           />
           <Icon
@@ -197,12 +234,14 @@ export default function OccurenceEdit({route, navigation}) {
           placeholder="Write your remarks"
           numberOfLines={20}
           value={remarks}
-          // onChangeText={(Description) => { setDescription(Description) }}
+          onChangeText={remarks => {
+            setremarks(remarks);
+          }}
           style={styles.text_input}
         />
       </View>
 
-      <TouchableOpacity style={styles.btn}>
+      <TouchableOpacity style={styles.btn} onPress={HandleSubmit}>
         <Text
           style={{
             flexDirection: 'row',

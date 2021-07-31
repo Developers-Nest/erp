@@ -121,10 +121,13 @@ function Occurance({navigation}) {
                     <Button
                       onPress={() =>
                         navigation.navigate('OccurenceEdit', {
+                          id: occurance._id,
                           employeeID: occurance.employeeName._id,
                           employeeName: occurance.employeeName.firstName,
                           date: occurance.date,
                           remarks: occurance.remarks,
+                          institution: occurance.institution,
+                          v: occurance.__v,
                         })
                       }>
                       edit <FontAwesome5 name={'edit'} size={20} light />
