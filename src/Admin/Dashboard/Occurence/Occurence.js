@@ -42,26 +42,11 @@ import Occurence2 from './Occurence2';
 
 export default function Occurence({navigation}) {
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={{flex: 1}}>
-        <Appbar>
-          <Appbar.BackAction onPress={() => navigation.goBack()} />
-          <Appbar.Content title="Occurence Register" />
-          <Appbar.Action
-            icon="plus-circle-outline"
-            onPress={() => navigation.navigate('Occurence2')}
-          />
-        </Appbar>
-
-        <View style={styles.maincontainer}>
-          <Stack.Navigator headerMode="none">
-            <Stack.Screen name="Occurence" component={Occurance} />
-            <Stack.Screen name="OccurenceEdit" component={OccurenceEdit} />
-            <Stack.Screen name="Occurence2" component={Occurence2} />
-          </Stack.Navigator>
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Occurence" component={Occurance} />
+      <Stack.Screen name="OccurenceEdit" component={OccurenceEdit} />
+      <Stack.Screen name="Occurence2" component={Occurence2} />
+    </Stack.Navigator>
   );
 }
 
@@ -97,6 +82,14 @@ function Occurance({navigation}) {
 
   return (
     <>
+      <Appbar>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Occurence Register" />
+        <Appbar.Action
+          icon="plus-circle-outline"
+          onPress={() => navigation.navigate('Occurence2')}
+        />
+      </Appbar>
       <View
         style={{
           width: '90%',
@@ -110,7 +103,7 @@ function Occurance({navigation}) {
         onChangeText={onChangeSearch}
         value={searchQuery}
       />
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         {list &&
           list.map(occurance => (
             <View style={styles.section} key={occurance._id}>
@@ -146,7 +139,7 @@ function Occurance({navigation}) {
               </View>
             </View>
           ))}
-      </View>
+      </ScrollView>
     </>
   );
 }
