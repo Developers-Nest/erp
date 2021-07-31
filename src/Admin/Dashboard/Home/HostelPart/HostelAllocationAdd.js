@@ -1,190 +1,473 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet, Text, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Button} from 'react-native-paper';
 
-import Evillcons from 'react-native-vector-icons/Feather';
-
-import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
+import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
 
 import { useSelector } from 'react-redux';
 
-const HostelAllocationAdd = ({navigation}) => {
+import get from '../../../../services/helpers/request/get'
+import post from '../../../../services/helpers/request/post'
+import read from '../../../../services/localstorage/read'
+
+import getCourse from '../../../../services/helpers/getList/getCourse'
+import getBatch from '../../../../services/helpers/getList/getBatch'
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
+
+const HostelAllocationAdd = ({ navigation }) => {
 
 
- //theming
- const institute = useSelector(state => state.institute);
+    //theming
+    const institute = useSelector(state => state.institute);
 
-    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [date, setDate] = React.useState('29 May 2021')
 
-    const [isDatePickerVisible1, setDatePickerVisibility1] = React.useState(false);
+    const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
     const [date1, setDate1] = React.useState('29 May 2021')
 
-    const showDatePicker1 = () => {
-        setDatePickerVisibility1(true);
-    };
+    // dropdown values
+    const [userType, setUserType] = useState([])
+    const [hostelType, setHostelType] = useState([])
+    const [hostelName, setHostelName] = useState([])
+    const [hostelRoom, setHostelRoom] = useState([])
+    const [courses, setCourses] = useState([])
+    const [batches, setBatches] = useState([])
+    const [users, setUsers] = useState([])
+    const [departments, setDepartments] = useState([])
 
-    const hideDatePicker1 = () => {
-        setDatePickerVisibility1(false);
-    };
-    const handleConfirm1 = (date1) => {
-        setDate1(date1.getDate() + " " + dateMonths[date1.getMonth() + 1] + " " + date1.getFullYear())
-        hideDatePicker1();
-    };
+    const [usersObject, setUsersObject] = useState([])
+
+    // selected values
+    const [selectedUserType, setSelectedUserType] = useState('')
+    const [selectedUserTypeId, setSelectedUserTypeId] = useState('')
+    const [selectedHostelType, setSelectedHostelType] = useState('')
+    const [selectedHostelName, setSelectedHostelName] = useState('')
+    const [selectedHostelRoom, setSelectedHostelRoom] = useState('')
+    const [selectedDepartment, setSelectedDepartment] = useState('')
+    const [selectedCourse, setSelectedCourse] = useState('')
+    const [selectedBatch, setSelectedBatch] = useState('')
+    const [selectedUser, setSelectedUser] = useState('')
+
+    // loading screen
+    const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
 
-    let index = 0;
-    const dateMonths = {
-        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
+    useEffect(async () => {
+        showLoadingScreen();
+        try {
+            let slug = '/usertype'
+            let token = await read('token')
+            let response = await get(slug, token)
+            let userArray = []
+            response && response.map((user) => {
+                userArray.push({
+                    key: user._id,
+                    label: user.name
+                })
+            })
+            console.log('UserTypes ', userArray)
+            setUserType(userArray)
+        } catch (err) {
+            alert('Error ', err)
+        }
+
+        try {
+            let courses = await getCourse()
+            setCourses(courses)
+        } catch (err) {
+            alert('Cannot fetch Courses!')
+        }
+
+        try {
+            let slug = '/department'
+            let token = await read('token')
+            let response = await get(slug, token)
+            let departmentArray = []
+            response && response.map((dep) => {
+                departmentArray.push({
+                    key: dep._id,
+                    label: dep.name
+                })
+            })
+            setDepartments(departmentArray)
+        } catch (err) {
+            alert('Cannot fetch departments!')
+        }
+
+        try {
+            let slug = '/hostel/hostelType'
+            let token = await read('token')
+            let response = await get(slug, token)
+            let hostelTypeArray = []
+            response && response.map((dep) => {
+                hostelTypeArray.push({
+                    key: dep._id,
+                    label: dep.name
+                })
+            })
+            setHostelType(hostelTypeArray)
+        } catch (err) {
+            alert('Cannot fetch hostel types!' + err)
+        }
+
+        console.log('Admin Institite ', institute)
+        hideLoadingScreen()
+    }, [])
+
+    // usertype === 'Teacher'
+    let fetchEmployees = async (sd) => {
+        showLoadingScreen()
+        try {
+            setSelectedDepartment(sd)
+            let slug = `/employee?department=${sd}`
+            let token = await read('token')
+            let response = await get(slug, token)
+            console.log('Response ', response)
+            let employeeArray = []
+            response && response.map((dep) => {
+                employeeArray.push({
+                    key: dep._id,
+                    label: dep.firstName ? dep.firstName : 'N/A'
+                })
+            })
+            setUsersObject(response)
+            console.log('Emplo ', employeeArray)
+            setUsers(employeeArray)
+        } catch (err) {
+            alert('Cannot fetch Employess!')
+        }
+        hideLoadingScreen()
     }
 
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
+    // usertype === 'Student'
+    // get list of batches
+    const fetchBatches = async sc => {
+        showLoadingScreen();
+        setSelectedCourse(sc);
+        try {
+            let bat = await getBatch(sc);
+            setBatches(bat);
+        } catch (err) {
+            alert('Cannot fetch Batches!!');
+        }
+        hideLoadingScreen();
     };
 
-    const hideDatePicker = () => {
+    // get list of students
+    const fetchStudents = async sb => {
+        showLoadingScreen();
+        setSelectedBatch(sb);
+        try {
+            let slug = `/student/course?course=${selectedCourse}&batch=${sb}`
+            let token = await read('token')
+            let res = await get(slug, token)
+            let studentArray = []
+            res && res.map((student) => {
+                studentArray.push({
+                    key: student._id,
+                    label: student.firstName
+                })
+            })
+            setUsersObject(res)
+            setUsers(studentArray)
+        } catch (err) {
+            alert('Cannot fetch Students!!');
+        }
+        hideLoadingScreen();
+    };
+
+    // hostel details
+    const fetchHostelName = async ht => {
+        showLoadingScreen();
+        setSelectedHostelType(ht)
+        try {
+            let slug = `/hostel/hostelDetails?hostelType=${ht}`
+            let token = await read('token')
+            let res = await get(slug, token)
+            let hostelArray = []
+            res && res.map((student) => {
+                hostelArray.push({
+                    key: student._id,
+                    label: student.name
+                })
+            })
+            setHostelName(hostelArray)
+        } catch (err) {
+            alert('Cannot fetch Hostel Types!!');
+        }
+        hideLoadingScreen();
+    };
+
+    const fetchHostelRoom = async hn => {
+        showLoadingScreen();
+        setSelectedHostelName(hn)
+        try {
+            let slug = `/hostel/hostelRoom?hostelType=${selectedHostelType}&hostelName=${hn}`
+            console.log('Slug Hostel Room ', slug)
+            let token = await read('token')
+            let res = await get(slug, token)
+            let hostelArray = []
+
+            res && res.map((student) => {
+                hostelArray.push({
+                    key: student._id,
+                    label: student.floorName + ' - ' + student.beds
+                })
+            })
+            setHostelRoom(hostelArray)
+        } catch (err) {
+            alert('Cannot fetch Hostel Types!!');
+        }
+        hideLoadingScreen();
+    };
+
+    // date
+    const handleConfirm = (date) => {
+        setDate(date.toString())
         setDatePickerVisibility(false);
     };
-    const handleConfirm = (date) => {
-        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
-        hideDatePicker();
+
+    const handleConfirm1 = (date1) => {
+        setDate1(date1.toString())
+        setDatePickerVisibility1(false);
     };
 
+    // submit form
+    const handleSubmit = async () => {
+        showLoadingScreen()
+        if (!userType || !date || !date1) {
+            alert('All fields are required!')
+            hideLoadingScreen()
+            return
+        }
+
+        try {
+            let selectedUsersObject = {}
+            usersObject.map((user) => {
+                if (user._id === selectedUser) {
+                    selectedUsersObject = user
+                }
+            })
+            let data = {}
+            if (selectedUsersObject.userType === 'Teacher') {
+                data = {
+                    department: selectedDepartment,
+                    hostelName: selectedHostelName,
+                    hostelRegistrationDate: date,
+                    hostelRoom: selectedHostelRoom,
+                    hostelType: selectedHostelType,
+                    user: selectedUsersObject,
+                    userType: selectedUserTypeId,
+                    vacatingDate: date1,
+                    hostelRoom: selectedHostelRoom,
+                }
+            } else {
+                data = {
+                    hostelName: selectedHostelName,
+                    hostelRegistrationDate: date,
+                    hostelRoom: selectedHostelRoom,
+                    hostelType: selectedHostelType,
+                    user: selectedUsersObject,
+                    userType: selectedUserTypeId,
+                    vacatingDate: date1,
+                    batch: selectedBatch,
+                    course: selectedCourse,
+                    hostelRoom: selectedHostelRoom,
+                }
+            }
+
+            let slug = '/hostel/hostelAllocation'
+            let token = await read('token')
+            let response = await post(slug, data, token)
+            console.log('Allocate Hostel ', response)
+            if (response.error) {
+                throw new Error(response.error)
+            } else if(response._id){
+                alert('Hosted Allocated')
+            }
+        } catch (err) {
+            alert('Error!! ' + err)
+        }
+        hideLoadingScreen()
+    }
+
     return (
-
-
-
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-                         {/* header start */}
-
-        <View
-          style={{
-            backgroundColor: institute ? institute.themeColor : '#FF5733',
-            ...styles.header,
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('AllocatedListHostel');
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                paddingLeft: 20,
-                paddingTop: 20,
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontFamily: 'NunitoSans-Regular',
-              fontSize: 28,
-              fontWeight: '600',
-              alignSelf: 'center',
-              paddingLeft: 30,
-              color: 'white',
-            }}>
-            Hostel Allocation
-          </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('AllocatedListHostel')}
-            style={{
-              justifyContent: 'flex-end',
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-           </TouchableOpacity>
-        </View>
-
-        {/* header ends */}
-
-
+            {loadingScreen}
+            {/* header start */}
+            <View
+                style={{
+                    backgroundColor: institute ? institute.themeColor : '#FF5733',
+                    ...styles.header,
+                }}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('AllocatedListHostel');
+                    }}>
+                    <AntDesign
+                        size={24}
+                        color="white"
+                        name="left"
+                        style={{
+                            alignSelf: 'center',
+                            fontSize: 25,
+                            color: 'white',
+                            paddingLeft: 20,
+                            paddingTop: 20,
+                        }}
+                    />
+                </TouchableOpacity>
+                <Text
+                    style={{
+                        fontStyle: 'normal',
+                        fontFamily: 'NunitoSans-Regular',
+                        fontSize: 28,
+                        fontWeight: '600',
+                        alignSelf: 'center',
+                        paddingLeft: 30,
+                        color: 'white',
+                    }}>
+                    Hostel Allocation
+                </Text>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('AllocatedListHostel')}
+                    style={{
+                        justifyContent: 'flex-end',
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                </TouchableOpacity>
+            </View>
+            {/* header ends */}
 
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
-
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Name</Text>
+                    <Text style={styles.section_heading}>User Type</Text>
                 </View>
-
                 <View style={{ marginHorizontal: 10, ...styles.shadow }}>
-                    <View style={styles.search}>
-                        <TextInput
-                            style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
-                            placeholder="Search User's name to add"
-
-                        />
-                        <TouchableOpacity
-                            style={{
-                                alignSelf: 'center',
-
-                            }}>
-                            <Icon
-                                name="search-sharp"
-                                style={{
-                                    alignSelf: 'center',
-                                    fontSize: 25,
-                                    color: 'black',
-
-                                }}
-                            />
-                        </TouchableOpacity>
-                    </View>
+                    <ModalSelector
+                        initValue="User Type"
+                        style={styles.card}
+                        data={userType}
+                        initValueTextStyle={styles.SelectedValueSmall}
+                        onChange={option => {
+                            setSelectedUserType(option.label)
+                            setSelectedUserTypeId(option.key)
+                        }}
+                    />
                 </View>
+
+                {
+                    selectedUserType === 'Student' ? (
+                        <View>
+                            <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                                <Text style={styles.section_heading}>Course </Text>
+                                <Text style={styles.section_heading2}>Batch</Text>
+                                <Text style={styles.section_heading2}>Student</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }} >
+                                <ModalSelector
+                                    initValue="Course"
+                                    style={styles.card3}
+                                    initValueTextStyle={styles.SelectedValueSmall}
+                                    data={courses}
+                                    onChange={option => {
+                                        fetchBatches(option.key)
+                                    }}
+                                />
+                                <ModalSelector
+                                    initValue="Batch"
+                                    style={styles.card3}
+                                    initValueTextStyle={styles.SelectedValueSmall}
+                                    data={batches}
+                                    onChange={option => {
+                                        fetchStudents(option.key)
+                                    }}
+                                />
+                                <ModalSelector
+                                    initValue="Student"
+                                    style={styles.card3}
+                                    initValueTextStyle={styles.SelectedValueSmall}
+                                    data={users}
+                                    onChange={option => {
+                                        setSelectedUser(option.key)
+                                    }}
+                                />
+                            </View>
+                        </View>
+                    ) : (null)
+                }
+
+
+                {
+                    selectedUserType === 'Teacher' ? (
+                        <View>
+                            <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                                <Text style={styles.section_heading}>Department </Text>
+                                <Text style={styles.section_heading2}>Employee</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }} >
+                                <ModalSelector
+                                    initValue="Department"
+                                    style={styles.card}
+                                    initValueTextStyle={styles.SelectedValueSmall}
+                                    data={departments}
+                                    onChange={option => {
+                                        fetchEmployees(option.key)
+                                    }}
+                                />
+                                <ModalSelector
+                                    initValue="Employee"
+                                    style={styles.card}
+                                    initValueTextStyle={styles.SelectedValueSmall}
+                                    data={users}
+                                    onChange={option => {
+                                        setSelectedUser(option.key)
+                                    }}
+                                />
+                            </View>
+                        </View>
+                    ) : (null)
+                }
+
 
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Hostel Type </Text>
                     <Text style={styles.section_heading2}>Hostel Name</Text>
+                    <Text style={styles.section_heading2}>Hostel Room</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }} >
-
                     <ModalSelector
-
-
-
-
                         initValue="Type"
-
-                        style={styles.card}
-
-
+                        style={styles.card3}
                         initValueTextStyle={styles.SelectedValueSmall}
-                    //selectTextStyle={styles.SelectedValueSmall}
-
-
-                    >
-                        <View style={{ marginTop: 10, flexDirection: 'row' }}>
-
-                            <Text style={styles.text2}>Type</Text>
-                            <Evillcons size={25} color='#505069' name='chevron-down'
-                                style={{
-
-                                    marginLeft: 70,
-
-
-
-                                }}>
-
-                            </Evillcons>
-
-                        </View>
-
-
-
-
-                    </ModalSelector>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nilgiri"
-
+                        data={hostelType}
+                        onChange={option => {
+                            fetchHostelName(option.key)
+                        }}
+                    />
+                    <ModalSelector
+                        initValue="Name"
+                        style={styles.card3}
+                        initValueTextStyle={styles.SelectedValueSmall}
+                        data={hostelName}
+                        onChange={option => {
+                            fetchHostelRoom(option.key)
+                        }}
+                    />
+                    <ModalSelector
+                        initValue="Room"
+                        style={styles.card3}
+                        initValueTextStyle={styles.SelectedValueSmall}
+                        data={hostelRoom}
+                        onChange={option => {
+                            setSelectedHostelRoom(option.key)
+                        }}
                     />
 
                 </View>
@@ -195,61 +478,53 @@ const HostelAllocationAdd = ({navigation}) => {
 
                 <View style={{ flexDirection: 'row' }} >
 
-                    <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
-                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                            placeholder={date}
-
+                    {/* registraion */}
+                    <TouchableOpacity style={styles.pickdate} onPress={() => setDatePickerVisibility(!isDatePickerVisible)}>
+                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: 'black' }}
+                            value={date ? date.slice(0, 11) : 'Select'}
+                            editable={false}
                         />
                         <Feather size={18} color="black" name="calendar"
                             style={{
                                 marginTop: 16,
                                 marginRight: 0,
                             }}
-
-
                         ></Feather>
                         <DateTimePickerModal
                             isVisible={isDatePickerVisible}
                             style={styles.pickdate}
                             mode="date"
                             onConfirm={handleConfirm}
-                            onCancel={hideDatePicker}
+                            onCancel={() => setDatePickerVisibility(false)}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.pickdate1} onPress={showDatePicker1} >
-                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                            placeholder={date1}
 
+                    {/* vacating */}
+                    <TouchableOpacity style={styles.pickdate1} onPress={() => setDatePickerVisibility1(!isDatePickerVisible1)} >
+                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: 'black' }}
+                            value={date1 ? date1.slice(0, 11) : 'Select'}
+                            editable={false}
                         />
                         <Feather size={18} color="black" name="calendar"
                             style={{
                                 marginTop: 16,
                                 marginRight: 0,
                             }}
-
-
                         ></Feather>
                         <DateTimePickerModal
                             isVisible={isDatePickerVisible1}
                             style={styles.pickdate}
                             mode="date"
                             onConfirm={handleConfirm1}
-                            onCancel={hideDatePicker1}
+                            onCancel={() => setDatePickerVisibility1(false)}
                         />
                     </TouchableOpacity>
 
 
                 </View>
                 <View style={styles.fixToText}>
-                    
-                    <Pressable style={styles.button}  onPress={() => navigation.navigate('HostelAllocationEdit')}
-           >
-                        <Text style={styles.text}>Save</Text>
-                    </Pressable>
-
-
+                    <Button onPress={handleSubmit} color={institute? institute.themeColor: 'blue'} mode="contained">Save</Button>
                 </View>
-
             </View>
 
         </View>
@@ -277,49 +552,49 @@ const styles = StyleSheet.create({
     },
     button1: {
 
-        marginTop:0,
-        marginBottom:0,
-           
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-            alignSelf: 'flex-end',
-            padding: 3,
-            paddingHorizontal: 25,
-            paddingVertical:2,
-            borderRadius: 4,
-            marginRight: 30,
-            height:46,
-            borderColor:'#d2691e',
-            borderWidth:1.5
-            
-        },
-        button: {
+        marginTop: 0,
+        marginBottom: 0,
 
-        
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingVertical: 12,
-            paddingHorizontal: 25,
-            borderRadius: 4,
-            elevation: 3,
-            backgroundColor: '#5177E7',
-        },
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        alignSelf: 'flex-end',
+        padding: 3,
+        paddingHorizontal: 25,
+        paddingVertical: 2,
+        borderRadius: 4,
+        marginRight: 30,
+        height: 46,
+        borderColor: '#d2691e',
+        borderWidth: 1.5
 
-        text1: {
-            fontSize: 18,
-            fontWeight: '500',
-            lineHeight: 21,
-            letterSpacing: 0.25,
-            color: '#d2691e',
-          },
-        text: {
-            fontSize: 18,
-            lineHeight: 21,
-            fontWeight: '500',
-            letterSpacing: 0.25,
-            color: 'white',
-        },
+    },
+    button: {
+
+
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 25,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: '#5177E7',
+    },
+
+    text1: {
+        fontSize: 18,
+        fontWeight: '500',
+        lineHeight: 21,
+        letterSpacing: 0.25,
+        color: '#d2691e',
+    },
+    text: {
+        fontSize: 18,
+        lineHeight: 21,
+        fontWeight: '500',
+        letterSpacing: 0.25,
+        color: 'white',
+    },
 
     fixToText: {
         flexDirection: 'row',
@@ -465,49 +740,53 @@ const styles = StyleSheet.create({
 
 
     card: {
-
         width: 170,
         height: 50,
-
         shadowColor: '#999',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.5,
         backgroundColor: 'white',
         borderColor: '#58636D',
-
-
         overflow: 'hidden',
         justifyContent: 'center',
         borderRadius: 8,
         borderWidth: 0.3,
         marginLeft: 15,
         marginRight: 20,
-
         //flexDirection: 'row',
         justifyContent: 'space-between'
+    },
 
-
-
-
+    card3: {
+        width: 100,
+        height: 50,
+        shadowColor: '#999',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        backgroundColor: 'white',
+        borderColor: '#58636D',
+        overflow: 'hidden',
+        justifyContent: 'center',
+        borderRadius: 8,
+        borderWidth: 0.3,
+        marginLeft: 15,
+        marginRight: 20,
+        //flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     SelectedValueSmall: {
-
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
         fontWeight: '500',
         fontSize: 18,
-
-
         justifyContent: 'space-between',
         color: '#211C5A',
-
-
     },
 
     header: {
         height: 69,
         flexDirection: 'row',
-      },
+    },
 
 });
 

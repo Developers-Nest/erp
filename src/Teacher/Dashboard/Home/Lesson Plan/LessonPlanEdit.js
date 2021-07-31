@@ -1,579 +1,237 @@
-// import React, {useState, useEffect} from 'react';
-// import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-// import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-// import {
-//   Button,
-//   List,
-//   Card,
-//   Title,
-//   Paragraph,
-//   TextInput,
-// } from 'react-native-paper';
-
-// //icons
-// import AntDesign from 'react-native-vector-icons/AntDesign';
-// import IonIcon from 'react-native-vector-icons/Ionicons';
-
-// import ModalSelector from 'react-native-modal-selector';
-
-// // helpers
-// import getBatch from '../../../../services/helpers/getList/getBatch';
-// import getCourse from '../../../../services/helpers/getList/getCourse';
-// import getSubject from '../../../../services/helpers/getList/getSubject';
-// import getTerm from '../../../../services/helpers/getList/getTerm';
-// import getAssessesment from '../../../../services/helpers/getList/getAssessesment';
-// import get from '../../../../services/helpers/request/get';
-// import patch from '../../../../services/helpers/request/patch';
-// import read from '../../../../services/localstorage/read';
-// import getExam from '../../../../services/helpers/getList/getExam';
-
-// // import {USERINFO} from '../src/reducers/actionType';
-// import {USERINFO} from '../../../../reducers/actionType';
-
-// // loading screem
-// import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
-
-// // redux
-// import {useSelector} from 'react-redux';
-// import {useDispatch} from 'react-redux';
-
-// export default function LessonPlanAdd({navigation}) {
-//   const [expanded, setExpanded] = React.useState(true);
-//   const [text, setText] = React.useState('');
-//   const handlePress = () => setExpanded(!expanded);
-//   const [course, setCourse] = useState([]);
-//   const [batch, setBatch] = useState([]);
-//   const [subject, setSubject] = useState([]);
-
-//   const [selectedCourse, setSelectedCourse] = useState(null);
-//   const [selectedBatch, setSelectedBatch] = useState(null);
-//   const [selectedSubject, setSelectedSubject] = useState(null);
-//   const [lectureCode, setlectureCode] = useState(null);
-//   const [description, setDescription] = useState(null);
-//   const [url, setUrl] = useState(null);
-//   const [topic, setTopic] = useState(null);
-
-//   // loading screen
-//   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
-
-//   const dispatch = useDispatch();
-//   // const getCourse = () =>{
-//   //   console.log("getcourse")
-//   //   console.log(response)
-//   // }
-//   const BatchData = async idx => {
-//     // console.log("called")
-
-//     setLoadingScreen();
-//     try {
-//       let batchdata = await getBatch(idx);
-//       setBatch(batchdata);
-//       // console.log(batchdata)
-//     } catch (err) {
-//       console.log('Batch data', err);
-//     }
-//     hideLoadingScreen();
-//   };
-//   const SubjectData = async (idx, batch) => {
-//     setLoadingScreen();
-//     try {
-//       // console.log(idx,batch)
-//       let subjectdata = await getSubject(idx, batch);
-//       setSubject(subjectdata);
-//     } catch (err) {
-//       console.log('subject data', err);
-//     }
-//     hideLoadingScreen();
-//   };
-
-//   const updatePlan = async () => {
-//     console.log(selectedCourse);
-//     console.log(selectedBatch[selectedCourse.key]);
-//     console.log(selectedSubject);
-//     try {
-//       // const token = await read('token')
-//       // const response = await patch(selectedSubject.key, token)
-//       console.log(response);
-//     } catch (e) {
-//       console.log('update Plan', e);
-//     }
-//   };
-//   useEffect(async () => {
-//     setLoadingScreen();
-//     // check for token from local storage
-//     try {
-//       let coursedata = await getCourse();
-//       setCourse(coursedata);
-//     } catch (err) {
-//       // token not found
-//       // ask user to login
-//       console.log('Use Effect Error ', err);
-//     }
-//     hideLoadingScreen();
-//   }, []);
-
-//   //theming
-//   const institute = useSelector(state => state.institute);
-
-//   return (
-//     <View style={styles.container}>
-//       <View
-//         style={{
-//           backgroundColor: institute ? institute.themeColor : 'black',
-//           ...styles.header,
-//         }}>
-//         {loadingScreen}
-//         <TouchableOpacity
-//           onPress={() => {
-//             navigation.navigate('Lesson Plan');
-//           }}>
-//           <AntDesign
-//             size={24}
-//             color="white"
-//             name="left"
-//             style={{
-//               alignSelf: 'center',
-//               fontSize: 25,
-//               color: 'white',
-//               paddingLeft: 20,
-//               paddingTop: 20,
-//             }}
-//           />
-//         </TouchableOpacity>
-//         <Text
-//           style={{
-//             fontStyle: 'normal',
-//             fontSize: 28,
-//             fontWeight: '600',
-//             alignSelf: 'center',
-//             paddingLeft: 30,
-//             color: 'white',
-//             fontFamily: 'NunitoSans-Regular',
-//           }}>
-//           Edit Lesson Plan
-//         </Text>
-//       </View>
-//       <View style={styles.Drop}>
-//         <ModalSelector
-//           data={course}
-//           initValue="Course"
-//           onChange={crs => {
-//             setSelectedCourse(crs);
-//             BatchData(crs.key);
-//           }}
-//         />
-
-//         <ModalSelector
-//           data={batch}
-//           initValue="Batch"
-//           onChange={bth => {
-//             setSelectedBatch(bth);
-//             SubjectData(selectedCourse.key, bth.key);
-//           }}
-//         />
-
-//         <ModalSelector
-//           data={subject}
-//           initValue="Subject"
-//           onChange={sbj => {
-//             setSelectedSubject(sbj);
-//           }}
-//         />
-//       </View>
-//       <Card style={styles.card}>
-//         <Card.Content>
-//           <TextInput
-//             style={{
-//               height: 80,
-//               textAlignVertical: 'top',
-//               backgroundColor: 'white',
-//             }}
-//             multiline={true}
-//             onChangeText={txt => setlectureCode(txt)}
-//             numberOfLines={10}
-//             placeholder="Lecture Code"
-//             right={<TextInput.Affix text="/100" />}
-//           />
-//           <TextInput
-//             style={{
-//               height: 80,
-//               textAlignVertical: 'top',
-//               backgroundColor: 'white',
-//             }}
-//             multiline={true}
-//             onChangeText={desc => setDescription(desc)}
-//             numberOfLines={10}
-//             placeholder="Description"
-//             right={<TextInput.Affix text="/100" />}
-//           />
-//           <TextInput
-//             style={{
-//               height: 80,
-//               textAlignVertical: 'top',
-//               backgroundColor: 'white',
-//             }}
-//             multiline={true}
-//             onChangeText={txt => setTopic(txt)}
-//             numberOfLines={10}
-//             placeholder="Topic"
-//             right={<TextInput.Affix text="/100" />}
-//           />
-//           <TextInput
-//             style={{
-//               height: 80,
-//               textAlignVertical: 'top',
-//               backgroundColor: 'white',
-//             }}
-//             onChangeText={txt => setUrl(txt)}
-//             multiline={true}
-//             numberOfLines={10}
-//             placeholder="URL"
-//             right={<TextInput.Affix text="/100" />}
-//           />
-//           {/* <TouchableOpacity
-//             onPress={() => {
-//             }}>
-//             <View
-//               style={{
-//                 flexDirection: 'row',
-//                 paddingVertical: 70,
-//                 alignSelf: 'flex-end',
-//               }}>
-//               <List.Item
-//                 style={{
-//                   width: 100,
-//                   borderWidth: 0.3,
-//                   borderTopRightRadius: 5,
-//                   borderBottomRightRadius: 5,
-//                   borderBottomLeftRadius: 5,
-//                   borderTopLeftRadius: 5,
-//                 }}
-//                 title="Add Link"
-//               />
-//             </View>
-//           </TouchableOpacity> */}
-//         </Card.Content>
-//       </Card>
-//       <View
-//         style={{justifyContent: 'center', marginTop: 50, flexDirection: 'row'}}>
-//         <Button mode="outlined" onPress={() => {}}>
-//           Delete
-//         </Button>
-//         <View style={{width: 50}}></View>
-//         <Button mode="contained" onPress={() => updatePlan()}>
-//           Save
-//         </Button>
-//       </View>
-//     </View>
-//   );
-// }
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#E5E5E5',
-//   },
-//   header: {
-//     height: 69,
-//     flexDirection: 'row',
-//   },
-//   Drop: {
-//     marginTop: 5,
-//     flexDirection: 'row',
-//     justifyContent: 'space-evenly',
-//   },
-//   card: {
-//     marginLeft: 10,
-//     marginRight: 10,
-//     marginTop: 5,
-//     // height: 310,
-//   },
-//   Week: {
-//     marginTop: 5,
-//     flexDirection: 'row',
-//   },
-// });
-
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import {
   Button,
-  List,
   Card,
-  Title,
-  Paragraph,
   TextInput,
-} from 'react-native-paper';
+} from 'react-native-paper'
 
 //icons
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import IonIcon from 'react-native-vector-icons/Ionicons';
-
-import ModalSelector from 'react-native-modal-selector';
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import ModalSelector from 'react-native-modal-selector'
 
 // helpers
-import getBatch from '../../../../services/helpers/getList/getBatch';
-import getCourse from '../../../../services/helpers/getList/getCourse';
-import getSubject from '../../../../services/helpers/getList/getSubject';
-import getTerm from '../../../../services/helpers/getList/getTerm';
-import getAssessesment from '../../../../services/helpers/getList/getAssessesment';
-import get from '../../../../services/helpers/request/get';
-import patch from '../../../../services/helpers/request/patch';
-import read from '../../../../services/localstorage/read';
-import getExam from '../../../../services/helpers/getList/getExam';
-
-// import {USERINFO} from '../src/reducers/actionType';
-import { USERINFO } from '../../../../reducers/actionType';
+import post from '../../../../services/helpers/request/post'
+import patch from '../../../../services/helpers/request/patch'
+import read from '../../../../services/localstorage/read'
 
 // loading screem
-import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js'
 
 // redux
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux'
+import { ScrollView } from 'react-native-gesture-handler'
 
-export default function LessonPlanAdd({ navigation }) {
-  const [expanded, setExpanded] = React.useState(true);
-  const [text, setText] = React.useState('');
-  const handlePress = () => setExpanded(!expanded);
-  const [course, setCourse] = useState([]);
-  const [batch, setBatch] = useState([]);
-  const [subject, setSubject] = useState([]);
+export default function LessonPlanAdd({ route,  navigation }) {
 
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [selectedBatch, setSelectedBatch] = useState(null);
-  const [selectedSubject, setSelectedSubject] = useState(null);
-  const [lectureCode, setlectureCode] = useState(null);
-  const [description, setDescription] = useState(null);
-  const [url, setUrl] = useState(null);
-  const [topic, setTopic] = useState(null);
+  const [course, setCourse] = useState('Select Me!')
+  const [batch, setBatch] = useState('Select Me!')
+  const [subject, setSubject] = useState('Select Me!')
+
+  const [planObject, setPlanObject] = useState({})
+  const [planId, setPlanId] = useState(null)
+  const [lectureCode, setlectureCode] = useState(null)
+  const [description, setDescription] = useState(null)
+  const [url, setUrl] = useState(null)
+  const [topic, setTopic] = useState(null)
 
   // loading screen
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
 
-  const dispatch = useDispatch();
-  // const getCourse = () =>{
-  //   console.log("getcourse")
-  //   console.log(response)
-  // }
-  const BatchData = async idx => {
-    // console.log("called")
+  const addPlan = async () => {
+    if (!course || !batch || !subject) {
+      alert('All fields are Mandatory!!')
+      return
+    }
 
-    setLoadingScreen();
-    try {
-      let batchdata = await getBatch(idx);
-      setBatch(batchdata);
-      // console.log(batchdata)
-    } catch (err) {
-      console.log('Batch data', err);
+    try{
+      let token = await read('token')
+      let slug = `/lessonplanning/${planId}`
+      let data = planObject
+      data.topic = topic
+      data.url = url
+      data.description = description
+      data.code = lectureCode
+      let response = await patch(slug, data, token)
+      console.log('Updated Lesson Plan ', response)
+    } catch(err){
+      alert('Cannot Delete!! '+ err)
     }
-    hideLoadingScreen();
-  };
-  const SubjectData = async (idx, batch) => {
-    setLoadingScreen();
-    try {
-      // console.log(idx,batch)
-      let subjectdata = await getSubject(idx, batch);
-      setSubject(subjectdata);
-    } catch (err) {
-      console.log('subject data', err);
-    }
-    hideLoadingScreen();
-  };
+  }
 
-  const updatePlan = async () => {
-    console.log(selectedCourse);
-    console.log(selectedBatch[selectedCourse.key]);
-    console.log(selectedSubject);
-    try {
-      // const token = await read('token')
-      // const response = await patch(selectedSubject.key, token)
-      console.log(response);
-    } catch (e) {
-      console.log('update Plan', e);
-    }
-  };
+  const deletePlan = async()=>{
+    // try{
+    //   let token = await read('token')
+    //   let slug = `/lessonplanning/${planId}`
+    //   let data = planObject
+    //   let response = await patch(slug, data, token)
+    //   console.log('Updated Lesson Plan ', response)
+    // } catch(err){
+    //   alert('Cannot Delete!! '+ err)
+    // }
+  }
+
   useEffect(async () => {
-    setLoadingScreen();
-    // check for token from local storage
-    try {
-      let coursedata = await getCourse();
-      setCourse(coursedata);
-    } catch (err) {
-      // token not found
-      // ask user to login
-      console.log('Use Effect Error ', err);
-    }
-    hideLoadingScreen();
-  }, []);
+    setLoadingScreen()
+    const {lessonPlan} = route.params
+    console.log('Lesson Plan ', lessonPlan)
+    setPlanObject(lessonPlan)
+    setPlanId(lessonPlan._id)
+    setBatch(lessonPlan.batch.batchName)
+    setCourse(lessonPlan.course.courseName)
+    setSubject(lessonPlan.subject.name)
+    setUrl(lessonPlan.url)
+    setlectureCode(lessonPlan.code)
+    setTopic(lessonPlan.topic)
+    setDescription(lessonPlan.description)
+
+    hideLoadingScreen()
+  }, [])
 
   //theming
-  const institute = useSelector(state => state.institute);
+  const institute = useSelector(state => state.institute)
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          backgroundColor: institute ? institute.themeColor : 'black',
-          ...styles.header,
-        }}>
-        {loadingScreen}
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Lesson Plan');
-          }}>
-          <AntDesign
-            size={24}
-            color="white"
-            name="left"
-            style={{
-              alignSelf: 'center',
-              fontSize: 25,
-              color: 'white',
-              paddingLeft: 20,
-              paddingTop: 20,
-            }}
-          />
-        </TouchableOpacity>
-        <Text
+        <View
           style={{
-            fontStyle: 'normal',
-            fontSize: 28,
-            fontWeight: '600',
-            alignSelf: 'center',
-            paddingLeft: 30,
-            color: 'white',
-            fontFamily: 'NunitoSans-Regular',
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
           }}>
-          Edit Lesson Plan
-        </Text>
-      </View>
-      <View style={{ padding: 15 }} />
-      <View style={styles.Drop}>
-        <ModalSelector
-          data={course}
-          initValue="Course"
-          onChange={crs => {
-            setSelectedCourse(crs);
-            BatchData(crs.key);
-          }}
-          style={styles.card_picker}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-
-        <ModalSelector
-          data={batch}
-          initValue="Batch"
-          onChange={bth => {
-            setSelectedBatch(bth);
-            SubjectData(selectedCourse.key, bth.key);
-          }}
-          style={styles.card_picker}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-
-        <ModalSelector
-          data={subject}
-          initValue="Subject"
-          onChange={sbj => {
-            setSelectedSubject(sbj);
-          }}
-          style={styles.card_picker}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-      </View>
-      <View style={{ padding: 15 }} />
-      <Card style={styles.card}>
-        <Card.Content>
-          <TextInput
-            style={{
-              height: 80,
-              textAlignVertical: 'top',
-              backgroundColor: 'white',
-            }}
-            multiline={true}
-            onChangeText={txt => setlectureCode(txt)}
-            numberOfLines={10}
-            placeholder="Lecture Code"
-            right={<TextInput.Affix text="/100" />}
-          />
-          <TextInput
-            style={{
-              height: 80,
-              textAlignVertical: 'top',
-              backgroundColor: 'white',
-            }}
-            multiline={true}
-            onChangeText={desc => setDescription(desc)}
-            numberOfLines={10}
-            placeholder="Description"
-            right={<TextInput.Affix text="/100" />}
-          />
-          <TextInput
-            style={{
-              height: 80,
-              textAlignVertical: 'top',
-              backgroundColor: 'white',
-            }}
-            multiline={true}
-            onChangeText={txt => setTopic(txt)}
-            numberOfLines={10}
-            placeholder="Topic"
-            right={<TextInput.Affix text="/100" />}
-          />
-          <TextInput
-            style={{
-              height: 80,
-              textAlignVertical: 'top',
-              backgroundColor: 'white',
-            }}
-            onChangeText={txt => setUrl(txt)}
-            multiline={true}
-            numberOfLines={10}
-            placeholder="URL"
-            right={<TextInput.Affix text="/100" />}
-          />
-          {/* <TouchableOpacity
+          {loadingScreen}
+          <TouchableOpacity
             onPress={() => {
+              navigation.navigate('Lesson Plan')
             }}>
-            <View
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
               style={{
-                flexDirection: 'row',
-                paddingVertical: 70,
-                alignSelf: 'flex-end',
-              }}>
-              <List.Item
-                style={{
-                  width: 100,
-                  borderWidth: 0.3,
-                  borderTopRightRadius: 5,
-                  borderBottomRightRadius: 5,
-                  borderBottomLeftRadius: 5,
-                  borderTopLeftRadius: 5,
-                }}
-                title="Add Link"
-              />
-            </View>
-          </TouchableOpacity> */}
-        </Card.Content>
-      </Card>
-      <View
-        style={{ justifyContent: 'center', marginTop: 50, flexDirection: 'row' }}>
-        <Button mode="outlined" onPress={() => { }} 
-        color = {institute.themeColor}
-        >
-          Delete
-        </Button>
-        <View style={{ width: 50 }}></View>
-        <Button mode="contained" onPress={() => updatePlan()} style={{ backgroundColor: institute.themeColor }}>
-          Save
-        </Button>
-      </View>
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                paddingTop: 20,
+              }}
+            />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 30,
+              color: 'white',
+              fontFamily: 'NunitoSans-Regular',
+            }}>
+            Edit Lesson Plan
+          </Text>
+        </View>
+        <View style={{ padding: 15 }} />
+        <View style={styles.Drop}>
+          <ModalSelector
+            initValue={course}
+            data={[
+              {label: 'Class1', key: 'Class1'},
+            ]}
+            disabled={true}
+            style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+
+          <ModalSelector
+            initValue={batch}
+            disabled={true}
+            data={[
+              {label: 'Class1', key: 'Class1'},
+            ]}
+            style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+
+          <ModalSelector
+            initValue={subject}
+            disabled={true}
+            data={[
+              {label: 'Class1', key: 'Class1'},
+            ]}
+            style={styles.card_picker}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+        </View>
+        <ScrollView>
+        <View style={{ padding: 15 }} />
+        <Card style={styles.card}>
+          <Card.Content>
+            <TextInput
+              style={{
+                height: 80,
+                textAlignVertical: 'top',
+                backgroundColor: 'white',
+              }}
+              value={lectureCode}
+              multiline={true}
+              onChangeText={txt => setlectureCode(txt)}
+              numberOfLines={10}
+              placeholder="Lecture Code"
+            />
+            <TextInput
+              style={{
+                height: 80,
+                textAlignVertical: 'top',
+                backgroundColor: 'white',
+              }}
+              value={topic}
+              multiline={true}
+              onChangeText={txt => setTopic(txt)}
+              numberOfLines={10}
+              placeholder="Topic"
+            />
+            <TextInput
+              style={{
+                height: 80,
+                textAlignVertical: 'top',
+                backgroundColor: 'white',
+              }}
+              value={url}
+              onChangeText={txt => setUrl(txt)}
+              multiline={true}
+              numberOfLines={10}
+              placeholder="URL"
+            />
+            <TextInput
+              style={{
+                height: 80,
+                textAlignVertical: 'top',
+                backgroundColor: 'white',
+              }}
+              value={description}
+              multiline={true}
+              onChangeText={desc => setDescription(desc)}
+              numberOfLines={10}
+              placeholder="Description"
+            />
+          </Card.Content>
+        </Card>
+
+        <View
+          style={{ justifyContent: 'center', marginTop: 20, flexDirection: 'row' }}>
+          <View style={{ width: 50 }}></View>
+          <Button mode="contained" onPress={deletePlan} style={{ backgroundColor: institute.themeColor }}>
+            Delete
+          </Button>
+          <Button mode="contained" onPress={addPlan} style={{ backgroundColor: institute.themeColor }}>
+            Save
+          </Button>
+        </View>
+      </ScrollView>
     </View>
-  );
+  )
 }
 const styles = StyleSheet.create({
   container: {
@@ -625,4 +283,4 @@ const styles = StyleSheet.create({
     minWidth: 110,
     elevation: 3,
   },
-});
+})

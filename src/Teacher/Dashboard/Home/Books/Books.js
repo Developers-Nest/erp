@@ -290,7 +290,7 @@ export default function BooksStudent({ navigation }) {
             }}>
             Issued Books
           </Text>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               justifyContent: 'flex-end',
               flex: 1,
@@ -307,7 +307,7 @@ export default function BooksStudent({ navigation }) {
                 paddingRight: 20,
               }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         {/* header ends */}
