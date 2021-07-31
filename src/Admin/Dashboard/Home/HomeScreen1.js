@@ -210,6 +210,11 @@ const HomeScreen1 = () => {
 
           <View style={styles.section}>
             <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Assignment');
+              }}>
               <MaterialCommunityIcon
                 size={36.83}
                 color="#FCBC05"
@@ -226,6 +231,7 @@ const HomeScreen1 = () => {
                 }}>
                 Assignment
               </Text>
+              </TouchableOpacity>
             </View>
           </View>
 

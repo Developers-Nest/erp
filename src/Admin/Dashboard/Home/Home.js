@@ -33,7 +33,6 @@ import ContentLibrary from './Home/Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
 
 import Transport from './Transport/Transport';
-import Subject from './Subject/Subject.js';
 import CceMarks from './CCEMarks/CCEmarks';
 import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
@@ -49,6 +48,8 @@ import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
 import Exams from './Home/Exams';
 import Results from './Home/Results';
+//assignment(same to teacher)
+import Assignment from './Home/Assignment';
 
 import Notification from './Home/Notification';
 
@@ -159,6 +160,12 @@ const Home_Route = () => {
         component={Timetable}
         options={{ headerShown: false }}
       />
+ <Stack.Screen
+        name="Assignment"
+        component={Assignment}
+        options={{ headerShown: false }}
+      />
+
       {/* library */}
       <Stack.Screen
         name="Library"
