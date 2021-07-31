@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -25,20 +25,100 @@ import {useSelector} from 'react-redux';
 
 //helpers
 import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
-import get from '../../../../../services/helpers/request/get';
 import read from '../../../../../services/localstorage/read';
+import post from '../../../../../services/helpers/request/post';
+import get from '../../../../../services/helpers/request/get';
 
 const AddVisitors = ({navigation}) => {
   //theming
   const institute = useSelector(state => state.institute);
 
-    //for category in 4th row
-    const [category, setcategory] = useState([
-      { label: 'Student', key: 'Student' },
-      { label: 'Teacher', key: 'Teacher' },
-      { label: 'Clerk', key: 'Clerk' },
-    ]);
-  
+  //selector data
+  const [categories, setCategories] = useState([]);
+  const [purposes, setPurposes] = useState([]);
+  const [students, setStudents] = useState([]);
+
+  //form data
+  const [category, setCategory] = useState();
+  const [purpose, setPurpose] = useState();
+  const [whomToMeet, setWhomToMeet] = useState('');
+  const [name, setName] = useState('');
+  const [mobNo, setMobNo] = useState();
+  const [student, setStudent] = useState('');
+
+  // loading screen
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+  //on load
+  useEffect(async () => {
+    setLoadingScreen();
+    // category
+    try {
+      let t = await read('token');
+      let r = await read('role');
+      const slug = '/visitors/category';
+      const response = await get(slug, t);
+      let list = [];
+      response.map(category => list.push({key: category, label: category}));
+      setCategories(list);
+    } catch (err) {
+      alert('Cannot fetch category !!' + err);
+    }
+    //purposes
+    try {
+      let t = await read('token');
+      let r = await read('role');
+      const slug = '/visitors/purpose';
+      const response = await get(slug, t);
+      let list = [];
+      response.map(purpose => list.push({key: purpose, label: purpose}));
+      setPurposes(list);
+    } catch (err) {
+      alert('Cannot fetch purpose !!' + err);
+    }
+    //students
+    try {
+      let t = await read('token');
+      let r = await read('role');
+      const slug = '/student/course';
+      const response = await get(slug, t);
+      let list = [];
+      let index = 1;
+      response.map(student =>
+        list.push({
+          key: student._id,
+          label: student.firstName + ' ' + student.lastName,
+        }),
+      );
+      setStudents(list);
+    } catch (err) {
+      alert('Cannot fetch Students !!' + err);
+    }
+    hideLoadingScreen();
+  }, []);
+
+  // save details
+  const HandleAdd = async () => {
+    try {
+      let slug = `/visitors/add`;
+      console.log('Visitor add slug', slug);
+      let token = await read('token');
+      let data = {
+        category: category,
+        purpose: purpose,
+        name: name,
+        user: student,
+        whomToMeet: whomToMeet,
+      };
+      console.log(data);
+      let response = await post(slug, data, token);
+      alert('Visitor created!');
+    } catch (err) {
+      alert('Cannot create occurance!' + err);
+    }
+  };
+
+  //date picker
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [date, setDate] = React.useState('29 May 2021');
   let index = 0;
@@ -116,42 +196,37 @@ const AddVisitors = ({navigation}) => {
       </View>
       <ScrollView>
         <View style={{justifyContent: 'space-around', alignContent: 'center'}}>
-      
-<View style={{ width: "100%", marginTop: 20, flexDirection: 'row' }}>
-<Text style={styles.section_heading}>Category </Text>
+          <View style={{width: '100%', marginTop: 20, flexDirection: 'row'}}>
+            <Text style={styles.section_heading}>Category </Text>
             <Text style={styles.section_heading1}>Purpose</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }} >
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{paddingHorizontal: 10}}>
+              <ModalSelector
+                data={categories}
+                initValue="Student"
+                onChange={option => {
+                  setCategory(option.label);
+                }}
+                style={styles.card}
+                initValueTextStyle={styles.SelectedValueSmall}
+                selectTextStyle={styles.SelectedValueSmall}
+              />
+            </View>
 
-<View style={{paddingHorizontal:10}}>
-                    <ModalSelector
-              data={category}
-              initValue="Student"
-              onChange={option => {
-                // setclass(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValueSmall}
-              selectTextStyle={styles.SelectedValueSmall}
-            />
-    </View>       
-                    {/* <TextInput
-                        style={styles.input}
-                        placeholder="First"
-
-
-                    /> */}
-                    {/* <View style={styles.search}> */}
-                    <TextInput
-                        style={[styles.input,styles.shadow]}
-                        placeholder="Casual Meet"
-                        placeholderTextColor='grey'
-
-                    />
-                    {/* </View> */}
-
-                </View>
-
+            <View style={{paddingHorizontal: 10}}>
+              <ModalSelector
+                data={purposes}
+                initValue="Casual Meet"
+                onChange={option => {
+                  setPurpose(option.label);
+                }}
+                style={styles.card}
+                initValueTextStyle={styles.SelectedValueSmall}
+                selectTextStyle={styles.SelectedValueSmall}
+              />
+            </View>
+          </View>
 
           <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
             <Text style={styles.section_heading}>Visitor's Name </Text>
@@ -159,50 +234,77 @@ const AddVisitors = ({navigation}) => {
           </View>
           <View style={{flexDirection: 'row'}}>
             <TextInput
-                                               placeholderTextColor='grey' style={[styles.input,styles.shadow]} placeholder="Shian Manzoor" />
-            <TextInput 
-                                              placeholderTextColor='grey'  style={[styles.input,styles.shadow]} placeholder="Brother" />
+              placeholderTextColor="grey"
+              style={[styles.input, styles.shadow]}
+              placeholder="Shian Manzoor"
+              onChangeText={name => {
+                setName(name);
+              }}
+            />
+            <TextInput
+              placeholderTextColor="grey"
+              style={[styles.input, styles.shadow]}
+              placeholder="Brother"
+            />
           </View>
           <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
-            <Text style={styles.section_heading}>Whom To Meet </Text>
+            <Text style={styles.section_heading}>Student </Text>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{paddingHorizontal: 10}}>
+              <ModalSelector
+                data={students}
+                initValue="Student"
+                onChange={option => {
+                  setStudent(option.label);
+                }}
+                style={styles.card}
+                initValueTextStyle={styles.SelectedValueSmall}
+                selectTextStyle={styles.SelectedValueSmall}
+              />
+            </View>
+          </View>
+          <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
+            <Text style={styles.section_heading}>Whom To Meet</Text>
             <Text style={styles.section_heading2}>Date</Text>
           </View>
 
           <View style={{flexDirection: 'row'}}>
-          <TextInput 
-                                          placeholderTextColor='grey'      style={[styles.input,styles.shadow]} placeholder="Safi Ahmed" />
-           <TouchableOpacity style={[styles.pickdate,styles.shadow]} onPress={showDatePicker}>
-                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                            placeholder={date}                         placeholderTextColor='grey'
-
-                        />
-                        <Feather size={18} color="black" name="calendar"
-                            style={{
-                                marginTop: 16,
-                                marginRight: 0,
-                            }}
-
-
-                        ></Feather>
-                        <DateTimePickerModal
-                            isVisible={isDatePickerVisible}
-                            style={styles.pickdate}
-                            mode="date"
-                            onConfirm={handleConfirm}
-                            onCancel={hideDatePicker}
-                        />
-                    </TouchableOpacity>
-               
+            <TextInput
+              placeholderTextColor="grey"
+              style={[styles.input, styles.shadow]}
+              onChangeText={who => setWhomToMeet(who)}
+              placeholder="Safi Ahmed"
+            />
+            <TouchableOpacity
+              style={[styles.pickdate, styles.shadow]}
+              onPress={showDatePicker}>
+              <TextInput
+                style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
+                placeholder={date}
+                placeholderTextColor="grey"
+              />
+              <Feather
+                size={18}
+                color="black"
+                name="calendar"
+                style={{
+                  marginTop: 16,
+                  marginRight: 0,
+                }}></Feather>
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                style={styles.pickdate}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+              />
+            </TouchableOpacity>
           </View>
           <View style={styles.fixToText}>
-            
-            <Pressable style={[styles.button]}  
-            onPress={() => {
-            navigation.navigate('EditVisitors');
-          }}>
+            <TouchableOpacity style={[styles.button]} onPress={HandleAdd}>
               <Text style={styles.text}>Save</Text>
-            </Pressable>
-         
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -215,7 +317,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
- 
+
   button: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -315,7 +417,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-
   input: {
     flex: 1,
     height: 50,
@@ -327,16 +428,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     // borderColor: '#58636D',
-   
+
     // borderWidth: 0.35,
     flexDirection: 'row',
     justifyContent: 'space-between',
     fontFamily: 'Poppins-Regular',
-    
+  },
 
-},
-
-shadow: {
+  shadow: {
     elevation: 2,
     borderRadius: 0,
     backgroundColor: 'transparent',
@@ -348,10 +447,8 @@ shadow: {
     shadowOpacity: 0.2,
     shadowRadius: 8,
   },
-  
 
-
-pickdate: {
+  pickdate: {
     width: 120,
     fontFamily: 'Poppins-Regular',
     height: 50,
@@ -366,14 +463,11 @@ pickdate: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
 
-},
-
-
-header: {
+  header: {
     height: 69,
     flexDirection: 'row',
-
   },
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
@@ -387,7 +481,7 @@ header: {
   SelectedValueSmall: {
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
-    fontWeight:'200',
+    fontWeight: '200',
     fontWeight: '500',
     fontSize: 14,
     lineHeight: 30,
@@ -395,28 +489,27 @@ header: {
     color: 'rgba(88, 99, 109, 0.85)',
   },
 
-card: {
-shadowColor: '#000',
-height:50,
-shadowOffset: {width: 0, height: 1},
-shadowOpacity: 0.2,
-shadowRadius: 12,
-elevation: 2,
-backgroundColor: 'white',
-borderColor: '#ccc',
-borderWidth: 1,
-borderBottomLeftRadius: 8,
-borderBottomRightRadius: 8,
-borderTopRightRadius: 8,
-borderTopLeftRadius: 8,
-overflow: 'hidden',
-justifyContent: 'center',
-margin: 0,
-padding: 0,
+  card: {
+    shadowColor: '#000',
+    height: 50,
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 2,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    margin: 0,
+    padding: 0,
 
-minWidth: '48%',
-},
-
+    minWidth: '48%',
+  },
 });
 
 export default AddVisitors;
