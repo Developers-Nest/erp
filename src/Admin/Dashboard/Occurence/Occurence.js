@@ -116,10 +116,16 @@ function Occurance({navigation}) {
                         fontSize: 20,
                         color: '#211C5A',
                       }}>
-                      {occurance.firstname}
+                      {occurance.employeeName.firstName}
                     </Text>
                     <Button
-                      onPress={() => navigation.navigate('OccurenceEdit')}>
+                      onPress={() =>
+                        navigation.navigate('OccurenceEdit', {
+                          name: occurance.firstname,
+                          date: occurance.date,
+                          remarks: occurance.remarks,
+                        })
+                      }>
                       edit <FontAwesome5 name={'edit'} size={20} light />
                     </Button>
                   </TouchableOpacity>
