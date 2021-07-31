@@ -46,13 +46,16 @@ import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
 import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
-import Exams from './Home/Exams';
+
 import Results from './Home/Results';
 import Leave from './Home/Leave';
 //assignment(same to teacher)
 import Assignment from './Home/Assignment';
 
 import Notification from './Home/Notification';
+
+//navigation from home menu and drawer navigation too
+import Exams from './Home/Exams';
 
 //helpers
 import write from '../../../services/localstorage/write';
@@ -311,7 +314,7 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Online Exams</Text>
           )}
-          onPress={() => props.navigation.navigate('Books')}
+          onPress={() => props.navigation.navigate('Exams')}
         />
         <DrawerItem
           style={styles.item}
@@ -397,7 +400,7 @@ export default function Route() {
       <DrawerNav.Screen name="Hostel" component={Hostel} />
       {/* <DrawerNav.Screen name="Assignment" component={Assignment} /> */}
       <DrawerNav.Screen name="LessonPlanStack" component={LessonPlanStack} />
-      <DrawerNav.Screen name="Books" component={Books} />
+      <DrawerNav.Screen name="Exams" component={Exams} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
       <DrawerNav.Screen name="Transport" component={Transport} />
       <DrawerNav.Screen name="Cce Marks" component={CceMarks} />
