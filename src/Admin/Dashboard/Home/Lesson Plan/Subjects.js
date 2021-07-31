@@ -1,23 +1,38 @@
-import * as React from 'react';
+import React, { useState,useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, ImageBackground, Button, TouchableOpacity } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
+// helpers
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 
 export default function Subjects({navigation}) {
 
- //theming
- const institute = useSelector(state => state.institute);
-
-
-    const [searchQuery, setSearchQuery] = React.useState('');
-
+    const [searchQuery, setSearchQuery] = useState('');
+    const [subjects, setsubjects] = useState([]);
+  
     const onChangeSearch = query => setSearchQuery(query);
+  
+    useEffect(async () => {
+        try {
+          let slug = '/subject';
+          let token = await read('token');
+          const response = await get(slug, token);
+          console.log(response);
+         setsubjects(response);
+        } catch (err) {
+          alert('Cannot fetch your rooms list !!');
+        }
+      }, []);
+    
+    //theming
+    const institute = useSelector(state => state.institute);
 
 
     return (
@@ -74,20 +89,24 @@ export default function Subjects({navigation}) {
 <TouchableWithoutFeedback  onPress={() => {
                         navigation.navigate('LessonPlan');
                     }}>
-                <View style={styles.section}>
+                        
+{subjects &&
+              subjects.map(subjects => (
+            
+                <View style={styles.section} key={subjects._id}>
                     <View style={styles.details}>
 
                         <View style={styles.userinhostels}>
-                            <TouchableOpacity style={styles.differentusers}>
-                                <Text style={{ fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Physics</Text>
+                            <View style={styles.differentusers}>
+                                <Text style={{ fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> {subjects.name}</Text>
 
-                                <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> PHY:20345</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.differentusers}>
+                                <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> {subjects.code}</Text>
+                            </View>
+                            <View style={styles.differentusers}>
                                 <Text style={{ fontSize: 12, marginLeft: 5, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>Batch</Text>
 
                                 <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Class</Text>
-                            </TouchableOpacity>
+                            </View>
                         </View>
 
 
@@ -96,29 +115,8 @@ export default function Subjects({navigation}) {
 
 
                 </View>
+              ))}
                 </TouchableWithoutFeedback>          
-                <View style={styles.section}>
-                    <View style={styles.details}>
-
-                        <View style={styles.userinhostels}>
-                            <TouchableOpacity style={styles.differentusers}>
-                                <Text style={{ fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Physics</Text>
-
-                                <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> PHY:20345</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.differentusers}>
-                                <Text style={{ fontSize: 12, marginLeft: 5, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>Batch</Text>
-
-                                <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Class</Text>
-                            </TouchableOpacity>
-                        </View>
-
-
-
-                    </View>
-
-
-                </View>
                 {/* </View> */}
 
             </ScrollView>
