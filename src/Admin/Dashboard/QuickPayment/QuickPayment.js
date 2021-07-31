@@ -47,7 +47,7 @@ export default function QuickPayment() {
         />
         <ModalSelector
           data={UseType}
-          initValue="Use Type"
+          initValue="User Type"
           onChange={async option => {
             await getAssessesments(option.key);
           }}
