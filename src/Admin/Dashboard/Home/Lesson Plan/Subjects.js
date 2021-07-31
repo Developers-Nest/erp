@@ -24,10 +24,10 @@ export default function Subjects({navigation}) {
           let slug = '/subject';
           let token = await read('token');
           const response = await get(slug, token);
-          console.log(response);
+          console.log("Subjects ", response);
          setsubjects(response);
         } catch (err) {
-          alert('Cannot fetch your rooms list !!');
+          alert('Cannot fetch your subjects list !!');
         }
       }, []);
     
@@ -36,9 +36,6 @@ export default function Subjects({navigation}) {
 
 
     return (
-
-
-
         <View style={styles.container}>
             {/* header start */}
 
@@ -78,7 +75,6 @@ export default function Subjects({navigation}) {
                     }}>
                     Subjects
                 </Text>
-
             </View>
 
             {/* header ends */}
