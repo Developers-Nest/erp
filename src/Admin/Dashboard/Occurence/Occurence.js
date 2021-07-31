@@ -47,7 +47,10 @@ export default function Occurence({navigation}) {
         <Appbar>
           <Appbar.BackAction onPress={() => navigation.goBack()} />
           <Appbar.Content title="Occurence Register" />
-          <Appbar.Action icon="plus-circle-outline" />
+          <Appbar.Action
+            icon="plus-circle-outline"
+            onPress={() => navigation.navigate('Occurence2')}
+          />
         </Appbar>
 
         <View style={styles.maincontainer}>
