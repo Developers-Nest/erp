@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -34,14 +34,21 @@ export default function Occurence2({navigation}) {
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   //data to be created
-  const [date, setDate] = React.useState('17 July 2021');
-  const [employee, setemployee] = React.useState(null);
+  const [date, setDate] = React.useState('');
+  const [employee, setemployee] = React.useState('');
   const [remarks, setremarks] = React.useState('');
 
   //modal data
   const [emp, setEmp] = React.useState([]);
 
+  //date display
+  const [datedisplay, setdatedisplay] = useState('');
+
   //date picker
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const dateMonths = {
     1: 'Jan',
@@ -65,18 +72,35 @@ export default function Occurence2({navigation}) {
     setDatePickerVisibility(false);
   };
 
-  const handleConfirm = date => {
-    console.warn('A date has been picked: ', date.toString());
-    // setDate(
-    //   date.getDate() +
-    //     ' ' +
-    //     dateMonths[date.getMonth()] +
-    //     ' ' +
-    //     date.getFullYear(),
-    // );
+  const handleConfirm = data => {
+    console.warn('A date has been picked: ', data.toString());
+    setdatedisplay(parseDate(data.toString()));
+    setDate(
+      data.getFullYear() +
+        '-' +
+        twodigit(data.getMonth() + 1) +
+        '-' +
+        twodigit(data.getDate()) +
+        'T' +
+        +twodigit(data.getHours()) +
+        ':' +
+        twodigit(data.getMinutes()) +
+        ':' +
+        twodigit(data.getSeconds()) +
+        '.' +
+        threedigit(data.getMilliseconds()) +
+        'Z',
+    );
+    console.log('A date has been picked: ', date);
     hideDatePicker();
   };
 
+  const twodigit = num => {
+    return ('0' + num).slice(-2);
+  };
+  const threedigit = num => {
+    return ('00' + num).slice(-3);
+  };
   //on load
   useEffect(async () => {
     showLoadingScreen();
@@ -159,7 +183,7 @@ export default function Occurence2({navigation}) {
         </View>
         <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
           <Text style={{marginTop: 20, marginLeft: 10}}>
-            {date}
+            {datedisplay}
             {'  '}
           </Text>
           <Icon
@@ -174,7 +198,6 @@ export default function Occurence2({navigation}) {
             isVisible={isDatePickerVisible}
             style={styles.pickdate}
             mode="date"
-            onChange={value => setDate(value.toString())}
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
           />
@@ -184,11 +207,9 @@ export default function Occurence2({navigation}) {
         style={{
           width: '90%',
           margin: 10,
-          flex: 1,
           flexDirection: 'row',
           //  alignContent:'center',
           justifyContent: 'center',
-          marginTop: 100,
         }}>
         <TextInput
           multiline
