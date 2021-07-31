@@ -48,6 +48,7 @@ import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
 import Exams from './Home/Exams';
 import Results from './Home/Results';
+import Leave from './Home/Leave';
 //assignment(same to teacher)
 import Assignment from './Home/Assignment';
 
@@ -196,6 +197,11 @@ const Home_Route = () => {
       <Stack.Screen
         name="Notification"
         component={Notification}
+        options={{ headerShown: false }}
+      />
+ <Stack.Screen
+        name="Leave"
+        component={Leave}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

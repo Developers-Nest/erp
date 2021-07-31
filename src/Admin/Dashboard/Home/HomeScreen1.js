@@ -308,6 +308,11 @@ const HomeScreen1 = () => {
 
           <View style={styles.section}>
             <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Leave');
+              }}>
               <IonIcon size={36.83} color="#8A06CD" name="document-outline" />
 
               <Text
@@ -320,6 +325,7 @@ const HomeScreen1 = () => {
                 }}>
                 Leave
               </Text>
+              </TouchableOpacity>
             </View>
           </View>
 
