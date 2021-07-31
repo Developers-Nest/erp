@@ -21,11 +21,9 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
 // helpers
-import get from '../../../services/helpers/request/get';
 import patch from '../../../services/helpers/request/patch';
 import read from '../../../services/localstorage/read';
-import getCourse from '../../../services/helpers/getList/getCourse';
-import getBatch from '../../../services/helpers/getList/getBatch';
+import getEmployee from '../../../services/helpers/getList/getEmployee';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -141,17 +139,8 @@ export default function OccurenceEdit({route, navigation}) {
   useEffect(async () => {
     showLoadingScreen();
     try {
-      let slug = `/employee`;
-      let token = await read('token');
-      let response = await get(slug, token);
-      console.log('Response ', response);
-      let list = [];
-      response.map(employee => {
-        list.push({
-          key: employee._id,
-          label: employee.firstName,
-        });
-      });
+      let list = await getEmployee();
+
       setEmp(list);
     } catch (err) {
       alert('Cannot fetch employee list !!\n' + err);
