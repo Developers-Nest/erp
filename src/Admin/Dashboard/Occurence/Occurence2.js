@@ -11,7 +11,7 @@ import {
   Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-
+import {Searchbar, Button, Appbar} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 // date picker
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -120,6 +120,10 @@ export default function Occurence2({navigation}) {
 
   return (
     <View>
+      <Appbar>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Occurence Register" />
+      </Appbar>
       <View
         style={{
           width: '90%',
