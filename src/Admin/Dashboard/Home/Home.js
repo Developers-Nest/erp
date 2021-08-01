@@ -106,7 +106,7 @@ const Home_Route = () => {
         name="Home"
         component={Home}
         options={({ navigation, route }) => ({
-          headerTitle: 'Hi Saawan!',
+          headerTitle: `Hi ${institute.name}!`,
           headerStyle: {
             height: 70,
             backgroundColor: 'rgba(249, 249, 249, 1)',
