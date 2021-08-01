@@ -91,6 +91,8 @@ const HostelDetails = ({navigation}) => {
                     <TextInput
                         style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
                         placeholder="Enter hostel name here"
+                        placeholderTextColor='grey'
+                        color='black'
 
                     />
                     <TouchableOpacity

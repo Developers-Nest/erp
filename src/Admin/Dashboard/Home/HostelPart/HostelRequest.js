@@ -333,6 +333,8 @@ fontSize:12,lineHeight:18,color:'#211C5A'}}
             <TextInput
               style={{width: '80%', ...styles.text_input}}
               placeholder="Enter user's name here"
+              placeholderTextColor='grey'
+              color='black'
   
             />
             <TouchableOpacity

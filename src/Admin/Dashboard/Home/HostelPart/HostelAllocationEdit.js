@@ -122,6 +122,8 @@ const HostelAllocationEdit = ({ navigation }) => {
                         <TextInput
                             style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
                             placeholder="Search User's name to add"
+                            placeholderTextColor='grey'
+                            color='black'
 
                         />
                         <TouchableOpacity
@@ -186,7 +188,8 @@ const HostelAllocationEdit = ({ navigation }) => {
                     <TextInput
                         style={styles.input}
                         placeholder="Nilgiri"
-
+                        placeholderTextColor='grey'
+                        color='black'
                     />
 
                 </View>
@@ -200,7 +203,8 @@ const HostelAllocationEdit = ({ navigation }) => {
                     <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={date}
-
+                            placeholderTextColor='grey'
+                            color='black'
                         />
                         <Feather size={18} color="black" name="calendar"
                             style={{
@@ -221,7 +225,8 @@ const HostelAllocationEdit = ({ navigation }) => {
                     <TouchableOpacity style={styles.pickdate1} onPress={showDatePicker1} >
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={date1}
-
+                            placeholderTextColor='grey'
+                            color='black'
                         />
                         <Feather size={18} color="black" name="calendar"
                             style={{
@@ -242,16 +247,7 @@ const HostelAllocationEdit = ({ navigation }) => {
 
 
                 </View>
-                {/* <View style={styles.fixToText}>
-
-                    <Pressable style={styles.button} onPress={() => navigation.navigate('RoomsList')}
-                    >
-                        <Text style={styles.text}>Save</Text>
-                    </Pressable>
-
-
-                </View> */}
-
+               
 <View style={styles.fixToText}>
                     <Pressable style={styles.button1} onPress={() => Alert.alert('Deleted')}>
                         <Text style={styles.text1}>Delete</Text>
