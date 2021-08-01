@@ -8,29 +8,21 @@ import {
   Button,
 } from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
   TextInput,
-  RadioButton,
 } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/AntDesign';
-import IonIcon from 'react-native-vector-icons/Ionicons';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // helpers
 import get from '../../../../services/helpers/request/get'
 import read from '../../../../services/localstorage/read'
 
 export default function LessonPlan({ navigation }) {
-//theming
-const institute = useSelector(state => state.institute);
+  //theming
+  const institute = useSelector(state => state.institute);
 
   const [data, setData] = useState([])
 
@@ -51,15 +43,15 @@ const institute = useSelector(state => state.institute);
         flex: 1,
         justifyContent: 'flex-start',
       }}>
-      <View 
-      style={{
-        backgroundColor: institute ? institute.themeColor : '#FF5733',
-        // backgroundColor:'blue',
-        ...styles.header,
-    }}
-      
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : '#FF5733',
+          // backgroundColor:'blue',
+          ...styles.header,
+        }}
+
       >
-        <TouchableOpacity onPress={() => {navigation.navigate('Subjects')}}>
+        <TouchableOpacity onPress={() => { navigation.navigate('Subjects') }}>
           <Icon
             size={24}
             color="white"
@@ -84,7 +76,7 @@ const institute = useSelector(state => state.institute);
           }}>
           Lesson Plan
         </Text>
-        </View>
+      </View>
 
       {/* 
 <AttendanceTakeHeader/> */}
@@ -123,7 +115,7 @@ const institute = useSelector(state => state.institute);
 
         {
           data && data.map((plan) => (
-            <View style={styles.section} key={data._id}>
+            <View style={styles.section} key={plan._id}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
                   <View style={styles.differentusers}>
@@ -179,7 +171,7 @@ const institute = useSelector(state => state.institute);
                 <Button
                   title="Link"
                   mode="contained"
-                  color={ institute ? institute.themeColor : "#5177E7"}
+                  color={institute ? institute.themeColor : "#5177E7"}
                   labelStyle={{ color: 'white' }}
                 />
               </View>
@@ -216,6 +208,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     marginHorizontal: 20,
+    marginBottom: 20
   },
 
   details: {
