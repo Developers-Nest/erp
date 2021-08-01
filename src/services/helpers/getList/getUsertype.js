@@ -5,19 +5,19 @@ import read from '../../localstorage/read';
  * @return list of assessments
  */
 
-async function getEmployee() {
-  let slug = `/employee`;
+async function getUserType() {
+  let slug = `/usertype`;
   let token = await read('token');
   let response = await get(slug, token);
   let list = [];
-  response.map(employee => {
+  response.map(usertype => {
     list.push({
-      key: employee._id,
-      label: employee.firstName,
+      key: usertype.name,
+      label: usertype.name,
     });
   });
 
   return list;
 }
 
-export default getEmployee;
+export default getUserType;
