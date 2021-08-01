@@ -4,6 +4,7 @@ import {
   View,
   Text,
   ScrollView,
+  Image,
   TouchableOpacity,Alert, Modal, Pressable,TextInput
 } from 'react-native';
 import {
@@ -125,7 +126,9 @@ export default function Profile({navigation}) {
       />
       <ScrollView>
         <View style={{justifyContent: 'center', flexDirection: 'row'}}>
-          <Avatar.Text size={100} label={userInfo.firstName[0]} />
+          {
+            userInfo.url? <Image source={{uri: userInfo.url}} style={styles.tinyLogo}/>:  <Avatar.Text size={100} label={userInfo.firstName[0]} />
+          }
         </View>
       <View style={styles.centeredView}>
       <Modal
@@ -267,6 +270,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
+  },
+  tinyLogo: {
+    width: 150,
+    height: 150,
+    borderRadius: 100
   },
   text_input: {
     padding: 10,
