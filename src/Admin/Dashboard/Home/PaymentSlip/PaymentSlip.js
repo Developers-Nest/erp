@@ -21,7 +21,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auto } from 'async';
 
-export default function PaymentSlip() {
+export default function PaymentSlip({navigation}) {
     const [Department, setDrepartment] = useState([]);
     const [Name, setName] = useState([]);
     const [Month, setMonth] = useState([]);
@@ -29,7 +29,7 @@ export default function PaymentSlip() {
   return (
     <View style={styles.backgroung}>
       <Appbar>
-        <Appbar.BackAction onPress={() => {}} />
+        <Appbar.BackAction onPress={() => {navigation.navigate('Home')}} />
         <Appbar.Content title="Payment Slip" />
       </Appbar>
       <ScrollView>
