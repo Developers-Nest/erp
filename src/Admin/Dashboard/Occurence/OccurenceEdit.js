@@ -151,7 +151,7 @@ export default function OccurenceEdit({route, navigation}) {
   return (
     <ScrollView>
       <Appbar>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.BackAction onPress={() => navigation.replace('Occurence')} />
         <Appbar.Content title="Occurence Register" />
       </Appbar>
       <View
