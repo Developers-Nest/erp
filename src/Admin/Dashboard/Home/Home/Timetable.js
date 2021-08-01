@@ -199,9 +199,7 @@ const styles = StyleSheet.create({
   },
   search: {
     backgroundColor: 'white',
-    justifyContent: 'space-between',
     flexDirection: 'row',
-    paddingHorizontal: 20,
     borderColor: '#00499F',
     borderRadius: 8,
   },
@@ -289,5 +287,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginHorizontal: 20,
     marginVertical: 10,
+  },
+  card: {
+    width: '100%',
   },
 });
