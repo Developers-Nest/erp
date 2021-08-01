@@ -1,20 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput ,TouchableWithoutFeedback} from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-
+// helpers
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
+//redux
 import { useSelector } from 'react-redux';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const HostelDetails = ({navigation}) => {
     //theming
   const institute = useSelector(state => state.institute);
 
-    return (
-        <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+  const [searchQuery, setSearchQuery] = useState('');
+    const [hdetails, sethdetails] = useState([]);
+
+    const onChangeSearch = query => setSearchQuery(query);
+    useEffect(async () => {
+        try {
+            let slug = '/hostel/hostelDetails';
+            let token = await read('token');
+            const response = await get(slug, token);
+            console.log("Hostel Details ", response);
+            sethdetails(response);
+        } catch (err) {
+            alert('Cannot fetch hostel details !!');
+        }
+    }, []);
+
+  return (
+        <View style={{ justifyContent: 'center', alignContent: 'center',
+        backgroundColor: 'rgba(249, 249, 249, 1)', }}>
              {/* header start */}
 
         <View
@@ -112,13 +132,17 @@ const HostelDetails = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
             </View>
-
+            
 <TouchableWithoutFeedback
  onPress={() => navigation.navigate('HostelRequest')}
            
 >
-
-            <View style={styles.section} >
+<ScrollView>
+    <View>
+        
+{hdetails &&
+                        hdetails.map(hdetails => (
+            <View style={styles.section} key={hdetails._id} >
                 <View style={styles.details}>
                     <View style={styles.userinhostels}>
                         <View style={styles.differentusers}>
@@ -127,32 +151,20 @@ const HostelDetails = ({navigation}) => {
                                     fontSize: 18,
                                     color: '#211C5A',
                                     fontFamily: 'Poppins-Regular',
-                                    marginHorizontal: -5,
+                                    
                                 }}>
 
-                                Hostel Name
+                              {hdetails.name?hdetails.name:'Name N/A'}
 
                             </Text>
 
                             <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
-                            Ph:7879428976
+                            Ph:{hdetails.phoneNumber?hdetails.phoneNumber:'N/A'}
                             </Text>
 
 
                             {/* */}
                         </View>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#5177E7',
-                                    fontFamily: 'Poppins-Medium',
-                                }}>
-
-                            </Text>
-
-
-                        </TouchableOpacity>
                         {/* <TouchableOpacity style={styles.differentusers}>
                             <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
                                 User Type
@@ -161,18 +173,18 @@ const HostelDetails = ({navigation}) => {
 
                         
 
-                            <TouchableOpacity style={styles.differentusers}>
+                            <View style={styles.differentusers}>
                                 <Text
                                     style={{
                                         fontSize: 12,
                                         color: '#211C5A',
                                         fontFamily: 'Poppins-Regular',
                                     }}>
-                                    Address
+                                   {hdetails.address?hdetails.address:'Address N/A'}
 
                                 </Text>
 
-                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <Text
                                     style={{
                                         fontSize: 12,
@@ -181,7 +193,7 @@ const HostelDetails = ({navigation}) => {
                                         marginTop: 5,
                                         marginHorizontal:8
                                     }}>
-                                    Type
+                                   {hdetails.hostelType?hdetails.hostelType.name:'N/A'}
                                 </Text>
                                 {/* <Icon1
                                     size={12}
@@ -189,10 +201,10 @@ const HostelDetails = ({navigation}) => {
                                     name="edit"
                                     style={{ paddingTop: 7, paddingRight: 12 }}
                                 /> */}
-                            </TouchableOpacity> 
+                            </View> 
 
 
-                            </TouchableOpacity>
+                            </View>
                        
                     </View>
                 </View>
@@ -206,7 +218,7 @@ const HostelDetails = ({navigation}) => {
                             style={{
                                 color: '#B04305',
                                 fontSize: 12,
-                                fontFamily: 'Poppins-Medium',
+                                fontFamily: 'Poppins-Regular',
                             }}>
 
                         </Text>
@@ -217,7 +229,7 @@ const HostelDetails = ({navigation}) => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                            Uday Singh
+                            {hdetails.wardenName?hdetails.wardenName:'N/A'}
                         </Text>
                     </View>
                     <View style={{ marginTop: 15 }}>
@@ -228,7 +240,7 @@ const HostelDetails = ({navigation}) => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                           Ph:7879428976
+                           Ph:{hdetails.wardenPhoneNumber?hdetails.wardenPhoneNumber:'N/A'}
                         </Text>
 
                     </View>
@@ -236,127 +248,16 @@ const HostelDetails = ({navigation}) => {
 
 
             </View>
+                        ))}
+                        
+                        </View>
+                        <View style={{height:90}}/>
+
+                        </ScrollView>
             </TouchableWithoutFeedback>
 
+           
 
-            <View style={styles.section} >
-                <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                        <View style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 18,
-                                    color: '#211C5A',
-                                    fontFamily: 'Poppins-Regular',
-                                    marginHorizontal: -5,
-                                }}>
-
-                                Hostel Name
-
-                            </Text>
-
-                            <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
-                            Ph:7879428976
-                            </Text>
-
-
-                            {/* */}
-                        </View>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#5177E7',
-                                    fontFamily: 'Poppins-Medium',
-                                }}>
-
-                            </Text>
-
-
-                        </TouchableOpacity>
-                        {/* <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
-                                User Type
-                            </Text>
-                        </TouchableOpacity> */}
-
-                        
-
-                            <TouchableOpacity style={styles.differentusers}>
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: '#211C5A',
-                                        fontFamily: 'Poppins-Regular',
-                                    }}>
-                                    Address
-
-                                </Text>
-
-                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: '#211C5A',
-                                        fontFamily: 'Poppins-Regular',
-                                        marginTop: 5,
-                                        marginHorizontal:8
-                                    }}>
-                                    Type
-                                </Text>
-                                {/* <Icon1
-                                    size={12}
-                                    backgroundColor=" #211C5A"
-                                    name="edit"
-                                    style={{ paddingTop: 7, paddingRight: 12 }}
-                                /> */}
-                            </TouchableOpacity> 
-
-
-                            </TouchableOpacity>
-                       
-                    </View>
-                </View>
-
-
-
-
-                <View style={styles.belowhr}>
-                    <View style={{ flexDirection: 'column' }}>
-                        <Text
-                            style={{
-                                color: '#B04305',
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Medium',
-                            }}>
-
-                        </Text>
-                        <Text
-                            style={{
-                                color: '#211C5A',
-
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-                            Uday Singh
-                        </Text>
-                    </View>
-                    <View style={{ marginTop: 15 }}>
-                        <Text
-                            style={{
-                                color: '#211C5A',
-
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-                           Ph:7879428976
-                        </Text>
-
-                    </View>
-                </View>
-
-
-            </View>
 
 
 
@@ -378,7 +279,7 @@ const styles = StyleSheet.create({
     container1: {
         paddingTop: 10,
         flex: 1,
-        backgroundColor: '#E5E5E5',
+        backgroundColor: 'rgba(249, 249, 249, 1)',
     },
     container: {
         alignContent: 'center',
@@ -426,17 +327,17 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#fff',
-        shadowColor: '#333',
+        shadowColor: '#000',
         shadowOffset: {
             width: 0,
-            height: 3,
+            height: 1,
         },
         shadowOpacity: 2.0,
-        elevation: 10,
+        elevation: 5,
         marginTop: 14,
+        marginBottom:5,
         borderRadius: 12,
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingHorizontal:20,
         marginHorizontal: 20,
     },
 
@@ -468,6 +369,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 0,
         justifyContent: 'space-between',
+        paddingHorizontal:0,
         paddingBottom: 10,
         borderBottomColor: '#333',
         //borderBottomWidth:1,
