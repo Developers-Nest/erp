@@ -43,6 +43,7 @@ import Hostel from './HostelPart/Hostel';
 import Task from './Asign Task/Task';
 import PaymentStack from './PaymentSlip/PaymentStack';
 import QuickPayment from './Quick Payment/QuickPayment';
+import Placement from './Placement/Placement';
 //navigations from home screen second screen
 import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
@@ -344,7 +345,7 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Placement Details</Text>
           )}
-          onPress={() => Alert.alert('Add Placement Details')}
+          onPress={() => props.navigation.navigate('Placement')}
         />
         <DrawerItem
           style={styles.item}
@@ -401,6 +402,7 @@ export default function Route() {
       <DrawerNav.Screen name="Recorded Classes" component={RecordedClasses} />
       <DrawerNav.Screen name="Report" component={Report} />
       <DrawerNav.Screen name="Occurence" component={Occurence} />
+      <DrawerNav.Screen name="Placement" component={Placement} />
       {/* <DrawerNav.Screen name="Cce Marks" component={CceMarks} /> */}
       {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
     </DrawerNav.Navigator>
