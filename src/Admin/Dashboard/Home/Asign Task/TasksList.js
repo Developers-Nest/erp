@@ -57,7 +57,7 @@ export default function TasksList({navigation}) {
             style={{
             ...styles.header,
             }}>
-            <TouchableOpacity onPress={()=> console.log('Pressed')}>
+            <TouchableOpacity onPress={()=> navigation.navigate('Home')}>
             <AntDesign
                 size={24}
                 color="white"

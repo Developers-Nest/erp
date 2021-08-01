@@ -28,7 +28,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
 
-export default function EditTask() {
+export default function EditTask({navigation}) {
 
 
     const [Priority, setPriority] = useState([]);
