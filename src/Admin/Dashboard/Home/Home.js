@@ -3,9 +3,6 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
-  TextInput,
   Alert,
 } from 'react-native';
 import HomeScreen2 from './HomeScreen2';
@@ -66,9 +63,6 @@ import write from '../../../services/localstorage/write';
 
 //redux
 import { useSelector } from 'react-redux';
-// import LessonPlanStack from './Lesson Plan/LessonPlanStack';
-
-// let userInfo;
 
 var styles1 = {
   wrapper: {},
@@ -106,7 +100,7 @@ const Home_Route = () => {
         name="Home"
         component={Home}
         options={({ navigation, route }) => ({
-          headerTitle: `Hi ${institute.name}!`,
+          headerTitle: `Hi ${institute? institute.name: 'N/A'}!`,
           headerStyle: {
             height: 70,
             backgroundColor: 'rgba(249, 249, 249, 1)',
@@ -221,20 +215,6 @@ const Home_Route = () => {
 };
 
 const DrawerNav = createDrawerNavigator();
-
-const getTabBarVisibility = route => {
-  const routeName = getFocusedRouteNameFromRoute(route);
-  if (
-    routeName === 'Home' ||
-    routeName === 'Statistics' ||
-    routeName === 'Classes' ||
-    routeName === 'Profile' ||
-    routeName === 'Message'
-  ) {
-    return true;
-  }
-  return false;
-};
 
 function DrawerContent(props) {
   const handleLogout = async () => {

@@ -2,14 +2,17 @@ import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 
+import { useSelector } from 'react-redux';
 
-function Loader() {
+
+function Loader({color}) {
     return (
         <View style={styles.container}>
             <Spinner
                 visible={true}
-                textContent={'Loading...'}
-                textStyle={styles.spinnerTextStyle}
+                // textContent={'Loading...'}
+                color={color}
+                // textStyle={{color: color}}
             />
         </View>
     )
@@ -17,11 +20,12 @@ function Loader() {
 
 function LoaderHook() {
     const [loading, setLoading] = useState(false)
+    const institute = useSelector((state)=>state.institute)
 
     return (
         [
             (loading) ? (
-                <Loader />
+                <Loader color={institute? institute.themeColor: '#FFF'}/>
             ) : null,
             () => setLoading(true),
             () => setLoading(false)
@@ -30,9 +34,6 @@ function LoaderHook() {
 }
 
 const styles = StyleSheet.create({
-    spinnerTextStyle: {
-        color: '#FFF'
-    },
     container: {
         ...StyleSheet.absoluteFillObject,
         backgroundColor: '#F5FCFF',
