@@ -7,11 +7,15 @@ import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
+//redux
+import { useSelector } from 'react-redux';
 
 
 
 const EditBooks = ({navigation}) => {
 
+//theming
+const institute = useSelector(state => state.institute);
    
    //for category in 4th row
     const [category, setcategory] = useState([
@@ -54,11 +58,11 @@ const [condition, setcondition] = useState([
         <View style={{ justifyContent: 'center', alignContent: 'center' ,   backgroundColor: 'rgba(249, 249, 249, 1)', }}>
            
             
-<View style={styles.header}
-          // style={{
-          //   backgroundColor: institute ? institute.themeColor : 'black',
-          //   ...styles.header,
-          // }}
+<View 
+    style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}
           
           >
           <TouchableOpacity
@@ -556,7 +560,7 @@ const styles = StyleSheet.create({
     header: {
         height: 69,
         flexDirection: 'row',
-        backgroundColor:'#FF5733'
+
       },
       SelectedValue: {
         fontFamily: 'Poppins-Regular',

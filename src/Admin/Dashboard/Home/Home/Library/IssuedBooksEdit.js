@@ -7,9 +7,14 @@ import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
+//redux
+import { useSelector } from 'react-redux';
 
 
 const IssuedBooksEdit = ({navigation}) => {
+
+  //theming
+  const institute = useSelector(state => state.institute);
 
     const [category, setcategory] = useState([
         { label: 'Fiction', key: 'Fiction' },
@@ -59,11 +64,12 @@ const IssuedBooksEdit = ({navigation}) => {
             />
              */}
 
-<View style={styles.header}
-          // style={{
-          //   backgroundColor: institute ? institute.themeColor : 'black',
-          //   ...styles.header,
-          // }}
+<View 
+      
+      style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}
           
           >
           <TouchableOpacity
@@ -110,6 +116,8 @@ const IssuedBooksEdit = ({navigation}) => {
                         <TextInput
                             style={{ marginTop:10,...styles.search_input, fontFamily: 'Poppins-Regular' }}
                             placeholder="Enter book name or ID here"
+                            placeholderTextColor='grey'
+                            color='black'
 
                         />
                         <TouchableOpacity
@@ -156,7 +164,8 @@ const IssuedBooksEdit = ({navigation}) => {
                     <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={dateissued}
-
+                            placeholderTextColor='grey'
+                            color='black'
                         />
                         <Feather size={18} color="black" name="calendar"
                             style={{
@@ -177,7 +186,8 @@ const IssuedBooksEdit = ({navigation}) => {
                     <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={date}
-
+                            placeholderTextColor='grey'
+                            color='black'
                         />
                         <Feather size={18} color="black" name="calendar"
                             style={{
@@ -452,7 +462,7 @@ const styles = StyleSheet.create({
       header: {
         height: 69,
         flexDirection: 'row',
-        backgroundColor:'#FF5733'
+
       },
 
 });
