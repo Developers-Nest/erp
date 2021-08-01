@@ -15,6 +15,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 //stack navigation
 import {createStackNavigator} from '@react-navigation/stack';
 import ExamReport from './ExamReport/ExamReport';
+import Attendance from '../Home/Attendance/AttendanceScreen2';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -70,7 +71,10 @@ const Statistics = ({navigation}) => {
       <ScrollView>
         <View style={{alignItems: 'center'}}>
           <Text style={styles.heading}>Attendance</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Attendance Report');
+            }}>
             <Image
               style={styles.image}
               source={{
@@ -103,6 +107,7 @@ export default function Statistics_Routes() {
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Statistics" component={Statistics} />
       <Stack.Screen name="Exam Report" component={ExamReport} />
+      <Stack.Screen name="Attendance Report" component={Attendance} />
     </Stack.Navigator>
   );
 }

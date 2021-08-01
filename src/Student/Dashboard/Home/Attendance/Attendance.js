@@ -27,7 +27,6 @@ import read from '../../../../services/localstorage/read';
 import get from '../../../../services/helpers/request/get';
 
 export default function Attendance({navigation}) {
-
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -92,7 +91,7 @@ export default function Attendance({navigation}) {
         flex: 1,
         justifyContent: 'flex-start',
       }}>
-        {loadingScreen}
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -100,7 +99,7 @@ export default function Attendance({navigation}) {
         }}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Home');
+            navigation.goBack();
           }}>
           <AntDesign
             size={24}
