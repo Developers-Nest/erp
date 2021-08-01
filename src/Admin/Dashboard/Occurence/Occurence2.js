@@ -135,7 +135,7 @@ export default function Occurence2({navigation}) {
   return (
     <View>
       <Appbar>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.BackAction onPress={() => navigation.replace('Occurence')} />
         <Appbar.Content title="Occurence Register" />
       </Appbar>
       <View
