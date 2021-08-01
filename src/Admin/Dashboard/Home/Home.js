@@ -35,6 +35,7 @@ import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
 import Occurence from '../Occurence/Occurence';
 import LessonPlanStack from './Lesson Plan/LessonPlanStack';
+import SmsStack from './Bulk SMS/SmsStack';
 //new and final for navigation only for drawer not from menu
 import Hostel from './HostelPart/Hostel';
 import Task from './Asign Task/Task';
@@ -100,7 +101,7 @@ const Home_Route = () => {
         name="Home"
         component={Home}
         options={({ navigation, route }) => ({
-          headerTitle: `Hi ${institute? institute.name: 'N/A'}!`,
+          headerTitle: `Hi ${institute ? institute.name : 'N/A'}!`,
           headerStyle: {
             height: 70,
             backgroundColor: 'rgba(249, 249, 249, 1)',
@@ -162,7 +163,7 @@ const Home_Route = () => {
         component={Timetable}
         options={{ headerShown: false }}
       />
- <Stack.Screen
+      <Stack.Screen
         name="Assignment"
         component={Assignment}
         options={{ headerShown: false }}
@@ -200,7 +201,7 @@ const Home_Route = () => {
         component={Notification}
         options={{ headerShown: false }}
       />
- <Stack.Screen
+      <Stack.Screen
         name="Leave"
         component={Leave}
         options={{ headerShown: false }}
@@ -265,15 +266,14 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Bulk SMS</Text>
           )}
-          onPress={() => Alert.alert('Add SMS screen')}
-        />
+          onPress={() => props.navigation.navigate('SmsStack')} />
         <DrawerItem
           style={styles.item}
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Task Manager</Text>
           )}
           onPress={() => props.navigation.navigate('Task')}
-       />
+        />
 
         <DrawerItem
           style={styles.item}
@@ -281,7 +281,7 @@ function DrawerContent(props) {
             <Text style={styles.drawer_item}>Payment Slip</Text>
           )}
           onPress={() => props.navigation.navigate('PaymentStack')}
-          />
+        />
 
         <DrawerItem
           style={styles.item}
@@ -289,7 +289,7 @@ function DrawerContent(props) {
             <Text style={styles.drawer_item}>Quick Payment</Text>
           )}
           onPress={() => props.navigation.navigate('QuickPayment')}
-         
+
         />
 
         <DrawerItem
@@ -335,7 +335,7 @@ function DrawerContent(props) {
           onPress={() => props.navigation.navigate('Report')}
         />
 
-      
+
         <TouchableOpacity>
           <Button
             style={{
@@ -371,7 +371,7 @@ export default function Route() {
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
       <DrawerNav.Screen name="Hostel" component={Hostel} />
-      {/* <DrawerNav.Screen name="Assignment" component={Assignment} /> */}
+      <DrawerNav.Screen name="SmsStack" component={SmsStack} />
       <DrawerNav.Screen name="LessonPlanStack" component={LessonPlanStack} />
       <DrawerNav.Screen name="Task" component={Task} />
       <DrawerNav.Screen name="PaymentStack" component={PaymentStack} />
