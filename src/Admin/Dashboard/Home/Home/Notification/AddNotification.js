@@ -15,26 +15,26 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // redux
-// import {useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 import ModalSelector from 'react-native-modal-selector';
 import { color } from 'react-native-elements/dist/helpers';
 
-export default function Report({navigation}) {
+export default function AddNotification({navigation}) {
   //theming
-//   const institute = useSelector(state => state.institute);
+  const institute = useSelector(state => state.institute);
   const [Description, setDescription] = React.useState('');
   const [text, setText] = React.useState('');
   return (
     <View style={styles.container}>
       <View
         style={{
-        //   backgroundColor: institute ? institute.themeColor : 'black',
+          backgroundColor: institute ? institute.themeColor : 'black',
           ...styles.header,
         }}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Home');
+            navigation.navigate('NotificationMain');
           }}>
           <AntDesign
             size={24}
