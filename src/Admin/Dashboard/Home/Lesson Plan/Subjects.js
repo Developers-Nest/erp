@@ -94,14 +94,20 @@ export default function Subjects({ navigation }) {
 
                                     <View style={styles.userinhostels}>
                                         <View style={styles.differentusers}>
-                                            <Text style={{ fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> {subjects.name}</Text>
+                                            <Text style={{ fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>
+                                                {' '}{subjects ?subjects.name:N/A}
+                                                 
+                                                 </Text>
 
-                                            <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> {subjects.code}</Text>
+                                            <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> 
+                                            {subjects?subjects.code:N/A}</Text>
                                         </View>
                                         <View style={styles.differentusers}>
-                                            <Text style={{ fontSize: 12, marginLeft: 5, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>Batch</Text>
+                                            <Text style={{ fontSize: 12, marginLeft: 5, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>
+                                            {subjects ?subjects.description : 'N/A'}
+                                           
 
-                                            <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Class</Text>
+                                            </Text>
                                         </View>
                                     </View>
                                 </View>
