@@ -40,6 +40,7 @@ import Occurence from '../Occurence/Occurence';
 import LessonPlanStack from './Lesson Plan/LessonPlanStack';
 //new and final for navigation only for drawer not from menu
 import Hostel from './HostelPart/Hostel';
+import Task from './Asign Task/Task';
 
 //navigations from home screen second screen
 import SettingUsers from './Home/Settings';
@@ -289,8 +290,8 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Task Manager</Text>
           )}
-          onPress={() => Alert.alert('Add Task Manager screen')}
-        />
+          onPress={() => props.navigation.navigate('Task')}
+       />
 
         <DrawerItem
           style={styles.item}
@@ -389,7 +390,7 @@ export default function Route() {
       <DrawerNav.Screen name="Hostel" component={Hostel} />
       {/* <DrawerNav.Screen name="Assignment" component={Assignment} /> */}
       <DrawerNav.Screen name="LessonPlanStack" component={LessonPlanStack} />
-      <DrawerNav.Screen name="Exams" component={Exams} />
+      <DrawerNav.Screen name="Task" component={Task} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
       <DrawerNav.Screen name="Transport" component={Transport} />
       <DrawerNav.Screen name="Cce Marks" component={CceMarks} />

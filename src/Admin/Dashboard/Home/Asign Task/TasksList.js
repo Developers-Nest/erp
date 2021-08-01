@@ -28,7 +28,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
 
-export default function TasksList() {
+export default function TasksList({navigation}) {
 
     const [isTimePickerVisible, setTimePickerVisibility] = React.useState(false);
     const [Time, setTime] = React.useState('15:00')
@@ -84,7 +84,7 @@ export default function TasksList() {
             </Text>
             <View style={{ flex: 1, marginLeft: 20 }}>
             <TouchableOpacity
-                onPress={() => console.log('Pressed') }
+                onPress={() => navigation.navigate('AddTask') }
                 style={{
                 justifyContent: 'center',
                 flex: 1,
@@ -108,6 +108,8 @@ export default function TasksList() {
             <TextInput
             style={{...styles.search_input }}
             placeholder="Enter the driver name here"
+            placeholderTextColor='grey'
+            color='black'
             />
             <TouchableOpacity
             style={{
@@ -197,6 +199,7 @@ export default function TasksList() {
                           Active 
                       </Text>
                       <TouchableOpacity
+                      onPress={()=>navigation.navigate('EditTask')}
                           style={{flexDirection: 'row'}}>
                           <Text
                             style={{

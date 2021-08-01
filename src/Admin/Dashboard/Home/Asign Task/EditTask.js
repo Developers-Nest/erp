@@ -66,7 +66,7 @@ export default function EditTask() {
             style={{
             ...styles.header,
             }}>
-            <TouchableOpacity onPress={()=> console.log('Pressed')}>
+            <TouchableOpacity onPress={()=> navigation.navigate('TasksList')}>
             <AntDesign
                 size={24}
                 color="white"
@@ -106,6 +106,8 @@ export default function EditTask() {
                     <TextInput
                 style={{...styles.search_input }}
                 placeholder="Name of the task"
+                placeholderTextColor='grey'
+                color='black'
                 />
                     </View>
                 </View>
@@ -123,6 +125,8 @@ export default function EditTask() {
                     <TextInput
                 style={{...styles.search_input }}
                 placeholder="Write the description here . . . ."
+                placeholderTextColor='grey'
+                color='black'
                 />
                     </View>
                 </View>
@@ -154,7 +158,8 @@ export default function EditTask() {
         ><TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
             placeholder={date}
-
+            placeholderTextColor='grey'
+            color='black'
         />
         <Feather size={18} color="black" name="calendar"
             style={{
