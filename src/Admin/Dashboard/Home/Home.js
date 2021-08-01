@@ -42,6 +42,7 @@ import LessonPlanStack from './Lesson Plan/LessonPlanStack';
 import Hostel from './HostelPart/Hostel';
 import Task from './Asign Task/Task';
 import PaymentStack from './PaymentSlip/PaymentStack';
+import QuickPayment from './Quick Payment/QuickPayment';
 //navigations from home screen second screen
 import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
@@ -306,7 +307,8 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Quick Payment</Text>
           )}
-          onPress={() => Alert.alert('Add quick payment screen')}
+          onPress={() => props.navigation.navigate('QuickPayment')}
+         
         />
 
         <DrawerItem
@@ -392,6 +394,7 @@ export default function Route() {
       <DrawerNav.Screen name="LessonPlanStack" component={LessonPlanStack} />
       <DrawerNav.Screen name="Task" component={Task} />
       <DrawerNav.Screen name="PaymentStack" component={PaymentStack} />
+      <DrawerNav.Screen name="QuickPayment" component={QuickPayment} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
       <DrawerNav.Screen name="Transport" component={Transport} />
       <DrawerNav.Screen name="Cce Marks" component={CceMarks} />

@@ -21,7 +21,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auto } from 'async';
 
-export default function QuickPayment1() {
+export default function QuickPayment2({navigation}) {
     const [Department, setDrepartment] = useState([]);
     const [UseType, setUseType] = useState([]);
     const [FeeTypeCategory, setFeeTypeCategory] = useState([]);
@@ -29,7 +29,7 @@ export default function QuickPayment1() {
   return (
     <View style={styles.backgroung}>
       <Appbar>
-        <Appbar.BackAction onPress={() => {}} />
+        <Appbar.BackAction onPress={() => {navigation.navigate('QuickPayment1')}} />
         <Appbar.Content title="Quick Payment" />
       </Appbar>
       <ScrollView>
