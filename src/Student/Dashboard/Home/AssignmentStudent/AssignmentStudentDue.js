@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {
   StyleSheet,
@@ -12,7 +12,7 @@ import {
   Linking,
 } from 'react-native';
 
-import { Button} from 'react-native-paper';
+import { Button } from 'react-native-paper';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -23,9 +23,9 @@ import read from '../../../../services/localstorage/read';
 import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function AssignmentStudentDue({navigation}) {
+export default function AssignmentStudentDue({ navigation }) {
   const [assignments, setAssignments] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
   const institute = useSelector(state => state.institute)
@@ -48,7 +48,7 @@ export default function AssignmentStudentDue({navigation}) {
   function isAssignmentDone(assignment) {
     // alert(assignment.attemptedBy.length);
     for (let i = 0; i < assignment.attemptedBy.length; i++) {
-      if (assignment.attemptedBy[i].userId === userInfo._id) {
+      if (assignment.attemptedBy[i] && assignment.attemptedBy[i].userId === userInfo._id) {
         // alert(userInfo._id + ' ' + assignment.attemptedBy[i].userId);
         return i;
       } else {
@@ -146,20 +146,20 @@ export default function AssignmentStudentDue({navigation}) {
                         fontSize: 12,
                         fontFamily: 'Poppins-Medium',
                       }}>
-                      {'  '}Due:
-                      {assignment.submissionDateString ||
+                      {'  '}Due:{'  '} 
+                      {assignment.submissionDateString.slice(0,15) ||
                         'Subject name Not Found'}
                     </Text>
 
                     <Button
                       style={styles.button}
-                      onPress={() => navigation.navigate('AssignmentSubmit')}
+                      onPress={() => navigation.navigate('AssignmentSubmit', {assignment: assignment})}
                       labelStyle={{
                         color: 'white',
                         fontFamily: 'Poppins-Regular',
                         fontWeight: 'bold',
                       }}
-                      color= {institute? institute.themeColor : 'blue'}
+                      color={institute ? institute.themeColor : 'blue'}
                       uppercase={false}
                       mode="contained">
                       Submit
@@ -246,7 +246,7 @@ export default function AssignmentStudentDue({navigation}) {
                         fontFamily: 'Poppins-Medium',
                       }}>
                       {'  '}Due:
-                      {assignment.submissionDateString ||
+                      {assignment.submissionDateString.slice(0,15) ||
                         'Subject name Not Found'}
                     </Text>
 
@@ -265,6 +265,7 @@ export default function AssignmentStudentDue({navigation}) {
                             .url,
                         )
                       }
+                      color={institute? institute.themeColor: 'blue'}
                       mode="contained">
                       View
                     </Button>
@@ -341,7 +342,7 @@ export default function AssignmentStudentDue({navigation}) {
               ...styles.shadow,
             }}>
             <TextInput
-              style={{width: '80%', ...styles.text_input}}
+              style={{ width: '80%', ...styles.text_input }}
               placeholder="Enter subject name"
               placeholderTextColor="black"
             />
@@ -536,7 +537,7 @@ const styles = StyleSheet.create({
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
