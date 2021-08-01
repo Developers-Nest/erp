@@ -1,8 +1,6 @@
-import * as React from 'react';
-// import { TextInput } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import LinearGradient from 'react-native-linear-gradient';
+
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Swipeable from 'react-native-gesture-handler/Swipeable'
@@ -16,157 +14,202 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  Touchable,
   Alert,
 } from 'react-native';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
+import read from '../../../../../services/localstorage/read';
+import get from '../../../../../services/helpers/request/get';
+import patch from '../../../../../services/helpers/request/patch'
 
-export default function Booksrequest({navigation}) {
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
+
+export default function Booksrequest({ navigation }) {
   const [showContent, setShowContent] = React.useState('Unreviewed');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
+  const [requests, setRequests] = useState([])
+
   //theming
   const institute = useSelector(state => state.institute);
+
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+  useEffect(async () => {
+    setLoadingScreen()
+    try {
+      let slug = '/library/request'
+      let token = await read('token')
+      let res = await get(slug, token)
+      console.log('Book Requests ', res)
+      setRequests(res)
+    } catch (err) {
+      alert('Cannot get Requests!' + err)
+    }
+    hideLoadingScreen()
+  }, [])
+
+  let handeleUpdate = async(id, status)=>{
+    setLoadingScreen()
+    try{
+      let slug = `/library/request/${id}`
+      let token = await read('token')
+      let data = {
+        status: status
+      }
+      let res = await patch(slug, data, token)
+      if(res._id){
+        let reqArray = []
+        requests.map((request)=>{
+          if(request._id === id){
+            request.status = status
+          }
+          reqArray.push(request)
+        })
+        setRequests(reqArray)
+        alert('Status: '+status)
+      }
+    } catch(err){
+      alert('Cannot update '+ err)
+    }
+    hideLoadingScreen()
+  }
 
   function Unreviewed() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
-    const RightActions = () => {
+
+
+    const RightActions = (id) => {
       return (
-        <TouchableOpacity 
-        onPress={() => {
-          Alert.alert('Rejected');
-        }}>
-        <View style={styles.iconbubblereject}>
-        <FontAwesome5
-                         size={38.5}
-                         color="white"
-                         name="trash-alt"
-                       />
-                       
-                       <Text style={{color:'white'}}>Reject</Text>
-                     </View>   
-                     </TouchableOpacity> 
+        <TouchableOpacity
+          onPress={() => {
+            handeleUpdate(id, 'Rejected')
+          }}>
+          <View style={styles.iconbubblereject}>
+            <FontAwesome5
+              size={38.5}
+              color="white"
+              name="trash-alt"
+            />
+
+            <Text style={{ color: 'white' }}>Reject</Text>
+          </View>
+        </TouchableOpacity>
       )
-     }
-     //for left action swipe:
-     const LeftActions = () => {
+    }
+
+
+    //for left action swipe:
+    const LeftActions = (id) => {
       return (
-        <TouchableOpacity 
-        onPress={() => {
-          Alert.alert('Approved');
-        }}
+        <TouchableOpacity
+          onPress={() => {
+            handeleUpdate(id, 'Accepted')
+          }}
         >
-        <View style={styles.iconbubbleapprove}>
-        <FontAwesome5
-          size={38.5}
-          color="white"
-          name="check-circle"
-        />
-        <Text style={{color:'white'}}>Approve</Text>
-      </View>
-</TouchableOpacity>
+          <View style={styles.iconbubbleapprove}>
+            <FontAwesome5
+              size={38.5}
+              color="white"
+              name="check-circle"
+            />
+            <Text style={{ color: 'white' }}>Approve</Text>
+          </View>
+        </TouchableOpacity>
       )
-     }
+    }
 
     return (
       <View style={styles.container}>
         <ScrollView>
-      <View style={{flexDirection:'row',justifyContent:'center'}}>
-      <Swipeable renderLeftActions={LeftActions} renderRightActions={RightActions}>
-<View style={styles.section}>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            marginHorizontal: -5,
-                            marginRight:150,
-                            paddingRight:50
-                          }}>
-                          {' '}
-                          Title
-                        </Text>
+          {
+            requests && requests.map((request) => (
+              request.status === "Pending" ? (
+                <View style={{ flexDirection: 'row', justifyContent: 'center' }} key={request._id}>
+                  <Swipeable renderLeftActions={()=>LeftActions(request._id)} renderRightActions={()=>RightActions(request._id)}>
+                    <View style={styles.section}>
+                      <View style={styles.details}>
+                        <View style={styles.userinhostels}>
+                          <View style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                                marginHorizontal: -5,
+                                marginRight: 150,
+                                paddingRight: 50
+                              }}>
+                              {' '}
+                              {request.title}
+                            </Text>
 
-                        <TouchableOpacity
-                          style={{flexDirection: 'row'}}
-                          >
+                            <TouchableOpacity
+                              style={{ flexDirection: 'row' }}
+                            >
+                              <Text
+                                style={{
+                                  fontSize: 12,
+                                  color: '#211C5A',
+                                  fontFamily: 'Poppins-Medium',
+                                }}>
+                                By: {request.author}
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                          <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#5177E7',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              User: {request.student ? request.student.firstName : request.employee.firstName}
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#505069',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              User Type: {request.userType ? request.userType.name : 'N/A'}
+                            </Text>
+
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                      <View style={styles.belowhr}>
+                        <View style={{ flexDirection: 'column' }}>
                           <Text
                             style={{
+                              color: institute ? institute.themeColor : '#B04305',
                               fontSize: 12,
-                              color: '#211C5A',
                               fontFamily: 'Poppins-Medium',
                             }}>
-                            Book No.
+                            {'  '}  Requested On:{' '} {request.requestedDate.slice(0, 10)}
+                            {/* {assignment.submissionDateString ||
+                            'Submission date Not Found'} */}
                           </Text>
-                        </TouchableOpacity>
+
+                        </View>
+                        <View style={{ marginBottom: 3 }}>
+                          <Text>Need: {request.needLevel}</Text>
+                        </View>
                       </View>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#5177E7',
-                            fontFamily: 'Poppins-Medium',
-                          }}>
-                            User
-                        </Text>
-                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#505069',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          User Type
-                        </Text>
+                    </View>
 
-                       </TouchableOpacity>
-                    </View>
-                  </View>
-
-                  <View style={styles.belowhr}>
-                    <View style={{flexDirection: 'column'}}>
-                      <Text
-                        style={{
-                          color: '#B04305',
-                          fontSize: 12,
-                          fontFamily: 'Poppins-Medium',
-                        }}>
-                      {'  '}  Requested On:{''}21 May,2021
-                        {/* {assignment.submissionDateString ||
-                          'Submission date Not Found'} */}
-                      </Text>
-                      
-                    </View>
-                    <View style={{marginBottom: 3}}>
-<Text>Urgent</Text>
-                    </View>
-                  </View>
+                  </Swipeable>
                 </View>
-
-</Swipeable>
-                {/* close swipeable */}
-   {/* for reject and approve icon */}
-   {/* <View style={styles.iconbubblereject}>
-   <FontAwesome5
-                    size={38.5}
-                    color="white"
-                    name="trash-alt"
-                  />
-                  
-                  <Text style={{color:'white'}}>Reject</Text>
-                </View> */}
-
-
-   </View>
+              ) : (null)
+            ))
+          }
         </ScrollView>
       </View>
     );
@@ -180,8 +223,10 @@ export default function Booksrequest({navigation}) {
     return (
       <View style={styles.container}>
         <ScrollView>
-
-        <View style={styles.sectionreviewed}>
+          {
+            requests && requests.map((request) => (
+              request.status != "Pending" ? (
+                <View style={styles.sectionreviewed} key={request._id}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
                       <View style={styles.differentusers}>
@@ -191,23 +236,23 @@ export default function Booksrequest({navigation}) {
                             color: '#211C5A',
                             fontFamily: 'Poppins-Regular',
                             marginHorizontal: -5,
-                            marginRight:100,
-                            paddingRight:50
+                            marginRight: 100,
+                            paddingRight: 50
                           }}>
                           {' '}
-                          Title
+                          {request.title}
                         </Text>
 
                         <TouchableOpacity
-                          style={{flexDirection: 'row'}}
-                          >
+                          style={{ flexDirection: 'row' }}
+                        >
                           <Text
                             style={{
                               fontSize: 12,
                               color: '#211C5A',
                               fontFamily: 'Poppins-Medium',
                             }}>
-                            Book No.
+                            By: {request.author}
                           </Text>
                         </TouchableOpacity>
                       </View>
@@ -218,19 +263,19 @@ export default function Booksrequest({navigation}) {
                             color: '#5177E7',
                             fontFamily: 'Poppins-Medium',
                           }}>
-                            User
+                          User: {request.student ? request.student.firstName : request.employee.firstName}
                         </Text>
                         <Text
                           style={{
                             fontSize: 12,
-                            color: 'green',
+                            color: 'black',
                             fontFamily: 'Poppins-Medium',
                           }}>
-                           Approved
+                          {request.status}
                         </Text>
 
 
-                       </TouchableOpacity>
+                      </TouchableOpacity>
                       <TouchableOpacity style={styles.differentusers}>
                         <Text
                           style={{
@@ -238,32 +283,36 @@ export default function Booksrequest({navigation}) {
                             color: '#505069',
                             fontFamily: 'Poppins-Regular',
                           }}>
-                          User Type
+                          User Type: {request.userType ? request.userType.name : 'N/A'}
                         </Text>
 
-                       </TouchableOpacity>
+                      </TouchableOpacity>
                     </View>
                   </View>
 
                   <View style={styles.belowhr}>
-                    <View style={{flexDirection: 'column'}}>
+                    <View style={{ flexDirection: 'column' }}>
                       <Text
                         style={{
-                          color: '#B04305',
+                          color: institute? institute.themeColor: '#B04305',
                           fontSize: 12,
                           fontFamily: 'Poppins-Medium',
                         }}>
-                      {'  '}  Requested On:{''}21 May,2021
+                        {'  '}  Requested On:{' '} {request.requestedDate.slice(0, 10)}
                         {/* {assignment.submissionDateString ||
-                          'Submission date Not Found'} */}
+                              'Submission date Not Found'} */}
                       </Text>
-                      
+
                     </View>
-                    <View style={{marginBottom: 3}}>
-<Text>Urgent</Text>
+                    <View style={{ marginBottom: 3 }}>
+                      <Text>Need: {request.needLevel}</Text>
                     </View>
                   </View>
                 </View>
+              ) : (null)
+            ))
+          }
+
 
         </ScrollView>
       </View>
@@ -278,9 +327,10 @@ export default function Booksrequest({navigation}) {
 
         <View
           style={{
-            backgroundColor: institute ? institute.themeColor :'#FF5733',
+            backgroundColor: institute ? institute.themeColor : '#FF5733',
             ...styles.header,
           }}>
+            {loadingScreen}
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('LibraryMain');
@@ -316,41 +366,41 @@ export default function Booksrequest({navigation}) {
 
         <View
           style={{
-            alignItems:'center',
+            alignItems: 'center',
             marginBottom: 20,
             marginTop: 20,
           }}>
-            <View style={{alignItems:'center',width:'90%'}}>
-          {/* open search */}
-          <View
-            style={{
-              marginTop: 10,
-              //make search and card in same line
-              marginLeft: 5,
-              justifyContent: 'space-between',
-              width: '95%',
-              flexDirection: 'row',
-              ...styles.shadow,
-            }}>
-            <TextInput
-              style={{width: '80%', ...styles.text_input}}
-              placeholder="Enter book's title here"
-  
-            />
-            <TouchableOpacity
+          <View style={{ alignItems: 'center', width: '90%' }}>
+            {/* open search */}
+            <View
               style={{
-                alignSelf: 'center',
+                marginTop: 10,
+                //make search and card in same line
+                marginLeft: 5,
+                justifyContent: 'space-between',
+                width: '95%',
+                flexDirection: 'row',
+                ...styles.shadow,
               }}>
-              <FontAwesome5
-                name="search"
+              <TextInput
+                style={{ width: '80%', ...styles.text_input }}
+                placeholder="Enter book's title here"
+
+              />
+              <TouchableOpacity
                 style={{
                   alignSelf: 'center',
-                  fontSize: 21,
-                  color: '#505069',
-                }}
-              />
-            </TouchableOpacity>
-          </View>
+                }}>
+                <FontAwesome5
+                  name="search"
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 21,
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -358,32 +408,32 @@ export default function Booksrequest({navigation}) {
 
         {/* tabs section open */}
         <ScrollView>
-        <View style={styles.switchTabsView}>
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: showContent == 'Unreviewed' ? 1 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => setShowContent('Unreviewed')}>
-            <Text style={styles.switchText}>Unreviewed</Text>
-          </TouchableOpacity>
+          <View style={styles.switchTabsView}>
+            <TouchableOpacity
+              style={{
+                borderBottomWidth: showContent == 'Unreviewed' ? 1 : 0,
+                borderBottomColor: '#58636D',
+                paddingHorizontal: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setShowContent('Unreviewed')}>
+              <Text style={styles.switchText}>Unreviewed</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: showContent == 'Reviewed' ? 1 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => setShowContent('Reviewed')}>
-            <Text style={styles.switchText}>Reviewed</Text>
-          </TouchableOpacity>
-        </View>
-        {showContent === 'Unreviewed' ? <Unreviewed /> : <Reviewed />}
+            <TouchableOpacity
+              style={{
+                borderBottomWidth: showContent == 'Reviewed' ? 1 : 0,
+                borderBottomColor: '#58636D',
+                paddingHorizontal: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setShowContent('Reviewed')}>
+              <Text style={styles.switchText}>Reviewed</Text>
+            </TouchableOpacity>
+          </View>
+          {showContent === 'Unreviewed' ? <Unreviewed /> : <Reviewed />}
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>
@@ -396,8 +446,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
-  
- 
+
+
   section: {
     display: 'flex',
     flexDirection: 'column',
@@ -411,12 +461,12 @@ const styles = StyleSheet.create({
     elevation: 5,
     // marginTop: 5,
     borderRadius: 8,
-    paddingHorizontal:10,
-    marginLeft:5,
-    marginRight:5,
+    paddingHorizontal: 10,
+    marginLeft: 5,
+    marginRight: 5,
     // paddingLeft: 10,
     // paddingRight: 10,
-    
+
     // marginHorizontal: 20,
     marginBottom: 20,
   },
@@ -436,12 +486,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingLeft: 10,
     paddingRight: 10,
-    
+
     marginHorizontal: 20,
     marginBottom: 10,
   },
 
- 
+
   details: {
     display: 'flex',
     flexDirection: 'column',
@@ -449,7 +499,7 @@ const styles = StyleSheet.create({
     // paddingBottom: 10,
     borderBottomColor: '#333',
     paddingHorizontal: 10,
-    borderBottomWidth:0.5
+    borderBottomWidth: 0.5
   },
   userinhostels: {
     marginBottom: 10,
@@ -515,7 +565,7 @@ const styles = StyleSheet.create({
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -540,7 +590,7 @@ const styles = StyleSheet.create({
     // display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-   
+
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -560,7 +610,7 @@ const styles = StyleSheet.create({
     // display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-   
+
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
