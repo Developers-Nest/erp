@@ -165,7 +165,7 @@ const EmployeeList = ({ navigation }) => {
                         paddingRight: 50
                       }}>
                       {' '}
-                      {employees.firstName?employees.firstName +' '+employees.middleName+' '+employees.lastName:'Name not given'}
+                      {employees.firstName?employees.firstName.charAt(0).toUpperCase()+employees.firstName.slice(1) +' '+employees.middleName.charAt(0).toUpperCase()+employees.middleName.slice(1)+' '+employees.lastName.charAt(0).toUpperCase()+employees.lastName.slice(1) :'Name not given'}
                     </Text>
                   </View>
                   <View style={styles.differentusers}>
