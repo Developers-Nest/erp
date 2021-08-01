@@ -21,48 +21,24 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auto } from 'async';
 
-export default function PaymentSlip() {
+export default function QuickPayment2({navigation}) {
     const [Department, setDrepartment] = useState([]);
-    const [Name, setName] = useState([]);
-    const [Month, setMonth] = useState([]);
-    const [Year, setYear] = useState([]);
+    const [UseType, setUseType] = useState([]);
+    const [FeeTypeCategory, setFeeTypeCategory] = useState([]);
+    const [FeeSubTypeCategory, setFeeSubTypeCategory] = useState([]);
   return (
     <View style={styles.backgroung}>
       <Appbar>
-        <Appbar.BackAction onPress={() => {}} />
-        <Appbar.Content title="Payment Slip" />
+        <Appbar.BackAction onPress={() => {navigation.navigate('QuickPayment1')}} />
+        <Appbar.Content title="Quick Payment" />
       </Appbar>
       <ScrollView>
       <View style={{padding:10}}/>
       <View style={{padding: 10}} >
-          
+          <View style={{flexDirection:"row", justifyContent:'space-between'}}>
       <ModalSelector
           data={Department}
           initValue="Department"
-          onChange={async option => {
-            await getAssessesments(option.key);
-          }}
-          style={styles.card_picker1}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-        <View style={{padding: 10}} />
-        <ModalSelector
-          data={Name}
-          initValue="Name"
-          onChange={async option => {
-            await getAssessesments(option.key);
-          }}
-          style={styles.card_picker1}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-        <View style={{padding: 10}} />
-        <View style={{flexDirection:"row", justifyContent:'space-between'}}>
-
-        <ModalSelector
-          data={Month}
-          initValue="Month"
           onChange={async option => {
             await getAssessesments(option.key);
           }}
@@ -70,10 +46,9 @@ export default function PaymentSlip() {
           initValueTextStyle={styles.SelectedValueSmall}
           selectTextStyle={styles.SelectedValueSmall}
         />
-        <View style={{padding: 10}} />
         <ModalSelector
-          data={Year}
-          initValue="Year"
+          data={UseType}
+          initValue="Use Type"
           onChange={async option => {
             await getAssessesments(option.key);
           }}
@@ -82,15 +57,114 @@ export default function PaymentSlip() {
           selectTextStyle={styles.SelectedValueSmall}
         />
         </View>
+        <View style={{padding: 10}} />
+        <ModalSelector
+          data={FeeTypeCategory}
+          initValue="Fee Type Category"
+          onChange={async option => {
+            await getAssessesments(option.key);
+          }}
+          style={styles.card_picker1}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
+        <View style={{padding: 10}} />
+        <ModalSelector
+          data={FeeSubTypeCategory}
+          initValue="Fee Sub Type Category"
+          onChange={async option => {
+            await getAssessesments(option.key);
+          }}
+          style={styles.card_picker1}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
     </View>
     <View style={{justifyContent: 'center',
                     alignItems: 'center',
-                    padding:15}}>
+                    padding:20}}>
 
     <Button color='#5177E7' mode="contained" onPress={() => console.log('Pressed')}>
-    Get
+    Search
   </Button>
     </View>
+
+    <View style={{ marginHorizontal: 30, ...styles.shadow }}>
+        <View style={styles.search}>
+            <TextInput
+            style={{...styles.search_input }}
+            placeholder="Enter the vehicle no. here"
+            />
+            <TouchableOpacity
+            style={{
+                alignSelf: 'center',
+            }}>
+            <Icon
+                name="search-sharp"
+                style={{
+                alignSelf: 'center',
+                fontSize: 30,
+                color: 'black',
+                paddingRight:5,
+                }}
+            />
+            </TouchableOpacity>
+        </View>
+    </View>
+    <View style={{padding: 10}} />
+    <View style={styles.section}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            marginHorizontal: -5,
+                          }}>
+                          Employee Name
+                        </Text>
+                      </View>
+                      <View style={{padding:5}}/>
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            marginHorizontal: -5,
+                          }}>
+                          Registration Number
+                        </Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Medium',
+                              paddingRight:5,
+                            }}>
+                            48,320 Rs
+                          </Text>
+                      </View>
+                    </View>
+                  </View>
+
+                  <View style={styles.belowhr}>
+                    <View style={{flexDirection: 'row',alignItems:'center', padding:5}}>
+                      <Text
+                        style={{
+                          color: '#211C5A',
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                            From: 21May,2021
+                      </Text>
+                    </View>
+                    <View style={{marginBottom: 3}}/>
+        </View>
+    </View>
+    <View style={{padding:10}}/>
 
     <View style={styles.section}>
                   <View style={styles.details}>
@@ -101,9 +175,9 @@ export default function PaymentSlip() {
                             fontSize: 18,
                             color: '#211C5A',
                             fontFamily: 'Poppins-Regular',
-                            paddingHorizontal: 5,
+                            marginHorizontal: -5,
                           }}>
-                          Name
+                          Employee Name
                         </Text>
                       </View>
                       <View style={{padding:5}}/>
@@ -113,215 +187,36 @@ export default function PaymentSlip() {
                             fontSize: 14,
                             color: '#211C5A',
                             fontFamily: 'Poppins-Regular',
-                            paddingHorizontal: 5,
+                            marginHorizontal: -5,
                           }}>
-                          Designation
-                        </Text>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              fontWeight:'bold',
-                              color: '#211C5A',
-                              fontFamily: 'Poppins-Medium',
-                              paddingHorizontal: 5,
-                            }}>
-                            Code
-                          </Text>
-                      </View>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            paddingHorizontal: 5,
-                          }}>
-                          Department
-                        </Text>
-                      </View>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Medium',
-                            paddingHorizontal: 5,
-                          }}>
-                          DOB: 31 July,2023
+                          Registration Number
                         </Text>
                           <Text
                             style={{
                               fontSize: 12,
                               color: '#211C5A',
                               fontFamily: 'Poppins-Medium',
-                              paddingHorizontal: 5,
+                              paddingRight:5,
                             }}>
-                            Joining Date: 31 July, 2022
+                            48,320 Rs
                           </Text>
                       </View>
                     </View>
                   </View>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                              fontWeight:'bold',
-                              color: '#211C5A',
-                              fontFamily: 'Poppins-Medium',
-                              paddingHorizontal: 5,
-                          }}>
-                          Bank Name
-                        </Text>
-                      </View>
-                      <View style={{padding:2}}/>
-                      <View style={styles.differentusers}>
-                      <Text
-                          style={{
-                            fontSize: 12,
-                              fontWeight:'bold',
-                              color: '#211C5A',
-                              fontFamily: 'Poppins-Medium',
-                              paddingHorizontal: 5,
-                          }}>
-                          Ac. No.-446466464876434545 
-                        </Text>
-                      </View>
-                      <View style={{padding:2}}/>
-                      <View style={styles.differentusers}>
-                      <Text
-                          style={{
-                            fontSize: 14,
-                              color: '#1F7C17',
-                              fontFamily: 'Poppins-Medium',
-                              paddingHorizontal: 5,
-                          }}>
-                          Earnings 
-                        </Text>
-                      </View>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 14,
-                              color: '#211C5A',
-                              fontFamily: 'Poppins-Medium',
-                              paddingHorizontal: 5,
-                          }}>
-                          Type
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 14,
-                              color: '#211C5A',
-                              fontFamily: 'Poppins-Medium',
-                              paddingHorizontal: 5,
-                          }}>
-                          20,000 Rs
-                        </Text>
-                      </View>
-                
-                      <View style={styles.differentusers}>
-                      <Text
-                          style={{
-                            fontSize: 14,
-                              color: '#B04305',
-                              fontFamily: 'Poppins-Medium',
-                              paddingHorizontal: 5,
-                          }}>
-                          Deductions
-                        </Text>
-                      </View>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Medium',
-                            paddingHorizontal: 5,
-                          }}>
-                          Type
-                        </Text>
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: '#211C5A',
-                              fontFamily: 'Poppins-Medium',
-                              paddingHorizontal: 5,
-                            }}>
-                                2000 Rs
-                          </Text>
-                      </View>
-                      <View style={{padding:5}}/>
-                    </View>
-                  </View>
-                
 
                   <View style={styles.belowhr}>
-                    <View style={{flexDirection: 'row',alignItems:'center', paddingHorizontal:5}}>
+                    <View style={{flexDirection: 'row',alignItems:'center', padding:5}}>
                       <Text
                         style={{
                           color: '#211C5A',
-                          fontSize: 14,
+                          fontSize: 12,
                           fontFamily: 'Poppins-Medium',
                         }}>
-                            Gross Salary
+                            From: 21May,2021
                       </Text>
                     </View>
-                    <View style={{marginBottom: 3}}>
-                    <Text
-                        style={{
-                          color: '#211C5A',
-                          fontSize: 14,
-                          fontFamily: 'Poppins-Medium',
-                          paddingHorizontal:5
-                        }}>
-                        20,000 Rs
-                      </Text>
-                    </View>
-                </View>
-                <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                <Text
-                        style={{
-                          color: '#211C5A',
-                          fontSize: 14,
-                          fontFamily: 'Poppins-Medium',
-                          paddingHorizontal:5
-                        }}>
-                            Total
-                      </Text>
-                      <Text
-                        style={{
-                          color: '#211C5A',
-                          fontSize: 14,
-                          fontFamily: 'Poppins-Medium',
-                          paddingHorizontal:5,
-                        }}>
-                            2,000 Rs
-                      </Text>
-                </View>
-                <View style={{padding:8}}/>
-                <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                <Text
-                        style={{
-                          color: '#211C5A',
-                          fontSize: 18,
-                          fontFamily: 'Poppins-Medium',
-                          paddingHorizontal:5
-                        }}>
-                            Net Salary
-                      </Text>
-                      <Text
-                        style={{
-                          color: '#211C5A',
-                          fontSize: 18,
-                          fontFamily: 'Poppins-Medium',
-                          paddingHorizontal:5,
-                        }}>
-                            18,000 Rs
-                      </Text>
-                </View>
-        <View style={{padding:15}}/>
+                    <View style={{marginBottom: 3}}/>
+        </View>
     </View>
     <View style={{padding:40}}/>
     </ScrollView>

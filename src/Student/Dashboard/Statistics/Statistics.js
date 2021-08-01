@@ -17,6 +17,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import ExamReport from './ExamReport/ExamReport';
+import AttendanceReport from '../Home/Attendance/Attendance';
 const Statistics = ({navigation}) => {
   return (
     <View style={styles.container}>
@@ -65,7 +66,10 @@ const Statistics = ({navigation}) => {
       <ScrollView>
         <View style={{alignItems: 'center'}}>
           <Text style={styles.heading}>Attendance</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Attendance');
+            }}>
             <Image
               style={styles.image}
               source={{
@@ -98,6 +102,7 @@ export default function Statistics_Routes() {
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Statistics" component={Statistics} />
       <Stack.Screen name="Exam Report" component={ExamReport} />
+      <Stack.Screen name="Attendance Report" component={AttendanceReport} />
     </Stack.Navigator>
   );
 }

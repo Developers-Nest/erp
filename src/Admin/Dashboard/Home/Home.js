@@ -40,7 +40,10 @@ import Occurence from '../Occurence/Occurence';
 import LessonPlanStack from './Lesson Plan/LessonPlanStack';
 //new and final for navigation only for drawer not from menu
 import Hostel from './HostelPart/Hostel';
-
+import Task from './Asign Task/Task';
+import PaymentStack from './PaymentSlip/PaymentStack';
+import QuickPayment from './Quick Payment/QuickPayment';
+import Placement from './Placement/Placement';
 //navigations from home screen second screen
 import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
@@ -103,7 +106,7 @@ const Home_Route = () => {
         name="Home"
         component={Home}
         options={({ navigation, route }) => ({
-          headerTitle: 'Hi Saawan!',
+          headerTitle: `Hi ${institute.name}!`,
           headerStyle: {
             height: 70,
             backgroundColor: 'rgba(249, 249, 249, 1)',
@@ -289,23 +292,24 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Task Manager</Text>
           )}
-          onPress={() => Alert.alert('Add Task Manager screen')}
-        />
+          onPress={() => props.navigation.navigate('Task')}
+       />
 
         <DrawerItem
           style={styles.item}
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Payment Slip</Text>
           )}
-          onPress={() => Alert.alert('Add Payment slip screen')}
-        />
+          onPress={() => props.navigation.navigate('PaymentStack')}
+          />
 
         <DrawerItem
           style={styles.item}
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Quick Payment</Text>
           )}
-          onPress={() => Alert.alert('Add quick payment screen')}
+          onPress={() => props.navigation.navigate('QuickPayment')}
+         
         />
 
         <DrawerItem
@@ -341,7 +345,7 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Placement Details</Text>
           )}
-          onPress={() => Alert.alert('Add Placement Details')}
+          onPress={() => props.navigation.navigate('Placement')}
         />
         <DrawerItem
           style={styles.item}
@@ -389,13 +393,16 @@ export default function Route() {
       <DrawerNav.Screen name="Hostel" component={Hostel} />
       {/* <DrawerNav.Screen name="Assignment" component={Assignment} /> */}
       <DrawerNav.Screen name="LessonPlanStack" component={LessonPlanStack} />
-      <DrawerNav.Screen name="Exams" component={Exams} />
+      <DrawerNav.Screen name="Task" component={Task} />
+      <DrawerNav.Screen name="PaymentStack" component={PaymentStack} />
+      <DrawerNav.Screen name="QuickPayment" component={QuickPayment} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
       <DrawerNav.Screen name="Transport" component={Transport} />
       <DrawerNav.Screen name="Cce Marks" component={CceMarks} />
       <DrawerNav.Screen name="Recorded Classes" component={RecordedClasses} />
       <DrawerNav.Screen name="Report" component={Report} />
       <DrawerNav.Screen name="Occurence" component={Occurence} />
+      <DrawerNav.Screen name="Placement" component={Placement} />
       {/* <DrawerNav.Screen name="Cce Marks" component={CceMarks} /> */}
       {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
     </DrawerNav.Navigator>

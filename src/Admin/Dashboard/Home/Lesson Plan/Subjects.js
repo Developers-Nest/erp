@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, ImageBackground, Button, TouchableOpacity } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
@@ -12,33 +12,30 @@ import read from '../../../../services/localstorage/read';
 import { useSelector } from 'react-redux';
 
 
-export default function Subjects({navigation}) {
+export default function Subjects({ navigation }) {
 
     const [searchQuery, setSearchQuery] = useState('');
     const [subjects, setsubjects] = useState([]);
-  
+
     const onChangeSearch = query => setSearchQuery(query);
-  
+
     useEffect(async () => {
         try {
-          let slug = '/subject';
-          let token = await read('token');
-          const response = await get(slug, token);
-          console.log(response);
-         setsubjects(response);
+            let slug = '/subject';
+            let token = await read('token');
+            const response = await get(slug, token);
+            console.log("Subjects ", response);
+            setsubjects(response);
         } catch (err) {
-          alert('Cannot fetch your rooms list !!');
+            alert('Cannot fetch your subjects list !!');
         }
-      }, []);
-    
+    }, []);
+
     //theming
     const institute = useSelector(state => state.institute);
 
 
     return (
-
-
-
         <View style={styles.container}>
             {/* header start */}
 
@@ -78,7 +75,6 @@ export default function Subjects({navigation}) {
                     }}>
                     Subjects
                 </Text>
-
             </View>
 
             {/* header ends */}
@@ -86,37 +82,40 @@ export default function Subjects({navigation}) {
             <ScrollView>
 
                 {/* <View style={styles.maincontainer}>     */}
-<TouchableWithoutFeedback  onPress={() => {
-                        navigation.navigate('LessonPlan');
-                    }}>
-                        
-{subjects &&
-              subjects.map(subjects => (
-            
-                <View style={styles.section} key={subjects._id}>
-                    <View style={styles.details}>
+                <TouchableWithoutFeedback onPress={() => {
+                    navigation.navigate('LessonPlan');
+                }}>
 
-                        <View style={styles.userinhostels}>
-                            <View style={styles.differentusers}>
-                                <Text style={{ fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> {subjects.name}</Text>
+                    {subjects &&
+                        subjects.map(subjects => (
 
-                                <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> {subjects.code}</Text>
+                            <View style={styles.section} key={subjects._id}>
+                                <View style={styles.details}>
+
+                                    <View style={styles.userinhostels}>
+                                        <View style={styles.differentusers}>
+                                            <Text style={{ fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>
+                                                {' '}{subjects.name ? subjects.name : 'N/A'}
+
+                                            </Text>
+
+                                            <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>
+                                                {subjects.code ? subjects.code : 'N/A'}</Text>
+                                        </View>
+                                        <View style={styles.differentusers}>
+                                            <Text style={{ fontSize: 12, marginLeft: 5, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>
+                                                {subjects.description ? subjects.description : 'Description N/A'}
+
+
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+
+
                             </View>
-                            <View style={styles.differentusers}>
-                                <Text style={{ fontSize: 12, marginLeft: 5, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>Batch</Text>
-
-                                <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}> Class</Text>
-                            </View>
-                        </View>
-
-
-
-                    </View>
-
-
-                </View>
-              ))}
-                </TouchableWithoutFeedback>          
+                        ))}
+                </TouchableWithoutFeedback>
                 {/* </View> */}
 
             </ScrollView>
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         elevation: 5,
         marginTop: 20,
-        marginBottom:10,
+        marginBottom: 10,
         borderRadius: 12,
         marginHorizontal: 25,
 
@@ -162,7 +161,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         borderBottomColor: '#333',
-        marginVertical:10
+        marginVertical: 10
         // borderBottomWidth:1,
     },
     userinhostels: {

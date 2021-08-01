@@ -160,7 +160,7 @@ export default function LibraryMain({ navigation }) {
           let slug = '/library/issue';
           let token = await read('token');
           const response = await get(slug, token);
-          console.log(response);
+          console.log("Issued Books ", response);
           setissuedbooks(response);
         } catch (err) {
           alert('Cannot fetch issued books list !!');
@@ -190,8 +190,6 @@ export default function LibraryMain({ navigation }) {
         <ScrollView>
         {issuedbooks &&
               issuedbooks.map(issuedbooks => (
-
-
           <View style={styles.section} key={issuedbooks._id}>
             <View style={styles.details}>
               <View style={styles.userinhostels}>
@@ -205,7 +203,7 @@ export default function LibraryMain({ navigation }) {
                     }}>
                     {' '}
                     {/* Title */}
-                    {issuedbooks.bookName.title}
+                    {issuedbooks.bookName ? issuedbooks.bookName.title : 'N/A'}
                   </Text>
 
                   <View
@@ -217,9 +215,7 @@ export default function LibraryMain({ navigation }) {
                         color: '#211C5A',
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {/* Status */}
-                      {/* //returned in place  of institution,but boolean value */}
-{issuedbooks.institution}
+                      {issuedbooks.returned ? 'Returned' : 'Not Returned'}
                     </Text>
                   </View>
                 </View>
