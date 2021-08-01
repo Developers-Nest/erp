@@ -385,6 +385,8 @@ export default function Booksrequest({ navigation }) {
               <TextInput
                 style={{ width: '80%', ...styles.text_input }}
                 placeholder="Enter book's title here"
+                placeholderTextColor='grey'
+                color='black'
 
               />
               <TouchableOpacity
