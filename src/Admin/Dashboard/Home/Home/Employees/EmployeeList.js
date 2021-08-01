@@ -217,7 +217,7 @@ const EmployeeList = ({ navigation }) => {
             </View>
 
           ))}
-<View style={{height:80}}/>
+<View style={{height:90}}/>
       </ScrollView>
 
 
