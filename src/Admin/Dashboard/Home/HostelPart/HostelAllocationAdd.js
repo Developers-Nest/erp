@@ -483,6 +483,8 @@ const HostelAllocationAdd = ({ navigation }) => {
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: 'black' }}
                             value={date ? date.slice(0, 11) : 'Select'}
                             editable={false}
+                            placeholderTextColor='grey'
+                            color='black'
                         />
                         <Feather size={18} color="black" name="calendar"
                             style={{
@@ -504,7 +506,9 @@ const HostelAllocationAdd = ({ navigation }) => {
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: 'black' }}
                             value={date1 ? date1.slice(0, 11) : 'Select'}
                             editable={false}
-                        />
+                            placeholderTextColor='grey'
+                            color='black'
+             />
                         <Feather size={18} color="black" name="calendar"
                             style={{
                                 marginTop: 16,
