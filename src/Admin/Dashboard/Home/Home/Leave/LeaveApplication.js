@@ -75,7 +75,7 @@ const LeaveApplication = ({navigation}) => {
           </View>
       
           <TouchableOpacity
-            //   onPress={() => navigation.navigate('AddNotification')}
+              onPress={() => navigation.navigate('AddApplication')}
               style={{
                 justifyContent: 'flex-end',
                 flex: 1,
