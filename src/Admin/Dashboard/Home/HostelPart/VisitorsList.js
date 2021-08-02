@@ -105,7 +105,8 @@ const VisitorsList = ({navigation}) => {
                     <TextInput
                         style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
                         placeholder="Enter hostel name here"
-
+                        placeholderTextColor='grey'
+                        color='black'
                     />
                     <TouchableOpacity
                         style={{
@@ -170,7 +171,7 @@ const VisitorsList = ({navigation}) => {
 
                         
 
-                            <TouchableOpacity style={styles.differentusers}>
+                            <View style={styles.differentusers}>
                                 <Text
                                     style={{
                                         fontSize: 12,
@@ -181,7 +182,12 @@ const VisitorsList = ({navigation}) => {
 
                                 </Text>
 
-                                <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <TouchableOpacity 
+                                // onPress={() => {
+                                //     navigation.navigate('EditVisitorsHostel');
+                                //   }}
+                                   >
+                                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <Text
                                     style={{
                                         fontSize: 12,
@@ -197,10 +203,11 @@ const VisitorsList = ({navigation}) => {
                                     name="edit"
                                     style={{ paddingTop: 7, paddingRight: 12 }}
                                 />
+                                </View>
                             </TouchableOpacity> 
 
 
-                            </TouchableOpacity>
+                            </View>
                        
                     </View>
                 </View>

@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
+
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
+
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -11,20 +11,28 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
 
-const IssuedBooksAdd = ({ navigation }) => {
-  //theming
-  const institute = useSelector(state => state.institute);
+import { CheckBox } from 'react-native-elements';
 
+const AddApplication = ({ navigation }) => {
+
+    //theming
+    const institute = useSelector(state => state.institute);
+
+    //for checkboxes
+    const [checkBoxValue, setCheckBoxValue] = useState(false);
+    //for category in 4th row
     const [category, setcategory] = useState([
         { label: 'Fiction', key: 'Fiction' },
         { label: 'Philosophy', key: 'Philosophy' },
         { label: 'history', key: 'History' },
     ]);
 
-
+    //date picker
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-    const [date, setDate] = React.useState('29 May 2021')
-    const [dateissued, setDateissued] = React.useState('21 May 2021')
+    const [date, setDate] = React.useState('21 May 2021')
+
+
+
     let index = 0;
     const dateMonths = {
         1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
@@ -42,37 +50,40 @@ const IssuedBooksAdd = ({ navigation }) => {
         setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
         hideDatePicker();
     };
-    const handleConfirmissued = (dateissued) => {
-        // console.warn("A date has been picked: ", dateissued.toString());
-        setDateissued(dateissued.getDate() + " " + dateMonths[dateissued.getMonth() + 1] + " " + dateissued.getFullYear())
-        hideDatePicker();
+    //2nd date
+    const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
+    const [date1, setDate1] = React.useState('29 May 2021')
+
+    const showDatePicker1 = () => {
+        setDatePickerVisibility1(true);
+    };
+
+    const hideDatePicker1 = () => {
+        setDatePickerVisibility1(false);
+    };
+    const handleConfirm1 = (date1) => {
+        // console.warn("A date has been picked: ", date.toString());
+        setDate1(date1.getDate() + " " + dateMonths[date1.getMonth() + 1] + " " + date1.getFullYear())
+        hideDatePicker1();
     };
 
     return (
 
 
 
-        <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-            {/* <ModalSelector
-             
-                initValue="Add Visitor"
-                
-                style={styles.card}
-                initValueTextStyle={styles.SelectedValue}
-                selectTextStyle={styles.SelectedValue}
-            />
-             */}
+        <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: 'rgba(249, 249, 249, 1)', }}>
 
-            <View 
-              style={{
-              backgroundColor: institute ? institute.themeColor : 'black',
-              ...styles.header,
-            }}
+
+            <View
+                style={{
+                    backgroundColor: institute ? institute.themeColor : 'black',
+                    ...styles.header,
+                }}
 
             >
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('LibraryMain');
+                        navigation.navigate('LeaveApplication');
                     }}>
                     <AntDesign
                         size={24}
@@ -97,92 +108,74 @@ const IssuedBooksAdd = ({ navigation }) => {
                         paddingLeft: 30,
                         color: 'white',
                     }}>
-                    Issue Books
+                    Add Application
                 </Text>
             </View>
+
             <ScrollView>
 
+
                 <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
-
-                    {/* <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Vechile No.</Text>
-                </View> */}
-
-                    <View style={{ marginHorizontal: 10, paddingTop: 20, ...styles.shadow }}>
-
-                        <View style={styles.search}>
-                            <TextInput
-                                style={{ marginTop: 10, ...styles.search_input, fontFamily: 'Poppins-Regular' }}
-                                placeholder="Enter book name or ID here"
-                                placeholderTextColor='grey'
-                                color='black'
-
-                            />
-                            <TouchableOpacity
-                                style={{
-                                    alignSelf: 'center',
-
-                                }}>
-                                <Icon
-                                    name="search-sharp"
-                                    style={{
-                                        alignSelf: 'center',
-                                        fontSize: 25,
-                                        color: 'black',
-
-                                    }}
-                                />
-                            </TouchableOpacity>
-                        </View>
+                    {/* 1st new row */}
+                    <View style={{ width: "100%", marginTop: 20, flexDirection: 'row' }}>
+                        <Text style={styles.section_heading}>Designation </Text>
+                        <Text style={styles.section_heading1}>Employee Name</Text>
                     </View>
+                    <View style={{ flexDirection: 'row' }} >
 
+                        <TextInput
+                            style={[styles.input, styles.shadow]}
+                            placeholder="First"
+                            placeholderTextColor='grey'
+                            color='black'
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 15 }} >
-
-                        <ModalSelector
-                            data={category}
-                            initValue="Select User Type"
-                            onChange={option => {
-                                // setclass(option.key);
-                            }}
-                            style={styles.card}
-                            initValueTextStyle={styles.SelectedValue}
-                            selectTextStyle={styles.SelectedValue}
+                        />
+                        <TextInput
+                            style={[styles.input, styles.shadow]}
+                            placeholder="J.K. Rowling"
+                            placeholderTextColor='grey'
+                            color='black'
                         />
 
                     </View>
-                    {/* 3rd row starts */}
-                    <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                        <Text style={styles.section_heading}>Issued On </Text>
-                        <Text style={styles.section_heading1}>Due On</Text>
-                    </View>
 
+                    <View style={{ width: "100%", marginTop: 20, flexDirection: 'row' }}>
+                        <Text style={styles.section_heading}>Leave Type </Text>
+                        <Text style={styles.section_heading1}>Leave Duration</Text>
+                    </View>
                     <View style={{ flexDirection: 'row' }} >
 
-                        <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
-                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                placeholder={dateissued}
-                                placeholderTextColor='grey'
-                                color='black'
-
-                            />
-                            <Feather size={18} color="black" name="calendar"
-                                style={{
-                                    marginTop: 16,
-                                    marginRight: 0,
+                        <View style={{ paddingHorizontal: 10 }}>
+                            <ModalSelector
+                                data={category}
+                                initValue="Medical"
+                                onChange={option => {
+                                    // setclass(option.key);
                                 }}
-
-
-                            ></Feather>
-                            <DateTimePickerModal
-                                isVisible={isDatePickerVisible}
-                                style={styles.pickdate}
-                                mode="date"
-                                onConfirm={handleConfirmissued}
-                                onCancel={hideDatePicker}
+                                style={styles.card}
+                                initValueTextStyle={styles.SelectedValueSmall}
+                                selectTextStyle={styles.SelectedValueSmall}
                             />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
+                        </View>
+
+                        <TextInput
+                            style={[styles.input, styles.shadow]}
+                            placeholder="8 days"
+                            placeholderTextColor='grey'
+                            color='black'
+                        />
+
+                    </View>
+
+
+
+                    <View style={{ width: "100%", paddingTop: 20, flexDirection: 'row' }}>
+                        <Text style={styles.section_heading}>From </Text>
+                        <Text style={styles.section_heading1}>To</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }} >
+
+                        <TouchableOpacity style={[styles.pickdate, styles.shadow]} onPress={showDatePicker}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                                 placeholder={date}
                                 placeholderTextColor='grey'
@@ -205,9 +198,44 @@ const IssuedBooksAdd = ({ navigation }) => {
                             />
                         </TouchableOpacity>
 
+                        <TouchableOpacity style={[styles.pickdate, styles.shadow]} onPress={showDatePicker1}>
+                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
+                                placeholder={date1}
+                                placeholderTextColor='grey'
+                                color='black'
+                            />
+                            <Feather size={18} color="black" name="calendar"
+                                style={{
+                                    marginTop: 16,
+                                    marginRight: 0,
+                                }}
+
+
+                            ></Feather>
+                            <DateTimePickerModal
+                                isVisible={isDatePickerVisible1}
+                                style={styles.pickdate}
+                                mode="date"
+                                onConfirm={handleConfirm1}
+                                onCancel={hideDatePicker1}
+                            />
+                        </TouchableOpacity>
+
                     </View>
+                    <View style={{ height: 30 }} />
+                    <CheckBox
+                        containerStyle={{ marginTop: -9 }}
+                        checked={checkBoxValue}
+                        title={'Apply for on Duty(OD)'}
+
+                        onPress={() => setCheckBoxValue(!checkBoxValue)}
+                    />
+
                     <View style={styles.fixToText}>
-                        <Pressable style={styles.button} >
+
+                        <Pressable style={{ backgroundColor: institute ? institute.themeColor : '#5177E7', ...styles.button }}
+                        // onPress={handleSubmit}
+                        >
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
 
@@ -228,7 +256,35 @@ const styles = StyleSheet.create({
 
 
     },
+
+    button1: {
+
+        marginTop: 0,
+        marginBottom: 0,
+
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
+        alignSelf: 'flex-end',
+        padding: 3,
+        paddingHorizontal: 25,
+        paddingVertical: 2,
+        borderRadius: 4,
+        marginRight: 30,
+        height: 46,
+        borderColor: '#d2691e',
+        borderWidth: 1.5
+
+    },
+    text1: {
+        fontSize: 18,
+        fontWeight: '500',
+        lineHeight: 21,
+        letterSpacing: 0.25,
+        color: '#d2691e',
+    },
     button: {
+
 
         alignItems: 'center',
         justifyContent: 'center',
@@ -254,16 +310,15 @@ const styles = StyleSheet.create({
         margin: 40,
 
 
-
     },
     search: {
         backgroundColor: 'white',
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingHorizontal: 20,
-        borderColor: '#58636D',
-        borderRadius: 8,
-        borderWidth: 0.3,
+        // borderColor: '#58636D',
+        // borderRadius: 8,
+        // borderWidth: 0.3,
 
     },
 
@@ -304,6 +359,25 @@ const styles = StyleSheet.create({
 
         marginBottom: 5,
     },
+    section_heading4: {
+        flex: 1,
+        flexDirection: 'row',
+        marginBottom: 5,
+        fontFamily: 'Poppins-Regular',
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '600',
+        lineHeight: 18,
+        textAlign: 'center',
+        marginLeft: -100,
+
+
+        color: 'rgba(88, 99, 109, 0.85)',
+
+
+
+    },
+
     section_heading2: {
         flex: 1,
         flexDirection: 'row',
@@ -322,6 +396,8 @@ const styles = StyleSheet.create({
 
 
     },
+
+
     pickdate1: {
         width: 120,
         height: 50,
@@ -347,15 +423,31 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         paddingHorizontal: 20,
         backgroundColor: 'white',
-        borderColor: '#58636D',
         borderRadius: 8,
-        borderWidth: 0.3,
+        // borderColor: '#58636D',
+
+        // borderWidth: 0.35,
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontFamily: 'Poppins-Regular',
 
 
     },
+
+    shadow: {
+        elevation: 2,
+        borderRadius: 0,
+        backgroundColor: 'transparent',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+    },
+
+
 
     pickdate: {
         width: 120,
@@ -364,9 +456,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#58636D',
         borderRadius: 8,
-        borderWidth: 0.3,
+        // borderWidth: 0.3,
         marginLeft: 12,
-        marginRight: 0,
+        marginRight: 10,
         paddingHorizontal: 20,
 
         flex: 1,
@@ -374,58 +466,52 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
 
     },
-    // SelectedValue: {
-    //     fontFamily: 'Poppins-Regular',
-    //     fontStyle: 'normal',
-    //     fontWeight: 'normal',
-    //     fontSize: 18,
-    //     lineHeight: 27,
-    //     padding: 10,
-    //     color: 'rgba(88, 99, 109, 0.85)',
-    //   },
-    SelectedValue: {
+
+
+    header: {
+        height: 69,
+        flexDirection: 'row',
+
+    },
+
+    SelectedValueSmall: {
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
         fontWeight: '200',
         fontWeight: '500',
         fontSize: 14,
         lineHeight: 30,
-        paddingTop: 3,
+        // paddingTop: 3,
+
         color: 'rgba(88, 99, 109, 0.85)',
     },
 
     card: {
-        shadowColor: '#999',
+        shadowColor: '#000',
         height: 50,
         shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.5,
+        shadowOpacity: 0.2,
         shadowRadius: 12,
-        elevation: 5,
+        elevation: 2,
         backgroundColor: 'white',
         borderColor: '#ccc',
         borderWidth: 1,
-        borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12,
-        borderTopRightRadius: 12,
-        borderTopLeftRadius: 12,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderTopRightRadius: 8,
+        borderTopLeftRadius: 8,
         overflow: 'hidden',
-        // justifyContent: 'center',
-        // alignContent:'center',
+        justifyContent: 'center',
         margin: 0,
         padding: 0,
 
-        width: '94%'
+        minWidth: '47%',
     },
 
-
-    header: {
-        height: 69,
-        flexDirection: 'row',
-    },
 
 });
 
 
 
 
-export default IssuedBooksAdd;
+export default AddApplication;

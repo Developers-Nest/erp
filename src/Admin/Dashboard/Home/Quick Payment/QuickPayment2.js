@@ -94,6 +94,8 @@ export default function QuickPayment2({navigation}) {
             <TextInput
             style={{...styles.search_input }}
             placeholder="Enter the vehicle no. here"
+            placeholderTextColor='grey'
+            color='black'
             />
             <TouchableOpacity
             style={{

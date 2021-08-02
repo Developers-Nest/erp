@@ -6,29 +6,29 @@ import AntDesign from 'react-native-vector-icons/AntDesign';//for users section 
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 // helpers
-import get from '../../../../services/helpers/request/get';
-import read from '../../../../services/localstorage/read';
+import get from '../../../../../services/helpers/request/get';
+import read from '../../../../../services/localstorage/read';
 //redux
 import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const HostelDetails = ({navigation}) => {
+const LeaveApplication = ({navigation}) => {
     //theming
   const institute = useSelector(state => state.institute);
 
   const [searchQuery, setSearchQuery] = useState('');
-    const [hdetails, sethdetails] = useState([]);
+    const [leaveapp,setleaveapp] = useState([]);
 
     const onChangeSearch = query => setSearchQuery(query);
     useEffect(async () => {
         try {
-            let slug = '/hostel/hostelDetails';
+            let slug = '/leavemanagement/application';
             let token = await read('token');
             const response = await get(slug, token);
-            console.log("Hostel Details ", response);
-            sethdetails(response);
+            console.log("Leave Details ", response);
+            setleaveapp(response);
         } catch (err) {
-            alert('Cannot fetch hostel details !!');
+            alert('Cannot fetch leave details !!');
         }
     }, []);
 
@@ -37,14 +37,15 @@ const HostelDetails = ({navigation}) => {
         backgroundColor: 'rgba(249, 249, 249, 1)', }}>
              {/* header start */}
 
-        <View
+             <View
           style={{
-            backgroundColor: institute ? institute.themeColor : '#FF5733',
+            backgroundColor: institute ? institute.themeColor : 'black',
             ...styles.header,
           }}>
+        <View style={{flexDirection:'row',alignItems:'center',paddingLeft:10}} >
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Home');
+              navigation.navigate('LeaveManager');
             }}>
             <AntDesign
               size={24}
@@ -54,33 +55,40 @@ const HostelDetails = ({navigation}) => {
                 alignSelf: 'center',
                 fontSize: 25,
                 color: 'white',
-                paddingLeft: 20,
-                paddingTop: 20,
+                // paddingLeft: 10,
+                // paddingTop: 23,
               }}
             />
           </TouchableOpacity>
           <Text
             style={{
               fontStyle: 'normal',
-              fontFamily: 'NunitoSans-Regular',
               fontSize: 28,
               fontWeight: '600',
               alignSelf: 'center',
-              paddingLeft: 30,
+              paddingLeft: 10,
               color: 'white',
+              fontFamily: 'NunitoSans-Regular',
             }}>
-            Hostel Details
+           Leave Application
           </Text>
+          </View>
+      
           <TouchableOpacity
-            onPress={() => navigation.navigate('AllocatedListHostel')}
-            style={{
-              justifyContent: 'flex-end',
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 5 }}>
-              {/* <Ionicons
+              onPress={() => navigation.navigate('AddApplication')}
+              style={{
+                justifyContent: 'flex-end',
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  marginRight: 5,
+                }}>
+                <Icon
                   name="add-circle"
                   color="#900"
                   style={{
@@ -88,20 +96,18 @@ const HostelDetails = ({navigation}) => {
                     color: 'white',
                     paddingRight: 20,
                   }}
-                /> */}
-              <MaterialIcon
-                name="align-horizontal-left"
-                color="#900"
-                style={{
-                  fontSize: 35,
-                  color: 'white',
-                  paddingRight: 20,
-                }}
-              />
-
-
-            </View>
-          </TouchableOpacity>
+                />
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontFamily: 'Poppins-Regular',
+                    fontSize: 12,
+                    paddingRight: 20,
+                  }}>
+                  Add
+                </Text>
+              </View>
+            </TouchableOpacity>
         </View>
 
         {/* header ends */}
@@ -110,7 +116,7 @@ const HostelDetails = ({navigation}) => {
                 <View style={styles.search}>
                     <TextInput
                         style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
-                        placeholder="Enter hostel name here"
+                        placeholder="Enter Employee no here"
                         placeholderTextColor='grey'
                         color='black'
 
@@ -140,9 +146,11 @@ const HostelDetails = ({navigation}) => {
 <ScrollView>
     <View>
         
-{hdetails &&
-                        hdetails.map(hdetails => (
-            <View style={styles.section} key={hdetails._id} >
+{leaveapp &&
+                        leaveapp.map(leaveapp => (
+            <View style={styles.section} 
+            key={leaveapp._id} 
+            >
                 <View style={styles.details}>
                     <View style={styles.userinhostels}>
                         <View style={styles.differentusers}>
@@ -154,12 +162,12 @@ const HostelDetails = ({navigation}) => {
                                     
                                 }}>
 
-                              {hdetails.name?hdetails.name:'Name N/A'}
+                             {leaveapp.empcode?leaveapp.empcode:'Employee code N/A'}
 
                             </Text>
 
-                            <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
-                            Ph:{hdetails.phoneNumber?hdetails.phoneNumber:'N/A'}
+                            <Text style={{ flexDirection: 'row', fontSize: 12, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
+                           {leaveapp.status?leaveapp.status:'N/A'}
                             </Text>
 
 
@@ -176,32 +184,14 @@ const HostelDetails = ({navigation}) => {
                             <View style={styles.differentusers}>
                                 <Text
                                     style={{
-                                        fontSize: 12,
+                                        fontSize: 14,
                                         color: '#211C5A',
                                         fontFamily: 'Poppins-Regular',
                                     }}>
-                                   {hdetails.address?hdetails.address:'Address N/A'}
-
+                                  {leaveapp.leaveCategory?leaveapp.leaveCategory.name:'N/A'}
                                 </Text>
 
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: '#211C5A',
-                                        fontFamily: 'Poppins-Regular',
-                                        marginTop: 5,
-                                        marginHorizontal:8
-                                    }}>
-                                   {hdetails.hostelType?hdetails.hostelType.name:'N/A'}
-                                </Text>
-                                {/* <Icon1
-                                    size={12}
-                                    backgroundColor=" #211C5A"
-                                    name="edit"
-                                    style={{ paddingTop: 7, paddingRight: 12 }}
-                                /> */}
-                            </View> 
+                             
 
 
                             </View>
@@ -214,14 +204,7 @@ const HostelDetails = ({navigation}) => {
 
                 <View style={styles.belowhr}>
                     <View style={{ flexDirection: 'column' }}>
-                        <Text
-                            style={{
-                                color: '#B04305',
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-
-                        </Text>
+                       
                         <Text
                             style={{
                                 color: '#211C5A',
@@ -229,10 +212,10 @@ const HostelDetails = ({navigation}) => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                            {hdetails.wardenName?hdetails.wardenName:'N/A'}
+                           From:{leaveapp.fromDate?leaveapp.fromDate.slice(0,10):'N/A'}
                         </Text>
                     </View>
-                    <View style={{ marginTop: 15 }}>
+                   
                         <Text
                             style={{
                                 color: '#211C5A',
@@ -240,18 +223,17 @@ const HostelDetails = ({navigation}) => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                           Ph:{hdetails.wardenPhoneNumber?hdetails.wardenPhoneNumber:'N/A'}
+                           To:{leaveapp.toDate?leaveapp.toDate.slice(0,10):'N/A'}
                         </Text>
 
-                    </View>
                 </View>
 
 
             </View>
-                        ))}
+                         ))} 
                         
                         </View>
-                        <View style={{height:90}}/>
+                        {/* <View style={{height:90,backgroundColor: 'rgba(249, 249, 249, 1)',}}/> */}
 
                         </ScrollView>
             </TouchableWithoutFeedback>
@@ -367,7 +349,7 @@ const styles = StyleSheet.create({
     belowhr: {
         display: 'flex',
         flexDirection: 'row',
-        marginTop: 0,
+        marginTop: 10,
         justifyContent: 'space-between',
         paddingHorizontal:0,
         paddingBottom: 10,
@@ -391,5 +373,5 @@ const styles = StyleSheet.create({
 
 });
 
-export default HostelDetails;
+export default LeaveApplication;
 

@@ -114,6 +114,8 @@ const AddVisitorsHostel = ({navigation}) => {
               <TextInput
                 style={styles.search_input}
                 placeholder="Search User's name to add"
+                placeholderTextColor='grey'
+                color='black'
               />
               <TouchableOpacity
                 style={{
@@ -136,8 +138,14 @@ const AddVisitorsHostel = ({navigation}) => {
             <Text style={styles.section_heading2}>Relation</Text>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <TextInput style={styles.input} placeholder="Shian Manzoor" />
-            <TextInput style={styles.input} placeholder="Brother" />
+            <TextInput style={styles.input}
+              placeholderTextColor='grey'
+              color='black'
+            placeholder="Shian Manzoor" />
+            <TextInput style={styles.input} 
+              placeholderTextColor='grey'
+              color='black'
+            placeholder="Brother" />
           </View>
           <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
             <Text style={styles.section_heading}>Date </Text>
@@ -149,6 +157,8 @@ const AddVisitorsHostel = ({navigation}) => {
               <TextInput
                 style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
                 placeholder={date}
+                placeholderTextColor='grey'
+                color='black'
               />
               <Feather
                 size={18}
@@ -170,6 +180,8 @@ const AddVisitorsHostel = ({navigation}) => {
               <TextInput
                 style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
                 placeholder="13.00"
+                placeholderTextColor='grey'
+                color='black'
               />
               <Feather
                 size={18}

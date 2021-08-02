@@ -20,7 +20,6 @@ import {useSelector} from 'react-redux';
 export default function Report({navigation}) {
   //theming
   const institute = useSelector(state => state.institute);
-
   const [Description, setDescription] = React.useState('');
   return (
     <View style={styles.container}>

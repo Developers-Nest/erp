@@ -101,7 +101,8 @@ const institute = useSelector(state => state.institute);
                         <TextInput
                             style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
                             placeholder="Search User's name to add"
-
+                            placeholderTextColor='grey'
+                            color='black'
                         />
                         <TouchableOpacity
                             style={{
@@ -130,16 +131,18 @@ const institute = useSelector(state => state.institute);
                     <TextInput
                         style={styles.input}
                         placeholder="Shian Manzoor"
-
+                        placeholderTextColor='grey'
+                        color='black'
 
                     />
                     <TextInput
                         style={styles.input}
                         placeholder="Brother"
-
+                        placeholderTextColor='grey'
+                        color='black'
                     />
 
-                </View>
+                </View>0
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Date </Text>
                     <Text style={styles.section_heading1}>Time</Text>
@@ -150,7 +153,8 @@ const institute = useSelector(state => state.institute);
                     <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={date}
-
+                            placeholderTextColor='grey'
+                            color='black'
                         />
                         <Feather size={18} color="black" name="calendar"
                             style={{
@@ -171,7 +175,8 @@ const institute = useSelector(state => state.institute);
                     <TouchableOpacity style={styles.pickdate1}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder="13.00"
-
+                            placeholderTextColor='grey'
+                            color='black'
 
                         />
                         <Feather size={18} color="black" name="calendar"
@@ -194,7 +199,6 @@ const institute = useSelector(state => state.institute);
 
 
                 </View>
-
             </View>
             </ScrollView>
         </View>

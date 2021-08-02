@@ -141,8 +141,8 @@ export default function Booksrequest({ navigation }) {
                                 color: '#211C5A',
                                 fontFamily: 'Poppins-Regular',
                                 marginHorizontal: -5,
-                                marginRight: 150,
-                                paddingRight: 50
+                                // marginRight: 100,
+                                paddingRight: 80
                               }}>
                               {' '}
                               {request.title}
@@ -385,6 +385,8 @@ export default function Booksrequest({ navigation }) {
               <TextInput
                 style={{ width: '80%', ...styles.text_input }}
                 placeholder="Enter book's title here"
+                placeholderTextColor='grey'
+                color='black'
 
               />
               <TouchableOpacity
