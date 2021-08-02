@@ -15,6 +15,7 @@ import {
   Title,
   Paragraph,
   Button,
+  RadioButton,
 } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
@@ -40,7 +41,10 @@ import get from '../../../../services/helpers/request/get';
 import post from '../../../../services/helpers/request/post';
 import read from '../../../../services/localstorage/read';
 import getEmployee from '../../../../services/helpers/getList/getEmployee';
-import getUserType from '../../../../services/helpers/getList/getUsertype';
+import getUsertypelist from '../../../../services/helpers/getList/getUsertype';
+import getCourse from '../../../../services/helpers/getList/getCourse';
+import getBatch from '../../../../services/helpers/getList/getBatch';
+import getStudents from '../../../../services/helpers/getList/getStudents';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -49,15 +53,37 @@ export default function AddTask({navigation}) {
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  //modal
+  //modal lists
   const [Priority, setPriority] = useState([
     {key: 'Low', label: 'Low'},
     {key: 'Medium', label: 'Medium'},
     {key: 'High', label: 'High'},
   ]);
-  const [Usertype, setUserType] = useState([]);
-  const [Status, setUserStatus] = useState([]);
+  const [Usertypelist, setUsertypelist] = useState([
+    {key: 'Employee', label: 'Employee'},
+    {key: 'Student', label: 'Student'},
+  ]);
+  const [Statuses, setUserStatuses] = useState([]);
 
+  //student modal lists
+  const [courses, setCourses] = useState([]);
+  const [batches, setBatches] = useState([]);
+  const [students, setStudents] = useState([]);
+
+  //data
+  const [Usertype, setUserType] = useState('');
+  const [Status, setUserStatus] = useState([]);
+  const [PrioritySelected, getPriority] = useState([]);
+
+  //student data
+  const [course, setCourse] = useState([]);
+  const [batch, setBatch] = useState([]);
+  const [selectedStudents, setselectedStudents] = useState([]);
+
+  //student toggle
+  const addStudent = student_name => {
+    selectedStudents.push(student_name);
+  };
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [date, setDate] = React.useState('21 May 2021');
   let index = 0;
@@ -98,17 +124,58 @@ export default function AddTask({navigation}) {
   //modal data
   const [emp, setEmp] = React.useState([]);
 
-  //on load
-  useEffect(async () => {
+  // //on load
+  // useEffect(async () => {
+  //   showLoadingScreen();
+  //   try {
+  //     let list = await getUsertypelist();
+  //     setUsertypelist(list);
+  //   } catch (err) {
+  //     alert('Cannot fetch employee list !!\n' + err);
+  //   }
+  //   hideLoadingScreen();
+  // }, []);
+
+  // handle student type
+  const handlestudentcourses = async option => {
     showLoadingScreen();
     try {
-      let list = await getUserType();
-      setUserType(list);
+      setUserType(option);
+      let list = await getCourse();
+      setCourses(list);
     } catch (err) {
-      alert('Cannot fetch employee list !!\n' + err);
+      alert('Cannot fetch course list !!\n' + err);
+    }
+
+    hideLoadingScreen();
+  };
+
+  const handlestudentbatches = async option => {
+    showLoadingScreen();
+
+    try {
+      setCourse(option);
+      let list = await getBatch(option);
+      setBatches(list);
+    } catch (err) {
+      alert('Cannot fetch batch list !!\n' + err);
     }
     hideLoadingScreen();
-  }, []);
+  };
+
+  const handlestudentStudents = async option => {
+    showLoadingScreen();
+
+    try {
+      setCourse(option);
+      let list = await getStudents(course, option);
+      console.log(list);
+      setStudents(list);
+    } catch (err) {
+      alert('Cannot fetch batch list !!\n' + err);
+    }
+    hideLoadingScreen();
+  };
 
   return (
     <View style={styles.backgroung}>
@@ -267,7 +334,7 @@ export default function AddTask({navigation}) {
             alignContent: 'flex-start',
             justifyContent: 'space-evenly',
           }}>
-          <Text style={styles.section_heading}>Usertype </Text>
+          <Text style={styles.section_heading}>Usertypelist </Text>
           <Text style={styles.section_heading1}>Status</Text>
         </View>
 
@@ -278,10 +345,10 @@ export default function AddTask({navigation}) {
             paddingHorizontal: 25,
           }}>
           <ModalSelector
-            data={Usertype}
+            data={Usertypelist}
             initValue="Teacher"
             onChange={async option => {
-              await getPriority(option.key);
+              await handlestudentcourses(option.key);
             }}
             style={styles.card_picker}
             initValueTextStyle={styles.SelectedValueSmall}
@@ -298,6 +365,111 @@ export default function AddTask({navigation}) {
             selectTextStyle={styles.SelectedValueSmall}
           />
         </View>
+        {Usertype === 'Student' && (
+          <>
+            <View
+              style={{
+                width: '100%',
+                paddingTop: 10,
+                flexDirection: 'row',
+                alignContent: 'flex-start',
+                justifyContent: 'space-evenly',
+              }}>
+              <Text style={styles.section_heading}>Choose Course </Text>
+              <Text style={styles.section_heading1}>Choose Batch</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 25,
+              }}>
+              <ModalSelector
+                data={courses}
+                initValue="course"
+                onChange={async option => {
+                  await handlestudentbatches(option.key);
+                }}
+                style={styles.card_picker}
+                initValueTextStyle={styles.SelectedValueSmall}
+                selectTextStyle={styles.SelectedValueSmall}
+              />
+              <ModalSelector
+                data={batches}
+                initValue="batch"
+                onChange={async option => {
+                  await handlestudentStudents(option.key);
+                }}
+                style={styles.card_picker}
+                initValueTextStyle={styles.SelectedValueSmall}
+                selectTextStyle={styles.SelectedValueSmall}
+              />
+            </View>
+            <View
+              style={{
+                width: '100%',
+                paddingTop: 10,
+                flexDirection: 'row',
+                alignContent: 'flex-start',
+                justifyContent: 'space-evenly',
+              }}>
+              <Text style={styles.section_heading}>Choose Student </Text>
+            </View>
+            <View
+              style={{
+                paddingHorizontal: 25,
+              }}>
+              {students &&
+                students.map(student => (
+                  <View style={styles.section}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 22,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {student.firstName + ' ' + student.lastName ||
+                              'Name Not Found'}
+                          </Text>
+                          <View style={{marginRight: 20}}>
+                            <RadioButton
+                              value="first"
+                              status={
+                                selectedStudents.includes(
+                                  student.firstName + ' ' + student.lastName,
+                                )
+                                  ? 'checked'
+                                  : 'unchecked'
+                              }
+                              onPress={() =>
+                                addStudent(
+                                  student.firstName + ' ' + student.lastName,
+                                )
+                              }
+                            />
+                          </View>
+                        </TouchableOpacity>
+                        {/* <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: '#6A6A80',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            {'  '}Admission No.{' '}
+                            {/* {studentsList[studentId].admissionNumber} 
+                          </Text>
+                        </TouchableOpacity> */}
+                      </View>
+                    </View>
+                  </View>
+                ))}
+            </View>
+          </>
+        )}
         <View
           style={{
             justifyContent: 'center',
@@ -466,5 +638,38 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  section: {
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 5,
+    marginTop: 10,
+    borderRadius: 12,
+
+    padding: 10,
+    marginLeft: 2,
+    marginHorizontal: 15,
+    width: '99%',
+  },
+
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+
+    borderBottomColor: '#333',
+  },
+  userinhostels: {
+    marginTop: 1,
+    marginHorizontal: 10,
+  },
+  userinhostels2: {
+    marginTop: -3,
+    marginHorizontal: 10,
   },
 });
