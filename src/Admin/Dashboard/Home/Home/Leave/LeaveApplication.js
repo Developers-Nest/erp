@@ -6,8 +6,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';//for users section 
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 // helpers
-// import get from '../../../../services/helpers/request/get';
-// import read from '../../../../services/localstorage/read';
+import get from '../../../../../services/helpers/request/get';
+import read from '../../../../../services/localstorage/read';
 //redux
 import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -16,21 +16,21 @@ const LeaveApplication = ({navigation}) => {
     //theming
   const institute = useSelector(state => state.institute);
 
-//   const [searchQuery, setSearchQuery] = useState('');
-//     const [hdetails, sethdetails] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+    const [leaveapp,setleaveapp] = useState([]);
 
-//     const onChangeSearch = query => setSearchQuery(query);
-//     useEffect(async () => {
-//         try {
-//             let slug = '/hostel/hostelDetails';
-//             let token = await read('token');
-//             const response = await get(slug, token);
-//             console.log("Hostel Details ", response);
-//             sethdetails(response);
-//         } catch (err) {
-//             alert('Cannot fetch hostel details !!');
-//         }
-//     }, []);
+    const onChangeSearch = query => setSearchQuery(query);
+    useEffect(async () => {
+        try {
+            let slug = '/leavemanagement/application';
+            let token = await read('token');
+            const response = await get(slug, token);
+            console.log("Leave Details ", response);
+            setleaveapp(response);
+        } catch (err) {
+            alert('Cannot fetch leave details !!');
+        }
+    }, []);
 
   return (
         <View style={{ justifyContent: 'center', alignContent: 'center',
@@ -145,11 +145,11 @@ const LeaveApplication = ({navigation}) => {
 >
 <ScrollView>
     <View>
-{/*         
-{hdetails &&
-                        hdetails.map(hdetails => ( */}
+        
+{leaveapp &&
+                        leaveapp.map(leaveapp => (
             <View style={styles.section} 
-            // key={hdetails._id} 
+            key={leaveapp._id} 
             >
                 <View style={styles.details}>
                     <View style={styles.userinhostels}>
@@ -162,12 +162,12 @@ const LeaveApplication = ({navigation}) => {
                                     
                                 }}>
 
-                             Employee no
+                             {leaveapp.empcode?leaveapp.empcode:'Employee code N/A'}
 
                             </Text>
 
                             <Text style={{ flexDirection: 'row', fontSize: 12, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
-                           Rejected
+                           {leaveapp.status?leaveapp.status:'N/A'}
                             </Text>
 
 
@@ -188,7 +188,7 @@ const LeaveApplication = ({navigation}) => {
                                         color: '#211C5A',
                                         fontFamily: 'Poppins-Regular',
                                     }}>
-                                  Leave Type
+                                  {leaveapp.leaveCategory?leaveapp.leaveCategory.name:'N/A'}
                                 </Text>
 
                              
@@ -212,7 +212,7 @@ const LeaveApplication = ({navigation}) => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                           From:21 May,2021
+                           From:{leaveapp.fromDate?leaveapp.fromDate.slice(0,10):'N/A'}
                         </Text>
                     </View>
                    
@@ -223,14 +223,14 @@ const LeaveApplication = ({navigation}) => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                           To:21Sept,2021
+                           To:{leaveapp.toDate?leaveapp.toDate.slice(0,10):'N/A'}
                         </Text>
 
                 </View>
 
 
             </View>
-                        {/* ))} */}
+                         ))} 
                         
                         </View>
                         {/* <View style={{height:90,backgroundColor: 'rgba(249, 249, 249, 1)',}}/> */}
