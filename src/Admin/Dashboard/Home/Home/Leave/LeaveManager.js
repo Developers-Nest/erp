@@ -3,6 +3,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 
 
@@ -312,8 +313,9 @@ export default function LeaveManager({ navigation }) {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
         {loaadingScreen}
-        {/* header start */}
-        <View
+                {/* header start */}
+
+                <View
           style={{
             backgroundColor: institute ? institute.themeColor : '#FF5733',
             ...styles.header,
@@ -345,11 +347,43 @@ export default function LeaveManager({ navigation }) {
               paddingLeft: 30,
               color: 'white',
             }}>
-            Leave Manager
+           Leave Manager
           </Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('LeaveApplication')}
+            style={{
+              justifyContent: 'flex-end',
+              flex: 1,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 5 }}>
+              {/* <Ionicons
+                  name="add-circle"
+                  color="#900"
+                  style={{
+                    fontSize: 35,
+                    color: 'white',
+                    paddingRight: 20,
+                  }}
+                /> */}
+              <MaterialIcon
+                name="align-horizontal-left"
+                color="#900"
+                style={{
+                  fontSize: 35,
+                  color: 'white',
+                  paddingRight: 20,
+                }}
+              />
+
+
+            </View>
+          </TouchableOpacity>
         </View>
 
         {/* header ends */}
+
 
         <View
           style={{
