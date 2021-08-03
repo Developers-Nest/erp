@@ -20,10 +20,8 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import {useSelector} from 'react-redux';
 
 // helpers
-import getBatch from '../../../../../services/helpers/getList/getBatch';
-import getSubject from '../../../../../services/helpers/getList/getSubject';
-import getCourse from '../../../../../services/helpers/getList/getCourse';
 import getMonth from '../../../../../services/helpers/getList/getMonth';
+import getYear from '../../../../../services/helpers/getList/getYear';
 import read from '../../../../../services/localstorage/read';
 import get from '../../../../../services/helpers/request/get';
 import patch from '../../../../../services/helpers/request/patch';
@@ -32,98 +30,66 @@ import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen
 const EmployeeAttendance = ({navigation}) => {
   // current year and month
   var d = new Date();
-  let year = d.getUTCFullYear();
-  let month = d.getUTCMonth();
+  let currentyear = d.getUTCFullYear();
+  let currentmonth = d.getUTCMonth();
 
   // selected dropdown values
-  const[department,setDepartment]=useState(null);
-  const [course, setCourse] = useState(null);
-  const [batch, setBatch] = useState(null);
-  const [subject, setSubject] = useState(null);
-  const [monthSelect, setMonthSelect] = useState(month);
+  const [department, setDepartment] = useState(null);
+  const [monthSelected, setmonthSelected] = useState(currentmonth);
+  const [yearSelected, setyearSelected] = useState(currentyear);
 
   // dropdown values
-  const[departments,setDepartments]=useState([]);
-  const [batches, setBatches] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [months, setMonths] = useState(getMonth());
+  const [years, setYears] = useState(getYear());
 
   // handle month model open
   const [openMonthSel, setOpenMonthSel] = useState(false);
 
   // attendance list
-  const [studentList, setStudentList] = useState([]);
-  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+  const [employeeList, setemployeeList] = useState([]);
 
-  const [nameMethod, setNameMethod] = useState('Name');
+  //loading screen
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   //theming
   const institute = useSelector(state => state.institute);
 
-// on load of the screen
-useEffect(async () => {
+  // on load of the screen
+  useEffect(async () => {
     showLoadingScreen();
     try {
-      let dept = await getDepartment();
-      setDepartments(dept);
+      let token = await read('token');
+      let response = await get('/department', token);
+      let list = [];
+      response.map(data => {
+        list.push({
+          label: data.name,
+          key: data._id,
+        });
+      });
+      setDepartments(list);
     } catch (err) {
-      alert('Cannot fetch courses!!');
+      alert('Cannot fetch dept!!' + err);
     }
     hideLoadingScreen();
   }, []);
 
-//   // on load of the screen
-//   useEffect(async () => {
-//     showLoadingScreen();
-//     try {
-//       let cour = await getCourse();
-//       setCourses(cour);
-//     } catch (err) {
-//       alert('Cannot fetch courses!!');
-//     }
-//     hideLoadingScreen();
-//   }, []);
-  // get list of batches
-  const fetchBatches = async sc => {
-    showLoadingScreen();
-    setCourse(sc);
-    try {
-      let bat = await getBatch(sc);
-      setBatches(bat);
-    } catch (err) {
-      alert('Cannot fetch Batches!!');
-    }
-    hideLoadingScreen();
-  };
-
-  // get list of subjects
-  const fetchSubjects = async sb => {
-    showLoadingScreen();
-    setBatch(sb);
-    try {
-      let sub = await getSubject(course, sb);
-      setSubjects(sub);
-    } catch (err) {
-      alert('Cannot fetch Subjects!!');
-    }
-    hideLoadingScreen();
-  };
-
   // fetch list
-  const fetchList = async (ss, sm = month) => {
+  const fetchList = async month => {
     showLoadingScreen();
-    setSubject(ss);
     try {
+      setmonthSelected(month);
+
       let token = await read('token');
-      let slug = `/student/attendance/monthly/?course=${course}&batch=${batch}&year=${year}&month=${sm}&subject=${ss}`;
+      let slug = `/employee/attendance/monthly/?department=${department}&year=${yearSelected}&month=${month}`;
       let response = await get(slug, token);
       if (response.length == 0) {
         alert('Inactive Month!!');
         hideLoadingScreen();
         return;
       }
-      setStudentList(response[0].students);
+      setemployeeList(response[0].employees);
     } catch (err) {
       alert('Cannot fetch List');
     }
@@ -155,7 +121,6 @@ useEffect(async () => {
         style={{
           backgroundColor: 'rgba(249, 249, 249, 1)',
           flex: 1,
-          // justifyContent: 'flex-start',
         }}>
         {loadingScreen}
         <View
@@ -186,7 +151,7 @@ useEffect(async () => {
               fontSize: 28,
               fontWeight: '600',
               alignSelf: 'center',
-              paddingLeft:10,
+              paddingLeft: 10,
               color: 'white',
               fontFamily: 'NunitoSans-Regular',
             }}>
@@ -206,28 +171,28 @@ useEffect(async () => {
                 width: '100%',
               }}>
               <ModalSelector
-                data={courses}
-                initValue="Course"
+                data={departments}
+                initValue="Department"
                 onChange={option => {
-                  fetchBatches(option.key);
+                  setDepartment(option.key);
                 }}
                 style={styles.card}
                 initValueTextStyle={styles.SelectedValueSmall}
                 selectTextStyle={styles.SelectedValueSmall}
               />
               <ModalSelector
-                data={batches}
-                initValue="Batch"
+                data={years}
+                initValue={'Year'}
                 onChange={option => {
-                  fetchSubjects(option.key);
+                  setyearSelected(option.key + 2020);
                 }}
                 style={styles.card}
                 initValueTextStyle={styles.SelectedValueSmall}
                 selectTextStyle={styles.SelectedValueSmall}
               />
               <ModalSelector
-                data={subjects}
-                initValue="Subject"
+                data={months}
+                initValue={'Month'}
                 onChange={option => {
                   fetchList(option.key);
                 }}
@@ -239,8 +204,8 @@ useEffect(async () => {
             <ScrollView>
               <View style={{marginTop: 20}}>
                 {/* <View style={{alignItems:'center'}}></View> */}
-                <View style={{padding: 5, alignItems: 'center'}}>
-                  {/* open search */}
+                {/* <View style={{padding: 5, alignItems: 'center'}}>
+                  {/* open search 
                   <View
                     style={{
                       justifyContent: 'space-around',
@@ -300,20 +265,16 @@ useEffect(async () => {
                       selectTextStyle={styles.SelectedValueSmall}
                     />
                   </View>
-                </View>
+                </View> */}
 
                 <View style={{padding: 10}} />
 
-                {studentList &&
-                  studentList.map(st => (
-                    <View style={styles.section} key={st._id}>
+                {employeeList &&
+                  employeeList.map(emp => (
+                    <View style={styles.section} key={emp._id}>
                       <View style={styles.details}>
                         <View style={styles.userinhostels2}>
-                          <TouchableOpacity
-                            style={styles.differentusers}
-                            onPress={() => {
-                              setNameMethod('Name');
-                            }}>
+                          <TouchableOpacity style={styles.differentusers}>
                             <Text
                               style={{
                                 fontSize: 22,
@@ -321,8 +282,8 @@ useEffect(async () => {
                                 fontFamily: 'Poppins-regular',
                               }}>
                               {' '}
-                              {st.studentId
-                                ? st.studentId.firstName
+                              {emp.employeeId
+                                ? emp.employeeId.firstName
                                 : 'Not Found'}
                             </Text>
 
@@ -333,7 +294,7 @@ useEffect(async () => {
                                 color: '#000000',
                                 fontFamily: 'Poppins-regular',
                               }}>
-                              {getAttPer(st.days)} %
+                              {getAttPer(emp.days)} %
                             </Text>
                           </TouchableOpacity>
                           <TouchableOpacity style={styles.differentusers}>
@@ -346,7 +307,7 @@ useEffect(async () => {
                                   : '#6A6A80',
                                 fontFamily: 'Poppins-regular',
                               }}>
-                              {''} Admission No: {st.studentAdmissionNumber}
+                              {''} {emp.employeeCode}
                             </Text>
                           </TouchableOpacity>
                         </View>
