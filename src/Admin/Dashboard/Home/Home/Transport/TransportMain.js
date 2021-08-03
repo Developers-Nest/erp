@@ -21,8 +21,9 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auto } from 'async';
-
+//redux
 import { useSelector } from 'react-redux';
+
 export default function TransportMain({ navigation }) {
   const [showContent, setShowContent] = React.useState('Vehicle');
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -38,8 +39,8 @@ export default function TransportMain({ navigation }) {
 
         <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
 
-        // onPress={() =>
-        //     navigation.navigate('AddCourses')}
+          onPress={() =>
+            navigation.navigate('AddVehicle')}
 
 
         >
@@ -55,6 +56,8 @@ export default function TransportMain({ navigation }) {
             <TextInput
               style={{ ...styles.search_input }}
               placeholder="Enter the vehicle no. here"
+              placeholderTextColor='grey'
+              color='black'
             />
             <TouchableOpacity
               style={{
@@ -109,7 +112,9 @@ addedbooks.map(addedbooks => ( */}
                     Dabbu Tripathi
                   </Text>
                   <TouchableOpacity
-                    style={{ flexDirection: 'row' }}>
+                    style={{ flexDirection: 'row' }}
+                    onPress={() => { navigation.navigate('EditVehicle') }}
+                  >
                     <Text
                       style={{
                         fontSize: 12,
@@ -173,8 +178,8 @@ addedbooks.map(addedbooks => ( */}
 
         <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
 
-        // onPress={() =>
-        //     navigation.navigate('AddCourses')}
+          onPress={() =>
+            navigation.navigate('AddDriver')}
 
 
         >
@@ -190,6 +195,8 @@ addedbooks.map(addedbooks => ( */}
             <TextInput
               style={{ ...styles.search_input }}
               placeholder="Enter the driver name here"
+              placeholderTextColor='grey'
+              color='black'
             />
             <TouchableOpacity
               style={{
@@ -245,6 +252,7 @@ addedbooks.map(addedbooks => ( */}
                     Dabbu Tripathi
                   </Text>
                   <TouchableOpacity
+                    onPress={() => { navigation.navigate('EditDriver') }}
                     style={{ flexDirection: 'row' }}>
                     <Text
                       style={{
@@ -299,8 +307,8 @@ addedbooks.map(addedbooks => ( */}
 
         <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
 
-        // onPress={() =>
-        //     navigation.navigate('AddCourses')}
+          onPress={() =>
+            navigation.navigate('AddDestination')}
 
 
         >
@@ -316,8 +324,9 @@ addedbooks.map(addedbooks => ( */}
             <TextInput
               style={{ ...styles.search_input }}
               placeholder="Enter the destination here"
-              placeholder="Enter the destination here"
+
               placeholderTextColor='grey'
+              color='black'
             />
             <TouchableOpacity
               style={{
@@ -374,6 +383,7 @@ addedbooks.map(addedbooks => ( */}
                     Stop Positon
                   </Text>
                   <TouchableOpacity
+                    onPress={() => { navigation.navigate('EditDestination') }}
                     style={{ flexDirection: 'row' }}>
                     <Text
                       style={{
@@ -482,7 +492,7 @@ addedbooks.map(addedbooks => ( */}
         </View>
 
         <TouchableOpacity
-          //  onPress={() => navigation.navigate('AddApplication')}
+          onPress={() => navigation.navigate('SmsAlert')}
           style={{
             justifyContent: 'flex-end',
             flex: 1,
