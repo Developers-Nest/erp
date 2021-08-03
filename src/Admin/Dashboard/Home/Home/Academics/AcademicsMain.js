@@ -328,7 +328,7 @@ export default function AcademicsMain({ navigation }) {
                         Academics
                     </Text>
                     <TouchableOpacity
-                        // onPress={() => navigation.navigate('BooksRequest')}
+                        onPress={() => navigation.navigate('ClassTeacherAllocation')}
                         style={{
                             justifyContent: 'flex-end',
                             flex: 1,
@@ -336,15 +336,6 @@ export default function AcademicsMain({ navigation }) {
                             alignItems: 'center',
                         }}>
                         <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 5 }}>
-                            {/* <Ionicons
-                  name="add-circle"
-                  color="#900"
-                  style={{
-                    fontSize: 35,
-                    color: 'white',
-                    paddingRight: 20,
-                  }}
-                /> */}
                             <MaterialIcon
                                 name="align-horizontal-right"
                                 color="#900"
@@ -374,7 +365,7 @@ export default function AcademicsMain({ navigation }) {
                         <View
                             style={{
                                 marginTop: 10,
-                                //make search and card in same line
+                                //make search and card in same line,death note,naruto,attack on titan,one piece,tokyo revenge
                                 marginLeft: 5,
                                 justifyContent: 'space-between',
                                 width: '95%',
