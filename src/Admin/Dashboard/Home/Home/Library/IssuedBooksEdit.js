@@ -16,11 +16,21 @@ const IssuedBooksEdit = ({navigation}) => {
   //theming
   const institute = useSelector(state => state.institute);
 
-    const [category, setcategory] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-      ]);
+  const [user, setuser] = useState([
+    { label: 'Fiction', key: 'Fiction' },
+    { label: 'Philosophy', key: 'Philosophy' },
+    { label: 'history', key: 'History' },
+]);
+const [department, setdepartment] = useState([
+    { label: 'Fiction', key: 'Fiction' },
+    { label: 'Philosophy', key: 'Philosophy' },
+    { label: 'history', key: 'History' },
+]);
+const [employee, setemployee] = useState([
+    { label: 'Fiction', key: 'Fiction' },
+    { label: 'Philosophy', key: 'Philosophy' },
+    { label: 'history', key: 'History' },
+]);
     
 
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
@@ -138,22 +148,49 @@ const IssuedBooksEdit = ({navigation}) => {
                     </View>
                 </View>
 
-                
-                <View style={{ flexDirection: 'row' ,justifyContent:'center',paddingTop:15}} >
+                <View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 15 }} >
 
-                <ModalSelector
-              data={category}
-              initValue="Select User Type"
-              onChange={option => {
-                // setclass(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValue}
-              selectTextStyle={styles.SelectedValue}
-            />
-              
-                </View>
-                {/* 3rd row starts */}
+<ModalSelector
+    data={user}
+    initValue="Select User Type"
+    onChange={option => {
+        // setclass(option.key);
+    }}
+    style={styles.card}
+    initValueTextStyle={styles.SelectedValue}
+    selectTextStyle={styles.SelectedValue}
+/>
+
+</View>
+<View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 15 }} >
+
+<ModalSelector
+data={department}
+initValue="Select department Type"
+onChange={option => {
+// setclass(option.key);
+}}
+style={styles.card}
+initValueTextStyle={styles.SelectedValue}
+selectTextStyle={styles.SelectedValue}
+/>
+
+</View>
+<View style={{ flexDirection: 'row', justifyContent: 'center', paddingTop: 15 }} >
+
+<ModalSelector
+data={employee}
+initValue="Select employee Type"
+onChange={option => {
+// setclass(option.key);
+}}
+style={styles.card}
+initValueTextStyle={styles.SelectedValue}
+selectTextStyle={styles.SelectedValue}
+/>
+
+</View>
+    {/* 3rd row starts */}
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Issued On </Text>
                     <Text style={styles.section_heading1}>Due On</Text>

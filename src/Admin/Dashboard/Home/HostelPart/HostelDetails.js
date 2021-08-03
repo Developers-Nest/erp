@@ -138,7 +138,7 @@ const HostelDetails = ({navigation}) => {
            
 >
 <ScrollView>
-    <View>
+    
         
 {hdetails &&
                         hdetails.map(hdetails => (
@@ -250,7 +250,7 @@ const HostelDetails = ({navigation}) => {
             </View>
                         ))}
                         
-                        </View>
+                        
                         <View style={{height:90}}/>
 
                         </ScrollView>
