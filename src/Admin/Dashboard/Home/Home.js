@@ -48,6 +48,7 @@ import Timetable from './Home/Timetable';
 import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
 
+
 import Results from './Home/Results';
 import Leave from './Home/Leave';
 import Employees from './Home/Employees';
@@ -58,6 +59,7 @@ import Notification from './Home/Notification';
 
 //navigation from home menu and drawer navigation too
 import Exams from './Home/Exams';
+import Academics from './Home/Academics';
 
 //helpers
 import write from '../../../services/localstorage/write';
@@ -245,7 +247,7 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Academics</Text>
           )}
-          onPress={() => Alert.alert('Add Academics screen')}
+          onPress={() => props.navigation.navigate('Academics')}
         />
         <DrawerItem
           style={styles.item}
@@ -368,6 +370,7 @@ export default function Route() {
       drawerContent={props => <DrawerContent {...props} />}
       drawerStyle={{ backgroundColor: 'rgba(255, 255, 255, 0.8)' }}>
       <DrawerNav.Screen name="Home" component={Home_Route} />
+      <DrawerNav.Screen name="Academics" component={Academics} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="Attendance" component={Attendance} />
       <DrawerNav.Screen name="Hostel" component={Hostel} />
