@@ -125,8 +125,8 @@ export default function ClassTeacherAllocation({ navigation }) {
                 <View style={styles.container}>
                 <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
 
-//   onPress={() =>
-//     navigation.navigate('IssuedBooksAdd')}
+  onPress={() =>
+    navigation.navigate('AllocateClassTeacher')}
 
 
 >
