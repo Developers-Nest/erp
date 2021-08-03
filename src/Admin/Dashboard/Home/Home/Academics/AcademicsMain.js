@@ -24,6 +24,7 @@ import {
 // import read from '../../../../../services/localstorage/read';
 //redux
 import { useSelector } from 'react-redux';
+import { Searchbar } from 'react-native-paper';
 
 export default function AcademicsMain({ navigation }) {
     const [showContent, setShowContent] = React.useState('Courses');
@@ -345,7 +346,7 @@ export default function AcademicsMain({ navigation }) {
                   }}
                 /> */}
                             <MaterialIcon
-                                name="align-horizontal-left"
+                                name="align-horizontal-right"
                                 color="#900"
                                 style={{
                                     fontSize: 35,
@@ -369,6 +370,7 @@ export default function AcademicsMain({ navigation }) {
                     }}>
                     <View style={{ alignItems: 'center', width: '90%' }}>
                         {/* open search */}
+                        
                         <View
                             style={{
                                 marginTop: 10,
