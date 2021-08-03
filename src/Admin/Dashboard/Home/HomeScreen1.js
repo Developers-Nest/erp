@@ -147,7 +147,11 @@ const HomeScreen1 = () => {
 2nd row started */}
 
           <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Transport');
+              }}>
               <IonIcon size={36.83} color="#34A853" name="bus" />
 
               <Text
@@ -160,7 +164,7 @@ const HomeScreen1 = () => {
                 }}>
                 Transport
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.section}>
