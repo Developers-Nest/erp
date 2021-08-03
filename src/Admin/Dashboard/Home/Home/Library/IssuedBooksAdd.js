@@ -21,6 +21,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 //redux
 import {useSelector} from 'react-redux';
 
+// loading screen
+import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
+
 // helpers
 import get from '../../../../../services/helpers/request/get';
 import post from '../../../../../services/helpers/request/post';
@@ -31,25 +34,30 @@ import getBatch from '../../../../../services/helpers/getList/getBatch';
 import getStudents from '../../../../../services/helpers/getList/getStudents';
 
 const IssuedBooksAdd = ({navigation}) => {
+  // loading screen
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
   //theming
   const institute = useSelector(state => state.institute);
+
+  //modal selector values
   const [books, setBooks] = useState([]);
-  const [user, setuser] = useState([
-    {label: 'Fiction', key: 'Fiction'},
-    {label: 'Philosophy', key: 'Philosophy'},
-    {label: 'history', key: 'History'},
-  ]);
-  const [department, setdepartment] = useState([
-    {label: 'Fiction', key: 'Fiction'},
-    {label: 'Philosophy', key: 'Philosophy'},
-    {label: 'history', key: 'History'},
-  ]);
-  const [employee, setemployee] = useState([
-    {label: 'Fiction', key: 'Fiction'},
-    {label: 'Philosophy', key: 'Philosophy'},
-    {label: 'history', key: 'History'},
-  ]);
-  const [Usertypelist, setUsertypelist] = useState([]);
+  const [users, setusers] = useState([]);
+
+  //EMPLOYEE TYPE modal selector
+  const [departments, setdepartments] = useState([]);
+  const [employees, setemployees] = useState([]);
+
+  //STUDENT TYPE modal selector
+
+  //data to be sent
+  const [book, setBook] = useState([]);
+  const [user, setuser] = useState([]);
+  const [department, setdepartment] = useState([]);
+  const [employee, setemployee] = useState([]);
+  const [due, setdue] = useState();
+  const [issue, setissue] = useState();
+
   //on load
   useEffect(async () => {
     try {
@@ -71,16 +79,155 @@ const IssuedBooksAdd = ({navigation}) => {
     }
     try {
       let list = await getUsertypelist();
-      setuser(list);
+      setusers(list);
     } catch (err) {
-      alert('Cannot fetch usertype list !!\n' + err);
+      alert('Cannot fetch usertype list !!');
     }
   }, []);
 
-  let fetchUserType = async () => {
+  //Employee Type fetch department
+  let fetchDepartment = async option => {
     showLoadingScreen();
-
+    try {
+      setuser(option);
+      let slug = '/department';
+      let token = await read('token');
+      let res = await get(slug, token);
+      let list = [];
+      res &&
+        res.map(cat => {
+          list.push({
+            label: cat.name,
+            key: cat._id,
+          });
+        });
+      console.log(list);
+      setdepartments(list);
+    } catch (err) {}
     hideLoadingScreen();
+  };
+
+  //Employee Type fetch employees
+  let fetchEmployees = async option => {
+    showLoadingScreen();
+    try {
+      setdepartment(option);
+      let slug = `/employee?department=${option}`;
+      let token = await read('token');
+      let res = await get(slug, token);
+      let list = [];
+      res &&
+        res.map(cat => {
+          list.push({
+            label: cat.firstName + ' ' + cat.lastName,
+            key: cat._id,
+          });
+        });
+      console.log(list);
+      setemployees(list);
+    } catch (err) {}
+    hideLoadingScreen();
+  };
+
+  //date display
+  const [datedisplayDue, setdatedisplayDue] = useState();
+  const [datedisplayIssued, setdatedisplayIssued] = useState();
+
+  //date picker
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
+
+  const [isDatePickerVisibleIssue, setDatePickerVisibilityIssue] =
+    React.useState(false);
+  const [isDatePickerVisibleDue, setDatePickerVisibilityDue] =
+    React.useState(false);
+
+  const [date, setDate] = React.useState();
+  const [dateissued, setDateissued] = React.useState();
+
+  let index = 0;
+  const dateMonths = {
+    1: 'Jan',
+    2: 'Feb',
+    3: 'Mar',
+    4: 'Apr',
+    5: 'May',
+    6: 'June',
+    7: 'July',
+    8: 'Aug',
+    9: 'Sept',
+    10: 'Oct',
+    11: 'Nov',
+    12: 'Dec',
+  };
+
+  const showDatePicker1 = () => {
+    setDatePickerVisibilityIssue(true);
+  };
+
+  const hideDatePicker1 = () => {
+    setDatePickerVisibilityIssue(false);
+  };
+
+  const showDatePicker2 = () => {
+    setDatePickerVisibilityDue(true);
+  };
+
+  const hideDatePicker2 = () => {
+    setDatePickerVisibilityDue(false);
+  };
+
+  const handleConfirmIssued = data => {
+    setdatedisplayIssued(parseDate(data.toString()));
+    setissue(
+      data.getFullYear() +
+        '-' +
+        twodigit(data.getMonth() + 1) +
+        '-' +
+        twodigit(data.getDate()) +
+        'T' +
+        +twodigit(data.getHours()) +
+        ':' +
+        twodigit(data.getMinutes()) +
+        ':' +
+        twodigit(data.getSeconds()) +
+        '.' +
+        threedigit(data.getMilliseconds()) +
+        'Z',
+    );
+    console.log('A date has been picked: ', issue);
+    hideDatePicker1();
+  };
+
+  const handleConfirmDue = data => {
+    setdatedisplayDue(parseDate(data.toString()));
+    setdue(
+      data.getFullYear() +
+        '-' +
+        twodigit(data.getMonth() + 1) +
+        '-' +
+        twodigit(data.getDate()) +
+        'T' +
+        +twodigit(data.getHours()) +
+        ':' +
+        twodigit(data.getMinutes()) +
+        ':' +
+        twodigit(data.getSeconds()) +
+        '.' +
+        threedigit(data.getMilliseconds()) +
+        'Z',
+    );
+    console.log('A date has been picked: ', due);
+    hideDatePicker2();
+  };
+
+  const twodigit = num => {
+    return ('0' + num).slice(-2);
+  };
+  const threedigit = num => {
+    return ('00' + num).slice(-3);
   };
 
   //   let handleSubmit = async () => {
@@ -111,56 +258,6 @@ const IssuedBooksAdd = ({navigation}) => {
   //         alert('Cannot Save !!' + err)
   //     }
   // }
-
-  const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-  const [date, setDate] = React.useState('29 May 2021');
-  const [dateissued, setDateissued] = React.useState('21 May 2021');
-  let index = 0;
-  const dateMonths = {
-    1: 'Jan',
-    2: 'Feb',
-    3: 'Mar',
-    4: 'Apr',
-    5: 'May',
-    6: 'June',
-    7: 'July',
-    8: 'Aug',
-    9: 'Sept',
-    10: 'Oct',
-    11: 'Nov',
-    12: 'Dec',
-  };
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-  const handleConfirm = date => {
-    // console.warn("A date has been picked: ", date.toString());
-    setDate(
-      date.getDate() +
-        ' ' +
-        dateMonths[date.getMonth() + 1] +
-        ' ' +
-        date.getFullYear(),
-    );
-    hideDatePicker();
-  };
-  const handleConfirmissued = dateissued => {
-    // console.warn("A date has been picked: ", dateissued.toString());
-    setDateissued(
-      dateissued.getDate() +
-        ' ' +
-        dateMonths[dateissued.getMonth() + 1] +
-        ' ' +
-        dateissued.getFullYear(),
-    );
-    hideDatePicker();
-  };
-
   return (
     <View style={{justifyContent: 'center', alignContent: 'center'}}>
       <View
@@ -240,9 +337,26 @@ const IssuedBooksAdd = ({navigation}) => {
             }}>
             <ModalSelector
               data={books}
+              initValue="Select Book"
+              onChange={option => {
+                setBook(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValue}
+              selectTextStyle={styles.SelectedValue}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              paddingTop: 15,
+            }}>
+            <ModalSelector
+              data={users}
               initValue="Select User Type"
               onChange={option => {
-                // setclass(option.key);
+                fetchDepartment(option.key);
               }}
               style={styles.card}
               initValueTextStyle={styles.SelectedValue}
@@ -256,10 +370,10 @@ const IssuedBooksAdd = ({navigation}) => {
               paddingTop: 15,
             }}>
             <ModalSelector
-              data={user}
-              initValue="Select User Type"
+              data={departments}
+              initValue="Select department"
               onChange={option => {
-                // setclass(option.key);
+                fetchEmployees(option.key);
               }}
               style={styles.card}
               initValueTextStyle={styles.SelectedValue}
@@ -273,25 +387,8 @@ const IssuedBooksAdd = ({navigation}) => {
               paddingTop: 15,
             }}>
             <ModalSelector
-              data={department}
-              initValue="Select department Type"
-              onChange={option => {
-                // setclass(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValue}
-              selectTextStyle={styles.SelectedValue}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              paddingTop: 15,
-            }}>
-            <ModalSelector
-              data={employee}
-              initValue="Select employee Type"
+              data={employees}
+              initValue="Select employee"
               onChange={option => {
                 // setclass(option.key);
               }}
@@ -307,13 +404,11 @@ const IssuedBooksAdd = ({navigation}) => {
           </View>
 
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
-              <TextInput
-                style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
-                placeholder={dateissued}
-                placeholderTextColor="grey"
-                color="black"
-              />
+            <TouchableOpacity style={styles.pickdate} onPress={showDatePicker1}>
+              <Text style={{marginTop: 20, marginLeft: 10}}>
+                {datedisplayIssued}
+                {'  '}
+              </Text>
               <Feather
                 size={18}
                 color="black"
@@ -323,20 +418,18 @@ const IssuedBooksAdd = ({navigation}) => {
                   marginRight: 0,
                 }}></Feather>
               <DateTimePickerModal
-                isVisible={isDatePickerVisible}
+                isVisible={isDatePickerVisibleIssue}
                 style={styles.pickdate}
                 mode="date"
-                onConfirm={handleConfirmissued}
-                onCancel={hideDatePicker}
+                onConfirm={handleConfirmIssued}
+                onCancel={hideDatePicker1}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
-              <TextInput
-                style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
-                placeholder={date}
-                placeholderTextColor="grey"
-                color="black"
-              />
+            <TouchableOpacity style={styles.pickdate} onPress={showDatePicker2}>
+              <Text style={{marginTop: 20, marginLeft: 10}}>
+                {datedisplayDue}
+                {'  '}
+              </Text>
               <Feather
                 size={18}
                 color="black"
@@ -346,11 +439,11 @@ const IssuedBooksAdd = ({navigation}) => {
                   marginRight: 0,
                 }}></Feather>
               <DateTimePickerModal
-                isVisible={isDatePickerVisible}
+                isVisible={isDatePickerVisibleDue}
                 style={styles.pickdate}
                 mode="date"
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
+                onConfirm={handleConfirmDue}
+                onCancel={hideDatePicker2}
               />
             </TouchableOpacity>
           </View>
