@@ -12,8 +12,8 @@ import { useSelector } from 'react-redux';
 
 
 const AddCourses = ({ navigation }) => {
-  //theming
-  const institute = useSelector(state => state.institute);
+    //theming
+    const institute = useSelector(state => state.institute);
 
     const [user, setuser] = useState([
         { label: 'Fiction', key: 'Fiction' },
@@ -61,58 +61,58 @@ const AddCourses = ({ navigation }) => {
 
 
 
-        <View style={{ justifyContent: 'center', alignContent: 'center',display:'flex',backgroundColor: 'rgba(249, 249, 249, 1)', }}>
-          
-                {/* header start */}
+        <View style={{ justifyContent: 'center', alignContent: 'center', display: 'flex', backgroundColor: 'rgba(249, 249, 249, 1)', }}>
 
-                <View
-          style={{
-            backgroundColor: institute ? institute.themeColor : 'black',
-            ...styles.header,
-          }}>
-        <View style={{flexDirection:'row',alignItems:'center',paddingLeft:10}} >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('AcademicsMain');
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                // paddingLeft: 10,
-                // paddingTop: 23,
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontSize: 28,
-              fontWeight: '600',
-              alignSelf: 'center',
-              paddingLeft: 10,
-              color: 'white',
-              fontFamily: 'NunitoSans-Regular',
-            }}>
-           Add Course
-          </Text>
-          </View>
-      
-           </View>
+            {/* header start */}
 
-        {/* header ends */}
-             <ScrollView>
+            <View
+                style={{
+                    backgroundColor: institute ? institute.themeColor : 'black',
+                    ...styles.header,
+                }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }} >
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('AcademicsMain');
+                        }}>
+                        <AntDesign
+                            size={24}
+                            color="white"
+                            name="left"
+                            style={{
+                                alignSelf: 'center',
+                                fontSize: 25,
+                                color: 'white',
+                                // paddingLeft: 10,
+                                // paddingTop: 23,
+                            }}
+                        />
+                    </TouchableOpacity>
+                    <Text
+                        style={{
+                            fontStyle: 'normal',
+                            fontSize: 28,
+                            fontWeight: '600',
+                            alignSelf: 'center',
+                            paddingLeft: 10,
+                            color: 'white',
+                            fontFamily: 'NunitoSans-Regular',
+                        }}>
+                        Add Course
+                    </Text>
+                </View>
+
+            </View>
+
+            {/* header ends */}
+            <ScrollView>
 
                 <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
 
-   
-                   
-                <View style={{justifyContent:'center', paddingTop: 15 }} >
-                    <Text style={styles.section_heading}>Course's Name </Text>
+
+
+                    <View style={{ justifyContent: 'center', paddingTop: 15 }} >
+                        <Text style={styles.section_heading}>Course's Name </Text>
                         <ModalSelector
                             data={user}
                             initValue="Introduction to the Python"
@@ -125,29 +125,29 @@ const AddCourses = ({ navigation }) => {
                         />
 
                     </View>
-                    
-                <View style={{  justifyContent: 'center', paddingTop: 15 }} >  
-                <Text style={styles.section_heading}>Batch Name </Text>
-                 <View style={{ marginHorizontal: 10 }}>
-                        <View style={[styles.search, styles.shadow]}>
-                            <TextInput
-                                style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
-                                placeholder="Description"
-                                placeholderTextColor='grey'
-                                color='black'
+
+                    <View style={{ justifyContent: 'center', paddingTop: 15 }} >
+                        <Text style={styles.section_heading}>Batch Name </Text>
+                        <View style={{ marginHorizontal: 10 }}>
+                            <View style={[styles.search, styles.shadow]}>
+                                <TextInput
+                                    style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
+                                    placeholder="Description"
+                                    placeholderTextColor='grey'
+                                    color='black'
                                 // // onChangeText={(val) => setTitle(val)
                                 // }
-                            />
+                                />
+                            </View>
                         </View>
-                    </View>
 
-</View>
+                    </View>
                     {/* 3rd row starts */}
                     <View style={{ width: "100%", paddingTop: 20, flexDirection: 'row' }}>
                         <Text style={styles.section_heading}>Code </Text>
                         <Text style={styles.section_heading1}>Attendance Type</Text>
                     </View>
-                    <View style={{ flexDirection: 'row',alignContent:'space-around' }} >
+                    <View style={{ flexDirection: 'row', alignContent: 'space-around' }} >
 
                         <TextInput
                             style={[styles.input, styles.shadow]}
@@ -155,11 +155,11 @@ const AddCourses = ({ navigation }) => {
                             placeholderTextColor='grey'
                             color='black'
                             keyboardType='numeric'
-                            // onChangeText={(val) => setIsbn(val)
-                            // }
+                        // onChangeText={(val) => setIsbn(val)
+                        // }
                         />
-                        
-                      <ModalSelector
+
+                        <ModalSelector
                             data={employee}
                             initValue="Regular"
                             onChange={option => {
@@ -171,7 +171,7 @@ const AddCourses = ({ navigation }) => {
                         />
 
                     </View>
-   <View style={styles.fixToText}>
+                    <View style={styles.fixToText}>
                         <Pressable style={styles.button} >
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
 
 
     },
-   
+
     section_heading: {
         fontFamily: 'Poppins-Regular',
         fontSize: 12,
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'center',
         color: 'rgba(88, 99, 109, 0.85)',
-marginLeft:50,
+        marginLeft: 50,
         marginBottom: 5,
     },
     section_heading2: {
@@ -292,7 +292,7 @@ marginLeft:50,
         backgroundColor: 'white',
         borderColor: '#58636D',
         borderRadius: 8,
-       
+
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontFamily: 'Poppins-Regular',
@@ -341,7 +341,7 @@ marginLeft:50,
         borderTopRightRadius: 12,
         borderTopLeftRadius: 12,
         overflow: 'hidden',
-        alignSelf:'center',
+        alignSelf: 'center',
         // justifyContent: 'center',
         // alignContent:'center',
         margin: 0,
@@ -380,7 +380,7 @@ marginLeft:50,
         margin: 0,
         padding: 0,
         width: '50%',
-        
+
     },
 
 
@@ -416,7 +416,7 @@ marginLeft:50,
         width: '100%',
         textAlign: 'left'
     },
-   
+
 });
 
 

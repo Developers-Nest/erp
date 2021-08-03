@@ -11,7 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
 
-const AddBatches = ({ navigation }) => {
+const EditBatches = ({ navigation }) => {
     //theming
     const institute = useSelector(state => state.institute);
 
@@ -98,7 +98,7 @@ const AddBatches = ({ navigation }) => {
                             color: 'white',
                             fontFamily: 'NunitoSans-Regular',
                         }}>
-                        Add Batches
+                        Edit Batches
                     </Text>
                 </View>
 
@@ -200,6 +200,9 @@ const AddBatches = ({ navigation }) => {
 
                     </View>
                     <View style={styles.fixToText}>
+                        <Pressable style={styles.button1} >
+                            <Text style={styles.text1}>Delete</Text>
+                        </Pressable>
                         <Pressable style={styles.button} >
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
@@ -411,10 +414,36 @@ const styles = StyleSheet.create({
         width: '100%',
         textAlign: 'left'
     },
+    button1: {
+
+        marginTop: 0,
+        marginBottom: 0,
+
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
+        alignSelf: 'flex-end',
+        padding: 3,
+        paddingHorizontal: 25,
+        paddingVertical: 2,
+        borderRadius: 4,
+        marginRight: 30,
+        height: 46,
+        borderColor: '#d2691e',
+        borderWidth: 1.5
+
+    },
+    text1: {
+        fontSize: 18,
+        fontWeight: '500',
+        lineHeight: 21,
+        letterSpacing: 0.25,
+        color: '#d2691e',
+    },
 
 });
 
 
 
 
-export default AddBatches;
+export default EditBatches;

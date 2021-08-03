@@ -60,8 +60,8 @@ export default function AcademicsMain({ navigation }) {
 
                 <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
 
-                  onPress={() =>
-                    navigation.navigate('AddCourses')}
+                    onPress={() =>
+                        navigation.navigate('AddCourses')}
 
 
                 >
@@ -117,9 +117,9 @@ export default function AcademicsMain({ navigation }) {
                                     </Text>
                                     <TouchableOpacity
                                         style={{ flexDirection: 'row' }}
-                                    // onPress={() =>
-                                    //   navigation.navigate('EditBooks')
-                                    // }
+                                        onPress={() =>
+                                            navigation.navigate('EditCourses')
+                                        }
                                     >
                                         <Text
                                             style={{
@@ -192,8 +192,8 @@ export default function AcademicsMain({ navigation }) {
         return (
             <View style={styles.container}>
                 <TouchableOpacity style={{ alignItems: 'flex-end', marginRight: 30 }}
-                  onPress={() =>
-                    navigation.navigate('AddBatches')}
+                    onPress={() =>
+                        navigation.navigate('AddBatches')}
 
                 >
                     <Text style={{ color: 'blue', marginBottom: -6 }}>Add more batches</Text>
@@ -236,9 +236,9 @@ export default function AcademicsMain({ navigation }) {
                                     </Text>
                                     <TouchableOpacity
                                         style={{ flexDirection: 'row' }}
-                                    // onPress={() =>
-                                    //   navigation.navigate('EditBooks')
-                                    // }
+                                        onPress={() =>
+                                            navigation.navigate('EditBatches')
+                                        }
                                     >
                                         <Text
                                             style={{
@@ -298,23 +298,25 @@ export default function AcademicsMain({ navigation }) {
                         backgroundColor: institute ? institute.themeColor : '#FF5733',
                         ...styles.header,
                     }}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            navigation.navigate('Home');
-                        }}>
-                        <AntDesign
-                            size={24}
-                            color="white"
-                            name="left"
-                            style={{
-                                alignSelf: 'center',
-                                fontSize: 25,
-                                color: 'white',
-                                paddingLeft: 20,
-                                paddingTop: 20,
-                            }}
-                        />
-                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('Home');
+                            }}>
+                            <AntDesign
+                                size={24}
+                                color="white"
+                                name="left"
+                                style={{
+                                    alignSelf: 'center',
+                                    fontSize: 25,
+                                    color: 'white',
+
+                                }}
+                            />
+
+                        </TouchableOpacity>
+                    </View>
                     <Text
                         style={{
                             fontStyle: 'normal',
@@ -322,7 +324,7 @@ export default function AcademicsMain({ navigation }) {
                             fontSize: 28,
                             fontWeight: '600',
                             alignSelf: 'center',
-                            paddingLeft: 30,
+                            paddingLeft: 20,
                             color: 'white',
                         }}>
                         Academics
@@ -361,7 +363,7 @@ export default function AcademicsMain({ navigation }) {
                     }}>
                     <View style={{ alignItems: 'center', width: '90%' }}>
                         {/* open search */}
-                        
+
                         <View
                             style={{
                                 marginTop: 10,

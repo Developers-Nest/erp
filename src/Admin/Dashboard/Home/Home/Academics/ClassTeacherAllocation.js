@@ -27,7 +27,7 @@ import { useSelector } from 'react-redux';
 import { Searchbar } from 'react-native-paper';
 
 export default function ClassTeacherAllocation({ navigation }) {
-  
+
     //theming
     const institute = useSelector(state => state.institute);
 
@@ -39,45 +39,45 @@ export default function ClassTeacherAllocation({ navigation }) {
                 {/* header start */}
 
                 <View
-          style={{
-            backgroundColor: institute ? institute.themeColor : 'black',
-            ...styles.header,
-          }}>
-        <View style={{flexDirection:'row',alignItems:'center',paddingLeft:10}} >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('AcademicsMain');
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                // paddingLeft: 10,
-                // paddingTop: 23,
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontSize: 28,
-              fontWeight: '600',
-              alignSelf: 'center',
-              paddingLeft: 10,
-              color: 'white',
-              fontFamily: 'NunitoSans-Regular',
-            }}>
-           Class Teacher Allocation
-          </Text>
-          </View>
-      
-           </View>
+                    style={{
+                        backgroundColor: institute ? institute.themeColor : 'black',
+                        ...styles.header,
+                    }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }} >
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('AcademicsMain');
+                            }}>
+                            <AntDesign
+                                size={24}
+                                color="white"
+                                name="left"
+                                style={{
+                                    alignSelf: 'center',
+                                    fontSize: 25,
+                                    color: 'white',
+                                    // paddingLeft: 10,
+                                    // paddingTop: 23,
+                                }}
+                            />
+                        </TouchableOpacity>
+                        <Text
+                            style={{
+                                fontStyle: 'normal',
+                                fontSize: 28,
+                                fontWeight: '600',
+                                alignSelf: 'center',
+                                paddingLeft: 10,
+                                color: 'white',
+                                fontFamily: 'NunitoSans-Regular',
+                            }}>
+                            Class Teacher Allocation
+                        </Text>
+                    </View>
 
-        {/* header ends */}
+                </View>
+
+                {/* header ends */}
 
                 <View
                     style={{
@@ -87,7 +87,7 @@ export default function ClassTeacherAllocation({ navigation }) {
                     }}>
                     <View style={{ alignItems: 'center', width: '90%' }}>
                         {/* open search */}
-                        
+
                         <View
                             style={{
                                 marginTop: 10,
@@ -123,90 +123,90 @@ export default function ClassTeacherAllocation({ navigation }) {
                 {/* close search */}
 
                 <View style={styles.container}>
-                <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
+                    <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
 
-  onPress={() =>
-    navigation.navigate('AllocateClassTeacher')}
+                        onPress={() =>
+                            navigation.navigate('AllocateClassTeacher')}
 
 
->
-    <Text style={{ color: 'blue', marginBottom: -6 }}>Allocate Teachers</Text>
-    <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
-        - - - - - - - - - - - - -
+                    >
+                        <Text style={{ color: 'blue', marginBottom: -6 }}>Allocate Teachers</Text>
+                        <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
+                            - - - - - - - - - - - - -
 
-    </Text>
-</TouchableOpacity>
-    <ScrollView>
-                    {/* {addedbooks &&
+                        </Text>
+                    </TouchableOpacity>
+                    <ScrollView>
+                        {/* {addedbooks &&
               addedbooks.map(addedbooks => ( */}
 
 
 
-<View style={styles.section}
-                    //   key={addedbooks._id}
-                    >
-                        <View style={styles.details}>
-                            <View style={styles.userinhostels}>
-                                <View style={styles.differentusers}>
-                                    <Text
-                                        style={{
-                                            fontSize: 18,
-                                            color: '#211C5A',
-                                            fontFamily: 'Poppins-Regular',
-                                        }}>
-                                        {' '}
-                                        Name
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            fontSize: 12,
-                                            color: '#211C5A',
-                                            fontFamily: 'Poppins-Regular',
-                                        }}>
-                                        {' '}
-                                        Batch Name
-                                    </Text>
-
-                                </View>
-                                <View style={styles.differentusers}>
-                                    <Text
-                                        style={{
-                                            fontSize: 12,
-                                            color: '#505069',
-                                            fontFamily: 'Poppins-Regular',
-                                        }}>
-                                        {'  '}Course Name
-                                    </Text>
-                                    <TouchableOpacity
-                                        style={{ flexDirection: 'row' }}
-                                    // onPress={() =>
-                                    //   navigation.navigate('EditBooks')
-                                    // }
-                                    >
+                        <View style={styles.section}
+                        //   key={addedbooks._id}
+                        >
+                            <View style={styles.details}>
+                                <View style={styles.userinhostels}>
+                                    <View style={styles.differentusers}>
+                                        <Text
+                                            style={{
+                                                fontSize: 18,
+                                                color: '#211C5A',
+                                                fontFamily: 'Poppins-Regular',
+                                            }}>
+                                            {' '}
+                                            Name
+                                        </Text>
                                         <Text
                                             style={{
                                                 fontSize: 12,
                                                 color: '#211C5A',
                                                 fontFamily: 'Poppins-Regular',
                                             }}>
-                                            Edit
+                                            {' '}
+                                            Batch Name
                                         </Text>
-                                        <AntDesign
-                                            size={12}
-                                            color="#211C5A"
-                                            name="edit"
-                                            style={{ paddingTop: 2 }}
-                                        />
-                                    </TouchableOpacity>
+
+                                    </View>
+                                    <View style={styles.differentusers}>
+                                        <Text
+                                            style={{
+                                                fontSize: 12,
+                                                color: '#505069',
+                                                fontFamily: 'Poppins-Regular',
+                                            }}>
+                                            {'  '}Course Name
+                                        </Text>
+                                        <TouchableOpacity
+                                            style={{ flexDirection: 'row' }}
+                                            onPress={() =>
+                                                navigation.navigate('EditAllocationTeacher')
+                                            }
+                                        >
+                                            <Text
+                                                style={{
+                                                    fontSize: 12,
+                                                    color: '#211C5A',
+                                                    fontFamily: 'Poppins-Regular',
+                                                }}>
+                                                Edit
+                                            </Text>
+                                            <AntDesign
+                                                size={12}
+                                                color="#211C5A"
+                                                name="edit"
+                                                style={{ paddingTop: 2 }}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
+
                         </View>
+                        {/* ))} */}
 
-                    </View>
-                    {/* ))} */}
-
-                </ScrollView>
-            </View>
+                    </ScrollView>
+                </View>
 
             </View>
         </TouchableWithoutFeedback>
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#333',
         paddingHorizontal: 10,
         paddingVertical: 10,
-       
+
     },
     // userinhostels: {
     //   marginBottom: 10,

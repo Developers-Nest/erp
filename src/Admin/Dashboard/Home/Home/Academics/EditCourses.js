@@ -11,7 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
 
-const AddBatches = ({ navigation }) => {
+const EditCourses = ({ navigation }) => {
     //theming
     const institute = useSelector(state => state.institute);
 
@@ -61,7 +61,7 @@ const AddBatches = ({ navigation }) => {
 
 
 
-        <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: 'rgba(249, 249, 249, 1)', }}>
+        <View style={{ justifyContent: 'center', alignContent: 'center', display: 'flex', backgroundColor: 'rgba(249, 249, 249, 1)', }}>
 
             {/* header start */}
 
@@ -98,7 +98,7 @@ const AddBatches = ({ navigation }) => {
                             color: 'white',
                             fontFamily: 'NunitoSans-Regular',
                         }}>
-                        Add Batches
+                        Edit Course
                     </Text>
                 </View>
 
@@ -143,63 +143,38 @@ const AddBatches = ({ navigation }) => {
 
                     </View>
                     {/* 3rd row starts */}
-                    <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                        <Text style={styles.section_heading}>From </Text>
-                        <Text style={styles.section_heading1}>To</Text>
+                    <View style={{ width: "100%", paddingTop: 20, flexDirection: 'row' }}>
+                        <Text style={styles.section_heading}>Code </Text>
+                        <Text style={styles.section_heading1}>Attendance Type</Text>
                     </View>
+                    <View style={{ flexDirection: 'row', alignContent: 'space-around' }} >
 
-                    <View style={{ flexDirection: 'row' }} >
+                        <TextInput
+                            style={[styles.input, styles.shadow]}
+                            placeholder="CSL-4232"
+                            placeholderTextColor='grey'
+                            color='black'
+                            keyboardType='numeric'
+                        // onChangeText={(val) => setIsbn(val)
+                        // }
+                        />
 
-                        <TouchableOpacity style={[styles.pickdate, styles.shadow]}
-                            onPress={showDatePicker}>
-                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                placeholder={dateissued}
-                                placeholderTextColor='grey'
-                                color='black'
-
-                            />
-                            <Feather size={18} color="black" name="calendar"
-                                style={{
-                                    marginTop: 16,
-                                    marginRight: 0,
-                                }}
-
-
-                            ></Feather>
-                            <DateTimePickerModal
-                                isVisible={isDatePickerVisible}
-                                style={styles.pickdate}
-                                mode="date"
-                                onConfirm={handleConfirmissued}
-                                onCancel={hideDatePicker}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.pickdate, styles.shadow]}
-                            onPress={showDatePicker}>
-                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                placeholder={date}
-                                placeholderTextColor='grey'
-                                color='black'
-                            />
-                            <Feather size={18} color="black" name="calendar"
-                                style={{
-                                    marginTop: 16,
-                                    marginRight: 0,
-                                }}
-
-
-                            ></Feather>
-                            <DateTimePickerModal
-                                isVisible={isDatePickerVisible}
-                                style={styles.pickdate}
-                                mode="date"
-                                onConfirm={handleConfirm}
-                                onCancel={hideDatePicker}
-                            />
-                        </TouchableOpacity>
+                        <ModalSelector
+                            data={employee}
+                            initValue="Regular"
+                            onChange={option => {
+                                // setclass(option.key);
+                            }}
+                            style={styles.cardsmall}
+                            initValueTextStyle={styles.SelectedValueSmall}
+                            selectTextStyle={styles.SelectedValueSmall}
+                        />
 
                     </View>
                     <View style={styles.fixToText}>
+                        <Pressable style={styles.button1} >
+                            <Text style={styles.text1}>Delete</Text>
+                        </Pressable>
                         <Pressable style={styles.button} >
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
@@ -272,7 +247,7 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'center',
         color: 'rgba(88, 99, 109, 0.85)',
-
+        marginLeft: 50,
         marginBottom: 5,
     },
     section_heading2: {
@@ -320,7 +295,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#58636D',
         borderRadius: 8,
-        borderWidth: 0.3,
+
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontFamily: 'Poppins-Regular',
@@ -377,6 +352,39 @@ const styles = StyleSheet.create({
 
         width: '94%'
     },
+    SelectedValueSmall: {
+        fontFamily: 'Poppins-Regular',
+        fontStyle: 'normal',
+        fontWeight: '200',
+        fontWeight: '500',
+        fontSize: 14,
+        lineHeight: 30,
+        paddingTop: 3,
+        color: 'rgba(88, 99, 109, 0.85)',
+    },
+
+    cardsmall: {
+
+        shadowColor: '#000',
+        height: 50,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 12,
+        elevation: 5,
+        backgroundColor: 'white',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderTopRightRadius: 8,
+        borderTopLeftRadius: 8,
+        overflow: 'hidden',
+        justifyContent: 'center',
+        margin: 0,
+        padding: 0,
+        width: '50%',
+
+    },
 
 
     header: {
@@ -411,10 +419,36 @@ const styles = StyleSheet.create({
         width: '100%',
         textAlign: 'left'
     },
+    button1: {
+
+        marginTop: 0,
+        marginBottom: 0,
+
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
+        alignSelf: 'flex-end',
+        padding: 3,
+        paddingHorizontal: 25,
+        paddingVertical: 2,
+        borderRadius: 4,
+        marginRight: 30,
+        height: 46,
+        borderColor: '#d2691e',
+        borderWidth: 1.5
+
+    },
+    text1: {
+        fontSize: 18,
+        fontWeight: '500',
+        lineHeight: 21,
+        letterSpacing: 0.25,
+        color: '#d2691e',
+    },
 
 });
 
 
 
 
-export default AddBatches;
+export default EditCourses;
