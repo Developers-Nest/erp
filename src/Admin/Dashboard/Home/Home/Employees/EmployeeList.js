@@ -1,22 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput, TouchableWithoutFeedback } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  Pressable,
+  TextInput,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 
-import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
+import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-
-import { useSelector } from 'react-redux';
-import { ScrollView } from 'react-native-gesture-handler';
+import {useSelector} from 'react-redux';
+import {ScrollView} from 'react-native-gesture-handler';
 
 // helpers
 import get from '../../../../../services/helpers/request/get';
 import read from '../../../../../services/localstorage/read';
 //redux
 
-
-const EmployeeList = ({ navigation }) => {
+const EmployeeList = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [employees, setemployeelist] = useState([]);
 
@@ -27,18 +33,15 @@ const EmployeeList = ({ navigation }) => {
       let slug = '/employee';
       let token = await read('token');
       const response = await get(slug, token);
-      console.log("Employees", response);
+      console.log('Employees', response);
       setemployeelist(response);
     } catch (err) {
       alert('Cannot fetch employees list !!');
     }
   }, []);
 
-
-
   //theming
   const institute = useSelector(state => state.institute);
-
 
   return (
     <View style={styles.container}>
@@ -79,15 +82,19 @@ const EmployeeList = ({ navigation }) => {
           Employee List
         </Text>
         <TouchableOpacity
-        //   onPress={() => navigation.navigate('EmployeeAttendance')
-        // }
+          onPress={() => navigation.navigate('EmployeeAttendance')}
           style={{
             justifyContent: 'flex-end',
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 5 }}>
+          <View
+            style={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginRight: 5,
+            }}>
             {/* <Ionicons
                   name="add-circle"
                   color="#900"
@@ -103,7 +110,6 @@ const EmployeeList = ({ navigation }) => {
               style={{
                 fontSize: 35,
                 color: 'white',
-
               }}
             />
             <Text
@@ -114,24 +120,22 @@ const EmployeeList = ({ navigation }) => {
               }}>
               Attendance
             </Text>
-
           </View>
         </TouchableOpacity>
       </View>
 
       {/* header ends */}
 
-      <View style={{ marginHorizontal: 10, ...styles.shadow }}>
+      <View style={{marginHorizontal: 10, ...styles.shadow}}>
         <View style={styles.search}>
           <TextInput
-            style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
+            style={{...styles.search_input, fontFamily: 'Poppins-Regular'}}
             placeholder="Enter employee name here"
-            placeholderTextColor='grey'
+            placeholderTextColor="grey"
           />
           <TouchableOpacity
             style={{
               alignSelf: 'center',
-
             }}>
             <Icon
               name="search-sharp"
@@ -139,7 +143,6 @@ const EmployeeList = ({ navigation }) => {
                 alignSelf: 'center',
                 fontSize: 30,
                 color: '#505069',
-
               }}
             />
           </TouchableOpacity>
@@ -147,7 +150,7 @@ const EmployeeList = ({ navigation }) => {
       </View>
 
       {/* cards open */}
-      
+
       <ScrollView>
         {employees &&
           employees.map(employees => (
@@ -162,10 +165,19 @@ const EmployeeList = ({ navigation }) => {
                         fontFamily: 'Poppins-Regular',
                         marginHorizontal: -5,
                         // marginRight:100,
-                        paddingRight: 50
+                        paddingRight: 50,
                       }}>
                       {' '}
-                      {employees.firstName?employees.firstName.charAt(0).toUpperCase()+employees.firstName.slice(1) +' '+employees.middleName.charAt(0).toUpperCase()+employees.middleName.slice(1)+' '+employees.lastName.charAt(0).toUpperCase()+employees.lastName.slice(1) :'Name not given'}
+                      {employees.firstName
+                        ? employees.firstName.charAt(0).toUpperCase() +
+                          employees.firstName.slice(1) +
+                          ' ' +
+                          employees.middleName.charAt(0).toUpperCase() +
+                          employees.middleName.slice(1) +
+                          ' ' +
+                          employees.lastName.charAt(0).toUpperCase() +
+                          employees.lastName.slice(1)
+                        : 'Name not given'}
                     </Text>
                   </View>
                   <View style={styles.differentusers}>
@@ -184,57 +196,46 @@ const EmployeeList = ({ navigation }) => {
                         color: '#211C5A',
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {employees.department ? employees.department :' N / A'}
+                      {employees.department ? employees.department : ' N / A'}
                     </Text>
-
-
                   </View>
                 </View>
               </View>
               <View style={styles.belowhr}>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text style={{
-                    fontFamily: 'Poppins-Regular', fontWeight: '500',
-                    fontSize: 12, lineHeight: 18, color: '#211C5A'
-                   }} >
-                    {employees.email?employees.email:'EMAIL N/A'}
-
-
+                <View style={{flexDirection: 'column'}}>
+                  <Text
+                    style={{
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: '500',
+                      fontSize: 12,
+                      lineHeight: 18,
+                      color: '#211C5A',
+                    }}>
+                    {employees.email ? employees.email : 'EMAIL N/A'}
                   </Text>
-
                 </View>
-                <View >
-                  <Text style={{
-                    fontFamily: 'Poppins-Regular', fontWeight: '500',
-                    fontSize: 12, lineHeight: 18, color: '#211C5A'
-                  }}
-                  > 
-                  
-                  {employees.code?employees.code:N/A}
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: '500',
+                      fontSize: 12,
+                      lineHeight: 18,
+                      color: '#211C5A',
+                    }}>
+                    {employees.code ? employees.code : N / A}
                   </Text>
                 </View>
               </View>
             </View>
-
           ))}
-<View style={{height:90}}/>
+        <View style={{height: 90}} />
       </ScrollView>
-
-
-
-
-
-
     </View>
-  )
-
-
-
-}
-
+  );
+};
 
 const styles = StyleSheet.create({
-
   // container1: {
   //     paddingTop: 10,
   //     flex: 1,
@@ -245,7 +246,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(249, 249, 249, 1)',
-
   },
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 27,
     padding: 10,
-    backgroundColor: "#8a2be2",
+    backgroundColor: '#8a2be2',
     color: '#211C5A',
   },
   search_input: {
@@ -268,8 +268,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     width: '90%',
     textAlign: 'left',
-    marginTop: 3
-
+    marginTop: 3,
   },
   search: {
     // backgroundColor: 'white',
@@ -280,9 +279,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 0.3,
     marginTop: 20,
-    marginBottom: 20
-
-
+    marginBottom: 20,
   },
 
   section: {
@@ -300,7 +297,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
 
     marginHorizontal: 20,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
 
   details: {
@@ -319,7 +316,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-
   },
   userstext: {
     fontSize: 16,
@@ -348,9 +344,6 @@ const styles = StyleSheet.create({
     height: 69,
     flexDirection: 'row',
   },
-
-
 });
 
 export default EmployeeList;
-
