@@ -60,8 +60,8 @@ export default function AcademicsMain({ navigation }) {
 
                 <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
 
-                //   onPress={() =>
-                //     navigation.navigate('IssuedBooksAdd')}
+                  onPress={() =>
+                    navigation.navigate('AddCourses')}
 
 
                 >
@@ -192,8 +192,8 @@ export default function AcademicsMain({ navigation }) {
         return (
             <View style={styles.container}>
                 <TouchableOpacity style={{ alignItems: 'flex-end', marginRight: 30 }}
-                //   onPress={() =>
-                //     navigation.navigate('AddBooks')}
+                  onPress={() =>
+                    navigation.navigate('AddBatches')}
 
                 >
                     <Text style={{ color: 'blue', marginBottom: -6 }}>Add more batches</Text>
