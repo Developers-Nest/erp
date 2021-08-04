@@ -13,10 +13,7 @@ async function get(slug, token=null, server=0){
         url = BASEURL + slug 
         auth = `Bearer ${token}`
     } 
-
-    console.log('Auth ', auth)
-    console.log('URL ', url)
-
+    
     const response = await fetch( url, {
         method: 'GET',
         headers: {
@@ -24,8 +21,6 @@ async function get(slug, token=null, server=0){
             'Content-Type': 'application/json'
         }
     })
-
-    console.log('Response ', response)
 
     return response.json()
 }

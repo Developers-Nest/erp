@@ -1,15 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import IconEnglish2 from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-// icons (if required)
-import Icon from 'react-native-vector-icons/Foundation';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
-import IconPhysics2 from 'react-native-vector-icons/Ionicons';
-import IconBio1 from 'react-native-vector-icons/FontAwesome5';
-import IconBio2 from 'react-native-vector-icons/FontAwesome5';
 
 // loading screen
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
@@ -19,7 +11,6 @@ import {
   Text,
   View,
   ScrollView,
-  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
@@ -31,7 +22,6 @@ import {useSelector} from 'react-redux';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import IonIcons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import get from '../../../services/helpers/request/get';
@@ -46,7 +36,7 @@ export default function LecturesScreen({navigation}) {
   const [showContent, setShowContent] = React.useState('Live');
   const [activeTab, setActiveTab] = React.useState('Live');
   const [searchQuery, setSearchQuery] = React.useState('');
-
+  let institute = useSelector(state => state.institute)
   const onChangeSearch = query => setSearchQuery(query);
 
   return (
@@ -210,6 +200,7 @@ function Live() {
 function Recorded() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
+  let institute = useSelector(state => state.institute)
 
   const [RecordedClasses, setRecordedClasses] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
