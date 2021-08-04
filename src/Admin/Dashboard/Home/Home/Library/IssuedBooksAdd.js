@@ -98,6 +98,7 @@ const IssuedBooksAdd = ({navigation}) => {
   let fetchDepartment = async (option, id) => {
     showLoadingScreen();
     try {
+      alert(id);
       setuser(option);
       setuserID(id);
       let slug = '/department';
@@ -147,8 +148,8 @@ const IssuedBooksAdd = ({navigation}) => {
   let fetchCourses = async (option, id) => {
     showLoadingScreen();
     try {
-      setuserID(id);
       setuser(option);
+      setuserID(id);
       let list = await getCourse();
       setcourses(list);
     } catch (err) {
@@ -297,18 +298,32 @@ const IssuedBooksAdd = ({navigation}) => {
     try {
       let slug = '/library/issue';
       let token = await read('token');
-      let data = {
-        batch: batch,
-        bookName: book,
-        bookNumber: bookNo,
-        course: course,
-        dueDate: due,
-        issueDate: issue,
-        returned: false,
-        student: student,
-        userId: student,
-        userType: userID,
-      };
+      let data;
+      if (user === 'Student')
+        data = {
+          batch: batch,
+          bookName: book,
+          bookNumber: bookNo,
+          course: course,
+          dueDate: due,
+          issueDate: issue,
+          returned: false,
+          student: student,
+          userId: student,
+          userType: userID,
+        };
+      else
+        data = {
+          bookName: book,
+          bookNumber: bookNo,
+          department: department,
+          dueDate: due,
+          issueDate: issue,
+          employee: employee,
+          returned: false,
+          userId: employee,
+          userType: userID,
+        };
       console.log('Issue Data ', data);
       let res = await post(slug, data, token);
       console.log('Issue Res ', res);
@@ -508,7 +523,7 @@ const IssuedBooksAdd = ({navigation}) => {
                   data={employees}
                   initValue="Select employee"
                   onChange={option => {
-                    // setclass(option.key);
+                    setemployee(option.key);
                   }}
                   style={styles.card}
                   initValueTextStyle={styles.SelectedValue}
@@ -715,15 +730,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  // SelectedValue: {
-  //     fontFamily: 'Poppins-Regular',
-  //     fontStyle: 'normal',
-  //     fontWeight: 'normal',
-  //     fontSize: 18,
-  //     lineHeight: 27,
-  //     padding: 10,
-  //     color: 'rgba(88, 99, 109, 0.85)',
-  //   },
+
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
@@ -750,11 +757,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12,
     borderTopLeftRadius: 12,
     overflow: 'hidden',
-    // justifyContent: 'center',
-    // alignContent:'center',
     margin: 0,
     padding: 0,
-
     width: '94%',
   },
 
