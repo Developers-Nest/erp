@@ -11,7 +11,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Button } from 'react-native-paper';
 
-const testvisitorlist = () => {
+const TypeList = ({navigation}) => {
     return (
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
             <ModalSelector
@@ -98,7 +98,10 @@ const testvisitorlist = () => {
 
                             </Text>
 
-                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between'
+                        }}
+                        onPress={()=>{navigation.navigate('EditType')}}
+                        >
                                 <Text
                                     style={{
                                         fontSize: 12,
@@ -379,5 +382,5 @@ const styles = StyleSheet.create({
 
 });
 
-export default testvisitorlist;
+export default TypeList;
 

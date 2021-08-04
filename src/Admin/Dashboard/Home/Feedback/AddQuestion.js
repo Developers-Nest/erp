@@ -32,9 +32,10 @@ const institute = useSelector(state => state.institute);
             // backgroundColor:'blue',
             ...styles.header,
           }}>
+                <View style={{flexDirection:'row',alignItems:'center',paddingLeft:10}} >
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Home');
+              navigation.navigate('FeedbackMain');
             }}>
             <AntDesign
               size={24}
@@ -45,8 +46,7 @@ const institute = useSelector(state => state.institute);
 
                 fontSize: 25,
                 color: 'white',
-                paddingLeft: 20,
-                marginTop: 22,
+                
               }}
             />
           </TouchableOpacity>
@@ -57,12 +57,12 @@ const institute = useSelector(state => state.institute);
               fontSize: 28,
               fontWeight: '600',
               alignSelf: 'center',
-              marginLeft: 30,
+              marginLeft: 10,
               color: 'white',
             }}>
             Add Question
           </Text>
-          
+          </View>
             <TouchableOpacity
               onPress={() => navigation.navigate('QuestionList')}
               style={{

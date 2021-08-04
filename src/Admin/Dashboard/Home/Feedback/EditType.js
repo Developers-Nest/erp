@@ -7,7 +7,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import Evillcons from 'react-native-vector-icons/Feather';
 
-const EditType = () => {
+const EditType = ({navigation}) => {
 
 
     return (

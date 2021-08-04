@@ -5,6 +5,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 
+
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+
 import Evillcons from 'react-native-vector-icons/Feather';
 import Icon2 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -19,7 +22,7 @@ import read from '../../../../services/localstorage/read';
 import { useSelector } from 'react-redux';
 
 
-const QuestionList = () => {
+const QuestionList = ({navigation}) => {
     const institute = useSelector(state => state.institute);
 
     
@@ -77,18 +80,70 @@ const QuestionList = () => {
 
 
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
-                <ModalSelector
+                  {/* header start */}
 
-                    initValue="Question's List"
+          <View
+                    style={{
+                        backgroundColor: institute ? institute.themeColor : '#FF5733',
+                        ...styles.header,
+                    }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('FeedbackMain');
+                            }}>
+                            <Icon1
+                                size={24}
+                                color="white"
+                                name="left"
+                                style={{
+                                    alignSelf: 'center',
+                                    fontSize: 25,
+                                    color: 'white',
+
+                                }}
+                            />
+
+                        </TouchableOpacity>
+                    </View>
+                    <Text
+                        style={{
+                            fontStyle: 'normal',
+                            fontFamily: 'NunitoSans-Regular',
+                            fontSize: 28,
+                            fontWeight: '600',
+                            alignSelf: 'center',
+                            paddingLeft: 20,
+                            color: 'white',
+                        }}>
+                     Question's List
+                    </Text>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('AddType')}
+                        style={{
+                            justifyContent: 'flex-end',
+                            flex: 1,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                        <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 5 }}>
+                            <MaterialIcon
+                                name="align-horizontal-right"
+                                color="#900"
+                                style={{
+                                    fontSize: 35,
+                                    color: 'white',
+                                    paddingRight: 20,
+                                }}
+                            />
 
 
-                    initValueTextStyle={styles.SelectedValue}
-                    selectTextStyle={styles.SelectedValue}
+                        </View>
+                    </TouchableOpacity>
+                </View>
 
+                {/* header ends */}
 
-
-
-                />
 
                 <View style={{ marginHorizontal: 10, ...styles.shadow }}>
                     <View style={styles.search}>
@@ -205,7 +260,9 @@ const QuestionList = () => {
                     </View>
 
                     <View style={{ marginTop: 15 }}>
-                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+                        onPress={()=>{navigation.navigate('EditQuestion')}}
+                        >
                             <Text
                                 style={{
                                     fontSize: 12,
@@ -447,6 +504,10 @@ color:'black',
 
 
     },
+    header: {
+        height: 69,
+        flexDirection: 'row',
+      },
 
 
 });
