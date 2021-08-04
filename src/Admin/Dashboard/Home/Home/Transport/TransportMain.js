@@ -23,6 +23,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { auto } from 'async';
 //redux
 import { useSelector } from 'react-redux';
+//useFocusEffect
+import { useFocusEffect } from '@react-navigation/native';
+// helpers
+import get from '../../../../../services/helpers/request/get';
+import read from '../../../../../services/localstorage/read';
 
 export default function TransportMain({ navigation }) {
   const [showContent, setShowContent] = React.useState('Vehicle');
@@ -33,6 +38,37 @@ export default function TransportMain({ navigation }) {
   const institute = useSelector(state => state.institute);
 
   function Vehicle() {
+    const [vehicleinfo,setvehicleinfo] = useState([]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+
+            const fetchUser = async () => {
+
+                try {
+                    let slug = '/transport/vehicle';
+                    let token = await read('token');
+                    const response = await get(slug, token);
+                    console.log('Vehicle info',response);
+                    setvehicleinfo(response);
+                } catch (err) {
+                    alert('Cannot fetch vehicles list !!');
+                }
+
+            };
+
+            fetchUser();
+
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
+
+
+
+
 
     return (
       <View style={styles.container}>
@@ -75,10 +111,12 @@ export default function TransportMain({ navigation }) {
           </View>
         </View>
         <ScrollView>
-          {/* {addedbooks &&
-addedbooks.map(addedbooks => ( */}
+          {vehicleinfo &&
+vehicleinfo.map(vehicleinfo => (
 
-          <View style={styles.section}>
+          <View style={styles.section}
+          key={vehicleinfo._id}
+          >
             <View style={styles.details}>
               <View style={styles.userinhostels}>
                 <View style={styles.differentusers}>
@@ -89,7 +127,7 @@ addedbooks.map(addedbooks => ( */}
                       fontFamily: 'Poppins-Regular',
                       marginHorizontal: -5,
                     }}>
-                    Vehicle No.
+                    {vehicleinfo.vehicleNo?vehicleinfo.vehicleNo:'N/A'}
                   </Text>
                   <Text style={{
                     fontSize: 12,
@@ -109,7 +147,7 @@ addedbooks.map(addedbooks => ( */}
                       fontFamily: 'Poppins-Regular',
                       marginHorizontal: -5,
                     }}>
-                    Dabbu Tripathi
+                    {vehicleinfo.contactPerson?vehicleinfo.contactPerson:'N/A'}
                   </Text>
                   <TouchableOpacity
                     style={{ flexDirection: 'row' }}
@@ -148,7 +186,7 @@ addedbooks.map(addedbooks => ( */}
                     fontSize: 12,
                     fontFamily: 'Poppins-Medium',
                   }}>
-                  Max 50Persons
+                  Max:{vehicleinfo.maximumAllowed?vehicleinfo.maximumAllowed:'N/A'} Persons
                 </Text>
               </View>
               <View style={{ marginBottom: 3 }}>
@@ -165,7 +203,7 @@ addedbooks.map(addedbooks => ( */}
           </View>
 
 
-          {/* ))} */}
+          ))} 
         </ScrollView>
       </View>
     );
@@ -173,6 +211,35 @@ addedbooks.map(addedbooks => ( */}
   };
 
   function Driver() {
+
+    const [driverinfo,setdriverinfo] = useState([]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+
+            const fetchUser = async () => {
+
+                try {
+                    let slug = '/transport/driver';
+                    let token = await read('token');
+                    const response = await get(slug, token);
+                    console.log('Driver info',response);
+                    setdriverinfo(response);
+                } catch (err) {
+                    alert('Cannot fetch driver list !!');
+                }
+
+            };
+
+            fetchUser();
+
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
+
     return (
       <View style={styles.container}>
 
@@ -214,11 +281,13 @@ addedbooks.map(addedbooks => ( */}
           </View>
         </View>
         <ScrollView>
-          {/* {addedbooks &&
-    addedbooks.map(addedbooks => ( */}
+          {driverinfo &&
+    driverinfo.map(driverinfo => (
 
 
-          <View style={styles.section}>
+          <View style={styles.section}
+          key={driverinfo._id}
+          >
             <View style={styles.details}>
               <View style={styles.userinhostels}>
                 <View style={styles.differentusers}>
@@ -229,7 +298,7 @@ addedbooks.map(addedbooks => ( */}
                       fontFamily: 'Poppins-Regular',
                       marginHorizontal: -5,
                     }}>
-                    Vehicle No.
+                    {driverinfo.vehicleNo.vehicleNo?driverinfo.vehicleNo.vehicleNo:'N/A'}
                   </Text>
                   <Text style={{
                     fontSize: 12,
@@ -237,7 +306,7 @@ addedbooks.map(addedbooks => ( */}
                     fontFamily: 'Poppins',
                     fontStyle: 'normal',
                   }}>
-                    Ph: 7879428976
+                    Ph:{driverinfo.phone?driverinfo.phone:'N/A'}
                   </Text>
                 </View>
                 <View style={{ padding: 5 }} />
@@ -249,7 +318,7 @@ addedbooks.map(addedbooks => ( */}
                       fontFamily: 'Poppins-Regular',
                       marginHorizontal: -5,
                     }}>
-                    Dabbu Tripathi
+                   {driverinfo.name?driverinfo.name:'N/A'}
                   </Text>
                   <TouchableOpacity
                     onPress={() => { navigation.navigate('EditDriver') }}
@@ -287,13 +356,13 @@ addedbooks.map(addedbooks => ( */}
                     fontSize: 12,
                     fontFamily: 'Poppins-Medium',
                   }}>
-                  Licensce No. 4568-454-5662
+                  Licensce No.{driverinfo.licenseNumber?driverinfo.licenseNumber:'N/A'}
                 </Text>
               </View>
             </View>
           </View>
 
-          {/* ))} */}
+           ))} 
         </ScrollView>
       </View>
     );
