@@ -83,7 +83,7 @@ export default function ContentLibrary({navigation}) {
                         }}>
                         {sm.title}
                       </Text>
-                      <TouchableOpacity style={{flexDirection: 'row'}}>
+                      {/* <TouchableOpacity style={{flexDirection: 'row'}}>
                         <Text
                           style={{
                             color: institute ? institute.themeColor : 'black',
@@ -98,7 +98,7 @@ export default function ContentLibrary({navigation}) {
                             color: '#6A6A80',
                           }}
                         />
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                     </View>
 
                     <TouchableOpacity style={styles.differentusers}>
@@ -126,7 +126,7 @@ export default function ContentLibrary({navigation}) {
                           color={institute ? institute.themeColor : 'blue'}
                           mode="contained"
                           onPress={() => Linking.openURL(sm.insertfile)}>
-                          Send
+                          View
                         </Button>
                       ) : null}
                     </TouchableOpacity>
@@ -161,11 +161,11 @@ export default function ContentLibrary({navigation}) {
                         style={{
                           fontWeight: 'normal',
                           fontSize: 20,
-                          color: institute ? institute.themeColor : '#211C5A',
+                          color: '#211C5A',
                         }}>
                         {vm.title}
                       </Text>
-                      <TouchableOpacity style={{flexDirection: 'row'}}>
+                      {/* <TouchableOpacity style={{flexDirection: 'row'}}>
                         <Text
                           style={{
                             color: institute ? institute.themeColor : 'black',
@@ -180,7 +180,7 @@ export default function ContentLibrary({navigation}) {
                             color: '#6A6A80',
                           }}
                         />
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                     </View>
 
                     <TouchableOpacity style={styles.differentusers}>
@@ -214,7 +214,7 @@ export default function ContentLibrary({navigation}) {
                               alert('Invalid URL');
                             }
                           }}>
-                          Send
+                          View
                         </Button>
                       ) : null}
                     </TouchableOpacity>
@@ -330,7 +330,7 @@ export default function ContentLibrary({navigation}) {
                   alignItems: 'center',
                 }}
                 onPress={() => setShowContent('Material')}>
-                <Text style={styles.switchText}> Study Material</Text>
+                <Text style={styles.switchText}> Material</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
