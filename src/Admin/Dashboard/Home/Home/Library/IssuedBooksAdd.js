@@ -55,7 +55,9 @@ const IssuedBooksAdd = ({navigation}) => {
 
   //data to be sent
   const [book, setBook] = useState();
+  const [bookNo, setBookNo] = useState();
   const [user, setuser] = useState();
+  const [userID, setuserID] = useState();
   const [department, setdepartment] = useState([]);
   const [employee, setemployee] = useState([]);
   const [due, setdue] = useState();
@@ -76,6 +78,7 @@ const IssuedBooksAdd = ({navigation}) => {
           list.push({
             label: cat.bookNumber + ' - ' + cat.title,
             key: cat._id,
+            no: cat.bookNumber,
           });
         });
       console.log(list);
@@ -92,10 +95,11 @@ const IssuedBooksAdd = ({navigation}) => {
   }, []);
 
   //EMPLOYEE Type fetch department
-  let fetchDepartment = async option => {
+  let fetchDepartment = async (option, id) => {
     showLoadingScreen();
     try {
       setuser(option);
+      setuserID(id);
       let slug = '/department';
       let token = await read('token');
       let res = await get(slug, token);
@@ -140,9 +144,10 @@ const IssuedBooksAdd = ({navigation}) => {
   };
 
   //STUDENT Type fetch courses
-  let fetchCourses = async option => {
+  let fetchCourses = async (option, id) => {
     showLoadingScreen();
     try {
+      setuserID(id);
       setuser(option);
       let list = await getCourse();
       setcourses(list);
@@ -288,34 +293,30 @@ const IssuedBooksAdd = ({navigation}) => {
     return ('00' + num).slice(-3);
   };
 
-  //   let handleSubmit = async () => {
-  //     try {
-  //         let slug = '/library/books'
-  //         let token = await read('token')
-  //         let data = {
-  //             author: author,
-  //             billNumber: billNo,
-  //             bookNumber: bookNo,
-  //             category: bookCategory,
-  //             condition: bookCondition,
-  //             copies: copies,
-  //             cost: bookCost,
-  //             edition: edition,
-  //             inbn: isbn,
-  //             language: language,
-  //             position: position,
-  //             publisher: publisher,
-  //             purchaseDate: date,
-  //             shelf: shelf,
-  //             title: title
-  //         }
-  //         console.log('Books Data ', data)
-  //         let res = await post(slug, data, token)
-  //         console.log('Book Res ', res)
-  //     } catch (err) {
-  //         alert('Cannot Save !!' + err)
-  //     }
-  // }
+  let handleSubmit = async () => {
+    try {
+      let slug = '/library/issue';
+      let token = await read('token');
+      let data = {
+        batch: batch,
+        bookName: book,
+        bookNumber: bookNo,
+        course: course,
+        dueDate: due,
+        issueDate: issue,
+        returned: false,
+        student: student,
+        userId: student,
+        userType: userID,
+      };
+      console.log('Issue Data ', data);
+      let res = await post(slug, data, token);
+      console.log('Issue Res ', res);
+      alert('Issued!!');
+    } catch (err) {
+      alert('Cannot Save !!' + err);
+    }
+  };
   return (
     <View style={{justifyContent: 'center', alignContent: 'center'}}>
       <View
@@ -325,7 +326,7 @@ const IssuedBooksAdd = ({navigation}) => {
         }}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('LibraryMain');
+            navigation.replace('LibraryMain');
           }}>
           <AntDesign
             size={24}
@@ -398,6 +399,7 @@ const IssuedBooksAdd = ({navigation}) => {
               initValue="Select Book"
               onChange={option => {
                 setBook(option.key);
+                setBookNo(option.no);
               }}
               style={styles.card}
               initValueTextStyle={styles.SelectedValue}
@@ -414,8 +416,9 @@ const IssuedBooksAdd = ({navigation}) => {
               data={users}
               initValue="Select User Type"
               onChange={option => {
-                if (option.label === 'Student') fetchCourses(option.key);
-                else fetchDepartment(option.key);
+                if (option.label === 'Student')
+                  fetchCourses(option.key, option.id);
+                else fetchDepartment(option.key, option.id);
               }}
               style={styles.card}
               initValueTextStyle={styles.SelectedValue}
@@ -566,9 +569,9 @@ const IssuedBooksAdd = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.fixToText}>
-            <Pressable style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.text}>Save</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
