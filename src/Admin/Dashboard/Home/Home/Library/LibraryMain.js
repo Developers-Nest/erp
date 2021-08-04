@@ -273,7 +273,7 @@ export default function LibraryMain({ navigation }) {
                   fontFamily: 'Poppins-Regular',
                   paddingLeft: 5,
                 }}>
-                Issued:{issuedbooks.bookName.purchaseDate.slice(0, 10)}
+                Issued:{issuedbooks.issueDate.slice(0, 10)}
               </Text>
               <Text
                 style={{
