@@ -239,7 +239,7 @@ export default function TransportMain({ navigation }) {
     return (
       <View style={styles.container}>
 
-        <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
+        <TouchableOpacity style={{ marginTop: 8, alignItems: 'center', alignContent: 'center' }}
 
           onPress={() =>
             navigation.navigate('AddDriver')}
@@ -248,7 +248,7 @@ export default function TransportMain({ navigation }) {
         >
           <Text style={{ color: 'blue', marginBottom: -6 }}>Driver</Text>
           <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
-            - - - - - - - - - - - - -
+            - - - - -
 
           </Text>
         </TouchableOpacity>
@@ -309,9 +309,10 @@ export default function TransportMain({ navigation }) {
                     <View style={styles.differentusers}>
                       <Text
                         style={{
-                          fontSize: 14,
+                          fontSize: 13,
                           color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
+                          fontFamily: 'Poppins-Medium',
+                          fontWeight: 'bold',
                           marginHorizontal: -5,
                         }}>
                         {driverinfo.name ? driverinfo.name : 'N/A'}
@@ -323,6 +324,7 @@ export default function TransportMain({ navigation }) {
                           style={{
                             fontSize: 12,
                             color: '#211C5A',
+                            fontWeight: 'bold',
                             fontFamily: 'Poppins-Medium',
                           }}>
                           Edit
@@ -346,6 +348,8 @@ export default function TransportMain({ navigation }) {
                         color: '#58636D',
                         fontSize: 12,
                         fontFamily: 'Poppins-Medium',
+                        fontWeight: 'bold',
+                        color: '#58636D',
                       }}>
                       Licensce No.{driverinfo.licenseNumber ? driverinfo.licenseNumber : 'N/A'}
                     </Text>
@@ -393,16 +397,17 @@ export default function TransportMain({ navigation }) {
     return (
       <View style={styles.container}>
 
-        <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
+        <TouchableOpacity style={{ marginTop: 8, marginRight: 30, alignItems: 'flex-end' }}
 
           onPress={() =>
             navigation.navigate('AddDestination')}
 
 
         >
+          <View style={{}}></View>
           <Text style={{ color: 'blue', marginBottom: -6 }}>Destination</Text>
           <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
-            - - - - - - - - - - - - -
+            - - - - - - - - -
 
           </Text>
         </TouchableOpacity>
@@ -453,9 +458,9 @@ export default function TransportMain({ navigation }) {
                         {destinationinfo.route.code ? destinationinfo.route.code : 'N/A'}
                       </Text>
                       <Text style={{
-                        fontSize: 12,
+                        fontSize: 14,
                         color: '#211C5A',
-                        fontFamily: 'Poppins',
+                        fontFamily: 'Poppins-Medium',
                         fontStyle: 'normal',
                       }}>
                         Stop time- {destinationinfo.stopTime ? destinationinfo.stopTime.slice(11, 19) : 'N/A'}
@@ -467,7 +472,8 @@ export default function TransportMain({ navigation }) {
                         style={{
                           fontSize: 14,
                           color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
+                          fontFamily: 'Poppins-Medium',
+                          fontWeight: 'bold',
                           marginHorizontal: -5,
                         }}>
                         {destinationinfo.route.stopPlace ? destinationinfo.route.stopPlace : 'N/A'}
@@ -479,6 +485,7 @@ export default function TransportMain({ navigation }) {
                           style={{
                             fontSize: 12,
                             color: '#211C5A',
+                            fontWeight: 'bold',
                             fontFamily: 'Poppins-Medium',
                           }}>
                           Edit
