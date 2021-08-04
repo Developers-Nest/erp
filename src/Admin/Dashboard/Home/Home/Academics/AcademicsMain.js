@@ -172,7 +172,10 @@ export default function AcademicsMain({ navigation }) {
                                 </View>
                             </View>
                         )) : 'N/A'}
+
+                    <View style={{ height: 30 }} />
                 </ScrollView>
+
             </View>
         );
     }
@@ -302,8 +305,9 @@ export default function AcademicsMain({ navigation }) {
                                 </View>
                             </View>
                         )) : 'N/A'}
-
+                    <View style={{ height: 30 }} />
                 </ScrollView>
+
             </View>
         );
     }
@@ -374,7 +378,7 @@ export default function AcademicsMain({ navigation }) {
                 </View>
 
                 {/* header ends */}
-
+<ScrollView>
                 <View
                     style={{
                         alignItems: 'center',
@@ -445,6 +449,7 @@ export default function AcademicsMain({ navigation }) {
                     </TouchableOpacity>
                 </View>
                 {showContent === 'Courses' ? <Courses /> : <Batches />}
+                </ScrollView>
             </View>
         </TouchableWithoutFeedback>
     );
@@ -455,6 +460,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         flex: 1,
         backgroundColor: 'rgba(249, 249, 249, 1)',
+
     },
     section: {
         display: 'flex',
