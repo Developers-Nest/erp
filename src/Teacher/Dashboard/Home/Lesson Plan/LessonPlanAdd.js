@@ -55,7 +55,7 @@ export default function LessonPlanAdd({ navigation }) {
     setLoadingScreen()
     try {
       setSelectedBatch(batch)
-      let subjectdata = await getSubject(course, batch)
+      let subjectdata = await getSubject(selectedCourse, batch)
       setSubject(subjectdata)
     } catch (err) {
       console.log('subject data', err)
@@ -64,7 +64,7 @@ export default function LessonPlanAdd({ navigation }) {
   }
 
   const addPlan = async () => {
-    if (!course || !batch || !subject) {
+    if (!selectedCourse || !selectedBatch || !selectedSubject || !lectureCode || !description || !url || !topic) {
       alert('All fields are Mandatory!!')
       return
     }
