@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// import { TextInput } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import LinearGradient from 'react-native-linear-gradient';
-//icons
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
-//for users section icons
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {
     StyleSheet,
     Text,
@@ -19,17 +15,50 @@ import {
     Keyboard,
 } from 'react-native';
 
-// // helpers
-// import get from '../../../../../services/helpers/request/get';
-// import read from '../../../../../services/localstorage/read';
+// helpers
+import get from '../../../../../services/helpers/request/get';
+import read from '../../../../../services/localstorage/read';
 //redux
 import { useSelector } from 'react-redux';
 import { Searchbar } from 'react-native-paper';
+
+//useFocusEffect
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ClassTeacherAllocation({ navigation }) {
 
     //theming
     const institute = useSelector(state => state.institute);
+    const [teacherallocationlist, setteacherallocationlist] = useState([]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            let isActive = true;
+
+            const fetchUser = async () => {
+
+                try {
+                    let slug = '/classteacher';
+                    let token = await read('token');
+                    const response = await get(slug, token);
+                    console.log('Allocated Teachers', response);
+                    setteacherallocationlist(response);
+                } catch (err) {
+                    alert('Cannot fetch added books list !!');
+                }
+
+            };
+
+            fetchUser();
+
+            return () => {
+                isActive = false;
+            };
+        }, [])
+    );
+
+
+
 
 
     return (
@@ -56,8 +85,7 @@ export default function ClassTeacherAllocation({ navigation }) {
                                     alignSelf: 'center',
                                     fontSize: 25,
                                     color: 'white',
-                                    // paddingLeft: 10,
-                                    // paddingTop: 23,
+
                                 }}
                             />
                         </TouchableOpacity>
@@ -91,7 +119,6 @@ export default function ClassTeacherAllocation({ navigation }) {
                         <View
                             style={{
                                 marginTop: 10,
-                                //make search and card in same line,death note,naruto,attack on titan,one piece,tokyo revenge
                                 marginLeft: 5,
                                 justifyContent: 'space-between',
                                 width: '95%',
@@ -137,73 +164,84 @@ export default function ClassTeacherAllocation({ navigation }) {
                         </Text>
                     </TouchableOpacity>
                     <ScrollView>
-                        {/* {addedbooks &&
-              addedbooks.map(addedbooks => ( */}
+                        {teacherallocationlist ? teacherallocationlist &&
+                            teacherallocationlist.map(teacherallocationlist => (
 
 
 
-                        <View style={styles.section}
-                        //   key={addedbooks._id}
-                        >
-                            <View style={styles.details}>
-                                <View style={styles.userinhostels}>
-                                    <View style={styles.differentusers}>
-                                        <Text
-                                            style={{
-                                                fontSize: 18,
-                                                color: '#211C5A',
-                                                fontFamily: 'Poppins-Regular',
-                                            }}>
-                                            {' '}
-                                            Name
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                fontSize: 12,
-                                                color: '#211C5A',
-                                                fontFamily: 'Poppins-Regular',
-                                            }}>
-                                            {' '}
-                                            Batch Name
-                                        </Text>
+                                <View style={styles.section}
+                                    key={teacherallocationlist._id}
+                                >
+                                    <View style={styles.details}>
+                                        <View style={styles.userinhostels}>
+                                            <View style={styles.differentusers}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 18,
+                                                        color: '#211C5A',
+                                                        fontFamily: 'Poppins-Regular',
+                                                    }}>
+                                                    {' '}
+                                                    {teacherallocationlist.classTeacher
+                                                        ? teacherallocationlist.classTeacher.firstName.charAt(0).toUpperCase() +
+                                                        teacherallocationlist.classTeacher.firstName.slice(1) +
+                                                        ' ' +
+                                                        teacherallocationlist.classTeacher.middleName.charAt(0).toUpperCase() +
+                                                        teacherallocationlist.classTeacher.middleName.slice(1) +
+                                                        ' ' +
+                                                        teacherallocationlist.classTeacher.lastName.charAt(0).toUpperCase() +
+                                                        teacherallocationlist.classTeacher.lastName.slice(1)
+                                                        : 'Name not given'}
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 12,
+                                                        color: '#211C5A',
+                                                        fontFamily: 'Poppins-Regular',
+                                                    }}>
+                                                    {' '}
+                                                    {teacherallocationlist.batch.batchName ? teacherallocationlist.batch.batchName : 'N/A'}
+                                                </Text>
 
+                                            </View>
+                                            <View style={styles.differentusers}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 12,
+                                                        color: '#505069',
+                                                        fontFamily: 'Poppins-Regular',
+                                                    }}>
+                                                    {'  '}{teacherallocationlist.course.courseName ? teacherallocationlist.course.courseName : 'N/A'}
+                                                </Text>
+                                                <TouchableOpacity
+                                                    style={{ flexDirection: 'row' }}
+                                                    onPress={() =>
+                                                        navigation.navigate('EditAllocationTeacher')
+                                                    }
+                                                >
+                                                    <Text
+                                                        style={{
+                                                            fontSize: 12,
+                                                            color: '#211C5A',
+                                                            fontFamily: 'Poppins-Regular',
+                                                        }}>
+                                                        Edit
+                                                    </Text>
+                                                    <AntDesign
+                                                        size={12}
+                                                        color="#211C5A"
+                                                        name="edit"
+                                                        style={{ paddingTop: 2 }}
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
                                     </View>
-                                    <View style={styles.differentusers}>
-                                        <Text
-                                            style={{
-                                                fontSize: 12,
-                                                color: '#505069',
-                                                fontFamily: 'Poppins-Regular',
-                                            }}>
-                                            {'  '}Course Name
-                                        </Text>
-                                        <TouchableOpacity
-                                            style={{ flexDirection: 'row' }}
-                                            onPress={() =>
-                                                navigation.navigate('EditAllocationTeacher')
-                                            }
-                                        >
-                                            <Text
-                                                style={{
-                                                    fontSize: 12,
-                                                    color: '#211C5A',
-                                                    fontFamily: 'Poppins-Regular',
-                                                }}>
-                                                Edit
-                                            </Text>
-                                            <AntDesign
-                                                size={12}
-                                                color="#211C5A"
-                                                name="edit"
-                                                style={{ paddingTop: 2 }}
-                                            />
-                                        </TouchableOpacity>
-                                    </View>
+
                                 </View>
-                            </View>
+                            )) : null}
 
-                        </View>
-                        {/* ))} */}
+                        <View style={{ height: 30 }} />
 
                     </ScrollView>
                 </View>
@@ -243,15 +281,12 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         marginTop: 4,
-        // paddingBottom: 10,
         borderBottomColor: '#333',
         paddingHorizontal: 10,
         paddingVertical: 10,
 
     },
-    // userinhostels: {
-    //   marginBottom: 10,
-    // },
+
     differentusers: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -259,7 +294,6 @@ const styles = StyleSheet.create({
     },
     userstext: {
         fontSize: 16,
-        // paddingVertical: 4,
         fontWeight: '300',
     },
 
@@ -293,9 +327,8 @@ const styles = StyleSheet.create({
     },
 
     text_input: {
-        // paddingHorizontal: 20,
+
         borderRadius: 10,
-        // backgroundColor: 'rgba(249, 249, 249, 1)',
         height: 50,
         fontSize: 16,
         minWidth: 171,
@@ -334,6 +367,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingHorizontal: 10,
         borderBottomColor: '#333',
-        //borderBottomWidth:1,
+
     },
 });
