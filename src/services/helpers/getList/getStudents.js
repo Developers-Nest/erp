@@ -12,7 +12,6 @@ async function getStudents(course, batch) {
   let token = await read('token');
   let response = await get(slug, token);
   console.log('Students ', response);
-  let batchArray = [];
 
   return response;
 }
