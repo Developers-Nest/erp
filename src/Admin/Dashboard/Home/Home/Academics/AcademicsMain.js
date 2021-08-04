@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// import { TextInput } from 'react-native-paper';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import LinearGradient from 'react-native-linear-gradient';
-//icons
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-//for users section icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {
     StyleSheet,
     Text,
@@ -18,14 +14,17 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
 } from 'react-native';
+//loadingscreen
+import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
 
-// // helpers
-// import get from '../../../../../services/helpers/request/get';
-// import read from '../../../../../services/localstorage/read';
+// helpers
+import get from '../../../../../services/helpers/request/get';
+import read from '../../../../../services/localstorage/read';
 //redux
 import { useSelector } from 'react-redux';
 import { Searchbar } from 'react-native-paper';
-
+//useFocusEffect
+import { useFocusEffect } from '@react-navigation/native';
 export default function AcademicsMain({ navigation }) {
     const [showContent, setShowContent] = React.useState('Courses');
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -33,29 +32,47 @@ export default function AcademicsMain({ navigation }) {
 
     //theming
     const institute = useSelector(state => state.institute);
+    // loading screem
+    const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
     function Courses() {
-        // const [addedbooks, setaddedbooks] = useState([]);
+        const [courselist, setcourselist] = useState([]);
+
+        useFocusEffect(
+            React.useCallback(() => {
+                let isActive = true;
+
+                const fetchUser = async () => {
+
+                    try {
+                        let slug = '/course';
+                        let token = await read('token');
+                        const response = await get(slug, token);
+                        console.log(response);
+                        setcourselist(response);
+                    } catch (err) {
+                        alert('Cannot fetch added books list !!');
+                    }
+
+                };
+
+                fetchUser();
+
+                return () => {
+                    isActive = false;
+                };
+            }, [])
+        );
 
 
-        // useEffect(async () => {
-        //     try {
-        //       let slug = '/library/books';
-        //       let token = await read('token');
-        //       const response = await get(slug, token);
-        //       console.log(response);
-        //       setaddedbooks(response);
-        //     } catch (err) {
-        //       alert('Cannot fetch added books list !!');
-        //     }
-        //   }, []);
 
 
-        // const [searchQuery, setSearchQuery] = React.useState('');
+        const [searchQuery, setSearchQuery] = React.useState('');
 
-        // const onChangeSearch = query => setSearchQuery(query);
+        const onChangeSearch = query => setSearchQuery(query);
 
         return (
+
             <View style={styles.container}>
 
                 <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
@@ -75,122 +92,125 @@ export default function AcademicsMain({ navigation }) {
 
 
                 <ScrollView>
-                    {/* {addedbooks &&
-              addedbooks.map(addedbooks => ( */}
+                    {courselist ? courselist &&
+                        courselist.map(courselist => (
 
 
 
-                    <View style={styles.section}
-                    //   key={addedbooks._id}
-                    >
-                        <View style={styles.details}>
-                            <View style={styles.userinhostels}>
-                                <View style={styles.differentusers}>
-                                    <Text
-                                        style={{
-                                            fontSize: 18,
-                                            color: '#211C5A',
-                                            fontFamily: 'Poppins-Regular',
-                                        }}>
-                                        {' '}
-                                        Course Name
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            fontSize: 12,
-                                            color: '#211C5A',
-                                            fontFamily: 'Poppins-Regular',
-                                        }}>
-                                        {' '}
-                                        Code
-                                    </Text>
+                            <View style={styles.section}
+                                key={courselist._id}
+                            >
+                                <View style={styles.details}>
+                                    <View style={styles.userinhostels}>
+                                        <View style={styles.differentusers}>
+                                            <Text
+                                                style={{
+                                                    fontSize: 18,
+                                                    color: '#211C5A',
+                                                    fontFamily: 'Poppins-Regular',
+                                                }}>
+                                                {' '}
+                                                {courselist.courseName ? courselist.courseName : 'N/A'}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    fontSize: 12,
+                                                    color: '#211C5A',
+                                                    fontFamily: 'Poppins-Regular',
+                                                }}>
+                                                {' '}
+                                                {courselist.code ? courselist.code : 'N/A'}
+                                            </Text>
 
+                                        </View>
+                                        <View style={styles.differentusers}>
+                                            <Text
+                                                style={{
+                                                    fontSize: 12,
+                                                    color: '#505069',
+                                                    fontFamily: 'Poppins-Regular',
+                                                }}>
+                                                {'  '}{courselist.description ? courselist.description : 'N/A'}
+                                            </Text>
+                                            <TouchableOpacity
+                                                style={{ flexDirection: 'row' }}
+                                                onPress={() =>
+                                                    navigation.navigate('EditCourses')
+                                                }
+                                            >
+                                                <Text
+                                                    style={{
+                                                        fontSize: 12,
+                                                        color: '#211C5A',
+                                                        fontFamily: 'Poppins-Regular',
+                                                    }}>
+                                                    Edit
+                                                </Text>
+                                                <AntDesign
+                                                    size={12}
+                                                    color="#211C5A"
+                                                    name="edit"
+                                                    style={{ paddingTop: 2 }}
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
                                 </View>
-                                <View style={styles.differentusers}>
+
+                                <View style={styles.belowhr}>
+
                                     <Text
                                         style={{
                                             fontSize: 12,
                                             color: '#505069',
                                             fontFamily: 'Poppins-Regular',
+                                            paddingLeft: 5,
                                         }}>
-                                        {'  '}Description
+                                        {courselist.attendanceType ? courselist.attendanceType : 'N/A'}
                                     </Text>
-                                    <TouchableOpacity
-                                        style={{ flexDirection: 'row' }}
-                                        onPress={() =>
-                                            navigation.navigate('EditCourses')
-                                        }
-                                    >
-                                        <Text
-                                            style={{
-                                                fontSize: 12,
-                                                color: '#211C5A',
-                                                fontFamily: 'Poppins-Regular',
-                                            }}>
-                                            Edit
-                                        </Text>
-                                        <AntDesign
-                                            size={12}
-                                            color="#211C5A"
-                                            name="edit"
-                                            style={{ paddingTop: 2 }}
-                                        />
-                                    </TouchableOpacity>
+
                                 </View>
                             </View>
-                        </View>
-
-                        <View style={styles.belowhr}>
-
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#505069',
-                                    fontFamily: 'Poppins-Regular',
-                                    paddingLeft: 5,
-                                }}>
-                                Attendance Type
-                            </Text>
-                            {/* <Text
-                style={{
-                  fontSize: 12,
-                  color: '#505069',
-                  fontFamily: 'Poppins-Regular',
-                }}>
-                {addedbooks.bookNumber}
-              </Text> */}
-
-                        </View>
-                    </View>
-                    {/* ))} */}
+                        )) : 'N/A'}
                 </ScrollView>
             </View>
         );
     }
 
     function Batches() {
-        // const [issuedbooks, setissuedbooks] = useState([]);
+        const [batchlist, setbatchlist] = useState([]);
+
+        useFocusEffect(
+            React.useCallback(() => {
+                let isActive = true;
+
+                const fetchUser = async () => {
+
+                    try {
+                        let slug = '/batch';
+                        let token = await read('token');
+                        const response = await get(slug, token);
+                        console.log(response);
+                        setbatchlist(response);
+                    } catch (err) {
+                        alert('Cannot fetch batches list !!');
+                    }
+
+                };
+
+                fetchUser();
+
+                return () => {
+                    isActive = false;
+                };
+            }, [])
+        );
 
 
-        // useEffect(async () => {
-        //     try {
-        //       let slug = '/library/issue';
-        //       let token = await read('token');
-        //       const response = await get(slug, token);
-        //       console.log("Issued Books ", response);
-        //       setissuedbooks(response);
-        //     } catch (err) {
-        //       alert('Cannot fetch issued books list !!');
-        //     }
-        //   }, []);
-
-
-        // const [searchQuery, setSearchQuery] = React.useState('');
-
-        // const onChangeSearch = query => setSearchQuery(query);
 
         return (
             <View style={styles.container}>
+
                 <TouchableOpacity style={{ alignItems: 'flex-end', marginRight: 30 }}
                     onPress={() =>
                         navigation.navigate('AddBatches')}
@@ -203,85 +223,85 @@ export default function AcademicsMain({ navigation }) {
                     </Text>
                 </TouchableOpacity>
                 <ScrollView>
-                    {/* {addedbooks &&
-              addedbooks.map(addedbooks => ( */}
+                    {batchlist ? batchlist &&
+                        batchlist.map(batchlist => (
 
 
 
-                    <View style={styles.section}
-                    //   key={addedbooks._id}
-                    >
-                        <View style={styles.details}>
-                            <View style={styles.userinhostels}>
-                                <View style={styles.differentusers}>
+                            <View style={styles.section}
+                                key={batchlist._id}
+                            >
+                                <View style={styles.details}>
+                                    <View style={styles.userinhostels}>
+                                        <View style={styles.differentusers}>
+                                            <Text
+                                                style={{
+                                                    fontSize: 18,
+                                                    color: '#211C5A',
+                                                    fontFamily: 'Poppins-Regular',
+                                                }}>
+                                                {' '}
+                                                {batchlist.batchName ? batchlist.batchName : 'N/A'}
+                                            </Text>
+
+                                        </View>
+                                        <View style={styles.differentusers}>
+                                            <Text
+                                                style={{
+                                                    fontSize: 12,
+                                                    color: '#505069',
+                                                    fontFamily: 'Poppins-Regular',
+                                                }}>
+                                                {'  '}{batchlist.course ? batchlist.course.courseName : 'N/A'}
+                                            </Text>
+                                            <TouchableOpacity
+                                                style={{ flexDirection: 'row' }}
+                                                onPress={() =>
+                                                    navigation.navigate('EditBatches')
+                                                }
+                                            >
+                                                <Text
+                                                    style={{
+                                                        fontSize: 12,
+                                                        color: '#211C5A',
+                                                        fontFamily: 'Poppins-Regular',
+                                                    }}>
+                                                    Edit
+                                                </Text>
+                                                <AntDesign
+                                                    size={12}
+                                                    color="#211C5A"
+                                                    name="edit"
+                                                    style={{ paddingTop: 2 }}
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
+
+                                <View style={styles.belowhr}>
+
                                     <Text
                                         style={{
-                                            fontSize: 18,
-                                            color: '#211C5A',
+                                            fontSize: 12,
+                                            color: '#505069',
                                             fontFamily: 'Poppins-Regular',
+                                            paddingLeft: 5,
                                         }}>
-                                        {' '}
-                                        Batch Name
+                                        Start:{batchlist.startDate ? batchlist.startDate.toString().slice(0, 10) : 'N/A'}
                                     </Text>
-
-                                </View>
-                                <View style={styles.differentusers}>
                                     <Text
                                         style={{
                                             fontSize: 12,
                                             color: '#505069',
                                             fontFamily: 'Poppins-Regular',
                                         }}>
-                                        {'  '}Course Name
+                                        End:{batchlist.endDate ? batchlist.endDate.toString().slice(0, 10) : 'N/A'}
                                     </Text>
-                                    <TouchableOpacity
-                                        style={{ flexDirection: 'row' }}
-                                        onPress={() =>
-                                            navigation.navigate('EditBatches')
-                                        }
-                                    >
-                                        <Text
-                                            style={{
-                                                fontSize: 12,
-                                                color: '#211C5A',
-                                                fontFamily: 'Poppins-Regular',
-                                            }}>
-                                            Edit
-                                        </Text>
-                                        <AntDesign
-                                            size={12}
-                                            color="#211C5A"
-                                            name="edit"
-                                            style={{ paddingTop: 2 }}
-                                        />
-                                    </TouchableOpacity>
+
                                 </View>
                             </View>
-                        </View>
-
-                        <View style={styles.belowhr}>
-
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#505069',
-                                    fontFamily: 'Poppins-Regular',
-                                    paddingLeft: 5,
-                                }}>
-                                Start:21 May,2021
-                            </Text>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#505069',
-                                    fontFamily: 'Poppins-Regular',
-                                }}>
-                                End:21 Sept,2021
-                            </Text>
-
-                        </View>
-                    </View>
-                    {/* ))} */}
+                        )) : 'N/A'}
 
                 </ScrollView>
             </View>
@@ -367,7 +387,6 @@ export default function AcademicsMain({ navigation }) {
                         <View
                             style={{
                                 marginTop: 10,
-                                //make search and card in same line,death note,naruto,attack on titan,one piece,tokyo revenge
                                 marginLeft: 5,
                                 justifyContent: 'space-between',
                                 width: '95%',
@@ -409,7 +428,7 @@ export default function AcademicsMain({ navigation }) {
                             alignItems: 'center',
                         }}
                         onPress={() => setShowContent('Courses')}>
-                        <Text style={[styles.switchText], [{ color: showContent == 'Courses' ? 'rgba(176, 67, 5, 1)' : '#58636D', fontWeight: '600' }]}>Courses</Text>
+                        <Text style={[styles.switchText], [{ color: showContent == 'Courses' ? 'rgba(176, 67, 5, 1)' : '#58636D' }, { fontWeight: 'bold' }]}>Courses</Text>
 
                     </TouchableOpacity>
 
@@ -422,7 +441,7 @@ export default function AcademicsMain({ navigation }) {
                             alignItems: 'center',
                         }}
                         onPress={() => setShowContent('Batches')}>
-                        <Text style={[styles.switchText], [{ color: showContent == 'Batches' ? 'rgba(176, 67, 5, 1)' : '#58636D', fontWeight: '600' }]}>Batches</Text>
+                        <Text style={[styles.switchText], [{ color: showContent == 'Batches' ? 'rgba(176, 67, 5, 1)' : '#58636D' }, { fontWeight: 'bold' }]}>Batches</Text>
                     </TouchableOpacity>
                 </View>
                 {showContent === 'Courses' ? <Courses /> : <Batches />}
@@ -467,9 +486,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderBottomWidth: 0.5
     },
-    // userinhostels: {
-    //   marginBottom: 10,
-    // },
+
     differentusers: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -477,7 +494,6 @@ const styles = StyleSheet.create({
     },
     userstext: {
         fontSize: 16,
-        // paddingVertical: 4,
         fontWeight: '300',
     },
 
@@ -494,8 +510,8 @@ const styles = StyleSheet.create({
     switchText: {
         fontSize: 14,
         paddingHorizontal: 5,
-        fontFamily: 'Poppins-SemiBold',
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-Regular',
+
     },
     maincontainer: {
         flex: 1,
@@ -511,9 +527,8 @@ const styles = StyleSheet.create({
     },
 
     text_input: {
-        // paddingHorizontal: 20,
+
         borderRadius: 10,
-        // backgroundColor: 'rgba(249, 249, 249, 1)',
         height: 50,
         fontSize: 16,
         minWidth: 171,
@@ -552,6 +567,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingHorizontal: 10,
         borderBottomColor: '#333',
-        //borderBottomWidth:1,
+
     },
 });
