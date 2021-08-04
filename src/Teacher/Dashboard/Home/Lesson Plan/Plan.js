@@ -25,6 +25,8 @@ import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 // redux
 import { useSelector } from 'react-redux';
 
+import { useFocusEffect } from '@react-navigation/core';
+
 export default function LessonPlan({ navigation }) {
   const [data, setData] = useState([]);
 
@@ -33,19 +35,32 @@ export default function LessonPlan({ navigation }) {
   //theming
   const institute = useSelector(state => state.institute);
 
-  useEffect(async () => {
-    setLoadingScreen()
-    try{
-      let slug = '/lessonplanning';
-      const token = await read('token');
-      const response = await get(slug, token);
-      console.log('Plan ', response)
-      setData(response)
-    } catch(err){
-      alert('Cannot fetch !!')
-    }
-    hideLoadingScreen()
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+
+      const fetchUser = async () => {
+        setLoadingScreen()
+        try {
+          let slug = '/lessonplanning';
+          const token = await read('token');
+          const response = await get(slug, token);
+          console.log('Plan ', response)
+          setData(response)
+        } catch (err) {
+          alert('Cannot fetch !!')
+        }
+        hideLoadingScreen()
+
+
+      }
+      fetchUser();
+
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
   return (
     <View
@@ -54,7 +69,7 @@ export default function LessonPlan({ navigation }) {
         flex: 1,
         justifyContent: 'flex-start'
       }}>
-        {loadingScreen}
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -151,7 +166,7 @@ export default function LessonPlan({ navigation }) {
                         color: '#211C5A',
                       }}>
                       {' '}
-                      {'Topic: '+plan.topic || 'Topic: N/A'}
+                      {'Topic: ' + plan.topic || 'Topic: N/A'}
                     </Text>
 
                     <TouchableOpacity
@@ -179,7 +194,7 @@ export default function LessonPlan({ navigation }) {
                         color: institute.themeColor || '#505069',
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      { plan.subject ? 'Subject: ' + plan.subject.name : 'Subject: N/A' || 'Subject: N/A'}
+                      {plan.subject ? 'Subject: ' + plan.subject.name : 'Subject: N/A' || 'Subject: N/A'}
                     </Text>
                   </View>
                   <View style={styles.differentusers}>
@@ -190,7 +205,7 @@ export default function LessonPlan({ navigation }) {
                         paddingRight: 15,
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {'Description: '+plan.description || 'Description: N/A'}
+                      {'Description: ' + plan.description || 'Description: N/A'}
                     </Text>
 
                     {/* <Text style={styles.userstext}>Graded</Text> */}
@@ -212,9 +227,9 @@ export default function LessonPlan({ navigation }) {
                 <Button
                   title="Link"
                   mode="contained"
-                  color={ institute.themeColor || "#5177E7"}
+                  color={institute.themeColor || "#5177E7"}
                   labelStyle={{ color: 'white' }}
-                  onPress={()=> Linking.openURL(plan.url)}
+                  onPress={() => Linking.openURL(plan.url)}
                 />
               </View>
             </View>

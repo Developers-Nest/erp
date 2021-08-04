@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -14,16 +14,15 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TextInput,
-  Alert,
 } from 'react-native';
 
 import { useFocusEffect } from '@react-navigation/native';
 
-import { Searchbar, Button } from 'react-native-paper';
-
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
+
+import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 
 // redux
 import { useSelector } from 'react-redux';
@@ -34,10 +33,13 @@ export default function AssignmentsDue({ navigation }) {
 
   const onChangeSearch = query => setSearchQuery(query);
 
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
   useFocusEffect(
     React.useCallback(() => {
       let isActive = true
       const fetchData = async () => {
+        setLoadingScreen()
         try {
           let slug = '/note/assignment';
           let token = await read('token');
@@ -46,6 +48,7 @@ export default function AssignmentsDue({ navigation }) {
         } catch (err) {
           alert('Cannot fetch your assignments !!');
         }
+        hideLoadingScreen()
       }
 
       fetchData()
@@ -62,6 +65,7 @@ export default function AssignmentsDue({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
+        {loadingScreen}
         <View
           style={{
             backgroundColor: institute ? institute.themeColor : 'black',

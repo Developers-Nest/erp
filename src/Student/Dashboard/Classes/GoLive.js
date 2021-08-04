@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import {
-  Button,
   List,
   Card,
   Title,
-  Paragraph,
   TextInput,
 } from 'react-native-paper';
 
