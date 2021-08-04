@@ -378,7 +378,7 @@ export default function AcademicsMain({ navigation }) {
                 </View>
 
                 {/* header ends */}
-<ScrollView>
+
                 <View
                     style={{
                         alignItems: 'center',
@@ -449,7 +449,6 @@ export default function AcademicsMain({ navigation }) {
                     </TouchableOpacity>
                 </View>
                 {showContent === 'Courses' ? <Courses /> : <Batches />}
-                </ScrollView>
             </View>
         </TouchableWithoutFeedback>
     );
