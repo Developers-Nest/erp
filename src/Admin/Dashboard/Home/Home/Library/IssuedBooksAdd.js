@@ -49,14 +49,22 @@ const IssuedBooksAdd = ({navigation}) => {
   const [employees, setemployees] = useState([]);
 
   //STUDENT TYPE modal selector
+  const [courses, setcourses] = useState([]);
+  const [batches, setbatches] = useState([]);
+  const [students, setstudents] = useState([{key: 'hi', label: 'hi'}]);
 
   //data to be sent
-  const [book, setBook] = useState([]);
-  const [user, setuser] = useState([]);
+  const [book, setBook] = useState();
+  const [bookNo, setBookNo] = useState();
+  const [user, setuser] = useState();
+  const [userID, setuserID] = useState();
   const [department, setdepartment] = useState([]);
   const [employee, setemployee] = useState([]);
   const [due, setdue] = useState();
   const [issue, setissue] = useState();
+  const [course, setcourse] = useState();
+  const [batch, setbatch] = useState();
+  const [student, setstudent] = useState([]);
 
   //on load
   useEffect(async () => {
@@ -70,6 +78,7 @@ const IssuedBooksAdd = ({navigation}) => {
           list.push({
             label: cat.bookNumber + ' - ' + cat.title,
             key: cat._id,
+            no: cat.bookNumber,
           });
         });
       console.log(list);
@@ -85,11 +94,12 @@ const IssuedBooksAdd = ({navigation}) => {
     }
   }, []);
 
-  //Employee Type fetch department
-  let fetchDepartment = async option => {
+  //EMPLOYEE Type fetch department
+  let fetchDepartment = async (option, id) => {
     showLoadingScreen();
     try {
       setuser(option);
+      setuserID(id);
       let slug = '/department';
       let token = await read('token');
       let res = await get(slug, token);
@@ -103,11 +113,13 @@ const IssuedBooksAdd = ({navigation}) => {
         });
       console.log(list);
       setdepartments(list);
-    } catch (err) {}
+    } catch (err) {
+      alert('Cannot fetch departmenr list !!');
+    }
     hideLoadingScreen();
   };
 
-  //Employee Type fetch employees
+  //EMPLOYEE Type fetch employees
   let fetchEmployees = async option => {
     showLoadingScreen();
     try {
@@ -125,7 +137,58 @@ const IssuedBooksAdd = ({navigation}) => {
         });
       console.log(list);
       setemployees(list);
-    } catch (err) {}
+    } catch (err) {
+      alert('Cannot fetch employee list !!');
+    }
+    hideLoadingScreen();
+  };
+
+  //STUDENT Type fetch courses
+  let fetchCourses = async (option, id) => {
+    showLoadingScreen();
+    try {
+      setuser(option);
+      setuserID(id);
+      let list = await getCourse();
+      setcourses(list);
+    } catch (err) {
+      alert('Cannot fetch courses list !!');
+    }
+    hideLoadingScreen();
+  };
+
+  //STUDENT Type fetch batches
+  let fetchBatches = async option => {
+    showLoadingScreen();
+    try {
+      setcourse(option);
+      let list = await getBatch(option);
+      setbatches(list);
+    } catch (err) {
+      alert('Cannot fetch batches list !!');
+    }
+    hideLoadingScreen();
+  };
+
+  //STUDENT Type fetch students
+  let fetchStudents = async option => {
+    showLoadingScreen();
+    try {
+      setbatch(option);
+      let res = await getStudents(course, option);
+      let list = [];
+
+      res.map(cat => {
+        list.push({
+          label: cat.firstName,
+          key: cat._id,
+        });
+      });
+      console.log('students list', list);
+      setstudents(list);
+    } catch (err) {
+      alert('Cannot fetch students list !!' + err);
+    }
     hideLoadingScreen();
   };
 
@@ -230,34 +293,44 @@ const IssuedBooksAdd = ({navigation}) => {
     return ('00' + num).slice(-3);
   };
 
-  //   let handleSubmit = async () => {
-  //     try {
-  //         let slug = '/library/books'
-  //         let token = await read('token')
-  //         let data = {
-  //             author: author,
-  //             billNumber: billNo,
-  //             bookNumber: bookNo,
-  //             category: bookCategory,
-  //             condition: bookCondition,
-  //             copies: copies,
-  //             cost: bookCost,
-  //             edition: edition,
-  //             inbn: isbn,
-  //             language: language,
-  //             position: position,
-  //             publisher: publisher,
-  //             purchaseDate: date,
-  //             shelf: shelf,
-  //             title: title
-  //         }
-  //         console.log('Books Data ', data)
-  //         let res = await post(slug, data, token)
-  //         console.log('Book Res ', res)
-  //     } catch (err) {
-  //         alert('Cannot Save !!' + err)
-  //     }
-  // }
+  let handleSubmit = async () => {
+    try {
+      let slug = '/library/issue';
+      let token = await read('token');
+      let data;
+      if (user === 'Student')
+        data = {
+          batch: batch,
+          bookName: book,
+          bookNumber: bookNo,
+          course: course,
+          dueDate: due,
+          issueDate: issue,
+          returned: false,
+          student: student,
+          userId: student,
+          userType: userID,
+        };
+      else
+        data = {
+          bookName: book,
+          bookNumber: bookNo,
+          department: department,
+          dueDate: due,
+          issueDate: issue,
+          employee: employee,
+          returned: false,
+          userId: employee,
+          userType: userID,
+        };
+      console.log('Issue Data ', data);
+      let res = await post(slug, data, token);
+      console.log('Issue Res ', res);
+      alert('Issued!!');
+    } catch (err) {
+      alert('Cannot Save !!' + err);
+    }
+  };
   return (
     <View style={{justifyContent: 'center', alignContent: 'center'}}>
       <View
@@ -267,7 +340,7 @@ const IssuedBooksAdd = ({navigation}) => {
         }}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('LibraryMain');
+            navigation.replace('LibraryMain');
           }}>
           <AntDesign
             size={24}
@@ -340,6 +413,7 @@ const IssuedBooksAdd = ({navigation}) => {
               initValue="Select Book"
               onChange={option => {
                 setBook(option.key);
+                setBookNo(option.no);
               }}
               style={styles.card}
               initValueTextStyle={styles.SelectedValue}
@@ -356,47 +430,108 @@ const IssuedBooksAdd = ({navigation}) => {
               data={users}
               initValue="Select User Type"
               onChange={option => {
-                fetchDepartment(option.key);
+                if (option.label === 'Student')
+                  fetchCourses(option.key, option.id);
+                else fetchDepartment(option.key, option.id);
               }}
               style={styles.card}
               initValueTextStyle={styles.SelectedValue}
               selectTextStyle={styles.SelectedValue}
             />
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              paddingTop: 15,
-            }}>
-            <ModalSelector
-              data={departments}
-              initValue="Select department"
-              onChange={option => {
-                fetchEmployees(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValue}
-              selectTextStyle={styles.SelectedValue}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              paddingTop: 15,
-            }}>
-            <ModalSelector
-              data={employees}
-              initValue="Select employee"
-              onChange={option => {
-                // setclass(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValue}
-              selectTextStyle={styles.SelectedValue}
-            />
-          </View>
+          {user === 'Student' ? (
+            <>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingTop: 15,
+                }}>
+                <ModalSelector
+                  data={courses}
+                  initValue="Select course"
+                  onChange={option => {
+                    fetchBatches(option.key);
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValue}
+                  selectTextStyle={styles.SelectedValue}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingTop: 15,
+                }}>
+                <ModalSelector
+                  data={batches}
+                  initValue="Select batch"
+                  onChange={option => {
+                    fetchStudents(option.key);
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValue}
+                  selectTextStyle={styles.SelectedValue}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingTop: 15,
+                }}>
+                <ModalSelector
+                  data={students}
+                  initValue="Select student"
+                  onChange={option => {
+                    setstudent(option.key);
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValue}
+                  selectTextStyle={styles.SelectedValue}
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingTop: 15,
+                }}>
+                <ModalSelector
+                  data={departments}
+                  initValue="Select department"
+                  onChange={option => {
+                    fetchEmployees(option.key);
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValue}
+                  selectTextStyle={styles.SelectedValue}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingTop: 15,
+                }}>
+                <ModalSelector
+                  data={employees}
+                  initValue="Select employee"
+                  onChange={option => {
+                    setemployee(option.key);
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValue}
+                  selectTextStyle={styles.SelectedValue}
+                />
+              </View>
+            </>
+          )}
+
           {/* 3rd row starts */}
           <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
             <Text style={styles.section_heading}>Issued On </Text>
@@ -448,9 +583,9 @@ const IssuedBooksAdd = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.fixToText}>
-            <Pressable style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.text}>Save</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -594,15 +729,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  // SelectedValue: {
-  //     fontFamily: 'Poppins-Regular',
-  //     fontStyle: 'normal',
-  //     fontWeight: 'normal',
-  //     fontSize: 18,
-  //     lineHeight: 27,
-  //     padding: 10,
-  //     color: 'rgba(88, 99, 109, 0.85)',
-  //   },
+
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
@@ -629,11 +756,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12,
     borderTopLeftRadius: 12,
     overflow: 'hidden',
-    // justifyContent: 'center',
-    // alignContent:'center',
     margin: 0,
     padding: 0,
-
     width: '94%',
   },
 

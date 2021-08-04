@@ -14,6 +14,7 @@ async function getUserType() {
     list.push({
       key: usertype.name,
       label: usertype.name,
+      id: usertype._id,
     });
   });
 

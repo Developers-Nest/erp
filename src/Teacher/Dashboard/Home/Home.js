@@ -4,30 +4,24 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   TextInput,
   Linking,
 } from 'react-native';
 
-import * as Animatable from 'react-native-animatable';
-import {Text, Searchbar, Card, Button, Drawer,Badge} from 'react-native-paper';
+import {Text, Button,Badge} from 'react-native-paper';
 import {
   createDrawerNavigator,
-  useIsDrawerOpen,
   DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
-import {useNavigation} from '@react-navigation/native';
 import Collapsible from 'react-native-collapsible';
 
 //icons
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 //drawer navigation
@@ -40,7 +34,6 @@ import ContentLibrary from './Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
 import LessonPlan from './Lesson Plan/LessonPlan';
 import Transport from './Transport/Transport';
-import Subject from './Subject/Subject.js';
 import CceMarks from './CCEMarks/CCEmarks';
 import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
@@ -59,6 +52,7 @@ import read from '../../../services/localstorage/read';
 import get from '../../../services/helpers/request/get';
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 import write from '../../../services/localstorage/write';
+import priviledges from '../../../services/helpers/extract/privileges'
 
 let userInfo;
 
@@ -94,7 +88,6 @@ const Home = ({navigation}) => {
       let slug = `/timetable/upcomingTimetable`;
       let token = await read('token');
       let response = await get(slug, token);
-      console.log('Response ', response);
       setUpcomingClasses(response);
     } catch (err) {
       alert('Cannot fetch your Upcoming Timetable !!');
@@ -135,6 +128,17 @@ const Home = ({navigation}) => {
       alert('Cannot fetch circular!!');
     }
 
+    try{
+      let token = await read('token')
+      let slug = `/privileges/Teacher`
+      let res = await get(slug, token)
+      console.log('Priviledges ', res)
+      let priv = priviledges(res)
+      console.log('User Priviledges ', priv)
+    } catch(err){
+      alert('Cannot get Priviledges!!' + err)
+    }
+
     try {
       let getUserType = () => {
         if (typeof(userInfo.userType) === 'string') {
@@ -165,7 +169,6 @@ const Home = ({navigation}) => {
           _id: noti._id,
           isRead: found?true:false 
         });
-        console.log('Count ', count)
       });
 
       dispatch({
@@ -182,11 +185,9 @@ const Home = ({navigation}) => {
       })
 
     } catch (err) {
-      console.log('Notification error ', err)
       alert('Cannot get Notifications!!');
     }
     hideLoadingScreen();
-    console.log('Not Read Notifications ', notReadNotifications)
   }, []);
 
   return (
