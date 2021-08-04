@@ -1,8 +1,9 @@
-import {USERINFO, INSTITUTE, SETNOTICATIONS, NOTREADNOTIFICATIONS} from './actionType'
+import {USERINFO, INSTITUTE, SETNOTICATIONS, NOTREADNOTIFICATIONS, SETPRIVILEDGES} from './actionType'
 
 // initial state
 const initialState = {
-    count: 0
+    count: 0,
+    priviledges: {}
 };
 
 // action reducer
@@ -31,6 +32,12 @@ function UserReducer(state = initialState, action) {
             return {
                 ... state,
                 count: action.count
+            }
+        
+        case SETPRIVILEDGES:
+            return {
+                ... state,
+                priviledges: action.priviledges
             }
 
     default:
