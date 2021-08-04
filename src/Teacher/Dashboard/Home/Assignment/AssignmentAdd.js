@@ -258,6 +258,8 @@ export default function AddAssignments({ navigation }) {
                 <TextInput
                   placeholder="Assignment Title"
                   onChangeText={title => setTitle(title)}
+                  placeholderTextColor="black"
+                  color="black"
                   defaultValue={title}
                 />
                 {/* <View style={{paddingLeft:10}} /> */}
@@ -273,6 +275,8 @@ export default function AddAssignments({ navigation }) {
               <TextInput
                 placeholder="Discription"
                 onChangeText={val => setDesc(val)}
+                placeholderTextColor="black"
+                color="black"
                 defaultValue={desc}
               />
               <View style={{ padding: 40 }} />
@@ -303,7 +307,7 @@ export default function AddAssignments({ navigation }) {
                   mode="contained"
                   color={file ? "green" : "white"}
                   onPress={() => filePicker()}>
-                  {file ? 'Selected' : 'Add File'}
+                  {file ? file.name : 'Add File'}
                 </Button>
               </View>
             </Card.Content>
