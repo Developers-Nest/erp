@@ -98,7 +98,6 @@ const IssuedBooksAdd = ({navigation}) => {
   let fetchDepartment = async (option, id) => {
     showLoadingScreen();
     try {
-      alert(id);
       setuser(option);
       setuserID(id);
       let slug = '/department';
