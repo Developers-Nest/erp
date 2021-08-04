@@ -255,7 +255,7 @@ export default function OnlineLecture({navigation}) {
                 color="white"
                 style={{margin: 2}}
                 onPress={() => setShowDatePicker(true)}>
-                Date
+                {date? date.slice(0,10) : 'DATE'}
               </Button>
 
               <DateTimePickerModal
@@ -272,7 +272,7 @@ export default function OnlineLecture({navigation}) {
                 color="white"
                 style={{margin: 2}}
                 onPress={() => setShowTimePicker(true)}>
-                Time
+                {time? time.slice(15,21) : 'TIME'}
               </Button>
 
               <DateTimePickerModal
