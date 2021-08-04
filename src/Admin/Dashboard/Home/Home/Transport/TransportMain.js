@@ -38,32 +38,32 @@ export default function TransportMain({ navigation }) {
   const institute = useSelector(state => state.institute);
 
   function Vehicle() {
-    const [vehicleinfo,setvehicleinfo] = useState([]);
+    const [vehicleinfo, setvehicleinfo] = useState([]);
 
     useFocusEffect(
-        React.useCallback(() => {
-            let isActive = true;
+      React.useCallback(() => {
+        let isActive = true;
 
-            const fetchUser = async () => {
+        const fetchUser = async () => {
 
-                try {
-                    let slug = '/transport/vehicle';
-                    let token = await read('token');
-                    const response = await get(slug, token);
-                    console.log('Vehicle info',response);
-                    setvehicleinfo(response);
-                } catch (err) {
-                    alert('Cannot fetch vehicles list !!');
-                }
+          try {
+            let slug = '/transport/vehicle';
+            let token = await read('token');
+            const response = await get(slug, token);
+            console.log('Vehicle info', response);
+            setvehicleinfo(response);
+          } catch (err) {
+            alert('Cannot fetch vehicles list !!');
+          }
 
-            };
+        };
 
-            fetchUser();
+        fetchUser();
 
-            return () => {
-                isActive = false;
-            };
-        }, [])
+        return () => {
+          isActive = false;
+        };
+      }, [])
     );
 
 
@@ -73,16 +73,16 @@ export default function TransportMain({ navigation }) {
     return (
       <View style={styles.container}>
 
-        <TouchableOpacity style={{ marginTop: 8, marginLeft: 30 }}
+        <TouchableOpacity style={{ marginTop: 8, marginLeft: 30, marginBottom: 10 }}
 
           onPress={() =>
             navigation.navigate('AddVehicle')}
 
 
         >
-          <Text style={{ color: 'blue', marginBottom: -6 }}>Vehicle</Text>
+          <Text style={{ color: 'blue', marginBottom: -6, fontWeight: 'bold' }}>Add Vehicle</Text>
           <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
-            - - - - - - - - - - - - -
+            - - - - - - - - -
 
           </Text>
         </TouchableOpacity>
@@ -112,98 +112,94 @@ export default function TransportMain({ navigation }) {
         </View>
         <ScrollView>
           {vehicleinfo &&
-vehicleinfo.map(vehicleinfo => (
+            vehicleinfo.map(vehicleinfo => (
 
-          <View style={styles.section}
-          key={vehicleinfo._id}
-          >
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <View style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                      marginHorizontal: -5,
-                    }}>
-                    {vehicleinfo.vehicleNo?vehicleinfo.vehicleNo:'N/A'}
-                  </Text>
-                  <Text style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins',
-                    fontStyle: 'normal',
-                  }}>
-                    Ph: 7879428976
-                  </Text>
-                </View>
-                <View style={{ padding: 5 }} />
-                <View style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                      marginHorizontal: -5,
-                    }}>
-                    {vehicleinfo.contactPerson?vehicleinfo.contactPerson:'N/A'}
-                  </Text>
-                  <TouchableOpacity
-                    style={{ flexDirection: 'row' }}
-                    onPress={() => { navigation.navigate('EditVehicle') }}
-                  >
-                    <Text
-                      style={{
+              <View style={styles.section}
+                key={vehicleinfo._id}
+              >
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+
+                        }}>
+                        {vehicleinfo.vehicleNo ? vehicleinfo.vehicleNo : 'N/A'}
+                      </Text>
+                      <Text style={{
                         fontSize: 12,
                         color: '#211C5A',
-                        fontFamily: 'Poppins-Medium',
+                        fontFamily: 'Poppins-Regular',
+                        fontStyle: 'normal',
                       }}>
-                      Edit
-                    </Text>
-                    {/* <Icon
-                            size={12}
-                            color="#211C5A"
-                            name="edit"
-                            style={{paddingTop: 2, paddingRight: 10}}
-                          /> */}
-                    <MaterialCommunityIcon
-                      size={15}
-                      color="#211C5A"
-                      name="square-edit-outline"
-                      style={{ paddingTop: 2, paddingRight: 10 }}
-                    />
-                  </TouchableOpacity>
+                        Vehicle Type: {vehicleinfo.type ? vehicleinfo.type : 'N/A'}
+                      </Text>
+                    </View>
+
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+
+                        }}>
+                        {''} {vehicleinfo.contactPerson ? vehicleinfo.contactPerson : 'N/A'}
+                      </Text>
+                      <TouchableOpacity
+                        style={{ flexDirection: 'row' }}
+                        onPress={() => { navigation.navigate('EditVehicle') }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          Edit
+                        </Text>
+                        <AntDesign
+                          size={12}
+                          color="#211C5A"
+                          name="edit"
+                          style={{ paddingTop: 2, paddingRight: 10 }}
+                        />
+
+
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+
+                <View style={styles.belowhr}>
+
+                  <Text
+                    style={{
+                      color: '#B04305',
+                      fontSize: 12,
+                      fontFamily: 'Poppins-Medium',
+                    }}>
+                    Max:{vehicleinfo.maximumAllowed ? vehicleinfo.maximumAllowed : 'N/A'} Persons
+                  </Text>
+
+
+                  <Text
+                    style={{
+                      color: '#58636D',
+                      fontSize: 12,
+                      fontFamily: 'Poppins-Medium',
+                    }}>
+                    Seats:{vehicleinfo.seats ? vehicleinfo.seats : 'N/A'}
+                  </Text>
+
                 </View>
               </View>
-            </View>
-
-            <View style={styles.belowhr}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', padding: 5 }}>
-                <Text
-                  style={{
-                    color: '#B04305',
-                    fontSize: 12,
-                    fontFamily: 'Poppins-Medium',
-                  }}>
-                  Max:{vehicleinfo.maximumAllowed?vehicleinfo.maximumAllowed:'N/A'} Persons
-                </Text>
-              </View>
-              <View style={{ marginBottom: 3 }}>
-                <Text
-                  style={{
-                    color: '#58636D',
-                    fontSize: 12,
-                    fontFamily: 'Poppins-Medium',
-                  }}>
-                  Saved as Draft
-                </Text>
-              </View>
-            </View>
-          </View>
 
 
-          ))} 
+            ))}
         </ScrollView>
       </View>
     );
@@ -212,32 +208,32 @@ vehicleinfo.map(vehicleinfo => (
 
   function Driver() {
 
-    const [driverinfo,setdriverinfo] = useState([]);
+    const [driverinfo, setdriverinfo] = useState([]);
 
     useFocusEffect(
-        React.useCallback(() => {
-            let isActive = true;
+      React.useCallback(() => {
+        let isActive = true;
 
-            const fetchUser = async () => {
+        const fetchUser = async () => {
 
-                try {
-                    let slug = '/transport/driver';
-                    let token = await read('token');
-                    const response = await get(slug, token);
-                    console.log('Driver info',response);
-                    setdriverinfo(response);
-                } catch (err) {
-                    alert('Cannot fetch driver list !!');
-                }
+          try {
+            let slug = '/transport/driver';
+            let token = await read('token');
+            const response = await get(slug, token);
+            console.log('Driver info', response);
+            setdriverinfo(response);
+          } catch (err) {
+            alert('Cannot fetch driver list !!');
+          }
 
-            };
+        };
 
-            fetchUser();
+        fetchUser();
 
-            return () => {
-                isActive = false;
-            };
-        }, [])
+        return () => {
+          isActive = false;
+        };
+      }, [])
     );
 
     return (
@@ -281,94 +277,117 @@ vehicleinfo.map(vehicleinfo => (
           </View>
         </View>
         <ScrollView>
-          {driverinfo &&
-    driverinfo.map(driverinfo => (
+          {driverinfo ? driverinfo &&
+            driverinfo.map(driverinfo => (
 
 
-          <View style={styles.section}
-          key={driverinfo._id}
-          >
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <View style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                      marginHorizontal: -5,
-                    }}>
-                    {driverinfo.vehicleNo.vehicleNo?driverinfo.vehicleNo.vehicleNo:'N/A'}
-                  </Text>
-                  <Text style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins',
-                    fontStyle: 'normal',
-                  }}>
-                    Ph:{driverinfo.phone?driverinfo.phone:'N/A'}
-                  </Text>
-                </View>
-                <View style={{ padding: 5 }} />
-                <View style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                      marginHorizontal: -5,
-                    }}>
-                   {driverinfo.name?driverinfo.name:'N/A'}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => { navigation.navigate('EditDriver') }}
-                    style={{ flexDirection: 'row' }}>
-                    <Text
-                      style={{
+              <View style={styles.section}
+                key={driverinfo._id}
+              >
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                          marginHorizontal: -5,
+                        }}>
+                        {driverinfo.vehicleNo.vehicleNo ? driverinfo.vehicleNo.vehicleNo : 'N/A'}
+                      </Text>
+                      <Text style={{
                         fontSize: 12,
                         color: '#211C5A',
+                        fontFamily: 'Poppins',
+                        fontStyle: 'normal',
+                      }}>
+                        Ph:{driverinfo.phone ? driverinfo.phone : 'N/A'}
+                      </Text>
+                    </View>
+                    <View style={{ padding: 5 }} />
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                          marginHorizontal: -5,
+                        }}>
+                        {driverinfo.name ? driverinfo.name : 'N/A'}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => { navigation.navigate('EditDriver') }}
+                        style={{ flexDirection: 'row' }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                          Edit
+                        </Text>
+
+                        <MaterialCommunityIcon
+                          size={15}
+                          color="#211C5A"
+                          name="square-edit-outline"
+                          style={{ paddingTop: 2, paddingRight: 10 }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+
+                <View style={styles.belowhr}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', padding: 5 }}>
+                    <Text
+                      style={{
+                        color: '#58636D',
+                        fontSize: 12,
                         fontFamily: 'Poppins-Medium',
                       }}>
-                      Edit
+                      Licensce No.{driverinfo.licenseNumber ? driverinfo.licenseNumber : 'N/A'}
                     </Text>
-                    {/* <Icon
-                            size={12}
-                            color="#211C5A"
-                            name="edit"
-                            style={{paddingTop: 2, paddingRight: 10}}
-                          /> */}
-                    <MaterialCommunityIcon
-                      size={15}
-                      color="#211C5A"
-                      name="square-edit-outline"
-                      style={{ paddingTop: 2, paddingRight: 10 }}
-                    />
-                  </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
 
-            <View style={styles.belowhr}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', padding: 5 }}>
-                <Text
-                  style={{
-                    color: '#58636D',
-                    fontSize: 12,
-                    fontFamily: 'Poppins-Medium',
-                  }}>
-                  Licensce No.{driverinfo.licenseNumber?driverinfo.licenseNumber:'N/A'}
-                </Text>
-              </View>
-            </View>
-          </View>
-
-           ))} 
+            )) : null}
         </ScrollView>
       </View>
     );
 
   };
   function Destination() {
+    const [destinationinfo, setdestinationinfo] = useState([]);
+
+    useFocusEffect(
+      React.useCallback(() => {
+        let isActive = true;
+
+        const fetchUser = async () => {
+
+          try {
+            let slug = '/transport/destinationAndFees';
+            let token = await read('token');
+            const response = await get(slug, token);
+            console.log('Destination info', response);
+            setdestinationinfo(response);
+          } catch (err) {
+            alert('Cannot fetch destination list !!');
+          }
+
+        };
+
+        fetchUser();
+
+        return () => {
+          isActive = false;
+        };
+      }, [])
+    );
+
 
 
     return (
@@ -414,96 +433,93 @@ vehicleinfo.map(vehicleinfo => (
         </View>
 
         <ScrollView>
-          {/* {addedbooks &&
-    addedbooks.map(addedbooks => ( */}
+          {destinationinfo ? destinationinfo &&
+            destinationinfo.map(destinationinfo => (
 
 
-          <View style={styles.section}>
-            <View style={styles.details}>
-              <View style={styles.userinhostels}>
-                <View style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                      marginHorizontal: -5,
-                    }}>
-                    Route Code
-                  </Text>
-                  <Text style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins',
-                    fontStyle: 'normal',
-                  }}>
-                    Stop time- 15:00
-                  </Text>
-                </View>
-                <View style={{ padding: 5 }} />
-                <View style={styles.differentusers}>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: '#211C5A',
-                      fontFamily: 'Poppins-Regular',
-                      marginHorizontal: -5,
-                    }}>
-                    Stop Positon
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => { navigation.navigate('EditDestination') }}
-                    style={{ flexDirection: 'row' }}>
-                    <Text
-                      style={{
+              <View style={styles.section}
+                key={destinationinfo._id}
+              >
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                          marginHorizontal: -5,
+                        }}>
+                        {destinationinfo.route.code ? destinationinfo.route.code : 'N/A'}
+                      </Text>
+                      <Text style={{
                         fontSize: 12,
                         color: '#211C5A',
+                        fontFamily: 'Poppins',
+                        fontStyle: 'normal',
+                      }}>
+                        Stop time- {destinationinfo.stopTime ? destinationinfo.stopTime.slice(11, 19) : 'N/A'}
+                      </Text>
+                    </View>
+                    <View style={{ padding: 5 }} />
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                          marginHorizontal: -5,
+                        }}>
+                        {destinationinfo.route.stopPlace ? destinationinfo.route.stopPlace : 'N/A'}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => { navigation.navigate('EditDestination') }}
+                        style={{ flexDirection: 'row' }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                          Edit
+                        </Text>
+
+                        <MaterialCommunityIcon
+                          size={15}
+                          color="#211C5A"
+                          name="square-edit-outline"
+                          style={{ paddingTop: 2, paddingRight: 10 }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+
+                <View style={styles.belowhr}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', padding: 5 }}>
+                    <Text
+                      style={{
+                        color: '#58636D',
+                        fontSize: 12,
                         fontFamily: 'Poppins-Medium',
                       }}>
-                      Edit
+                      Fees Type: {destinationinfo.feeType ? destinationinfo.feeType : 'N/A'}
                     </Text>
-                    {/* <Icon
-                                size={12}
-                                color="#211C5A"
-                                name="edit"
-                                style={{paddingTop: 2, paddingRight: 10}}
-                              /> */}
-                    <MaterialCommunityIcon
-                      size={15}
-                      color="#211C5A"
-                      name="square-edit-outline"
-                      style={{ paddingTop: 2, paddingRight: 10 }}
-                    />
-                  </TouchableOpacity>
+                  </View>
+                  <View style={{ marginBottom: 3 }}>
+                    <Text
+                      style={{
+                        color: '#1F7C17',
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                      }}>
+                      Fees:{destinationinfo.amount ? destinationinfo.amount : 'N/A'}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
 
-            <View style={styles.belowhr}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', padding: 5 }}>
-                <Text
-                  style={{
-                    color: '#58636D',
-                    fontSize: 12,
-                    fontFamily: 'Poppins-Medium',
-                  }}>
-                  Fees Type: Transport
-                </Text>
-              </View>
-              <View style={{ marginBottom: 3 }}>
-                <Text
-                  style={{
-                    color: '#1F7C17',
-                    fontSize: 12,
-                    fontFamily: 'Poppins-Medium',
-                  }}>
-                  Fees: 900 Rs
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          {/* ))} */}
+            )) : null}
         </ScrollView>
       </View>
     );
@@ -765,8 +781,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginTop: 14,
     borderRadius: 12,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingHorizontal: 20,
     marginHorizontal: 20,
     marginBottom: 10
   },
@@ -807,6 +822,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 10,
     borderBottomColor: '#333',
+    paddingHorizontal: 5
   },
   container: {
     paddingTop: 10,
