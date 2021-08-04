@@ -1,38 +1,29 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   TouchableOpacity,
   StyleSheet,
   Text,
-  Pressable,
   TextInput,
   ScrollView,
 } from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
-import Icon2 from 'react-native-vector-icons/Ionicons';
-import Evillcons from 'react-native-vector-icons/Feather';
-import check from 'react-native-vector-icons/Ionicons';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {Button} from 'react-native-paper';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
-import timeTableBuilder from '../../../../services/helpers/extract/teacherTtDayWiseBuild';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-const AllocatedListHostel = ({navigation}) => {
+import { useFocusEffect } from '@react-navigation/native';
+
+const AllocatedListHostel = ({ navigation }) => {
   const [allocationlist, setAllocationlist] = useState([]);
   // loading screem
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
@@ -42,40 +33,55 @@ const AllocatedListHostel = ({navigation}) => {
     return d.toString().slice(0, 15);
   };
   // on load of the screen
-  useEffect(async () => {
-    showLoadingScreen();
-    try {
-      let slug = `/hostel/hostelAllocation`;
-      let token = await read('token');
 
-      let response = await get(slug, token);
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
 
-      const list = [];
-      for (let i = 0; i < response.length; i++) {
-        list.push({
-          username: response[i].user.firstName,
-          type: response[i].userType.name,
-          hostel: response[i].hostelName.name,
-          room: response[i].hostelRoom.roomNo,
-          floor: response[i].hostelRoom.floorName,
-          institution: response[i].institution,
-          regDate: parseDate(response[i].hostelRegistartionDate),
-          vacaDate: parseDate(response[i].vacatingDate),
-        });
-        setAllocationlist(list);
-      }
-    } catch (err) {
-      alert('Cannot fetch allocation list!!' + err);
-    }
-    hideLoadingScreen();
-  }, []);
+      const fetchUser = async () => {
+        showLoadingScreen();
+        try {
+          let slug = `/hostel/hostelAllocation`;
+          let token = await read('token');
+
+          let response = await get(slug, token);
+
+          const list = [];
+          for (let i = 0; i < response.length; i++) {
+            list.push({
+              username: response[i].user.firstName,
+              type: response[i].userType.name,
+              hostel: response[i].hostelName.name,
+              room: response[i].hostelRoom.roomNo,
+              floor: response[i].hostelRoom.floorName,
+              institution: response[i].institution,
+              regDate: parseDate(response[i].hostelRegistartionDate),
+              vacaDate: parseDate(response[i].vacatingDate),
+            });
+            setAllocationlist(list);
+          }
+        } catch (err) {
+          alert('Cannot fetch allocation list!!' + err);
+        }
+        hideLoadingScreen();
+      };
+
+      fetchUser();
+
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
+
+
   //theming
   const institute = useSelector(state => state.institute);
 
   return (
-    <View style={{justifyContent: 'center', alignContent: 'center'}}>
+    <View style={{ justifyContent: 'center', alignContent: 'center' }}>
       {/* header start */}
-
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : '#FF5733',
@@ -150,10 +156,10 @@ const AllocatedListHostel = ({navigation}) => {
 
       {/* header ends */}
 
-      <View style={{marginHorizontal: 10, ...styles.shadow}}>
+      <View style={{ marginHorizontal: 10, ...styles.shadow }}>
         <View style={styles.search}>
           <TextInput
-            style={{...styles.search_input, fontFamily: 'Poppins-Regular'}}
+            style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
             placeholder="Enter hostel name here"
             placeholderTextColor="grey"
           />
@@ -173,9 +179,9 @@ const AllocatedListHostel = ({navigation}) => {
         </View>
       </View>
       {/* <View style={{height:30}}/> */}
-<ScrollView>
-      {allocationlist
-        ? allocationlist &&
+      <ScrollView>
+        {allocationlist
+          ? allocationlist &&
           allocationlist.map(allocation => (
             <View style={styles.section} key={allocationlist._id}>
               <View style={styles.details}>
@@ -255,7 +261,7 @@ const AllocatedListHostel = ({navigation}) => {
                         size={12}
                         backgroundColor=" #211C5A"
                         name="edit"
-                        style={{paddingTop: 7, paddingRight: 12}}
+                        style={{ paddingTop: 7, paddingRight: 12 }}
                         color={institute ? institute.themeColor : '#211C5A'}
                       />
                     </TouchableOpacity>
@@ -264,7 +270,7 @@ const AllocatedListHostel = ({navigation}) => {
               </View>
 
               <View style={styles.belowhr}>
-                <View style={{flexDirection: 'column'}}>
+                <View style={{ flexDirection: 'column' }}>
                   <Text
                     style={{
                       color: '#B04305',
@@ -282,7 +288,7 @@ const AllocatedListHostel = ({navigation}) => {
                     {allocation.regDate}
                   </Text>
                 </View>
-                <View style={{marginTop: 15}}>
+                <View style={{ marginTop: 15 }}>
                   <Text
                     style={{
                       color: '#211C5A',
@@ -295,14 +301,14 @@ const AllocatedListHostel = ({navigation}) => {
                 </View>
               </View>
             </View>
-            
+
           ))
-        : null}
-         <View style={{height:60}}/>
- </ScrollView>
+          : null}
+        <View style={{ height: 60 }} />
+      </ScrollView>
 
     </View>
-  
+
   );
 };
 
@@ -331,7 +337,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 50,
     fontSize: 15,
-    color:'black',
+    color: 'black',
     paddingTop: 5,
     paddingHorizontal: 0,
     width: '90%',
@@ -360,7 +366,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 2.0,
     elevation: 10,
     marginTop: 14,
-    marginBottom:10,
+    marginBottom: 10,
     borderRadius: 12,
     paddingLeft: 10,
     paddingRight: 10,
