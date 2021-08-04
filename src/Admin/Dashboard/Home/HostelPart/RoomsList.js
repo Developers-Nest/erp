@@ -1,20 +1,12 @@
 import React, { useState,useEffect } from 'react';
-import { View, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Text, Pressable, TextInput } from 'react-native';
-import ModalSelector from 'react-native-modal-selector';
+import { View, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Text, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Icon1 from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
-import Icon2 from 'react-native-vector-icons/Ionicons';
-import Evillcons from 'react-native-vector-icons/Feather';
-import check from 'react-native-vector-icons/Ionicons';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Button } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
 
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
+
 //redux
 import { useSelector } from 'react-redux';
 

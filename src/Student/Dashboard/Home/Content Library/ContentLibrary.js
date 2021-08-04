@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   ScrollView,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -13,7 +12,6 @@ import {
 import {Button} from 'react-native-paper';
 
 //icons
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // redux
@@ -110,7 +108,7 @@ export default function ContentLibrary({navigation}) {
                           color={institute ? institute.themeColor : 'blue'}
                           mode="contained"
                           onPress={() => Linking.openURL(sm.insertfile)}>
-                          Link
+                          View
                         </Button>
                       ) : null}
                     </TouchableOpacity>
@@ -182,7 +180,7 @@ export default function ContentLibrary({navigation}) {
                               alert('Invalid URL');
                             }
                           }}>
-                          Link
+                          View
                         </Button>
                       ) : null}
                     </TouchableOpacity>
@@ -297,7 +295,7 @@ export default function ContentLibrary({navigation}) {
                   alignItems: 'center',
                 }}
                 onPress={() => setShowContent('Material')}>
-                <Text style={styles.switchText}> Study Material</Text>
+                <Text style={styles.switchText}>Material</Text>
               </TouchableOpacity>
 
               <TouchableOpacity

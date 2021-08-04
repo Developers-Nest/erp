@@ -111,7 +111,7 @@ export default function ContentLibrary({ navigation }) {
                               color={institute ? institute.themeColor : 'blue'}
                               mode="contained"
                               onPress={() => Linking.openURL(sm.insertfile)}>
-                              Link
+                              View
                             </Button>
 
                           ) : (null)
@@ -190,7 +190,7 @@ export default function ContentLibrary({ navigation }) {
                                 }
                               }
                               }>
-                              Link
+                              View
                             </Button>
                           ) : (null)
                         }
@@ -311,7 +311,7 @@ export default function ContentLibrary({ navigation }) {
                   alignItems: 'center',
                 }}
                 onPress={() => setShowContent('Material')}>
-                <Text style={styles.switchText}> Study Material</Text>
+                <Text style={styles.switchText}>Material</Text>
               </TouchableOpacity>
 
               <TouchableOpacity

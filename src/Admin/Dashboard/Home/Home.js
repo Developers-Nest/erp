@@ -29,7 +29,6 @@ import Books from './Books/Books';
 import ContentLibrary from './Home/Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
 
-import Transport from './Transport/Transport';
 import CceMarks from './CCEMarks/CCEmarks';
 import RecordedClasses from './Recorded Classes/RecordedClasses';
 import Report from './Report/Report';
@@ -47,7 +46,7 @@ import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
 import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
-
+import Transport from './Home/Transport';
 
 import Results from './Home/Results';
 import Leave from './Home/Leave';
@@ -177,7 +176,11 @@ const Home_Route = () => {
         component={Library}
         options={{ headerShown: false }}
       />
-
+<Stack.Screen
+        name="Transport"
+        component={Transport}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Exams"
         component={Exams}
@@ -380,7 +383,6 @@ export default function Route() {
       <DrawerNav.Screen name="PaymentStack" component={PaymentStack} />
       <DrawerNav.Screen name="QuickPayment" component={QuickPayment} />
       <DrawerNav.Screen name="Feedback" component={Feedback} />
-      <DrawerNav.Screen name="Transport" component={Transport} />
       <DrawerNav.Screen name="Cce Marks" component={CceMarks} />
       <DrawerNav.Screen name="Recorded Classes" component={RecordedClasses} />
       <DrawerNav.Screen name="Report" component={Report} />
