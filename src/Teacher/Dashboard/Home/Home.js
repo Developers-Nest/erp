@@ -54,6 +54,8 @@ import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 import write from '../../../services/localstorage/write';
 import priviledges from '../../../services/helpers/extract/privileges'
 
+import { useFocusEffect } from '@react-navigation/native';
+
 let userInfo;
 
 const Home = ({ navigation }) => {
@@ -84,57 +86,12 @@ const Home = ({ navigation }) => {
 
   useEffect(async () => {
     setLoadingScreen();
-    try {
-      let slug = `/timetable/upcomingTimetable`;
-      let token = await read('token');
-      let response = await get(slug, token);
-      setUpcomingClasses(response);
-    } catch (err) {
-      alert('Cannot fetch your Upcoming Timetable !!');
-    }
-
-    try {
-      let slug = '/note/assignment';
-      let token = await read('token');
-      const response = await get(slug, token);
-      setAssignments(response);
-    } catch (err) {
-      alert('Cannot fetch your assignments !!');
-    }
-
-    try {
-      let slug = '/subject';
-      let token = await read('token');
-      const response = await get(slug, token);
-      setSubjects(response);
-    } catch (err) {
-      alert('Cannot fetch your assignments !!');
-    }
-
-    try {
-      let token = await read('token');
-      let slug = `/circular?department=${userInfo.department}`;
-      let res = await get(slug, token);
-      let circularArray = [];
-      res.map(cir => {
-        circularArray.push({
-          title: cir.circularsubject,
-          content: cir.circularContent,
-          time: parseDate(cir.circularDate),
-        });
-      });
-      setCirculars(circularArray);
-    } catch (err) {
-      alert('Cannot fetch circular!!');
-    }
 
     try {
       let token = await read('token')
       let slug = `/privileges/Teacher`
       let res = await get(slug, token)
-      console.log('Priviledges ', res)
       let priv = priviledges(res)
-      console.log('User Priviledges ', priv)
       dispatch({
         type: SETPRIVILEDGES,
         priviledges: priv
@@ -143,56 +100,118 @@ const Home = ({ navigation }) => {
       alert('Cannot get Priviledges!!' + err)
     }
 
-    try {
-      let getUserType = () => {
-        if (typeof (userInfo.userType) === 'string') {
-          return userInfo.userType;
-        } else {
-          return userInfo.userType._id;
+
+    hideLoadingScreen();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+
+      const fetchUser = async () => {
+
+        try {
+          let slug = `/timetable/upcomingTimetable`;
+          let token = await read('token');
+          let response = await get(slug, token);
+          setUpcomingClasses(response);
+        } catch (err) {
+          alert('Cannot fetch your Upcoming Timetable !!');
+        }    
+
+        try {
+          let slug = '/subject';
+          let token = await read('token');
+          const response = await get(slug, token);
+          setSubjects(response);
+        } catch (err) {
+          alert('Cannot fetch your assignments !!');
+        }
+
+        try {
+          let slug = '/note/assignment';
+          let token = await read('token');
+          const response = await get(slug, token);
+          setAssignments(response);
+        } catch (err) {
+          alert('Cannot fetch your assignments !!');
+        }
+
+        try {
+          let token = await read('token');
+          let slug = `/circular?department=${userInfo.department}`;
+          let res = await get(slug, token);
+          let circularArray = [];
+          res.map(cir => {
+            circularArray.push({
+              title: cir.circularsubject,
+              content: cir.circularContent,
+              time: parseDate(cir.circularDate),
+            });
+          });
+          setCirculars(circularArray);
+        } catch (err) {
+          alert('Cannot fetch circular!!');
+        }
+
+        try {
+          let getUserType = () => {
+            if (typeof (userInfo.userType) === 'string') {
+              return userInfo.userType;
+            } else {
+              return userInfo.userType._id;
+            }
+          };
+
+          let slug = `/notification?userType=${getUserType()}&department=${userInfo.department}`;
+          let token = await read('token');
+          let res = await get(slug, token);
+          let Content = [];
+          let currentUser = userInfo._id
+          let count = 0
+          await res.map(noti => {
+            let found = false
+            noti && noti.isReadBy.map((read) => {
+              if (read == currentUser) {
+                found = true
+              }
+            })
+            if (!found) count += 1
+            Content.push({
+              title: noti.title,
+              content: noti.message,
+              type: 'News',
+              _id: noti._id,
+              isRead: found ? true : false
+            });
+          });
+
+          dispatch({
+            type: NOTREADNOTIFICATIONS,
+            count: count
+          })
+
+          setNotifications(Content);
+
+          // notification count in redux store
+          dispatch({
+            type: SETNOTICATIONS,
+            notificatons: Content
+          })
+
+        } catch (err) {
+          alert('Cannot get Notifications!!');
         }
       };
 
-      let slug = `/notification?userType=${getUserType()}&department=${userInfo.department}`;
-      let token = await read('token');
-      let res = await get(slug, token);
-      let Content = [];
-      let currentUser = userInfo._id
-      let count = 0
-      await res.map(noti => {
-        let found = false
-        noti && noti.isReadBy.map((read) => {
-          if (read == currentUser) {
-            found = true
-          }
-        })
-        if (!found) count += 1
-        Content.push({
-          title: noti.title,
-          content: noti.message,
-          type: 'News',
-          _id: noti._id,
-          isRead: found ? true : false
-        });
-      });
+      fetchUser();
 
-      dispatch({
-        type: NOTREADNOTIFICATIONS,
-        count: count
-      })
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
-      setNotifications(Content);
-
-      // notification count in redux store
-      dispatch({
-        type: SETNOTICATIONS,
-        notificatons: Content
-      })
-
-    } catch (err) {
-      alert('Cannot get Notifications!!');
-    }
-    hideLoadingScreen();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -546,7 +565,6 @@ const getTabBarVisibility = route => {
 function DrawerContent(props) {
   let institute = useSelector(state => state.institute);
   let userPriviledges = useSelector(state => state.priviledges)
-  console.log('Drawer Navigation Priviledges ', userPriviledges)
   const handleLogout = async () => {
     // const navigation = useNavigation();
     try {
