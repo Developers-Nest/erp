@@ -49,14 +49,20 @@ const IssuedBooksAdd = ({navigation}) => {
   const [employees, setemployees] = useState([]);
 
   //STUDENT TYPE modal selector
+  const [courses, setcourses] = useState([]);
+  const [batches, setbatches] = useState([]);
+  const [students, setstudents] = useState([{key: 'hi', label: 'hi'}]);
 
   //data to be sent
-  const [book, setBook] = useState([]);
-  const [user, setuser] = useState([]);
+  const [book, setBook] = useState();
+  const [user, setuser] = useState();
   const [department, setdepartment] = useState([]);
   const [employee, setemployee] = useState([]);
   const [due, setdue] = useState();
   const [issue, setissue] = useState();
+  const [course, setcourse] = useState();
+  const [batch, setbatch] = useState();
+  const [student, setstudent] = useState([]);
 
   //on load
   useEffect(async () => {
@@ -85,7 +91,7 @@ const IssuedBooksAdd = ({navigation}) => {
     }
   }, []);
 
-  //Employee Type fetch department
+  //EMPLOYEE Type fetch department
   let fetchDepartment = async option => {
     showLoadingScreen();
     try {
@@ -103,11 +109,13 @@ const IssuedBooksAdd = ({navigation}) => {
         });
       console.log(list);
       setdepartments(list);
-    } catch (err) {}
+    } catch (err) {
+      alert('Cannot fetch departmenr list !!');
+    }
     hideLoadingScreen();
   };
 
-  //Employee Type fetch employees
+  //EMPLOYEE Type fetch employees
   let fetchEmployees = async option => {
     showLoadingScreen();
     try {
@@ -125,7 +133,57 @@ const IssuedBooksAdd = ({navigation}) => {
         });
       console.log(list);
       setemployees(list);
-    } catch (err) {}
+    } catch (err) {
+      alert('Cannot fetch employee list !!');
+    }
+    hideLoadingScreen();
+  };
+
+  //STUDENT Type fetch courses
+  let fetchCourses = async option => {
+    showLoadingScreen();
+    try {
+      setuser(option);
+      let list = await getCourse();
+      setcourses(list);
+    } catch (err) {
+      alert('Cannot fetch courses list !!');
+    }
+    hideLoadingScreen();
+  };
+
+  //STUDENT Type fetch batches
+  let fetchBatches = async option => {
+    showLoadingScreen();
+    try {
+      setcourse(option);
+      let list = await getBatch(option);
+      setbatches(list);
+    } catch (err) {
+      alert('Cannot fetch batches list !!');
+    }
+    hideLoadingScreen();
+  };
+
+  //STUDENT Type fetch students
+  let fetchStudents = async option => {
+    showLoadingScreen();
+    try {
+      setbatch(option);
+      let res = await getStudents(course, option);
+      let list = [];
+
+      res.map(cat => {
+        list.push({
+          label: cat.firstName,
+          key: cat._id,
+        });
+      });
+      console.log('students list', list);
+      setstudents(list);
+    } catch (err) {
+      alert('Cannot fetch students list !!' + err);
+    }
     hideLoadingScreen();
   };
 
@@ -356,47 +414,107 @@ const IssuedBooksAdd = ({navigation}) => {
               data={users}
               initValue="Select User Type"
               onChange={option => {
-                fetchDepartment(option.key);
+                if (option.label === 'Student') fetchCourses(option.key);
+                else fetchDepartment(option.key);
               }}
               style={styles.card}
               initValueTextStyle={styles.SelectedValue}
               selectTextStyle={styles.SelectedValue}
             />
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              paddingTop: 15,
-            }}>
-            <ModalSelector
-              data={departments}
-              initValue="Select department"
-              onChange={option => {
-                fetchEmployees(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValue}
-              selectTextStyle={styles.SelectedValue}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              paddingTop: 15,
-            }}>
-            <ModalSelector
-              data={employees}
-              initValue="Select employee"
-              onChange={option => {
-                // setclass(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValue}
-              selectTextStyle={styles.SelectedValue}
-            />
-          </View>
+          {user === 'Student' ? (
+            <>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingTop: 15,
+                }}>
+                <ModalSelector
+                  data={courses}
+                  initValue="Select course"
+                  onChange={option => {
+                    fetchBatches(option.key);
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValue}
+                  selectTextStyle={styles.SelectedValue}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingTop: 15,
+                }}>
+                <ModalSelector
+                  data={batches}
+                  initValue="Select batch"
+                  onChange={option => {
+                    fetchStudents(option.key);
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValue}
+                  selectTextStyle={styles.SelectedValue}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingTop: 15,
+                }}>
+                <ModalSelector
+                  data={students}
+                  initValue="Select student"
+                  onChange={option => {
+                    setstudent(option.key);
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValue}
+                  selectTextStyle={styles.SelectedValue}
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingTop: 15,
+                }}>
+                <ModalSelector
+                  data={departments}
+                  initValue="Select department"
+                  onChange={option => {
+                    fetchEmployees(option.key);
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValue}
+                  selectTextStyle={styles.SelectedValue}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingTop: 15,
+                }}>
+                <ModalSelector
+                  data={employees}
+                  initValue="Select employee"
+                  onChange={option => {
+                    // setclass(option.key);
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValue}
+                  selectTextStyle={styles.SelectedValue}
+                />
+              </View>
+            </>
+          )}
+
           {/* 3rd row starts */}
           <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
             <Text style={styles.section_heading}>Issued On </Text>
