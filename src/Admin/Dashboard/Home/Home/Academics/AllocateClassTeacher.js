@@ -1,44 +1,95 @@
 
-import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet, Text, Pressable } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
+
 //redux
 import { useSelector } from 'react-redux';
+
+// helpers
+import getCourse from '../../../../../services/helpers/getList/getCourse'
+import getBatch from '../../../../../services/helpers/getList/getBatch'
+import getTeachers from '../../../../../services/helpers/getList/getTeachers';
+import post from '../../../../../services/helpers/request/post'
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
+import read from '../../../../../services/localstorage/read'
+import get from '../../../../../services/helpers/request/get';
 
 
 const AllocateClassTeacher = ({ navigation }) => {
     //theming
     const institute = useSelector(state => state.institute);
 
-    const [user, setuser] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [department, setdepartment] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [employee, setemployee] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
+    // dropdown values
+    const [courses, setcourses] = useState([]);
+    const [batches, setbatches] = useState([]);
+    const [teachers, setteachers] = useState([]);
+
+    const [course, setCourse] = useState('')
+    const [batch, setBatch] = useState('')
+    const [teacher, setTeacher] = useState('')
+
+    const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+    useEffect(async()=>{
+        setLoadingScreen()
+        try{
+            let res = await getCourse()
+            setcourses(res)
+        } catch(err){
+            alert('Cannot fetch courses!!')
+        }
+
+        try{
+            let res = await getTeachers()
+            setteachers(res)
+        } catch(err){
+            alert('Cannot fetch teachers!!'+err)
+        }
+        hideLoadingScreen()
+    }, [])
+
+    let fetchBatch = async(sel)=>{
+        setLoadingScreen()
+        try{
+            setCourse(sel)
+            let res = await getBatch(sel)
+            setbatches(res)
+        } catch(err){
+            alert('Cannot get Batches!!')
+        }
+        hideLoadingScreen()
+    }
+
+    let handleSubmit = async()=>{
+        setLoadingScreen()
+        try{
+            let slug = '/classteacher/add'
+            let token = await read('token')
+            let data = {
+                batch: batch,
+                classTeacher: teacher,
+                course: course
+            }
+            let res = await post(slug, data, token)
+            if(res.error){
+                alert(res.error)
+            } else if(res._id){
+                alert('Teacher Allocated')
+            }
+        } catch(err){
+            alert('Cannot Save')
+        }
+        hideLoadingScreen()
+    }
 
     return (
-
-
-
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
 
             {/* header start */}
-
+            {loadingScreen}
             <View
                 style={{
                     backgroundColor: institute ? institute.themeColor : 'black',
@@ -57,8 +108,6 @@ const AllocateClassTeacher = ({ navigation }) => {
                                 alignSelf: 'center',
                                 fontSize: 25,
                                 color: 'white',
-                                // paddingLeft: 10,
-                                // paddingTop: 23,
                             }}
                         />
                     </TouchableOpacity>
@@ -82,17 +131,13 @@ const AllocateClassTeacher = ({ navigation }) => {
             <ScrollView>
 
                 <View style={{ flex: 1, justifyContent: 'center' }}>
-
-
-
-
                     <View style={{ flexDirection: 'column', paddingTop: 15 }} >
                         <Text style={styles.section_heading}>Course's Name </Text>
                         <ModalSelector
-                            data={user}
-                            initValue="Introduction to the Python"
+                            data={courses}
+                            initValue="Course Name"
                             onChange={option => {
-                                // setclass(option.key);
+                                fetchBatch(option.key)
                             }}
                             style={styles.card}
                             initValueTextStyle={styles.SelectedValue}
@@ -103,10 +148,10 @@ const AllocateClassTeacher = ({ navigation }) => {
                     <View style={{ justifyContent: 'center', paddingTop: 15 }} >
                         <Text style={styles.section_heading}>Batch's Name </Text>
                         <ModalSelector
-                            data={department}
+                            data={batches}
                             initValue="Name of the Batch"
                             onChange={option => {
-                                // setclass(option.key);
+                                setBatch(option.key)
                             }}
                             style={styles.card}
                             initValueTextStyle={styles.SelectedValue}
@@ -117,10 +162,10 @@ const AllocateClassTeacher = ({ navigation }) => {
                     <View style={{ justifyContent: 'center', paddingTop: 15 }} >
                         <Text style={styles.section_heading}>Class Teacher </Text>
                         <ModalSelector
-                            data={employee}
+                            data={teachers}
                             initValue="Teacher's Name"
                             onChange={option => {
-                                // setclass(option.key);
+                                setTeacher(option.key)
                             }}
                             style={styles.card}
                             initValueTextStyle={styles.SelectedValue}
@@ -129,13 +174,10 @@ const AllocateClassTeacher = ({ navigation }) => {
 
                     </View>
                     <View style={styles.fixToText}>
-                        <Pressable style={styles.button} >
+                        <Pressable style={{ backgroundColor: institute? institute.themeColor: 'blue',...styles.button}} onPress={handleSubmit}>
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
-
-
                     </View>
-
                 </View>
             </ScrollView>
         </View>
@@ -147,18 +189,14 @@ const styles = StyleSheet.create({
     container: {
         alignContent: 'center',
         justifyContent: 'center',
-
-
     },
     button: {
-
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 25,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: '#5177E7',
     },
     text: {
         fontSize: 18,
