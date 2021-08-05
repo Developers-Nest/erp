@@ -22,9 +22,10 @@ import get from '../../../../../services/helpers/request/get';
 import read from '../../../../../services/localstorage/read';
 //redux
 import { useSelector } from 'react-redux';
-import { Searchbar } from 'react-native-paper';
+
 //useFocusEffect
 import { useFocusEffect } from '@react-navigation/native';
+
 export default function AcademicsMain({ navigation }) {
     const [showContent, setShowContent] = React.useState('Courses');
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -43,17 +44,14 @@ export default function AcademicsMain({ navigation }) {
                 let isActive = true;
 
                 const fetchUser = async () => {
-
                     try {
                         let slug = '/course';
                         let token = await read('token');
                         const response = await get(slug, token);
-                        console.log(response);
                         setcourselist(response);
                     } catch (err) {
                         alert('Cannot fetch added books list !!');
                     }
-
                 };
 
                 fetchUser();
@@ -88,7 +86,7 @@ export default function AcademicsMain({ navigation }) {
 
                     </Text>
                 </TouchableOpacity>
-                
+
                 <ScrollView>
                     {courselist ? courselist &&
                         courselist.map(courselist => (
@@ -191,7 +189,6 @@ export default function AcademicsMain({ navigation }) {
                         let slug = '/batch';
                         let token = await read('token');
                         const response = await get(slug, token);
-                        console.log(response);
                         setbatchlist(response);
                     } catch (err) {
                         alert('Cannot fetch batches list !!');
