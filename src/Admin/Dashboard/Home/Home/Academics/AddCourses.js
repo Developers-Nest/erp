@@ -2,68 +2,63 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
+
 //redux
 import { useSelector } from 'react-redux';
 
+// helpers
+import post from '../../../../../services/helpers/request/post'
+import read from '../../../../../services/localstorage/read'
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
 
 const AddCourses = ({ navigation }) => {
     //theming
     const institute = useSelector(state => state.institute);
 
-    const [user, setuser] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [department, setdepartment] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [employee, setemployee] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
+    const [attendanceType, setAttendanceType] = useState([
+        { label: 'Daily', key: 'Daily' },
+        { label: 'Subject Wise', key: 'Subject Wise' },
     ]);
 
-    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-    const [date, setDate] = React.useState('29 May 2021')
-    const [dateissued, setDateissued] = React.useState('21 May 2021')
-    let index = 0;
-    const dateMonths = {
-        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
+
+    const [courseName, setCourseName] = useState('')
+    const [desc, setDesc] = useState('')
+    const [code, setCode] = useState('')
+    const [type, setType] = useState('')
+
+    const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+    let handleSubmit = async()=>{
+        setLoadingScreen()
+        try{
+            let token = await read('token')
+            let slug = '/course/add'
+            let acadYear = institute.academicYear
+            let data = {
+                academicYear: acadYear,
+                attendanceType: type,
+                code: code,
+                courseName: courseName,
+                description: desc,
+                minimumAttendance: 0,
+                syllabusName: "CCE",
+                totalWorkingDay: 0
+            }
+            let res = await post(slug, data, token)
+            console.log('Course Added ', res)
+        } catch(err){
+            alert('Cannot Add '+err)
+        }
+        hideLoadingScreen()
     }
 
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
-    const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date.toString());
-        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
-        hideDatePicker();
-    };
-    const handleConfirmissued = (dateissued) => {
-        // console.warn("A date has been picked: ", dateissued.toString());
-        setDateissued(dateissued.getDate() + " " + dateMonths[dateissued.getMonth() + 1] + " " + dateissued.getFullYear())
-        hideDatePicker();
-    };
-
     return (
-
-
-
         <View style={{ justifyContent: 'center', alignContent: 'center', display: 'flex', backgroundColor: 'rgba(249, 249, 249, 1)', }}>
 
             {/* header start */}
+            {loadingScreen}
 
             <View
                 style={{
@@ -83,8 +78,6 @@ const AddCourses = ({ navigation }) => {
                                 alignSelf: 'center',
                                 fontSize: 25,
                                 color: 'white',
-                                // paddingLeft: 10,
-                                // paddingTop: 23,
                             }}
                         />
                     </TouchableOpacity>
@@ -112,22 +105,23 @@ const AddCourses = ({ navigation }) => {
 
 
                     <View style={{ justifyContent: 'center', paddingTop: 15 }} >
-                        <Text style={styles.section_heading}>Course's Name </Text>
-                        <ModalSelector
-                            data={user}
-                            initValue="Introduction to the Python"
-                            onChange={option => {
-                                // setclass(option.key);
-                            }}
-                            style={styles.card}
-                            initValueTextStyle={styles.SelectedValue}
-                            selectTextStyle={styles.SelectedValue}
-                        />
+                        <Text style={styles.section_heading}>Course Name </Text>
+                        <View style={{ marginHorizontal: 10 }}>
+                            <View style={[styles.search, styles.shadow]}>
+                                <TextInput
+                                    style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
+                                    placeholder="Course Name"
+                                    placeholderTextColor='grey'
+                                    color='black'
+                                    onChangeText={(val) => setCourseName(val)}
+                                />
+                            </View>
+                        </View>
 
                     </View>
 
                     <View style={{ justifyContent: 'center', paddingTop: 15 }} >
-                        <Text style={styles.section_heading}>Batch Name </Text>
+                        <Text style={styles.section_heading}>Description </Text>
                         <View style={{ marginHorizontal: 10 }}>
                             <View style={[styles.search, styles.shadow]}>
                                 <TextInput
@@ -135,8 +129,7 @@ const AddCourses = ({ navigation }) => {
                                     placeholder="Description"
                                     placeholderTextColor='grey'
                                     color='black'
-                                // // onChangeText={(val) => setTitle(val)
-                                // }
+                                    onChangeText={(val) => setDesc(val)}
                                 />
                             </View>
                         </View>
@@ -155,15 +148,14 @@ const AddCourses = ({ navigation }) => {
                             placeholderTextColor='grey'
                             color='black'
                             keyboardType='numeric'
-                        // onChangeText={(val) => setIsbn(val)
-                        // }
+                            onChangeText={(val) => setCode(val)}
                         />
 
                         <ModalSelector
-                            data={employee}
+                            data={attendanceType}
                             initValue="Regular"
                             onChange={option => {
-                                // setclass(option.key);
+                                setType(option.key)
                             }}
                             style={styles.cardsmall}
                             initValueTextStyle={styles.SelectedValueSmall}
@@ -172,7 +164,7 @@ const AddCourses = ({ navigation }) => {
 
                     </View>
                     <View style={styles.fixToText}>
-                        <Pressable style={styles.button} >
+                        <Pressable style={{backgroundColor: institute? institute.themeColor: 'blue', ...styles.button}} onPress={handleSubmit}>
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
 
@@ -202,7 +194,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 25,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: '#5177E7',
     },
     text: {
         fontSize: 18,

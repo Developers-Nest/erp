@@ -88,9 +88,7 @@ export default function AcademicsMain({ navigation }) {
 
                     </Text>
                 </TouchableOpacity>
-
-
-
+                
                 <ScrollView>
                     {courselist ? courselist &&
                         courselist.map(courselist => (

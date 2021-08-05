@@ -405,9 +405,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingHorizontal: 20,
-        // borderColor: '#58636D',
-        // borderRadius: 8,
-        // borderWidth: 0.3,
+        borderTopEndRadius:8,
+        borderTopLeftRadius:8,
+        borderTopRightRadius:8,
+        borderTopStartRadius:8,
+         borderBottomEndRadius:8,
+         borderBottomLeftRadius:8,
+         borderBottomRightRadius:8,
+         borderBottomStartRadius:8,
+      
 
     },
 
@@ -425,10 +431,11 @@ const styles = StyleSheet.create({
 
     search_input: {
         fontFamily: 'Poppins-Regular',
-        borderRadius: 8,
+       
         height: 50,
         fontSize: 15,
-
+       
+      
 
         paddingTop: 5,
         paddingHorizontal: 0,
@@ -512,10 +519,14 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         paddingHorizontal: 20,
         backgroundColor: 'white',
-        borderRadius: 8,
-        // borderColor: '#58636D',
-       
-        // borderWidth: 0.35,
+       borderTopEndRadius:8,
+       borderTopLeftRadius:8,
+       borderTopRightRadius:8,
+       borderTopStartRadius:8,
+        borderBottomEndRadius:8,
+        borderBottomLeftRadius:8,
+        borderBottomRightRadius:8,
+        borderBottomStartRadius:8,
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontFamily: 'Poppins-Regular',
@@ -524,15 +535,15 @@ const styles = StyleSheet.create({
     },
 
     shadow: {
-        elevation: 2,
+        elevation: 5,
         borderRadius: 0,
-        backgroundColor: 'transparent',
+        backgroundColor: 'white',
         shadowColor: '#000',
         shadowOffset: {
           width: 0,
           height: 1,
         },
-        shadowOpacity: 0.2,
+        shadowOpacity: 1,
         shadowRadius: 8,
       },
       
@@ -586,17 +597,17 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     height:50,
     shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 2,
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 5,
     backgroundColor: 'white',
-    borderColor: '#ccc',
-    borderWidth: 1,
+    // borderColor: '#ccc',
+    // borderWidth: 1,
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
     borderTopRightRadius: 8,
     borderTopLeftRadius: 8,
-    overflow: 'hidden',
+    // overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
     padding: 0,

@@ -540,7 +540,7 @@ const IssuedBooksAdd = ({navigation}) => {
 
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity style={styles.pickdate} onPress={showDatePicker1}>
-              <Text style={{marginTop: 20, marginLeft: 10}}>
+              <Text style={{marginTop: 15, marginLeft: 10,color:'black'}}>
                 {datedisplayIssued}
                 {'  '}
               </Text>
@@ -561,7 +561,7 @@ const IssuedBooksAdd = ({navigation}) => {
               />
             </TouchableOpacity>
             <TouchableOpacity style={styles.pickdate} onPress={showDatePicker2}>
-              <Text style={{marginTop: 20, marginLeft: 10}}>
+              <Text style={{marginTop: 15, marginLeft: 10,color:'black'}}>
                 {datedisplayDue}
                 {'  '}
               </Text>
