@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput,ScrollView } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -103,7 +103,7 @@ const institute = useSelector(state => state.institute);
 
    
 
-
+        <ScrollView>
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
 
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
@@ -229,6 +229,7 @@ const institute = useSelector(state => state.institute);
                 </View>
 
             </View>
+            </ScrollView>
 
         </View>
 

@@ -26,11 +26,35 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //redux
 import { useSelector } from 'react-redux';
+// helpers
+import post from '../../../../../services/helpers/request/post'
+import read from '../../../../../services/localstorage/read'
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
 
 export default function AddVehicle({ navigation }) {
 
     //theming
     const institute = useSelector(state => state.institute);
+
+    //dropdown
+    const [types, setTypes] = useState([
+        { label: 'Contract', key: 'Contract' },
+        { label: 'Ownership', key: 'Fine' },
+
+    ]);
+//for textboxes
+const [vehiclenum, setVehiclenum] = useState('')
+const [trackid, setTrackid] = useState('')
+const [licensenum, setLicensenum] = useState('')
+const [maxseats, setMaxseats] = useState('')
+const [drivername, setDrivername] = useState('')
+const [maxallow, setMaxallow] = useState('')
+
+
+const[type,setType]=useState('');
+const[phone,setPhone]=useState('')
+
+const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
 
 
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
@@ -52,6 +76,33 @@ export default function AddVehicle({ navigation }) {
         setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
         hideDatePicker();
     };
+
+    let handleSubmit = async()=>{
+        setLoadingScreen()
+        try{
+            let token = await read('token')
+            let slug = '/transport/vehicle'
+          //  let acadYear = institute.academicYear
+            let data = {
+               // academicYear: acadYear,
+               vehicleNo:vehiclenum,
+               trackId:trackid,
+               seats:maxseats,
+               maximumAllowed:maxallow,
+               contactPerson:drivername,
+                vehicleType: type,
+                renewalDate:date,
+                createdAt: "2021-07-15T06:43:00.650Z",
+                updatedAt: "2021-07-15T06:43:00.650Z"
+
+            }
+            let res = await post(slug, data, token)
+            console.log('Vehicle Added ', res)
+        } catch(err){
+            alert('Cannot Add '+err)
+        }
+        hideLoadingScreen()
+    }
 
 
     return (
@@ -114,6 +165,10 @@ export default function AddVehicle({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Vehicle No."
+                                placeholderTextColor='grey'
+                                color='black'
+                                
+                                onChangeText={(val) => setVehiclenum(val)}
                             />
                         </View>
                     </View>
@@ -122,6 +177,10 @@ export default function AddVehicle({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Track ID"
+                                placeholderTextColor='grey'
+                                color='black'
+                                keyboardType='numeric'
+                                onChangeText={(val) => setTrackid(val)}
                             />
                         </View>
                     </View>
@@ -130,25 +189,34 @@ export default function AddVehicle({ navigation }) {
 
 
                 <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row', alignContent: 'flex-start', justifyContent: 'space-evenly' }}>
-                    <Text style={styles.section_heading}>License No. </Text>
+                    <Text style={styles.section_heading}>Vehicle Type</Text>
                     <Text style={styles.section_heading}>Date</Text>
                 </View>
 
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
-                    <View style={styles.Card}>
-                        <View style={styles.CardContent}>
-                            <TextInput
-                                style={{ ...styles.search_input }}
-                                placeholder="License No."
+                   
+                        <ModalSelector
+                                data={types}
+                                initValue="Contract"
+                                onChange={option => {
+                                   
+                                setType(option.key)
+                                }}
+                                style={styles.card}
+                                initValueTextStyle={styles.SelectedValueSmall}
+                                selectTextStyle={styles.SelectedValueSmall}
                             />
-                        </View>
-                    </View>
+                    
                     <View style={styles.Card}>
                         <View style={styles.CardContent}>
                             <TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
                                 <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                                     placeholder={date}
+                                    placeholderTextColor='grey'
+                                    color='black'
+                                    values={date}
+                                    editable={false}
 
                                 />
                                 <Feather size={18} color="black" name="calendar"
@@ -181,6 +249,10 @@ export default function AddVehicle({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Seats"
+                                placeholderTextColor='grey'
+                                color='black'
+                                keyboardType='numeric'
+                                onChangeText={(val) => setMaxseats(val)}
                             />
                         </View>
                     </View>
@@ -189,6 +261,9 @@ export default function AddVehicle({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Driver's name"
+                                placeholderTextColor='grey'
+                                color='black'
+                                onChangeText={(val) => setDrivername(val)}
                             />
                         </View>
                     </View>
@@ -206,6 +281,10 @@ export default function AddVehicle({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Allowed"
+                                placeholderTextColor='grey'
+                                color='black'
+                                keyboardType='numeric'
+                                onChangeText={(val) => setMaxallow(val)}
                             />
                         </View>
                     </View>
@@ -214,6 +293,8 @@ export default function AddVehicle({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Phone no."
+                                placeholderTextColor='grey'
+                                color='black'
                             />
                         </View>
                     </View>
@@ -225,8 +306,8 @@ export default function AddVehicle({ navigation }) {
                         alignItems: 'center',
                         padding: 20,
                     }}>
-                    <Button style={{ width: 90 }} color="#5177E7" mode="contained" onPress={() => console.log('Pressed')}>
-                        SAVE
+                    <Button  color="#5177E7" mode="contained" 
+                    style={{backgroundColor: institute? institute.themeColor: 'blue', ...styles.button}} onPress={handleSubmit}> SAVE
                     </Button>
                 </View>
 
@@ -254,7 +335,7 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: '500',
         fontSize: 18,
-        lineHeight: 30,
+        lineHeight: 40,
         paddingTop: 3,
         color: '#211C5A',
     },
@@ -363,5 +444,32 @@ const styles = StyleSheet.create({
     header: {
         height: 69,
         flexDirection: 'row',
+    },
+    button:{
+
+        width:90,
+    },
+    card: {
+        shadowColor: '#999',
+        height: 60,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 12,
+        elevation: 5,
+        backgroundColor: 'white',
+        borderColor: '#ccc',
+       
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+        borderTopRightRadius: 12,
+        borderTopLeftRadius: 12,
+        overflow: 'hidden',
+        alignSelf: 'center',
+        // justifyContent: 'center',
+        // alignContent:'center',
+        margin: 0,
+        padding: 0,
+
+        width: '40%'
     },
 });
