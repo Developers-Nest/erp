@@ -358,6 +358,7 @@ export default function AddVehicle({navigation}) {
                 placeholder="Phone no."
                 placeholderTextColor="grey"
                 color="black"
+                keyboardType="numeric"
               />
             </View>
           </View>
