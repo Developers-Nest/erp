@@ -61,7 +61,7 @@ export default function LibraryMain({ navigation }) {
             navigation.navigate('AddBooks')}
 
         >
-          <Text style={{ color: 'blue', marginBottom: -6 }}>Add more books</Text>
+          <Text style={{ color: 'blue', marginBottom: -6,fontWeight:'bold'}}>Add more books</Text>
           <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
             - - - - - - - - - - - - -
 
@@ -181,7 +181,7 @@ export default function LibraryMain({ navigation }) {
 
 
         >
-          <Text style={{ color: 'blue', marginBottom: -6 }}>Issue more books</Text>
+          <Text style={{ color: 'blue', marginBottom: -6,fontWeight:'bold' }}>Issue more books</Text>
           <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
             - - - - - - - - - - - - -
 
@@ -421,7 +421,7 @@ export default function LibraryMain({ navigation }) {
               alignItems: 'center',
             }}
             onPress={() => setShowContent('IssuedBooks')}>
-              <Text style={[styles.switchText],[{ color:showContent=='IssuedBooks'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600'}]}>Issued Books</Text>
+              <Text style={[styles.switchText],[{ color:showContent=='IssuedBooks'?'rgba(176, 67, 5, 1)':'#58636D'},{fontWeight:'bold'}]}>Issued Books</Text>
         
           </TouchableOpacity>
 
@@ -434,7 +434,7 @@ export default function LibraryMain({ navigation }) {
               alignItems: 'center',
             }}
             onPress={() => setShowContent('AddedBooks')}>
-      <Text style={[styles.switchText],[{ color:showContent=='AddedBooks'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600'}]}>Added Books</Text>
+      <Text style={[styles.switchText],[{ color:showContent=='AddedBooks'?'rgba(176, 67, 5, 1)':'#58636D'},{fontWeight:'bold'}]}>Added Books</Text>
           </TouchableOpacity>
         </View>
         {showContent === 'IssuedBooks' ? <IssuedBooks /> : <AddedBooks />}
@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingHorizontal: 5,
     fontFamily: 'Poppins-SemiBold',
-    fontWeight: 'bold',
+    
   },
   maincontainer: {
     flex: 1,
