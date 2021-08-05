@@ -232,7 +232,7 @@ const EditBatches = ({ route, navigation }) => {
                         <Pressable style={styles.button1} onPress={handleDelete}>
                             <Text style={styles.text1}>Delete</Text>
                         </Pressable>
-                        <Pressable style={styles.button} onPress={handleUpdate}>
+                        <Pressable style={{backgroundColor: institute? institute.themeColor: 'blue',...styles.button}} onPress={handleUpdate}>
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
                     </View>
@@ -251,14 +251,12 @@ const styles = StyleSheet.create({
 
     },
     button: {
-
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 25,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: '#5177E7',
     },
     text: {
         fontSize: 18,

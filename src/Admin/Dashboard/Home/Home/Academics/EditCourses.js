@@ -1,70 +1,89 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
+
 //redux
 import { useSelector } from 'react-redux';
 
 
-const EditCourses = ({ navigation }) => {
+// helpers
+import patch from '../../../../../services/helpers/request/patch'
+import deleteReq from '../../../../../services/helpers/request/delete'
+import read from '../../../../../services/localstorage/read'
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
+
+
+const EditCourses = ({ route, navigation }) => {
     //theming
     const institute = useSelector(state => state.institute);
 
-    const [user, setuser] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [department, setdepartment] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [employee, setemployee] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
+    const [user, setuser] = useState([]);
+    const [employee, setemployee] = useState([]);
 
-    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-    const [date, setDate] = React.useState('29 May 2021')
-    const [dateissued, setDateissued] = React.useState('21 May 2021')
-    let index = 0;
-    const dateMonths = {
-        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
+    const [courseName, setCourseName] = useState('')
+    const [des, setDes] = useState('')
+    const [code, setCode] = useState('')
+    const [type, setType] = useState('')
+    const [id, setId] = useState('')
+
+    const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+    useEffect(async () => {
+        let course = route.params.course
+        setCourseName(course.courseName)
+        setDes(course.description)
+        setCode(course.code)
+        setType(course.attendanceType)
+        setId(course._id)
+    }, [])
+
+    let handleUpdate = async () => {
+        setLoadingScreen()
+        try {
+            let slug = `/course/${id}`
+            let token = await read('token')
+            let data = {
+                code: code,
+                courseName: courseName,
+                description: des
+            }
+            let res = await patch(slug, data, token)
+            if (res.error) {
+                alert(res.error)
+            } else if (res._id) {
+                alert('Updated')
+            }
+        } catch (err) {
+            alert('Cannot Update !!')
+        }
+        hideLoadingScreen()
     }
 
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
-    const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date.toString());
-        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
-        hideDatePicker();
-    };
-    const handleConfirmissued = (dateissued) => {
-        // console.warn("A date has been picked: ", dateissued.toString());
-        setDateissued(dateissued.getDate() + " " + dateMonths[dateissued.getMonth() + 1] + " " + dateissued.getFullYear())
-        hideDatePicker();
-    };
+    let handleDelete = async () => {
+        setLoadingScreen()
+        try {
+            let slug = `/course/${id}`
+            let token = await read('token')
+            let res = await deleteReq(slug, token)
+            if (res.error) {
+                alert(res.error)
+            } else {
+                alert('Deleted')
+            }
+        } catch (err) {
+            alert('Cannot Delete !!')
+        }
+        hideLoadingScreen()
+    }
 
     return (
-
-
-
         <View style={{ justifyContent: 'center', alignContent: 'center', display: 'flex', backgroundColor: 'rgba(249, 249, 249, 1)', }}>
 
             {/* header start */}
-
+            {loadingScreen}
             <View
                 style={{
                     backgroundColor: institute ? institute.themeColor : 'black',
@@ -108,26 +127,24 @@ const EditCourses = ({ navigation }) => {
             <ScrollView>
 
                 <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
-
-
-
                     <View style={{ justifyContent: 'center', paddingTop: 15 }} >
-                        <Text style={styles.section_heading}>Course's Name </Text>
-                        <ModalSelector
-                            data={user}
-                            initValue="Introduction to the Python"
-                            onChange={option => {
-                                // setclass(option.key);
-                            }}
-                            style={styles.card}
-                            initValueTextStyle={styles.SelectedValue}
-                            selectTextStyle={styles.SelectedValue}
-                        />
-
+                        <Text style={styles.section_heading}>Course Name </Text>
+                        <View style={{ marginHorizontal: 10 }}>
+                            <View style={[styles.search, styles.shadow]}>
+                                <TextInput
+                                    style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
+                                    placeholder="Course Name"
+                                    placeholderTextColor='grey'
+                                    color='black'
+                                    value={courseName}
+                                    onChangeText={(val) => setCourseName(val)}
+                                />
+                            </View>
+                        </View>
                     </View>
 
                     <View style={{ justifyContent: 'center', paddingTop: 15 }} >
-                        <Text style={styles.section_heading}>Batch Name </Text>
+                        <Text style={styles.section_heading}>Description </Text>
                         <View style={{ marginHorizontal: 10 }}>
                             <View style={[styles.search, styles.shadow]}>
                                 <TextInput
@@ -135,8 +152,8 @@ const EditCourses = ({ navigation }) => {
                                     placeholder="Description"
                                     placeholderTextColor='grey'
                                     color='black'
-                                // // onChangeText={(val) => setTitle(val)
-                                // }
+                                    value={des}
+                                    onChangeText={(val) => setDes(val)}
                                 />
                             </View>
                         </View>
@@ -155,16 +172,17 @@ const EditCourses = ({ navigation }) => {
                             placeholderTextColor='grey'
                             color='black'
                             keyboardType='numeric'
-                        // onChangeText={(val) => setIsbn(val)
-                        // }
+                            value={code}
+                            onChangeText={(val) => setCode(val)}
                         />
 
                         <ModalSelector
                             data={employee}
-                            initValue="Regular"
+                            initValue={type}
                             onChange={option => {
                                 // setclass(option.key);
                             }}
+                            disabled={true}
                             style={styles.cardsmall}
                             initValueTextStyle={styles.SelectedValueSmall}
                             selectTextStyle={styles.SelectedValueSmall}
@@ -172,10 +190,10 @@ const EditCourses = ({ navigation }) => {
 
                     </View>
                     <View style={styles.fixToText}>
-                        <Pressable style={styles.button1} >
+                        <Pressable style={styles.button1} onPress={handleDelete}>
                             <Text style={styles.text1}>Delete</Text>
                         </Pressable>
-                        <Pressable style={styles.button} >
+                        <Pressable style={{ backgroundColor: institute? institute.themeColor: 'blue',...styles.button}} onPress={handleUpdate}>
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
 
@@ -198,14 +216,12 @@ const styles = StyleSheet.create({
 
     },
     button: {
-
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 25,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: '#5177E7',
     },
     text: {
         fontSize: 18,
@@ -420,10 +436,8 @@ const styles = StyleSheet.create({
         textAlign: 'left'
     },
     button1: {
-
         marginTop: 0,
         marginBottom: 0,
-
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'transparent',
