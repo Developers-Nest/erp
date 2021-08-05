@@ -10,9 +10,12 @@ import Icon2 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-
-const PlacementScreen1 = () => {
+import AntDesign from 'react-native-vector-icons/AntDesign';
+//redux
+import { useSelector } from 'react-redux';
+const PlacementScreen1 = ({ navigation }) => {
+    //theming
+    const institute = useSelector(state => state.institute);
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -46,18 +49,47 @@ const PlacementScreen1 = () => {
 
 
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
-                <ModalSelector
+                {/* header start */}
 
-                    initValue="Placement Details"
+                <View
+                    style={{
+                        backgroundColor: institute ? institute.themeColor : '#FF5733',
+                        ...styles.header,
+                    }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('Home');
+                            }}>
+                            <AntDesign
+                                size={24}
+                                color="white"
+                                name="left"
+                                style={{
+                                    alignSelf: 'center',
+                                    fontSize: 25,
+                                    color: 'white',
 
+                                }}
+                            />
 
-                    initValueTextStyle={styles.SelectedValue}
-                    selectTextStyle={styles.SelectedValue}
+                        </TouchableOpacity>
+                    </View>
+                    <Text
+                        style={{
+                            fontStyle: 'normal',
+                            fontFamily: 'NunitoSans-Regular',
+                            fontSize: 28,
+                            fontWeight: '600',
+                            alignSelf: 'center',
+                            paddingLeft: 20,
+                            color: 'white',
+                        }}>
+                        Placement Details
+                    </Text>
+                </View>
 
-
-
-
-                />
+                {/* header ends */}
 
 
 
@@ -146,7 +178,7 @@ const PlacementScreen1 = () => {
 
             </View>
 
-            <View style={{flexDirection:'row'}}>
+            <View style={{ flexDirection: 'row' }}>
                 <Icon2
                     size={25}
                     color="#5177E7"
@@ -157,7 +189,7 @@ const PlacementScreen1 = () => {
                     fontSize: 12,
                     color: '#211C5A',
                     fontFamily: 'Poppins-Regular',
-                    marginTop:15,
+                    marginTop: 15,
                 }}>
                     Select All
                 </Text>
@@ -489,7 +521,10 @@ const styles = StyleSheet.create({
 
 
     },
-
+    header: {
+        height: 69,
+        flexDirection: 'row',
+    },
 
 });
 
