@@ -93,7 +93,7 @@ const HostelDetails = ({navigation}) => {
                 name="align-horizontal-left"
                 color="#900"
                 style={{
-                  fontSize: 35,
+                  fontSize: 30,
                   color: 'white',
                   paddingRight: 20,
                 }}

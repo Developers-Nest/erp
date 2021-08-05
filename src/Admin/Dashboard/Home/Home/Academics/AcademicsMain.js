@@ -304,7 +304,7 @@ export default function AcademicsMain({ navigation }) {
     }
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <View style={styles.maincontainer}>
+            <ScrollView style={styles.maincontainer}>
                 {/* header start */}
 
                 <View
@@ -356,7 +356,7 @@ export default function AcademicsMain({ navigation }) {
                                 name="align-horizontal-right"
                                 color="#900"
                                 style={{
-                                    fontSize: 35,
+                                    fontSize: 30,
                                     color: 'white',
                                     paddingRight: 20,
                                 }}
@@ -439,7 +439,7 @@ export default function AcademicsMain({ navigation }) {
                     </TouchableOpacity>
                 </View>
                 {showContent === 'Courses' ? <Courses /> : <Batches />}
-            </View>
+            </ScrollView>
         </TouchableWithoutFeedback>
     );
 }

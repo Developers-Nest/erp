@@ -32,6 +32,7 @@ export default function SmsAlert({ navigation }) {
       const institute = useSelector(state => state.institute);
     const [AccountName, setAccountName] = useState([]);
     const [Template, setTemplate] = useState([]);
+    const [Des, setDiscription] = useState([]);
     return (
         <View style={styles.backgroung}>
             <View
@@ -89,18 +90,15 @@ export default function SmsAlert({ navigation }) {
                         selectTextStyle={styles.SelectedValueSmall}
                     />
                     <View style={{ padding: 10 }} />
-                    <Card style={{ height: 100, ...styles.Card }}>
-                        <Card.Content>
+                   
                             <TextInput
                                 placeholder="Write your subject of the email here. . ."
                                 placeholderTextColor='grey'
-                                color='black'
-
                                 onChange={val => setDiscription(val)}
-                                style={{ backgroundColor: 'white' }}
+                                multiline={true}
+                                style={{ backgroundColor: 'white' ,color:'black',fontFamily:'Poppins-Regular',fontSize:15,textAlignVertical:'top',height:150,borderRadius:12}}
                             />
-                        </Card.Content>
-                    </Card>
+                       
                 </View>
                 <View style={{ padding: 10 }}>
                     <View
@@ -155,10 +153,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#ccc',
         borderWidth: 1,
-        borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12,
-        borderTopRightRadius: 12,
-        borderTopLeftRadius: 12,
+        borderRadius:12,
         overflow: 'hidden',
         justifyContent: 'center',
         elevation: 3,

@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     paddingTop: 15,
     paddingHorizontal: 10,
-    fontWeight:'bold',
+    
     width: '90%',
     color:'black'
   },

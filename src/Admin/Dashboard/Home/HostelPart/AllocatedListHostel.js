@@ -137,9 +137,10 @@ const AllocatedListHostel = ({ navigation }) => {
               name="add-circle"
               color="#900"
               style={{
-                fontSize: 35,
+                fontSize: 30,
                 color: 'white',
                 paddingRight: 20,
+                marginTop:10
               }}
             />
             <Text
@@ -147,6 +148,7 @@ const AllocatedListHostel = ({ navigation }) => {
                 color: '#fff',
                 fontFamily: 'Poppins-Regular',
                 fontSize: 12,
+                marginRight:20
               }}>
               ALLOCATE
             </Text>
@@ -201,7 +203,7 @@ const AllocatedListHostel = ({ navigation }) => {
                     <Text
                       style={{
                         flexDirection: 'row',
-                        fontSize: 10,
+                        fontSize: 12,
                         color: '#505069',
                         marginTop: 5,
                         fontFamily: 'openSans',
@@ -250,7 +252,7 @@ const AllocatedListHostel = ({ navigation }) => {
                       }}>
                       <Text
                         style={{
-                          fontSize: 12,
+                          fontSize: 13,
                           color: institute ? institute.themeColor : '#211C5A',
                           fontFamily: 'Poppins-Regular',
                           marginTop: 5,
@@ -258,7 +260,7 @@ const AllocatedListHostel = ({ navigation }) => {
                         Edit
                       </Text>
                       <Icon1
-                        size={12}
+                        size={13}
                         backgroundColor=" #211C5A"
                         name="edit"
                         style={{ paddingTop: 7, paddingRight: 12 }}

@@ -73,7 +73,7 @@ const HomeScreen2 = ({navigation}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={{height: 20}}></View>
       <View style={{marginHorizontal: 30, ...styles.shadow}}>
         <View style={styles.search}>
@@ -106,7 +106,7 @@ const HomeScreen2 = ({navigation}) => {
             flexDirection: 'row',
             marginHorizontal: 15,
             flexWrap: 'wrap',
-            justifyContent: 'flex-start',
+            justifyContent: 'space-evenly',
           }}>
           {/* count of member section begins */}
 
@@ -270,7 +270,7 @@ const HomeScreen2 = ({navigation}) => {
             flexDirection: 'row',
             marginHorizontal: 15,
             flexWrap: 'wrap',
-            justifyContent: 'flex-start',
+            justifyContent: 'space-evenly',
           }}>
           <View style={styles.section}>
             <View style={{alignItems: 'center'}}>
@@ -333,7 +333,7 @@ const HomeScreen2 = ({navigation}) => {
         </View>
         <View style={{height: 30}} />
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -358,7 +358,6 @@ const styles = StyleSheet.create({
     height: 59,
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
-    fontWeight: 'bold',
     paddingTop: 15,
     paddingHorizontal: 10,
     width: '90%',

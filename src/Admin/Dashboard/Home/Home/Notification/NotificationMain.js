@@ -4,7 +4,7 @@ import {
   View,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Keyboard,
+  Keyboard,ScrollView
 } from 'react-native';
 
 import {Text} from 'react-native-paper';
@@ -28,7 +28,7 @@ export default function NotificationMain({navigation}) {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View
           style={{
             backgroundColor: institute ? institute.themeColor : 'black',
@@ -82,9 +82,10 @@ export default function NotificationMain({navigation}) {
                   name="add-circle"
                   color="#900"
                   style={{
-                    fontSize: 35,
+                    fontSize: 30,
                     color: 'white',
-                    paddingRight: 20,
+                    marginRight: 20,
+                    marginTop:10
                   }}
                 />
                 <Text
@@ -92,7 +93,7 @@ export default function NotificationMain({navigation}) {
                     color: '#fff',
                     fontFamily: 'Poppins-Regular',
                     fontSize: 12,
-                    paddingRight: 20,
+                    marginRight: 25,
                   }}>
                   Add
                 </Text>
@@ -125,7 +126,7 @@ export default function NotificationMain({navigation}) {
           </TouchableOpacity>
         </View>
         {showContent === 'Circular' ? <Circulars /> : <Notifications />}
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 }

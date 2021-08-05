@@ -73,9 +73,10 @@ export default function BulkSMS({ navigation }) {
                             flex: 1,
                             alignItems: 'center',
                             alignSelf: 'flex-end',
-                            paddingRight: 20,
+                            paddingRight: 25,
+                            marginTop:5
                         }}>
-                        <IonIcon size={24} color="white" name="add-circle-outline" />
+                        <IonIcon size={30} color="white" name="add-circle-outline" />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -100,7 +101,9 @@ export default function BulkSMS({ navigation }) {
                                 placeholderTextColor='grey'
                                 color='black'
                                 onChange={val => setDiscription(val)}
-                                style={{ backgroundColor: 'white' }}
+                                style={{ backgroundColor: 'white',textAlignVertical:'top',fontFamily:'Poppins-Regular',fontSize:15 }}
+                                multiline={true}
+                                
                             />
                         </Card.Content>
                     </Card>
@@ -157,11 +160,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         backgroundColor: 'white',
         borderColor: '#ccc',
-        borderWidth: 1,
-        borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12,
-        borderTopRightRadius: 12,
-        borderTopLeftRadius: 12,
+        borderWidth: 0.5,
+        borderRadius:12,
         overflow: 'hidden',
         justifyContent: 'center',
         elevation: 3,

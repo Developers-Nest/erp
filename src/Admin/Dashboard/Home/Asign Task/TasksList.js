@@ -136,9 +136,10 @@ export default function TasksList({navigation}) {
               flex: 1,
               alignItems: 'center',
               alignSelf: 'flex-end',
+              marginTop:5,
               paddingRight: 20,
             }}>
-            <IonIcon size={24} color="white" name="add-circle-outline" />
+            <IonIcon size={30} color="white" name="add-circle-outline" />
           </TouchableOpacity>
         </View>
       </View>
@@ -155,7 +156,7 @@ export default function TasksList({navigation}) {
               style={{...styles.search_input}}
               placeholder="Enter the driver name here"
               placeholderTextColor="grey"
-              color="black"
+              
             />
             <TouchableOpacity
               style={{
@@ -310,10 +311,10 @@ const styles = StyleSheet.create({
     height: 59,
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
-    fontWeight: 'bold',
     paddingTop: 15,
     paddingHorizontal: 10,
     width: '90%',
+    color:'black'
   },
   shadow: {
     elevation: 5,
