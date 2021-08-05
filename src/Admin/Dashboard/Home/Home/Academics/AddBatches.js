@@ -1,70 +1,91 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
+
 //redux
 import { useSelector } from 'react-redux';
+
+// helpers
+import getCourse from '../../../../../services/helpers/getList/getCourse'
+import post from '../../../../../services/helpers/request/post'
+import read from '../../../../../services/localstorage/read'
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
 
 
 const AddBatches = ({ navigation }) => {
     //theming
     const institute = useSelector(state => state.institute);
 
-    const [user, setuser] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [department, setdepartment] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [employee, setemployee] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
+    const [user, setuser] = useState([]);
 
+    const [batchName, setBatchName] = useState('')
+    const [courseName, setCourseName] = useState('')
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-    const [date, setDate] = React.useState('29 May 2021')
-    const [dateissued, setDateissued] = React.useState('21 May 2021')
-    let index = 0;
-    const dateMonths = {
-        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
-    }
+    const [date, setDate] = useState('29 May 2021')
+    const [startDate, setstartDate] = useState('21 May 2021')
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
     };
-
     const hideDatePicker = () => {
         setDatePickerVisibility(false);
     };
     const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date.toString());
-        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
+        setstartDate(date.toString())
         hideDatePicker();
     };
-    const handleConfirmissued = (dateissued) => {
-        // console.warn("A date has been picked: ", dateissued.toString());
-        setDateissued(dateissued.getDate() + " " + dateMonths[dateissued.getMonth() + 1] + " " + dateissued.getFullYear())
+    const handleConfirmissued = (startDate) => {
+        setDate(startDate.toString())
         hideDatePicker();
     };
+
+    const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+    useEffect(async()=>{
+        setLoadingScreen()
+        try{
+            let res = await getCourse()
+            setuser(res)
+        } catch(err){   
+            alert('Cannot get Batched!!')
+        }
+        hideLoadingScreen()
+    },[])
+
+    let handleSubmit = async()=>{
+        try{
+            let token = await read('token')
+            let slug = '/batch/add'
+            let data = {
+                academicYear: institute.academicYear,
+                batchName: batchName,
+                course: courseName,
+                endDate: date,
+                maximumStudents: 600,
+                startDate: startDate
+            }
+            let res = await post(slug, data, token)
+            if(res.error){
+                alert(res.error)
+            } else if(res._id){
+                alert('Batch Added')
+            }
+        } catch(err){
+            alert('Cannot Save '+err)
+        }
+
+    }
 
     return (
-
-
-
         <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: 'rgba(249, 249, 249, 1)', }}>
 
             {/* header start */}
-
+            {loadingScreen}
             <View
                 style={{
                     backgroundColor: institute ? institute.themeColor : 'black',
@@ -117,7 +138,7 @@ const AddBatches = ({ navigation }) => {
                             data={user}
                             initValue="Introduction to the Python"
                             onChange={option => {
-                                // setclass(option.key);
+                               setCourseName(option.key)
                             }}
                             style={styles.card}
                             initValueTextStyle={styles.SelectedValue}
@@ -135,8 +156,7 @@ const AddBatches = ({ navigation }) => {
                                     placeholder="Description"
                                     placeholderTextColor='grey'
                                     color='black'
-                                // // onChangeText={(val) => setTitle(val)
-                                // }
+                                 onChangeText={(val) => setBatchName(val)}
                                 />
                             </View>
                         </View>
@@ -153,18 +173,16 @@ const AddBatches = ({ navigation }) => {
                         <TouchableOpacity style={[styles.pickdate, styles.shadow]}
                             onPress={showDatePicker}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                placeholder={dateissued}
+                                value={startDate.slice(0,10)}
                                 placeholderTextColor='grey'
                                 color='black'
-
+                                editable={false}
                             />
                             <Feather size={18} color="black" name="calendar"
                                 style={{
                                     marginTop: 16,
                                     marginRight: 0,
                                 }}
-
-
                             ></Feather>
                             <DateTimePickerModal
                                 isVisible={isDatePickerVisible}
@@ -177,17 +195,16 @@ const AddBatches = ({ navigation }) => {
                         <TouchableOpacity style={[styles.pickdate, styles.shadow]}
                             onPress={showDatePicker}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                placeholder={date}
+                                value={date.slice(0,10)}
                                 placeholderTextColor='grey'
                                 color='black'
+                                editable={false}
                             />
                             <Feather size={18} color="black" name="calendar"
                                 style={{
                                     marginTop: 16,
                                     marginRight: 0,
                                 }}
-
-
                             ></Feather>
                             <DateTimePickerModal
                                 isVisible={isDatePickerVisible}
@@ -200,13 +217,10 @@ const AddBatches = ({ navigation }) => {
 
                     </View>
                     <View style={styles.fixToText}>
-                        <Pressable style={styles.button} >
+                        <Pressable style={{backgroundColor: institute? institute.themeColor: 'blue', ...styles.button}} onPress={handleSubmit}>
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
-
-
                     </View>
-
                 </View>
             </ScrollView>
         </View>
@@ -219,18 +233,14 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         backgroundColor: 'rgba(249, 249, 249, 1)',
-
-
     },
     button: {
-
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 25,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: '#5177E7',
     },
     text: {
         fontSize: 18,
@@ -246,9 +256,6 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         borderRadius: 8,
         margin: 40,
-
-
-
     },
 
     section_heading: {
@@ -272,7 +279,6 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'center',
         color: 'rgba(88, 99, 109, 0.85)',
-
         marginBottom: 5,
     },
     section_heading2: {
@@ -286,12 +292,7 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'center',
         marginRight: 35,
-
-
         color: 'rgba(88, 99, 109, 0.85)',
-
-
-
     },
     pickdate1: {
         width: 120,
@@ -324,8 +325,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontFamily: 'Poppins-Regular',
-
-
     },
 
     pickdate: {
