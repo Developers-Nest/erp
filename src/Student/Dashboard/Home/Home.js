@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,17 +6,16 @@ import {
   ScrollView,
   Linking,
   TextInput,
-
 } from 'react-native';
 
-import { Text, Button, Badge } from 'react-native-paper';
+import {Text, Button, Badge} from 'react-native-paper';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 //icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -40,20 +39,24 @@ import Notes from './Home/Notes';
 import Timetable from './Home/Timetable';
 
 // redux
-import { useSelector, useDispatch } from 'react-redux';
-import { SETNOTICATIONS, NOTREADNOTIFICATIONS, SETPRIVILEDGES } from '../../../reducers/actionType'
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  SETNOTICATIONS,
+  NOTREADNOTIFICATIONS,
+  SETPRIVILEDGES,
+} from '../../../reducers/actionType';
 
 // helpers
 import read from '../../../services/localstorage/read';
 import write from '../../../services/localstorage/write';
 import get from '../../../services/helpers/request/get';
 import timeTableBuilder from '../../../services/helpers/extract/teacherTtDayWiseBuild';
-import priviledges from '../../../services/helpers/extract/privileges'
+import priviledges from '../../../services/helpers/extract/privileges';
 
 // loadingScreen
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
 let parseDate = myDate => {
   let d = new Date(myDate);
@@ -71,7 +74,7 @@ let daylist = [
 let userInfo;
 let today = daylist[new Date().getDay()];
 
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
   let institute = useSelector(state => state.institute);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [collapsed, setCollapsed] = React.useState(true);
@@ -87,35 +90,37 @@ const Home = ({ navigation }) => {
   const [notes, setNotes] = useState([]);
   const [circulars, setCirculars] = useState([]);
   const [timeTable, setTimeTable] = useState([]);
+  const [notifications, setNotifications] = useState([]);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   let parseDate = myDate => {
     let d = new Date(myDate);
     return d.toString().slice(0, 15);
   };
 
-  useEffect(async () => {
+  // unread notifications count
+  let notReadNotifications = useSelector(state => state.count);
 
+  useEffect(async () => {
     setLoadingScreen();
 
     try {
-      let token = await read('token')
-      let slug = `/privileges/Student`
-      let res = await get(slug, token)
+      let token = await read('token');
+      let slug = `/privileges/Student`;
+      let res = await get(slug, token);
       // console.log('Priviledges ', res)
-      let priv = priviledges(res)
-      console.log('Priv ', priv)
+      let priv = priviledges(res);
+      console.log('Priv ', priv);
       dispatch({
         type: SETPRIVILEDGES,
-        priviledges: priv
-      })
+        priviledges: priv,
+      });
     } catch (err) {
-      alert('Cannot get Priviledges!!' + err)
+      alert('Cannot get Priviledges!!' + err);
     }
 
     hideLoadingScreen();
-
   }, []);
 
   useFocusEffect(
@@ -170,14 +175,64 @@ const Home = ({ navigation }) => {
         } catch (err) {
           alert('Cannot Display your timetable!! ' + err);
         }
+        //fetch notifaication count
+        try {
+          let getUserType = () => {
+            if (typeof userInfo.userType === 'string') {
+              return userInfo.userType;
+            } else {
+              return userInfo.userType._id;
+            }
+          };
 
-      }
+          let slug = `/notification?userType=${getUserType()}&course=${
+            userInfo.course
+          }&batch=${userInfo.batch}`;
+          let token = await read('token');
+          let res = await get(slug, token);
+          let Content = [];
+          let currentUser = userInfo._id;
+          let count = 0;
+          await res.map(noti => {
+            let found = false;
+            noti &&
+              noti.isReadBy.map(read => {
+                if (read == currentUser) {
+                  found = true;
+                }
+              });
+            if (!found) count += 1;
+            Content.push({
+              title: noti.title,
+              content: noti.message,
+              type: 'News',
+              _id: noti._id,
+              isRead: found ? true : false,
+            });
+          });
+
+          dispatch({
+            type: NOTREADNOTIFICATIONS,
+            count: count,
+          });
+
+          setNotifications(Content);
+
+          // notification count in redux store
+          dispatch({
+            type: SETNOTICATIONS,
+            notificatons: Content,
+          });
+        } catch (err) {
+          alert('Cannot get Notifications!!' + err);
+        }
+      };
       fetchUser();
 
       return () => {
         isActive = false;
       };
-    }, [])
+    }, []),
   );
 
   return (
@@ -243,14 +298,21 @@ const Home = ({ navigation }) => {
               color: institute ? institute.themeColor : 'black',
             }}
           />
-          <Badge style={{ backgroundColor: 'blue', marginBottom: 35, marginRight: 10 }}>3</Badge>
+          <Badge
+            style={{
+              backgroundColor: 'blue',
+              marginBottom: 35,
+              marginRight: 10,
+            }}>
+            {notReadNotifications}
+          </Badge>
         </TouchableOpacity>
       </View>
-      <View style={{ paddingTop: 10 }}></View>
-      <View style={{ ...styles.shadow }}>
+      <View style={{paddingTop: 10}}></View>
+      <View style={{...styles.shadow}}>
         <View style={styles.search}>
           <TextInput
-            style={{ ...styles.search_input }}
+            style={{...styles.search_input}}
             placeholder="Live class, fees and more"
             placeholderTextColor="black"
           />
@@ -271,7 +333,7 @@ const Home = ({ navigation }) => {
         </View>
       </View>
       <ScrollView style={styles.main}>
-        <View style={{ height: 30 }}></View>
+        <View style={{height: 30}}></View>
         <View>
           <Text style={styles.section_heading}>Upcoming Classes</Text>
         </View>
@@ -280,7 +342,7 @@ const Home = ({ navigation }) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           {timeTable[today] && timeTable[today].length == 0 ? (
-            <Text style={{ marginLeft: 10 }}>No Classes</Text>
+            <Text style={{marginLeft: 10}}>No Classes</Text>
           ) : (
             timeTable[today] &&
             timeTable[today].map((slots, index) => {
@@ -291,7 +353,11 @@ const Home = ({ navigation }) => {
                       <Text style={styles.classes_cardClass}>
                         {slot.subjectId && slot.subjectId.name.toUpperCase()}
                       </Text>
-                      <Text style={styles.classes_cardTime, { color: institute ? institute.themeColor : 'blue' }}>
+                      <Text
+                        style={
+                          (styles.classes_cardTime,
+                          {color: institute ? institute.themeColor : 'blue'})
+                        }>
                         {`${slot.startTime} - ${slot.endTime}`}
                       </Text>
                       <Text style={styles.classes_cardBatch}>
@@ -305,7 +371,7 @@ const Home = ({ navigation }) => {
           )}
         </ScrollView>
 
-        <View style={{ height: 30 }}></View>
+        <View style={{height: 30}}></View>
         <View>
           <Text style={styles.section_heading}>New Circular</Text>
         </View>
@@ -380,12 +446,12 @@ const Home = ({ navigation }) => {
             </View>
           ))
         ) : (
-          <Text style={{ marginLeft: 30 }}>No Active Circulars</Text>
+          <Text style={{marginLeft: 30}}>No Active Circulars</Text>
         )}
 
         {/* assignment section */}
         <ScrollView
-          contentContainerStyle={{ ...styles.card_Wrapper }}
+          contentContainerStyle={{...styles.card_Wrapper}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           {assignments &&
@@ -419,7 +485,7 @@ const Home = ({ navigation }) => {
 
         {/* books section */}
         <ScrollView
-          contentContainerStyle={{ ...styles.card_Wrapper }}
+          contentContainerStyle={{...styles.card_Wrapper}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           {notes &&
@@ -453,7 +519,7 @@ const Home = ({ navigation }) => {
 
         {/* fees section */}
         <ScrollView
-          contentContainerStyle={{ ...styles.card_Wrapper }}
+          contentContainerStyle={{...styles.card_Wrapper}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           <View>
@@ -492,22 +558,22 @@ const Home_Route = () => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Notification"
         component={Notification}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Notes"
         component={Notes}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="Timetable"
         component={Timetable}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
@@ -531,7 +597,7 @@ const getTabBarVisibility = route => {
 
 function DrawerContent(props) {
   let institute = useSelector(state => state.institute);
-  let userPriviledges = useSelector(state => state.priviledges)
+  let userPriviledges = useSelector(state => state.priviledges);
   const handleLogout = async () => {
     // const navigation = useNavigation();
     try {
@@ -544,106 +610,96 @@ function DrawerContent(props) {
     }
   };
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
         <DrawerItem
           style={styles.item}
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Home</Text>
           )}
           onPress={() => props.navigation.navigate('Home')}
         />
 
-        {
-          userPriviledges && userPriviledges.hasOwnProperty('Student Timetable') ? (
-            <DrawerItem
-              style={styles.item}
-              label={({ focused, color }) => (
-                <Text style={styles.drawer_item}>Timetable</Text>
-              )}
-              onPress={() => props.navigation.navigate('Timetable')}
-            />
-          ) : (null)
-        }
+        {userPriviledges &&
+        userPriviledges.hasOwnProperty('Student Timetable') ? (
+          <DrawerItem
+            style={styles.item}
+            label={({focused, color}) => (
+              <Text style={styles.drawer_item}>Timetable</Text>
+            )}
+            onPress={() => props.navigation.navigate('Timetable')}
+          />
+        ) : null}
 
-        {
-          userPriviledges && userPriviledges.hasOwnProperty('Content Library') ? (
-            <DrawerItem
-              style={styles.item}
-              label={({ focused, color }) => (
-                <Text style={styles.drawer_item}>Content Library</Text>
-              )}
-              onPress={() => props.navigation.navigate('ContentStack')}
-            />
-          ) : (null)
-        }
+        {userPriviledges &&
+        userPriviledges.hasOwnProperty('Content Library') ? (
+          <DrawerItem
+            style={styles.item}
+            label={({focused, color}) => (
+              <Text style={styles.drawer_item}>Content Library</Text>
+            )}
+            onPress={() => props.navigation.navigate('ContentStack')}
+          />
+        ) : null}
 
-        {
-          userPriviledges && userPriviledges.hasOwnProperty('Student Attendance') ? (
-            <DrawerItem
-              style={styles.item}
-              label={({ focused, color }) => (
-                <Text style={styles.drawer_item}>Attendance</Text>
-              )}
-              onPress={() => props.navigation.navigate('Attendance')}
-            />
-          ) : (null)
-        }
+        {userPriviledges &&
+        userPriviledges.hasOwnProperty('Student Attendance') ? (
+          <DrawerItem
+            style={styles.item}
+            label={({focused, color}) => (
+              <Text style={styles.drawer_item}>Attendance</Text>
+            )}
+            onPress={() => props.navigation.navigate('Attendance')}
+          />
+        ) : null}
         <DrawerItem
           style={styles.item}
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Fees</Text>
           )}
           onPress={() => props.navigation.navigate('Fees')}
         />
 
-        {
-          userPriviledges && userPriviledges.hasOwnProperty('Assignments List') ? (
-            <DrawerItem
-              style={styles.item}
-              label={({ focused, color }) => (
-                <Text style={styles.drawer_item}>Assignment</Text>
-              )}
-              onPress={() => props.navigation.navigate('AssignmentStudent')}
-            />
-          ) : (null)
-        }
+        {userPriviledges &&
+        userPriviledges.hasOwnProperty('Assignments List') ? (
+          <DrawerItem
+            style={styles.item}
+            label={({focused, color}) => (
+              <Text style={styles.drawer_item}>Assignment</Text>
+            )}
+            onPress={() => props.navigation.navigate('AssignmentStudent')}
+          />
+        ) : null}
 
-        {
-          userPriviledges && userPriviledges.hasOwnProperty('Issue Book') ? (
-            <DrawerItem
-              label={({ focused, color }) => (
-                <Text style={styles.drawer_item}>Books</Text>
-              )}
-              onPress={() => props.navigation.navigate('Books')}
-            />
-          ) : (null)
-        }
+        {userPriviledges && userPriviledges.hasOwnProperty('Issue Book') ? (
+          <DrawerItem
+            label={({focused, color}) => (
+              <Text style={styles.drawer_item}>Books</Text>
+            )}
+            onPress={() => props.navigation.navigate('Books')}
+          />
+        ) : null}
 
-        {
-          userPriviledges && userPriviledges.hasOwnProperty('Add Feedback') ? (
-            <DrawerItem
-              label={({ focused, color }) => (
-                <Text style={styles.drawer_item}>Feedback</Text>
-              )}
-              onPress={() => props.navigation.navigate('Feedback')}
-            />
-          ) : (null)
-        }
+        {userPriviledges && userPriviledges.hasOwnProperty('Add Feedback') ? (
+          <DrawerItem
+            label={({focused, color}) => (
+              <Text style={styles.drawer_item}>Feedback</Text>
+            )}
+            onPress={() => props.navigation.navigate('Feedback')}
+          />
+        ) : null}
 
-
-        {
-          userPriviledges && userPriviledges.hasOwnProperty('Transport Allocation') ? (
-            <DrawerItem
-              label={({ focused, color }) => (
-                <Text style={styles.drawer_item}>Transport</Text>
-              )}
-              onPress={() => props.navigation.navigate('Transport')}
-            />
-          ) : (null)
-        }
+        {userPriviledges &&
+        userPriviledges.hasOwnProperty('Transport Allocation') ? (
+          <DrawerItem
+            label={({focused, color}) => (
+              <Text style={styles.drawer_item}>Transport</Text>
+            )}
+            onPress={() => props.navigation.navigate('Transport')}
+          />
+        ) : null}
         <DrawerItem
-          label={({ focused, color }) => (
+          label={({focused, color}) => (
             <Text style={styles.drawer_item}>Report</Text>
           )}
           onPress={() => props.navigation.navigate('Report')}
@@ -724,7 +780,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingHorizontal: 10,
     width: '90%',
-    color: 'black'
+    color: 'black',
   },
   section_heading: {
     fontFamily: 'Poppins-Regular',
@@ -879,5 +935,5 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
   },
-  item: { padding: 0, margin: 0 },
+  item: {padding: 0, margin: 0},
 });
