@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -14,11 +14,27 @@ import { Button } from 'react-native-paper';
 //redux
 import { useSelector } from 'react-redux';
 
+// helpers
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const TypeList = ({navigation}) => {
 
     const institute = useSelector(state => state.institute);
-
+    const [typelist, settypelist] = useState([]);
+    useEffect(async () => {
+        try {
+          let slug = '/feedback/type?';
+          let token = await read('token');
+          const response = await get(slug, token);
+          console.log(response);
+          settypelist(response);
+        } catch (err) {
+          alert('Cannot fetch feedback type list !!');
+        }
+      }, []);
+    
     return (
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
                    {/* header start */}
@@ -70,6 +86,8 @@ const TypeList = ({navigation}) => {
                     <TextInput
                         style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
                         placeholder="Enter feedback type here"
+                        placeholderTextColor='grey'
+                        color='black'
 
                     />
                     <TouchableOpacity
@@ -89,10 +107,13 @@ const TypeList = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
             </View>
+<ScrollView>
+            {typelist &&
+              typelist.map(typelist => (
 
-
-
-            <View style={styles.section} >
+            <View style={styles.section}
+            key={typelist._id}
+            >
                 <View style={styles.details}>
                     <View style={styles.userinhostels}>
                         <View style={styles.differentusers}>
@@ -104,7 +125,7 @@ const TypeList = ({navigation}) => {
                                     marginHorizontal: -5,
                                 }}>
 
-                                Feedback Type
+                                {typelist.feedbacktype?typelist.feedbacktype:'N/A'}
 
                             </Text>
 
@@ -136,7 +157,7 @@ const TypeList = ({navigation}) => {
                                     color: '#505069',
                                     fontFamily: 'Poppins-Regular',
                                 }}>
-                                For: Students
+                                For: {typelist.feedbackfor?typelist.feedbackfor:'N/A'}
 
                             </Text>
 
@@ -155,7 +176,7 @@ const TypeList = ({navigation}) => {
                                 </Text>
                                 <Icon1
                                     size={12}
-                                    backgroundColor=" #211C5A"
+                                    backgroundColor="#211C5A"
                                     name="edit"
                                     style={{ paddingTop: 7, paddingRight: 12 }}
                                 />
@@ -187,7 +208,7 @@ const TypeList = ({navigation}) => {
                                 fontSize: 12,
                                 fontFamily: 'Poppins-Regular',
                             }}>
-                                Active
+                                {typelist.status?typelist.status:'N/A'}
                         </Text>
                     </View>
                     
@@ -196,109 +217,9 @@ const TypeList = ({navigation}) => {
 
             </View>
 
-
-            <View style={styles.section} >
-                <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                        <View style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 18,
-                                    color: '#211C5A',
-                                    fontFamily: 'Poppins-Regular',
-                                    marginHorizontal: -5,
-                                }}>
-
-                                Feedback Type
-
-                            </Text>
-
-                            
-
-
-                            {/* */}
-                        </View>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#5177E7',
-                                    fontFamily: 'Poppins-Medium',
-                                }}>
-
-                            </Text>
-
-
-                        </TouchableOpacity>
-                        
-
-
-
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#505069',
-                                    fontFamily: 'Poppins-Regular',
-                                }}>
-                                For: Students
-
-                            </Text>
-
-                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: '#211C5A',
-                                        fontFamily: 'Poppins-Regular',
-                                        marginTop: 5,
-                                    }}>
-                                    Edit
-                                </Text>
-                                <Icon1
-                                    size={12}
-                                    backgroundColor=" #211C5A"
-                                    name="edit"
-                                    style={{ paddingTop: 7, paddingRight: 12 }}
-                                />
-                            </TouchableOpacity>
-
-
-                        </TouchableOpacity>
-
-                    </View>
-                </View>
-
-
-
-
-                <View style={styles.belowhr}>
-                    <View style={{ flexDirection: 'column' }}>
-                        <Text
-                            style={{
-                                color: '#B04305',
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Medium',
-                            }}>
-
-                        </Text>
-                        <Text
-                            style={{
-                                color: '#505069',
-
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-                                Inactive
-                        </Text>
-                    </View>
-                    
-                </View>
-
-
-            </View>
-
-
+))}
+<View style={{height:80}}/>
+</ScrollView>
 
 
 
