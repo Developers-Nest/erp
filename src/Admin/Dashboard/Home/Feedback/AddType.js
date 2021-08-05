@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         lineHeight: 18,
         textAlign: 'center',
-        marginRight: 35,
+        marginRight: 28,
         marginLeft: 0,
 
 
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
 
     card: {
 
-        width: 170,
+        
         height: 50,
 
         shadowColor: '#999',
@@ -453,15 +453,15 @@ const styles = StyleSheet.create({
         marginRight: 20,
 
         //flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
 
-
+        width:'47%',
 
 
     },
     card1: {
 
-        width: 170,
+        width:'43%',
         height: 50,
 
         shadowColor: '#999',
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 8,
         borderWidth: 0.3,
-        marginLeft: 10,
+        marginLeft:0,
         marginRight: 20,
 
         //flexDirection: 'row',
