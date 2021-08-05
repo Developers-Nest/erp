@@ -264,62 +264,71 @@ const HomeScreen2 = ({navigation}) => {
         <View style={{width: '100%', paddingTop: 35}}>
           <Text style={styles.section_heading}>Mostly Used</Text>
         </View>
-        <View style={styles.section}>
-          <View style={{alignItems: 'center'}}>
-            <IonIcon
-              size={36.83}
-              color={institute ? institute.themeColor : '#211C5A'}
-              name="library-outline"
-            />
 
-            <Text
-              style={{
-                fontWeight: 'normal',
-                fontSize: 12,
-                color: '#211C5A',
-                fontFamily: 'Poppins-Regular',
-              }}>
-              Library
-            </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginHorizontal: 15,
+            flexWrap: 'wrap',
+            justifyContent: 'flex-start',
+          }}>
+          <View style={styles.section}>
+            <View style={{alignItems: 'center'}}>
+              <IonIcon
+                size={36.83}
+                color={institute ? institute.themeColor : '#211C5A'}
+                name="library-outline"
+              />
+
+              <Text
+                style={{
+                  fontWeight: 'normal',
+                  fontSize: 12,
+                  color: '#211C5A',
+                  fontFamily: 'Poppins-Regular',
+                }}>
+                Library
+              </Text>
+            </View>
           </View>
-        </View>
-        <View style={styles.section}>
-          <View style={{alignItems: 'center'}}>
-            <SimpleLineIcon
-              size={38}
-              color={institute ? institute.themeColor : '#211C5A'}
-              name="graduation"
-            />
+          <View style={styles.section}>
+            <View style={{alignItems: 'center'}}>
+              <SimpleLineIcon
+                size={38}
+                color={institute ? institute.themeColor : '#211C5A'}
+                name="graduation"
+              />
 
-            <Text
-              style={{
-                fontWeight: 'normal',
-                fontSize: 12,
-                color: '#211C5A',
-                fontFamily: 'Poppins-Regular',
-              }}>
-              Students
-            </Text>
+              <Text
+                style={{
+                  fontWeight: 'normal',
+                  fontSize: 12,
+                  color: '#211C5A',
+                  fontFamily: 'Poppins-Regular',
+                }}>
+                Students
+              </Text>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.section}>
-          <View style={{alignItems: 'center'}}>
-            <MaterialCommunityIcon
-              size={36.83}
-              color={institute ? institute.themeColor : '#211C5A'}
-              name="briefcase-outline"
-            />
+          <View style={styles.section}>
+            <View style={{alignItems: 'center'}}>
+              <MaterialCommunityIcon
+                size={36.83}
+                color={institute ? institute.themeColor : '#211C5A'}
+                name="briefcase-outline"
+              />
 
-            <Text
-              style={{
-                fontWeight: 'normal',
-                fontSize: 12,
-                color: '#211C5A',
-                fontFamily: 'Poppins-Regular',
-              }}>
-              Employees
-            </Text>
+              <Text
+                style={{
+                  fontWeight: 'normal',
+                  fontSize: 12,
+                  color: '#211C5A',
+                  fontFamily: 'Poppins-Regular',
+                }}>
+                Employees
+              </Text>
+            </View>
           </View>
         </View>
         <View style={{height: 30}} />
