@@ -266,4 +266,8 @@ const styles = StyleSheet.create({
     paddingTop: 3,
     color: '#211C5A',
   },
+  header: {
+    height: 69,
+    flexDirection: 'row',
+  },
 });

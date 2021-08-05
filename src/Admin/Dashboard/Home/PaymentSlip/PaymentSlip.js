@@ -497,4 +497,8 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomColor: '#333',
   },
+  header: {
+    height: 69,
+    flexDirection: 'row',
+  },
 });
