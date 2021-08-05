@@ -59,6 +59,7 @@ import Notification from './Home/Notification';
 //navigation from home menu and drawer navigation too
 import Exams from './Home/Exams';
 import Academics from './Home/Academics';
+import EventNavigation from './Events/EventNavigation';
 
 //helpers
 import write from '../../../services/localstorage/write';
@@ -264,7 +265,7 @@ function DrawerContent(props) {
           label={({ focused, color }) => (
             <Text style={styles.drawer_item}>Events</Text>
           )}
-          onPress={() => Alert.alert('Add Events screen')}
+          onPress={() => props.navigation.navigate('EventNavigation')}
         />
         <DrawerItem
           style={styles.item}
@@ -388,6 +389,7 @@ export default function Route() {
       <DrawerNav.Screen name="Report" component={Report} />
       <DrawerNav.Screen name="Occurence" component={Occurence} />
       <DrawerNav.Screen name="Placement" component={Placement} />
+      <DrawerNav.Screen name="EventNavigation" component={EventNavigation} />
       {/* <DrawerNav.Screen name="Cce Marks" component={CceMarks} /> */}
       {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
     </DrawerNav.Navigator>

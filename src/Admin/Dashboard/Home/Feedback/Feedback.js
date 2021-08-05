@@ -22,7 +22,6 @@ export default function FeedBack() {
       <Stack.Screen name="EditQuestion" component={EditQuestion} />
       <Stack.Screen name="QuestionList" component={QuestionList} />
       <Stack.Screen name="TypeList" component={TypeList} />
-      
     </Stack.Navigator>
   );
 }
