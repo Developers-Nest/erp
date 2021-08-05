@@ -80,7 +80,7 @@ const HomeScreen2 = ({navigation}) => {
           <TextInput
             style={{...styles.search_input}}
             placeholder="Live class, fees and more"
-            placeholderTextColor='grey'
+            placeholderTextColor="grey"
           />
 
           <TouchableOpacity
@@ -196,113 +196,130 @@ const HomeScreen2 = ({navigation}) => {
           <View style={{width: '100%', paddingTop: 15}}>
             <Text style={styles.section_heading}>New Circular</Text>
           </View>
-          <View style={{marginHorizontal: 10, ...styles.shadow}}>
-            <View
+        </View>
+
+        <View style={{marginHorizontal: 20, ...styles.shadow}}>
+          <View
+            style={{
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+              borderBottomLeftRadius: collapsed ? 8 : 0,
+              borderBottomRightRadius: collapsed ? 8 : 0,
+              ...styles.collapsable_header,
+            }}>
+            <Text style={styles.collapsable_headerText}>Title</Text>
+            {!collapsed ? (
+              <TouchableOpacity
+                style={styles.collapsable_IconContainer}
+                onPress={toggleExpanded}>
+                <FontAwesome5
+                  name="chevron-up"
+                  size={14}
+                  style={{
+                    color: institute
+                      ? institute.themeColor
+                      : 'rgba(62, 104, 228, 0.9)',
+                  }}
+                />
+                <Text style={styles.collapsable_IconText}>Read Less</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.collapsable_IconContainer}
+                onPress={toggleExpanded}>
+                <FontAwesome5
+                  name="chevron-down"
+                  size={14}
+                  style={{
+                    color: institute
+                      ? institute.themeColor
+                      : 'rgba(62, 104, 228, 0.9)',
+                  }}
+                />
+                <Text style={styles.collapsable_IconText}>Read More</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          <Collapsible
+            collapsed={collapsed}
+            align="center"
+            style={styles.collapsable_contentWrapper}>
+            <Text style={styles.collapsable_content}>
+              Exams will be conducted via online mode. All the best. It is
+              requested from the students to maintain the.
+            </Text>
+            <Button
+              mode="contained"
               style={{
-                borderTopLeftRadius: 8,
-                borderTopRightRadius: 8,
-                borderBottomLeftRadius: collapsed ? 8 : 0,
-                borderBottomRightRadius: collapsed ? 8 : 0,
-                ...styles.collapsable_header,
+                borderWidth: 0.5,
+                borderColor: institute ? institute.themeColor : 'black',
+              }}
+              color={institute ? institute.themeColor : 'black'}>
+              Download Circular
+            </Button>
+          </Collapsible>
+        </View>
+        {/* Most used section*/}
+
+        <View style={{width: '100%', paddingTop: 35}}>
+          <Text style={styles.section_heading}>Mostly Used</Text>
+        </View>
+        <View style={styles.section}>
+          <View style={{alignItems: 'center'}}>
+            <IonIcon
+              size={36.83}
+              color={institute ? institute.themeColor : '#211C5A'}
+              name="library-outline"
+            />
+
+            <Text
+              style={{
+                fontWeight: 'normal',
+                fontSize: 12,
+                color: '#211C5A',
+                fontFamily: 'Poppins-Regular',
               }}>
-              <Text style={styles.collapsable_headerText}>Title</Text>
-              {!collapsed ? (
-                <TouchableOpacity
-                  style={styles.collapsable_IconContainer}
-                  onPress={toggleExpanded}>
-                  <FontAwesome5
-                    name="chevron-up"
-                    size={14}
-                    style={{color: 'rgba(62, 104, 228, 0.9)'}}
-                  />
-                  <Text style={styles.collapsable_IconText}>Read Less</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles.collapsable_IconContainer}
-                  onPress={toggleExpanded}>
-                  <FontAwesome5
-                    name="chevron-down"
-                    size={14}
-                    style={{color: 'rgba(62, 104, 228, 0.9)'}}
-                  />
-                  <Text style={styles.collapsable_IconText}>Read More</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-            <Collapsible
-              collapsed={collapsed}
-              align="center"
-              style={styles.collapsable_contentWrapper}>
-              <Text style={styles.collapsable_content}>
-                Exams will be conducted via online mode. All the best. It is
-                requested from the students to maintain the.
-              </Text>
-            </Collapsible>
+              Library
+            </Text>
           </View>
+        </View>
+        <View style={styles.section}>
+          <View style={{alignItems: 'center'}}>
+            <SimpleLineIcon
+              size={38}
+              color={institute ? institute.themeColor : '#211C5A'}
+              name="graduation"
+            />
 
-          {/* Most used section*/}
-
-          <View style={{width: '100%', paddingTop: 35}}>
-            <Text style={styles.section_heading}>Mostly Used</Text>
+            <Text
+              style={{
+                fontWeight: 'normal',
+                fontSize: 12,
+                color: '#211C5A',
+                fontFamily: 'Poppins-Regular',
+              }}>
+              Students
+            </Text>
           </View>
-          <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
-              <IonIcon
-                size={36.83}
-                color={institute ? institute.themeColor : '#211C5A'}
-                name="library-outline"
-              />
+        </View>
 
-              <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  fontFamily: 'Poppins-Regular',
-                }}>
-                Library
-              </Text>
-            </View>
-          </View>
-          <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
-              <SimpleLineIcon
-                size={38}
-                color={institute ? institute.themeColor : '#211C5A'}
-                name="graduation"
-              />
+        <View style={styles.section}>
+          <View style={{alignItems: 'center'}}>
+            <MaterialCommunityIcon
+              size={36.83}
+              color={institute ? institute.themeColor : '#211C5A'}
+              name="briefcase-outline"
+            />
 
-              <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  fontFamily: 'Poppins-Regular',
-                }}>
-                Students
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
-              <MaterialCommunityIcon
-                size={36.83}
-                color={institute ? institute.themeColor : '#211C5A'}
-                name="briefcase-outline"
-              />
-
-              <Text
-                style={{
-                  fontWeight: 'normal',
-                  fontSize: 12,
-                  color: '#211C5A',
-                  fontFamily: 'Poppins-Regular',
-                }}>
-                Employees
-              </Text>
-            </View>
+            <Text
+              style={{
+                fontWeight: 'normal',
+                fontSize: 12,
+                color: '#211C5A',
+                fontFamily: 'Poppins-Regular',
+              }}>
+              Employees
+            </Text>
           </View>
         </View>
         <View style={{height: 30}} />
@@ -336,7 +353,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingHorizontal: 10,
     width: '90%',
-    color:'black'
+    color: 'black',
   },
   section_heading: {
     fontFamily: 'Poppins-Regular',
@@ -428,7 +445,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontSize: 11,
-    color: '#00499F',
   },
   collapsable_contentWrapper: {
     borderBottomLeftRadius: 8,
