@@ -163,57 +163,56 @@ export default function EventScreen({navigation}) {
       {events &&
         events.map(event => (
           <View style={styles.shadow} key={event._id}>
-            <View style={styles.EventCard}>
+               <View style={styles.EventCard}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginTop: 18,
+                marginLeft: 18,
+                marginRight: 18,
+              }}>
+              <Text style={{fontSize: 18, fontWeight: '400', color: '#211C5A'}}>
+                {event.name}
+              </Text>
+              <View style={{flexDirection: 'row'}}>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    navigation.navigate('EditEvent');
+                  }}>
+                  <FontAwesome5Icon
+                    name="edit"
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 20,
+                      color: '#211C5A',
+                    }}
+                  />
+                  <Text>Edit</Text>
+                </TouchableWithoutFeedback>
+              </View>
+            </View>
+            <View style={{marginLeft: 18, marginRight: 18}}>
+              <Text style={{color: '#211C5A'}}>{event.eventFor}</Text>
+              <Text style={{color: '#211C5A', marginBottom: 0}}>
+                {event.description}
+              </Text>
               <View
                 style={{
+                  marginTop: 10,
                   flexDirection: 'row',
                   justifyContent: 'space-between',
-                  marginTop: 18,
-                  marginLeft: 18,
-                  marginRight: 18,
+                  marginBottom: 10,
+                  borderTopWidth: 0.2,
                 }}>
-                <Text
-                  style={{fontSize: 18, fontWeight: '400', color: '#211C5A'}}>
-                  {event.name}
+                <Text style={{color: '#211C5A', marginTop: 5}}>
+                  {'From: '}
+                  {parseDate(event.startDate)}
                 </Text>
-                <View style={{flexDirection: 'row'}}>
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      navigation.navigate('EditEvent');
-                    }}>
-                    <FontAwesome5Icon
-                      name="edit"
-                      style={{
-                        alignSelf: 'center',
-                        fontSize: 20,
-                        color: '#211C5A',
-                      }}
-                    />
-                    <Text>Edit</Text>
-                  </TouchableWithoutFeedback>
-                </View>
-              </View>
-              <View style={{marginLeft: 18, marginRight: 18}}>
-                <Text style={{color: '#211C5A'}}>{event.eventFor}</Text>
-                <Text style={{color: '#211C5A', marginBottom: 0}}>
-                  {event.description}
+                <Text style={{color: '#211C5A', marginTop: 5}}>
+                  {'To: '}
+                  {parseDate(event.endDate)}
                 </Text>
-                <View
-                  style={{
-                    marginTop: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginBottom: 10,
-                    borderTopWidth: 0.2,
-                  }}>
-                  <Text style={{color: '#211C5A', marginTop: 5}}>
-                    {'From: '}
-                    {parseDate(event.startDate)}
-                  </Text>
-                  <Text style={{color: '#211C5A', marginTop: 5}}>
-                    {'To: '}
-                    {parseDate(event.endDate)}
-                  </Text>
                 </View>
               </View>
             </View>
@@ -254,13 +253,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   shadow: {
-    shadowColor: '#999',
+    shadowColor: '#000',
     shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
+    shadowOpacity: 1,
     shadowRadius: 12,
     backgroundColor: 'white',
     borderColor: '#ccc',
-    borderWidth: 1,
+    
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
     borderTopRightRadius: 12,
