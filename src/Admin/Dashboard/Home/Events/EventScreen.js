@@ -203,7 +203,7 @@ export default function EventScreen({navigation}) {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   marginBottom: 10,
-                  borderTopWidth: 0.2,
+                  borderTopWidth: 0.5,
                 }}>
                 <Text style={{color: '#211C5A', marginTop: 5}}>
                   {'From: '}
