@@ -1,70 +1,105 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
+
 //redux
 import { useSelector } from 'react-redux';
 
+// helpers
+import patch from '../../../../../services/helpers/request/patch'
+import deleteReq from '../../../../../services/helpers/request/delete'
+import read from '../../../../../services/localstorage/read'
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
 
-const EditBatches = ({ navigation }) => {
+const EditBatches = ({ route, navigation }) => {
+
     //theming
     const institute = useSelector(state => state.institute);
 
-    const [user, setuser] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [department, setdepartment] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [employee, setemployee] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
+    const [user, setuser] = useState([]);
+    const [batch, setBatch] = useState({})
 
-    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-    const [date, setDate] = React.useState('29 May 2021')
-    const [dateissued, setDateissued] = React.useState('21 May 2021')
-    let index = 0;
-    const dateMonths = {
-        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
-    }
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [batchName, setBatchName] = useState('')
+    const [date, setDate] = useState('29 May 2021')
+    const [startDate, setstartDate] = useState('21 May 2021')
+
+    const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoaderHook()
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
     };
-
     const hideDatePicker = () => {
         setDatePickerVisibility(false);
     };
     const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date.toString());
-        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
+        setDate(date.toString())
         hideDatePicker();
     };
-    const handleConfirmissued = (dateissued) => {
-        // console.warn("A date has been picked: ", dateissued.toString());
-        setDateissued(dateissued.getDate() + " " + dateMonths[dateissued.getMonth() + 1] + " " + dateissued.getFullYear())
+    const handleConfirmissued = (startDate) => {
+        setstartDate(startDate.toString())
         hideDatePicker();
     };
+
+    useEffect(()=>{
+        let b = route.params
+        let batch = b.batch
+        setBatchName(batch.batchName)
+        setBatch(batch)
+        setDate(batch.startDate)
+        setstartDate(batch.startDate)
+    },[])
+
+    let handleUpdate = async()=>{
+        showLoadingScreen()
+        try{
+            let slug = `/batch/${batch._id}`
+            let token = await read('token')
+            let data = {
+                batchName: batchName,
+                endDate: date,
+                maximumStudents: 600,
+                startDate: startDate
+            }
+            let res = await patch(slug, data, token)
+            if(res.error){
+                alert(res.error)
+            } else if(res._id){
+                alert('Updated')
+            }
+        } catch(err){
+            alert('Cannot Update !!'+err)
+        }
+        hideLoadingScreen()
+    }
+
+    let handleDelete = async()=>{
+        showLoadingScreen()
+        try{
+            let slug = `/batch/${batch._id}`
+            let token = await read('token')
+            let res = await deleteReq(slug, token)
+            if(res.error){
+                alert(res.error)
+            } else{
+                alert('Deleted')
+            }
+        } catch(err){
+            alert('Cannot Delete !!'+err)
+        }
+        hideLoadingScreen()
+    }
 
     return (
-
-
-
         <View style={{ justifyContent: 'center', alignContent: 'center', backgroundColor: 'rgba(249, 249, 249, 1)', }}>
 
             {/* header start */}
-
+            {loadingScreen}
             <View
                 style={{
                     backgroundColor: institute ? institute.themeColor : 'black',
@@ -108,17 +143,15 @@ const EditBatches = ({ navigation }) => {
             <ScrollView>
 
                 <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
-
-
-
                     <View style={{ justifyContent: 'center', paddingTop: 15 }} >
                         <Text style={styles.section_heading}>Course's Name </Text>
                         <ModalSelector
                             data={user}
-                            initValue="Introduction to the Python"
+                            initValue={batch.course? batch.course.courseName : 'N/A'}
                             onChange={option => {
                                 // setclass(option.key);
                             }}
+                            disabled={true}
                             style={styles.card}
                             initValueTextStyle={styles.SelectedValue}
                             selectTextStyle={styles.SelectedValue}
@@ -135,8 +168,8 @@ const EditBatches = ({ navigation }) => {
                                     placeholder="Description"
                                     placeholderTextColor='grey'
                                     color='black'
-                                // // onChangeText={(val) => setTitle(val)
-                                // }
+                                    onChangeText={(val) => setBatchName(val)}
+                                    value={batchName}
                                 />
                             </View>
                         </View>
@@ -153,18 +186,16 @@ const EditBatches = ({ navigation }) => {
                         <TouchableOpacity style={[styles.pickdate, styles.shadow]}
                             onPress={showDatePicker}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                placeholder={dateissued}
+                                value={startDate.slice(0,10)}
                                 placeholderTextColor='grey'
                                 color='black'
-
+                                editable={false}
                             />
                             <Feather size={18} color="black" name="calendar"
                                 style={{
                                     marginTop: 16,
                                     marginRight: 0,
                                 }}
-
-
                             ></Feather>
                             <DateTimePickerModal
                                 isVisible={isDatePickerVisible}
@@ -177,17 +208,16 @@ const EditBatches = ({ navigation }) => {
                         <TouchableOpacity style={[styles.pickdate, styles.shadow]}
                             onPress={showDatePicker}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                placeholder={date}
+                                value={date.slice(0,10)}
                                 placeholderTextColor='grey'
                                 color='black'
+                                editable={false}
                             />
                             <Feather size={18} color="black" name="calendar"
                                 style={{
                                     marginTop: 16,
                                     marginRight: 0,
                                 }}
-
-
                             ></Feather>
                             <DateTimePickerModal
                                 isVisible={isDatePickerVisible}
@@ -197,23 +227,18 @@ const EditBatches = ({ navigation }) => {
                                 onCancel={hideDatePicker}
                             />
                         </TouchableOpacity>
-
                     </View>
                     <View style={styles.fixToText}>
-                        <Pressable style={styles.button1} >
+                        <Pressable style={styles.button1} onPress={handleDelete}>
                             <Text style={styles.text1}>Delete</Text>
                         </Pressable>
-                        <Pressable style={styles.button} >
+                        <Pressable style={styles.button} onPress={handleUpdate}>
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
-
-
                     </View>
-
                 </View>
             </ScrollView>
         </View>
-
     )
 }
 

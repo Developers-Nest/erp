@@ -90,9 +90,6 @@ export default function AcademicsMain({ navigation }) {
                 <ScrollView>
                     {courselist ? courselist &&
                         courselist.map(courselist => (
-
-
-
                             <View style={styles.section}
                                 key={courselist._id}
                             >
@@ -131,7 +128,9 @@ export default function AcademicsMain({ navigation }) {
                                             <TouchableOpacity
                                                 style={{ flexDirection: 'row' }}
                                                 onPress={() =>
-                                                    navigation.navigate('EditCourses')
+                                                    navigation.navigate('EditCourses', {
+                                                        course: courselist
+                                                    })
                                                 }
                                             >
                                                 <Text
@@ -184,7 +183,6 @@ export default function AcademicsMain({ navigation }) {
                 let isActive = true;
 
                 const fetchUser = async () => {
-
                     try {
                         let slug = '/batch';
                         let token = await read('token');
@@ -193,7 +191,6 @@ export default function AcademicsMain({ navigation }) {
                     } catch (err) {
                         alert('Cannot fetch batches list !!');
                     }
-
                 };
 
                 fetchUser();
@@ -223,9 +220,6 @@ export default function AcademicsMain({ navigation }) {
                 <ScrollView>
                     {batchlist ? batchlist &&
                         batchlist.map(batchlist => (
-
-
-
                             <View style={styles.section}
                                 key={batchlist._id}
                             >
@@ -255,7 +249,9 @@ export default function AcademicsMain({ navigation }) {
                                             <TouchableOpacity
                                                 style={{ flexDirection: 'row' }}
                                                 onPress={() =>
-                                                    navigation.navigate('EditBatches')
+                                                    navigation.navigate('EditBatches',{
+                                                        batch: batchlist
+                                                    })
                                                 }
                                             >
                                                 <Text
@@ -309,7 +305,6 @@ export default function AcademicsMain({ navigation }) {
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={styles.maincontainer}>
-
                 {/* header start */}
 
                 <View
@@ -383,7 +378,7 @@ export default function AcademicsMain({ navigation }) {
                     <View style={{ alignItems: 'center', width: '90%' }}>
                         {/* open search */}
 
-                        <View
+                        {/* <View
                             style={{
                                 marginTop: 10,
                                 marginLeft: 5,
@@ -410,7 +405,7 @@ export default function AcademicsMain({ navigation }) {
                                     }}
                                 />
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
 
