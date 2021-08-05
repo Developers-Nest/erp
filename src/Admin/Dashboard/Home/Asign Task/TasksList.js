@@ -40,6 +40,9 @@ import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 
 export default function TasksList({navigation}) {
+    //theming
+    const institute = useSelector(state => state.institute);
+
   const [isTimePickerVisible, setTimePickerVisibility] = React.useState(false);
   const [Time, setTime] = React.useState('15:00');
   let index = 0;
@@ -97,8 +100,8 @@ export default function TasksList({navigation}) {
   return (
     <View style={styles.backgroung}>
       <View
-        style={{
-          ...styles.header,
+        style={{backgroundColor: institute ? institute.themeColor : '#FF5733',
+        ...styles.header,
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <AntDesign
@@ -292,7 +295,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 69,
-    backgroundColor: '#595260',
     flexDirection: 'row',
   },
   search: {

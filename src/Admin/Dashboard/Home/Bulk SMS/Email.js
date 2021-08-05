@@ -22,16 +22,22 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auto } from 'async';
+//redux
+import {useSelector} from 'react-redux';
+
 
 export default function SmsAlert({ navigation }) {
+    
+      //theming
+      const institute = useSelector(state => state.institute);
     const [AccountName, setAccountName] = useState([]);
     const [Template, setTemplate] = useState([]);
     return (
         <View style={styles.backgroung}>
             <View
-                style={{
-                    ...styles.header,
-                }}>
+                style={{backgroundColor: institute ? institute.themeColor : '#FF5733',
+                ...styles.header,
+                  }}>
                 <TouchableOpacity onPress={() => navigation.navigate('BulkSMS')}>
                     <AntDesign
                         size={24}
@@ -123,7 +129,6 @@ const styles = StyleSheet.create({
     },
     header: {
         height: 69,
-        backgroundColor: '#595260',
         flexDirection: 'row',
     },
     button: {

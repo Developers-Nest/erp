@@ -22,8 +22,13 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auto } from 'async';
+//redux
+import {useSelector} from 'react-redux';
 
 export default function BulkSMS({ navigation }) {
+      //theming
+      const institute = useSelector(state => state.institute);
+
     const [SMS_for, setSMS_for] = useState([]);
     return (
         <View style={styles.backgroung}>
@@ -32,8 +37,8 @@ export default function BulkSMS({ navigation }) {
         <Appbar.Content title="Bulk SMS" />
       </Appbar> */}
             <View
-                style={{
-                    ...styles.header,
+              style={{backgroundColor: institute ? institute.themeColor : '#FF5733',
+              ...styles.header,
                 }}>
                 <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                     <AntDesign
@@ -127,7 +132,6 @@ const styles = StyleSheet.create({
     },
     header: {
         height: 69,
-        backgroundColor: '#595260',
         flexDirection: 'row',
     },
     button: {

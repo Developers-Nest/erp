@@ -26,10 +26,13 @@ import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
+// redux
+import {useSelector} from 'react-redux';
 
 
 export default function EditTask({navigation}) {
-
+  //theming
+  const institute = useSelector(state => state.institute);
 
     const [Priority, setPriority] = useState([]);
     const [Usertype, setUserType] = useState([]);
@@ -63,7 +66,7 @@ export default function EditTask({navigation}) {
         <Appbar.Content title="Add Task" />
       </Appbar> */}
       <View
-            style={{
+            style={{backgroundColor: institute ? institute.themeColor : '#FF5733',
             ...styles.header,
             }}>
             <TouchableOpacity onPress={()=> navigation.navigate('TasksList')}>
@@ -234,7 +237,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 69,
-    backgroundColor:'#595260',
     flexDirection: 'row',
     },
     button: {

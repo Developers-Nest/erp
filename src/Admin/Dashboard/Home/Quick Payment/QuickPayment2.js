@@ -21,8 +21,17 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auto } from 'async';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+//redux
+import {useSelector} from 'react-redux';
+
 
 export default function QuickPayment2({ navigation }) {
+
+
+    
+      //theming
+      const institute = useSelector(state => state.institute);
+
   const [Department, setDrepartment] = useState([]);
   const [UseType, setUseType] = useState([]);
   const [FeeTypeCategory, setFeeTypeCategory] = useState([]);

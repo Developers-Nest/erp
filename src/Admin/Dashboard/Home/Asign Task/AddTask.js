@@ -50,6 +50,10 @@ import getStudents from '../../../../services/helpers/getList/getStudents';
 import {useSelector} from 'react-redux';
 
 export default function AddTask({navigation}) {
+
+    //theming
+    const institute = useSelector(state => state.institute);
+
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
@@ -181,7 +185,8 @@ export default function AddTask({navigation}) {
     <View style={styles.backgroung}>
       <View
         style={{
-          ...styles.header,
+          backgroundColor: institute ? institute.themeColor : '#FF5733',
+                        ...styles.header,
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('TasksList')}>
           <AntDesign
@@ -497,7 +502,6 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 69,
-    backgroundColor: '#595260',
     flexDirection: 'row',
   },
   button: {
