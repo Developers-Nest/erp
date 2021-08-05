@@ -1,32 +1,31 @@
-
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, TextInput ,Text} from 'react-native';
+import React, { useState, useEffect } from 'react';
 import {
-   
-} from 'react-native-paper';
+    View,
+    StyleSheet,
+    TouchableOpacity,
+    TextInput,
+    Text,
+} from 'react-native';
 
-//selector
+import { Button } from 'react-native-paper';
+
+
 import ModalSelector from 'react-native-modal-selector';
-
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-
-// redux
 import { useSelector } from 'react-redux';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 export default function EditEvent({ navigation }) {
-    const [type, setType] = useState([]);
-    const [courses, setCourses] = useState([]);
-    const [subjects, setSubjects] = useState([]);
 
-    //theming
+
     const institute = useSelector(state => state.institute);
+    const [event, SetEvent] = React.useState("");
+    const [Organizer, SetOrganizer] = React.useState("");
 
     return (
-        <View style={{ backgroundColor: 'rgba(249, 249, 249, 1)', flex: 1 }}>
+        <View style={styles.container}>
             {/* header start */}
 
             <View
@@ -34,7 +33,8 @@ export default function EditEvent({ navigation }) {
                     backgroundColor: institute ? institute.themeColor : '#FF5733',
                     ...styles.header,
                 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+                <View
+                    style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
                     <TouchableOpacity
                         onPress={() => {
                             navigation.navigate('Events');
@@ -47,10 +47,8 @@ export default function EditEvent({ navigation }) {
                                 alignSelf: 'center',
                                 fontSize: 25,
                                 color: 'white',
-
                             }}
                         />
-
                     </TouchableOpacity>
                 </View>
                 <Text
@@ -63,135 +61,122 @@ export default function EditEvent({ navigation }) {
                         paddingLeft: 20,
                         color: 'white',
                     }}>
-                   Edit Events
+                    Edit Events
                 </Text>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('AddQuestion')}
-                    style={{
-                        justifyContent: 'flex-end',
-                        flex: 1,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}>
-                    <View
-                        style={{
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            marginRight: 5,
-                        }}>
-                        <Ionicons
-                            name="add-circle"
-                            color="#900"
-                            style={{
-                                fontSize: 30,
-                                color: 'white',
-                                marginRight: 20,
-                                marginTop: 10
-                            }}
-                        />
-                        <Text
-                            style={{
-                                color: '#fff',
-                                fontFamily: 'Poppins-Regular',
-                                fontSize: 12,
-                                marginRight: 20,
-                            }}>
-                            Add Events
-                        </Text>
-                    </View>
-                </TouchableOpacity>
             </View>
-
             {/* header ends */}
-
-            <View style={styles.search}>
-                <TextInput
-                    style={{ ...styles.search_input }}
-                    placeholder="Enter Events name Here"
-                    placeholderTextColor='grey'
-                />
-
-                <TouchableOpacity
-                    style={{
-                        alignSelf: 'center',
-                    }}>
-                    <FontAwesome5Icon
-                        name="search"
-                        style={{
-                            alignSelf: 'center',
-                            fontSize: 30,
-                            color: 'black',
-                        }}
+             
+            <View style={styles.Eventbox}>
+                <View style={{ flexDirection: 'row',marginTop:10,justifyContent:'space-between' }}>
+                <View >
+                    <Text style={{fontFamily:'Poppins-Regular',color:'#58636D'}}>Event Name</Text>
+                    <TextInput
+                        style={styles.Eventinput}
+                        onChangeText={(value) => SetEvent(value)}
+                        value={event}
+                        placeholder="Enter name"
+                        placeholderTextColor={'grey'}
+                        numberOfLines={2}
+                        multiline={true}
                     />
-                </TouchableOpacity>
-            </View>
-           
-            <View style={styles.EventCard}>
-                <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:18,marginLeft:18,marginRight:18}}>
-                    <Text style={{fontSize:18,fontWeight:'400',color:'#211C5A'}}>Events Name</Text>
-                    <View style={{flexDirection:'row'}}>
-                    <TouchableWithoutFeedback onPress={() => {
-                                navigation.navigate('Home')}}>
-                    <FontAwesome5Icon
-                     name="edit"
-                     style={{
-                         alignSelf: 'center',
-                         fontSize: 20,
-                         color: '#211C5A',
-                     }}/>
-                    <Text>Edit</Text>
-                    </TouchableWithoutFeedback>
+                 </View>
+                 <View>
+                 <Text style={{fontFamily:'Poppins-Regular',color:'#58636D'}}>Event Type</Text>
+                    <ModalSelector style={{width:150,}}>
+                    </ModalSelector>
+                    </View>
+
+                </View>
+                <View style={{ flexDirection: 'row',marginTop:30,justifyContent:'space-between' }}>
+                <View >
+                    <Text style={{fontFamily:'Poppins-Regular',color:'#58636D'}}>Organizer Name</Text>
+                    <TextInput
+                        style={styles.Eventinput}
+                        onChangeText={(value) => SetOrganizer(value)}
+                        value={Organizer}
+                        placeholder="Enter name"
+                        placeholderTextColor={'grey'}
+                        numberOfLines={2}
+                        multiline={true}
+                    />
+                 </View>
+                 <View>
+                 <Text style={{fontFamily:'Poppins-Regular',color:'#58636D'}}>Event For</Text>
+                    <ModalSelector style={{width:150}}>
+                    </ModalSelector>
+                    </View>
+
+                </View>
+
+
+
+                <View style={{ flexDirection: 'row',marginTop:30,justifyContent:'space-between' }}>
+                <View >
+                    <Text >Organizer Name</Text>
+                    <TextInput
+                        style={styles.Eventinput}
+                        SetEvent={SetEvent}
+                        value={event}
+                        placeholder="Enter name"
+                        placeholderTextColor={'grey'}
+                        numberOfLines={2}
+                        multiline={true}
+                    />
+                 </View>
+                 <View>
+                 <Text>Event For</Text>
+                    <ModalSelector style={{width:150}}>
+                    </ModalSelector>
                     </View>
                 </View>
-                <View style={{marginLeft:18,marginRight:18}}>
-                    <Text style={{color:'#211C5A'}}>
-                        Event type
-                    </Text>
-                    <Text style={{color: '#211C5A',marginBottom:0}}>
-                    Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and  muvh more
-                    </Text>
-                    <View style={{marginTop:10,flexDirection:'row',justifyContent:'space-between',marginBottom:10,borderTopWidth:0.2}}>
-                        <Text style={{color: '#211C5A',marginTop:5}}>
-                            Beds:448
-                        </Text>
-                        <Text style={{color: '#211C5A',marginTop:5}}>
-                            Amount:240000 Rs
-                        </Text>
-                    </View>
-                </View>
             </View>
+            
+            <View style={{justifyContent:'space-evenly',flexDirection:'row',marginTop:50}}>
+            <Button  mode="outlined" style={styles.ButtonView} color='red' onPress={() => console.log('Pressed')}>
+  Save
+  </Button>
+  <Button  mode="contained" style={styles.ButtonView} color='#5177E7' onPress={() => console.log('Pressed')}>
+  Save
+  </Button>
+  </View>
+  
+
+            
+
+
+
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'rgba(249, 249, 249, 1)'
+    },
     header: {
         height: 69,
         flexDirection: 'row',
     },
-    search: {
-        backgroundColor: 'white',
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        paddingHorizontal: 20,
-        borderColor: '#00499F',
-        borderRadius: 10,
-        margin: 20
+    Eventbox: {
+        marginTop: 15, 
+        marginLeft: 20,
+        marginRight: 20,
+         
     },
-    search_input: {
-        borderRadius: 8,
-        height: 59,
-        fontSize: 15,
-        fontFamily: 'Poppins-Regular',
-        width: '90%',
-        color: 'black'
-    },
-    EventCard:{
+    Eventinput: {
+        height: 41,
+        borderWidth: 0.5,
+        color:'black',
+        fontFamily:'Poppins-Regular',
+        minWidth:150,
+        borderRadius:5,
         backgroundColor:'white',
-        marginRight:20,
-        marginLeft:20,
-        borderRadius:10,
-        marginTop:10
+        fontSize:15,
+      },
+    ButtonView:{
+        width:100,
+        
     }
 
 });

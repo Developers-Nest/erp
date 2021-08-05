@@ -101,7 +101,7 @@ export default function EventScreen({navigation}) {
           Events
         </Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('AddQuestion')}
+          onPress={() => navigation.navigate('AddEvents')}
           style={{
             justifyContent: 'flex-end',
             flex: 1,
@@ -168,9 +168,9 @@ export default function EventScreen({navigation}) {
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                marginTop: 18,
-                marginLeft: 18,
-                marginRight: 18,
+                marginTop: 15,
+                marginLeft: 10,
+                marginRight: 10,
               }}>
               <Text style={{fontSize: 18, fontWeight: '400', color: '#211C5A'}}>
                 {event.name}
@@ -192,7 +192,7 @@ export default function EventScreen({navigation}) {
                 </TouchableWithoutFeedback>
               </View>
             </View>
-            <View style={{marginLeft: 18, marginRight: 18}}>
+            <View style={{marginLeft: 10, marginRight: 10}}>
               <Text style={{color: '#211C5A'}}>{event.eventFor}</Text>
               <Text style={{color: '#211C5A', marginBottom: 0}}>
                 {event.description}
@@ -247,10 +247,8 @@ const styles = StyleSheet.create({
   },
   EventCard: {
     backgroundColor: 'white',
-    marginRight: 20,
-    marginLeft: 20,
     borderRadius: 10,
-    marginTop: 10,
+   
   },
   shadow: {
     shadowColor: '#000',
@@ -259,16 +257,14 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     backgroundColor: 'white',
     borderColor: '#ccc',
-    
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
-    margin: 20,
+    marginTop:15,
+    marginLeft:20,
+    marginRight:20,
     padding: 0,
-    minWidth: 110,
+    
     elevation: 5,
   },
 });

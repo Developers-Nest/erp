@@ -11,7 +11,7 @@ export default function EventNavigation(){
     return (
         <Stack.Navigator headerMode="none">
           <Stack.Screen name="Events" component={EventScreen} />      
-          {/* <Stack.Screen name="AddEvents" component={AddEvents} /> */}
+          <Stack.Screen name="AddEvents" component={AddEvents} />
           <Stack.Screen name="EditEvent" component={EditEvent} />
         </Stack.Navigator>
       );
