@@ -1,44 +1,112 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ScrollView } from 'react-native-gesture-handler';
+
+
 //redux
 import { useSelector } from 'react-redux';
 
+// helpers
+import patch from '../../../../../services/helpers/request/patch'
+import deleteReq from '../../../../../services/helpers/request/delete'
+import read from '../../../../../services/localstorage/read'
+import getCourse from '../../../../../services/helpers/getList/getCourse'
+import getBatch from '../../../../../services/helpers/getList/getBatch'
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
 
-const EditAllocationTeacher = ({ navigation }) => {
+
+
+const EditAllocationTeacher = ({ route, navigation }) => {
     //theming
     const institute = useSelector(state => state.institute);
 
-    const [user, setuser] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [department, setdepartment] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
-    const [employee, setemployee] = useState([
-        { label: 'Fiction', key: 'Fiction' },
-        { label: 'Philosophy', key: 'Philosophy' },
-        { label: 'history', key: 'History' },
-    ]);
+    // dropdown values
+    const [courses, setcourses] = useState([]);
+    const [batches, setbatches] = useState([]);
+    const [employee, setemployee] = useState([]);
+
+    const [teacher, setTeacher] = useState({})
+    const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+    const [course, setCourse] = useState('')
+    const [batch, setBatch] = useState('')
+
+    useEffect(async()=>{
+        setLoadingScreen()
+        let t = route.params.teacher
+        console.log('Edit Teacher ', t)
+        setTeacher(t)
+
+        try{
+            let res = await getCourse()
+            setcourses(res)
+        } catch(err){
+            alert('Cannot fetch courses!!')
+        }
+        hideLoadingScreen()
+    },[])
+
+    let fetchBatch = async(sel)=>{
+        setLoadingScreen()
+        try{
+            setCourse(sel)
+            let res = await getBatch(sel)
+            setbatches(res)
+        } catch(err){
+            alert('Cannot get Batches!!')
+        }
+        hideLoadingScreen()
+    }
+
+    let handleUpdate = async()=>{
+        setLoadingScreen()
+        try{
+            let slug = `/classteacher/${teacher._id}`
+            let token = await read('token')
+            // let data = {
+            //     batchName: batchName,
+            //     endDate: date,
+            //     maximumStudents: 600,
+            //     startDate: startDate
+            // }
+            // let res = await patch(slug, data, token)
+            // if(res.error){
+            //     alert(res.error)
+            // } else if(res._id){
+            //     alert('Updated')
+            // }
+            alert('Updated!!')
+        } catch(err){
+            alert('Cannot Update !!'+err)
+        }
+        hideLoadingScreen()
+    }
+
+    let handleDelete = async()=>{
+        setLoadingScreen()
+        try{
+            let slug = `/classteacher/${teacher._id}`
+            let token = await read('token')
+            let res = await deleteReq(slug, token)
+            if(res.error){
+                alert(res.error)
+            } else{
+                alert('Teacher Deleted!!')
+            }
+        } catch(err){
+            alert('Cannot Delete !!'+err)
+        }
+        hideLoadingScreen()
+    }
 
     return (
-
-
-
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
 
             {/* header start */}
-
+            {loadingScreen}
             <View
                 style={{
                     backgroundColor: institute ? institute.themeColor : 'black',
@@ -80,19 +148,14 @@ const EditAllocationTeacher = ({ navigation }) => {
 
             {/* header ends */}
             <ScrollView>
-
                 <View style={{ flex: 1, justifyContent: 'center' }}>
-
-
-
-
                     <View style={{ flexDirection: 'column', paddingTop: 15 }} >
                         <Text style={styles.section_heading}>Course's Name </Text>
                         <ModalSelector
-                            data={user}
-                            initValue="Introduction to the Python"
+                            data={courses}
+                            initValue={teacher.course? teacher.course.courseName : 'N/A'}
                             onChange={option => {
-                                // setclass(option.key);
+                                fetchBatch(option.key)
                             }}
                             style={styles.card}
                             initValueTextStyle={styles.SelectedValue}
@@ -103,10 +166,10 @@ const EditAllocationTeacher = ({ navigation }) => {
                     <View style={{ justifyContent: 'center', paddingTop: 15 }} >
                         <Text style={styles.section_heading}>Batch's Name </Text>
                         <ModalSelector
-                            data={department}
-                            initValue="Name of the Batch"
+                            data={batches}
+                            initValue={teacher.batch? teacher.batch.batchName: 'N/A'}
                             onChange={option => {
-                                // setclass(option.key);
+                                setBatch(option.key)
                             }}
                             style={styles.card}
                             initValueTextStyle={styles.SelectedValue}
@@ -118,10 +181,11 @@ const EditAllocationTeacher = ({ navigation }) => {
                         <Text style={styles.section_heading}>Class Teacher </Text>
                         <ModalSelector
                             data={employee}
-                            initValue="Teacher's Name"
+                            initValue={teacher.classTeacher? teacher.classTeacher.firstName: 'N/A'}
                             onChange={option => {
                                 // setclass(option.key);
                             }}
+                            disabled={true}
                             style={styles.card}
                             initValueTextStyle={styles.SelectedValue}
                             selectTextStyle={styles.SelectedValue}
@@ -129,10 +193,10 @@ const EditAllocationTeacher = ({ navigation }) => {
 
                     </View>
                     <View style={styles.fixToText}>
-                        <Pressable style={styles.button1} >
+                        <Pressable style={styles.button1} onPress={handleDelete}>
                             <Text style={styles.text1}>Delete</Text>
                         </Pressable>
-                        <Pressable style={styles.button} >
+                        <Pressable style={{ backgroundColor: institute? institute.themeColor: 'blue' ,...styles.button}} onPress={handleUpdate} >
                             <Text style={styles.text}>Save</Text>
                         </Pressable>
 
@@ -154,14 +218,12 @@ const styles = StyleSheet.create({
 
     },
     button: {
-
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 25,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: '#5177E7',
     },
     text: {
         fontSize: 18,
