@@ -37,12 +37,14 @@ export default function Profile({navigation}) {
   const [ufirstName, setUfirstName] = useState(null)
   const [ulastName, setULastName] = useState(null)
   const [upaddress, setUpAddress] = useState(null)
+  const [umobile, setUmobile] = useState(null)
 
   useEffect(()=>{
     setUemail(userInfo.email)
     setUfirstName(userInfo.firstName)
     setULastName(userInfo.lastName)
     setUpAddress(userInfo.permanentAddress)
+    setUmobile(userInfo.phone)
   },[])
 
 
@@ -56,7 +58,8 @@ export default function Profile({navigation}) {
         email: uemail,
         firstName: ufirstName,
         lastName: ulastName,
-        presentAddress: upaddress
+        presentAddress: upaddress,
+        phone: umobile
       }
       console.log('Update Profile Data ', data)
       let response = await patch(slug, data, token)
@@ -150,7 +153,11 @@ export default function Profile({navigation}) {
             <TextInput placeholder={userInfo.lastName}
                                    value={ulastName} style={styles.textInput} 
                                    onChangeText={(value) => setULastName(value)} />
-             <Text style={{marginTop:20}}>Present Address</Text>
+            <Text style={{marginTop:20}}>Phone</Text>
+            <TextInput placeholder={userInfo.phone} 
+                                   value={umobile} style={styles.textInput} 
+                                   onChangeText={(value) => setUmobile(value)} />
+            <Text style={{marginTop:20}}>Present Address</Text>
             <TextInput placeholder={userInfo.presentAddress} 
                                    value={upaddress} style={styles.textInput} 
                                    onChangeText={(value) => setUpAddress(value)} />
@@ -252,8 +259,8 @@ export default function Profile({navigation}) {
                 marginRight: 10,
               }}
             />
-            <Text style={styles.inputField}>Mobile: </Text>
-            <Text style={styles.inputValue}>{userInfo.phone}</Text>
+            <Text style={styles.inputField}>Phone: </Text>
+            <Text style={styles.inputValue}>{umobile}</Text>
           </View>
         </View>
       </ScrollView>
