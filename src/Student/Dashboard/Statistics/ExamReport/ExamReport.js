@@ -6,15 +6,15 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  TextInput,
 } from 'react-native';
 
 //icons
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //selector
 import ModalSelector from 'react-native-modal-selector';
+
+import { useSelector } from 'react-redux';
 
 export default function ExamReport({navigation}) {
   // const [open, setOpen] = useState(null);
@@ -23,6 +23,8 @@ export default function ExamReport({navigation}) {
     {label: 'Final Reports', key: 'Final Reports'},
     {label: 'Mid Term', key: 'Mid Term'},
   ]);
+  let institute = useSelector((state)=>state.institute)
+
   return (
     <View style={styles.container}>
       <View

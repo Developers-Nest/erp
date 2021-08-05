@@ -10,15 +10,16 @@ import {
 import {Text} from 'react-native-paper';
 
 //icons
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {createStackNavigator} from '@react-navigation/stack';
 
 import ExamReport from './ExamReport/ExamReport';
 import AttendanceReport from '../Home/Attendance/Attendance';
+import { useSelector } from 'react-redux';
+
 const Statistics = ({navigation}) => {
+  let institute = useSelector((state)=>state.institute)
   return (
     <View style={styles.container}>
       <View
