@@ -239,16 +239,16 @@ export default function TransportMain({ navigation }) {
     return (
       <View style={styles.container}>
 
-        <TouchableOpacity style={{ marginTop: 8, alignItems: 'center', alignContent: 'center' }}
+        <TouchableOpacity style={{ marginTop: 8, alignItems: 'center', alignContent: 'center', marginBottom: 10 }}
 
           onPress={() =>
             navigation.navigate('AddDriver')}
 
 
         >
-          <Text style={{ color: 'blue', marginBottom: -6 }}>Driver</Text>
+          <Text style={{ color: 'blue', marginBottom: -6 ,fontWeight:'bold'}}>Add Driver</Text>
           <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
-            - - - - -
+            - - - - - - - - - -
 
           </Text>
         </TouchableOpacity>
@@ -292,7 +292,7 @@ export default function TransportMain({ navigation }) {
                           fontSize: 18,
                           color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
-                          marginHorizontal: -5,
+                         
                         }}>
                         {driverinfo.vehicleNo.vehicleNo ? driverinfo.vehicleNo.vehicleNo : 'N/A'}
                       </Text>
@@ -305,7 +305,7 @@ export default function TransportMain({ navigation }) {
                         Ph:{driverinfo.phone ? driverinfo.phone : 'N/A'}
                       </Text>
                     </View>
-                    <View style={{ padding: 5 }} />
+                   
                     <View style={styles.differentusers}>
                       <Text
                         style={{
@@ -313,7 +313,7 @@ export default function TransportMain({ navigation }) {
                           color: '#211C5A',
                           fontFamily: 'Poppins-Medium',
                           fontWeight: 'bold',
-                          marginHorizontal: -5,
+                          
                         }}>
                         {driverinfo.name ? driverinfo.name : 'N/A'}
                       </Text>
@@ -330,24 +330,25 @@ export default function TransportMain({ navigation }) {
                           Edit
                         </Text>
 
-                        <MaterialCommunityIcon
-                          size={15}
+                        <AntDesign
+                          size={12}
                           color="#211C5A"
-                          name="square-edit-outline"
+                          name="edit"
                           style={{ paddingTop: 2, paddingRight: 10 }}
                         />
+
                       </TouchableOpacity>
                     </View>
                   </View>
                 </View>
 
                 <View style={styles.belowhr}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', padding: 5 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center'}}>
                     <Text
                       style={{
                         color: '#58636D',
                         fontSize: 12,
-                        fontFamily: 'Poppins-Medium',
+                        fontFamily: 'Poppins-Regular',
                         fontWeight: 'bold',
                         color: '#58636D',
                       }}>
@@ -397,7 +398,7 @@ export default function TransportMain({ navigation }) {
     return (
       <View style={styles.container}>
 
-        <TouchableOpacity style={{ marginTop: 8, marginRight: 30, alignItems: 'flex-end' }}
+        <TouchableOpacity style={{ marginTop: 8, marginRight: 30, alignItems: 'flex-end', marginBottom: 10}}
 
           onPress={() =>
             navigation.navigate('AddDestination')}
@@ -405,9 +406,9 @@ export default function TransportMain({ navigation }) {
 
         >
           <View style={{}}></View>
-          <Text style={{ color: 'blue', marginBottom: -6 }}>Destination</Text>
+          <Text style={{ color: 'blue', marginBottom: -6 ,fontWeight:'bold'}}>Add Destination</Text>
           <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
-            - - - - - - - - -
+             - - - - - - - - - - - -
 
           </Text>
         </TouchableOpacity>
@@ -453,28 +454,27 @@ export default function TransportMain({ navigation }) {
                           fontSize: 18,
                           color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
-                          marginHorizontal: -5,
+                          
                         }}>
                         {destinationinfo.route.code ? destinationinfo.route.code : 'N/A'}
                       </Text>
                       <Text style={{
                         fontSize: 14,
                         color: '#211C5A',
-                        fontFamily: 'Poppins-Medium',
+                        fontFamily: 'Poppins-Regular',
                         fontStyle: 'normal',
                       }}>
                         Stop time- {destinationinfo.stopTime ? destinationinfo.stopTime.slice(11, 19) : 'N/A'}
                       </Text>
                     </View>
-                    <View style={{ padding: 5 }} />
                     <View style={styles.differentusers}>
                       <Text
                         style={{
                           fontSize: 14,
                           color: '#211C5A',
-                          fontFamily: 'Poppins-Medium',
+                          fontFamily: 'Poppins-Regular',
                           fontWeight: 'bold',
-                          marginHorizontal: -5,
+                          
                         }}>
                         {destinationinfo.route.stopPlace ? destinationinfo.route.stopPlace : 'N/A'}
                       </Text>
@@ -486,15 +486,15 @@ export default function TransportMain({ navigation }) {
                             fontSize: 12,
                             color: '#211C5A',
                             fontWeight: 'bold',
-                            fontFamily: 'Poppins-Medium',
+                            fontFamily: 'Poppins-Regular',
                           }}>
                           Edit
                         </Text>
 
-                        <MaterialCommunityIcon
-                          size={15}
+                        <AntDesign
+                          size={12}
                           color="#211C5A"
-                          name="square-edit-outline"
+                          name="edit"
                           style={{ paddingTop: 2, paddingRight: 10 }}
                         />
                       </TouchableOpacity>
@@ -503,7 +503,7 @@ export default function TransportMain({ navigation }) {
                 </View>
 
                 <View style={styles.belowhr}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', padding: 5 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center'}}>
                     <Text
                       style={{
                         color: '#58636D',
@@ -513,7 +513,7 @@ export default function TransportMain({ navigation }) {
                       Fees Type: {destinationinfo.feeType ? destinationinfo.feeType : 'N/A'}
                     </Text>
                   </View>
-                  <View style={{ marginBottom: 3 }}>
+                 
                     <Text
                       style={{
                         color: '#1F7C17',
@@ -522,7 +522,7 @@ export default function TransportMain({ navigation }) {
                       }}>
                       Fees:{destinationinfo.amount ? destinationinfo.amount : 'N/A'}
                     </Text>
-                  </View>
+               
                 </View>
               </View>
 
