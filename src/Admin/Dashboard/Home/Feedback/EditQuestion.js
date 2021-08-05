@@ -35,7 +35,7 @@ const institute = useSelector(state => state.institute);
           }}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Home');
+              navigation.navigate('QuestionList');
             }}>
             <AntDesign
               size={24}
@@ -61,7 +61,7 @@ const institute = useSelector(state => state.institute);
               marginLeft: 30,
               color: 'white',
             }}>
-            Add Question
+            Edit Question
           </Text>
           
             <TouchableOpacity
