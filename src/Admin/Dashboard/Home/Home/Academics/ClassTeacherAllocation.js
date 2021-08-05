@@ -25,6 +25,7 @@ import { Searchbar } from 'react-native-paper';
 //useFocusEffect
 import { useFocusEffect } from '@react-navigation/native';
 
+
 export default function ClassTeacherAllocation({ navigation }) {
 
     //theming
