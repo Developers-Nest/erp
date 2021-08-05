@@ -4,7 +4,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     TextInput,
-    Text,
+    Text,ScrollView
 } from 'react-native';
 
 import { Button } from 'react-native-paper';
@@ -23,9 +23,10 @@ export default function AddEvents({ navigation }) {
     const institute = useSelector(state => state.institute);
     const [event, SetEvent] = React.useState("");
     const [Organizer, SetOrganizer] = React.useState("");
+    const [des, setDescription] = useState('')
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             {/* header start */}
 
             <View
@@ -130,8 +131,17 @@ export default function AddEvents({ navigation }) {
                     </View>
                 </View>
             </View>
+            <TextInput
+              placeholder="Write description here "
+              onChangeText={(value) => setDescription(value)}
+              value={des}
+              style={styles.feedbox}
+            //   numberOfLines={10}
+              multiline={true}
+              placeholderTextColor="grey"
+            />
             
-            <View style={{justifyContent:'center',flexDirection:'row',marginTop:50}}>
+            <View style={{justifyContent:'center',flexDirection:'row'}}>
             <Button  mode="contained" style={styles.ButtonView} color='#5177E7' onPress={() => console.log('Pressed')}>
   Save
   </Button>
@@ -142,7 +152,7 @@ export default function AddEvents({ navigation }) {
 
 
 
-        </View>
+        </ScrollView>
     );
 }
 
@@ -171,6 +181,16 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         fontSize:15,
       },
+    feedbox:{
+        margin:20,
+        backgroundColor:'white',
+        textAlignVertical:'top',
+        fontFamily:'Poppins-Regular',
+        fontSize:15,
+        color:'black',
+        borderRadius:12,
+        height:200
+    },
     ButtonView:{
         width:100,
         

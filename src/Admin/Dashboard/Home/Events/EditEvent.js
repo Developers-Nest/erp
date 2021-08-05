@@ -23,6 +23,7 @@ export default function EditEvent({ navigation }) {
     const institute = useSelector(state => state.institute);
     const [event, SetEvent] = React.useState("");
     const [Organizer, SetOrganizer] = React.useState("");
+    const [des, setDescription] = useState('')
 
     return (
         <View style={styles.container}>
@@ -65,83 +66,94 @@ export default function EditEvent({ navigation }) {
                 </Text>
             </View>
             {/* header ends */}
-             
+
             <View style={styles.Eventbox}>
-                <View style={{ flexDirection: 'row',marginTop:10,justifyContent:'space-between' }}>
-                <View >
-                    <Text style={{fontFamily:'Poppins-Regular',color:'#58636D'}}>Event Name</Text>
-                    <TextInput
-                        style={styles.Eventinput}
-                        onChangeText={(value) => SetEvent(value)}
-                        value={event}
-                        placeholder="Enter name"
-                        placeholderTextColor={'grey'}
-                        numberOfLines={2}
-                        multiline={true}
-                    />
-                 </View>
-                 <View>
-                 <Text style={{fontFamily:'Poppins-Regular',color:'#58636D'}}>Event Type</Text>
-                    <ModalSelector style={{width:150,}}>
-                    </ModalSelector>
+                <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between' }}>
+                    <View >
+                        <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>Event Name</Text>
+                        <TextInput
+                            style={styles.Eventinput}
+                            onChangeText={(value) => SetEvent(value)}
+                            value={event}
+                            placeholder="Enter name"
+                            placeholderTextColor={'grey'}
+                            numberOfLines={2}
+                            multiline={true}
+                        />
+                    </View>
+                    <View>
+                        <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>Event Type</Text>
+                        <ModalSelector style={{ width: 150, }}>
+                        </ModalSelector>
                     </View>
 
                 </View>
-                <View style={{ flexDirection: 'row',marginTop:30,justifyContent:'space-between' }}>
-                <View >
-                    <Text style={{fontFamily:'Poppins-Regular',color:'#58636D'}}>Organizer Name</Text>
-                    <TextInput
-                        style={styles.Eventinput}
-                        onChangeText={(value) => SetOrganizer(value)}
-                        value={Organizer}
-                        placeholder="Enter name"
-                        placeholderTextColor={'grey'}
-                        numberOfLines={2}
-                        multiline={true}
-                    />
-                 </View>
-                 <View>
-                 <Text style={{fontFamily:'Poppins-Regular',color:'#58636D'}}>Event For</Text>
-                    <ModalSelector style={{width:150}}>
-                    </ModalSelector>
+                <View style={{ flexDirection: 'row', marginTop: 30, justifyContent: 'space-between' }}>
+                    <View >
+                        <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>Organizer Name</Text>
+                        <TextInput
+                            style={styles.Eventinput}
+                            onChangeText={(value) => SetOrganizer(value)}
+                            value={Organizer}
+                            placeholder="Enter name"
+                            placeholderTextColor={'grey'}
+                            numberOfLines={2}
+                            multiline={true}
+                        />
+                    </View>
+                    <View>
+                        <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>Event For</Text>
+                        <ModalSelector style={{ width: 150 }}>
+                        </ModalSelector>
                     </View>
 
                 </View>
 
 
 
-                <View style={{ flexDirection: 'row',marginTop:30,justifyContent:'space-between' }}>
-                <View >
-                    <Text >Organizer Name</Text>
-                    <TextInput
-                        style={styles.Eventinput}
-                        SetEvent={SetEvent}
-                        value={event}
-                        placeholder="Enter name"
-                        placeholderTextColor={'grey'}
-                        numberOfLines={2}
-                        multiline={true}
-                    />
-                 </View>
-                 <View>
-                 <Text>Event For</Text>
-                    <ModalSelector style={{width:150}}>
-                    </ModalSelector>
+                <View style={{ flexDirection: 'row', marginTop: 30, justifyContent: 'space-between' }}>
+                    <View >
+                        <Text >Organizer Name</Text>
+                        <TextInput
+                            style={styles.Eventinput}
+                            SetEvent={SetEvent}
+                            value={event}
+                            placeholder="Enter name"
+                            placeholderTextColor={'grey'}
+                            numberOfLines={2}
+                            multiline={true}
+                        />
+                    </View>
+                    <View>
+                        <Text>Event For</Text>
+                        <ModalSelector style={{ width: 150 }}>
+                        </ModalSelector>
                     </View>
                 </View>
             </View>
-            
-            <View style={{justifyContent:'space-evenly',flexDirection:'row',marginTop:50}}>
-            <Button  mode="outlined" style={styles.ButtonView} color='red' onPress={() => console.log('Pressed')}>
-  Save
-  </Button>
-  <Button  mode="contained" style={styles.ButtonView} color='#5177E7' onPress={() => console.log('Pressed')}>
-  Save
-  </Button>
-  </View>
-  
 
-            
+            <TextInput
+                placeholder="Write description here "
+                onChangeText={(value) => setDescription(value)}
+                value={des}
+                style={styles.feedbox}
+                //   numberOfLines={10}
+                multiline={true}
+                placeholderTextColor="grey"
+            />
+
+
+            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row' }}>
+                <Button mode="outlined" style={styles.ButtonView} color='red' onPress={() => console.log('Pressed')}>
+                    Delete
+                </Button>
+                <Button mode="contained" style={styles.ButtonView} color='#5177E7' onPress={() => console.log('Pressed')}>
+                    Save
+                </Button>
+            </View>
+
+
+
 
 
 
@@ -159,24 +171,35 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     Eventbox: {
-        marginTop: 15, 
+        marginTop: 15,
         marginLeft: 20,
         marginRight: 20,
-         
+
     },
     Eventinput: {
         height: 41,
         borderWidth: 0.5,
-        color:'black',
-        fontFamily:'Poppins-Regular',
-        minWidth:150,
-        borderRadius:5,
-        backgroundColor:'white',
-        fontSize:15,
-      },
-    ButtonView:{
-        width:100,
-        
+        color: 'black',
+        fontFamily: 'Poppins-Regular',
+        minWidth: 150,
+        borderRadius: 5,
+        backgroundColor: 'white',
+        fontSize: 15,
+    },
+
+    feedbox: {
+        margin: 20,
+        backgroundColor: 'white',
+        textAlignVertical: 'top',
+        fontFamily: 'Poppins-Regular',
+        fontSize: 15,
+        color: 'black',
+        borderRadius: 12,
+        height: 200
+    },
+    ButtonView: {
+        width: 100,
+
     }
 
 });

@@ -4,7 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Text,
+  Text,ScrollView
 } from 'react-native';
 import {} from 'react-native-paper';
 
@@ -62,7 +62,7 @@ export default function EventScreen({navigation}) {
   }, []);
 
   return (
-    <View style={{backgroundColor: 'rgba(249, 249, 249, 1)', flex: 1}}>
+    <ScrollView style={{backgroundColor: 'rgba(249, 249, 249, 1)', flex: 1}}>
       {/* header start */}
 
       <View
@@ -218,7 +218,7 @@ export default function EventScreen({navigation}) {
             </View>
           </View>
         ))}
-    </View>
+    </ScrollView>
   );
 }
 
