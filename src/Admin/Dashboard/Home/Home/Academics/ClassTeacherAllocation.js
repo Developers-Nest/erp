@@ -58,10 +58,6 @@ export default function ClassTeacherAllocation({ navigation }) {
         }, [])
     );
 
-
-
-
-
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={styles.maincontainer}>
@@ -117,7 +113,7 @@ export default function ClassTeacherAllocation({ navigation }) {
                     <View style={{ alignItems: 'center', width: '90%' }}>
                         {/* open search */}
 
-                        <View
+                        {/* <View
                             style={{
                                 marginTop: 10,
                                 marginLeft: 5,
@@ -144,7 +140,7 @@ export default function ClassTeacherAllocation({ navigation }) {
                                     }}
                                 />
                             </TouchableOpacity>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
 
@@ -167,9 +163,6 @@ export default function ClassTeacherAllocation({ navigation }) {
                     <ScrollView>
                         {teacherallocationlist ? teacherallocationlist &&
                             teacherallocationlist.map(teacherallocationlist => (
-
-
-
                                 <View style={styles.section}
                                     key={teacherallocationlist._id}
                                 >
@@ -217,9 +210,10 @@ export default function ClassTeacherAllocation({ navigation }) {
                                                 <TouchableOpacity
                                                     style={{ flexDirection: 'row' }}
                                                     onPress={() =>
-                                                        navigation.navigate('EditAllocationTeacher')
-                                                    }
-                                                >
+                                                        navigation.navigate('EditAllocationTeacher', {
+                                                            teacher: teacherallocationlist
+                                                        })
+                                                    }>
                                                     <Text
                                                         style={{
                                                             fontSize: 12,
