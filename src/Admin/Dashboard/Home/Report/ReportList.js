@@ -10,15 +10,21 @@ import {
 import { Card, Title } from 'react-native-paper';
 import FeesPaidReport from './FeesPaidReport';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useSelector } from 'react-redux';
+
 export default function ReportList({navigation}) {
+  
+//theming
+const institute = useSelector(state => state.institute);
+
     return (
         <View style={styles.container}>
            
-<View style={styles.header}
-          // style={{
-          //   backgroundColor: institute ? institute.themeColor : 'black',
-          //   ...styles.header,
-          // }}
+<View 
+          style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}
           
           >
           <TouchableOpacity
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
     header: {
         height: 65,
         flexDirection: 'row',
-        backgroundColor:'#FF5733'
+       
       },
     CardContainer: {
         marginTop: 10,

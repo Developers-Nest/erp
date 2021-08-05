@@ -12,8 +12,13 @@ import ModalSelector from 'react-native-modal-selector';
 // date picker
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useSelector } from 'react-redux';
 
 export default function StudentReport({navigation}) {
+    
+//theming
+const institute = useSelector(state => state.institute);
+
 
     const [className, setclassName] = useState(null);
     const [classes, setclasses] = useState([
@@ -67,11 +72,11 @@ export default function StudentReport({navigation}) {
     return (
         <View style={styles.container}>
                      
-<View style={styles.header}
-          // style={{
-          //   backgroundColor: institute ? institute.themeColor : 'black',
-          //   ...styles.header,
-          // }}
+<View 
+          style={{
+            backgroundColor: institute ? institute.themeColor : 'black',
+            ...styles.header,
+          }}
           
           >
           <TouchableOpacity
@@ -271,7 +276,7 @@ const styles = StyleSheet.create({
     header: {
         height: 65,
         flexDirection: 'row',
-        backgroundColor:'#FF5733'
+       
       },
     ModalContainer: {
         marginTop: 10,
