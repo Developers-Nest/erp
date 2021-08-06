@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
     Searchbar,
@@ -11,15 +11,7 @@ import {
 } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -27,6 +19,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 //redux
 import { useSelector } from 'react-redux';
 
+import get from '../../../../../services/helpers/request/get'
+import post from '../../../../../services/helpers/request/post'
+import read from '../../../../../services/localstorage/read'
 
 
 
@@ -36,6 +31,19 @@ export default function AddDriver({ navigation }) {
 
     //theming
     const institute = useSelector(state => state.institute);
+
+    //modal selector values
+    const [vehicles, setVehicles] = useState([]);
+    //data to be sent
+    const [vehicle, setVehicle] = useState();
+    //for textinputs
+    const [track, setTrackid] = useState();
+    const [licensenum, setLicensenum] = useState('');
+    const [name, setName] = useState('')
+    const [phone, setPhone] = useState('')
+    const [curraddr, setcurraddr] = useState('')
+    const [permaddr, setpermaddr] = useState('')
+
 
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('21 May 2021')
@@ -57,6 +65,57 @@ export default function AddDriver({ navigation }) {
         hideDatePicker();
     };
 
+    //on save button press action
+    let handleSubmit = async () => {
+        try {
+            let slug = '/transport/driver';
+            let token = await read('token');
+            let data;
+
+            data = {
+                vehicleNo: vehicle,
+                licenseNumber: licensenum,
+                name: name,
+                phone: phone,
+                presentAddress: curraddr,
+                permanentAddress: permaddr,
+                trackId: track,
+
+            };
+            console.log('Driver Data ', data);
+            let res = await post(slug, data, token);
+            console.log('Add Driver ', res);
+            alert('Driver added!!');
+        } catch (err) {
+            alert('Cannot Save !!' + err);
+        }
+    }
+    //on load
+    useEffect(async () => {
+        try {
+            let slug = '/transport/vehicle';
+            let token = await read('token');
+            let res = await get(slug, token);
+            let list = [];
+
+            res &&
+                res.map((res) => {
+                    list.push({
+                        label: res.vehicleNo,
+                        key: res._id,
+                    })
+                })
+
+            console.log(list);
+            setVehicles(list);
+
+        } catch (err) {
+            alert('Cannot get Vehicle number list!!');
+        }
+
+
+    }, [])
+
 
     return (
         <View style={styles.backgroung}>
@@ -67,7 +126,7 @@ export default function AddDriver({ navigation }) {
                     backgroundColor: institute ? institute.themeColor : 'black',
                     ...styles.header,
                 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }} >
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
                     <TouchableOpacity
                         onPress={() => {
                             navigation.navigate('TransportMain');
@@ -80,8 +139,7 @@ export default function AddDriver({ navigation }) {
                                 alignSelf: 'center',
                                 fontSize: 25,
                                 color: 'white',
-                                // paddingLeft: 10,
-                                // paddingTop: 23,
+
                             }}
                         />
                     </TouchableOpacity>
@@ -91,7 +149,7 @@ export default function AddDriver({ navigation }) {
                             fontSize: 28,
                             fontWeight: '600',
                             alignSelf: 'center',
-                            paddingLeft: 10,
+                            paddingLeft: 20,
                             color: 'white',
                             fontFamily: 'NunitoSans-Regular',
                         }}>
@@ -113,19 +171,25 @@ export default function AddDriver({ navigation }) {
 
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
-                    <View style={styles.Card}>
-                        <View style={styles.CardContent}>
-                            <TextInput
-                                style={{ ...styles.search_input }}
-                                placeholder="Vehicle No."
-                            />
-                        </View>
-                    </View>
+                    <ModalSelector
+                        data={vehicles}
+                        initValue="Contract"
+                        onChange={option => {
+                            setVehicle(option.key);
+                        }}
+                        style={styles.card}
+                        initValueTextStyle={styles.SelectedValueSmall}
+                        selectTextStyle={styles.SelectedValueSmall}
+                    />
+
                     <View style={styles.Card}>
                         <View style={styles.CardContent}>
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Track ID"
+                                placeholderTextColor='grey'
+                                color='black'
+                                keyboardType="numeric"
                             />
                         </View>
                     </View>
@@ -145,6 +209,10 @@ export default function AddDriver({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="License No."
+                                placeholderTextColor="grey"
+                                color="black"
+                                keyboardType="numeric"
+                                onChangeText={val => setLicensenum(val)}
                             />
                         </View>
                     </View>
@@ -153,6 +221,10 @@ export default function AddDriver({ navigation }) {
                             <TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
                                 <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                                     placeholder={date}
+                                    placeholderTextColor="grey"
+                                    color="black"
+                                    values={date}
+                                    editable={false}
 
                                 />
                                 <Feather size={18} color="black" name="calendar"
@@ -184,7 +256,10 @@ export default function AddDriver({ navigation }) {
                         <View style={styles.CardContent}>
                             <TextInput
                                 style={{ ...styles.search_input }}
-                                placeholder="Vehicle No."
+                                placeholder="Shaheen"
+                                placeholderTextColor="grey"
+                                color="black"
+                                onChangeText={val => setName(val)}
                             />
                         </View>
                     </View>
@@ -192,7 +267,11 @@ export default function AddDriver({ navigation }) {
                         <View style={styles.CardContent}>
                             <TextInput
                                 style={{ ...styles.search_input }}
-                                placeholder="Track ID"
+                                placeholder="8906534256"
+                                placeholderTextColor="grey"
+                                keyboardType="numeric"
+                                color="black"
+                                onChangeText={val => setPhone(val)}
                             />
                         </View>
                     </View>
@@ -209,6 +288,9 @@ export default function AddDriver({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Enter current address"
+                                placeholderTextColor="grey"
+                                color="black"
+                                onChangeText={val => setcurraddr(val)}
                             />
                         </View>
                     </View>
@@ -227,6 +309,9 @@ export default function AddDriver({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Enter permanent address"
+                                placeholderTextColor="grey"
+                                color="black"
+                                onChangeText={val => setpermaddr(val)}
                             />
                         </View>
                     </View>
@@ -239,7 +324,7 @@ export default function AddDriver({ navigation }) {
                         alignItems: 'center',
                         padding: 20,
                     }}>
-                    <Button style={{ width: 90 }} color="#5177E7" mode="contained" onPress={() => console.log('Pressed')}>
+                    <Button style={{ width: 90 }} color="#5177E7" mode="contained" onPress={handleSubmit}>
                         SAVE
                     </Button>
                 </View>
@@ -268,7 +353,7 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: '500',
         fontSize: 18,
-        lineHeight: 30,
+        lineHeight: 40,
         paddingTop: 3,
         color: '#211C5A',
     },
@@ -396,5 +481,28 @@ const styles = StyleSheet.create({
     header: {
         height: 69,
         flexDirection: 'row',
+    },
+    card: {
+        shadowColor: '#999',
+        height: 60,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 12,
+        elevation: 5,
+        backgroundColor: 'white',
+        borderColor: '#ccc',
+
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+        borderTopRightRadius: 12,
+        borderTopLeftRadius: 12,
+        overflow: 'hidden',
+        alignSelf: 'center',
+        // justifyContent: 'center',
+        // alignContent:'center',
+        margin: 0,
+        padding: 0,
+
+        width: '40%',
     },
 });
