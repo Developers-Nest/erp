@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, TextInput } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, TextInput} from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -16,6 +16,7 @@ import read from '../../../../services/localstorage/read'
 import getCourse from '../../../../services/helpers/getList/getCourse'
 import getBatch from '../../../../services/helpers/getList/getBatch'
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const HostelAllocationAdd = ({ navigation }) => {
 
@@ -344,7 +345,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
             {/* header ends */}
-
+<ScrollView>
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>User Type</Text>
@@ -352,7 +353,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                 <View style={{ marginHorizontal: 10, ...styles.shadow }}>
                     <ModalSelector
                         initValue="User Type"
-                        style={styles.card}
+                        style={styles.card2}
                         data={userType}
                         initValueTextStyle={styles.SelectedValueSmall}
                         onChange={option => {
@@ -365,10 +366,10 @@ const HostelAllocationAdd = ({ navigation }) => {
                 {
                     selectedUserType === 'Student' ? (
                         <View>
-                            <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                            <View style={{ width:'100%',paddingTop: 15, flexDirection: 'row' }}>
                                 <Text style={styles.section_heading}>Course </Text>
-                                <Text style={styles.section_heading2}>Batch</Text>
-                                <Text style={styles.section_heading2}>Student</Text>
+                                <Text style={styles.section_heading4}>Batch</Text>
+                                <Text style={styles.section_heading3}>Student</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }} >
                                 <ModalSelector
@@ -391,7 +392,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                                 />
                                 <ModalSelector
                                     initValue="Student"
-                                    style={styles.card3}
+                                    style={styles.card5}
                                     initValueTextStyle={styles.SelectedValueSmall}
                                     data={users}
                                     onChange={option => {
@@ -409,7 +410,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                         <View>
                             <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                                 <Text style={styles.section_heading}>Department </Text>
-                                <Text style={styles.section_heading2}>Employee</Text>
+                                <Text style={styles.section_heading3}>Employee</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }} >
                                 <ModalSelector
@@ -423,7 +424,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                                 />
                                 <ModalSelector
                                     initValue="Employee"
-                                    style={styles.card}
+                                    style={styles.card1}
                                     initValueTextStyle={styles.SelectedValueSmall}
                                     data={users}
                                     onChange={option => {
@@ -439,7 +440,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Hostel Type </Text>
                     <Text style={styles.section_heading2}>Hostel Name</Text>
-                    <Text style={styles.section_heading2}>Hostel Room</Text>
+                    <Text style={styles.section_heading3}>Hostel Room</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }} >
                     <ModalSelector
@@ -462,7 +463,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                     />
                     <ModalSelector
                         initValue="Room"
-                        style={styles.card3}
+                        style={styles.card4}
                         initValueTextStyle={styles.SelectedValueSmall}
                         data={hostelRoom}
                         onChange={option => {
@@ -530,6 +531,8 @@ const HostelAllocationAdd = ({ navigation }) => {
                     <Button onPress={handleSubmit} color={institute? institute.themeColor: 'blue'} mode="contained">Save</Button>
                 </View>
             </View>
+
+            </ScrollView>
 
         </View>
 
@@ -658,6 +661,7 @@ const styles = StyleSheet.create({
 
         marginBottom: 5,
         marginRight: 20,
+        width:'33%'
     },
     section_heading2: {
         flex: 1,
@@ -669,15 +673,54 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         lineHeight: 18,
         textAlign: 'center',
-        marginRight: 35,
-        marginLeft: 35,
+        marginRight: 20,
+        marginLeft:55,
 
 
         color: 'rgba(88, 99, 109, 0.85)',
 
-
+        width:'33%'
 
     },
+    section_heading3: {
+        flex: 1,
+        flexDirection: 'row',
+        marginBottom: 5,
+        fontFamily: 'Poppins-Regular',
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '600',
+        lineHeight: 18,
+        textAlign: 'center',
+        marginRight: 20,
+        marginLeft:0,
+
+
+        color: 'rgba(88, 99, 109, 0.85)',
+
+        width:'33%'
+
+    },
+    section_heading4: {
+        flex: 1,
+        flexDirection: 'row',
+        marginBottom: 5,
+        fontFamily: 'Poppins-Regular',
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '600',
+        lineHeight: 18,
+        textAlign: 'center',
+        marginRight: 20,
+        marginLeft:55,
+
+
+        color: 'rgba(88, 99, 109, 0.85)',
+
+        width:'33%'
+
+    },
+
     pickdate1: {
         width: 120,
         height: 50,
@@ -744,6 +787,42 @@ const styles = StyleSheet.create({
 
 
     card: {
+        width:'48%',
+        height: 50,
+        shadowColor: '#999',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        backgroundColor: 'white',
+        borderColor: '#58636D',
+        overflow: 'hidden',
+        justifyContent: 'center',
+        borderRadius: 8,
+        borderWidth: 0.3,
+        marginLeft: 10,
+        marginRight:0,
+        //flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    
+    card1: {
+        width:'45%',
+        height: 50,
+        shadowColor: '#999',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        backgroundColor: 'white',
+        borderColor: '#58636D',
+        overflow: 'hidden',
+        justifyContent: 'center',
+        borderRadius: 8,
+        borderWidth: 0.3,
+        marginLeft: 12,
+        marginRight:0,
+        //flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+
+    card2: {
         width: 170,
         height: 50,
         shadowColor: '#999',
@@ -762,7 +841,7 @@ const styles = StyleSheet.create({
     },
 
     card3: {
-        width: 100,
+        width:'33%',
         height: 50,
         shadowColor: '#999',
         shadowOffset: { width: 0, height: 1 },
@@ -773,11 +852,49 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 8,
         borderWidth: 0.3,
-        marginLeft: 15,
-        marginRight: 20,
+        marginLeft: 7,
+        marginRight:0,
         //flexDirection: 'row',
         justifyContent: 'space-between'
     },
+card4:{
+    width:'28%',
+    height: 50,
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#58636D',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    borderRadius: 8,
+    borderWidth: 0.3,
+    marginLeft: 5,
+    marginRight:0,
+    //flexDirection: 'row',
+    justifyContent: 'space-between'
+},
+
+card5: {
+    width:'28%',
+    height: 50,
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#58636D',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    borderRadius: 8,
+    borderWidth: 0.3,
+    marginLeft: 7,
+    marginRight:0,
+    //flexDirection: 'row',
+    justifyContent: 'space-between'
+},
+
+
+
     SelectedValueSmall: {
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
