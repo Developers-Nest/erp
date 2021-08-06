@@ -81,9 +81,9 @@ export default function SmsAlert({ navigation }) {
         <ModalSelector
           data={SMS_for}
           initValue="SMS for"
-          onChange={async option => {
-            await getAssessesments(option.key);
-          }}
+          // onChange={async option => {
+          //   await getAssessesments(option.key);
+          // }}
           style={styles.card_picker}
           initValueTextStyle={styles.SelectedValueSmall}
           selectTextStyle={styles.SelectedValueSmall}
@@ -93,7 +93,9 @@ export default function SmsAlert({ navigation }) {
           <Card.Content>
             <TextInput
               placeholder="Write your message here "
-              onChange={val => setDiscription(val)}
+              placeholderTextColor='grey'
+              color='black'
+              // onChange={val => setDiscription(val)}
               style={{ backgroundColor: 'white' }}
             />
           </Card.Content>
