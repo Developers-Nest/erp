@@ -24,7 +24,7 @@ import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 import { useFocusEffect } from '@react-navigation/native';
 
 const AllocatedListHostel = ({ navigation }) => {
-  const [allocationlist, setAllocationlist] = useState([]);
+  const [allocation, setAllocationlist] = useState([]);
   // loading screem
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
@@ -182,10 +182,10 @@ const AllocatedListHostel = ({ navigation }) => {
       </View>
       {/* <View style={{height:30}}/> */}
       <ScrollView>
-        {allocationlist
-          ? allocationlist &&
-          allocationlist.map(allocation => (
-            <View style={styles.section} key={allocationlist._id}>
+        {allocation
+          ? allocation &&
+          allocation.map(allocation => (
+            <View style={styles.section} key={allocation._id}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
                   <View style={styles.differentusers}>
