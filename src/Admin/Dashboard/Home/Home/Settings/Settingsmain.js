@@ -272,7 +272,7 @@ export default function Settingsmain({ navigation }) {
         setCheckBoxValue(prevRecDays => {
           return {
             ...prevRecDays,
-            [userId]: !checkBoxValue[[userId]],
+            [userId]: !isSelectAll,
           };
         });
       });
@@ -281,6 +281,10 @@ export default function Settingsmain({ navigation }) {
 
     let sendEmail = async()=>{
       setLoadingScreen()
+      if(users && users.length == 0){
+        hideLoadingScreen()
+        return
+      }
       try{
         let token = await read('token')
         let slug = '/settings/user/email'
