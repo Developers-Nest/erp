@@ -189,8 +189,8 @@ fontSize:12,lineHeight:18,color:'#211C5A'}}
                             color: '#211C5A',
                             fontFamily: 'Poppins-Regular',
                             marginHorizontal: -5,
-                            marginRight:100,
-                            paddingRight:50
+                            // marginRight:100,
+                            // paddingRight:50
                           }}>
                           {' '}
                           User
