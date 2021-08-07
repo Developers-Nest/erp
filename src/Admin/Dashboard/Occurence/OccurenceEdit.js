@@ -32,6 +32,8 @@ export default function OccurenceEdit({route, navigation}) {
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
+  const institute = useSelector((state)=>state.institute)
+
   //edit values
   const [id, setID] = React.useState(route.params.id);
   const [v, setv] = React.useState(route.params.v);
@@ -150,7 +152,7 @@ export default function OccurenceEdit({route, navigation}) {
 
   return (
     <ScrollView>
-      <Appbar>
+      <Appbar style={{backgroundColor: institute? institute.themeColor: 'blue'}}>
         <Appbar.BackAction onPress={() => navigation.replace('Occurence')} />
         <Appbar.Content title="Occurence Register" />
       </Appbar>
@@ -230,7 +232,7 @@ export default function OccurenceEdit({route, navigation}) {
         />
       </View>
 
-      <TouchableOpacity style={styles.btn} onPress={HandleSubmit}>
+      <TouchableOpacity style={{ backgroundColor: institute? institute.themeColor : 'blue' ,  ...styles.btn}} onPress={HandleSubmit}>
         <Text
           style={{
             flexDirection: 'row',
@@ -255,7 +257,6 @@ const styles = StyleSheet.create({
   btn: {
     width: 80,
     height: 40,
-    backgroundColor: '#5177E7',
     alignContent: 'center',
     alignSelf: 'center',
     borderRadius: 5,

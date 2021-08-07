@@ -45,8 +45,12 @@ export default function LeaveManager({ navigation }) {
       let token = await read('token')
       let slug = '/leavemanagement/application'
       let res = await get(slug, token)
-      console.log('Leaves ', res)
-      setLeaves(res)
+      if(res.error){
+        alert(res.error)
+      } else {
+        console.log('Leaves ', res)
+        setLeaves(res)
+      }
     } catch (err) {
       alert('Cannot get list ' + err)
     }

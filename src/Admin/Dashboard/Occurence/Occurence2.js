@@ -4,14 +4,10 @@ import {
   Text,
   View,
   TextInput,
-  ScrollView,
-  ImageBackground,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {Searchbar, Button, Appbar} from 'react-native-paper';
+import { Appbar} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 // date picker
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -20,7 +16,6 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
 // helpers
-import get from '../../../services/helpers/request/get';
 import post from '../../../services/helpers/request/post';
 import read from '../../../services/localstorage/read';
 import getEmployee from '../../../services/helpers/getList/getEmployee';
@@ -31,6 +26,8 @@ import {useSelector} from 'react-redux';
 export default function Occurence2({navigation}) {
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+  const institute = useSelector((state)=>state.institute)
 
   //data to be created
   const [date, setDate] = React.useState('');
@@ -134,10 +131,11 @@ export default function Occurence2({navigation}) {
 
   return (
     <View>
-      <Appbar>
+      <Appbar style={{backgroundColor: institute? institute.themeColor: 'blue'}}>
         <Appbar.BackAction onPress={() => navigation.replace('Occurence')} />
         <Appbar.Content title="Occurence Register" />
       </Appbar>
+      {loadingScreen}
       <View
         style={{
           width: '90%',
@@ -220,11 +218,11 @@ export default function Occurence2({navigation}) {
           marginTop: 340,
           flex: 1,
           flexDirection: 'row',
-          justifyContent: 'space-evenly',
+          justifyContent: 'center',
           alignContent: 'center',
           marginLeft: 20,
         }}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             ...styles.btn,
             alignSelf: 'flex-start',
@@ -245,13 +243,13 @@ export default function Occurence2({navigation}) {
             }}>
             {'Delete'}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={handlesubmit}
           style={{
             ...styles.btn,
             alignSelf: 'flex-end',
-            backgroundColor: '#5177E7',
+            backgroundColor: institute? institute.themeColor: '#5177E7',
           }}>
           <Text
             style={{
