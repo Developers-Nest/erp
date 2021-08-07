@@ -38,6 +38,7 @@ export default function HostelRequest({navigation}) {
 
   //response
   const [requests, setRequests] = React.useState([]);
+  const [refresh, setRefresh] = React.useState(false);
 
   //on load
   useEffect(async () => {
@@ -50,7 +51,49 @@ export default function HostelRequest({navigation}) {
     } catch (err) {
       alert('Cannot fetch your rooms list !!');
     }
-  }, []);
+  }, [refresh]);
+
+  // save details
+  const Approve = async id => {
+    try {
+      let slug = `/hostel/hostelAllocation/${id}`;
+      console.log('Occurance slug', slug);
+      let token = await read('token');
+      let data = {
+        status: 'Accepted',
+      };
+      console.log(data);
+      let response = await patch(slug, data, token);
+      alert('Status: Accepted!');
+      setRefresh(!refresh);
+    } catch (err) {
+      alert('Cannot create occurance!' + err);
+    }
+  };
+
+  // save details
+  const Reject = async id => {
+    try {
+      let slug = `/hostel/hostelAllocation/${id}`;
+      console.log('Occurance slug', slug);
+      let token = await read('token');
+      let data = {
+        status: 'Rejected',
+      };
+      console.log(data);
+      let response = await patch(slug, data, token);
+      alert('Status: Rejected!');
+      setRefresh(!refresh);
+    } catch (err) {
+      alert('Cannot create occurance!' + err);
+    }
+  };
+
+  //date picker
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -167,60 +210,16 @@ export default function HostelRequest({navigation}) {
               <Text style={styles.switchText}>Reviewed</Text>
             </TouchableOpacity>
           </View>
-          {showContent === 'Unreviewed' ? (
-            <Unreviewed requests={requests} />
-          ) : (
-            <Reviewed requests={requests} />
-          )}
+          {showContent === 'Unreviewed' ? <Unreviewed /> : <Reviewed />}
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );
 
-  function Unreviewed({requests}) {
+  function Unreviewed() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
-
-    // save details
-    const Approve = async id => {
-      try {
-        let slug = `/hostel/hostelAllocation/${id}`;
-        console.log('Occurance slug', slug);
-        let token = await read('token');
-        let data = {
-          status: 'Accepted',
-        };
-        console.log(data);
-        let response = await patch(slug, data, token);
-        alert('Status: Accepted!');
-      } catch (err) {
-        alert('Cannot create occurance!' + err);
-      }
-    };
-
-    // save details
-    const Reject = async id => {
-      try {
-        let slug = `/hostel/hostelAllocation/${id}`;
-        console.log('Occurance slug', slug);
-        let token = await read('token');
-        let data = {
-          status: 'Rejected',
-        };
-        console.log(data);
-        let response = await patch(slug, data, token);
-        alert('Status: Rejected!');
-      } catch (err) {
-        alert('Cannot create occurance!' + err);
-      }
-    };
-
-    //date picker
-    let parseDate = myDate => {
-      let d = new Date(myDate);
-      return d.toString().slice(0, 15);
-    };
 
     const LeftActions = id => {
       return (
@@ -360,50 +359,10 @@ export default function HostelRequest({navigation}) {
     );
   }
 
-  function Reviewed({requests}) {
+  function Reviewed() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
-
-    // save details
-    const Approve = async id => {
-      try {
-        let slug = `/hostel/hostelAllocation/${id}`;
-        console.log('Occurance slug', slug);
-        let token = await read('token');
-        let data = {
-          status: 'Accepted',
-        };
-        console.log(data);
-        let response = await patch(slug, data, token);
-        alert('Status: Accepted!');
-      } catch (err) {
-        alert('Cannot create occurance!' + err);
-      }
-    };
-
-    // save details
-    const Reject = async id => {
-      try {
-        let slug = `/hostel/hostelAllocation/${id}`;
-        console.log('Occurance slug', slug);
-        let token = await read('token');
-        let data = {
-          status: 'Rejected',
-        };
-        console.log(data);
-        let response = await patch(slug, data, token);
-        alert('Status: Rejected!');
-      } catch (err) {
-        alert('Cannot create occurance!' + err);
-      }
-    };
-
-    //date picker
-    let parseDate = myDate => {
-      let d = new Date(myDate);
-      return d.toString().slice(0, 15);
-    };
 
     const LeftActions = id => {
       return (
