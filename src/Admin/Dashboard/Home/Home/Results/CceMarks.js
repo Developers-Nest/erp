@@ -154,7 +154,7 @@ export default function CceMarksAdmin({navigation}) {
           mark: data.mark,
         });
       });
-      setList(res);
+      setList(marksArray);
       setFetched(true);
     } catch (err) {
       alert('No Lists found!!' + err);
