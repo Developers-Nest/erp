@@ -50,7 +50,7 @@ export default function HostelRequest({navigation}) {
     } catch (err) {
       alert('Cannot fetch your rooms list !!');
     }
-  });
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
