@@ -33,11 +33,11 @@ export default function HostelRequest({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
-  //response
-  const [requests, setRequests] = React.useState([]);
-
   //theming
   const institute = useSelector(state => state.institute);
+
+  //response
+  const [requests, setRequests] = React.useState([]);
 
   //on load
   useEffect(async () => {
@@ -50,335 +50,8 @@ export default function HostelRequest({navigation}) {
     } catch (err) {
       alert('Cannot fetch your rooms list !!');
     }
-  }, []);
+  });
 
-  // save details
-  const Approve = async id => {
-    try {
-      let slug = `/hostel/hostelAllocation/${id}`;
-      console.log('Occurance slug', slug);
-      let token = await read('token');
-      let data = {
-        status: 'Accepted',
-      };
-      console.log(data);
-      let response = await patch(slug, data, token);
-      alert('Status: Accepted!');
-    } catch (err) {
-      alert('Cannot create occurance!' + err);
-    }
-  };
-
-  // save details
-  const Reject = async id => {
-    try {
-      let slug = `/hostel/hostelAllocation/${id}`;
-      console.log('Occurance slug', slug);
-      let token = await read('token');
-      let data = {
-        status: 'Rejected',
-      };
-      console.log(data);
-      let response = await patch(slug, data, token);
-      alert('Status: Rejected!');
-    } catch (err) {
-      alert('Cannot create occurance!' + err);
-    }
-  };
-
-  //date picker
-  let parseDate = myDate => {
-    let d = new Date(myDate);
-    return d.toString().slice(0, 15);
-  };
-
-  function Unreviewed() {
-    const [searchQuery, setSearchQuery] = React.useState('');
-
-    const onChangeSearch = query => setSearchQuery(query);
-    //for left action swipe:
-    const LeftActions = id => {
-      return (
-        <TouchableOpacity
-          onPress={() => {
-            Approve(id);
-          }}>
-          <View style={styles.iconbubbleapprove}>
-            <FontAwesome5 size={38.5} color="white" name="check-circle" />
-            <Text style={{color: 'white'}}>Approve</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
-    const RightActions = id => {
-      return (
-        <TouchableOpacity
-          onPress={() => {
-            Reject(id);
-          }}>
-          <View style={styles.iconbubblereject}>
-            <FontAwesome5 size={38.5} color="white" name="trash-alt" />
-
-            <Text style={{color: 'white'}}>Reject</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
-
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          {requests &&
-            requests.map(request =>
-              request && request.status === 'Pending' ? (
-                <View key={request._id}>
-                  <Swipeable
-                    renderLeftActions={() => LeftActions(request._id)}
-                    renderRightActions={() => RightActions(request._id)}>
-                    <View style={styles.sectionreviewed}>
-                      <View style={styles.details}>
-                        <View style={styles.userinhostels}>
-                          <View style={styles.differentusers}>
-                            <Text
-                              style={{
-                                fontSize: 18,
-                                color: '#211C5A',
-                                fontFamily: 'Poppins-Regular',
-                              }}>
-                              {request.user.firstName +
-                                ' ' +
-                                request.user.lastName}
-                            </Text>
-
-                            <TouchableOpacity style={{flexDirection: 'row'}}>
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  color: '#211C5A',
-                                  fontFamily: 'Poppins-Medium',
-                                }}>
-                                {request.hostelRoom.roomNo +
-                                  ' ' +
-                                  request.hostelRoom.floorName}
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                          <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                color: '#58636D',
-                                fontFamily: 'Poppins-Medium',
-                              }}>
-                              {'Hostel: '}
-                              {request.hostelName.name}
-                            </Text>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                color: 'red',
-                                fontFamily: 'Poppins-Medium',
-                              }}>
-                              Pending
-                            </Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                color: '#505069',
-                                fontFamily: 'Poppins-Regular',
-                              }}>
-                              {request.userType.name}
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                      <View style={styles.belowhr}>
-                        <View style={{flexDirection: 'column'}}>
-                          <Text
-                            style={{
-                              fontFamily: 'Poppins-Regular',
-                              fontWeight: '500',
-                              fontSize: 12,
-                              lineHeight: 18,
-                              color: '#211C5A',
-                            }}>
-                            {'  '} Register: {''}
-                            {parseDate(request.updatedAt)}
-                            {/* {assignment.submissionDateString ||
-                          'Submission date Not Found'} */}
-                          </Text>
-                        </View>
-                        <View>
-                          <Text
-                            style={{
-                              fontFamily: 'Poppins-Regular',
-                              fontWeight: '500',
-                              fontSize: 12,
-                              lineHeight: 18,
-                              color: '#211C5A',
-                            }}>
-                            {' '}
-                            Vacate: {''}
-                            {parseDate(request.vacatingDate)}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </Swipeable>
-                </View>
-              ) : null,
-            )}
-        </ScrollView>
-      </View>
-    );
-  }
-
-  function Reviewed() {
-    const [searchQuery, setSearchQuery] = React.useState('');
-
-    const onChangeSearch = query => setSearchQuery(query);
-    //for left action swipe:
-    const LeftActions = id => {
-      return (
-        <TouchableOpacity
-          onPress={() => {
-            Approve(id);
-          }}>
-          <View style={styles.iconbubbleapprove}>
-            <FontAwesome5 size={38.5} color="white" name="check-circle" />
-            <Text style={{color: 'white'}}>Approve</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
-    const RightActions = id => {
-      return (
-        <TouchableOpacity
-          onPress={() => {
-            Reject(id);
-          }}>
-          <View style={styles.iconbubblereject}>
-            <FontAwesome5 size={38.5} color="white" name="trash-alt" />
-
-            <Text style={{color: 'white'}}>Reject</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          {requests &&
-            requests.map(request =>
-              request && request.status === 'Pending' ? null : (
-                <View key={request._id}>
-                  <Swipeable
-                    renderLeftActions={() => LeftActions(request._id)}
-                    renderRightActions={() => RightActions(request._id)}>
-                    <View style={styles.sectionreviewed}>
-                      <View style={styles.details}>
-                        <View style={styles.userinhostels}>
-                          <View style={styles.differentusers}>
-                            <Text
-                              style={{
-                                fontSize: 18,
-                                color: '#211C5A',
-                                fontFamily: 'Poppins-Regular',
-                              }}>
-                              {request.user.firstName +
-                                ' ' +
-                                request.user.lastName}{' '}
-                            </Text>
-
-                            <TouchableOpacity style={{flexDirection: 'row'}}>
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  color: '#211C5A',
-                                  fontFamily: 'Poppins-Medium',
-                                }}>
-                                {request.hostelRoom.roomNo +
-                                  ' ' +
-                                  request.hostelRoom.floorName}
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                          <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                color: '#58636D',
-                                fontFamily: 'Poppins-Medium',
-                              }}>
-                              {'Hostel: '}
-                              {request.hostelName.name}
-                            </Text>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                color:
-                                  request.status === 'Rejected'
-                                    ? 'red'
-                                    : 'green',
-                                fontFamily: 'Poppins-Medium',
-                              }}>
-                              {request.status}
-                            </Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                color: '#505069',
-                                fontFamily: 'Poppins-Regular',
-                              }}>
-                              {request.userType.name}
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                      <View style={styles.belowhr}>
-                        <View style={{flexDirection: 'column'}}>
-                          <Text
-                            style={{
-                              fontFamily: 'Poppins-Regular',
-                              fontWeight: '500',
-                              fontSize: 12,
-                              lineHeight: 18,
-                              color: '#211C5A',
-                            }}>
-                            {'  '} Register: {''}
-                            {parseDate(request.updatedAt)}
-                            {/* {assignment.submissionDateString ||
-                          'Submission date Not Found'} */}
-                          </Text>
-                        </View>
-                        <View>
-                          <Text
-                            style={{
-                              fontFamily: 'Poppins-Regular',
-                              fontWeight: '500',
-                              fontSize: 12,
-                              lineHeight: 18,
-                              color: '#211C5A',
-                            }}>
-                            {' '}
-                            Vacate: {''}
-                            {parseDate(request.vacatingDate)}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </Swipeable>
-                </View>
-              ),
-            )}
-        </ScrollView>
-      </View>
-    );
-  }
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
@@ -494,13 +167,382 @@ export default function HostelRequest({navigation}) {
               <Text style={styles.switchText}>Reviewed</Text>
             </TouchableOpacity>
           </View>
-          {showContent === 'Unreviewed' ? <Unreviewed /> : <Reviewed />}
+          {showContent === 'Unreviewed' ? (
+            <Unreviewed requests={requests} />
+          ) : (
+            <Reviewed requests={requests} />
+          )}
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
+function Unreviewed({requests}) {
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const onChangeSearch = query => setSearchQuery(query);
+
+  // save details
+  const Approve = async id => {
+    try {
+      let slug = `/hostel/hostelAllocation/${id}`;
+      console.log('Occurance slug', slug);
+      let token = await read('token');
+      let data = {
+        status: 'Accepted',
+      };
+      console.log(data);
+      let response = await patch(slug, data, token);
+      alert('Status: Accepted!');
+    } catch (err) {
+      alert('Cannot create occurance!' + err);
+    }
+  };
+
+  // save details
+  const Reject = async id => {
+    try {
+      let slug = `/hostel/hostelAllocation/${id}`;
+      console.log('Occurance slug', slug);
+      let token = await read('token');
+      let data = {
+        status: 'Rejected',
+      };
+      console.log(data);
+      let response = await patch(slug, data, token);
+      alert('Status: Rejected!');
+    } catch (err) {
+      alert('Cannot create occurance!' + err);
+    }
+  };
+
+  //date picker
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
+
+  const LeftActions = id => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          Approve(id);
+        }}>
+        <View style={styles.iconbubbleapprove}>
+          <FontAwesome5 size={38.5} color="white" name="check-circle" />
+          <Text style={{color: 'white'}}>Approve</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  const RightActions = id => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          Reject(id);
+        }}>
+        <View style={styles.iconbubblereject}>
+          <FontAwesome5 size={38.5} color="white" name="trash-alt" />
+
+          <Text style={{color: 'white'}}>Reject</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        {requests &&
+          requests.map(request =>
+            request && request.status === 'Pending' ? (
+              <View key={request._id}>
+                <Swipeable
+                  renderLeftActions={() => LeftActions(request._id)}
+                  renderRightActions={() => RightActions(request._id)}>
+                  <View style={styles.sectionreviewed}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {request.user.firstName +
+                              ' ' +
+                              request.user.lastName}
+                          </Text>
+
+                          <TouchableOpacity style={{flexDirection: 'row'}}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              {request.hostelRoom.roomNo +
+                                ' ' +
+                                request.hostelRoom.floorName}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#58636D',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            {'Hostel: '}
+                            {request.hostelName.name}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: 'red',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            Pending
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#505069',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {request.userType.name}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                    <View style={styles.belowhr}>
+                      <View style={{flexDirection: 'column'}}>
+                        <Text
+                          style={{
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: '500',
+                            fontSize: 12,
+                            lineHeight: 18,
+                            color: '#211C5A',
+                          }}>
+                          {'  '} Register: {''}
+                          {parseDate(request.updatedAt)}
+                          {/* {assignment.submissionDateString ||
+                        'Submission date Not Found'} */}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text
+                          style={{
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: '500',
+                            fontSize: 12,
+                            lineHeight: 18,
+                            color: '#211C5A',
+                          }}>
+                          {' '}
+                          Vacate: {''}
+                          {parseDate(request.vacatingDate)}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </Swipeable>
+              </View>
+            ) : null,
+          )}
+      </ScrollView>
+    </View>
+  );
+}
+
+function Reviewed({requests}) {
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const onChangeSearch = query => setSearchQuery(query);
+
+  // save details
+  const Approve = async id => {
+    try {
+      let slug = `/hostel/hostelAllocation/${id}`;
+      console.log('Occurance slug', slug);
+      let token = await read('token');
+      let data = {
+        status: 'Accepted',
+      };
+      console.log(data);
+      let response = await patch(slug, data, token);
+      alert('Status: Accepted!');
+    } catch (err) {
+      alert('Cannot create occurance!' + err);
+    }
+  };
+
+  // save details
+  const Reject = async id => {
+    try {
+      let slug = `/hostel/hostelAllocation/${id}`;
+      console.log('Occurance slug', slug);
+      let token = await read('token');
+      let data = {
+        status: 'Rejected',
+      };
+      console.log(data);
+      let response = await patch(slug, data, token);
+      alert('Status: Rejected!');
+    } catch (err) {
+      alert('Cannot create occurance!' + err);
+    }
+  };
+
+  //date picker
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
+
+  const LeftActions = id => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          Approve(id);
+        }}>
+        <View style={styles.iconbubbleapprove}>
+          <FontAwesome5 size={38.5} color="white" name="check-circle" />
+          <Text style={{color: 'white'}}>Approve</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  const RightActions = id => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          Reject(id);
+        }}>
+        <View style={styles.iconbubblereject}>
+          <FontAwesome5 size={38.5} color="white" name="trash-alt" />
+
+          <Text style={{color: 'white'}}>Reject</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  return (
+    <View style={styles.container}>
+      <ScrollView>
+        {requests &&
+          requests.map(request =>
+            request && request.status === 'Pending' ? null : (
+              <View key={request._id}>
+                <Swipeable
+                  renderLeftActions={() => LeftActions(request._id)}
+                  renderRightActions={() => RightActions(request._id)}>
+                  <View style={styles.sectionreviewed}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {request.user.firstName +
+                              ' ' +
+                              request.user.lastName}{' '}
+                          </Text>
+
+                          <TouchableOpacity style={{flexDirection: 'row'}}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              {request.hostelRoom.roomNo +
+                                ' ' +
+                                request.hostelRoom.floorName}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#58636D',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            {'Hostel: '}
+                            {request.hostelName.name}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color:
+                                request.status === 'Rejected' ? 'red' : 'green',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            {request.status}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#505069',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {request.userType.name}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                    <View style={styles.belowhr}>
+                      <View style={{flexDirection: 'column'}}>
+                        <Text
+                          style={{
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: '500',
+                            fontSize: 12,
+                            lineHeight: 18,
+                            color: '#211C5A',
+                          }}>
+                          {'  '} Register: {''}
+                          {parseDate(request.updatedAt)}
+                          {/* {assignment.submissionDateString ||
+                        'Submission date Not Found'} */}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text
+                          style={{
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: '500',
+                            fontSize: 12,
+                            lineHeight: 18,
+                            color: '#211C5A',
+                          }}>
+                          {' '}
+                          Vacate: {''}
+                          {parseDate(request.vacatingDate)}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </Swipeable>
+              </View>
+            ),
+          )}
+      </ScrollView>
+    </View>
+  );
+}
 const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
