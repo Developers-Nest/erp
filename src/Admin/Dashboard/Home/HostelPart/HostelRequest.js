@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 // import { TextInput } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Swipeable from 'react-native-gesture-handler/Swipeable'
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 import {
   StyleSheet,
@@ -20,7 +20,11 @@ import {
   Alert,
 } from 'react-native';
 
-// redux
+// helpers
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
+
+//redux
 import {useSelector} from 'react-redux';
 
 export default function HostelRequest({navigation}) {
@@ -28,8 +32,30 @@ export default function HostelRequest({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
+  //response
+  const [requests, setRequests] = React.useState([]);
+
   //theming
   const institute = useSelector(state => state.institute);
+
+  //on load
+  useEffect(async () => {
+    try {
+      let slug = '/hostel/hostelAllocation';
+      let token = await read('token');
+      const response = await get(slug, token);
+      console.log(response);
+      setRequests(response);
+    } catch (err) {
+      alert('Cannot fetch your rooms list !!');
+    }
+  }, []);
+
+  //date picker
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
 
   function Unreviewed() {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -37,134 +63,139 @@ export default function HostelRequest({navigation}) {
     const onChangeSearch = query => setSearchQuery(query);
     const RightActions = () => {
       return (
-        <TouchableOpacity 
-        onPress={() => {
-          Alert.alert('Rejected');
-        }}>
-        <View style={styles.iconbubblereject}>
-        <FontAwesome5
-                         size={38.5}
-                         color="white"
-                         name="trash-alt"
-                       />
-                       
-                       <Text style={{color:'white'}}>Reject</Text>
-                     </View>   
-                     </TouchableOpacity> 
-      )
-     }
-     //for left action swipe:
-     const LeftActions = () => {
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert('Rejected');
+          }}>
+          <View style={styles.iconbubblereject}>
+            <FontAwesome5 size={38.5} color="white" name="trash-alt" />
+
+            <Text style={{color: 'white'}}>Reject</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    };
+    //for left action swipe:
+    const LeftActions = () => {
       return (
-        <TouchableOpacity 
-        onPress={() => {
-          Alert.alert('Approved');
-        }}
-        >
-        <View style={styles.iconbubbleapprove}>
-        <FontAwesome5
-          size={38.5}
-          color="white"
-          name="check-circle"
-        />
-        <Text style={{color:'white'}}>Approve</Text>
-      </View>
-</TouchableOpacity>
-      )
-     }
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert('Approved');
+          }}>
+          <View style={styles.iconbubbleapprove}>
+            <FontAwesome5 size={38.5} color="white" name="check-circle" />
+            <Text style={{color: 'white'}}>Approve</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    };
 
     return (
       <View style={styles.container}>
         <ScrollView>
-      <View style={{flexDirection:'row',justifyContent:'center'}}>
-      <Swipeable renderLeftActions={LeftActions} renderRightActions={RightActions}>
-<View style={styles.section}>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            marginHorizontal: -5,
-                            marginRight:150,
-                            paddingRight:50
-                          }}>
-                          {' '}
-                          User
-                        </Text>
+          {requests &&
+            requests.map(request =>
+              request && request.status === 'Pending' ? (
+                <View key={request._id}>
+                  <Swipeable
+                    renderLeftActions={LeftActions}
+                    renderRightActions={RightActions}>
+                    <View style={styles.sectionreviewed}>
+                      <View style={styles.details}>
+                        <View style={styles.userinhostels}>
+                          <View style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              {request.user.firstName +
+                                ' ' +
+                                request.user.lastName}
+                            </Text>
 
-                        <TouchableOpacity
-                          style={{flexDirection: 'row'}}
-                          >
+                            <TouchableOpacity style={{flexDirection: 'row'}}>
+                              <Text
+                                style={{
+                                  fontSize: 12,
+                                  color: '#211C5A',
+                                  fontFamily: 'Poppins-Medium',
+                                }}>
+                                {request.hostelRoom.roomNo +
+                                  ' ' +
+                                  request.hostelRoom.floorName +
+                                  ', '}
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                          <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#58636D',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              {'Hostel: '}
+                              {request.hostelName.name}
+                            </Text>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: 'red',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              Pending
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#505069',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              {request.userType.name}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                      <View style={styles.belowhr}>
+                        <View style={{flexDirection: 'column'}}>
                           <Text
                             style={{
+                              fontFamily: 'Poppins-Regular',
+                              fontWeight: '500',
                               fontSize: 12,
+                              lineHeight: 18,
                               color: '#211C5A',
-                              fontFamily: 'Poppins-Medium',
                             }}>
-                            402,3rd Floor
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#58636D',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                           Hostel
-                        </Text>
-                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#505069',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          User Type
-                        </Text>
-
-                       </TouchableOpacity>
-                    </View>
-                  </View>
-                  <View style={styles.belowhr}>
-                    <View style={{flexDirection: 'column'}}>
-                    <Text style={{fontFamily:'Poppins-Regular',fontWeight:'500',
-fontSize:12,lineHeight:18,color:'#211C5A'}}
->
-                      {'  '}  Register:{''}21 May,2021
-                        {/* {assignment.submissionDateString ||
+                            {'  '} Register: {''}
+                            {parseDate(request.updatedAt)}
+                            {/* {assignment.submissionDateString ||
                           'Submission date Not Found'} */}
-                      </Text>
-                      
+                          </Text>
+                        </View>
+                        <View>
+                          <Text
+                            style={{
+                              fontFamily: 'Poppins-Regular',
+                              fontWeight: '500',
+                              fontSize: 12,
+                              lineHeight: 18,
+                              color: '#211C5A',
+                            }}>
+                            {' '}
+                            Vacate: {''}
+                            {parseDate(request.vacatingDate)}
+                          </Text>
+                        </View>
+                      </View>
                     </View>
-                    <View >
-<Text style={{fontFamily:'Poppins-Regular',fontWeight:'500',
-fontSize:12,lineHeight:18,color:'#211C5A'}}
-> {'  '}  Vacate:{''}21 Sept,2021</Text>
-                    </View>
-                  </View>
+                  </Swipeable>
                 </View>
-
-</Swipeable>
-                {/* close swipeable */}
-   {/* for reject and approve icon */}
-   {/* <View style={styles.iconbubblereject}>
-   <FontAwesome5
-                    size={38.5}
-                    color="white"
-                    name="trash-alt"
-                  />
-                  
-                  <Text style={{color:'white'}}>Reject</Text>
-                </View> */}
-
-
-   </View>
+              ) : null,
+            )}
         </ScrollView>
       </View>
     );
@@ -178,8 +209,10 @@ fontSize:12,lineHeight:18,color:'#211C5A'}}
     return (
       <View style={styles.container}>
         <ScrollView>
-
-        <View style={styles.sectionreviewed}>
+          {requests &&
+            requests.map(request =>
+              request && request.status === 'Accepted' ? (
+                <View style={styles.sectionreviewed}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
                       <View style={styles.differentusers}>
@@ -188,25 +221,22 @@ fontSize:12,lineHeight:18,color:'#211C5A'}}
                             fontSize: 18,
                             color: '#211C5A',
                             fontFamily: 'Poppins-Regular',
-                            marginHorizontal: -5,
-                            marginRight:100,
-                            paddingRight:50
                           }}>
-                          {' '}
-                          User
+                          {request.user.firstName + ' ' + request.user.lastName}{' '}
+                          Thiahhiqkjbedk
                         </Text>
 
-                        <TouchableOpacity
-                          style={{flexDirection: 'row'}}
-                          >
+                        <TouchableOpacity style={{flexDirection: 'row'}}>
                           <Text
                             style={{
                               fontSize: 12,
                               color: '#211C5A',
                               fontFamily: 'Poppins-Medium',
                             }}>
-                           
-                           402,3rd Floor
+                            {request.hostelName.name +
+                              ' ' +
+                              request.hostelRoom.floorName +
+                              request.hostelRoom.roomNo}
                           </Text>
                         </TouchableOpacity>
                       </View>
@@ -216,9 +246,8 @@ fontSize:12,lineHeight:18,color:'#211C5A'}}
                             fontSize: 12,
                             color: '#58636D',
                             fontFamily: 'Poppins-Medium',
-  
                           }}>
-                            Hostel
+                          Hostel
                         </Text>
                         <Text
                           style={{
@@ -226,11 +255,9 @@ fontSize:12,lineHeight:18,color:'#211C5A'}}
                             color: 'green',
                             fontFamily: 'Poppins-Medium',
                           }}>
-                           Approved
+                          Approved
                         </Text>
-
-
-                       </TouchableOpacity>
+                      </TouchableOpacity>
                       <TouchableOpacity style={styles.differentusers}>
                         <Text
                           style={{
@@ -240,29 +267,41 @@ fontSize:12,lineHeight:18,color:'#211C5A'}}
                           }}>
                           User Type
                         </Text>
-
-                       </TouchableOpacity>
+                      </TouchableOpacity>
                     </View>
                   </View>
                   <View style={styles.belowhr}>
                     <View style={{flexDirection: 'column'}}>
-                    <Text style={{fontFamily:'Poppins-Regular',fontWeight:'500',
-fontSize:12,lineHeight:18,color:'#211C5A'}}
->
-                      {'  '}  Register:{''}21 May,2021
+                      <Text
+                        style={{
+                          fontFamily: 'Poppins-Regular',
+                          fontWeight: '500',
+                          fontSize: 12,
+                          lineHeight: 18,
+                          color: '#211C5A',
+                        }}>
+                        {'  '} Register:{''}21 May,2021
                         {/* {assignment.submissionDateString ||
                           'Submission date Not Found'} */}
                       </Text>
-                      
                     </View>
-                    <View >
-<Text style={{fontFamily:'Poppins-Regular',fontWeight:'500',
-fontSize:12,lineHeight:18,color:'#211C5A'}}
-> {'  '}  Vacate:{''}21 Sept,2021</Text>
+                    <View>
+                      <Text
+                        style={{
+                          fontFamily: 'Poppins-Regular',
+                          fontWeight: '500',
+                          fontSize: 12,
+                          lineHeight: 18,
+                          color: '#211C5A',
+                        }}>
+                        {' '}
+                        {'  '} Vacate:{''}21 Sept,2021
+                      </Text>
                     </View>
                   </View>
                 </View>
-
+              ) : null,
+            )}
         </ScrollView>
       </View>
     );
@@ -276,7 +315,7 @@ fontSize:12,lineHeight:18,color:'#211C5A'}}
 
         <View
           style={{
-            backgroundColor: institute ? institute.themeColor :'#FF5733',
+            backgroundColor: institute ? institute.themeColor : '#FF5733',
             ...styles.header,
           }}>
           <TouchableOpacity
@@ -314,43 +353,42 @@ fontSize:12,lineHeight:18,color:'#211C5A'}}
 
         <View
           style={{
-            alignItems:'center',
+            alignItems: 'center',
             marginBottom: 20,
             marginTop: 20,
           }}>
-            <View style={{alignItems:'center',width:'90%'}}>
-          {/* open search */}
-          <View
-            style={{
-              marginTop: 10,
-              //make search and card in same line
-              marginLeft: 5,
-              justifyContent: 'space-between',
-              width: '95%',
-              flexDirection: 'row',
-              ...styles.shadow,
-            }}>
-            <TextInput
-              style={{width: '80%', ...styles.text_input}}
-              placeholder="Enter user's name here"
-              placeholderTextColor='grey'
-              color='black'
-  
-            />
-            <TouchableOpacity
+          <View style={{alignItems: 'center', width: '90%'}}>
+            {/* open search */}
+            <View
               style={{
-                alignSelf: 'center',
+                marginTop: 10,
+                //make search and card in same line
+                marginLeft: 5,
+                justifyContent: 'space-between',
+                width: '95%',
+                flexDirection: 'row',
+                ...styles.shadow,
               }}>
-              <FontAwesome5
-                name="search"
+              <TextInput
+                style={{width: '80%', ...styles.text_input}}
+                placeholder="Enter user's name here"
+                placeholderTextColor="grey"
+                color="black"
+              />
+              <TouchableOpacity
                 style={{
                   alignSelf: 'center',
-                  fontSize: 21,
-                  color: '#505069',
-                }}
-              />
-            </TouchableOpacity>
-          </View>
+                }}>
+                <FontAwesome5
+                  name="search"
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 21,
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -358,32 +396,32 @@ fontSize:12,lineHeight:18,color:'#211C5A'}}
 
         {/* tabs section open */}
         <ScrollView>
-        <View style={styles.switchTabsView}>
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: showContent == 'Unreviewed' ? 1 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => setShowContent('Unreviewed')}>
-            <Text style={styles.switchText}>Unreviewed</Text>
-          </TouchableOpacity>
+          <View style={styles.switchTabsView}>
+            <TouchableOpacity
+              style={{
+                borderBottomWidth: showContent == 'Unreviewed' ? 1 : 0,
+                borderBottomColor: '#58636D',
+                paddingHorizontal: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setShowContent('Unreviewed')}>
+              <Text style={styles.switchText}>Unreviewed</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: showContent == 'Reviewed' ? 1 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => setShowContent('Reviewed')}>
-            <Text style={styles.switchText}>Reviewed</Text>
-          </TouchableOpacity>
-        </View>
-        {showContent === 'Unreviewed' ? <Unreviewed /> : <Reviewed />}
+            <TouchableOpacity
+              style={{
+                borderBottomWidth: showContent == 'Reviewed' ? 1 : 0,
+                borderBottomColor: '#58636D',
+                paddingHorizontal: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setShowContent('Reviewed')}>
+              <Text style={styles.switchText}>Reviewed</Text>
+            </TouchableOpacity>
+          </View>
+          {showContent === 'Unreviewed' ? <Unreviewed /> : <Reviewed />}
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>
@@ -396,11 +434,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
-  
- 
+
   section: {
-    display: 'flex',
-    flexDirection: 'column',
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {
@@ -411,12 +446,11 @@ const styles = StyleSheet.create({
     elevation: 5,
     // marginTop: 5,
     borderRadius: 8,
-    paddingHorizontal:10,
-    marginLeft:5,
-    marginRight:5,
+    paddingHorizontal: 10,
+
     // paddingLeft: 10,
     // paddingRight: 10,
-    
+
     // marginHorizontal: 20,
     marginBottom: 20,
   },
@@ -436,12 +470,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingLeft: 10,
     paddingRight: 10,
-    
+
     marginHorizontal: 20,
     marginBottom: 10,
   },
 
- 
   details: {
     display: 'flex',
     flexDirection: 'column',
@@ -449,14 +482,13 @@ const styles = StyleSheet.create({
     // paddingBottom: 10,
     borderBottomColor: '#333',
     paddingHorizontal: 10,
-    borderBottomWidth:0.5
+    borderBottomWidth: 0.5,
   },
   userinhostels: {
     marginBottom: 10,
   },
   differentusers: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
   },
   userstext: {
@@ -540,7 +572,7 @@ const styles = StyleSheet.create({
     // display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-   
+
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -548,7 +580,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     shadowRadius: 1.41,
-    elevation: 5
+    elevation: 5,
   },
 
   iconbubbleapprove: {
@@ -560,7 +592,7 @@ const styles = StyleSheet.create({
     // display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-   
+
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -568,7 +600,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     shadowRadius: 1.41,
-    elevation: 5
+    elevation: 5,
   },
 
   header: {
