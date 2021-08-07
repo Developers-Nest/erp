@@ -221,8 +221,7 @@ export default function LessonPlanAdd({ route,  navigation }) {
         </Card>
 
         <View
-          style={{ justifyContent: 'center', marginTop: 20, flexDirection: 'row' }}>
-          <View style={{ width: 50 }}></View>
+          style={{ justifyContent: 'space-evenly', marginTop: 20, flexDirection: 'row' }}>
           <Button mode="contained" onPress={deletePlan} style={{ backgroundColor: institute.themeColor }}>
             Delete
           </Button>

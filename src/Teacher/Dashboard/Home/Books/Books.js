@@ -357,6 +357,7 @@ export default function BooksStudent({ navigation }) {
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
+             
               borderBottomWidth: showContent == 'Due' ? 1 : 0,
               borderBottomColor: 'rgba(176, 67, 5, 1)',
               paddingHorizontal: 4,
@@ -364,7 +365,7 @@ export default function BooksStudent({ navigation }) {
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Due')}>
-            <Text style={[styles.switchText],[{ color:showContent=='Due'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600'}]}>Due</Text>
+            <Text style={[styles.switchText],[{ color:showContent=='Due'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600',fontSize:15}]}>Due</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -376,7 +377,7 @@ export default function BooksStudent({ navigation }) {
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Cleared')}>
-            <Text style={[styles.switchText],[{ color:showContent=='Cleared'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600'}]}>Cleared</Text>
+            <Text style={[styles.switchText],[{ color:showContent=='Cleared'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600',fontSize:15}]}>Cleared</Text>
           </TouchableOpacity>
         </View>
         {showContent === 'Due' ? <Due /> : <Cleared />}

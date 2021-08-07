@@ -745,7 +745,7 @@ export default function CceMarks({navigation}) {
           color={ institute ? institute.themeColor : "#5177E7"}
           onPress={getList}
           style={{
-            width: 90,
+            width: 90,marginTop:20
           }}>
           {' '}
           Get
@@ -861,24 +861,20 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 18,
-    lineHeight: 30,
+    lineHeight: 20,
     paddingTop: 3,
     color: '#211C5A',
   },
   card_picker: {
     shadowColor: '#999',
     shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
+    shadowOpacity: 0,
     backgroundColor: 'white',
     borderColor: '#ccc',
-    borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderWidth: 0,
+    borderRadius:0.5,
     overflow: 'hidden',
     justifyContent: 'center',
-
     minWidth: 110,
     elevation: 3,
   },

@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   switchText: {
-    fontSize: 20,
+    fontSize: 18,
     color: 'black',
     paddingHorizontal: 5,
   },
