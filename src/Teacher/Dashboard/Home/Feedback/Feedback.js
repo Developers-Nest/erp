@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   Text,
@@ -20,15 +20,94 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 // redux
 import {useSelector} from 'react-redux';
 
+// helpers
+import read from '../../../../services/localstorage/read';
+import get from '../../../../services/helpers/request/get';
+import post from '../../../../services/helpers/request/post';
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
+
 export default function Feedback({navigation}) {
-  const [type, setType] = useState([]);
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
 
-  const [feedback, setFeedback] = useState('')
+  const [feedback, setFeedback] = useState('');
+
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   //theming
   const institute = useSelector(state => state.institute);
+
+  //modal content
+  const [types, setTypes] = React.useState([]);
+  const [questions, setQuestions] = React.useState([]);
+
+  //selected values
+  const [type, setType] = React.useState([]);
+
+  //userinfo
+  let userInfo = useSelector(state => state.userInfo);
+
+  //on load fetch feedback type
+  useEffect(async () => {
+    setLoadingScreen();
+    try {
+      let slug = `/feedback/type`;
+      let token = await read('token');
+      let response = await get(slug, token);
+      let list = [];
+
+      response.map(type => {
+        type.feedbackfor === 'Employee'
+          ? list.push({
+              label: type.feedbacktype,
+              key: type._id,
+            })
+          : null;
+      });
+      setTypes(list);
+    } catch (err) {
+      alert('Cannot get feedback types!!' + err);
+    }
+
+    hideLoadingScreen();
+  }, []);
+
+  let getQuestions = async type => {
+    setLoadingScreen();
+    setType(type);
+    try {
+      let slug = `/feedback/question`;
+      let token = await read('token');
+      let response = await get(slug, token);
+      let list = [];
+      setQuestions(response);
+    } catch (err) {
+      alert('Cannot get your Batches!!');
+    }
+    hideLoadingScreen();
+  };
+
+  let handleSubmit = async () => {
+    setLoadingScreen();
+    try {
+      let slug = `/feedback`;
+      let token = await read('token');
+      let data = {
+        department: userInfo.department,
+        comment: feedback,
+        feedbackBy: userInfo._id,
+        feedbacktype: type,
+        questions: [],
+      };
+      console.log('data: ', data);
+      let response = await post(slug, data, token);
+      console.log('response: ', response);
+      alert('feedback created');
+    } catch (err) {
+      alert('Cannot get your Batches!!');
+    }
+    hideLoadingScreen();
+  };
 
   return (
     <View style={{backgroundColor: '#E5E5E5'}}>
@@ -71,10 +150,10 @@ export default function Feedback({navigation}) {
       <View style={{paddingHorizontal: 20}}>
         <View>
           <ModalSelector
-            data={type}
+            data={types}
             initValue="Type"
             onChange={option => {
-              getSubjects(option.key);
+              getQuestions(option.key);
             }}
             style={styles.card_picker}
             initValueTextStyle={styles.SelectedValueSmall}
@@ -97,11 +176,18 @@ export default function Feedback({navigation}) {
           <Card.Content>
             <TextInput
               placeholder="Write down your feedback question here..... "
+              placeholderTextColor="black"
               onChangeText={val => setFeedback(val)}
               style={{backgroundColor: 'white'}}
             />
           </Card.Content>
         </Card>
+        <Button
+          onPress={handleSubmit}
+          mode="contained"
+          color={institute.themeColor}>
+          submit
+        </Button>
       </View>
     </View>
   );
