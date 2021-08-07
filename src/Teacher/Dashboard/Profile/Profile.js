@@ -200,7 +200,7 @@ export default function Profile({ navigation }) {
               }}
             />
             <Text style={styles.inputField}>Name: </Text>
-            <Text style={styles.inputValue}>{userInfo.firstName}</Text>
+            <Text style={styles.inputValue}>{ufirstName}</Text>
           </View>
 
           <View style={styles.input}>
@@ -265,7 +265,7 @@ export default function Profile({ navigation }) {
               }}
             />
             <Text style={styles.inputField}>Mobile: </Text>
-            <Text style={styles.inputValue}>{userInfo.mobile}</Text>
+            <Text style={styles.inputValue}>{umobile}</Text>
           </View>
         </View>
       </ScrollView>

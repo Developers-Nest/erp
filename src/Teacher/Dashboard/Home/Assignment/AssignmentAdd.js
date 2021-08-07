@@ -111,8 +111,13 @@ export default function AddAssignments({ navigation }) {
   };
   // handle form submission
   let handleSubmit = async () => {
-
     showLoadingScreen()
+
+    if(!title || !desc || !file || !course || !batch || !subject || !date || !dateString ){
+      alert('All Fields are required!!')
+      hideLoadingScreen()
+      return
+    }
 
     try {
       let slug = `/note/addAssignment`;
@@ -258,7 +263,7 @@ export default function AddAssignments({ navigation }) {
                 <TextInput
                   placeholder="Assignment Title"
                   onChangeText={title => setTitle(title)}
-                  placeholderTextColor="black"
+                  placeholderTextColor="grey"
                   color="black"
                   defaultValue={title}
                 />
@@ -275,7 +280,7 @@ export default function AddAssignments({ navigation }) {
               <TextInput
                 placeholder="Discription"
                 onChangeText={val => setDesc(val)}
-                placeholderTextColor="black"
+                placeholderTextColor="grey"
                 color="black"
                 defaultValue={desc}
               />
