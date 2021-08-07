@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 
+import {Button} from 'react-native-paper';
+
 import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -144,9 +146,13 @@ const HostelDetails = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('HostelRequest')}>
-        <Text>Hostel Request</Text>
-      </TouchableOpacity>
+      <Button
+        onPress={() => navigation.navigate('HostelRequest')}
+        style={{marginHorizontal: 20, marginVertical: 10}}
+        color={institute.themeColor}
+        mode="contained">
+        <Text>Hostel Requests</Text>
+      </Button>
       <TouchableWithoutFeedback
         onPress={() => navigation.navigate('HostelRequest')}>
         <ScrollView>
