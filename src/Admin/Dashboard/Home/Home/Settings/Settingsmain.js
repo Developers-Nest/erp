@@ -21,7 +21,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 //checkbox
-import { CheckBox } from 'react-native-elements';
+import { CheckBox, Modal } from 'react-native-elements';
 
 //redux
 import { useSelector } from 'react-redux';
@@ -38,6 +38,7 @@ export default function Settingsmain({ navigation }) {
   const [showContent, setShowContent] = React.useState('Users');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
+  const [modalVisible, setModalVisible] = useState(false)
 
   //theming
   const institute = useSelector(state => state.institute);
@@ -95,8 +96,8 @@ export default function Settingsmain({ navigation }) {
                           fontFamily: 'Poppins-Regular',
                         }}>
                         {visitor.category}
-                      </Text>              
-               
+                      </Text>
+
                     </TouchableOpacity>
                     <View style={styles.differentusers}>
                       <Text
@@ -126,7 +127,7 @@ export default function Settingsmain({ navigation }) {
                           style={{ paddingTop: 2, paddingRight: 10 }}
                         />
                       </TouchableOpacity>
-              
+
                     </View>
                   </View>
                 </View>
@@ -267,7 +268,7 @@ export default function Settingsmain({ navigation }) {
       });
     }
 
-    let selectAll = ()=>{
+    let selectAll = () => {
       Object.entries(checkBoxValue).forEach(([userId, value]) => {
         setCheckBoxValue(prevRecDays => {
           return {
@@ -279,358 +280,361 @@ export default function Settingsmain({ navigation }) {
       setIsSelectAll(!isSelectAll)
     }
 
-    let sendEmail = async()=>{
+    let sendEmail = async () => {
       setLoadingScreen()
-      if(users && users.length == 0){
+      if (users && users.length == 0) {
         hideLoadingScreen()
         return
       }
-      try{
+      try {
         let token = await read('token')
         let slug = '/settings/user/email'
 
         let list = []
         Object.entries(checkBoxValue).forEach(([userId, value]) => {
-          if(checkBoxValue[userId]) list.push(userId)
+          if (checkBoxValue[userId]) list.push(userId)
         });
 
         let data = {
           emailText: emailText,
-          list: list 
+          list: list
         }
 
         let res = await post(slug, data, token)
-        if(res.error){
+        if (res.error) {
           alert(res.error)
-        } else if (res.message){
+        } else if (res.message) {
           alert('Email Sent!!')
         }
 
-      } catch(err){
+      } catch (err) {
         alert('Cannot Send Email')
       }
       hideLoadingScreen()
     }
 
-  return (
-    <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          marginTop: 10,
-          alignContent: 'flex-start',
-          // width: '100%'
-        }}>
-        {loadingScreen}
-        <ModalSelector
-          data={userType}
-          initValue="Usertype"
-          onChange={option => {
-            setSuserType(option.label)
-            setSuserId(option.key)
-          }}
-          style={styles.card}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-
-        {
-          sUserType === "Student" ? (
-            <View>
-              <ModalSelector
-                data={courses}
-                initValue="Course"
-                onChange={option => {
-                  fetchBatch(option.key)
-                }}
-                style={styles.card}
-                initValueTextStyle={styles.SelectedValueSmall}
-                selectTextStyle={styles.SelectedValueSmall}
-              />
-
-              <ModalSelector
-                data={batches}
-                initValue="Batches"
-                onChange={option => {
-                  fetchUsers(option.key)
-                }}
-                style={styles.card}
-                initValueTextStyle={styles.SelectedValueSmall}
-                selectTextStyle={styles.SelectedValueSmall}
-              />
-            </View>
-          ) : (null)
-        }
-
-        {
-          sUserType === "Teacher" ? (
-            <ModalSelector
-              data={department}
-              initValue="Department"
-              onChange={option => {
-                fetchUsers(option.key)
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValueSmall}
-              selectTextStyle={styles.SelectedValueSmall}
-            />
-          ) : (null)
-        }
-
-      </View>
-      <ScrollView>
-        {/* //for logo inside bubble */}
-        <View style={{ height: 20 }} />
-        {/* <View style={{  padding: 30 }}> */}
+    return (
+      <View style={styles.container}>
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
+            justifyContent: 'space-around',
+            marginTop: 10,
+            alignItems: 'center',
+
           }}>
+          {loadingScreen}
+          <ModalSelector
+            data={userType}
+            initValue="Usertype"
+            onChange={option => {
+              setSuserType(option.label)
+              setSuserId(option.key)
+            }}
+            style={styles.cardusertype}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+
+          {
+            sUserType === "Student" ? (
+
+              <>
+                <ModalSelector
+                  data={courses}
+                  initValue="Course"
+                  onChange={option => {
+                    fetchBatch(option.key)
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValueSmall}
+                  selectTextStyle={styles.SelectedValueSmall}
+                />
+
+                <ModalSelector
+                  data={batches}
+                  initValue="Batches"
+                  onChange={option => {
+                    fetchUsers(option.key)
+                  }}
+                  style={styles.card}
+                  initValueTextStyle={styles.SelectedValueSmall}
+                  selectTextStyle={styles.SelectedValueSmall}
+                />
+              </>
+
+            ) : (null)
+          }
+
+          {
+            sUserType === "Teacher" ? (
+              <ModalSelector
+                data={department}
+                initValue="Department"
+                onChange={option => {
+                  fetchUsers(option.key)
+                }}
+                style={styles.carddept}
+                initValueTextStyle={styles.SelectedValuedept}
+                selectTextStyle={styles.SelectedValuedept}
+              />
+            ) : (null)
+          }
+
+        </View>
+        <ScrollView>
+          {/* //for logo inside bubble */}
+          <View style={{ height: 20 }} />
+          {/* <View style={{  padding: 30 }}> */}
           <View
             style={{
-              flexDirection: 'column',
-              marginLeft: 25,
-            }}>
-
-            <TouchableOpacity style={styles.iconbubble} onPress={sendEmail}>
-              <MaterialCommunityIcon size={38.5} color="black" name="gmail" />
-            </TouchableOpacity>
-            <View>
-              <Text
-                style={{
-                  color: '#505069',
-                  fontFamily: 'Poppins-Regular',
-                  fontSize: 12.8855,
-                }}>
-                {'      '}Email
-              </Text>
-            </View>
-          </View>
-          <View style={{ flexDirection: 'column' }}>
-            <View style={styles.iconbubble}>
-              <MaterialCommunityIcon
-                size={38.5}
-                color="black"
-                name="chat-processing"
-              />
-            </View>
-            <View>
-              <Text
-                style={{
-                  color: '#505069',
-                  fontFamily: 'Poppins-Regular',
-                  fontSize: 12.8855,
-                }}>
-                {'        '}SMS
-              </Text>
-            </View>
-          </View>
-
-          <View style={{ flexDirection: 'column' }}>
-            <View style={styles.iconbubble}>
-              <MaterialCommunityIcon size={38.5} color="black" name="lock" />
-            </View>
-            <View>
-              <Text
-                style={{
-                  color: '#505069',
-                  fontFamily: 'Poppins-Regular',
-                  marginRight: 3,
-                  fontSize: 12.8855,
-                }}>
-                Reset Password
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* all icons and text placed above*/}
-        <View style={{ height: 30 }} />
-        <CheckBox
-          containerStyle={{ marginTop: -9 }}
-          checked={isSelectAll}
-          title={'Select All'}
-          onPress={selectAll}
-        />
-
-        {/* new card start */}
-        {
-          users && users.map((user) => (
-            <View style={styles.section} key={user._id}>
-              <View style={styles.details2}>
-                <View style={styles.userinhostels}>
-                  <View style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        color: '#211C5A',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      {' '}
-                      {user.firstName}
-                    </Text>
-                  </View>
-                  <View style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#58636D',
-                        fontFamily: 'Poppins-Regular',
-                        marginTop: -15,
-                      }}>
-                      {''} {user.email}
-                    </Text>
-                    <CheckBox
-                      containerStyle={{ marginTop: -9 }}
-                      checked={checkBoxValue[user._id]}
-                      onPress={() => toggleCheckBox(user._id)}
-                    />
-                    {/* <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
-                  </View>
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#58636D',
-                        fontFamily: 'Poppins-Regular',
-                        marginTop: -15,
-                      }}>
-                      {''} {user.code}
-                    </Text>
-
-                    {/* <Text style={styles.userstext}>Graded</Text> */}
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-
-          ))
-        }
-
-
-        {/* new card ends */}
-      </ScrollView>
-    </View>
-  );
-}
-return (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    <View style={styles.maincontainer}>
-      {/* header start */}
-
-      <View
-        style={{
-          backgroundColor: institute ? institute.themeColor : '#FF5733',
-          // backgroundColor:'blue',
-          ...styles.header,
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Home');
-          }}>
-          <AntDesign
-            size={24}
-            color="white"
-            name="left"
-            style={{
-              alignSelf: 'center',
-
-              fontSize: 25,
-              color: 'white',
-              paddingLeft: 20,
-              marginTop: 22,
-            }}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontStyle: 'normal',
-            fontFamily: 'NunitoSans-Regular',
-            fontSize: 28,
-            fontWeight: '600',
-            alignSelf: 'center',
-            marginLeft: 30,
-            color: 'white',
-          }}>
-          Settings
-        </Text>
-        {showContent === 'Users' ? null : (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('AddVisitors')}
-            style={{
-              justifyContent: 'flex-end',
-              flex: 1,
               flexDirection: 'row',
-              alignItems: 'center',
+              justifyContent: 'space-between',
             }}>
             <View
               style={{
                 flexDirection: 'column',
-                alignItems: 'center',
-                marginRight: 5,
+                marginLeft: 25,
               }}>
-              <Ionicons
-                name="add-circle"
-                color="#900"
-                style={{
-                  fontSize: 35,
-                  color: 'white',
-                  paddingRight: 20,
-                }}
-              />
-              <Text
-                style={{
-                  color: '#fff',
-                  fontFamily: 'Poppins-Regular',
-                  fontSize: 12,
-                }}>
-                Add Visitors
-              </Text>
+
+              <TouchableOpacity style={styles.iconbubble} onPress={sendEmail}>
+                <MaterialCommunityIcon size={38.5} color="black" name="gmail" />
+              </TouchableOpacity>
+              <View>
+                <Text
+                  style={{
+                    color: '#505069',
+                    fontFamily: 'Poppins-Regular',
+                    fontSize: 12.8855,
+                  }}>
+                  {'      '}Email
+                </Text>
+              </View>
             </View>
-          </TouchableOpacity>
-        )}
+            <View style={{ flexDirection: 'column' }}>
+              <View style={styles.iconbubble}>
+                <MaterialCommunityIcon
+                  size={38.5}
+                  color="black"
+                  name="chat-processing"
+                />
+              </View>
+              <View>
+                <Text
+                  style={{
+                    color: '#505069',
+                    fontFamily: 'Poppins-Regular',
+                    fontSize: 12.8855,
+                  }}>
+                  {'        '}SMS
+                </Text>
+              </View>
+            </View>
+
+            <View style={{ flexDirection: 'column' }}>
+              <View style={styles.iconbubble}>
+                <MaterialCommunityIcon size={38.5} color="black" name="lock" />
+              </View>
+              <View>
+                <Text
+                  style={{
+                    color: '#505069',
+                    fontFamily: 'Poppins-Regular',
+                    marginRight: 3,
+                    fontSize: 12.8855,
+                  }}>
+                  Reset Password
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* all icons and text placed above*/}
+          <View style={{ height: 30 }} />
+          <CheckBox
+            containerStyle={{ marginTop: -9 }}
+            checked={isSelectAll}
+            title={'Select All'}
+            onPress={selectAll}
+          />
+
+          {/* new card start */}
+          {
+            users && users.map((user) => (
+              <View style={styles.section} key={user._id}>
+                <View style={styles.details2}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {' '}
+                        {user.firstName}
+                      </Text>
+                    </View>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58636D',
+                          fontFamily: 'Poppins-Regular',
+                          marginTop: -15,
+                        }}>
+                        {''} {user.email}
+                      </Text>
+                      <CheckBox
+                        containerStyle={{ marginTop: -9 }}
+                        checked={checkBoxValue[user._id]}
+                        onPress={() => toggleCheckBox(user._id)}
+                      />
+                      {/* <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
+                    </View>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58636D',
+                          fontFamily: 'Poppins-Regular',
+                          marginTop: -15,
+                        }}>
+                        {''} {user.code}
+                      </Text>
+
+                      {/* <Text style={styles.userstext}>Graded</Text> */}
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+
+            ))
+          }
+
+
+          {/* new card ends */}
+        </ScrollView>
       </View>
+    );
+  }
+  return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.maincontainer}>
+        {/* header start */}
 
-      {/* header ends */}
-
-      <View style={{ padding: 15 }} />
-      <ScrollView>
-        {/* tabs section open */}
-
-        <View style={{ height: 30 }} />
-
-        <View style={styles.switchTabsView}>
+        <View
+          style={{
+            backgroundColor: institute ? institute.themeColor : '#FF5733',
+            // backgroundColor:'blue',
+            ...styles.header,
+          }}>
           <TouchableOpacity
-            style={{
-              borderBottomWidth: showContent == 'Users' ? 1 : 0,
-              borderBottomColor: 'rgba(176, 67, 5, 1)',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => setShowContent('Users')}>
-            <Text style={styles.switchTextDue}>Users</Text>
-          </TouchableOpacity>
+            onPress={() => {
+              navigation.navigate('Home');
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
 
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: showContent == 'Visitors' ? 1 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => setShowContent('Visitors')}>
-            <Text style={styles.switchText}>Visitors</Text>
+                fontSize: 25,
+                color: 'white',
+                paddingLeft: 20,
+                marginTop: 22,
+              }}
+            />
           </TouchableOpacity>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontFamily: 'NunitoSans-Regular',
+              fontSize: 28,
+              fontWeight: '600',
+              alignSelf: 'center',
+              marginLeft: 30,
+              color: 'white',
+            }}>
+            Settings
+          </Text>
+          {showContent === 'Users' ? null : (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('AddVisitors')}
+              style={{
+                justifyContent: 'flex-end',
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  marginRight: 5,
+                }}>
+                <Ionicons
+                  name="add-circle"
+                  color="#900"
+                  style={{
+                    fontSize: 35,
+                    color: 'white',
+                    paddingRight: 20,
+                  }}
+                />
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontFamily: 'Poppins-Regular',
+                    fontSize: 12,
+                  }}>
+                  Add Visitors
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
-        {showContent === 'Users' ? <Users /> : <Visitors />}
-      </ScrollView>
-    </View>
-  </TouchableWithoutFeedback>
-);
+
+        {/* header ends */}
+
+
+        <ScrollView>
+          {/* tabs section open */}
+
+          <View style={{ height: 30 }} />
+
+          <View style={styles.switchTabsView}>
+            <TouchableOpacity
+              style={{
+                borderBottomWidth: showContent == 'Users' ? 1 : 1,
+                borderBottomColor: showContent == 'Users' ? 'rgba(176, 67, 5, 1)' : '#58636D',
+                paddingHorizontal: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setShowContent('Users')}>
+              <Text style={[styles.switchText], [{ color: showContent == 'Users' ? 'rgba(176, 67, 5, 1)' : '#58636D' }, { fontWeight: 'bold' }]}>Users</Text>
+
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                borderBottomWidth: showContent == 'Visitors' ? 1 : 1,
+                borderBottomColor: showContent == 'Visitors' ? 'rgba(176, 67, 5, 1)' : '#58636D',
+                paddingHorizontal: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setShowContent('Visitors')}>
+              <Text style={[styles.switchText], [{ color: showContent == 'Visitors' ? 'rgba(176, 67, 5, 1)' : '#58636D' }, { fontWeight: 'bold' }]}>Visitors</Text>
+            </TouchableOpacity>
+          </View>
+          {showContent === 'Users' ? <Users /> : <Visitors />}
+        </ScrollView>
+      </View>
+    </TouchableWithoutFeedback>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -712,7 +716,7 @@ const styles = StyleSheet.create({
   },
   switchText: {
     fontSize: 14,
-    color: '#58636D',
+
     paddingHorizontal: 5,
     fontFamily: 'Poppins-SemiBold',
     fontWeight: 'bold',
@@ -782,7 +786,16 @@ const styles = StyleSheet.create({
     paddingTop: 3,
     color: '#211C5A',
   },
+  SelectedValuedept: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
 
+  },
   //for users
 
   iconbubble: {
@@ -818,7 +831,42 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
 
-    width: 170,
+    width: 120,
+    elevation: 3,
+  },
+
+  cardusertype: {
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+
+    width: 120,
+    elevation: 3,
+  },
+  carddept: {
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+
+    width: 140,
     elevation: 3,
   },
 });
