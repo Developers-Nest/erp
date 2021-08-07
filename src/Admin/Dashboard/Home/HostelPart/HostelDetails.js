@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 
-import {Button} from 'react-native-paper';
+import { Button } from 'react-native-paper';
 
 import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -19,10 +19,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 //redux
-import {useSelector} from 'react-redux';
-import {ScrollView} from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const HostelDetails = ({navigation}) => {
+const HostelDetails = ({ navigation }) => {
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -123,10 +123,10 @@ const HostelDetails = ({navigation}) => {
 
       {/* header ends */}
 
-      <View style={{marginHorizontal: 10, ...styles.shadow}}>
+      <View style={{ marginHorizontal: 10, ...styles.shadow }}>
         <View style={styles.search}>
           <TextInput
-            style={{...styles.search_input, fontFamily: 'Poppins-Regular'}}
+            style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
             placeholder="Enter hostel name here"
             placeholderTextColor="grey"
             color="black"
@@ -148,125 +148,123 @@ const HostelDetails = ({navigation}) => {
       </View>
       <Button
         onPress={() => navigation.navigate('HostelRequest')}
-        style={{marginHorizontal: 20, marginVertical: 10}}
+        style={{ marginHorizontal: 20, marginVertical: 10 }}
         color={institute.themeColor}
         mode="contained">
         <Text>Hostel Requests</Text>
       </Button>
-      <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('HostelRequest')}>
-        <ScrollView>
-          {hdetails &&
-            hdetails.map(hdetails => (
-              <View style={styles.section} key={hdetails._id}>
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        {hdetails.name ? hdetails.name : 'Name N/A'}
-                      </Text>
 
-                      <Text
-                        style={{
-                          flexDirection: 'row',
-                          fontSize: 10,
-                          color: '#505069',
-                          marginTop: 5,
-                          fontFamily: 'openSans',
-                        }}>
-                        Ph:{hdetails.phoneNumber ? hdetails.phoneNumber : 'N/A'}
-                      </Text>
+      <ScrollView>
+        {hdetails &&
+          hdetails.map(hdetails => (
+            <View style={styles.section} key={hdetails._id}>
+              <View style={styles.details}>
+                <View style={styles.userinhostels}>
+                  <View style={styles.differentusers}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        color: '#211C5A',
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {hdetails.name ? hdetails.name : 'Name N/A'}
+                    </Text>
 
-                      {/* */}
-                    </View>
-                    {/* <TouchableOpacity style={styles.differentusers}>
+                    <Text
+                      style={{
+                        flexDirection: 'row',
+                        fontSize: 10,
+                        color: '#505069',
+                        marginTop: 5,
+                        fontFamily: 'openSans',
+                      }}>
+                      Ph:{hdetails.phoneNumber ? hdetails.phoneNumber : 'N/A'}
+                    </Text>
+
+                    {/* */}
+                  </View>
+                  {/* <TouchableOpacity style={styles.differentusers}>
                             <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
                                 User Type
                             </Text>
                         </TouchableOpacity> */}
 
-                    <View style={styles.differentusers}>
+                  <View style={styles.differentusers}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#211C5A',
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {hdetails.address ? hdetails.address : 'Address N/A'}
+                    </Text>
+
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
                       <Text
                         style={{
                           fontSize: 12,
                           color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
+                          marginTop: 5,
+                          marginHorizontal: 8,
                         }}>
-                        {hdetails.address ? hdetails.address : 'Address N/A'}
+                        {hdetails.hostelType
+                          ? hdetails.hostelType.name
+                          : 'N/A'}
                       </Text>
-
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            marginTop: 5,
-                            marginHorizontal: 8,
-                          }}>
-                          {hdetails.hostelType
-                            ? hdetails.hostelType.name
-                            : 'N/A'}
-                        </Text>
-                        {/* <Icon1
+                      {/* <Icon1
                                     size={12}
                                     backgroundColor=" #211C5A"
                                     name="edit"
                                     style={{ paddingTop: 7, paddingRight: 12 }}
                                 /> */}
-                      </View>
                     </View>
                   </View>
                 </View>
+              </View>
 
-                <View style={styles.belowhr}>
-                  <View style={{flexDirection: 'column'}}>
-                    <Text
-                      style={{
-                        color: '#B04305',
-                        fontSize: 12,
-                        fontFamily: 'Poppins-Regular',
-                      }}></Text>
-                    <Text
-                      style={{
-                        color: '#211C5A',
+              <View style={styles.belowhr}>
+                <View style={{ flexDirection: 'column' }}>
+                  <Text
+                    style={{
+                      color: '#B04305',
+                      fontSize: 12,
+                      fontFamily: 'Poppins-Regular',
+                    }}></Text>
+                  <Text
+                    style={{
+                      color: '#211C5A',
 
-                        fontSize: 12,
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      {hdetails.wardenName ? hdetails.wardenName : 'N/A'}
-                    </Text>
-                  </View>
-                  <View style={{marginTop: 15}}>
-                    <Text
-                      style={{
-                        color: '#211C5A',
+                      fontSize: 12,
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    {hdetails.wardenName ? hdetails.wardenName : 'N/A'}
+                  </Text>
+                </View>
+                <View style={{ marginTop: 15 }}>
+                  <Text
+                    style={{
+                      color: '#211C5A',
 
-                        fontSize: 12,
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      Ph:
-                      {hdetails.wardenPhoneNumber
-                        ? hdetails.wardenPhoneNumber
-                        : 'N/A'}
-                    </Text>
-                  </View>
+                      fontSize: 12,
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    Ph:
+                    {hdetails.wardenPhoneNumber
+                      ? hdetails.wardenPhoneNumber
+                      : 'N/A'}
+                  </Text>
                 </View>
               </View>
-            ))}
+            </View>
+          ))}
 
-          <View style={{height: 90}} />
-        </ScrollView>
-      </TouchableWithoutFeedback>
+        <View style={{ height: 90 }} />
+      </ScrollView>
     </View>
   );
 };

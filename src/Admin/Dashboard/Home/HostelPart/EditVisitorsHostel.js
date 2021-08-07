@@ -142,7 +142,7 @@ const institute = useSelector(state => state.institute);
                         color='black'
                     />
 
-                </View>0
+                </View>
                 <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>Date </Text>
                     <Text style={styles.section_heading1}>Time</Text>

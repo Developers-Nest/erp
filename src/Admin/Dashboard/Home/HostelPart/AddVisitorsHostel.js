@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -7,7 +7,7 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 
 //modal selector
 import ModalSelector from 'react-native-modal-selector';
@@ -21,10 +21,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 
-const AddVisitorsHostel = ({navigation}) => {
+const AddVisitorsHostel = ({ navigation }) => {
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -58,10 +58,10 @@ const AddVisitorsHostel = ({navigation}) => {
 
     setDate(
       date.getDate() +
-        ' ' +
-        dateMonths[date.getMonth() + 1] +
-        ' ' +
-        date.getFullYear(),
+      ' ' +
+      dateMonths[date.getMonth() + 1] +
+      ' ' +
+      date.getFullYear(),
     );
     hideDatePicker();
   };
@@ -104,12 +104,12 @@ const AddVisitorsHostel = ({navigation}) => {
         </Text>
       </View>
       <ScrollView>
-        <View style={{justifyContent: 'space-around', alignContent: 'center'}}>
-          <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
+        <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
+          <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
             <Text style={styles.section_heading}>Vehicle No.</Text>
           </View>
 
-          <View style={{marginHorizontal: 10, ...styles.shadow}}>
+          <View style={{ marginHorizontal: 10, ...styles.shadow }}>
             <View style={styles.search}>
               <TextInput
                 style={styles.search_input}
@@ -133,29 +133,29 @@ const AddVisitorsHostel = ({navigation}) => {
             </View>
           </View>
 
-          <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
+          <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
             <Text style={styles.section_heading}>Visitor's Name </Text>
             <Text style={styles.section_heading2}>Relation</Text>
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <TextInput style={styles.input}
               placeholderTextColor='grey'
               color='black'
-            placeholder="Shian Manzoor" />
-            <TextInput style={styles.input} 
+              placeholder="Shian Manzoor" />
+            <TextInput style={styles.input}
               placeholderTextColor='grey'
               color='black'
-            placeholder="Brother" />
+              placeholder="Brother" />
           </View>
-          <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
+          <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
             <Text style={styles.section_heading}>Date </Text>
             <Text style={styles.section_heading1}>Time</Text>
           </View>
 
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
               <TextInput
-                style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
+                style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                 placeholder={date}
                 placeholderTextColor='grey'
                 color='black'
@@ -178,7 +178,7 @@ const AddVisitorsHostel = ({navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity style={styles.pickdate1}>
               <TextInput
-                style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
+                style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                 placeholder="13.00"
                 placeholderTextColor='grey'
                 color='black'
@@ -194,7 +194,7 @@ const AddVisitorsHostel = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.fixToText}>
-            <Pressable style={styles.button} onPress={() => navigation.navigate('EditVisitorsHostel')}>
+            <Pressable style={styles.button} onPress={() => console.log('Pressed')}>
               <Text style={styles.text}>Save</Text>
             </Pressable>
           </View>

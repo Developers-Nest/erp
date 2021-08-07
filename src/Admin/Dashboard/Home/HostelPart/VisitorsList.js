@@ -221,28 +221,30 @@ const VisitorsList = ({ navigation }) => {
                                         </Text>
 
                                         <TouchableOpacity
-                                        // onPress={() => {
-                                        //     navigation.navigate('EditVisitorsHostel');
-                                        //   }}
-                                        >
-                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                                <Text
-                                                    style={{
-                                                        fontSize: 12,
-                                                        color: '#211C5A',
-                                                        fontFamily: 'Poppins-Regular',
-                                                        marginTop: 5,
-                                                    }}>
-                                                    Edit
-                                                </Text>
-                                                <Icon1
-                                                    size={12}
-                                                    backgroundColor=" #211C5A"
-                                                    name="edit"
-                                                    style={{ paddingTop: 7, paddingRight: 12 }}
-                                                />
-                                            </View>
-                                        </TouchableOpacity>
+                        onPress={() =>
+                          navigation.navigate('EditVisitorsHostel')
+                        }
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            color: institute ? institute.themeColor : '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            
+                          }}>
+                          Edit
+                        </Text>
+                        <Icon1
+                          size={13}
+                          backgroundColor=" #211C5A"
+                          name="edit"
+                          style={{marginTop:2,paddingRight: 12}}
+                          color={institute ? institute.themeColor : '#211C5A'}
+                        />
+                      </TouchableOpacity>
 
 
                                     </View>

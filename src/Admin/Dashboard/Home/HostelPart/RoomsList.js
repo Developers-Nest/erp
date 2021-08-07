@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -10,7 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
 
-import {Button} from 'react-native-paper';
+import { Button } from 'react-native-paper';
 
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
@@ -19,9 +19,9 @@ import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const RoomsList = ({navigation}) => {
+const RoomsList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [listroom, setRoomsList] = useState([]);
 
@@ -43,7 +43,7 @@ const RoomsList = ({navigation}) => {
   const institute = useSelector(state => state.institute);
 
   return (
-    <View style={{justifyContent: 'center', alignContent: 'center'}}>
+    <View style={{ justifyContent: 'center', alignContent: 'center' }}>
       {/* header start */}
 
       <View
@@ -126,12 +126,12 @@ const RoomsList = ({navigation}) => {
       </View>
 
       {/* header ends */}
-      <View style={{height: 10}} />
+      <View style={{ height: 10 }} />
 
-      <View style={{marginHorizontal: 10, ...styles.shadow}}>
+      <View style={{ marginHorizontal: 10, ...styles.shadow }}>
         <View style={styles.search}>
           <TextInput
-            style={{...styles.search_input, fontFamily: 'Poppins-Regular'}}
+            style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
             placeholder="Enter hostel name here"
             placeholderTextColor="grey"
           />
@@ -151,99 +151,96 @@ const RoomsList = ({navigation}) => {
         </View>
       </View>
 
-      <View style={{height: 15}} />
-      <TouchableWithoutFeedback
-        onPress={() => {
-          navigation.navigate('VisitorsList');
-        }}>
-        <View>
-          {listroom &&
-            listroom.map(listroom => (
-              <View style={styles.section} key={listroom._id}>
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                          marginHorizontal: -5,
-                        }}>
-                        {/* Hostel Name */}
-                        {''}{' '}
-                        {listroom.hostelName.name || 'Hostel name Not Found'}
-                      </Text>
+      <View style={{ height: 15 }} />
 
-                      <Text
-                        style={{
-                          flexDirection: 'row',
-                          fontSize: 10,
-                          color: '#505069',
-                          marginTop: 5,
-                          fontFamily: 'openSans',
-                        }}>
-                        {listroom.roomNo}, {listroom.floorName}
-                      </Text>
-
-                      {/* */}
-                    </View>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: '#5177E7',
-                          fontFamily: 'Poppins-Medium',
-                        }}></Text>
-                    </View>
-
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        {listroom.hostelType.name}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-
-                <View style={styles.belowhr}>
-                  <View style={{flexDirection: 'column'}}>
+      <View>
+        {listroom &&
+          listroom.map(listroom => (
+            <View style={styles.section} key={listroom._id}>
+              <View style={styles.details}>
+                <View style={styles.userinhostels}>
+                  <View style={styles.differentusers}>
                     <Text
                       style={{
-                        color: '#B04305',
+                        fontSize: 18,
+                        color: '#211C5A',
+                        fontFamily: 'Poppins-Regular',
+                        marginHorizontal: -5,
+                      }}>
+                      {/* Hostel Name */}
+                      {''}{' '}
+                      {listroom.hostelName.name || 'Hostel name Not Found'}
+                    </Text>
+
+                    <Text
+                      style={{
+                        flexDirection: 'row',
+                        fontSize: 10,
+                        color: '#505069',
+                        marginTop: 5,
+                        fontFamily: 'openSans',
+                      }}>
+                      {listroom.roomNo}, {listroom.floorName}
+                    </Text>
+
+                    {/* */}
+                  </View>
+                  <View style={styles.differentusers}>
+                    <Text
+                      style={{
                         fontSize: 12,
+                        color: '#5177E7',
                         fontFamily: 'Poppins-Medium',
                       }}></Text>
-                    <Text
-                      style={{
-                        color: '#211C5A',
-
-                        fontSize: 12,
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      Beds:{listroom.beds}
-                    </Text>
                   </View>
-                  <View style={{marginTop: 15}}>
+
+                  <View style={styles.differentusers}>
                     <Text
                       style={{
+                        fontSize: 14,
                         color: '#211C5A',
-
-                        fontSize: 12,
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      Amount: {listroom.amount} Rs
+                      {listroom.hostelType.name}
                     </Text>
                   </View>
                 </View>
               </View>
-            ))}
-        </View>
-      </TouchableWithoutFeedback>
+
+              <View style={styles.belowhr}>
+                <View style={{ flexDirection: 'column' }}>
+                  <Text
+                    style={{
+                      color: '#B04305',
+                      fontSize: 12,
+                      fontFamily: 'Poppins-Medium',
+                    }}></Text>
+                  <Text
+                    style={{
+                      color: '#211C5A',
+
+                      fontSize: 12,
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    Beds:{listroom.beds}
+                  </Text>
+                </View>
+                <View style={{ marginTop: 15 }}>
+                  <Text
+                    style={{
+                      color: '#211C5A',
+
+                      fontSize: 12,
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    Amount: {listroom.amount} Rs
+                  </Text>
+                </View>
+              </View>
+            </View>
+          ))}
+      </View>
+
     </View>
   );
 };

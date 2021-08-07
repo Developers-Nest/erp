@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -17,9 +17,9 @@ import Evillcons from 'react-native-vector-icons/Feather';
 
 import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
 
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const HostelAllocationEdit = ({navigation}) => {
+const HostelAllocationEdit = ({ navigation }) => {
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -41,10 +41,10 @@ const HostelAllocationEdit = ({navigation}) => {
     // console.warn("A date has been picked: ", date1.toString());
     setDate1(
       date1.getDate() +
-        ' ' +
-        dateMonths[date1.getMonth() + 1] +
-        ' ' +
-        date1.getFullYear(),
+      ' ' +
+      dateMonths[date1.getMonth() + 1] +
+      ' ' +
+      date1.getFullYear(),
     );
     hideDatePicker1();
   };
@@ -76,16 +76,16 @@ const HostelAllocationEdit = ({navigation}) => {
     // console.warn("A date has been picked: ", date.toString());
     setDate(
       date.getDate() +
-        ' ' +
-        dateMonths[date.getMonth() + 1] +
-        ' ' +
-        date.getFullYear(),
+      ' ' +
+      dateMonths[date.getMonth() + 1] +
+      ' ' +
+      date.getFullYear(),
     );
     hideDatePicker();
   };
 
   return (
-    <View style={{justifyContent: 'center', alignContent: 'center'}}>
+    <View style={{ justifyContent: 'center', alignContent: 'center' }}>
       {/* header start */}
 
       <View
@@ -134,15 +134,15 @@ const HostelAllocationEdit = ({navigation}) => {
 
       {/* header ends */}
 
-      <View style={{justifyContent: 'space-around', alignContent: 'center'}}>
-        <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
+      <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
+        <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
           <Text style={styles.section_heading}>Name</Text>
         </View>
 
-        <View style={{marginHorizontal: 10, ...styles.shadow}}>
+        <View style={{ marginHorizontal: 10, ...styles.shadow }}>
           <View style={styles.search}>
             <TextInput
-              style={{...styles.search_input, fontFamily: 'Poppins-Regular'}}
+              style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
               placeholder="Search User's name to add"
               placeholderTextColor="grey"
               color="black"
@@ -163,18 +163,18 @@ const HostelAllocationEdit = ({navigation}) => {
           </View>
         </View>
 
-        <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
+        <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
           <Text style={styles.section_heading}>Hostel Type </Text>
           <Text style={styles.section_heading2}>Hostel Name</Text>
         </View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <ModalSelector
             initValue="Type"
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
-            //selectTextStyle={styles.SelectedValueSmall}
+          //selectTextStyle={styles.SelectedValueSmall}
           >
-            <View style={{marginTop: 10, flexDirection: 'row'}}>
+            <View style={{ marginTop: 10, flexDirection: 'row' }}>
               <Text style={styles.text2}>Type</Text>
               <Evillcons
                 size={25}
@@ -192,15 +192,15 @@ const HostelAllocationEdit = ({navigation}) => {
             color="black"
           />
         </View>
-        <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
+        <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
           <Text style={styles.section_heading}>Registration </Text>
           <Text style={styles.section_heading1}>Vacating</Text>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
             <TextInput
-              style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
+              style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
               placeholder={date}
               placeholderTextColor="grey"
               color="black"
@@ -223,7 +223,7 @@ const HostelAllocationEdit = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity style={styles.pickdate1} onPress={showDatePicker1}>
             <TextInput
-              style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
+              style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
               placeholder={date1}
               placeholderTextColor="grey"
               color="black"
@@ -254,7 +254,7 @@ const HostelAllocationEdit = ({navigation}) => {
           </Pressable>
           <Pressable
             style={styles.button}
-            onPress={() => navigation.navigate('RoomsList')}>
+            onPress={() => Alert.alert('Saved')}>
             <Text style={styles.text}>Save</Text>
           </Pressable>
         </View>
@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
     height: 50,
 
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#58636D',
