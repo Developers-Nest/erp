@@ -300,7 +300,7 @@ const Home = ({navigation}) => {
           />
           <Badge
             style={{
-              backgroundColor: 'blue',
+              backgroundColor: institute ? institute.themeColor : 'black',
               marginBottom: 35,
               marginRight: 10,
             }}>
@@ -342,7 +342,7 @@ const Home = ({navigation}) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           {timeTable[today] && timeTable[today].length == 0 ? (
-            <Text style={{marginLeft: 10}}>No Classes</Text>
+            <Text style={{marginLeft: 30}}>No Classes</Text>
           ) : (
             timeTable[today] &&
             timeTable[today].map((slots, index) => {

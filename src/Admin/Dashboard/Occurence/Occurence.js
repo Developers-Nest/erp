@@ -3,15 +3,10 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   ScrollView,
-  ImageBackground,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
 } from 'react-native';
 
-import {Container, Content, List, ListItem, Header, Icon} from 'native-base';
 
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -21,22 +16,14 @@ import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 // helpers
 import get from '../../../services/helpers/request/get';
 import read from '../../../services/localstorage/read';
-import getCourse from '../../../services/helpers/getList/getCourse';
-import getBatch from '../../../services/helpers/getList/getBatch';
 
 // redux
 import {useSelector} from 'react-redux';
 
 const Stack = createStackNavigator();
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {
-  event,
-  onChange,
-  setValue,
-  target,
-  value,
-} from 'react-native-reanimated';
-import {Searchbar, Button, Appbar} from 'react-native-paper';
+
+import { Button, Appbar} from 'react-native-paper';
 import OccurenceEdit from './OccurenceEdit';
 import Occurence2 from './Occurence2';
 
@@ -56,12 +43,10 @@ function Occurance({navigation}) {
     return d.toString().slice(0, 15);
   };
 
+  const institute = useSelector(state => state.institute)
+
   const [list, setlist] = useState([]);
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
-
-  const userInfo = useSelector(state => state.userInfo);
-  const institute = useSelector(state => state.institute);
-  const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
 
@@ -82,7 +67,7 @@ function Occurance({navigation}) {
 
   return (
     <>
-      <Appbar>
+      <Appbar style={{backgroundColor: institute? institute.themeColor: 'blue'}}>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Occurence Register" />
         <Appbar.Action
@@ -90,19 +75,20 @@ function Occurance({navigation}) {
           onPress={() => navigation.navigate('Occurence2')}
         />
       </Appbar>
-      <View
+      {loadingScreen}
+      {/* <View
         style={{
           width: '90%',
           marginLeft: 25,
           marginBottom: 10,
           marginTop: 30,
           justifyContent: 'flex-start',
-        }}></View>
-      <Searchbar
+        }}></View> */}
+      {/* <Searchbar
         placeholder="Enter subject or batch name"
         onChangeText={onChangeSearch}
         value={searchQuery}
-      />
+      /> */}
       <ScrollView style={styles.container}>
         {list &&
           list.map(occurance => (
@@ -119,6 +105,7 @@ function Occurance({navigation}) {
                       {occurance.employeeName.firstName}
                     </Text>
                     <Button
+                      color={institute? institute.themeColor: 'blue'}
                       onPress={() =>
                         navigation.navigate('OccurenceEdit', {
                           id: occurance._id,
@@ -134,8 +121,8 @@ function Occurance({navigation}) {
                     </Button>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text style={{fontSize: 16, color: 'blue'}}>
+                  <TouchableOpacity style={{ ...styles.differentusers}}>
+                    <Text style={{fontSize: 16, color: institute? institute.themeColor : 'blue'}}>
                       {parseDate(occurance.date)}
                     </Text>
                   </TouchableOpacity>
@@ -182,6 +169,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     marginHorizontal: 20,
+    marginBottom: 20
   },
 
   details: {

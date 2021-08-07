@@ -230,7 +230,8 @@ const AttendanceScreen1 = ({navigation}) => {
               flex: 1,
               alignItems: 'center',
               alignSelf: 'flex-end',
-              paddingRight: 30,
+              paddingRight: 20,
+              marginTop:10
             }}>
             <MaterialCommunityIcon size={24} color="white" name="eye" />
             <Text style={{fontFamily: 'Poppins-Regular', color: '#fff'}}>
@@ -485,15 +486,12 @@ const styles = StyleSheet.create({
     elevation: 5,
     backgroundColor: 'white',
     borderColor: '#ccc',
-    borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderWidth: 0.5,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
-    margin: 0,
-    padding: 0,
+    // margin: 0,
+    // padding: 0,
     minWidth: '30%',
   },
 
@@ -563,23 +561,7 @@ const styles = StyleSheet.create({
     height: 69,
     flexDirection: 'row',
   },
-  card: {
-    shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.5,
-    backgroundColor: 'white',
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
-    overflow: 'hidden',
-    justifyContent: 'center',
 
-    minWidth: 110,
-    elevation: 3,
-  },
   card_title: {fontSize: 18},
   card_marks: {
     justifyContent: 'center',

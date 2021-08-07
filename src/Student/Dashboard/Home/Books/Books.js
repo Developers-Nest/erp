@@ -239,24 +239,7 @@ export default function BooksStudent({ navigation }) {
             }}>
             Issued Books
           </Text>
-          <TouchableOpacity
-            style={{
-              justifyContent: 'flex-end',
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <MaterialIcon
-              size={24}
-              color="white"
-              name="align-horizontal-right"
-              style={{
-                fontSize: 35,
-                color: 'white',
-                paddingRight: 20,
-              }}
-            />
-          </TouchableOpacity>
+          
         </View>
 
         {/* header ends */}

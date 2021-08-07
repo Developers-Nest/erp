@@ -110,12 +110,15 @@ export default function AssignmentsDue({ navigation }) {
               name="add-circle"
               color="#900"
               style={{
-                fontSize: 35,
+                fontSize: 30,
                 color: 'white',
                 paddingRight: 20,
+                marginTop:10
               }}
             />
+            
           </TouchableOpacity>
+          
         </View>
 
         <View

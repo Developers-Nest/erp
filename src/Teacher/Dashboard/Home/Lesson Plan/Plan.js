@@ -108,10 +108,11 @@ export default function LessonPlan({ navigation }) {
               flex: 1,
               alignItems: 'center',
               alignSelf: 'flex-end',
-              paddingRight: 30,
+              paddingRight: 20,
+              marginTop:15
             }}>
-            <IonIcon size={24} color="white" name="add-circle-outline" />
-            <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff' }}>
+            <IonIcon size={30} color="white" name="add-circle-outline" />
+            <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff',marginRight:5 }}>
               Add
             </Text>
           </TouchableOpacity>

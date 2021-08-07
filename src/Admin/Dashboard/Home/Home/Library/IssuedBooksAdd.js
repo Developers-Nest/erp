@@ -374,7 +374,7 @@ const IssuedBooksAdd = ({navigation}) => {
                     <Text style={styles.section_heading}>Vechile No.</Text>
                 </View> */}
 
-          <View
+          {/* <View
             style={{marginHorizontal: 10, paddingTop: 20, ...styles.shadow}}>
             <View style={styles.search}>
               <TextInput
@@ -401,7 +401,7 @@ const IssuedBooksAdd = ({navigation}) => {
                 />
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
           <View
             style={{
               flexDirection: 'row',
@@ -583,7 +583,7 @@ const IssuedBooksAdd = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.fixToText}>
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <TouchableOpacity style={{backgroundColor: institute? institute.themeColor: 'blue', ...styles.button}} onPress={handleSubmit}>
               <Text style={styles.text}>Save</Text>
             </TouchableOpacity>
           </View>
@@ -605,7 +605,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: '#5177E7',
   },
   text: {
     fontSize: 18,

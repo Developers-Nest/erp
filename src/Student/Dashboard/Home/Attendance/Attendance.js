@@ -127,7 +127,7 @@ export default function Attendance({navigation}) {
         </Text>
       </View>
 
-      <View style={{padding: 7}} />
+      
 
       <View
         style={{

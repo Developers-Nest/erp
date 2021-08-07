@@ -524,11 +524,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
-    borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderWidth: 0.5,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
 
