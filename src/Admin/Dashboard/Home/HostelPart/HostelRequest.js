@@ -65,7 +65,7 @@ export default function HostelRequest({navigation}) {
       return (
         <TouchableOpacity
           onPress={() => {
-            Alert.alert('Rejected');
+            Reject();
           }}>
           <View style={styles.iconbubblereject}>
             <FontAwesome5 size={38.5} color="white" name="trash-alt" />
@@ -98,7 +98,9 @@ export default function HostelRequest({navigation}) {
               request && request.status === 'Pending' ? (
                 <View key={request._id}>
                   <Swipeable
-                    renderLeftActions={LeftActions}
+                    renderLeftActions={() => {
+                      LeftActions(request._id);
+                    }}
                     renderRightActions={RightActions}>
                     <View style={styles.sectionreviewed}>
                       <View style={styles.details}>
@@ -124,8 +126,7 @@ export default function HostelRequest({navigation}) {
                                 }}>
                                 {request.hostelRoom.roomNo +
                                   ' ' +
-                                  request.hostelRoom.floorName +
-                                  ', '}
+                                  request.hostelRoom.floorName}
                               </Text>
                             </TouchableOpacity>
                           </View>
@@ -223,7 +224,6 @@ export default function HostelRequest({navigation}) {
                             fontFamily: 'Poppins-Regular',
                           }}>
                           {request.user.firstName + ' ' + request.user.lastName}{' '}
-                          Thiahhiqkjbedk
                         </Text>
 
                         <TouchableOpacity style={{flexDirection: 'row'}}>
@@ -233,10 +233,9 @@ export default function HostelRequest({navigation}) {
                               color: '#211C5A',
                               fontFamily: 'Poppins-Medium',
                             }}>
-                            {request.hostelName.name +
+                            {request.hostelRoom.roomNo +
                               ' ' +
-                              request.hostelRoom.floorName +
-                              request.hostelRoom.roomNo}
+                              request.hostelRoom.floorName}
                           </Text>
                         </TouchableOpacity>
                       </View>
@@ -247,7 +246,8 @@ export default function HostelRequest({navigation}) {
                             color: '#58636D',
                             fontFamily: 'Poppins-Medium',
                           }}>
-                          Hostel
+                          {'Hostel: '}
+                          {request.hostelName.name}
                         </Text>
                         <Text
                           style={{
@@ -265,7 +265,7 @@ export default function HostelRequest({navigation}) {
                             color: '#505069',
                             fontFamily: 'Poppins-Regular',
                           }}>
-                          User Type
+                          {request.userType.name}
                         </Text>
                       </TouchableOpacity>
                     </View>
@@ -280,7 +280,8 @@ export default function HostelRequest({navigation}) {
                           lineHeight: 18,
                           color: '#211C5A',
                         }}>
-                        {'  '} Register:{''}21 May,2021
+                        {'  '} Register: {''}
+                        {parseDate(request.updatedAt)}
                         {/* {assignment.submissionDateString ||
                           'Submission date Not Found'} */}
                       </Text>
@@ -295,7 +296,8 @@ export default function HostelRequest({navigation}) {
                           color: '#211C5A',
                         }}>
                         {' '}
-                        {'  '} Vacate:{''}21 Sept,2021
+                        Vacate: {''}
+                        {parseDate(request.vacatingDate)}
                       </Text>
                     </View>
                   </View>
