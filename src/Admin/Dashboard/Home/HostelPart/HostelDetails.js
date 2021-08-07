@@ -133,13 +133,15 @@ const HostelDetails = ({navigation}) => {
                 </View>
             </View>
             
+
+<ScrollView>
+    
+               
 <TouchableWithoutFeedback
  onPress={() => navigation.navigate('HostelRequest')}
            
 >
-<ScrollView>
-    
-        
+<View>    
 {hdetails &&
                         hdetails.map(hdetails => (
             <View style={styles.section} key={hdetails._id} >
@@ -250,11 +252,12 @@ const HostelDetails = ({navigation}) => {
             </View>
                         ))}
                         
-                        
+                        </View> 
+                        </TouchableWithoutFeedback>          
                         <View style={{height:90}}/>
 
                         </ScrollView>
-            </TouchableWithoutFeedback>
+       
 
            
 
