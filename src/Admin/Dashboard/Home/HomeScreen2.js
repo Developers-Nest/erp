@@ -45,7 +45,9 @@ import read from '../../../services/localstorage/read';
 import get from '../../../services/helpers/request/get';
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
-const HomeScreen2 = ({navigation}) => {
+import {useNavigation} from '@react-navigation/native';
+const HomeScreen2 = () => {
+  const navigation = useNavigation();
   const institute = useSelector(state => state.institute);
 
   const [collapsed, setCollapsed] = React.useState(true);
@@ -273,7 +275,9 @@ const HomeScreen2 = ({navigation}) => {
             justifyContent: 'space-evenly',
           }}>
           <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Library')}
+              style={{alignItems: 'center'}}>
               <IonIcon
                 size={36.83}
                 color={institute ? institute.themeColor : '#211C5A'}
@@ -289,10 +293,10 @@ const HomeScreen2 = ({navigation}) => {
                 }}>
                 Library
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
+            <TouchableOpacity onPress={() => {}} style={{alignItems: 'center'}}>
               <SimpleLineIcon
                 size={38}
                 color={institute ? institute.themeColor : '#211C5A'}
@@ -308,11 +312,15 @@ const HomeScreen2 = ({navigation}) => {
                 }}>
                 Students
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.section}>
-            <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                navigation.navigate('Employees');
+              }}>
               <MaterialCommunityIcon
                 size={36.83}
                 color={institute ? institute.themeColor : '#211C5A'}
@@ -328,7 +336,7 @@ const HomeScreen2 = ({navigation}) => {
                 }}>
                 Employees
               </Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={{height: 30}} />
