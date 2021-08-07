@@ -22,6 +22,7 @@ import {
 
 // helpers
 import get from '../../../../services/helpers/request/get';
+import patch from '../../../../services/helpers/request/patch';
 import read from '../../../../services/localstorage/read';
 
 //redux
@@ -51,6 +52,23 @@ export default function HostelRequest({navigation}) {
     }
   }, []);
 
+  // save details
+  const Approve = async id => {
+    try {
+      let slug = `/hostel/hostelAllocation/${id}`;
+      console.log('Occurance slug', slug);
+      let token = await read('token');
+      let data = {
+        status: 'Accepted',
+      };
+      console.log(data);
+      let response = await patch(slug, data, token);
+      alert('Status: Accepted!');
+    } catch (err) {
+      alert('Cannot create occurance!' + err);
+    }
+  };
+
   //date picker
   let parseDate = myDate => {
     let d = new Date(myDate);
@@ -61,30 +79,30 @@ export default function HostelRequest({navigation}) {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
-    const RightActions = () => {
+    //for left action swipe:
+    const LeftActions = id => {
       return (
         <TouchableOpacity
           onPress={() => {
-            Reject();
+            Approve(id);
+          }}>
+          <View style={styles.iconbubbleapprove}>
+            <FontAwesome5 size={38.5} color="white" name="check-circle" />
+            <Text style={{color: 'white'}}>Approve</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    };
+    const RightActions = id => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            Reject(id);
           }}>
           <View style={styles.iconbubblereject}>
             <FontAwesome5 size={38.5} color="white" name="trash-alt" />
 
             <Text style={{color: 'white'}}>Reject</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
-    //for left action swipe:
-    const LeftActions = () => {
-      return (
-        <TouchableOpacity
-          onPress={() => {
-            Alert.alert('Approved');
-          }}>
-          <View style={styles.iconbubbleapprove}>
-            <FontAwesome5 size={38.5} color="white" name="check-circle" />
-            <Text style={{color: 'white'}}>Approve</Text>
           </View>
         </TouchableOpacity>
       );
@@ -98,10 +116,8 @@ export default function HostelRequest({navigation}) {
               request && request.status === 'Pending' ? (
                 <View key={request._id}>
                   <Swipeable
-                    renderLeftActions={() => {
-                      LeftActions(request._id);
-                    }}
-                    renderRightActions={RightActions}>
+                    renderLeftActions={() => LeftActions(request._id)}
+                    renderRightActions={() => RightActions(request._id)}>
                     <View style={styles.sectionreviewed}>
                       <View style={styles.details}>
                         <View style={styles.userinhostels}>
@@ -212,7 +228,7 @@ export default function HostelRequest({navigation}) {
         <ScrollView>
           {requests &&
             requests.map(request =>
-              request && request.status === 'Accepted' ? (
+              request && request.status === 'Pending' ? null : (
                 <View style={styles.sectionreviewed}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
@@ -252,10 +268,11 @@ export default function HostelRequest({navigation}) {
                         <Text
                           style={{
                             fontSize: 12,
-                            color: 'green',
+                            color:
+                              request.status === 'Rejected' ? 'red' : 'green',
                             fontFamily: 'Poppins-Medium',
                           }}>
-                          Approved
+                          {request.status}
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.differentusers}>
@@ -302,7 +319,7 @@ export default function HostelRequest({navigation}) {
                     </View>
                   </View>
                 </View>
-              ) : null,
+              ),
             )}
         </ScrollView>
       </View>
@@ -468,7 +485,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     elevation: 5,
-    marginTop: 14,
     borderRadius: 8,
     paddingLeft: 10,
     paddingRight: 10,
