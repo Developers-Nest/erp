@@ -11,9 +11,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import ModalSelector from 'react-native-modal-selector'
 
 // helpers
-import post from '../../../../services/helpers/request/post'
 import patch from '../../../../services/helpers/request/patch'
 import read from '../../../../services/localstorage/read'
+import deleteReq from '../../../../services/helpers/request/delete'
 
 // loading screem
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js'
@@ -60,15 +60,16 @@ export default function LessonPlanAdd({ route,  navigation }) {
   }
 
   const deletePlan = async()=>{
-    // try{
-    //   let token = await read('token')
-    //   let slug = `/lessonplanning/${planId}`
-    //   let data = planObject
-    //   let response = await patch(slug, data, token)
-    //   console.log('Updated Lesson Plan ', response)
-    // } catch(err){
-    //   alert('Cannot Delete!! '+ err)
-    // }
+    setLoadingScreen()
+    try{
+      let token = await read('token')
+      let slug = `/lessonplanning/${planId}`
+      let response = await deleteReq(slug, token)
+      alert('Lesson Plan Deleted!!')
+    } catch(err){
+      alert('Cannot Delete!! '+ err)
+    }
+    hideLoadingScreen()
   }
 
   useEffect(async () => {

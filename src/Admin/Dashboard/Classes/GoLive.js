@@ -108,7 +108,7 @@ export default function OnlineLecture({navigation}) {
 
   const handleSaveClass = async () => {
     showLoadingScreen();
-    if(!batch || !course || !date || !time || !url || !daysArray || !description){
+    if(!batch || !course || !date || !time || !url || !description){
       alert('All fields are required!!')
       hideLoadingScreen()
       return
@@ -138,7 +138,10 @@ export default function OnlineLecture({navigation}) {
         name: description,
       };
       let response = await post(slug, data, token);
-      if (response) {
+      if(response.error){
+        alert(response.error);
+      }
+      else if (response._id) {
         alert('Class Added!');
       }
     } catch (err) {
@@ -222,10 +225,12 @@ export default function OnlineLecture({navigation}) {
           <Card.Content>
             <TextInput
               placeholder="URL"
+              placeholderTextColor="grey"
               style={{
                 textAlignVertical: 'top',
                 borderBottomWidth: 0.5,
                 fontSize: 15,
+                color: 'black'
               }}
               onChangeText={val => setUrl(val)}
             />
@@ -234,11 +239,13 @@ export default function OnlineLecture({navigation}) {
               placeholder="Description"
               multiline={true}
               numberOfLines={4}
+              placeholderTextColor="grey"
               style={{
                 textAlignVertical: 'top',
                 marginTop: 5,
                 height: 150,
                 fontSize: 15,
+                color: 'black'
               }}
               onChangeText={val => setDescription(val)}
             />

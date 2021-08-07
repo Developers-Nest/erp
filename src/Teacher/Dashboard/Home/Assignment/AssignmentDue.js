@@ -144,8 +144,9 @@ export default function AssignmentsDue({ navigation }) {
               />
 
               <TextInput
-                style={{ width: '80%', ...styles.text_input }}
+                style={{ width: '80%', ...styles.text_input, color: 'black' }}
                 placeholder="Enter subject or batch name"
+                placeholderTextColor="grey"
               />
               <TouchableOpacity
                 style={{
