@@ -10,6 +10,8 @@ import {
   Image,
 } from 'react-native';
 
+import { Avatar } from 'react-native-paper';
+
 //icons
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -24,6 +26,8 @@ import write from '../../../services/localstorage/write'
 import read from '../../../services/localstorage/read'
 import get from '../../../services/helpers/request/get'
 
+import { useFocusEffect } from '@react-navigation/native';
+
 const Chats = ({ navigation }) => {
   navigationByCondition = item => {
     const { navigation } = props.navigation;
@@ -36,96 +40,96 @@ const Chats = ({ navigation }) => {
   };
 
   const [messages, setMessages] = useState([
-    {
-      userImage: 'https://randomuser.me/api/portraits/women/79.jpg',
-      userName: 'Sarah',
-      message: {
-        sender: 'Sarah',
-        text: 'I will catch join it in five minutes',
-        seenByYou: true,
-        seenByUser: true,
-      },
+    // {
+    //   userImage: 'https://randomuser.me/api/portraits/women/79.jpg',
+    //   userName: 'Sarah',
+    //   message: {
+    //     sender: 'Sarah',
+    //     text: 'I will catch join it in five minutes',
+    //     seenByYou: true,
+    //     seenByUser: true,
+    //   },
 
-      time: 'now',
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/women/81.jpg',
-      userName: 'Deepsi',
-      message: {
-        sender: 'You',
-        text: 'Kaisan baa 😊😇?',
-        seenByYou: true,
-        seenByUser: false,
-      },
-      time: '03:32 PM',
-      // isTyping: true,
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/men/33.jpg',
-      userName: 'Motha',
-      message: {
-        sender: 'Motha',
-        text: 'Hii sis,bro,chachi,bhai,aunty!',
-        seenByYou: true,
-        seenByUser: true,
-      },
-      time: '01:40 PM',
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/women/21.jpg',
-      userName: 'Thangarajan',
-      message: {
-        sender: 'Thangarajan',
-        text: 'Badtameez dil..Thaane na thaane',
-        seenByYou: false,
-        seenByUser: false,
-      },
-      time: '10:37 AM',
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/men/60.jpg',
-      userName: 'Thangirajan',
-      message: {
-        sender: 'Thangirajan',
-        text: 'Thaane na Thaane na',
-        seenByYou: true,
-        seenByUser: true,
-      },
-      time: 'Yesterday',
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/men/47.jpg',
-      userName: 'Christopher',
-      message: {
-        sender: 'Christopher',
-        text: 'That is awesome',
-        seenByYou: true,
-        seenByUser: true,
-      },
-      time: '3 days ago',
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/women/21.jpg',
-      userName: 'Danny',
-      message: {
-        sender: 'You',
-        text: 'I have already completed it',
-        seenByYou: true,
-        seenByUser: true,
-      },
-      time: '4 days ago',
-    },
-    {
-      userImage: 'https://randomuser.me/api/portraits/men/54.jpg',
-      userName: 'Diana',
-      message: {
-        sender: 'Diana',
-        text: 'What is the syllabus of java',
-        seenByYou: true,
-        seenByUser: true,
-      },
-      time: 'one month ago',
-    },
+    //   time: 'now',
+    // },
+    // {
+    //   userImage: 'https://randomuser.me/api/portraits/women/81.jpg',
+    //   userName: 'Deepsi',
+    //   message: {
+    //     sender: 'You',
+    //     text: 'Kaisan baa 😊😇?',
+    //     seenByYou: true,
+    //     seenByUser: false,
+    //   },
+    //   time: '03:32 PM',
+    //   // isTyping: true,
+    // },
+    // {
+    //   userImage: 'https://randomuser.me/api/portraits/men/33.jpg',
+    //   userName: 'Motha',
+    //   message: {
+    //     sender: 'Motha',
+    //     text: 'Hii sis,bro,chachi,bhai,aunty!',
+    //     seenByYou: true,
+    //     seenByUser: true,
+    //   },
+    //   time: '01:40 PM',
+    // },
+    // {
+    //   userImage: 'https://randomuser.me/api/portraits/women/21.jpg',
+    //   userName: 'Thangarajan',
+    //   message: {
+    //     sender: 'Thangarajan',
+    //     text: 'Badtameez dil..Thaane na thaane',
+    //     seenByYou: false,
+    //     seenByUser: false,
+    //   },
+    //   time: '10:37 AM',
+    // },
+    // {
+    //   userImage: 'https://randomuser.me/api/portraits/men/60.jpg',
+    //   userName: 'Thangirajan',
+    //   message: {
+    //     sender: 'Thangirajan',
+    //     text: 'Thaane na Thaane na',
+    //     seenByYou: true,
+    //     seenByUser: true,
+    //   },
+    //   time: 'Yesterday',
+    // },
+    // {
+    //   userImage: 'https://randomuser.me/api/portraits/men/47.jpg',
+    //   userName: 'Christopher',
+    //   message: {
+    //     sender: 'Christopher',
+    //     text: 'That is awesome',
+    //     seenByYou: true,
+    //     seenByUser: true,
+    //   },
+    //   time: '3 days ago',
+    // },
+    // {
+    //   userImage: 'https://randomuser.me/api/portraits/women/21.jpg',
+    //   userName: 'Danny',
+    //   message: {
+    //     sender: 'You',
+    //     text: 'I have already completed it',
+    //     seenByYou: true,
+    //     seenByUser: true,
+    //   },
+    //   time: '4 days ago',
+    // },
+    // {
+    //   userImage: 'https://randomuser.me/api/portraits/men/54.jpg',
+    //   userName: 'Diana',
+    //   message: {
+    //     sender: 'Diana',
+    //     text: 'What is the syllabus of java',
+    //     seenByYou: true,
+    //     seenByUser: true,
+    //   },
+    //   time: 'one month ago',
+    // },
   ]);
 
   //theming
@@ -134,7 +138,6 @@ const Chats = ({ navigation }) => {
   const userInfo = useSelector(state => state.userInfo)
 
   useEffect(async () => {
-
     try {
       let email = userInfo.email
       let password = userInfo.password
@@ -152,12 +155,10 @@ const Chats = ({ navigation }) => {
         console.log('Token ', response.accessToken)
 
       } else {
-        throw new Error('Email/ Password not available')
+        throw new Error('Cannot Login to Chat Service!!')
       }
-
     } catch (err) {
-      console.log(err)
-      alert('Cannot get chats!!')
+      alert(err)
     }
 
     try{
@@ -179,6 +180,38 @@ const Chats = ({ navigation }) => {
     }
 
   }, [])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+  
+      const fetchUser = async () => {
+        try{
+          let chatToken = await read('chatToken')
+          let userId = await read('chatUser')
+          console.log('Chat Token ', chatToken)
+      
+          if (chatToken) {
+            let slug = `/chat/loadchatlist?userId=${userId}`
+            let res = await get(slug, chatToken, 1)
+            console.log('Res ', res)
+            // setMessages(res)
+          } else {
+            throw new Error('Cannot fetch chat list!!')
+          }
+    
+        } catch(err){
+          console.log('Chat List error ', err)
+        }
+      };
+  
+      fetchUser();
+  
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -261,8 +294,10 @@ const Chats = ({ navigation }) => {
               //         ? navigation.navigate('ChatScreen1'):
               //     navigation.navigate('Chats')
               // }
-              key = {chat.chatHeadId}
-              onPress={() => navigation.navigate('ChatScreen1')}
+              key = {chat._id}
+              onPress={() => navigation.navigate('ChatScreen1',{
+                chat: chat
+              })}
 
               onLongPress={() => {
                 Alert.alert(
@@ -288,29 +323,7 @@ const Chats = ({ navigation }) => {
                 );
               }}>
 
-
-              <Image
-                style={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: 100,
-                  // borderWidth:
-                  //   stories.filter(
-                  //     (story) => story.userName === chat.userName
-                  //   ).length > 0
-                  //     ? 4
-                  //     : null,
-                  // borderColor:
-                  //   stories.filter(
-                  //     (story) => story.userName === chat.userName
-                  //   ).length > 0
-                  //     ? '#3c40c6'
-                  //     : null,
-                }}
-                source={{
-                  uri: chat.userImage,
-                }}
-              />
+              <Avatar.Text size={70} label={'A'} />
 
 
               {/* </TouchableOpacity> */}
@@ -336,15 +349,6 @@ const Chats = ({ navigation }) => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                   }}>
-                  {chat.isTyping ? (
-                    <Text
-                      style={{
-                        color: 'green',
-                        fontSize: 16,
-                      }}>
-                      typing...
-                    </Text>
-                  ) : (
                     <Text
                       style={{
                         fontFamily:
@@ -365,7 +369,7 @@ const Chats = ({ navigation }) => {
                       >
                       {chat.chatMessages ? chat.chatMessages.messageContent : ''}
                     </Text>
-                  )}
+                  
 
                   {/*
                  CONDITION FOR ICONS FOR FOUR DIFFERENT CONDITIONS(TWO FOR SENDER AND TWO FOR ME)
