@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -10,20 +10,22 @@ import {
 
 import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
 
+import {Button} from 'react-native-paper';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 
 // redux
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
-const AllocatedListHostel = ({ navigation }) => {
+const AllocatedListHostel = ({navigation}) => {
   const [allocation, setAllocationlist] = useState([]);
   // loading screem
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
@@ -71,15 +73,14 @@ const AllocatedListHostel = ({ navigation }) => {
       return () => {
         isActive = false;
       };
-    }, [])
+    }, []),
   );
-
 
   //theming
   const institute = useSelector(state => state.institute);
 
   return (
-    <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+    <View style={{justifyContent: 'center', alignContent: 'center'}}>
       {/* header start */}
       {loadingScreen}
       <View
@@ -140,7 +141,7 @@ const AllocatedListHostel = ({ navigation }) => {
                 fontSize: 30,
                 color: 'white',
                 paddingRight: 20,
-                marginTop:10
+                marginTop: 10,
               }}
             />
             <Text
@@ -148,7 +149,7 @@ const AllocatedListHostel = ({ navigation }) => {
                 color: '#fff',
                 fontFamily: 'Poppins-Regular',
                 fontSize: 12,
-                marginRight:20
+                marginRight: 20,
               }}>
               ALLOCATE
             </Text>
@@ -158,10 +159,10 @@ const AllocatedListHostel = ({ navigation }) => {
 
       {/* header ends */}
 
-      <View style={{ marginHorizontal: 10, ...styles.shadow }}>
+      <View style={{marginHorizontal: 10, ...styles.shadow}}>
         <View style={styles.search}>
           <TextInput
-            style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
+            style={{...styles.search_input, fontFamily: 'Poppins-Regular'}}
             placeholder="Enter hostel name here"
             placeholderTextColor="grey"
           />
@@ -181,136 +182,144 @@ const AllocatedListHostel = ({ navigation }) => {
         </View>
       </View>
       {/* <View style={{height:30}}/> */}
+
+      <Button
+        onPress={() => navigation.navigate('RoomsList')}
+        style={{marginHorizontal: 20, marginVertical: 10}}
+        color={institute.themeColor}
+        mode="contained">
+        <Text>Room List</Text>
+      </Button>
+
       <ScrollView>
         {allocation
           ? allocation &&
-          allocation.map(allocation => (
-            <View style={styles.section} key={allocation._id}>
-              <View style={styles.details}>
-                <View style={styles.userinhostels}>
-                  <View style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        color: '#211C5A',
-                        fontFamily: 'Poppins-Regular',
-                        marginHorizontal: -5,
-                      }}>
-                      {' '}
-                      {allocation.username}
-                    </Text>
-
-                    <Text
-                      style={{
-                        flexDirection: 'row',
-                        fontSize: 12,
-                        color: '#505069',
-                        marginTop: 5,
-                        fontFamily: 'openSans',
-                      }}>
-                      {allocation.room} {', '}
-                      {allocation.floor} {' floor'}
-                    </Text>
-
-                    {/* */}
-                  </View>
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#5177E7',
-                        fontFamily: 'Poppins-Medium',
-                      }}></Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: institute ? institute.themeColor : '#505069',
-                        fontFamily: 'openSans',
-                      }}>
-                      {allocation.type}
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#505069',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      {'Hostel: '}
-                      {allocation.hostel}
-                    </Text>
-
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('HostelAllocationEdit')}
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
+            allocation.map(allocation => (
+              <View style={styles.section} key={allocation._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
                       <Text
                         style={{
-                          fontSize: 13,
-                          color: institute ? institute.themeColor : '#211C5A',
+                          fontSize: 18,
+                          color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
-                          marginTop: 5,
+                          marginHorizontal: -5,
                         }}>
-                        Edit
+                        {' '}
+                        {allocation.username}
                       </Text>
-                      <Icon1
-                        size={13}
-                        backgroundColor=" #211C5A"
-                        name="edit"
-                        style={{ paddingTop: 7, paddingRight: 12 }}
-                        color={institute ? institute.themeColor : '#211C5A'}
-                      />
+
+                      <Text
+                        style={{
+                          flexDirection: 'row',
+                          fontSize: 12,
+                          color: '#505069',
+                          marginTop: 5,
+                          fontFamily: 'openSans',
+                        }}>
+                        {allocation.room} {', '}
+                        {allocation.floor} {' floor'}
+                      </Text>
+
+                      {/* */}
+                    </View>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#5177E7',
+                          fontFamily: 'Poppins-Medium',
+                        }}></Text>
                     </TouchableOpacity>
-                  </TouchableOpacity>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: institute ? institute.themeColor : '#505069',
+                          fontFamily: 'openSans',
+                        }}>
+                        {allocation.type}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#505069',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {'Hostel: '}
+                        {allocation.hostel}
+                      </Text>
+
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('HostelAllocationEdit')
+                        }
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            color: institute ? institute.themeColor : '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            marginTop: 5,
+                          }}>
+                          Edit
+                        </Text>
+                        <Icon1
+                          size={13}
+                          backgroundColor=" #211C5A"
+                          name="edit"
+                          style={{paddingTop: 7, paddingRight: 12}}
+                          color={institute ? institute.themeColor : '#211C5A'}
+                        />
+                      </TouchableOpacity>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={styles.belowhr}>
+                  <View style={{flexDirection: 'column'}}>
+                    <Text
+                      style={{
+                        color: '#B04305',
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                      }}></Text>
+                    <Text
+                      style={{
+                        color: '#211C5A',
+
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {'Register: '}
+                      {allocation.regDate}
+                    </Text>
+                  </View>
+                  <View style={{marginTop: 15}}>
+                    <Text
+                      style={{
+                        color: '#211C5A',
+
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {'Vacate: '} {allocation.vacaDate}
+                    </Text>
+                  </View>
                 </View>
               </View>
-
-              <View style={styles.belowhr}>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text
-                    style={{
-                      color: '#B04305',
-                      fontSize: 12,
-                      fontFamily: 'Poppins-Medium',
-                    }}></Text>
-                  <Text
-                    style={{
-                      color: '#211C5A',
-
-                      fontSize: 12,
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {'Register: '}
-                    {allocation.regDate}
-                  </Text>
-                </View>
-                <View style={{ marginTop: 15 }}>
-                  <Text
-                    style={{
-                      color: '#211C5A',
-
-                      fontSize: 12,
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {'Vacate: '} {allocation.vacaDate}
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-          ))
+            ))
           : null}
-        <View style={{ height: 60 }} />
+        <View style={{height: 60}} />
       </ScrollView>
-
     </View>
-
   );
 };
 
