@@ -1,26 +1,10 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
-    Searchbar,
-    Appbar,
-    List,
-    Card,
-    Title,
-    Paragraph,
     Button,
 } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
-import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -31,119 +15,93 @@ import { useSelector } from 'react-redux';
 import get from '../../../../../services/helpers/request/get'
 import post from '../../../../../services/helpers/request/post'
 import read from '../../../../../services/localstorage/read'
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
 
 
 export default function AddDestination({ navigation }) {
     //theming
     const institute = useSelector(state => state.institute);
 
-
-
     //modal selector values
     const [routenos, setroutenos] = useState([]);
+
     //for fee type no API given,make the label and keys
     const [feetypes, setfeetypes] = useState([
-        {label: 'Annual', key: 'Annual'},
-        {label: 'Bi-Annual', key: 'Bi-Annual'},
-        {label: 'Tri-Annual', key: 'Tri-Annual'},
-        {label: 'Quaterly', key: 'Quaterly'},
-        {label: 'Monthly', key: 'Monthly'},
-
-
+        { label: 'Annual', key: 'Annual' },
+        { label: 'Bi-Annual', key: 'Bi-Annual' },
+        { label: 'Tri-Annual', key: 'Tri-Annual' },
+        { label: 'Quaterly', key: 'Quaterly' },
+        { label: 'Monthly', key: 'Monthly' },
     ]);
-    
+
     //data to be sent
     const [routeno, setrouteno] = useState();
     const [feetype, setfeetype] = useState();
+
     //for textinputs
     const [feeamount, setfeeamount] = useState('');
     const [drop, setdrop] = useState('');
-    
-    // const [isTimePickerVisible, setTimePickerVisibility] = React.useState(false);
-    // const [Time, setTime] = React.useState('15:00')
 
-    // const showTimePicker = () => {
-    //     setTimePickerVisibility(true);
-    // };
 
-    // const hideTimePicker = () => {
-    //     setTimePickerVisibility(false);
-    // };
-    // const handleConfirm = (Time) => {
-    //     // console.warn("A date has been picked: ", date.toString());
-    //     setTime(Time.getTime() + " " + TimeMonths[Time.getHour() + 1] + ":" + Time.getMinute())
-    //    hideTimePicker();
-    // };
-  
-    // let index = 0;
-    // const dateMonths = {
-    //     1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
-    // }
- 
- 
-    
-
+    const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoaderHook()
 
     const [showtimePicker, setShowTimePicker] = useState(false);
- const [time, setTime] = useState(null);
- // handle time select
- let handleSubmit2 = async sd => {
-    showLoadingScreen();
-    await setTime(sd.toString());
-    setShowTimePicker(false);
-    hideLoadingScreen();
-  };
-    
- //on save button press action
- let handleSubmit = async () => {
-    try {
-        let slug = '/transport/destinationAndFees';
-        let token = await read('token');
-        let data;
+    const [time, setTime] = useState(null);
 
-        data = {
-            pickAndDrop:drop,
-            amount:feeamount,
-            //for modal picker
-            
-            feeType:feetype,
-          stopTime:time,
-          route:routeno,
 
-        };
-        console.log('Driver Data ', data);
-        let res = await post(slug, data, token);
-        console.log('Add Driver ', res);
-        alert('Destination added!!');
-    } catch (err) {
-        alert('Cannot Save !!' + err);
+    // handle time select
+    let handleSubmit2 = async sd => {
+        showLoadingScreen();
+        await setTime(sd.toString());
+        setShowTimePicker(false);
+        hideLoadingScreen();
+    };
+
+    //on save button press action
+    let handleSubmit = async () => {
+        showLoadingScreen()
+        try {
+            let slug = '/transport/destinationAndFees';
+            let token = await read('token');
+            let data = {
+                pickAndDrop: drop,
+                amount: feeamount,
+                feeType: feetype,
+                stopTime: time,
+                route: routeno,
+            };
+            let res = await post(slug, data, token);
+            if(res.error){
+                alert(res.error)
+            } else if(res._id){
+                alert('Destination Added!!')
+            }
+        } catch (err) {
+            alert('Cannot Save !!' + err);
+        }
+        hideLoadingScreen()
     }
-}
-//on load
-useEffect(async () => {
-    try {
-        let slug = '/transport/route';
-        let token = await read('token');
-        let res = await get(slug, token);
-        let list = [];
 
-        res &&
-            res.map((res) => {
-                list.push({
-                    label: res.code,
-                    key: res._id,
+    //on load
+    useEffect(async () => {
+        try {
+            let slug = '/transport/route';
+            let token = await read('token');
+            let res = await get(slug, token);
+            let list = [];
+
+            res &&
+                res.map((res) => {
+                    list.push({
+                        label: res.code,
+                        key: res._id,
+                    })
                 })
-            })
-
-        console.log(list);
-        setroutenos(list);
-
-    } catch (err) {
-        alert('Cannot get route code!!');
-    }
-
-
-}, [])
+            setroutenos(list);
+        } catch (err) {
+            alert('Cannot get route code!!');
+        }
+    }, [])
 
 
     return (
@@ -168,11 +126,10 @@ useEffect(async () => {
                                 alignSelf: 'center',
                                 fontSize: 25,
                                 color: 'white',
-                                // paddingLeft: 10,
-                                // paddingTop: 23,
                             }}
                         />
                     </TouchableOpacity>
+                    {loadingScreen}
                     <Text
                         style={{
                             fontStyle: 'normal',
@@ -202,7 +159,7 @@ useEffect(async () => {
 
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
-                <ModalSelector
+                    <ModalSelector
                         data={routenos}
                         initValue="Route Code"
                         onChange={option => {
@@ -212,24 +169,24 @@ useEffect(async () => {
                         initValueTextStyle={styles.SelectedValueSmall}
                         selectTextStyle={styles.SelectedValueSmall}
                     />
-                   <View style={styles.Card}>
+                    <View style={styles.Card}>
                         <View style={styles.CardContent}>
                             {/* time picker */}
-              <Button
-                icon="calendar"
-                mode="contained"
-                color="white"
-                style={{margin: 2}}
-                onPress={() => setShowTimePicker(true)}>
-                {time? time.slice(11,19) : 'TIME'}
-              </Button>
+                            <Button
+                                icon="calendar"
+                                mode="contained"
+                                color="white"
+                                style={{ margin: 2 }}
+                                onPress={() => setShowTimePicker(true)}>
+                                {time ? time.slice(17, 21) : 'TIME'}
+                            </Button>
 
-              <DateTimePickerModal
-                isVisible={showtimePicker}
-                mode="time"
-                onConfirm={handleSubmit2}
-                onCancel={() => setShowTimePicker(!showtimePicker)}
-              />
+                            <DateTimePickerModal
+                                isVisible={showtimePicker}
+                                mode="time"
+                                onConfirm={handleSubmit2}
+                                onCancel={() => setShowTimePicker(!showtimePicker)}
+                            />
                         </View>
                     </View>
                 </View>
@@ -241,7 +198,7 @@ useEffect(async () => {
 
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
-                <ModalSelector
+                    <ModalSelector
                         data={feetypes}
                         initValue="Fee Type"
                         onChange={option => {
@@ -282,18 +239,15 @@ useEffect(async () => {
                             />
                         </View>
                     </View>
-
                 </View>
 
-
-               
                 <View
                     style={{
                         justifyContent: 'center',
                         alignItems: 'center',
                         padding: 20,
                     }}>
-                    <Button style={{ width: 90 }} color="#5177E7" mode="contained" onPress={handleSubmit}>
+                    <Button style={{ width: 90 }} color={ institute? institute.themeColor : "#5177E7"} mode="contained" onPress={handleSubmit}>
                         SAVE
                     </Button>
                 </View>
@@ -460,18 +414,14 @@ const styles = StyleSheet.create({
         elevation: 5,
         backgroundColor: 'white',
         borderColor: '#ccc',
-
         borderBottomLeftRadius: 12,
         borderBottomRightRadius: 12,
         borderTopRightRadius: 12,
         borderTopLeftRadius: 12,
         overflow: 'hidden',
         alignSelf: 'center',
-        // justifyContent: 'center',
-        // alignContent:'center',
         margin: 0,
         padding: 0,
-
         width: '40%',
     },
 });

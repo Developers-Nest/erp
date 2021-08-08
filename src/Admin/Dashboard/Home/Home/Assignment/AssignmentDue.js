@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -17,16 +17,16 @@ import {
   Alert,
 } from 'react-native';
 
-import {Searchbar, Button} from 'react-native-paper';
+import { Searchbar, Button } from 'react-native-paper';
 
 // helpers
 import get from '../../../../../services/helpers/request/get';
 import read from '../../../../../services/localstorage/read';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function AssignmentDue({navigation}) {
+export default function AssignmentDue({ navigation }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [assignments, setAssignments] = useState([]);
 
@@ -104,13 +104,13 @@ export default function AssignmentDue({navigation}) {
 
         <View
           style={{
-            // width: '90%',
+
             alignItems: 'center',
             marginBottom: 30,
             marginTop: 30,
           }}>
           {/* open search */}
-          <View style={{width: '90%', alignItems: 'center'}}>
+          <View style={{ width: '90%', alignItems: 'center' }}>
             <View
               style={{
                 justifyContent: 'space-between',
@@ -128,7 +128,7 @@ export default function AssignmentDue({navigation}) {
               />
 
               <TextInput
-                style={{width: '80%', ...styles.text_input}}
+                style={{ width: '80%', ...styles.text_input }}
                 placeholder="Enter subject or batch name"
                 placeholderTextColor='grey'
               />
@@ -170,7 +170,7 @@ export default function AssignmentDue({navigation}) {
                         </Text>
 
                         <TouchableOpacity
-                          style={{flexDirection: 'row'}}
+                          style={{ flexDirection: 'row' }}
                           onPress={() =>
                             navigation.navigate('Assignment Edit', {
                               assignment: assignment,
@@ -188,7 +188,7 @@ export default function AssignmentDue({navigation}) {
                             size={12}
                             color="#211C5A"
                             name="edit"
-                            style={{paddingTop: 2, paddingRight: 10}}
+                            style={{ paddingTop: 2, paddingRight: 10 }}
                           />
                         </TouchableOpacity>
                       </View>
@@ -202,8 +202,7 @@ export default function AssignmentDue({navigation}) {
                           {assignment.course && assignment.course.courseName} -
                           {assignment.batch && assignment.batch.batchName}
                         </Text>
-                        {/*                 
-                    <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
+
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.differentusers}>
                         <Text
@@ -212,45 +211,38 @@ export default function AssignmentDue({navigation}) {
                             color: '#505069',
                             fontFamily: 'Poppins-Regular',
                           }}>
-                          {/* Exams will be conducted via online mode in the upcoming week
-                        and these are notes for it.So,go through them and study well */}
+
                           {assignment.description || 'Description Not Found'}
                         </Text>
 
-                        {/* <Text style={styles.userstext}>Graded</Text> */}
+
                       </TouchableOpacity>
                     </View>
                   </View>
 
                   <View style={styles.belowhr}>
-                    <View style={{flexDirection: 'column'}}>
+                    <View style={{ flexDirection: 'column' }}>
+
                       <Text
                         style={{
                           color: '#B04305',
                           fontSize: 12,
+                          marginTop: 10,
                           fontFamily: 'Poppins-Medium',
                         }}>
                         Due:{' '}
-                        {assignment.submissionDateString ||
+                        {assignment.submissionDateString.slice(0, 15) ||
                           'Submission date Not Found'}
                       </Text>
-                      <Text
-                        style={{
-                          color: '#58636D',
-                          fontSize: 12,
-                          fontFamily: 'Poppins-Medium',
-                        }}>
-                        Saved as Draft
-                      </Text>
                     </View>
-                    <View style={{marginBottom: 3}}>
+                    <View>
                       <Button
                         style={styles.button}
                         onPress={() =>
                           Alert.alert('Assignment Successfully sent')
                         }
                         color={institute ? institute.themeColor : 'blue'}
-                        labelStyle={{color: 'white'}}
+                        labelStyle={{ color: 'white' }}
                         uppercase={false}
                         mode="contained">
                         Send
@@ -259,7 +251,7 @@ export default function AssignmentDue({navigation}) {
                   </View>
                 </View>
               ))}
-            <View style={{height: 20}} />
+            <View style={{ height: 20 }} />
           </ScrollView>
         </View>
       </View>
@@ -324,7 +316,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 10,
     borderBottomColor: '#333',
-    //borderBottomWidth:1,
+
   },
 
   switchTabsView: {
@@ -344,17 +336,17 @@ const styles = StyleSheet.create({
   text_input: {
     paddingHorizontal: 20,
     borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
+
     height: 50,
     fontSize: 16,
     minWidth: 171,
-    color:'black',
+    color: 'black',
     backgroundColor: 'white',
   },
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -372,8 +364,10 @@ const styles = StyleSheet.create({
   },
   button: {
     color: '#F9F9F9',
-    padding: 3,
+
     paddingHorizontal: 5,
     borderRadius: 5,
+    height: 40,
+    lineHeight: 20
   },
 });
