@@ -1,6 +1,6 @@
-import React,{useState} from 'react';
-import { Appbar } from 'react-native-paper';
-import { List } from 'react-native-paper';
+import React, {useState, useEffect} from 'react';
+import {Appbar} from 'react-native-paper';
+import {List} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 
 import {
@@ -20,40 +20,49 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 //redux
 import {useSelector} from 'react-redux';
 
+// helpers
+import read from '../../../../../services/localstorage/read';
+import get from '../../../../../services/helpers/request/get';
+import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
+
 export default function OnlineExams({navigation}) {
-     //theming
+  //theming
   const institute = useSelector(state => state.institute);
 
-    const [className, setclassName] = useState(null);
-    const [classes, setclasses] = useState([
-      {label: 'Class1', key: 'Class1'},
-      {label: 'Class2', key: 'Class2'},
-      {label: 'Class3', key: 'Class3'},
-    ]);
-  
-    // const [open2, setOpen2] = useState(null);
-    const [batch, setbatch] = useState(null);
-    const [batches, setbatches] = useState([
-      {label: 'Batch1', key: 'Batch1'},
-      {label: 'Batch2', key: 'Batch2'},
-      {label: 'Batch3', key: 'Batch3'},
-    ]);
-  
-    // const [open3, setOpen3] = useState(null);
-    const [subject, setsubject] = useState(null);
-    const [subjects, setsubjects] = useState([
-      {label: 'Subject1', key: 'Subject1'},
-      {label: 'Subject2', key: 'Subject2'},
-      {label: 'Subject3', key: 'Subject3'},
-    ]);
-  
-   
-    const [expanded, setExpanded] = React.useState(true);
+  //loading screen
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  const handlePress = () => setExpanded(!expanded);
+  //exams
+  const [exams, setexams] = useState([]);
+
+  //on load
+  useEffect(async () => {
+    setLoadingScreen();
+    try {
+      let slug = `/class/getClassAssignment`;
+      let token = await read('token');
+      let response = await get(slug, token);
+      setexams(response);
+    } catch (err) {
+      alert('Cannot get Exams!!');
+    }
+
+    hideLoadingScreen();
+  }, []);
+
+  const [className, setclassName] = useState(null);
+  const [classes, setclasses] = useState([]);
+
+  const [batch, setbatch] = useState(null);
+  const [batches, setbatches] = useState([]);
+
+  const [subject, setsubject] = useState(null);
+  const [subjects, setsubjects] = useState([]);
+
   const [showContent, setShowContent] = React.useState('Processed');
 
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -66,26 +75,27 @@ export default function OnlineExams({navigation}) {
       setActiveTab('Completed');
     }
   }
+
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(0, 15);
+  };
+
   function Processed() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
 
     return (
-
-        
       <View style={styles.container}>
+        {loadingScreen}
         <ScrollView>
-
-            
-       
-
-      <View
+          <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-around',
               marginTop: 20,
-              marginBottom:10,
+              marginBottom: 10,
               alignContent: 'flex-start',
               // width: '100%'
             }}>
@@ -110,8 +120,8 @@ export default function OnlineExams({navigation}) {
               initValueTextStyle={styles.SelectedValueSmall}
               selectTextStyle={styles.SelectedValueSmall}
             />
-         
-         <ModalSelector
+
+            <ModalSelector
               data={subjects}
               initValue="Subjects"
               onChange={option => {
@@ -121,45 +131,71 @@ export default function OnlineExams({navigation}) {
               initValueTextStyle={styles.SelectedValueSmall}
               selectTextStyle={styles.SelectedValueSmall}
             />
-         
           </View>
-         {/* close list part */}
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontWeight: 'normal', fontSize: 18,color:'#211C5A',fontFamily:'Poppins-Regular'}}> Title</Text>
+          {/* close list part */}
+          {exams &&
+            exams.map(exam =>
+              new Date(exam.due) > new Date() ? (
+                <View style={styles.section}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontWeight: 'normal',
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          {exam.title}
+                        </Text>
 
-                <Text style={{fontSize: 10,color:'#B04305',fontFamily:'Poppins-Regular',marginTop:-20}}>Difficult</Text>
-              </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            color: '#B04305',
+                            fontFamily: 'Poppins-Regular',
+                            marginTop: -20,
+                          }}>
+                          {exam.topic && exam.topic.topicName}
+                        </Text>
+                      </TouchableOpacity>
 
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 12,color:"#58636D",fontFamily:'Poppins-Regular'}}>21May,2021</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={{fontSize: 12,color:'#58636D',fontFamily:'Poppins-Regular'}}> 09:00 to 12:00 </Text>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#58636D',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {parseDate(exam.due)}
+                        </Text>
+                        <View style={{flexDirection: 'row'}}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#58636D',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {' '}
+                            {new Date(exam.due).toString().slice(15)}{' '}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58636D',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        Instructions: {exam.instruction}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontWeight: 'normal', fontSize: 18,color:'#211C5A',fontFamily:'Poppins-Regular'}}> Title</Text>
-
-                <Text style={{fontSize: 10,color:'#B04305',fontFamily:'Poppins-Regular',marginTop:-20}}>Difficult</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 12,color:"#58636D",fontFamily:'Poppins-Regular'}}>21May,2021</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={{fontSize: 12,color:'#58636D',fontFamily:'Poppins-Regular'}}> 09:00 to 12:00 </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+              ) : null,
+            )}
         </ScrollView>
       </View>
     );
@@ -172,16 +208,15 @@ export default function OnlineExams({navigation}) {
 
     return (
       <View style={styles.container}>
+        {loadingScreen}
         <ScrollView>
-  
-
-        <View
+          <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-around',
               marginTop: 20,
-              marginBottom:10,
-               alignContent: 'flex-start',
+              marginBottom: 10,
+              alignContent: 'flex-start',
               // width: '100%'
             }}>
             <ModalSelector
@@ -205,8 +240,8 @@ export default function OnlineExams({navigation}) {
               initValueTextStyle={styles.SelectedValueSmall}
               selectTextStyle={styles.SelectedValueSmall}
             />
-         
-         <ModalSelector
+
+            <ModalSelector
               data={subjects}
               initValue="Subjects"
               onChange={option => {
@@ -216,78 +251,81 @@ export default function OnlineExams({navigation}) {
               initValueTextStyle={styles.SelectedValueSmall}
               selectTextStyle={styles.SelectedValueSmall}
             />
-         
           </View>
-         {/* close list part */}
-<View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontWeight: 'normal', fontSize: 18,color:'#211C5A',fontFamily:'Poppins-Regular'}}> Title</Text>
+          {/* close list part */}
+          {exams &&
+            exams.map(exam =>
+              new Date(exam.due) < new Date() ? (
+                <View style={styles.section}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontWeight: 'normal',
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          {exam.title}
+                        </Text>
 
-                <Text style={{fontSize: 10,color:'#B04305',fontFamily:'Poppins-Regular',marginTop:-20}}>Difficult</Text>
-              </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            color: '#B04305',
+                            fontFamily: 'Poppins-Regular',
+                            marginTop: -20,
+                          }}>
+                          {exam.topic && exam.topic.topicName}
+                        </Text>
+                      </TouchableOpacity>
 
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 12,color:"#58636D",fontFamily:'Poppins-Regular'}}>21May,2021</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={{fontSize: 12,color:'#58636D',fontFamily:'Poppins-Regular'}}> 09:00 to 12:00 </Text>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#58636D',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {parseDate(exam.due)}
+                        </Text>
+                        <View style={{flexDirection: 'row'}}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#58636D',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {' '}
+                            {new Date(exam.due).toString().slice(15)}{' '}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58636D',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        Instructions: {exam.instruction}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontWeight: 'normal', fontSize: 18,color:'#211C5A',fontFamily:'Poppins-Regular'}}> Title</Text>
-
-                <Text style={{fontSize: 10,color:'#B04305',fontFamily:'Poppins-Regular',marginTop:-20}}>Medium</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 12,color:"#58636D",fontFamily:'Poppins-Regular'}}>21May,2021</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={{fontSize: 12,color:'#58636D',fontFamily:'Poppins-Regular'}}> 09:00 to 12:00 </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-
-
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontWeight: 'normal', fontSize: 18,color:'#211C5A',fontFamily:'Poppins-Regular'}}> Title</Text>
-
-                <Text style={{fontSize: 10,color:'#B04305',fontFamily:'Poppins-Regular',marginTop:-20}}>Difficult</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.differentusers}>
-                <Text style={{fontSize: 12,color:"#58636D",fontFamily:'Poppins-Regular'}}>21May,2021</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={{fontSize: 12,color:'#58636D',fontFamily:'Poppins-Regular'}}> 09:00 to 12:00 </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+              ) : null,
+            )}
         </ScrollView>
       </View>
     );
   }
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        
       <View style={styles.maincontainer}>
-         {/* header start */}
+        {/* header start */}
 
-         <View
+        <View
           style={{
             backgroundColor: institute ? institute.themeColor : '#FF5733',
             // backgroundColor:'blue',
@@ -323,11 +361,9 @@ export default function OnlineExams({navigation}) {
             }}>
             Online Exams
           </Text>
-          
         </View>
 
-      
-<View style={{padding:5}}/>
+        <View style={{padding: 5}} />
 
         <View style={styles.switchTabsView}>
           <TouchableOpacity
@@ -344,7 +380,7 @@ export default function OnlineExams({navigation}) {
 
           <TouchableOpacity
             style={{
-              borderBottomWidth:showContent == 'Completed' ? 2 : 0,
+              borderBottomWidth: showContent == 'Completed' ? 2 : 0,
               borderBottomColor: '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
@@ -362,11 +398,10 @@ export default function OnlineExams({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
- 
+
   section: {
     display: 'flex',
     flexDirection: 'column',
@@ -379,7 +414,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 5,
     marginTop: 14,
-    marginBottom:10,
+    marginBottom: 10,
     borderRadius: 12,
     paddingLeft: 10,
     paddingRight: 10,
@@ -390,7 +425,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     marginTop: 10,
-    marginBottom:10,
+    marginBottom: 10,
     paddingBottom: 10,
     borderBottomColor: '#333',
     // borderBottomWidth:1,
@@ -425,19 +460,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 40,
-    marginTop:25
+    marginTop: 25,
   },
   switchText: {
-
     fontSize: 14,
     color: '#58636D',
     paddingHorizontal: 5,
-    fontFamily:'Poppins-Regular'
+    fontFamily: 'Poppins-Regular',
   },
   maincontainer: {
-
     flex: 1,
-     backgroundColor: 'rgba(249, 249, 249, 1)',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
