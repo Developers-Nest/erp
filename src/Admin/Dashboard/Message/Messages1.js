@@ -52,7 +52,6 @@ export default function ChatScreen1({ route, navigation }) {
     try {
       let c = route.params.chat
       setChat(c)
-      console.log('Current user ', c)
     } catch (err) {
       alert('Cannot get chat details !!')
     }
@@ -66,7 +65,6 @@ export default function ChatScreen1({ route, navigation }) {
         let slug = `/chat/getchatmessages?userId=${userId}&chatId=${chatId}`
         let res = await get(slug, chatToken, 1)
         setCurrentUser(userId)
-        console.log('Current User ', userId)
         let messageArray = []
         res && res.map((message) => {
           messageArray.push({
@@ -90,21 +88,22 @@ export default function ChatScreen1({ route, navigation }) {
 
     socket.off('chatListUpdate');
 
-    socket.on("chatListUpdate", (res) => {
-      console.log('Chat list update ', res)
-      if(res.message){
+    socket.on("chatListUpdate", (data) => {
+      if(data.message){
         let newMessage = {
-          sender: res.message.senderId,
-          message: res.message.messageContent,
-          status: res.message.messageStatus,
-          time: getTime(new Date(res.message.timestamp)),
-          id: res.message._id
+          sender: data.message.senderId,
+          message: data.message.messageContent,
+          status: data.message.messageStatus,
+          time: getTime(new Date(data.message.timestamp)),
+          id: data.message._id
         }
-        console.log('New Message ', newMessage)
-        setMessages([
-          ...messages,
-          newMessage
-        ])
+
+        setMessages((prevMess)=>{
+          return [
+            ...prevMess,
+            newMessage
+          ]
+        })
       }
     })
 
@@ -130,10 +129,11 @@ export default function ChatScreen1({ route, navigation }) {
       time: getTime(new Date()),
       id: new Date().getMilliseconds()
     }
+
     setMessages([
       ...messages,
-      newMessage,
-    ]);
+      newMessage
+    ])
     setInputMessage('')
   }
 

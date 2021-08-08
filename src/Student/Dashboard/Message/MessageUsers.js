@@ -59,6 +59,10 @@ const Chats = ({ navigation }) => {
         let slug = '/login'
         let response = await post(slug, data, null, 1)
         setUserData(response)
+
+        console.log('User Data ', response)
+        console.log("Socket INIT ",socket.emit("initCon", response))
+
         await write('chatToken', response.accessToken)
         await write('chatUser', response._id)
 
@@ -84,10 +88,6 @@ const Chats = ({ navigation }) => {
     } catch (err) {
       alert('Cannot get chat list')
     }
-
-
-    console.log('User Data ', userData)
-    console.log("Socket INIT ",socket.emit("initCon", userData))
     
     socket.on("chatMessage",(data)=>{ 
       console.log('Chat Message Data ', data)
