@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput,ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput, ScrollView } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -10,113 +10,205 @@ import AntDesign from 'react-native-vector-icons/AntDesign';//for users section 
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
+import get from '../../../../services/helpers/request/get'
+import post from '../../../../services/helpers/request/post'
+import read from '../../../../services/localstorage/read'
+import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
+
 
 import { useSelector } from 'react-redux';
 
 
-const AddQuestion = ({navigation}) => {
-//theming
-const institute = useSelector(state => state.institute);
+const AddQuestion = ({ navigation }) => {
+    //theming
+    const institute = useSelector(state => state.institute);
 
+    //text input
+    const [feedbackquestion, setfeedbackquestion] = useState('');
+
+    //fetch from type api
+    const [feedbacktypes, setfeedbacktypes] = useState([
+    ]);
+
+//modal selector values,no values fetched in api ,const label and keys made
+    const [statuses, setstatuses] = useState([
+        { label: 'Active', key: 'Active' },
+        { label: 'Deactive', key: 'Deactive' },
+
+    ]);
+
+    //data to be sent
+    const [feedbacktype, setfeedbacktype] = useState();
+
+    const [status, setstatus] = useState();
+
+    const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+    //on save button press action
+    let handleSubmit = async () => {
+        showLoadingScreen()
+        try {
+            let slug = '/feedback/question?';
+            let token = await read('token');
+            let data = {
+                question: feedbackquestion,
+
+                feedbacktype: feedbacktype,
+
+                status: status
+            };
+            let res = await post(slug, data, token);
+            if (res.error) {
+                alert(res.error)
+            } else if (res._id) {
+                alert('Feeback Question Added!!')
+            }
+        } catch (err) {
+            alert('Unable to add Question !!' + err);
+        }
+        hideLoadingScreen()
+    }
+
+    //on load
+    useEffect(async () => {
+        try {
+            let slug = '/feedback/type?';
+            let token = await read('token');
+            let res = await get(slug, token);
+            let list = [];
+
+            res &&
+                res.map((res) => {
+                    list.push({
+                        label: res.code,
+                        key: res._id,
+                    })
+                })
+            setfeedbacktypes(list);
+        } catch (err) {
+            alert('Cannot get route code!!');
+        }
+    }, [])
 
     return (
 
 
 
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-          {/* header start */}
+            {/* header start */}
 
-   <View
-          style={{
-            backgroundColor: institute ? institute.themeColor : '#FF5733',
-            // backgroundColor:'blue',
-            ...styles.header,
-          }}>
-                <View style={{flexDirection:'row',alignItems:'center',paddingLeft:10}} >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('FeedbackMain');
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
-              style={{
-                alignSelf: 'center',
-
-                fontSize: 25,
-                color: 'white',
-                
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontFamily: 'NunitoSans-Regular',
-              fontSize: 28,
-              fontWeight: '600',
-              alignSelf: 'center',
-              marginLeft: 10,
-              color: 'white',
-            }}>
-            Add Question
-          </Text>
-          </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('QuestionList')}
-              style={{
-                justifyContent: 'flex-end',
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <View
+            <View
                 style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  marginRight: 5,
+                    backgroundColor: institute ? institute.themeColor : '#FF5733',
+                    // backgroundColor:'blue',
+                    ...styles.header,
                 }}>
-                <MaterialCommunityIcon
-                  name="eye"
-                  color="#900"
-                  style={{
-                    fontSize: 30,
-                    color: 'white',
-                    paddingRight: 20,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: 12,
-                  }}>
-                  VIEW LIST
-                </Text>
-              </View>
-            </TouchableOpacity>
-          
-        </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }} >
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('FeedbackMain');
+                        }}>
+                        <AntDesign
+                            size={24}
+                            color="white"
+                            name="left"
+                            style={{
+                                alignSelf: 'center',
 
-        {/* header ends */}
+                                fontSize: 25,
+                                color: 'white',
 
-   
-
-        <ScrollView>
-            <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
-
-                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Add Feedback Type</Text>
+                            }}
+                        />
+                    </TouchableOpacity>
+                    <Text
+                        style={{
+                            fontStyle: 'normal',
+                            fontFamily: 'NunitoSans-Regular',
+                            fontSize: 28,
+                            fontWeight: '600',
+                            alignSelf: 'center',
+                            marginLeft: 10,
+                            color: 'white',
+                        }}>
+                        Add Question
+                    </Text>
                 </View>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('QuestionList')}
+                    style={{
+                        justifyContent: 'flex-end',
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                    <View
+                        style={{
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            marginRight: 5,
+                        }}>
+                        <MaterialCommunityIcon
+                            name="eye"
+                            color="#900"
+                            style={{
+                                fontSize: 30,
+                                color: 'white',
+                                paddingRight: 20,
+                            }}
+                        />
+                        <Text
+                            style={{
+                                color: '#fff',
+                                fontFamily: 'Poppins-Regular',
+                                fontSize: 12,
+                            }}>
+                            VIEW LIST
+                        </Text>
+                    </View>
+                </TouchableOpacity>
 
-                <ModalSelector>
+            </View>
+
+            {/* header ends */}
+
+
+
+            <ScrollView>
+                <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
+
+                    {/* <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                    <Text style={styles.section_heading}>Add Feedback Type</Text>
+                </View> */}
+
+                    {/* <ModalSelector
+                
+                data={feedbacktypes}
+
+                onChange={option => {
+                    setfeedbacktype(option.key);
+                }}
+
+
+
+                initValue="Active"
+
+                style={styles.card}
+
+
+                initValueTextStyle={styles.SelectedValueSmall}
+            // selectTextStyle={styles.SelectedValueSmall}
+
+
+                >
 
                     <View style={{ marginHorizontal: 10, ...styles.shadow }}>
                         <View style={styles.search}>
                             <TextInput
                                 style={{ ...styles.search_input, fontFamily: 'Poppins-Regular', color: '#505069' }}
                                 placeholder="Annual feedback forum"
+                                placeholderTextColor='grey'
+                                color='black'
 
                             />
                             <Evillcons size={25} color='#505069' name='chevron-down'
@@ -133,102 +225,160 @@ const institute = useSelector(state => state.institute);
 
                         </View>
                     </View>
-                </ModalSelector>
+                </ModalSelector> */}
+
+
+                    <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                        <Text style={styles.section_heading}>Add Feedback Type</Text>
+
+                    </View>
+                    <View style={{ flexDirection: 'row' }} >
+
+                        <ModalSelector
+
+                            data={feedbacktypes}
+
+                            onChange={option => {
+                                setfeedbacktype(option.key);
+                            }}
+
+
+
+                            initValue="Annual Feedback"
+
+                            style={styles.card}
+
+
+                            initValueTextStyle={styles.SelectedValueSmall}
+                            selectTextStyle={styles.SelectedValueSmall}
+
+
+                        >
+                            <View style={{ marginTop: 10, flexDirection: 'row' }}>
+
+                                <Text style={styles.text2}>Annual Feedback</Text>
+                                <Evillcons size={25} color='#505069' name='chevron-down'
+                                    style={{
+
+                                        marginLeft: 70,
+
+
+
+                                    }}>
+
+                                </Evillcons>
+
+                            </View>
 
 
 
 
-                <View>
-                    <Text style={styles.section_heading}> Feedback Question </Text>
+                        </ModalSelector>
 
 
+                    </View>
+
+
+
+                    <View>
+                        <Text style={styles.section_heading}> Feedback Question </Text>
+
+
+
+                    </View>
+
+
+
+
+
+                    <View>
+                        <TextInput style={{ width: 348, borderRadius: 8, borderWidth: 0.2, backgroundColor: '#FFFFFF', marginLeft: 15, paddingBottom: 120 }}
+                            placeholder="Write your feedback question here"
+                            placeholderTextColor="grey"
+                            color="black"
+
+                            onChangeText={val => setfeedbackquestion(val)}
+                        >
+                        </TextInput>
+                    </View>
+
+
+
+
+
+
+                    <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                        <Text style={styles.section_heading}>Status</Text>
+
+                    </View>
+                    <View style={{ flexDirection: 'row' }} >
+
+                        <ModalSelector
+
+                            data={statuses}
+
+                            onChange={option => {
+                                setstatus(option.key);
+                            }}
+
+
+
+                            initValue="Active"
+
+                            style={styles.card}
+
+
+                            initValueTextStyle={styles.SelectedValueSmall}
+                        // selectTextStyle={styles.SelectedValueSmall}
+
+
+                        >
+                            <View style={{ marginTop: 10, flexDirection: 'row' }}>
+
+                                <Text style={styles.text2}>Active</Text>
+                                <Evillcons size={25} color='#505069' name='chevron-down'
+                                    style={{
+
+                                        marginLeft: 70,
+
+
+
+                                    }}>
+
+                                </Evillcons>
+
+                            </View>
+
+
+
+
+                        </ModalSelector>
+
+
+                    </View>
+
+
+
+
+
+                    <View style={styles.fixToText}>
+
+
+
+
+
+                        <Pressable
+                            style={{ backgroundColor: institute ? institute.themeColor : '#5177E7', ...styles.button }} onPress={handleSubmit}>
+                            <Text style={styles.text}>Save</Text>
+                        </Pressable>
+
+
+
+
+
+                    </View>
 
                 </View>
-
-
-
-
-
-                <View>
-                    <TextInput style={{ width: 348, borderRadius: 8, borderWidth: 0.2, backgroundColor: '#FFFFFF', marginLeft: 15, paddingBottom: 120 }}
-                        placeholder="Write your feedback question here"
-                    >
-                    </TextInput>
-                </View>
-
-
-
-
-
-
-                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Status</Text>
-
-                </View>
-                <View style={{ flexDirection: 'row' }} >
-
-                    <ModalSelector
-
-
-
-
-                        initValue="Active"
-
-                        style={styles.card}
-
-
-                        initValueTextStyle={styles.SelectedValueSmall}
-                    //selectTextStyle={styles.SelectedValueSmall}
-
-
-                    >
-                        <View style={{ marginTop: 10, flexDirection: 'row' }}>
-
-                            <Text style={styles.text2}>Active</Text>
-                            <Evillcons size={25} color='#505069' name='chevron-down'
-                                style={{
-
-                                    marginLeft: 70,
-
-
-
-                                }}>
-
-                            </Evillcons>
-
-                        </View>
-
-
-
-
-                    </ModalSelector>
-
-
-                </View>
-
-
-
-
-
-                <View style={styles.fixToText}>
-
-
-
-                    
-
-                    <Pressable style={styles.button} 
-                    onPress={() => {
-                        navigation.navigate('EditQuestion');}}
-                    >
-                        <Text style={styles.text}>Save</Text>
-                    </Pressable>
-
-
-
-
-                </View>
-
-            </View>
             </ScrollView>
 
         </View>
@@ -294,7 +444,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 25,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: '#5177E7',
     },
 
     text1: {
@@ -526,7 +675,7 @@ const styles = StyleSheet.create({
     header: {
         height: 69,
         flexDirection: 'row',
-      },
+    },
 
 
 });

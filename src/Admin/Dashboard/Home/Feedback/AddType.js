@@ -1,109 +1,159 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
 
 import Evillcons from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
+import get from '../../../../services/helpers/request/get'
+import post from '../../../../services/helpers/request/post'
+import read from '../../../../services/localstorage/read'
+import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 
 import { useSelector } from 'react-redux';
 
 
 
-const AddType = ({navigation}) => {
+const AddType = ({ navigation }) => {
+    //theming
+    const institute = useSelector(state => state.institute);
+    //text input
+    const [feedbacktype, setfeedbacktype] = useState('');
+
+    //modal selector values,no values fetched in api ,const label and keys made
+    const [feedbackfors, setfeedbackfors] = useState([
+
+        { label: 'Student', key: 'Student' },
+        { label: 'Guardian', key: 'Guardian' },
+        { label: 'Employee', key: 'Employee' },
+        { label: 'Common To All', key: 'Common To All' },
+
+    ]);
 
 
-//theming
-const institute = useSelector(state => state.institute);
+    const [statuses, setstatuses] = useState([
+        { label: 'Active', key: 'Active' },
+        { label: 'Deactive', key: 'Deactive' },
+
+    ]);
+
+    //data to be sent
+    const [feedbackfor, setfeedbackfor] = useState();
+    const [status, setstatus] = useState();
+
+    const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+    //on save button press action
+    let handleSubmit = async () => {
+        showLoadingScreen()
+        try {
+            let slug = '/feedback/type?';
+            let token = await read('token');
+            let data = {
+
+                feedbackfor: feedbackfor,
+                feedbacktype: feedbacktype,
+
+                status: status
+            };
+            let res = await post(slug, data, token);
+            if (res.error) {
+                alert(res.error)
+            } else if (res._id) {
+                alert('Fedback Type Added!!')
+            }
+        } catch (err) {
+            alert('Unable to add Feedback Type !!' + err);
+        }
+        hideLoadingScreen()
+    }
 
     return (
 
 
 
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-             {/* header start */}
+            {/* header start */}
 
-   <View
-          style={{
-            backgroundColor: institute ? institute.themeColor : '#FF5733',
-            // backgroundColor:'blue',
-            ...styles.header,
-          }}>
-                <View style={{flexDirection:'row',alignItems:'center',paddingLeft:10}} >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('FeedbackMain');
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
-              style={{
-                alignSelf: 'center',
-
-                fontSize: 25,
-                color: 'white',
-                
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontFamily: 'NunitoSans-Regular',
-              fontSize: 28,
-              fontWeight: '600',
-              alignSelf: 'center',
-              marginLeft: 10,
-              color: 'white',
-            }}>
-            Add Type
-          </Text>
-          </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('TypeList')}
-              style={{
-                justifyContent: 'flex-end',
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <View
+            <View
                 style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  marginRight: 5,
+                    backgroundColor: institute ? institute.themeColor : '#FF5733',
+
+                    ...styles.header,
                 }}>
-                <MaterialCommunityIcon
-                  name="eye"
-                  color="#900"
-                  style={{
-                    fontSize: 30,
-                    color: 'white',
-                    paddingRight: 20,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: 12,
-                  }}>
-                  VIEW LIST
-                </Text>
-              </View>
-            </TouchableOpacity>
-          
-        </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }} >
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('FeedbackMain');
+                        }}>
+                        <AntDesign
+                            size={24}
+                            color="white"
+                            name="left"
+                            style={{
+                                alignSelf: 'center',
 
-        {/* header ends */}
+                                fontSize: 25,
+                                color: 'white',
 
+                            }}
+                        />
+                    </TouchableOpacity>
+                    <Text
+                        style={{
+                            fontStyle: 'normal',
+                            fontFamily: 'NunitoSans-Regular',
+                            fontSize: 28,
+                            fontWeight: '600',
+                            alignSelf: 'center',
+                            marginLeft: 10,
+                            color: 'white',
+                        }}>
+                        Add Type
+                    </Text>
+                </View>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('TypeList')}
+                    style={{
+                        justifyContent: 'flex-end',
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                    <View
+                        style={{
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            marginRight: 5,
+                        }}>
+                        <MaterialCommunityIcon
+                            name="eye"
+                            color="#900"
+                            style={{
+                                fontSize: 30,
+                                color: 'white',
+                                paddingRight: 20,
+                            }}
+                        />
+                        <Text
+                            style={{
+                                color: '#fff',
+                                fontFamily: 'Poppins-Regular',
+                                fontSize: 12,
+                            }}>
+                            VIEW LIST
+                        </Text>
+                    </View>
+                </TouchableOpacity>
 
+            </View>
+
+            {/* header ends */}
+
+            {loadingScreen}
 
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
 
@@ -116,7 +166,10 @@ const institute = useSelector(state => state.institute);
                         <TextInput
                             style={{ ...styles.search_input, fontFamily: 'Poppins-Regular', color: '#505069' }}
                             placeholder="Annual feedback forum"
+                            placeholderTextColor="grey"
+                            color="black"
 
+                            onChangeText={val => setfeedbacktype(val)}
                         />
 
                     </View>
@@ -130,7 +183,11 @@ const institute = useSelector(state => state.institute);
 
                     <ModalSelector
 
+                        data={feedbackfors}
 
+                        onChange={option => {
+                            setfeedbackfor(option.key);
+                        }}
 
 
                         initValue="Student"
@@ -139,7 +196,7 @@ const institute = useSelector(state => state.institute);
 
 
                         initValueTextStyle={styles.SelectedValueSmall}
-                    //selectTextStyle={styles.SelectedValueSmall}
+                        selectTextStyle={styles.SelectedValueSmall}
 
 
                     >
@@ -167,7 +224,11 @@ const institute = useSelector(state => state.institute);
                     <ModalSelector
 
 
+                        data={statuses}
 
+                        onChange={option => {
+                            setstatus(option.key);
+                        }}
 
                         initValue="Active"
 
@@ -175,7 +236,7 @@ const institute = useSelector(state => state.institute);
 
 
                         initValueTextStyle={styles.SelectedValueSmall}
-                    //selectTextStyle={styles.SelectedValueSmall}
+                        selectTextStyle={styles.SelectedValueSmall}
 
 
                     >
@@ -208,9 +269,10 @@ const institute = useSelector(state => state.institute);
                 <View style={styles.fixToText}>
 
 
-                    
 
-                    <Pressable style={styles.button} >
+
+                    <Pressable
+                        style={{ backgroundColor: institute ? institute.themeColor : '#5177E7', ...styles.button }} onPress={handleSubmit}>
                         <Text style={styles.text}>Save</Text>
                     </Pressable>
 
@@ -272,7 +334,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 25,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: '#5177E7',
     },
 
     text1: {
@@ -435,7 +496,7 @@ const styles = StyleSheet.create({
 
     card: {
 
-        
+
         height: 50,
 
         shadowColor: '#999',
@@ -455,13 +516,13 @@ const styles = StyleSheet.create({
         //flexDirection: 'row',
         justifyContent: 'space-between',
 
-        width:'47%',
+        width: '47%',
 
 
     },
     card1: {
 
-        width:'43%',
+        width: '43%',
         height: 50,
 
         shadowColor: '#999',
@@ -475,7 +536,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 8,
         borderWidth: 0.3,
-        marginLeft:0,
+        marginLeft: 0,
         marginRight: 20,
 
         //flexDirection: 'row',
@@ -502,7 +563,7 @@ const styles = StyleSheet.create({
     header: {
         height: 69,
         flexDirection: 'row',
-      },
+    },
 
 
 
