@@ -1,12 +1,15 @@
 import React from 'react';
-import {View} from 'react-native';
+import Chats from './MessageUsers';
+import ChatScreen1 from './Messages1';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import {Text} from 'react-native-paper';
+const Stack = createStackNavigator();
 
-export default function App({navigation}) {
+export default function Message() {
   return (
-    <View>
-      <Text>Chat Screen Teacher</Text>
-    </View>
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Chats" component={Chats} />
+      <Stack.Screen name="ChatScreen1" component={ChatScreen1} />
+    </Stack.Navigator>
   );
 }
