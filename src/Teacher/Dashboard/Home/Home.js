@@ -251,17 +251,6 @@ const Home = ({navigation}) => {
               color: institute ? institute.themeColor : 'black',
             }}
           />
-          {/* <FontAwesome5
-            name="book"
-            style={{
-              alignSelf: 'center',
-              fontSize: 25,
-              color: 'black',
-              paddingLeft: 20,
-              paddingTop: 20,
-              color: institute ? institute.themeColor : 'black',
-            }}
-          /> */}
         </TouchableOpacity>
         <Text
           style={{
@@ -555,21 +544,6 @@ const Home_Route = () => {
         name="Home"
         component={Home}
         options={{headerShown: false}}
-        // options={({navigation, route}) => ({
-        //   headerTitle: userInfo ? `Hi ${userInfo.firstName}` : `Hi`,
-        //   headerStyle: {
-        //     height: 70,
-        //   },
-        //   headerTitleStyle: {
-        //     fontSize: 25,
-        //   },
-        //   headerRight: () => (
-
-        //   ),
-        //   headerLeft: () => (
-
-        //   ),
-        // })}
       />
       <Stack.Screen
         name="Notification"
@@ -591,20 +565,6 @@ const Home_Route = () => {
 };
 
 const DrawerNav = createDrawerNavigator();
-
-const getTabBarVisibility = route => {
-  const routeName = getFocusedRouteNameFromRoute(route);
-  if (
-    routeName === 'Home' ||
-    routeName === 'Statistics' ||
-    routeName === 'Classes' ||
-    routeName === 'Profile' ||
-    routeName === 'Message'
-  ) {
-    return true;
-  }
-  return false;
-};
 
 function DrawerContent(props) {
   let institute = useSelector(state => state.institute);
@@ -745,13 +705,7 @@ export default function Route() {
   return (
     <DrawerNav.Navigator
       initialRouteName="Home"
-      drawerContent={props => <DrawerContent {...props} />}
-      drawerStyle={
-        {
-          // backgroundColor: 'rgba(255, 255, 255, 0.8)',
-          // marginTop: 69,
-        }
-      }>
+      drawerContent={props => <DrawerContent {...props} />}>
       <DrawerNav.Screen name="Home" component={Home_Route} />
       <DrawerNav.Screen name="Content Library" component={ContentLibrary} />
       <DrawerNav.Screen name="AttendanceStack" component={AttendanceStack} />
@@ -763,8 +717,6 @@ export default function Route() {
       <DrawerNav.Screen name="Cce Marks" component={CceMarks} />
       <DrawerNav.Screen name="Recorded Classes" component={RecordedClasses} />
       <DrawerNav.Screen name="Report" component={Report} />
-      {/* <DrawerNav.Screen name="Cce Marks" component={CceMarks} /> */}
-      {/* <DrawerNav.Screen name="Subject" component={Subject} /> */}
     </DrawerNav.Navigator>
   );
 }
@@ -941,7 +893,6 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '500',
     fontSize: 12,
-    // color: 'rgba(176, 67, 5, 0.75)',
   },
   card_Wrapper: {
     paddingHorizontal: 10,
