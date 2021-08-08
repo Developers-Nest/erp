@@ -89,7 +89,7 @@ export default function ChatScreen1({ route, navigation }) {
     socket.off('chatListUpdate');
 
     socket.on("chatListUpdate", (data) => {
-      if(data.message){
+      if (data.message) {
         let newMessage = {
           sender: data.message.senderId,
           message: data.message.messageContent,
@@ -98,7 +98,7 @@ export default function ChatScreen1({ route, navigation }) {
           id: data.message._id
         }
 
-        setMessages((prevMess)=>{
+        setMessages((prevMess) => {
           return [
             ...prevMess,
             newMessage
@@ -140,7 +140,7 @@ export default function ChatScreen1({ route, navigation }) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-      {loadingScreen}
+        {loadingScreen}
         <View
           style={{
             height: 70,
@@ -211,7 +211,7 @@ export default function ChatScreen1({ route, navigation }) {
                     borderBottomLeftRadius:
                       item.sender === currentUser ? 25 : 0,
                     borderBottomRightRadius:
-                      item.sender === currentUser? 0 : 25,
+                      item.sender === currentUser ? 0 : 25,
                   }}>
                   <Text
                     style={{
@@ -249,7 +249,7 @@ export default function ChatScreen1({ route, navigation }) {
             />
             <TouchableOpacity
               style={styles.messageSendView}
-              onPress={() => {sendMessage()}}>
+              onPress={() => { sendMessage() }}>
               <Icon name="send" type="material" />
             </TouchableOpacity>
           </View>
