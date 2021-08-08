@@ -136,7 +136,7 @@ export default function OnlineExams({navigation}) {
           {exams &&
             exams.map(exam =>
               new Date(exam.due) > new Date() ? (
-                <View style={styles.section}>
+                <View style={styles.section} key={exam._id}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
                       <TouchableOpacity style={styles.differentusers}>
@@ -256,7 +256,7 @@ export default function OnlineExams({navigation}) {
           {exams &&
             exams.map(exam =>
               new Date(exam.due) < new Date() ? (
-                <View style={styles.section}>
+                <View style={styles.section} key={exam._id}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
                       <TouchableOpacity style={styles.differentusers}>
