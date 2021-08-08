@@ -493,13 +493,14 @@ const Home = ({navigation}) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           {DueBooks.length === 0 ? (
-            <Text>No upcoming classes</Text>
+            <Text>No Books Due</Text>
           ) : (
             DueBooks &&
             DueBooks.map(DueBook => (
               <TouchableOpacity
                 style={{marginHorizontal: 10}}
-                onPress={() => navigation.navigate('Books')}>
+                onPress={() => navigation.navigate('Books')}
+                key={DueBook._id}>
                 <Text style={styles.card_heading}>Due Book</Text>
                 <View style={styles.shadow}>
                   <TouchableOpacity
