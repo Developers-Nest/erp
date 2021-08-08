@@ -211,7 +211,6 @@ const Home = ({navigation}) => {
           let slug = `/library/issue`;
           const token = await read('token');
           const res = await get(slug, token);
-          console.log('Books ', res);
           let due = [];
           res &&
             res.map(book => {
@@ -219,7 +218,6 @@ const Home = ({navigation}) => {
                 due.push(book);
               }
             });
-          console.log('Due ', due);
           setDueBooks(due);
         } catch (err) {
           alert('Cannot get Books!!' + err);
