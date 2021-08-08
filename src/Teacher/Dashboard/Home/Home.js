@@ -15,7 +15,6 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 import Collapsible from 'react-native-collapsible';
 

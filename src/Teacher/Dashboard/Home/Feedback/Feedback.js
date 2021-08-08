@@ -15,7 +15,6 @@ import ModalSelector from 'react-native-modal-selector';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -27,8 +26,6 @@ import post from '../../../../services/helpers/request/post';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
 export default function Feedback({navigation}) {
-  const [courses, setCourses] = useState([]);
-  const [subjects, setSubjects] = useState([]);
 
   const [feedback, setFeedback] = useState('');
 
@@ -111,6 +108,7 @@ export default function Feedback({navigation}) {
 
   return (
     <View style={{backgroundColor: '#E5E5E5'}}>
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
