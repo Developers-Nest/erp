@@ -29,14 +29,19 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import LoaderHook from '../../../components/LoadingScreen/LoadingScreen';
 
+// socket
+import socket from '../../../services/config/socket'
+
 const Chats = ({ navigation }) => {
 
-  const [messages, setMessages] = useState([]);
-
   //theming
-  const institute = useSelector(state => state.institute);
-
+  const institute = useSelector(state => state.institute)
   const userInfo = useSelector(state => state.userInfo)
+
+  const [userData, setUserData] = useState({})
+  const [initDone, setInintDone] = useState(false)
+
+  const [messages, setMessages] = useState([]);
 
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
 
@@ -52,6 +57,7 @@ const Chats = ({ navigation }) => {
 
         let slug = '/login'
         let response = await post(slug, data, null, 1)
+        setUserData(response)
         await write('chatToken', response.accessToken)
         await write('chatUser', response._id)
 
@@ -77,6 +83,27 @@ const Chats = ({ navigation }) => {
     } catch (err) {
       alert('Cannot get chat list')
     }
+
+
+    console.log('User Data ', userData)
+    console.log("Socket INIT ",socket.emit("initCon", userData))
+    
+    socket.on("chatMessage",(data)=>{ 
+      console.log('Chat Message Data ', data)
+    })
+
+    socket.on("updateUser", (data) => {
+      setUserData({ ...userData, permissions: data })
+    })
+
+    socket.on("addedToGroup", (data) => {
+      console.log('Group ', data)
+      console.log("You have been added to group " + data.name)
+    });
+
+    socket.on("globalMessagePing", (data) => {
+      socket.emit("recChatAck", data.senderId, data.receiverId, 'delivered');
+    });
 
     hideLoadingScreen()
 
@@ -237,7 +264,7 @@ const Chats = ({ navigation }) => {
                     }}>
                     {chat.chatHeadName}
                   </Text>
-                  <Text style={{ fontSize: 14 }}>{chat.chatMessages && getTime(chat.chatMessages.timestamp)}</Text>
+                  <Text style={{ fontSize: 14 }}>{chat.chatMessages && getTime(new Date(chat.chatMessages.timestamp))}</Text>
                 </View>
                 <View
                   style={{

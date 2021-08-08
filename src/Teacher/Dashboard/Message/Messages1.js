@@ -27,16 +27,12 @@ import { useSelector } from 'react-redux';
 
 import LoaderHook from '../../../components/LoadingScreen/LoadingScreen';
 
-export default function ChatScreen1({ route, navigation }) {
-  const [chatUser] = useState({
-    name: 'Sarah',
-    profile_image: 'https://randomuser.me/api/portraits/women/79.jpg',
-    last_seen: 'online',
-  });
+import socket from '../../../services/config/socket'
 
-  const [currentUser, setCurrentUser] = useState({
-    name: 'Deepsi',
-  });
+export default function ChatScreen1({ route, navigation }) {
+
+  // user id of current user
+  const [currentUser, setCurrentUser] = useState('');
 
   // chat messages
   const [messages, setMessages] = useState([]);
@@ -49,10 +45,14 @@ export default function ChatScreen1({ route, navigation }) {
   // input message
   const [inputMessage, setInputMessage] = useState('');
 
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
   useEffect(async () => {
+    setLoadingScreen()
     try {
       let c = route.params.chat
       setChat(c)
+      console.log('Current user ', c)
     } catch (err) {
       alert('Cannot get chat details !!')
     }
@@ -66,13 +66,14 @@ export default function ChatScreen1({ route, navigation }) {
         let slug = `/chat/getchatmessages?userId=${userId}&chatId=${chatId}`
         let res = await get(slug, chatToken, 1)
         setCurrentUser(userId)
+        console.log('Current User ', userId)
         let messageArray = []
         res && res.map((message) => {
           messageArray.push({
             sender: message.senderId,
             message: message.messageContent,
             status: message.status,
-            time: getTime(message.timeStamp),
+            time: getTime(new Date(message.timestamp)),
             id: message._id
           })
         })
@@ -85,23 +86,56 @@ export default function ChatScreen1({ route, navigation }) {
       alert('Cannot get chat list' + err)
     }
 
-    function sendMessage() {
-      if (inputMessage === '') {
-        return setInputMessage('');
+    hideLoadingScreen()
+
+    socket.off('chatListUpdate');
+
+    socket.on("chatListUpdate", (res) => {
+      console.log('Chat list update ', res)
+      if(res.message){
+        let newMessage = {
+          sender: res.message.senderId,
+          message: res.message.messageContent,
+          status: res.message.messageStatus,
+          time: getTime(new Date(res.message.timestamp)),
+          id: res.message._id
+        }
+        console.log('New Message ', newMessage)
+        setMessages([
+          ...messages,
+          newMessage
+        ])
       }
-      let t = getTime(new Date());
-      setMessages([
-        ...messages,
-        {
-          sender: currentUser.name,
-          message: inputMessage,
-          time: t,
-        },
-      ]);
-      setInputMessage('');
-    }
+    })
 
   }, [])
+
+  function sendMessage() {
+    if (inputMessage === '') {
+      return setInputMessage('');
+    }
+
+    const messageData = {
+      _id: new Date().getMilliseconds(),
+      senderId: currentUser,
+      recId: chat.chatHeadId,
+      message: inputMessage
+    }
+
+    socket.emit("chatMessage", messageData);
+
+    let newMessage = {
+      sender: currentUser,
+      message: inputMessage,
+      time: getTime(new Date()),
+      id: new Date().getMilliseconds()
+    }
+    setMessages([
+      ...messages,
+      newMessage,
+    ]);
+    setInputMessage('')
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -134,7 +168,7 @@ export default function ChatScreen1({ route, navigation }) {
                 }}
               />
             </TouchableOpacity>
-
+              {loadingScreen}
             <View
               style={{
                 marginLeft: 20,
@@ -166,18 +200,18 @@ export default function ChatScreen1({ route, navigation }) {
                   style={{
                     maxWidth: Dimensions.get('screen').width * 0.8,
                     backgroundColor:
-                      item.sender === currentUser.name ? '#62525D' : '#505069',
+                      item.sender === currentUser ? '#62525D' : '#505069',
                     alignSelf:
-                      item.sender === currentUser.name
+                      item.sender === currentUser
                         ? 'flex-end'
                         : 'flex-start',
                     marginHorizontal: 10,
                     padding: 10,
                     borderRadius: 25,
                     borderBottomLeftRadius:
-                      item.sender === currentUser.name ? 25 : 0,
+                      item.sender === currentUser ? 25 : 0,
                     borderBottomRightRadius:
-                      item.sender === currentUser.name ? 0 : 25,
+                      item.sender === currentUser? 0 : 25,
                   }}>
                   <Text
                     style={{
@@ -215,8 +249,7 @@ export default function ChatScreen1({ route, navigation }) {
             />
             <TouchableOpacity
               style={styles.messageSendView}
-              onPress={() => {
-              }}>
+              onPress={() => {sendMessage()}}>
               <Icon name="send" type="material" />
             </TouchableOpacity>
           </View>
