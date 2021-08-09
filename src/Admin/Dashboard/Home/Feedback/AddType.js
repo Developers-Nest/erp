@@ -3,8 +3,7 @@ import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from '
 import ModalSelector from 'react-native-modal-selector';
 
 
-import Evillcons from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
@@ -179,10 +178,18 @@ const AddType = ({ navigation }) => {
                     <Text style={styles.section_heading}> Feedback For </Text>
                     <Text style={styles.section_heading2}> Status </Text>
                 </View>
-                <View style={{ flexDirection: 'row' }} >
+
+
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-around',
+
+                        alignItems: 'center',
+
+                    }}>
 
                     <ModalSelector
-
                         data={feedbackfors}
 
                         onChange={option => {
@@ -192,38 +199,12 @@ const AddType = ({ navigation }) => {
 
                         initValue="Student"
 
-                        style={styles.card}
-
-
+                        style={styles.cardusertype}
                         initValueTextStyle={styles.SelectedValueSmall}
                         selectTextStyle={styles.SelectedValueSmall}
-
-
-                    >
-                        <View style={{ marginTop: 10, flexDirection: 'row' }}>
-
-                            <Text style={styles.text2}>Student</Text>
-                            <Evillcons size={25} color='#505069' name='chevron-down'
-                                style={{
-
-                                    marginLeft: 70,
-
-
-
-                                }}>
-
-                            </Evillcons>
-
-                        </View>
-
-
-
-
-                    </ModalSelector>
+                    />
 
                     <ModalSelector
-
-
                         data={statuses}
 
                         onChange={option => {
@@ -231,38 +212,12 @@ const AddType = ({ navigation }) => {
                         }}
 
                         initValue="Active"
-
-                        style={styles.card1}
-
-
+                        style={styles.cardusertype}
                         initValueTextStyle={styles.SelectedValueSmall}
                         selectTextStyle={styles.SelectedValueSmall}
+                    />
 
-
-                    >
-                        <View style={{ marginTop: 10, flexDirection: 'row' }}>
-
-                            <Text style={styles.text2}>Active</Text>
-                            <Evillcons size={25} color='#505069' name='chevron-down'
-                                style={{
-
-                                    marginLeft: 70,
-
-
-
-                                }}>
-
-                            </Evillcons>
-
-                        </View>
-
-
-
-
-                    </ModalSelector>
                 </View>
-
-
 
 
 
@@ -513,7 +468,6 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginRight: 20,
 
-        //flexDirection: 'row',
         justifyContent: 'space-between',
 
         width: '47%',
@@ -539,27 +493,39 @@ const styles = StyleSheet.create({
         marginLeft: 0,
         marginRight: 20,
 
-        //flexDirection: 'row',
         justifyContent: 'space-between'
 
 
 
 
     },
-    SelectedValueSmall: {
+    cardusertype: {
+        shadowColor: '#999',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        backgroundColor: 'white',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+        borderTopRightRadius: 12,
+        borderTopLeftRadius: 12,
+        overflow: 'hidden',
+        justifyContent: 'center',
 
+        width: 160,
+        elevation: 3,
+    },
+
+    SelectedValueSmall: {
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
         fontWeight: '500',
         fontSize: 18,
-
-
-        justifyContent: 'space-between',
+        lineHeight: 30,
+        paddingTop: 3,
         color: '#211C5A',
-
-
     },
-
     header: {
         height: 69,
         flexDirection: 'row',
