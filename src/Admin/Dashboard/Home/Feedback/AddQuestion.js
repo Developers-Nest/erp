@@ -30,7 +30,7 @@ const AddQuestion = ({ navigation }) => {
     const [feedbacktypes, setfeedbacktypes] = useState([
     ]);
 
-//modal selector values,no values fetched in api ,const label and keys made
+    //modal selector values,no values fetched in api ,const label and keys made
     const [statuses, setstatuses] = useState([
         { label: 'Active', key: 'Active' },
         { label: 'Deactive', key: 'Deactive' },
@@ -80,13 +80,13 @@ const AddQuestion = ({ navigation }) => {
             res &&
                 res.map((res) => {
                     list.push({
-                        label: res.code,
+                        label: res.feedbacktype,
                         key: res._id,
                     })
                 })
             setfeedbacktypes(list);
         } catch (err) {
-            alert('Cannot get route code!!');
+            alert('Cannot get feedback types!!');
         }
     }, [])
 
@@ -175,67 +175,25 @@ const AddQuestion = ({ navigation }) => {
 
 
             <ScrollView>
+                {loadingScreen}
                 <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
 
-                    {/* <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Add Feedback Type</Text>
-                </View> */}
 
-                    {/* <ModalSelector
-                
-                data={feedbacktypes}
-
-                onChange={option => {
-                    setfeedbacktype(option.key);
-                }}
-
-
-
-                initValue="Active"
-
-                style={styles.card}
-
-
-                initValueTextStyle={styles.SelectedValueSmall}
-            // selectTextStyle={styles.SelectedValueSmall}
-
-
-                >
-
-                    <View style={{ marginHorizontal: 10, ...styles.shadow }}>
-                        <View style={styles.search}>
-                            <TextInput
-                                style={{ ...styles.search_input, fontFamily: 'Poppins-Regular', color: '#505069' }}
-                                placeholder="Annual feedback forum"
-                                placeholderTextColor='grey'
-                                color='black'
-
-                            />
-                            <Evillcons size={25} color='#505069' name='chevron-down'
-                                style={{
-
-                                    marginLeft: 20,
-                                    marginTop: 10,
-
-
-
-                                }}>
-
-                            </Evillcons>
-
-                        </View>
-                    </View>
-                </ModalSelector> */}
 
 
                     <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                         <Text style={styles.section_heading}>Add Feedback Type</Text>
 
                     </View>
-                    <View style={{ flexDirection: 'row' }} >
 
+
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            paddingTop: 15,
+                        }}>
                         <ModalSelector
-
                             data={feedbacktypes}
 
                             onChange={option => {
@@ -244,38 +202,12 @@ const AddQuestion = ({ navigation }) => {
 
 
 
-                            initValue="Annual Feedback"
+                            initValue="Annual feedback forum"
 
                             style={styles.card}
-
-
-                            initValueTextStyle={styles.SelectedValueSmall}
-                            selectTextStyle={styles.SelectedValueSmall}
-
-
-                        >
-                            <View style={{ marginTop: 10, flexDirection: 'row' }}>
-
-                                <Text style={styles.text2}>Annual Feedback</Text>
-                                <Evillcons size={25} color='#505069' name='chevron-down'
-                                    style={{
-
-                                        marginLeft: 70,
-
-
-
-                                    }}>
-
-                                </Evillcons>
-
-                            </View>
-
-
-
-
-                        </ModalSelector>
-
-
+                            initValueTextStyle={styles.SelectedValue}
+                            selectTextStyle={styles.SelectedValue}
+                        />
                     </View>
 
 
@@ -311,10 +243,15 @@ const AddQuestion = ({ navigation }) => {
                         <Text style={styles.section_heading}>Status</Text>
 
                     </View>
-                    <View style={{ flexDirection: 'row' }} >
 
+
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            paddingTop: 15,
+                        }}>
                         <ModalSelector
-
                             data={statuses}
 
                             onChange={option => {
@@ -325,39 +262,13 @@ const AddQuestion = ({ navigation }) => {
 
                             initValue="Active"
 
+
+
                             style={styles.card}
-
-
-                            initValueTextStyle={styles.SelectedValueSmall}
-                        // selectTextStyle={styles.SelectedValueSmall}
-
-
-                        >
-                            <View style={{ marginTop: 10, flexDirection: 'row' }}>
-
-                                <Text style={styles.text2}>Active</Text>
-                                <Evillcons size={25} color='#505069' name='chevron-down'
-                                    style={{
-
-                                        marginLeft: 70,
-
-
-
-                                    }}>
-
-                                </Evillcons>
-
-                            </View>
-
-
-
-
-                        </ModalSelector>
-
-
+                            initValueTextStyle={styles.SelectedValue}
+                            selectTextStyle={styles.SelectedValue}
+                        />
                     </View>
-
-
 
 
 
@@ -596,42 +507,36 @@ const styles = StyleSheet.create({
     SelectedValue: {
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: 18,
-        lineHeight: 27,
-        padding: 10,
-        backgroundColor: "#8a2be2",
-        color: '#211C5A',
+        fontWeight: '200',
+        fontWeight: '500',
+        fontSize: 14,
+        lineHeight: 30,
+        paddingTop: 3,
+        color: 'rgba(88, 99, 109, 0.85)',
     },
+
 
 
     card: {
-
-        width: 170,
-        height: 50,
-
         shadowColor: '#999',
+        height: 50,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.5,
+        shadowRadius: 12,
+        elevation: 5,
         backgroundColor: 'white',
-        borderColor: '#58636D',
-
-
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+        borderTopRightRadius: 12,
+        borderTopLeftRadius: 12,
         overflow: 'hidden',
-        justifyContent: 'center',
-        borderRadius: 8,
-        borderWidth: 0.3,
-        marginLeft: 15,
-        marginRight: 20,
-        marginTop: 10,
-
-        //flexDirection: 'row',
-        justifyContent: 'space-between'
-
-
-
-
+        margin: 0,
+        padding: 0,
+        width: '94%',
     },
+
     card1: {
 
         width: 170,
