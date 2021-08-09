@@ -6,8 +6,8 @@ function getYear() {
   var d = new Date();
   let currentyear = d.getUTCFullYear();
   let years = [];
-  for (let i = 2020; i <= currentyear; i++) {
-    years.push({key: i - 2020, label: i});
+  for (let i = 2022; i <= currentyear; i++) {
+    years.push({key: i - 2022, label: i});
   }
   return years;
 }

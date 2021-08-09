@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
   Searchbar,
@@ -22,13 +22,130 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auto } from 'async';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import getDesignation from '../../../../services/helpers/getList/getDesignation';
+import getHRname from '../../../../services/helpers/getList/getHRname';
+import getYear from '../../../../services/helpers/getList/getYear';
+import getMonth from '../../../../services/helpers/getList/getMonth';
+
+
+// loading screem
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
 
 export default function PaymentSlip({ navigation }) {
-  const [Department, setDrepartment] = useState([]);
-  const [Name, setName] = useState([]);
-  const [Month, setMonth] = useState([]);
-  const [Year, setYear] = useState([]);
+  
   const institute = useSelector(state => state.institute);
+
+  // dropdown values
+  const [Designations, setDesignations] = useState([]);
+  const [Names, setNames] = useState([]);
+  const [Months, setMonths] = useState([]);
+  const [Years, setYears] = useState([]);
+  
+  // selected Values
+
+  const [Designation, setDesignation] = useState(null);
+  const [Name, setName] = useState(null);
+  const [Month, setMonth] =useState(null);
+  const [Year, setYear] = useState(null);
+ 
+  // after fetching list
+  const [fetched, setFetched] = useState(false);
+  const [list, setList] = useState([]);
+
+  // loading screen
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      const response = await getDesignation();
+      setDesignations(response);
+    } catch (err) {
+      alert('Cannot get Designations!');
+    }
+    try {
+      // await setBatch(sb);
+      const response = await getMonth();
+      setMonths(response);
+    } catch (err) {
+      alert('Cannot get Months');
+    }
+   
+    hideLoadingScreen();
+  }, []);
+//////////// get dropdown values ///////////////
+const getNames = async selectedDesignation => {
+  showLoadingScreen();
+  try {
+    await setDesignation(selectedDesignation);
+    const response = await getHRname(selectedDesignation);
+    setNames(response);
+  } catch (err) {
+    alert('Cannot get Names list');
+  }
+  hideLoadingScreen();
+};
+
+const getYears = async mt => {
+  showLoadingScreen();
+  try {
+    await setMonth(mt);
+    const response = await getYear(mt);
+
+    setYears(response);
+  } catch (err) {
+    alert('Cannot get Assessments!!');
+  }
+  hideLoadingScreen();
+};
+
+// const getMonths = async () => {
+//   showLoadingScreen();
+//   try {
+//     // await setBatch(sb);
+//     const response = await getMonth();
+//     setMonths(response);
+//   } catch (err) {
+//     alert('Cannot get Months');
+//   }
+//   hideLoadingScreen();
+// };
+
+
+const getList = async () => {
+  showLoadingScreen();
+  try {
+    let slug = `
+    /payroll/employeeSalary?designation=${designation}&employee=${names}&year=${empSalary}&month=${month}`;
+    let token = await read('token');
+    let res = await get(slug, token);
+    // res = res.students;
+    let payslipArray = [];
+    res.map(data => {
+      payslipArray.push({
+
+        nm:data.employee.firstName,
+        desg:data.employee.designation.name,
+        code:data.employee.code,
+        dept:data.employee.department.name,
+        dob:data.employee.dob,
+        join:data.employee.joiningDate,
+       account:data.bankDetails,
+       earntype:data.earnings.earntype,
+       deduct:data.deductions,
+       gross:data.grossSalary,
+       total:data.totalDeduction,
+       netsal:data.netSaalary
+
+      });
+    });
+    setList(res);
+    setFetched(true);
+  } catch (err) {
+    alert('No Lists found!!');
+  }
+  hideLoadingScreen();
+};
+
   return (
     <View style={styles.backgroung}>
       {/* <Appbar>
@@ -78,21 +195,24 @@ export default function PaymentSlip({ navigation }) {
         <View style={{ padding: 10 }} >
 
           <ModalSelector
-            data={Department}
+           
+            data={Designations}
+        
+          onChange={async option => {
+            await getNames(option.key);
+          }}
             initValue="Department"
-            onChange={async option => {
-              await getAssessesments(option.key);
-            }}
+           
             style={styles.card_picker1}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
           <View style={{ padding: 10 }} />
           <ModalSelector
-            data={Name}
+            data={Names}
             initValue="Name"
             onChange={async option => {
-              await getAssessesments(option.key);
+              await getYears(option.key);
             }}
             style={styles.card_picker1}
             initValueTextStyle={styles.SelectedValueSmall}
@@ -102,10 +222,10 @@ export default function PaymentSlip({ navigation }) {
           <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
 
             <ModalSelector
-              data={Month}
+              data={Months}
               initValue="Month"
               onChange={async option => {
-                await getAssessesments(option.key);
+               await getYears(option.key);
               }}
               style={styles.card_picker}
               initValueTextStyle={styles.SelectedValueSmall}
@@ -113,10 +233,10 @@ export default function PaymentSlip({ navigation }) {
             />
             <View style={{ padding: 10 }} />
             <ModalSelector
-              data={Year}
+              data={Years}
               initValue="Year"
               onChange={async option => {
-                await getAssessesments(option.key);
+              setYear(option.key);
               }}
               style={styles.card_picker}
               initValueTextStyle={styles.SelectedValueSmall}
@@ -130,11 +250,17 @@ export default function PaymentSlip({ navigation }) {
           padding: 15
         }}>
 
-          <Button color='#5177E7' mode="contained" onPress={() => console.log('Pressed')}>
+          <Button
+           color={ institute ? institute.themeColor : "#5177E7"}
+           onPress={getList}
+          mode="contained"
+          >
             Get
           </Button>
         </View>
-
+        {fetched
+        ? list &&
+          list.map(data => (
         <View style={styles.section}>
           <View style={styles.details}>
             <View style={styles.userinhostels}>
@@ -146,7 +272,7 @@ export default function PaymentSlip({ navigation }) {
                     fontFamily: 'Poppins-Regular',
                     paddingHorizontal: 5,
                   }}>
-                  Name
+                  {data.nm}
                 </Text>
               </View>
               <View style={{ padding: 5 }} />
@@ -158,7 +284,7 @@ export default function PaymentSlip({ navigation }) {
                     fontFamily: 'Poppins-Regular',
                     paddingHorizontal: 5,
                   }}>
-                  Designation
+                 {data.desg}
                 </Text>
                 <Text
                   style={{
@@ -366,6 +492,9 @@ export default function PaymentSlip({ navigation }) {
           </View>
           <View style={{ padding: 15 }} />
         </View>
+
+        ))
+        : null}
         <View style={{ padding: 40 }} />
       </ScrollView>
     </View>
