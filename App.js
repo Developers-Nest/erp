@@ -4,6 +4,7 @@ import {Button} from 'react-native-paper';
 import {View, StyleSheet, TextInput} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import RNBootSplash from "react-native-bootsplash";
 
 // import Teacher from './src/Teacher/Teacher';
 // import Student from './src/Student/Student';
@@ -25,7 +26,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
+      <NavigationContainer onReady={() => RNBootSplash.hide()}>
         <Stack.Navigator headerMode="none">
           {/* <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Teacher Login" component={Teacher} />
