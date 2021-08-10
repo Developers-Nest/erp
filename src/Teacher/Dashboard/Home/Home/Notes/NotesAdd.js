@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -22,28 +22,59 @@ import ModalSelector from 'react-native-modal-selector';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+// helpers
+import getBatch from '../../../../../services/helpers/getList/getBatch';
+import getCourse from '../../../../../services/helpers/getList/getCourse';
+import get from '../../../../../services/helpers/request/get';
+import read from '../../../../../services/localstorage/read';
+import post from '../../../../../services/helpers/request/post';
+
 // redux
 import {useSelector} from 'react-redux';
 
+// loading screem
+import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen.js';
+
 export default function AddNotes({navigation}) {
-  const [topic, setTopic] = useState(null);
-  const [desc, setDescription] = useState(null);
+  // loading screen
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  const [className, setclassName] = useState(null);
-  const [classes, setclasses] = useState([
-    {label: 'Class1', key: 'Class1'},
-    {label: 'Class2', key: 'Class2'},
-    {label: 'Class3', key: 'Class3'},
-  ]);
-
-  const [batch, setbatch] = useState(null);
-  const [batches, setbatches] = useState([
-    {label: 'Batch1', key: 'Batch1'},
-    {label: 'Batch2', key: 'Batch2'},
-    {label: 'Batch3', key: 'Batch3'},
-  ]);
-
+  //theming
   const institute = useSelector(state => state.institute);
+
+  //post data
+  const [topic, setTopic] = useState('');
+  const [desc, setDescription] = useState('');
+  const [course, setcourse] = useState('');
+  const [batch, setbatch] = useState('');
+
+  //dropdown values
+  const [courses, setcourses] = useState([]);
+  const [batches, setbatches] = useState([]);
+
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      const response = await getCourse();
+      setcourses(response);
+    } catch (err) {
+      alert('Cannot get Courses!');
+    }
+
+    hideLoadingScreen();
+  }, []);
+
+  const getBatches = async selectedCourse => {
+    showLoadingScreen();
+    try {
+      await setcourse(selectedCourse);
+      const response = await getBatch(selectedCourse);
+      setbatches(response);
+    } catch (err) {
+      alert('Cannot get Batches');
+    }
+    hideLoadingScreen();
+  };
 
   return (
     <View style={styles.container}>
@@ -90,10 +121,10 @@ export default function AddNotes({navigation}) {
             marginTop: 10,
           }}>
           <ModalSelector
-            data={classes}
-            initValue="Class"
+            data={courses}
+            initValue="Course"
             onChange={option => {
-              setclassName(option.key);
+              getBatches(option.key);
             }}
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
