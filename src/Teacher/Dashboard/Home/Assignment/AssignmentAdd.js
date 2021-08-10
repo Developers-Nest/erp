@@ -103,7 +103,6 @@ export default function AddAssignments({ navigation }) {
 
   let handleDatePicker = async date => {
     showLoadingScreen();
-    console.log('Date ', date);
     await setDateString(date.toString());
     await setDate(date.toString());
     setShowDatePicker(false);
@@ -121,10 +120,8 @@ export default function AddAssignments({ navigation }) {
 
     try {
       let slug = `/note/addAssignment`;
-      console.log('Assignment slug ', slug);
       let token = await read('token');
 
-      console.log('File ', file)
       if (file != null) {
 
         const data = new FormData();
@@ -138,13 +135,10 @@ export default function AddAssignments({ navigation }) {
         data.append('submissionDateString', dateString);
 
         let response = await formDataPost(slug, data, token)
-        console.log("Response ", response)
 
         if (response.url) {
-          console.log('Response ', response)
           alert('Assignment Uploaded!!')
         } else {
-          console.log('Cannot upload file '+ response)
           throw new Error('Cannot upload file')
         }
       } else {
@@ -163,7 +157,6 @@ export default function AddAssignments({ navigation }) {
     const res = await DocumentPickerHandle.pick({
       type: [DocumentPickerHandle.types.pdf],
     })
-    console.log('Response ', res)
     setFile(res)
 
     //  -- do not remove following 2 lines (for debugging) -- 

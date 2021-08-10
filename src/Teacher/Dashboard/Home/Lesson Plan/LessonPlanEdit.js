@@ -78,7 +78,6 @@ export default function LessonPlanAdd({ route,  navigation }) {
   useEffect(async () => {
     setLoadingScreen()
     const {lessonPlan} = route.params
-    console.log('Lesson Plan ', lessonPlan)
     setPlanObject(lessonPlan)
     setPlanId(lessonPlan._id)
     setBatch(lessonPlan.batch.batchName)
