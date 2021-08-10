@@ -64,7 +64,7 @@ export default function LessonPlanAdd({ navigation }) {
   }
 
   const addPlan = async () => {
-    if (!selectedCourse || !selectedBatch || !selectedSubject || !lectureCode || !description || !url || !topic) {
+    if (!selectedCourse || !selectedBatch || !selectedSubject || !lectureCode || !description || !topic) {
       alert('All fields are Mandatory!!')
       return
     }
@@ -86,6 +86,7 @@ export default function LessonPlanAdd({ navigation }) {
       const response = await post(slug, data, token)
       if (response.message === "Added") {
         alert('Lesson Plan Added!!')
+        navigation.navigate('Lesson Plan')
       } else throw new Error('Cannot Add')
     } catch (err) {
       alert('Error: ' + err)

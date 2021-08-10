@@ -1,14 +1,14 @@
-import React,{useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   ScrollView,
   Image,
-  TouchableOpacity,TextInput,Modal
+  TouchableOpacity, TextInput, Modal
 } from 'react-native';
 import {
-  Avatar,Button
+  Avatar, Button
 } from 'react-native-paper';
 
 //icons
@@ -20,9 +20,9 @@ import patch from '../../../services/helpers/request/patch';
 import LoaderHook from '../../../components/LoadingScreen/LoadingScreen';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function Profile({navigation}) {
+export default function Profile({ navigation }) {
   const userInfo = useSelector(state => state.userInfo);
 
   //theming
@@ -39,19 +39,19 @@ export default function Profile({navigation}) {
   const [upaddress, setUpAddress] = useState(null)
   const [umobile, setUmobile] = useState(null)
 
-  useEffect(()=>{
+  useEffect(() => {
     setUemail(userInfo.email)
     setUfirstName(userInfo.firstName)
     setULastName(userInfo.lastName)
     setUpAddress(userInfo.permanentAddress)
     setUmobile(userInfo.phone)
-  },[])
+  }, [])
 
 
-  let updateProfile = async()=>{
+  let updateProfile = async () => {
     setLoadingScreen()
     setModalVisible(!modalVisible)
-    try{
+    try {
       let slug = '/user'
       let token = await read('token')
       let data = {
@@ -64,11 +64,11 @@ export default function Profile({navigation}) {
       console.log('Update Profile Data ', data)
       let response = await patch(slug, data, token)
       console.log('Profile Update Response ', response)
-      if(response){
+      if (response) {
         alert('Profile Updated!!')
       } else throw new Error('Some Error occured!!')
-    } catch(err){
-      alert('Cannot Update '+err)
+    } catch (err) {
+      alert('Cannot Update ' + err)
     }
     hideLoadingScreen()
   }
@@ -123,66 +123,67 @@ export default function Profile({navigation}) {
         }}
       />
       <ScrollView>
-        <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+        <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
           {
-            userInfo.url? <Image source={{uri: userInfo.url}} style={styles.tinyLogo}/>:  <Avatar.Text size={100} label={userInfo.firstName[0]} />
+            userInfo.url ? <Image source={{ uri: userInfo.url }} style={styles.tinyLogo} /> : <Avatar.Text size={100} label={userInfo.firstName[0]} />
           }
         </View>
 
         <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-          <Text style={{marginTop:20}}>Enter Email</Text>
-          <ScrollView>
-          <TextInput placeholder={userInfo.email}
-                                   value={uemail} style={styles.textInput} 
-                                   onChangeText={(value) => setUemail(value)} />
-           <Text style={{marginTop:20}}>First Name</Text>
-            <TextInput placeholder={userInfo.firstName} 
-                                   value={ufirstName} style={styles.textInput} 
-                                   onChangeText={(value) => setUfirstName(value)} />
-             <Text style={{marginTop:20}}>Last Name</Text>
-            <TextInput placeholder={userInfo.lastName}
-                                   value={ulastName} style={styles.textInput} 
-                                   onChangeText={(value) => setULastName(value)} />
-            <Text style={{marginTop:20}}>Phone</Text>
-            <TextInput placeholder={userInfo.phone} 
-                                   value={umobile} style={styles.textInput} 
-                                   onChangeText={(value) => setUmobile(value)} />
-            <Text style={{marginTop:20}}>Present Address</Text>
-            <TextInput placeholder={userInfo.presentAddress} 
-                                   value={upaddress} style={styles.textInput} 
-                                   onChangeText={(value) => setUpAddress(value)} />
-            </ScrollView>
-            <View style={{flexDirection:'row',justifyContent:'space-evenly',margin:20}}>
-            <Button mode="outlined"  color={ institute?institute.themeColor : "red"} onPress={() => setModalVisible(!modalVisible)}>Cancel</Button>
-            <Button mode="contained" color={ institute?institute.themeColor : "blue"} onPress={updateProfile}  >Save</Button>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={{ marginTop: 20 }}>Enter Email</Text>
+                <ScrollView>
+                  <TextInput placeholder={userInfo.email}
+                    value={uemail} style={styles.textInput}
+                    onChangeText={(value) => setUemail(value)} />
+                  <Text style={{ marginTop: 20 }}>First Name</Text>
+                  <TextInput placeholder={userInfo.firstName}
+                    value={ufirstName} style={styles.textInput}
+                    onChangeText={(value) => setUfirstName(value)} />
+                  <Text style={{ marginTop: 20 }}>Last Name</Text>
+                  <TextInput placeholder={userInfo.lastName}
+                    value={ulastName} style={styles.textInput}
+                    onChangeText={(value) => setULastName(value)} />
+                  <Text style={{ marginTop: 20 }}>Phone</Text>
+                  <TextInput placeholder={userInfo.phone}
+                    keyboardType='numeric'
+                    value={umobile} style={styles.textInput}
+                    onChangeText={(value) => setUmobile(value)} />
+                  <Text style={{ marginTop: 20 }}>Present Address</Text>
+                  <TextInput placeholder={userInfo.presentAddress}
+                    value={upaddress} style={styles.textInput}
+                    onChangeText={(value) => setUpAddress(value)} />
+                </ScrollView>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', margin: 20 }}>
+                  <Button mode="outlined" color={institute ? institute.themeColor : "red"} onPress={() => setModalVisible(!modalVisible)}>Cancel</Button>
+                  <Button mode="contained" color={institute ? institute.themeColor : "blue"} onPress={updateProfile}  >Save</Button>
+                </View>
+              </View>
             </View>
-          </View>
+          </Modal>
         </View>
-      </Modal>
-    </View>
-    <View style={{flexDirection:'row',justifyContent:'flex-end',marginEnd:30}}>
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-      <Text>
-      Edit Profile 
-      &nbsp;
-      <FontAwesome5
-              name="edit"
-              size={20}
-              color={institute? institute.themeColor : 'rgba(62, 104, 228, 0.9)'}
-            />
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginEnd: 30 }}>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Text>
+              Edit Profile
+              &nbsp;
+              <FontAwesome5
+                name="edit"
+                size={20}
+                color={institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)'}
+              />
             </Text>
-      </TouchableOpacity>
-      </View> 
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.textFields}>
           <View style={styles.input}>
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width:'90%'
+    width: '90%'
   },
   button: {
     borderRadius: 20,
@@ -361,5 +362,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0, 0, 0, 0.2)",
     borderWidth: 1,
     marginBottom: 8,
-    color: 'black'},
+    color: 'black'
+  },
 });

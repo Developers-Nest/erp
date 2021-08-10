@@ -109,10 +109,10 @@ export default function LessonPlan({ navigation }) {
               alignItems: 'center',
               alignSelf: 'flex-end',
               paddingRight: 20,
-              marginTop:15
+              marginTop: 15
             }}>
             <IonIcon size={30} color="white" name="add-circle-outline" />
-            <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff',marginRight:5 }}>
+            <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff', marginRight: 5 }}>
               Add
             </Text>
           </TouchableOpacity>
@@ -224,14 +224,15 @@ export default function LessonPlan({ navigation }) {
                   {plan.course && plan.course.courseName} -
                   {plan.batch && plan.batch.batchName}
                 </Text>
-
-                <Button
-                  title="Link"
-                  mode="contained"
-                  color={institute.themeColor || "#5177E7"}
-                  labelStyle={{ color: 'white' }}
-                  onPress={() => Linking.openURL(plan.url)}
-                />
+                {
+                  plan.url ? <Button
+                    title="Link"
+                    mode="contained"
+                    color={institute.themeColor || "#5177E7"}
+                    labelStyle={{ color: 'white' }}
+                    onPress={() => Linking.openURL(plan.url)}
+                  /> : (null)
+                }
               </View>
             </View>
           ))}

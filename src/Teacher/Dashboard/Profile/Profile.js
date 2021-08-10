@@ -160,6 +160,7 @@ export default function Profile({ navigation }) {
                   <Text style={{ marginTop: 20 }}>Mobile</Text>
                   <TextInput placeholder={userInfo.mobile}
                     value={umobile} style={styles.textInput}
+                    keyboardType='numeric'
                     onChangeText={(value) => setUMobile(value)} />
                   <Text style={{ marginTop: 20 }}>Present Address</Text>
                   <TextInput placeholder={userInfo.presentAddress}

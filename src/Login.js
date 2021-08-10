@@ -70,6 +70,9 @@ export default function App({navigation}) {
 
       // post request
       let response = await post(slug, data);
+      if(!response || !response.userType){
+        throw new Error('Cannot get User Account!!')
+      }
       let role = response.userType.name;
 
       let res = await get('/user', response.token);

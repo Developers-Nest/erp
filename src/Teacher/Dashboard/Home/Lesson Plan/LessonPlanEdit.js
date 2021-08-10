@@ -53,7 +53,8 @@ export default function LessonPlanAdd({ route,  navigation }) {
       data.description = description
       data.code = lectureCode
       let response = await patch(slug, data, token)
-      console.log('Updated Lesson Plan ', response)
+      alert('Updated Lesson Plan')
+      navigation.navigate('Lesson Plan')
     } catch(err){
       alert('Cannot Delete!! '+ err)
     }
@@ -66,10 +67,12 @@ export default function LessonPlanAdd({ route,  navigation }) {
       let slug = `/lessonplanning/${planId}`
       let response = await deleteReq(slug, token)
       alert('Lesson Plan Deleted!!')
+      navigation.navigate('Lesson Plan')
     } catch(err){
       alert('Cannot Delete!! '+ err)
     }
     hideLoadingScreen()
+    navigation.navigate('Lesson Plan')
   }
 
   useEffect(async () => {
