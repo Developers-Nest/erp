@@ -10,5 +10,6 @@ Chat Application: [http://ec2-13-232-81-77.ap-south-1.compute.amazonaws.com:3021
  - 😎 Shivansh Goel
  - 👻 Deepsi Kumari
  - 🤪 Shreya Thiagarajan
+ - 🥱 Dev
  - 👽Pratyush Motha
  - 🤠 Rekha
