@@ -25,23 +25,6 @@ import get from '../../services/helpers/request/get';
 import read from '../../services/localstorage/read';
 
 const Tab = createBottomTabNavigator();
-const getTabBarVisibility = route => {
-  // const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home Route';
-  // if (
-  //   routeName !== 'Home' &&
-  //   routeName !== 'Statistics' &&
-  //   routeName !== 'Classes' &&
-  //   routeName !== 'Profile' &&
-  //   routeName !== 'Message'
-  // ) {
-  //   // alert(routeName);
-
-  //   return false;
-  // }
-  // // alert(routeName);
-
-  return true;
-};
 
 export default function Dashboard() {
   let dispatch = useDispatch();
@@ -102,7 +85,6 @@ export default function Dashboard() {
         name="Statistics"
         component={Statistics}
         options={({route}) => ({
-          tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
             <View style={{alignItems: 'center', width: 100}}>
               <IonIcon
@@ -121,7 +103,6 @@ export default function Dashboard() {
         name="Home"
         component={Home}
         options={({route}) => ({
-          tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({color, size, focused}) => (
             <View style={{alignItems: 'center', width: 100}}>
               <IonIcon
