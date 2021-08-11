@@ -1,13 +1,11 @@
 import React from 'react';
 
-import {Button} from 'react-native-paper';
 import {
   View,
   TouchableOpacity,
   StyleSheet,
   Text,
   Image,
-  TextInput,
 } from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -69,9 +67,9 @@ function RoleBased_Login({navigation}) {
           <Text style={styles.text1}>User Login</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={styles.button1}
           onPress={() => navigation.replace('Admin Login')}>
-          <Text style={styles.text}>Admin Login</Text>
+          <Text style={styles.text1}>Admin Login</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -85,19 +83,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
-
+  logoStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+    paddingBottom: 60,
+  },
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignContent: 'center',
+  },
   button1: {
     marginTop: 0,
     marginBottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#5177E7',
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
     padding: 3,
     paddingHorizontal: 25,
     paddingVertical: 2,
     borderRadius: 4,
-    marginRight: 30,
     height: 60,
     borderColor: '#5177E7',
     borderWidth: 1.5,
@@ -107,35 +113,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 21,
     letterSpacing: 0.25,
-    color: 'white',
-  },
-  logoStyle: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-    paddingBottom: 10,
-  },
-  fixToText: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-    borderRadius: 8,
-    marginVertical: 10,
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: '#5177E7',
-  },
-  text: {
-    fontSize: 18,
-    lineHeight: 21,
-    fontWeight: '500',
-    letterSpacing: 0.25,
-    color: 'white',
+    color: '#5177E7',
   },
 });
