@@ -132,6 +132,8 @@ export default function AddNotes({route, navigation}) {
         // } else {
         //   throw new Error('Cannot upload notes');
         // }
+        alert('Notes created');
+        navigation.navigate('Home');
       } else {
         throw new Error('File not selected!!');
       }
