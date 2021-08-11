@@ -31,6 +31,11 @@ const AddCourses = ({ navigation }) => {
     const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
 
     let handleSubmit = async()=>{
+        if(!type || !code || !courseName || !desc){
+            alert('All Fields are required!!')
+            hideLoadingScreen()
+            return
+        }
         setLoadingScreen()
         try{
             let token = await read('token')
@@ -47,7 +52,12 @@ const AddCourses = ({ navigation }) => {
                 totalWorkingDay: 0
             }
             let res = await post(slug, data, token)
-            console.log('Course Added ', res)
+            if(res.error){
+                alert(res.error)
+            } else{
+                alert('Course Added')
+                navigation.navigate('AcademicsMain');
+            }
         } catch(err){
             alert('Cannot Add '+err)
         }
