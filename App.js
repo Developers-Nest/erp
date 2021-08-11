@@ -59,17 +59,13 @@ export default function App() {
 function RoleBased_Login({navigation}) {
   return (
   
-    <View style={{
-      justifyContent: 'center',
-      alignContent: 'center',
-      backgroundColor: 'rgba(249, 249, 249, 1)',
-  }}>
+    <View style={styles.container}>
 
       <Image source={require('./assets/bootsplash_logo.png')}
 
-          style={{ marginTop:200, justifyContent: 'center', marginLeft: 70 }}
+          style={{ marginTop:25, justifyContent: 'center', marginLeft: 70 }}
       />
-      <View style={{ marginTop: 100 }}>
+   
           <View style={styles.fixToText}>
               <TouchableOpacity style={styles.button1} onPress={() => navigation.replace('Student Teacher Login')}>
                   <Text style={styles.text1}>User Login</Text>
@@ -79,7 +75,7 @@ function RoleBased_Login({navigation}) {
               </TouchableOpacity>
 
 
-          </View>
+      
 
       </View>
 
@@ -96,6 +92,8 @@ const styles = StyleSheet.create({
   container: {
       alignContent: 'center',
       justifyContent: 'center',
+      flex:1,
+      backgroundColor:'rgba(249, 249, 249, 1)'
   },
 
   button1: {
