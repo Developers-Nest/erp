@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
     Searchbar,
@@ -11,15 +11,7 @@ import {
 } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
@@ -28,11 +20,34 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 //redux
 import { useSelector } from 'react-redux';
 
+// helpers
+import patch from '../../../../../services/helpers/request/patch'
+import deleteReq from '../../../../../services/helpers/request/delete'
+import read from '../../../../../services/localstorage/read'
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
 
-export default function EditDriver({ navigation }) {
+
+
+export default function EditDriver({ route, navigation }) {
 
     //theming
     const institute = useSelector(state => state.institute);
+//loading screen
+    const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+//modal selector values
+const [vehicles, setVehicles] = useState([]);
+//data to be sent
+const [vehicle, setVehicle] = useState();
+//for textinputs
+const [track, setTrackid] = useState();
+const [licensenum, setLicensenum] = useState('');
+const [name, setName] = useState('')
+const [phone, setPhone] = useState('')
+const [curraddr, setcurraddr] = useState('')
+const [permaddr, setpermaddr] = useState('')
+
+const [id, setId] = useState('')
+
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('21 May 2021')
     let index = 0;
@@ -50,9 +65,108 @@ export default function EditDriver({ navigation }) {
     const handleConfirm = (date) => {
         // console.warn("A date has been picked: ", date.toString());
         setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
+        // setDate(date.toString())
         hideDatePicker();
     };
 
+//for edit
+
+
+useEffect(async () => {
+    let driver = route.params.driver
+    console.log('Edit driver ', driver)
+//  setVehicle(driver.vehicleNo)
+ setDate(driver.dob)
+ //text inputs
+setLicensenum(driver.licenseNumber)
+setName(driver.name)
+
+setPhone(driver.phone)
+setcurraddr(driver.presentAddress)
+setpermaddr(driver.permanentAddress)
+setId(driver._id)
+  
+try {
+   
+    let slug = '/transport/vehicle';
+    let token = await read('token');
+    let res = await get(slug, token);
+    let list = [];
+
+    res &&
+        res.map((res) => {
+            list.push({
+                label: res.vehicleNo,
+                key: res._id,
+            })
+        })
+
+    console.log(list);
+    setVehicles(list);
+
+} catch (err) {
+    alert('Cannot fetch Vehicle number list!!');
+}
+
+}, [])
+
+let fetchVehicle = async(sel)=>{
+    setLoadingScreen()
+    try{
+        setVehicle(sel)
+        
+    } catch(err){
+        alert('Cannot get vehicles!!')
+    }
+    hideLoadingScreen()
+}
+
+let handleUpdate = async () => {
+    setLoadingScreen()
+    try {
+        let slug = `/transport/driver/${id}`
+        let token = await read('token')
+        let data = {
+            vehicleNo: vehicle,
+            licenseNumber: licensenum,
+            name: name,
+            phone: phone,
+            presentAddress: curraddr,
+            permanentAddress: permaddr,
+            // trackId: track,
+            dob:date,
+            
+        }
+        let res = await patch(slug, data, token)
+        if (res.error) {
+            alert(res.error)
+        } else if (res._id) {
+            alert('Updated')
+            navigation.navigate('TransportMain');
+        }
+    } catch (err) {
+        alert('Cannot Update !!')
+    }
+    hideLoadingScreen()
+}
+
+let handleDelete = async () => {
+    setLoadingScreen()
+    try {
+        let slug = `/transport/driver/${id}`
+        let token = await read('token')
+        let res = await deleteReq(slug, token)
+        if (res.error) {
+            alert(res.error)
+        } else {
+            alert('Deleted')
+            navigation.navigate('TransportMain');
+        }
+    } catch (err) {
+        alert('Cannot Delete !!')
+    }
+    hideLoadingScreen()
+}
 
     return (
         <View style={styles.backgroung}>
@@ -76,8 +190,7 @@ export default function EditDriver({ navigation }) {
                                 alignSelf: 'center',
                                 fontSize: 25,
                                 color: 'white',
-                                // paddingLeft: 10,
-                                // paddingTop: 23,
+                               
                             }}
                         />
                     </TouchableOpacity>
@@ -100,7 +213,7 @@ export default function EditDriver({ navigation }) {
             {/* header ends */}
             <ScrollView>
                 <View style={{ padding: 10 }} />
-
+{loadingScreen}
                 <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row', alignContent: 'flex-start', justifyContent: 'space-evenly' }}>
                     <Text style={styles.section_heading}>Vehicle No. </Text>
                     <Text style={styles.section_heading}>Track ID</Text>
@@ -108,19 +221,26 @@ export default function EditDriver({ navigation }) {
 
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
-                    <View style={styles.Card}>
-                        <View style={styles.CardContent}>
-                            <TextInput
-                                style={{ ...styles.search_input }}
-                                placeholder="Vehicle No."
-                            />
-                        </View>
-                    </View>
+                    <ModalSelector
+                        data={vehicles}
+                        initValue="Contract"
+                        onChange={option => {
+                            setVehicle(option.key);
+                        }}
+                        // disabled={true}
+                        style={styles.card}
+                        initValueTextStyle={styles.SelectedValueSmall}
+                        selectTextStyle={styles.SelectedValueSmall}
+                    />
+
                     <View style={styles.Card}>
                         <View style={styles.CardContent}>
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Track ID"
+                                placeholderTextColor='grey'
+                                color='black'
+                                keyboardType="numeric"
                             />
                         </View>
                     </View>
@@ -140,6 +260,11 @@ export default function EditDriver({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="License No."
+                                placeholderTextColor="grey"
+                                color="black"
+                                keyboardType="numeric"
+                                value={licensenum}
+                                onChangeText={val => setLicensenum(val)}
                             />
                         </View>
                     </View>
@@ -148,6 +273,11 @@ export default function EditDriver({ navigation }) {
                             <TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
                                 <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                                     placeholder={date}
+                                    value={date}
+                                    placeholderTextColor="grey"
+                                    color="black"
+                                   
+                                    editable={false}
 
                                 />
                                 <Feather size={18} color="black" name="calendar"
@@ -162,6 +292,7 @@ export default function EditDriver({ navigation }) {
                                     mode="date"
                                     onConfirm={handleConfirm}
                                     onCancel={hideDatePicker}
+                                  
                                 />
                             </TouchableOpacity>
                         </View>
@@ -179,7 +310,11 @@ export default function EditDriver({ navigation }) {
                         <View style={styles.CardContent}>
                             <TextInput
                                 style={{ ...styles.search_input }}
-                                placeholder="Vehicle No."
+                                placeholder="Shaheen"
+                                placeholderTextColor="grey"
+                                color="black"
+                                value={name}
+                                onChangeText={val => setName(val)}
                             />
                         </View>
                     </View>
@@ -187,7 +322,12 @@ export default function EditDriver({ navigation }) {
                         <View style={styles.CardContent}>
                             <TextInput
                                 style={{ ...styles.search_input }}
-                                placeholder="Track ID"
+                                placeholder="8906534256"
+                                placeholderTextColor="grey"
+                                keyboardType="numeric"
+                                color="black"
+                                value={phone}
+                                onChangeText={val => setPhone(val)}
                             />
                         </View>
                     </View>
@@ -204,6 +344,10 @@ export default function EditDriver({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Enter current address"
+                                placeholderTextColor="grey"
+                                color="black"
+                                value={curraddr}
+                                onChangeText={val => setcurraddr(val)}
                             />
                         </View>
                     </View>
@@ -222,11 +366,17 @@ export default function EditDriver({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Enter permanent address"
+                                placeholderTextColor="grey"
+                                color="black"
+                                value={permaddr}
+                                onChangeText={val => setpermaddr(val)}
                             />
                         </View>
                     </View>
 
                 </View>
+
+            
 
                 <View
                     style={{
@@ -236,10 +386,10 @@ export default function EditDriver({ navigation }) {
                         flexDirection: 'row',
 
                     }}>
-                    <Button style={{ width: 90 }} color="#B04305" mode="contained" onPress={() => console.log('Pressed')}>
+                    <Button style={{ width: 90 }} color="#B04305" mode="contained" onPress={handleDelete}>
                         DELETE
                     </Button>
-                    <Button style={{ width: 90 }} color="#5177E7" mode="contained" onPress={() => console.log('Pressed')}>
+                    <Button style={{ width: 90 }} color="#5177E7" mode="contained" onPress={handleUpdate}>
                         SAVE
                     </Button>
                 </View>
@@ -268,7 +418,7 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: '500',
         fontSize: 18,
-        lineHeight: 30,
+        lineHeight: 40,
         paddingTop: 3,
         color: '#211C5A',
     },
@@ -396,5 +546,28 @@ const styles = StyleSheet.create({
     header: {
         height: 69,
         flexDirection: 'row',
+    },
+    card: {
+        shadowColor: '#999',
+        height: 60,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 12,
+        elevation: 5,
+        backgroundColor: 'white',
+        borderColor: '#ccc',
+
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+        borderTopRightRadius: 12,
+        borderTopLeftRadius: 12,
+        overflow: 'hidden',
+        alignSelf: 'center',
+        // justifyContent: 'center',
+        // alignContent:'center',
+        margin: 0,
+        padding: 0,
+
+        width: '40%',
     },
 });
