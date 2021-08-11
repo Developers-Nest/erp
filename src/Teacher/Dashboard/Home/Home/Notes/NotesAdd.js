@@ -82,20 +82,21 @@ export default function AddNotes({route, navigation}) {
     showLoadingScreen();
     try {
       await setbatch(selectedBatch);
-      let slug = `/subject/assign?course=${course}&batch=${batch}`;
+      let slug = `/subject/assign?course=${course}&batch=${selectedBatch}`;
       let token = await read('token');
       const response = await get(slug, token);
+      console.log(response);
       let list = [];
-      response.map(subject =>
+      response.map(sub =>
         list.push({
-          key: subject._id,
-          label: subject.subject,
+          key: sub.subjectId,
+          label: sub.subject,
         }),
       );
       console.log(response);
       setSubjects(list);
     } catch (err) {
-      alert('Cannot get Batches' + err);
+      alert('Cannot get Subjects' + err);
     }
     hideLoadingScreen();
   };
@@ -161,7 +162,7 @@ export default function AddNotes({route, navigation}) {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            justifyContent: 'space-between',
             marginTop: 10,
           }}>
           <ModalSelector
@@ -170,28 +171,27 @@ export default function AddNotes({route, navigation}) {
             onChange={option => {
               getBatches(option.key);
             }}
-            style={styles.card}
+            style={{...styles.card, width: 100}}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
-          <View style={{width: 40}}></View>
           <ModalSelector
             data={batches}
             initValue="Batch"
             onChange={option => {
               getSubjects(option.key);
             }}
-            style={styles.card}
+            style={{...styles.card, width: 100}}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
           <ModalSelector
             data={subjects}
-            initValue="Batch"
+            initValue="Subject"
             onChange={option => {
               setSubject(option.key);
             }}
-            style={styles.card}
+            style={{...styles.card, width: 100}}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -202,12 +202,16 @@ export default function AddNotes({route, navigation}) {
         <Card.Content>
           <TextInput
             placeholder="Topic "
-            onChange={val => setTopic(val)}
+            onChangeText={val => {
+              setTopic(val);
+            }}
             style={{borderBottomWidth: 0.5, fontSize: 15}}
           />
           <TextInput
             placeholder="Description (optional) "
-            onChange={val => setDescription(val)}
+            onChangeText={val => {
+              setDescription(val);
+            }}
             style={{
               height: 150,
               textAlignVertical: 'top',
