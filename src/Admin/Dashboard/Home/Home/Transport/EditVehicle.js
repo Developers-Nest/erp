@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
     Searchbar,
@@ -36,32 +36,32 @@ import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
 
 
 export default function EditVehicle({ route, navigation }) {
-    
-//loading screen
-const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+    //loading screen
+    const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
     //theming
     const institute = useSelector(state => state.institute);
 
 
-    
-  //dropdown
-  const [types, setTypes] = useState([
-    {label: 'Contract', key: 'Contract'},
-    {label: 'Ownership', key: 'Ownership'},
-  ]);
-  //for textboxes
-  const [vehiclenum, setVehiclenum] = useState('');
-  const [trackid, setTrackid] = useState('');
-  const [licensenum, setLicensenum] = useState('');
-  const [maxseats, setMaxseats] = useState('');
-  const [drivername, setDrivername] = useState('');
-  const [maxallow, setMaxallow] = useState('');
-  const [phone, setPhone] = useState('');
-  const [id, setId] = useState('')
 
-//data to be sent
-  const [type, setType] = useState('');
- 
+    //dropdown
+    const [types, setTypes] = useState([
+        { label: 'Contract', key: 'Contract' },
+        { label: 'Ownership', key: 'Ownership' },
+    ]);
+    //for textboxes
+    const [vehiclenum, setVehiclenum] = useState('');
+    const [trackid, setTrackid] = useState('');
+    const [licensenum, setLicensenum] = useState('');
+    const [maxseats, setMaxseats] = useState('');
+    const [drivername, setDrivername] = useState('');
+    const [maxallow, setMaxallow] = useState('');
+    const [phone, setPhone] = useState('');
+    const [id, setId] = useState('')
+
+    //data to be sent
+    const [type, setType] = useState('');
+
     //datepicker
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('21 May 2021')
@@ -83,70 +83,70 @@ const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
         hideDatePicker();
     };
 
-    
-useEffect(async () => {
-    let vehicle = route.params.vehicle
-    console.log('Edit vehicle ', vehicle)
-//  setVehicle(driver.vehicleNo)
-setVehiclenum(vehicle.vehicleNo);
-   setTrackid(vehicle.trackId);
-   setDate(vehicle.renewalDate);
-   setType(vehicle.type);
-//  setLicensenum(vehicle.);
-  setMaxseats(vehicle.seats);
-  setDrivername(vehicle.contactPerson);
-   setMaxallow(vehicle.maximumAllowed);
-   setId(vehicle._id)
 
-}, [])
+    useEffect(async () => {
+        let vehicle = route.params.vehicle
+        console.log('Edit vehicle ', vehicle)
+        //  setVehicle(driver.vehicleNo)
+        setVehiclenum(vehicle.vehicleNo);
+        setTrackid(vehicle.trackId);
+        setDate(vehicle.renewalDate);
+        setType(vehicle.type);
+        //  setLicensenum(vehicle.);
+        setMaxseats(vehicle.seats);
+        setDrivername(vehicle.contactPerson);
+        setMaxallow(vehicle.maximumAllowed);
+        setId(vehicle._id)
+
+    }, [])
 
 
 
-let handleUpdate = async () => {
-    setLoadingScreen()
-    try {
-        let slug = `/transport/vehicle/${id}`
-        let token = await read('token')
-        let data = {
-           vehicleNo:vehiclenum,
-          trackId:trackid,
-       type:type,
-           seats:maxseats,
-           contactPerson:drivername,
-           maximumAllowed:maxallow,
-           renewalDate:date
+    let handleUpdate = async () => {
+        setLoadingScreen()
+        try {
+            let slug = `/transport/vehicle/${id}`
+            let token = await read('token')
+            let data = {
+                vehicleNo: vehiclenum,
+                trackId: trackid,
+                type: type,
+                seats: maxseats,
+                contactPerson: drivername,
+                maximumAllowed: maxallow,
+                renewalDate: date
 
+            }
+            let res = await patch(slug, data, token)
+            if (res.error) {
+                alert(res.error)
+            } else if (res._id) {
+                alert('Updated')
+                navigation.navigate('TransportMain');
+            }
+        } catch (err) {
+            alert('Cannot Update !!')
         }
-        let res = await patch(slug, data, token)
-        if (res.error) {
-            alert(res.error)
-        } else if (res._id) {
-            alert('Updated')
-            navigation.navigate('TransportMain');
-        }
-    } catch (err) {
-        alert('Cannot Update !!')
+        hideLoadingScreen()
     }
-    hideLoadingScreen()
-}
 
-let handleDelete = async () => {
-    setLoadingScreen()
-    try {
-        let slug = `/transport/vehicle/${id}`
-        let token = await read('token')
-        let res = await deleteReq(slug, token)
-        if (res.error) {
-            alert(res.error)
-        } else {
-            alert('Deleted')
-            navigation.navigate('TransportMain');
+    let handleDelete = async () => {
+        setLoadingScreen()
+        try {
+            let slug = `/transport/vehicle/${id}`
+            let token = await read('token')
+            let res = await deleteReq(slug, token)
+            if (res.error) {
+                alert(res.error)
+            } else {
+                alert('Deleted')
+                navigation.navigate('TransportMain');
+            }
+        } catch (err) {
+            alert('Cannot Delete !!')
         }
-    } catch (err) {
-        alert('Cannot Delete !!')
+        hideLoadingScreen()
     }
-    hideLoadingScreen()
-}
 
     return (
         <View style={styles.backgroung}>
@@ -197,203 +197,203 @@ let handleDelete = async () => {
                 <View style={{ padding: 10 }} />
 
                 <View
-          style={{
-            width: '100%',
-            paddingTop: 10,
-            flexDirection: 'row',
-            alignContent: 'flex-start',
-            justifyContent: 'space-evenly',
-          }}>
-          <Text style={styles.section_heading}>Vehicle No. </Text>
-          <Text style={styles.section_heading}>Track ID</Text>
-        </View>
+                    style={{
+                        width: '100%',
+                        paddingTop: 10,
+                        flexDirection: 'row',
+                        alignContent: 'flex-start',
+                        justifyContent: 'space-evenly',
+                    }}>
+                    <Text style={styles.section_heading}>Vehicle No. </Text>
+                    <Text style={styles.section_heading}>Track ID</Text>
+                </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            paddingBottom: 10,
-          }}>
-          <View style={styles.Card}>
-            <View style={styles.CardContent}>
-              <TextInput
-                style={{...styles.search_input}}
-                placeholder="Vehicle No."
-                placeholderTextColor="grey"
-                color="black"
-                value={vehiclenum}
-                onChangeText={val => setVehiclenum(val)}
-              />
-            </View>
-          </View>
-          <View style={styles.Card}>
-            <View style={styles.CardContent}>
-              <TextInput
-                style={{...styles.search_input}}
-                placeholder="Track ID"
-                placeholderTextColor="grey"
-                color="black"
-                keyboardType="numeric"
-                value={trackid}
-                onChangeText={val => setTrackid(val)}
-              />
-            </View>
-          </View>
-        </View>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-evenly',
+                        paddingBottom: 10,
+                    }}>
+                    <View style={styles.Card}>
+                        <View style={styles.CardContent}>
+                            <TextInput
+                                style={{ ...styles.search_input }}
+                                placeholder="Vehicle No."
+                                placeholderTextColor="grey"
+                                color="black"
+                                value={vehiclenum}
+                                onChangeText={val => setVehiclenum(val)}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.Card}>
+                        <View style={styles.CardContent}>
+                            <TextInput
+                                style={{ ...styles.search_input }}
+                                placeholder="Track ID"
+                                placeholderTextColor="grey"
+                                color="black"
+                                keyboardType="numeric"
+                                value={trackid}
+                                onChangeText={val => setTrackid(val)}
+                            />
+                        </View>
+                    </View>
+                </View>
 
-        <View
-          style={{
-            width: '100%',
-            paddingTop: 10,
-            flexDirection: 'row',
-            alignContent: 'flex-start',
-            justifyContent: 'space-evenly',
-          }}>
-          <Text style={styles.section_heading}>Vehicle Type</Text>
-          <Text style={styles.section_heading}>Date</Text>
-        </View>
+                <View
+                    style={{
+                        width: '100%',
+                        paddingTop: 10,
+                        flexDirection: 'row',
+                        alignContent: 'flex-start',
+                        justifyContent: 'space-evenly',
+                    }}>
+                    <Text style={styles.section_heading}>Vehicle Type</Text>
+                    <Text style={styles.section_heading}>Date</Text>
+                </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            paddingBottom: 10,
-          }}>
-          <ModalSelector
-            data={types}
-            initValue="Contract"
-            onChange={option => {
-              setType(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-evenly',
+                        paddingBottom: 10,
+                    }}>
+                    <ModalSelector
+                        data={types}
+                        initValue="Contract"
+                        onChange={option => {
+                            setType(option.key);
+                        }}
+                        style={styles.card}
+                        initValueTextStyle={styles.SelectedValueSmall}
+                        selectTextStyle={styles.SelectedValueSmall}
+                    />
 
-          <View style={styles.Card}>
-            <View style={styles.CardContent}>
-              <TouchableOpacity
-                style={[styles.pickdate]}
-                onPress={showDatePicker}>
-                <TextInput
-                  style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
-                  placeholder={date}
-                  value={date.slice(0,10)}
-                  placeholderTextColor="grey"
-                  color="black"
-                 
-                  editable={false}
-                />
-                <Feather
-                  size={18}
-                  color="black"
-                  name="calendar"
-                  style={{
-                    marginTop: 10,
-                    marginRight: 0,
-                  }}></Feather>
-                <DateTimePickerModal
-                  isVisible={isDatePickerVisible}
-                  style={styles.pickdate}
-                  mode="date"
-                  onConfirm={handleConfirm}
-                  onCancel={hideDatePicker}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+                    <View style={styles.Card}>
+                        <View style={styles.CardContent}>
+                            <TouchableOpacity
+                                style={[styles.pickdate]}
+                                onPress={showDatePicker}>
+                                <TextInput
+                                    style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
+                                    placeholder={date}
+                                    value={date.slice(0, 10)}
+                                    placeholderTextColor="grey"
+                                    color="black"
 
-        <View
-          style={{
-            width: '100%',
-            paddingTop: 10,
-            flexDirection: 'row',
-            alignContent: 'flex-start',
-            justifyContent: 'space-evenly',
-          }}>
-          <Text style={styles.section_heading1}>Max Seats </Text>
-          <Text style={styles.section_heading2}>Name of the driver</Text>
-        </View>
+                                    editable={false}
+                                />
+                                <Feather
+                                    size={18}
+                                    color="black"
+                                    name="calendar"
+                                    style={{
+                                        marginTop: 10,
+                                        marginRight: 0,
+                                    }}></Feather>
+                                <DateTimePickerModal
+                                    isVisible={isDatePickerVisible}
+                                    style={styles.pickdate}
+                                    mode="date"
+                                    onConfirm={handleConfirm}
+                                    onCancel={hideDatePicker}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            paddingBottom: 10,
-          }}>
-          <View style={styles.Card1}>
-            <View style={styles.CardContent}>
-              <TextInput
-                style={{...styles.search_input}}
-                placeholder="Seats"
-                value={maxseats}
-                placeholderTextColor="grey"
-                color="black"
-                keyboardType="numeric"
-               
-                onChangeText={val => setMaxseats(val)}
-              />
-            </View>
-          </View>
-          <View style={styles.Card2}>
-            <View style={styles.CardContent}>
-              <TextInput
-                style={{...styles.search_input}}
-                placeholder="Driver's name"
-                placeholderTextColor="grey"
-                color="black"
-                value={drivername}
-                onChangeText={val => setDrivername(val)}
-              />
-            </View>
-          </View>
-        </View>
+                <View
+                    style={{
+                        width: '100%',
+                        paddingTop: 10,
+                        flexDirection: 'row',
+                        alignContent: 'flex-start',
+                        justifyContent: 'space-evenly',
+                    }}>
+                    <Text style={styles.section_heading1}>Max Seats </Text>
+                    <Text style={styles.section_heading2}>Name of the driver</Text>
+                </View>
 
-        <View
-          style={{
-            width: '100%',
-            paddingTop: 10,
-            flexDirection: 'row',
-            alignContent: 'flex-start',
-            justifyContent: 'space-evenly',
-          }}>
-          <Text style={styles.section_heading1}>Max Allowed</Text>
-          <Text style={styles.section_heading2}>Phone no. of the driver</Text>
-        </View>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-evenly',
+                        paddingBottom: 10,
+                    }}>
+                    <View style={styles.Card1}>
+                        <View style={styles.CardContent}>
+                            <TextInput
+                                style={{ ...styles.search_input }}
+                                placeholder="Seats"
+                                value={maxseats}
+                                placeholderTextColor="grey"
+                                color="black"
+                                keyboardType="numeric"
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            paddingBottom: 10,
-          }}>
-          <View style={styles.Card1}>
-            <View style={styles.CardContent}>
-              <TextInput
-                style={{...styles.search_input}}
-                placeholder="Allowed"
-                placeholderTextColor="grey"
-                color="black"
-                keyboardType="numeric"
-                value={maxallow}
-                onChangeText={val => setMaxallow(val)}
-              />
-            </View>
-          </View>
-          <View style={styles.Card2}>
-            <View style={styles.CardContent}>
-              <TextInput
-                style={{...styles.search_input}}
-                placeholder="Phone no."
-                placeholderTextColor="grey"
-                color="black"
-                value={phone}
-                keyboardType="numeric"
-              />
-            </View>
-          </View>
-        </View>
+                                onChangeText={val => setMaxseats(val)}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.Card2}>
+                        <View style={styles.CardContent}>
+                            <TextInput
+                                style={{ ...styles.search_input }}
+                                placeholder="Driver's name"
+                                placeholderTextColor="grey"
+                                color="black"
+                                value={drivername}
+                                onChangeText={val => setDrivername(val)}
+                            />
+                        </View>
+                    </View>
+                </View>
+
+                <View
+                    style={{
+                        width: '100%',
+                        paddingTop: 10,
+                        flexDirection: 'row',
+                        alignContent: 'flex-start',
+                        justifyContent: 'space-evenly',
+                    }}>
+                    <Text style={styles.section_heading1}>Max Allowed</Text>
+                    <Text style={styles.section_heading2}>Phone no. of the driver</Text>
+                </View>
+
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-evenly',
+                        paddingBottom: 10,
+                    }}>
+                    <View style={styles.Card1}>
+                        <View style={styles.CardContent}>
+                            <TextInput
+                                style={{ ...styles.search_input }}
+                                placeholder="Allowed"
+                                placeholderTextColor="grey"
+                                color="black"
+                                keyboardType="numeric"
+                                value={maxallow}
+                                onChangeText={val => setMaxallow(val)}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.Card2}>
+                        <View style={styles.CardContent}>
+                            <TextInput
+                                style={{ ...styles.search_input }}
+                                placeholder="Phone no."
+                                placeholderTextColor="grey"
+                                color="black"
+                                value={phone}
+                                keyboardType="numeric"
+                            />
+                        </View>
+                    </View>
+                </View>
 
 
                 <View
@@ -404,15 +404,15 @@ let handleDelete = async () => {
                         flexDirection: 'row',
 
                     }}>
-                  <Button style={{ width: 90 }} 
-                //   color={institute ? institute.themeColor : '#5177E7'}
-                  color="#B04305" mode="contained" onPress={handleDelete}>
+                    <Button style={{ width: 90 }}
+                        //   color={institute ? institute.themeColor : '#5177E7'}
+                        color="#B04305" mode="contained" onPress={handleDelete}>
                         DELETE
                     </Button>
                     <Button style={{ width: 90 }}
-                    color={institute ? institute.themeColor : '#5177E7'}
-                    
-                    mode="contained" onPress={handleUpdate}>
+                        color={institute ? institute.themeColor : '#5177E7'}
+
+                        mode="contained" onPress={handleUpdate}>
                         SAVE
                     </Button>
                 </View>
