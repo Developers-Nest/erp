@@ -35,6 +35,9 @@ import {useSelector} from 'react-redux';
 // loading screem
 import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen.js';
 
+//file picker
+import DocumentPickerHandle from 'react-native-document-picker';
+
 export default function AddNotes({route, navigation}) {
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
@@ -48,6 +51,7 @@ export default function AddNotes({route, navigation}) {
   const [course, setcourse] = useState('');
   const [batch, setbatch] = useState('');
   const [subject, setSubject] = useState('');
+  const [file, setFile] = React.useState(null);
 
   //dropdown values
   const [courses, setcourses] = useState([]);
@@ -103,24 +107,51 @@ export default function AddNotes({route, navigation}) {
 
   const addNote = async () => {
     showLoadingScreen();
+    if (!topic || !desc || !file || !course || !batch || !subject) {
+      alert('All Fields are required!!');
+      hideLoadingScreen();
+      return;
+    }
     try {
-      let token = await read('token');
-      let slug = `/note/add`;
-      let data = {
-        title: topic,
-        description: desc,
-        file: null,
-        course: course,
-        batch: batch,
-        subject: subject,
-      };
-      console.log(data);
-      const response = await post(slug, data, token);
+      if (file != null) {
+        let token = await read('token');
+        let slug = `/note/add`;
+        let data = {
+          title: topic,
+          description: desc,
+          file: file,
+          course: course,
+          batch: batch,
+          subject: subject,
+        };
+        console.log(data);
+        const response = await post(slug, data, token);
+        console.log(response);
+        // if (response.url) {
+        //   alert('Notes Uploaded!!');
+        // } else {
+        //   throw new Error('Cannot upload notes');
+        // }
+      } else {
+        throw new Error('File not selected!!');
+      }
     } catch (err) {
       alert('Cannot get Batches' + err);
     }
     hideLoadingScreen();
   };
+
+  const filePicker = async () => {
+    const res = await DocumentPickerHandle.pick({
+      type: [DocumentPickerHandle.types.pdf],
+    });
+    setFile(res);
+
+    //  -- do not remove following 2 lines (for debugging) --
+    // const fileName = res.uri.replace("file://", "")
+    // setFile(fileName)
+  };
+
   return (
     <View style={styles.container}>
       <View
@@ -234,11 +265,17 @@ export default function AddNotes({route, navigation}) {
               Chapter{' '}
             </Button>
             <View style={{padding: 10}} />
-            <Button
+            {/* <Button
               mode="contained"
               color="white"
               onPress={() => console.log('Pressed')}>
               Add Link
+            </Button> */}
+            <Button
+              mode="contained"
+              color={file ? 'green' : 'white'}
+              onPress={() => filePicker()}>
+              {file ? file.name : 'Add File'}
             </Button>
           </View>
         </Card.Content>
