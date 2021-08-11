@@ -12,15 +12,6 @@ import {
 import { useSelector } from 'react-redux';
 
 import ModalSelector from 'react-native-modal-selector';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import getDesignation from '../../../../services/helpers/getList/getDesignation';
 import getHRname from '../../../../services/helpers/getList/getHRname';
@@ -62,13 +53,7 @@ export default function PaymentSlip({ navigation }) {
     } catch (err) {
       alert('Cannot get Designations!');
     }
-    try {
-      // await setBatch(sb);
-      const response = await getMonth();
-      setMonths(response);
-    } catch (err) {
-      alert('Cannot get Months');
-    }
+   
    
     hideLoadingScreen();
   }, []);
@@ -85,11 +70,12 @@ const getNames = async selectedDesignation => {
   hideLoadingScreen();
 };
 
-const getYears = async mt => {
+const getYears = async (m) => {
   showLoadingScreen();
   try {
-    await setMonth(mt);
-    const response = await getYear(mt);
+    await setName(m);
+  
+    const response = await getYear();
 
     setYears(response);
   } catch (err) {
@@ -97,25 +83,35 @@ const getYears = async mt => {
   }
   hideLoadingScreen();
 };
+const getMonths = async (y) => {
+  showLoadingScreen();
+  try {
+    await setYear(y);
+  
+    const response = await getMonth();
 
-// const getMonths = async () => {
-//   showLoadingScreen();
-//   try {
-//     // await setBatch(sb);
-//     const response = await getMonth();
-//     setMonths(response);
-//   } catch (err) {
-//     alert('Cannot get Months');
+    setMonths(response);
+  } catch (err) {
+    alert('Cannot get Months!!');
+  }
+  hideLoadingScreen();
+};
+// let fetchVehicle = async(sel)=>{
+//   setLoadingScreen()
+//   try{
+//       setVehicle(sel)
+      
+//   } catch(err){
+//       alert('Cannot get vehicles!!')
 //   }
-//   hideLoadingScreen();
-// };
-
+//   hideLoadingScreen()
+// }
 
 const getList = async () => {
   showLoadingScreen();
   try {
     let slug = `
-    /payroll/employeeSalary?designation=${designation}&employee=${names}&year=${empSalary}&month=${month}`;
+    /payroll/employeeSalary?designation=${Designation}&employee=${Name}&year=${Year}&month=${Month}`;
     let token = await read('token');
     let res = await get(slug, token);
     // res = res.students;
@@ -225,7 +221,7 @@ const getList = async () => {
               data={Months}
               initValue="Month"
               onChange={async option => {
-               await getYears(option.key);
+               setMonth(option.key);
               }}
               style={styles.card_picker}
               initValueTextStyle={styles.SelectedValueSmall}
@@ -236,7 +232,7 @@ const getList = async () => {
               data={Years}
               initValue="Year"
               onChange={async option => {
-              setYear(option.key);
+              await getMonths(option.key);
               }}
               style={styles.card_picker}
               initValueTextStyle={styles.SelectedValueSmall}

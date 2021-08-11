@@ -151,7 +151,11 @@ export default function TransportMain({ navigation }) {
                       </Text>
                       <TouchableOpacity
                         style={{ flexDirection: 'row' }}
-                        onPress={() => { navigation.navigate('EditVehicle') }}
+                        onPress={() => navigation.navigate('EditVehicle', {
+                          vehicle: vehicleinfo
+                      })
+                     }
+                        
                       >
                         <Text
                           style={{
