@@ -466,7 +466,11 @@ const Home = ({navigation}) => {
                 <View style={styles.shadow}>
                   <TouchableOpacity
                     style={styles.card}
-                    onPress={() => navigation.navigate('Notes')}>
+                    onPress={() =>
+                      navigation.navigate('Notes', {
+                        id: subject._id,
+                      })
+                    }>
                     <Text style={styles.card_row1}>
                       {subject.name ? subject.name.toUpperCase() : null}
                     </Text>
@@ -537,7 +541,7 @@ const Home = ({navigation}) => {
 
 const Stack = createStackNavigator();
 
-const Home_Route = () => {
+const Home_Route = ({navigation}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
