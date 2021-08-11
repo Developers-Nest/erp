@@ -35,7 +35,7 @@ import {useSelector} from 'react-redux';
 // loading screem
 import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen.js';
 
-export default function AddNotes({navigation}) {
+export default function AddNotes({route, navigation}) {
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
@@ -47,10 +47,12 @@ export default function AddNotes({navigation}) {
   const [desc, setDescription] = useState('');
   const [course, setcourse] = useState('');
   const [batch, setbatch] = useState('');
+  const [subject, setSubject] = useState('');
 
   //dropdown values
   const [courses, setcourses] = useState([]);
   const [batches, setbatches] = useState([]);
+  const [subjects, setSubjects] = useState([]);
 
   useEffect(async () => {
     showLoadingScreen();
@@ -71,11 +73,53 @@ export default function AddNotes({navigation}) {
       const response = await getBatch(selectedCourse);
       setbatches(response);
     } catch (err) {
-      alert('Cannot get Batches');
+      alert('Cannot get Batches' + err);
     }
     hideLoadingScreen();
   };
 
+  const getSubjects = async selectedBatch => {
+    showLoadingScreen();
+    try {
+      await setbatch(selectedBatch);
+      let slug = `/subject/assign?course=${course}&batch=${batch}`;
+      let token = await read('token');
+      const response = await get(slug, token);
+      let list = [];
+      response.map(subject =>
+        list.push({
+          key: subject._id,
+          label: subject.subject,
+        }),
+      );
+      console.log(response);
+      setSubjects(list);
+    } catch (err) {
+      alert('Cannot get Batches' + err);
+    }
+    hideLoadingScreen();
+  };
+
+  const addNote = async () => {
+    showLoadingScreen();
+    try {
+      let token = await read('token');
+      let slug = `/note/add`;
+      let data = {
+        title: topic,
+        description: desc,
+        file: null,
+        course: course,
+        batch: batch,
+        subject: subject,
+      };
+      console.log(data);
+      const response = await post(slug, data, token);
+    } catch (err) {
+      alert('Cannot get Batches' + err);
+    }
+    hideLoadingScreen();
+  };
   return (
     <View style={styles.container}>
       <View
@@ -110,7 +154,7 @@ export default function AddNotes({navigation}) {
             color: 'white',
             fontFamily: 'NunitoSans-Regular',
           }}>
-          Add Notes
+          Add Notes{route.params}
         </Text>
       </View>
       <View style={{marginHorizontal: 15, marginVertical: 10}}>
@@ -135,7 +179,17 @@ export default function AddNotes({navigation}) {
             data={batches}
             initValue="Batch"
             onChange={option => {
-              setbatch(option.key);
+              getSubjects(option.key);
+            }}
+            style={styles.card}
+            initValueTextStyle={styles.SelectedValueSmall}
+            selectTextStyle={styles.SelectedValueSmall}
+          />
+          <ModalSelector
+            data={subjects}
+            initValue="Batch"
+            onChange={option => {
+              setSubject(option.key);
             }}
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
@@ -189,7 +243,8 @@ export default function AddNotes({navigation}) {
       <View style={{alignItems: 'center'}}>
         <Button
           mode="contained"
-          onPress={() => navigation.navigate('Edit Notes')}
+          onPress={addNote}
+          // onPress={() => navigation.navigate('Edit Notes')}
           style={styles.submitButton}>
           Save
         </Button>

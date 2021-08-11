@@ -9,7 +9,7 @@ import NotesEdit from './Notes/NotesEdit';
 
 const Stack = createStackNavigator();
 
-export default function App() {
+export default function Notes({navigation}) {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Add Notes" component={NotesAdd} />
