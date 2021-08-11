@@ -318,7 +318,10 @@ export default function TransportMain({ navigation }) {
                         {driverinfo.name ? driverinfo.name : 'N/A'}
                       </Text>
                       <TouchableOpacity
-                        onPress={() => { navigation.navigate('EditDriver') }}
+                        onPress={() => navigation.navigate('EditDriver', {
+                          driver: driverinfo
+                      })
+                     }
                         style={{ flexDirection: 'row' }}>
                         <Text
                           style={{
