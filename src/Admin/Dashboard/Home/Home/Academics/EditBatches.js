@@ -71,6 +71,7 @@ const EditBatches = ({ route, navigation }) => {
                 alert(res.error)
             } else if(res._id){
                 alert('Updated')
+                navigation.navigate('AcademicsMain');
             }
         } catch(err){
             alert('Cannot Update !!'+err)
@@ -88,6 +89,7 @@ const EditBatches = ({ route, navigation }) => {
                 alert(res.error)
             } else{
                 alert('Deleted')
+                navigation.navigate('AcademicsMain');
             }
         } catch(err){
             alert('Cannot Delete !!'+err)
