@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
-export default function Students({ navigation }) {
+export default function Guardian({ navigation }) {
 
     //theming
     const institute = useSelector(state => state.institute);
@@ -37,7 +37,7 @@ export default function Students({ navigation }) {
                     style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('Home');
+                            navigation.navigate('Students');
                         }}>
                         <AntDesign
                             size={24}
@@ -61,45 +61,11 @@ export default function Students({ navigation }) {
                         paddingLeft: 20,
                         color: 'white',
                     }}>
-                    Student
+                    Guardian
                 </Text>
-                <TouchableOpacity
-                      onPress={() => navigation.navigate('Guardian')}
-                    style={{
-                        justifyContent: 'flex-end',
-                        flex: 1,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}>
-                    <View
-                        style={{
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            marginRight: 5,
-                        }}>
-                        <FontAwesome5Icon
-                            name="list-alt"
-                            color="#900"
-                            style={{
-                                fontSize: 30,
-                                color: 'white',
-                                marginRight: 20,
-                                marginTop: 10,
-                            }}
-                        />
-                        <Text
-                            style={{
-                                color: '#fff',
-                                fontFamily: 'Poppins-Regular',
-                                fontSize: 12,
-                                marginRight: 20,
-                            }}>
-                            Guardian List
-                        </Text>
-                    </View>
-                </TouchableOpacity>
+                
             </View>
-
+           
             {/* Modal Selector */}
             <View style={styles.ModalContainer}>
                 <ModalSelector 
@@ -120,12 +86,14 @@ export default function Students({ navigation }) {
             </View>
 
             {/* {modal selector ends} */}
+           
 
+           
            {/* Search bar */}
             <View style={styles.search}>
                 <TextInput
                     style={{ ...styles.search_input }}
-                    placeholder="Enter Student's name Here"
+                    placeholder="Enter Guardian's name Here"
                     placeholderTextColor="grey"
                 />
 
@@ -144,12 +112,15 @@ export default function Students({ navigation }) {
                 </TouchableOpacity>
             </View>
             {/* searchbar ends */}
-
+    
             {/* Student section */}
             <View style={styles.StudentsCard}>
                 <View style={{margin:10,flexDirection:'column'}}>
-                <Text style={{fontFamily:'Poppins-Regular',fontSize:20}}>
+                <Text style={{fontFamily:'Poppins-Regular',fontSize:18}}>
                     Student name
+                </Text>
+                <Text style={{fontFamily:'Poppins-Regular',fontSize:18}}>
+                    Guardian name
                 </Text>
                 <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                     <Text style={{fontFamily:'Poppins-Regular',fontSize:15}}>
@@ -161,6 +132,8 @@ export default function Students({ navigation }) {
                 </View>
                 </View>
             </View>
+           
+            
 
             
         </View>
@@ -224,7 +197,7 @@ const styles = StyleSheet.create({
     search_input: {
         borderRadius: 8,
         height: 59,
-        fontSize: 15,
+        fontSize: 16,
         fontFamily: 'Poppins-Regular',
         width: '90%',
         color: 'black',
