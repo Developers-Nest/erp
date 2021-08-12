@@ -4,9 +4,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Text,ScrollView
+  Text,
+  ScrollView,
 } from 'react-native';
+
 import {} from 'react-native-paper';
+
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 //selector
 import ModalSelector from 'react-native-modal-selector';
@@ -27,7 +31,6 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 // redux
 import {useSelector} from 'react-redux';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 export default function EventScreen({navigation}) {
   const [type, setType] = useState([]);
@@ -41,7 +44,7 @@ export default function EventScreen({navigation}) {
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  //date picker
+  //date
   let parseDate = myDate => {
     let d = new Date(myDate);
     return d.toString().slice(0, 15);
@@ -54,17 +57,15 @@ export default function EventScreen({navigation}) {
       let token = await read('token');
       let response = await get('/event', token);
       setEvents(response);
-      console.log(response);
     } catch (err) {
-      alert('Cannot fetch events!!' + err);
+      alert('Cannot fetch events : ' + err);
     }
     hideLoadingScreen();
   }, []);
 
   return (
     <ScrollView style={{backgroundColor: 'rgba(249, 249, 249, 1)', flex: 1}}>
-      {/* header start */}
-
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : '#FF5733',
@@ -137,8 +138,6 @@ export default function EventScreen({navigation}) {
         </TouchableOpacity>
       </View>
 
-      {/* header ends */}
-
       <View style={styles.search}>
         <TextInput
           style={{...styles.search_input}}
@@ -163,20 +162,21 @@ export default function EventScreen({navigation}) {
       {events &&
         events.map(event => (
           <View style={styles.shadow} key={event._id}>
-               <View style={styles.EventCard}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: 15,
-                marginLeft: 10,
-                marginRight: 10,
-              }}>
-              <Text style={{fontSize: 18, fontWeight: '400', color: '#211C5A'}}>
-                {event.name}
-              </Text>
-              <View style={{flexDirection: 'row'}}>
+            <View style={styles.EventCard}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginTop: 15,
+                  marginLeft: 10,
+                  marginRight: 10,
+                }}>
+                <Text
+                  style={{fontSize: 18, fontWeight: '400', color: '#211C5A'}}>
+                  {event.name}
+                </Text>
                 <TouchableWithoutFeedback
+                  style={{flexDirection: 'row', alignContent: 'flex-end'}}
                   onPress={() => {
                     navigation.navigate('EditEvent');
                   }}>
@@ -184,35 +184,40 @@ export default function EventScreen({navigation}) {
                     name="edit"
                     style={{
                       alignSelf: 'center',
-                      fontSize: 20,
-                      color: '#211C5A',
+                      fontSize: 15,
+                      color: institute ? institute.themeColor : '#211C5A',
+                      marginRight: 2,
                     }}
                   />
-                  <Text>Edit</Text>
+                  <Text
+                    style={{
+                      color: institute ? institute.themeColor : '#211C5A',
+                    }}>
+                    Edit
+                  </Text>
                 </TouchableWithoutFeedback>
               </View>
-            </View>
-            <View style={{marginLeft: 10, marginRight: 10}}>
-              <Text style={{color: '#211C5A'}}>{event.eventFor}</Text>
-              <Text style={{color: '#211C5A', marginBottom: 0}}>
-                {event.description}
-              </Text>
-              <View
-                style={{
-                  marginTop: 10,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginBottom: 10,
-                  borderTopWidth: 0.5,
-                }}>
-                <Text style={{color: '#211C5A', marginTop: 5}}>
-                  {'From: '}
-                  {parseDate(event.startDate)}
+              <View style={{marginLeft: 10, marginRight: 10}}>
+                <Text style={{color: '#211C5A'}}>{event.eventFor}</Text>
+                <Text style={{color: '#211C5A', marginBottom: 0}}>
+                  {event.description}
                 </Text>
-                <Text style={{color: '#211C5A', marginTop: 5}}>
-                  {'To: '}
-                  {parseDate(event.endDate)}
-                </Text>
+                <View
+                  style={{
+                    marginTop: 10,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginBottom: 10,
+                    borderTopWidth: 0.5,
+                  }}>
+                  <Text style={{color: '#211C5A', marginTop: 5}}>
+                    {'From: '}
+                    {parseDate(event.startDate)}
+                  </Text>
+                  <Text style={{color: '#211C5A', marginTop: 5}}>
+                    {'To: '}
+                    {parseDate(event.endDate)}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -248,7 +253,7 @@ const styles = StyleSheet.create({
   EventCard: {
     backgroundColor: 'white',
     borderRadius: 10,
-   
+    padding: 7,
   },
   shadow: {
     shadowColor: '#000',
@@ -257,14 +262,14 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     backgroundColor: 'white',
     borderColor: '#ccc',
-    borderRadius:12,
+    borderRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
-    marginTop:15,
-    marginLeft:20,
-    marginRight:20,
+    marginTop: 15,
+    marginLeft: 20,
+    marginRight: 20,
     padding: 0,
-    
+
     elevation: 5,
   },
 });
