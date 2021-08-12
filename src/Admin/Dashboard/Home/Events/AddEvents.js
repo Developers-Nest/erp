@@ -79,9 +79,7 @@ export default function AddEvents({navigation}) {
   const [checkBoxValueBatch, setcheckBoxValueBatch] = useState({});
 
   //modal selector values
-  const [eventTypes, setEventTypes] = useState([
-    {key: '610c4ac2066c057a9116408e', label: 'event1'},
-  ]);
+  const [eventTypes, setEventTypes] = useState([]);
   const [eventForList, setEventForList] = useState([
     {key: 'Selected Batch', label: 'Batch'},
     {key: 'Selected Department', label: 'Department'},
@@ -259,6 +257,7 @@ export default function AddEvents({navigation}) {
       console.log(data);
       let response = await post(slug, data, token);
       console.log(response);
+      navigation.replace('Events');
       alert('Event created!');
     } catch (err) {
       alert('Cannot create event!' + err);
