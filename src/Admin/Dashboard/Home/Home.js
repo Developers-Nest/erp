@@ -47,6 +47,7 @@ import Timetable from './Home/Timetable';
 import Library from './Home/Library';
 import Attendance from './Attendance/Attendance';
 import Transport from './Home/Transport';
+import Students from './Home/Students';
 
 import Results from './Home/Results';
 import Leave from './Home/Leave';
@@ -175,6 +176,11 @@ const Home_Route = () => {
       <Stack.Screen
         name="Library"
         component={Library}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Students"
+        component={Students}
         options={{ headerShown: false }}
       />
 <Stack.Screen

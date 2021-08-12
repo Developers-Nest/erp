@@ -100,6 +100,11 @@ const HomeScreen1 = () => {
           </TouchableOpacity>
           <View style={styles.section}>
             <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+                style={{alignItems: 'center'}}
+                onPress={() => {
+                  navigation.navigate('Students');
+                }}>
               <SimpleLineIcon size={38} color="#0066DA" name="graduation" />
 
               <Text
@@ -112,6 +117,7 @@ const HomeScreen1 = () => {
                 }}>
                 Students
               </Text>
+              </TouchableOpacity>
             </View>
           </View>
 
