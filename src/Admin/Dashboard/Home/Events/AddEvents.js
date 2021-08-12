@@ -10,6 +10,9 @@ import {
 
 import {RadioButton, Button} from 'react-native-paper';
 
+//checkbox
+import {CheckBox} from 'react-native-elements';
+
 //selector
 import ModalSelector from 'react-native-modal-selector';
 
@@ -25,6 +28,8 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 //helpers
 import get from '../../../../services/helpers/request/get';
 import post from '../../../../services/helpers/request/post';
+import getBatch from '../../../../services/helpers/getList/getBatch';
+import getCourse from '../../../../services/helpers/getList/getCourse';
 
 //localstorage
 import read from '../../../../services/localstorage/read';
@@ -53,13 +58,30 @@ export default function AddEvents({navigation}) {
   const [eventFor, setEventFor] = useState('');
   const [eventType, setEventType] = React.useState('');
 
+  //students event dropdown
+  const [courses, setcourses] = useState();
+  const [batches, setbatches] = useState();
+
+  //students event data
+  const [course, setcourse] = useState();
+  const [batch, setbatch] = useState();
+
+  //students event dropdown
+  const [department, setdepartment] = useState();
+
+  //faculty event data
+  const [departments, setdepartments] = useState();
+
+  //department checkboxes
+  const [checkBoxValueDept, setcheckBoxValueDept] = useState({});
+
   //modal selector values
   const [eventTypes, setEventTypes] = useState([
     {key: '610c4ac2066c057a9116408e', label: 'event1'},
   ]);
   const [eventForList, setEventForList] = useState([
-    {key: 'Selected Batch', label: 'Selected Batch'},
-    {key: 'Selected Department', label: 'Selected Department'},
+    {key: 'Selected Batch', label: 'Batch'},
+    {key: 'Selected Department', label: 'Department'},
     {key: 'Common To All', label: 'Common To All'},
   ]);
 
@@ -122,39 +144,110 @@ export default function AddEvents({navigation}) {
   //   hideLoadingScreen();
   // }, []);
 
+  let sendEmail = async () => {
+    setLoadingScreen();
+    if (users && users.length == 0) {
+      hideLoadingScreen();
+      return;
+    }
+    try {
+      let token = await read('token');
+      let slug = '/settings/user/email';
+
+      let list = [];
+      Object.entries(checkBoxValue).forEach(([userId, value]) => {
+        if (checkBoxValue[userId]) list.push(userId);
+      });
+
+      let data = {
+        emailText: emailText,
+        list: list,
+      };
+
+      let res = await post(slug, data, token);
+      if (res.error) {
+        alert(res.error);
+      } else if (res.message) {
+        alert('Email Sent!!');
+      }
+    } catch (err) {
+      alert('Cannot Send Email');
+    }
+    hideLoadingScreen();
+  };
   // save details
   const handlesubmit = async () => {
     try {
       let slug = `/event`;
       let token = await read('token');
       let data;
-      if (checked)
-        data = {
-          batch: [],
-          course: '',
-          department: [],
-          description: des,
-          endDate: end,
-          eventFor: eventFor,
-          holiday: checked,
-          name: eventname,
-          organizer: Organizer,
-          startDate: start,
-        };
-      else
-        data = {
-          batch: [],
-          course: '',
-          department: [],
-          description: des,
-          endDate: end,
-          eventFor: eventFor,
-          holiday: checked,
-          name: eventname,
-          organizer: Organizer,
-          startDate: start,
-          type: eventType,
-        };
+      if (checked) {
+        if (departments.length === 0) {
+          data = {
+            batch: [],
+            course: '',
+            department: [],
+            description: des,
+            endDate: end,
+            eventFor: eventFor,
+            holiday: checked,
+            name: eventname,
+            organizer: Organizer,
+            startDate: start,
+          };
+        } else {
+          let dept = [];
+          Object.entries(checkBoxValueDept).forEach(([userId, value]) => {
+            if (checkBoxValueDept[userId]) dept.push(userId);
+          });
+          data = {
+            batch: [],
+            course: '',
+            department: dept,
+            description: des,
+            endDate: end,
+            eventFor: eventFor,
+            holiday: checked,
+            name: eventname,
+            organizer: Organizer,
+            startDate: start,
+          };
+        }
+      } else {
+        if (departments.length === 0) {
+          data = {
+            batch: [],
+            course: '',
+            department: [],
+            description: des,
+            endDate: end,
+            eventFor: eventFor,
+            holiday: checked,
+            name: eventname,
+            organizer: Organizer,
+            startDate: start,
+            type: eventType,
+          };
+        } else {
+          let dept = [];
+          Object.entries(checkBoxValueDept).forEach(([userId, value]) => {
+            if (checkBoxValueDept[userId]) dept.push(userId);
+          });
+          data = {
+            batch: [],
+            course: '',
+            department: dept,
+            description: des,
+            endDate: end,
+            eventFor: eventFor,
+            holiday: checked,
+            name: eventname,
+            organizer: Organizer,
+            startDate: start,
+            type: eventType,
+          };
+        }
+      }
       console.log(data);
       let response = await post(slug, data, token);
       console.log(response);
@@ -164,8 +257,68 @@ export default function AddEvents({navigation}) {
     }
   };
 
+  const HandleEventForSelection = async evefor => {
+    showLoadingScreen();
+
+    try {
+      setEventFor(evefor);
+
+      if (evefor === 'Selected Batch') {
+        try {
+          let response = await getCourse();
+          setcourses(response);
+          console.log(response);
+        } catch (err) {
+          alert('Cannot fetch courses : ' + err);
+        }
+      } else if (evefor === 'Selected Department') {
+        try {
+          let token = await read('token');
+          let response = await get('/department', token);
+          let checkBoxMapDept = {};
+          console.log('dept', response);
+          response &&
+            response.map(data => {
+              checkBoxMapDept[data._id] = false;
+            });
+          setcheckBoxValueDept(checkBoxMapDept);
+          setdepartments(response);
+        } catch (err) {
+          alert('Cannot fetch dept!!' + err);
+        }
+      }
+    } catch (err) {
+      alert('Error!' + err);
+    }
+    hideLoadingScreen();
+  };
+
+  const fetchBatches = async course => {
+    showLoadingScreen();
+
+    try {
+      setcourse(course);
+      let response = await getBatch(course);
+      setbatches(response);
+      console.log(response);
+    } catch (err) {
+      alert('Cannot fetch batches : ' + err);
+    }
+    hideLoadingScreen();
+  };
+  //dept
+  let toggleCheckBoxDept = userId => {
+    setcheckBoxValueDept(prev => {
+      return {
+        ...prev,
+        [userId]: !checkBoxValueDept[[userId]],
+      };
+    });
+  };
+
   return (
     <ScrollView style={styles.container}>
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : '#FF5733',
@@ -307,7 +460,7 @@ export default function AddEvents({navigation}) {
               data={eventForList}
               initValue="Event For"
               onChange={option => {
-                setEventFor(option.key);
+                HandleEventForSelection(option.key);
               }}
               style={{
                 backgroundColor: 'white',
@@ -325,6 +478,138 @@ export default function AddEvents({navigation}) {
             />
           </View>
         </View>
+
+        {eventFor === 'Selected Batch' ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 20,
+              justifyContent: 'space-between',
+            }}>
+            <View>
+              <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+                Course
+              </Text>
+              <ModalSelector
+                data={courses}
+                initValue="Event For"
+                onChange={option => {
+                  fetchBatches(option.key);
+                }}
+                style={{
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  width: 150,
+                  height: 50,
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 10,
+                  shadowColor: 'black',
+                  shadowOpacity: 5,
+                  elevation: 1,
+                }}
+                initValueTextStyle={styles.SelectedValue}
+                selectTextStyle={styles.SelectedValue}
+              />
+            </View>
+            <View>
+              <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+                Batch
+              </Text>
+              <ModalSelector
+                data={batches}
+                initValue="Event For"
+                onChange={option => {
+                  setbatch(option.key);
+                }}
+                style={{
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  width: 150,
+                  height: 50,
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 10,
+                  shadowColor: 'black',
+                  shadowOpacity: 5,
+                  elevation: 1,
+                }}
+                initValueTextStyle={styles.SelectedValue}
+                selectTextStyle={styles.SelectedValue}
+              />
+            </View>
+          </View>
+        ) : null}
+        {eventFor === 'Selected Department' ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 20,
+              justifyContent: 'space-between',
+            }}>
+            <View>
+              <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+                Department
+              </Text>
+              <ScrollView
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 10,
+                  shadowColor: 'black',
+                  shadowOpacity: 5,
+                  elevation: 3,
+                  borderWidth: 0,
+                  padding: 10,
+                  width: 150,
+                }}>
+                {departments &&
+                  departments.map(dept => (
+                    <View
+                      style={{
+                        justifyContent: 'space-between',
+                        flexDirection: 'row',
+                        backgroundColor: 'white',
+                      }}
+                      key={dept._id}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58636D',
+                          fontFamily: 'Poppins-Regular',
+                          paddingVertical: 10,
+                        }}>
+                        {''} {dept.name}
+                      </Text>
+                      <CheckBox
+                        containerStyle={{padding: 5}}
+                        checked={checkBoxValueDept[dept._id]}
+                        onPress={() => toggleCheckBoxDept(dept._id)}
+                      />
+                      {/* <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
+                    </View>
+                  ))}
+              </ScrollView>
+              {/* <ModalSelector
+                data={departments}
+                initValue="Event For"
+                onChange={option => {
+                  setdepartment(option.key);
+                }}
+                style={{
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  width: 150,
+                  height: 50,
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 10,
+                  shadowColor: 'black',
+                  shadowOpacity: 5,
+                  elevation: 1,
+                }}
+                initValueTextStyle={styles.SelectedValue}
+                selectTextStyle={styles.SelectedValue}
+              /> */}
+            </View>
+          </View>
+        ) : null}
       </View>
       <View
         style={{
@@ -390,15 +675,24 @@ export default function AddEvents({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
-      <TextInput
-        placeholder="Write description here "
-        onChangeText={value => setDescription(value)}
-        value={des}
-        style={styles.feedbox}
-        //   numberOfLines={10}
-        multiline={true}
-        placeholderTextColor="grey"
-      />
+      <View
+        style={{
+          marginHorizontal: 20,
+          marginVertical: 10,
+        }}>
+        <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+          Description
+        </Text>
+        <TextInput
+          placeholder="Write description here "
+          onChangeText={value => setDescription(value)}
+          value={des}
+          style={styles.feedbox}
+          //   numberOfLines={10}
+          multiline={true}
+          placeholderTextColor="grey"
+        />
+      </View>
 
       <View style={{justifyContent: 'center', flexDirection: 'row'}}>
         <Button
@@ -428,7 +722,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   Eventinput: {
-    width: 155,
+    width: 150,
     borderWidth: 0.5,
     color: 'black',
     fontFamily: 'Poppins-Regular',
@@ -442,14 +736,20 @@ const styles = StyleSheet.create({
     height: 50,
   },
   feedbox: {
-    margin: 20,
     backgroundColor: 'white',
     textAlignVertical: 'top',
     fontFamily: 'Poppins-Regular',
     fontSize: 15,
     color: 'black',
     borderRadius: 12,
-    height: 200,
+    height: 100,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowOpacity: 5,
+    elevation: 3,
+    borderWidth: 0,
+    padding: 10,
   },
 
   ButtonView: {
@@ -460,12 +760,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: 'normal',
+    fontSize: 15,
     padding: 3,
     color: '#211C5A',
   },
 
   pickdate: {
-    width: 155,
+    width: 150,
     height: 50,
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
