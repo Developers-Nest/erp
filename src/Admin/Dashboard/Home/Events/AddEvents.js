@@ -24,6 +24,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 //helpers
 import get from '../../../../services/helpers/request/get';
+import post from '../../../../services/helpers/request/post';
 
 //localstorage
 import read from '../../../../services/localstorage/read';
@@ -65,7 +66,7 @@ export default function AddEvents({navigation}) {
   //date picker
   let parseDate = myDate => {
     let d = new Date(myDate);
-    return d.toString().slice(0, 15);
+    return d.toString().slice(4, 15);
   };
 
   //date display
@@ -120,6 +121,48 @@ export default function AddEvents({navigation}) {
   //   }
   //   hideLoadingScreen();
   // }, []);
+
+  // save details
+  const handlesubmit = async () => {
+    try {
+      let slug = `/event`;
+      let token = await read('token');
+      let data;
+      if (checked)
+        data = {
+          batch: [],
+          course: '',
+          department: [],
+          description: des,
+          endDate: end,
+          eventFor: eventFor,
+          holiday: checked,
+          name: eventname,
+          organizer: Organizer,
+          startDate: start,
+        };
+      else
+        data = {
+          batch: [],
+          course: '',
+          department: [],
+          description: des,
+          endDate: end,
+          eventFor: eventFor,
+          holiday: checked,
+          name: eventname,
+          organizer: Organizer,
+          startDate: start,
+          type: eventType,
+        };
+      console.log(data);
+      let response = await post(slug, data, token);
+      console.log(response);
+      alert('Event created!');
+    } catch (err) {
+      alert('Cannot create event!' + err);
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -216,11 +259,23 @@ export default function AddEvents({navigation}) {
               </Text>
               <ModalSelector
                 data={eventTypes}
-                initValue="Type"
+                initValue="Event Type"
                 onChange={option => {
                   setEventType(option.key);
                 }}
-                style={{width: 150}}
+                style={{
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  width: 150,
+                  height: 50,
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 10,
+                  shadowColor: 'black',
+                  shadowOpacity: 5,
+                  elevation: 1,
+                }}
+                initValueTextStyle={styles.SelectedValue}
+                selectTextStyle={styles.SelectedValue}
               />
             </View>
           )}
@@ -250,58 +305,90 @@ export default function AddEvents({navigation}) {
             </Text>
             <ModalSelector
               data={eventForList}
-              initValue="Type"
+              initValue="Event For"
               onChange={option => {
                 setEventFor(option.key);
               }}
-              style={{width: 150}}></ModalSelector>
+              style={{
+                backgroundColor: 'white',
+                justifyContent: 'center',
+                width: 150,
+                height: 50,
+                backgroundColor: '#FFFFFF',
+                borderRadius: 10,
+                shadowColor: 'black',
+                shadowOpacity: 5,
+                elevation: 1,
+              }}
+              initValueTextStyle={styles.SelectedValue}
+              selectTextStyle={styles.SelectedValue}
+            />
           </View>
         </View>
       </View>
-      <View style={{flexDirection: 'row', marginTop: 30}}>
-        <TouchableOpacity style={styles.pickdate} onPress={showDatePicker1}>
-          <Text style={{marginTop: 15, marginLeft: 10, color: 'black'}}>
-            {startDisplay}
-            {'  '}
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 30,
+          margin: 20,
+          justifyContent: 'space-between',
+        }}>
+        <View>
+          <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+            Start Date
           </Text>
-          <Feather
-            size={18}
-            color="black"
-            name="calendar"
-            style={{
-              marginTop: 16,
-              marginRight: 0,
-            }}
-          />
-          <DateTimePickerModal
-            isVisible={isDatePickerVisibleStart}
-            style={styles.pickdate}
-            mode="date"
-            onConfirm={handleConfirmStart}
-            onCancel={hideDatePicker1}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.pickdate} onPress={showDatePicker2}>
-          <Text style={{marginTop: 15, marginLeft: 10, color: 'black'}}>
-            {endDisplay}
-            {'  '}
+          <TouchableOpacity style={styles.pickdate} onPress={showDatePicker1}>
+            <Text style={{marginTop: 15, marginLeft: 10, color: 'black'}}>
+              {startDisplay}
+              {'  '}
+            </Text>
+            <Feather
+              size={18}
+              color="black"
+              name="calendar"
+              style={{
+                marginTop: 16,
+                marginRight: 0,
+              }}
+            />
+            <DateTimePickerModal
+              isVisible={isDatePickerVisibleStart}
+              mode="date"
+              onConfirm={handleConfirmStart}
+              onCancel={hideDatePicker1}
+              style={{
+                marginTop: 10,
+                borderWidth: 0,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+        <View>
+          <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+            End Date
           </Text>
-          <Feather
-            size={18}
-            color="black"
-            name="calendar"
-            style={{
-              marginTop: 16,
-              marginRight: 0,
-            }}></Feather>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisibleEnd}
-            style={styles.pickdate}
-            mode="date"
-            onConfirm={handleConfirmEnd}
-            onCancel={hideDatePicker2}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.pickdate} onPress={showDatePicker2}>
+            <Text style={{marginTop: 15, marginLeft: 10, color: 'black'}}>
+              {endDisplay}
+              {'  '}
+            </Text>
+            <Feather
+              size={18}
+              color="black"
+              name="calendar"
+              style={{
+                marginTop: 16,
+                marginRight: 0,
+              }}
+            />
+            <DateTimePickerModal
+              isVisible={isDatePickerVisibleEnd}
+              mode="date"
+              onConfirm={handleConfirmEnd}
+              onCancel={hideDatePicker2}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       <TextInput
         placeholder="Write description here "
@@ -318,7 +405,7 @@ export default function AddEvents({navigation}) {
           mode="contained"
           style={styles.ButtonView}
           color="#5177E7"
-          onPress={() => console.log('Pressed')}>
+          onPress={handlesubmit}>
           Save
         </Button>
       </View>
@@ -341,14 +428,18 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   Eventinput: {
+    width: 155,
     borderWidth: 0.5,
     color: 'black',
     fontFamily: 'Poppins-Regular',
-    width: 150,
-    borderRadius: 5,
-    backgroundColor: 'white',
-    fontSize: 15,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowOpacity: 5,
+    elevation: 3,
+    borderWidth: 0,
     padding: 10,
+    height: 50,
   },
   feedbox: {
     margin: 20,
@@ -365,19 +456,25 @@ const styles = StyleSheet.create({
     width: 100,
   },
 
-  pickdate: {
-    width: 100,
+  SelectedValue: {
     fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    padding: 3,
+    color: '#211C5A',
+  },
+
+  pickdate: {
+    width: 155,
     height: 50,
-    backgroundColor: 'white',
-    borderColor: '#58636D',
-    borderRadius: 8,
-    borderWidth: 0.3,
-    marginLeft: 12,
-    marginRight: 0,
-    paddingHorizontal: 20,
-    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowOpacity: 5,
+    elevation: 3,
+    borderWidth: 0,
+    // flex:1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
 });
