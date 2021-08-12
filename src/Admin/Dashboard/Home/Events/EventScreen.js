@@ -198,12 +198,14 @@ export default function EventScreen({navigation}) {
               </View>
               <View style={{marginLeft: 10, marginRight: 10}}>
                 <Text style={{color: '#211C5A'}}>
-                  {event.eventFor === 'Common To All'
-                    ? event.eventFor
-                    : 'Batch: ' +
+                  {event.eventFor === 'Selected Batch'
+                    ? 'Batch: ' +
                       event.course.courseName +
                       ', ' +
-                      event.batch.batchName}
+                      event.batch.batchName
+                    : event.eventFor === 'Selected Department'
+                    ? 'Department: ' + event.department.name
+                    : event.eventFor}
                 </Text>
                 <Text style={{color: '#211C5A', marginBottom: 0}}>
                   {event.description}
