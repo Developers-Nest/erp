@@ -27,7 +27,15 @@ import { useSelector } from 'react-redux';
 const AddVisitorsHostel = ({ navigation }) => {
   //theming
   const institute = useSelector(state => state.institute);
+// dropdown values
+const [userType, setUserType] = useState([])
 
+const [courses, setCourses] = useState([])
+const [batches, setBatches] = useState([])
+const [users, setUsers] = useState([])
+const [departments, setDepartments] = useState([])
+
+const [usersObject, setUsersObject] = useState([])
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [date, setDate] = React.useState('29 May 2021');
   let index = 0;
@@ -105,7 +113,97 @@ const AddVisitorsHostel = ({ navigation }) => {
       </View>
       <ScrollView>
         <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
-          <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
+        
+        <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                    <Text style={styles.section_heading}>User Type</Text>
+                </View>
+                <View style={{ marginHorizontal: 10, ...styles.shadow }}>
+                    <ModalSelector
+                        initValue="User Type"
+                        style={styles.card2}
+                        data={userType}
+                        initValueTextStyle={styles.SelectedValueSmall}
+                        // onChange={option => {
+                        //     setSelectedUserType(option.label)
+                        //     setSelectedUserTypeId(option.key)
+                        // }}
+                    />
+                </View>
+
+                {/* {
+                    selectedUserType === 'Student' ? ( */}
+                        <View>
+                            <View style={{ width:'100%',paddingTop: 15, flexDirection: 'row' }}>
+                                <Text style={styles.section_heading}>Course </Text>
+                                <Text style={styles.section_heading4}>Batch</Text>
+                                <Text style={styles.section_heading3}>Student</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }} >
+                                <ModalSelector
+                                    initValue="Course"
+                                    style={styles.card3}
+                                    initValueTextStyle={styles.SelectedValueSmall}
+                                    data={courses}
+                                    // onChange={option => {
+                                    //     fetchBatches(option.key)
+                                    // }}
+                                />
+                                <ModalSelector
+                                    initValue="Batch"
+                                    style={styles.card3}
+                                    initValueTextStyle={styles.SelectedValueSmall}
+                                    data={batches}
+                                    // onChange={option => {
+                                    //     fetchStudents(option.key)
+                                    // }}
+                                />
+                                <ModalSelector
+                                    initValue="Student"
+                                    style={styles.card5}
+                                    initValueTextStyle={styles.SelectedValueSmall}
+                                    data={users}
+                                    // onChange={option => {
+                                    //     setSelectedUser(option.key)
+                                    // }}
+                                />
+                            </View>
+                        </View>
+                {/* //     ) : (null)
+                // }
+
+
+                // {
+                //     selectedUserType === 'Teacher' ? ( */}
+                        <View>
+                            <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                                <Text style={styles.section_heading}>Department </Text>
+                                <Text style={styles.section_heading3}>Employee</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }} >
+                                <ModalSelector
+                                    initValue="Department"
+                                    style={styles.card}
+                                    initValueTextStyle={styles.SelectedValueSmall}
+                                    data={departments}
+                                    // onChange={option => {
+                                    //     fetchEmployees(option.key)
+                                    // }}
+                                />
+                                <ModalSelector
+                                    initValue="Employee"
+                                    style={styles.card1}
+                                    initValueTextStyle={styles.SelectedValueSmall}
+                                    data={users}
+                                    // onChange={option => {
+                                    //     setSelectedUser(option.key)
+                                    // }}
+                                />
+                            </View>
+                        </View>
+                {/* //     ) : (null)
+                // } */}
+        
+          {/* <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
             <Text style={styles.section_heading}>Vehicle No.</Text>
           </View>
 
@@ -131,7 +229,7 @@ const AddVisitorsHostel = ({ navigation }) => {
                 />
               </TouchableOpacity>
             </View>
-          </View>
+          </View> */}
 
           <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
             <Text style={styles.section_heading}>Visitor's Name </Text>
@@ -292,6 +390,64 @@ const styles = StyleSheet.create({
 
     color: 'rgba(88, 99, 109, 0.85)',
   },
+  section_heading2: {
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 5,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 18,
+    textAlign: 'center',
+    marginRight: 20,
+    marginLeft:55,
+
+
+    color: 'rgba(88, 99, 109, 0.85)',
+
+    width:'33%'
+
+},
+section_heading3: {
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 5,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 18,
+    textAlign: 'center',
+    marginRight: 20,
+    marginLeft:0,
+
+
+    color: 'rgba(88, 99, 109, 0.85)',
+
+    width:'33%'
+
+},
+section_heading4: {
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 5,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 18,
+    textAlign: 'center',
+    marginRight: 20,
+    marginLeft:55,
+
+
+    color: 'rgba(88, 99, 109, 0.85)',
+
+    width:'33%'
+
+},
+
   pickdate1: {
     width: 120,
     height: 50,
@@ -357,8 +513,117 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 30,
     paddingTop: 3,
-    color: 'white',
+    color: 'grey',
   },
+
+  card: {
+    width:'48%',
+    height: 50,
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#58636D',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    borderRadius: 8,
+    borderWidth: 0.3,
+    marginLeft: 10,
+    marginRight:0,
+    //flexDirection: 'row',
+    justifyContent: 'space-between'
+},
+
+card1: {
+    width:'45%',
+    height: 50,
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#58636D',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    borderRadius: 8,
+    borderWidth: 0.3,
+    marginLeft: 12,
+    marginRight:0,
+    //flexDirection: 'row',
+    justifyContent: 'space-between'
+},
+
+card2: {
+    width: 170,
+    height: 50,
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#58636D',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    borderRadius: 8,
+    borderWidth: 0.3,
+    marginLeft: 15,
+    marginRight: 20,
+    //flexDirection: 'row',
+    justifyContent: 'space-between'
+},
+
+card3: {
+    width:'33%',
+    height: 50,
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    backgroundColor: 'white',
+    borderColor: '#58636D',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    borderRadius: 8,
+    borderWidth: 0.3,
+    marginLeft: 7,
+    marginRight:0,
+    //flexDirection: 'row',
+    justifyContent: 'space-between'
+},
+card4:{
+width:'28%',
+height: 50,
+shadowColor: '#999',
+shadowOffset: { width: 0, height: 1 },
+shadowOpacity: 0.5,
+backgroundColor: 'white',
+borderColor: '#58636D',
+overflow: 'hidden',
+justifyContent: 'center',
+borderRadius: 8,
+borderWidth: 0.3,
+marginLeft: 5,
+marginRight:0,
+//flexDirection: 'row',
+justifyContent: 'space-between'
+},
+
+card5: {
+width:'28%',
+height: 50,
+shadowColor: '#999',
+shadowOffset: { width: 0, height: 1 },
+shadowOpacity: 0.5,
+backgroundColor: 'white',
+borderColor: '#58636D',
+overflow: 'hidden',
+justifyContent: 'center',
+borderRadius: 8,
+borderWidth: 0.3,
+marginLeft: 7,
+marginRight:0,
+//flexDirection: 'row',
+justifyContent: 'space-between'
+},
+
+
 
   header: {
     height: 69,
