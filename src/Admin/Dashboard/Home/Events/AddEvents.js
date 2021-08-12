@@ -427,6 +427,7 @@ export default function AddEvents({navigation}) {
             <RadioButton
               status={checked ? 'checked' : 'unchecked'}
               onPress={() => setChecked(!checked)}
+              color={institute ? institute.themeColor : null}
             />
           </View>
           {checked ? null : (
@@ -561,7 +562,6 @@ export default function AddEvents({navigation}) {
                       key={batch.key}>
                       <Text
                         style={{
-                          fontSize: 12,
                           color: '#58636D',
                           fontFamily: 'Poppins-Regular',
                           paddingVertical: 10,
@@ -572,31 +572,14 @@ export default function AddEvents({navigation}) {
                         containerStyle={{padding: 5}}
                         checked={checkBoxValueBatch[batch.key]}
                         onPress={() => toggleCheckBoxBatch(batch.key)}
+                        checkedColor={
+                          institute ? institute.themeColor : 'black'
+                        }
                       />
                       {/* <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
                     </View>
                   ))}
               </ScrollView>
-              {/* <ModalSelector
-                data={batches}
-                initValue="Event For"
-                onChange={option => {
-                  setbatch(option.key);
-                }}
-                style={{
-                  backgroundColor: 'white',
-                  justifyContent: 'center',
-                  width: 150,
-                  height: 50,
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: 10,
-                  shadowColor: 'black',
-                  shadowOpacity: 5,
-                  elevation: 1,
-                }}
-                initValueTextStyle={styles.SelectedValue}
-                selectTextStyle={styles.SelectedValue}
-              /> */}
             </View>
           </View>
         ) : null}
@@ -633,7 +616,6 @@ export default function AddEvents({navigation}) {
                       key={dept._id}>
                       <Text
                         style={{
-                          fontSize: 12,
                           color: '#58636D',
                           fontFamily: 'Poppins-Regular',
                           paddingVertical: 10,
@@ -644,31 +626,13 @@ export default function AddEvents({navigation}) {
                         containerStyle={{padding: 5}}
                         checked={checkBoxValueDept[dept._id]}
                         onPress={() => toggleCheckBoxDept(dept._id)}
+                        checkedColor={
+                          institute ? institute.themeColor : 'black'
+                        }
                       />
-                      {/* <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
                     </View>
                   ))}
               </ScrollView>
-              {/* <ModalSelector
-                data={departments}
-                initValue="Event For"
-                onChange={option => {
-                  setdepartment(option.key);
-                }}
-                style={{
-                  backgroundColor: 'white',
-                  justifyContent: 'center',
-                  width: 150,
-                  height: 50,
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: 10,
-                  shadowColor: 'black',
-                  shadowOpacity: 5,
-                  elevation: 1,
-                }}
-                initValueTextStyle={styles.SelectedValue}
-                selectTextStyle={styles.SelectedValue}
-              /> */}
             </View>
           </View>
         ) : null}
@@ -760,7 +724,7 @@ export default function AddEvents({navigation}) {
         <Button
           mode="contained"
           style={styles.ButtonView}
-          color="#5177E7"
+          color={institute ? institute.themeColor : '#5177E7'}
           onPress={handlesubmit}>
           Save
         </Button>
@@ -816,6 +780,7 @@ const styles = StyleSheet.create({
 
   ButtonView: {
     width: 100,
+    marginVertical: 15,
   },
 
   SelectedValue: {
