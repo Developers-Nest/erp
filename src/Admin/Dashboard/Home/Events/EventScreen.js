@@ -200,11 +200,12 @@ export default function EventScreen({navigation}) {
                 <Text style={{color: '#211C5A'}}>
                   {event.eventFor === 'Selected Batch'
                     ? 'Batch: ' +
-                      event.course.courseName +
+                      (event.course && event.course.courseName) +
                       ', ' +
-                      event.batch.batchName
+                      (event.batch && event.batch.batchName)
                     : event.eventFor === 'Selected Department'
-                    ? 'Department: ' + event.department.name
+                    ? 'Department: ' +
+                      (event.department && event.department.name)
                     : event.eventFor}
                 </Text>
                 <Text style={{color: '#211C5A', marginBottom: 0}}>
