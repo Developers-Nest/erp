@@ -75,6 +75,9 @@ export default function AddEvents({navigation}) {
   //department checkboxes
   const [checkBoxValueDept, setcheckBoxValueDept] = useState({});
 
+  //batch checkbox
+  const [checkBoxValueBatch, setcheckBoxValueBatch] = useState({});
+
   //modal selector values
   const [eventTypes, setEventTypes] = useState([
     {key: '610c4ac2066c057a9116408e', label: 'event1'},
@@ -130,51 +133,22 @@ export default function AddEvents({navigation}) {
   };
   const [checked, setChecked] = React.useState(true);
 
-  // // on load of the screen
-  // useEffect(async () => {
-  //   showLoadingScreen();
-  //   try {
-  //     let token = await read('token');
-  //     let response = await get('/event/types', token);
-  //     setEventTypes(response);
-  //     console.log(response);
-  //   } catch (err) {
-  //     alert('Cannot fetch events : ' + err);
-  //   }
-  //   hideLoadingScreen();
-  // }, []);
-
-  let sendEmail = async () => {
-    setLoadingScreen();
-    if (users && users.length == 0) {
-      hideLoadingScreen();
-      return;
-    }
+  // on load of the screen
+  useEffect(async () => {
+    showLoadingScreen();
     try {
       let token = await read('token');
-      let slug = '/settings/user/email';
-
+      let response = await get('/event/eventTypes', token);
       let list = [];
-      Object.entries(checkBoxValue).forEach(([userId, value]) => {
-        if (checkBoxValue[userId]) list.push(userId);
-      });
-
-      let data = {
-        emailText: emailText,
-        list: list,
-      };
-
-      let res = await post(slug, data, token);
-      if (res.error) {
-        alert(res.error);
-      } else if (res.message) {
-        alert('Email Sent!!');
-      }
+      response.map(type => list.push({key: type._id, label: type.name}));
+      setEventTypes(list);
+      console.log(response);
     } catch (err) {
-      alert('Cannot Send Email');
+      alert('Cannot fetch events : ' + err);
     }
     hideLoadingScreen();
-  };
+  }, []);
+
   // save details
   const handlesubmit = async () => {
     try {
@@ -182,7 +156,7 @@ export default function AddEvents({navigation}) {
       let token = await read('token');
       let data;
       if (checked) {
-        if (departments.length === 0) {
+        if (eventFor === 'Common To All') {
           data = {
             batch: [],
             course: '',
@@ -195,7 +169,7 @@ export default function AddEvents({navigation}) {
             organizer: Organizer,
             startDate: start,
           };
-        } else {
+        } else if (eventFor === 'Selected Department') {
           let dept = [];
           Object.entries(checkBoxValueDept).forEach(([userId, value]) => {
             if (checkBoxValueDept[userId]) dept.push(userId);
@@ -204,6 +178,23 @@ export default function AddEvents({navigation}) {
             batch: [],
             course: '',
             department: dept,
+            description: des,
+            endDate: end,
+            eventFor: eventFor,
+            holiday: checked,
+            name: eventname,
+            organizer: Organizer,
+            startDate: start,
+          };
+        } else if (eventFor === 'Selected Batch') {
+          let batch = [];
+          Object.entries(checkBoxValueBatch).forEach(([Id, value]) => {
+            if (checkBoxValueBatch[Id]) batch.push(Id);
+          });
+          data = {
+            batch: batch,
+            course: course,
+            department: [],
             description: des,
             endDate: end,
             eventFor: eventFor,
@@ -214,7 +205,7 @@ export default function AddEvents({navigation}) {
           };
         }
       } else {
-        if (departments.length === 0) {
+        if (eventFor === 'Common To All') {
           data = {
             batch: [],
             course: '',
@@ -226,9 +217,8 @@ export default function AddEvents({navigation}) {
             name: eventname,
             organizer: Organizer,
             startDate: start,
-            type: eventType,
           };
-        } else {
+        } else if (eventFor === 'Selected Department') {
           let dept = [];
           Object.entries(checkBoxValueDept).forEach(([userId, value]) => {
             if (checkBoxValueDept[userId]) dept.push(userId);
@@ -237,6 +227,24 @@ export default function AddEvents({navigation}) {
             batch: [],
             course: '',
             department: dept,
+            description: des,
+            endDate: end,
+            eventFor: eventFor,
+            holiday: checked,
+            name: eventname,
+            organizer: Organizer,
+            startDate: start,
+            type: eventType,
+          };
+        } else if (eventFor === 'Selected Batch') {
+          let batch = [];
+          Object.entries(checkBoxValueBatch).forEach(([Id, value]) => {
+            if (checkBoxValueBatch[Id]) batch.push(Id);
+          });
+          data = {
+            batch: batch,
+            course: course,
+            department: [],
             description: des,
             endDate: end,
             eventFor: eventFor,
@@ -299,6 +307,12 @@ export default function AddEvents({navigation}) {
     try {
       setcourse(course);
       let response = await getBatch(course);
+      let checkBoxMapBatch = {};
+      response &&
+        response.map(data => {
+          checkBoxMapBatch[data.key] = false;
+        });
+      setcheckBoxValueBatch(checkBoxMapBatch);
       setbatches(response);
       console.log(response);
     } catch (err) {
@@ -306,12 +320,23 @@ export default function AddEvents({navigation}) {
     }
     hideLoadingScreen();
   };
+
   //dept
-  let toggleCheckBoxDept = userId => {
+  let toggleCheckBoxDept = Id => {
     setcheckBoxValueDept(prev => {
       return {
         ...prev,
-        [userId]: !checkBoxValueDept[[userId]],
+        [Id]: !checkBoxValueDept[[Id]],
+      };
+    });
+  };
+
+  //batch
+  let toggleCheckBoxBatch = Id => {
+    setcheckBoxValueBatch(prev => {
+      return {
+        ...prev,
+        [Id]: !checkBoxValueBatch[[Id]],
       };
     });
   };
@@ -515,7 +540,45 @@ export default function AddEvents({navigation}) {
               <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
                 Batch
               </Text>
-              <ModalSelector
+              <ScrollView
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 10,
+                  shadowColor: 'black',
+                  shadowOpacity: 5,
+                  elevation: 3,
+                  borderWidth: 0,
+                  padding: 10,
+                  width: 150,
+                }}>
+                {batches &&
+                  batches.map(batch => (
+                    <View
+                      style={{
+                        justifyContent: 'space-between',
+                        flexDirection: 'row',
+                        backgroundColor: 'white',
+                      }}
+                      key={batch.key}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58636D',
+                          fontFamily: 'Poppins-Regular',
+                          paddingVertical: 10,
+                        }}>
+                        {''} {batch.label}
+                      </Text>
+                      <CheckBox
+                        containerStyle={{padding: 5}}
+                        checked={checkBoxValueBatch[batch.key]}
+                        onPress={() => toggleCheckBoxBatch(batch.key)}
+                      />
+                      {/* <Text style={{fontSize:12,color:'blue'}}> Not Graded</Text> */}
+                    </View>
+                  ))}
+              </ScrollView>
+              {/* <ModalSelector
                 data={batches}
                 initValue="Event For"
                 onChange={option => {
@@ -534,7 +597,7 @@ export default function AddEvents({navigation}) {
                 }}
                 initValueTextStyle={styles.SelectedValue}
                 selectTextStyle={styles.SelectedValue}
-              />
+              /> */}
             </View>
           </View>
         ) : null}
