@@ -89,6 +89,8 @@ const AllocatedListHostel = ({navigation}) => {
           // backgroundColor:'blue',
           ...styles.header,
         }}>
+           <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+          
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('HostelDetails');
@@ -102,8 +104,7 @@ const AllocatedListHostel = ({navigation}) => {
 
               fontSize: 25,
               color: 'white',
-              paddingLeft: 20,
-              marginTop: 22,
+             
             }}
           />
         </TouchableOpacity>
@@ -114,12 +115,12 @@ const AllocatedListHostel = ({navigation}) => {
             fontSize: 28,
             fontWeight: '600',
             alignSelf: 'center',
-            marginLeft: 30,
+            marginLeft: 20,
             color: 'white',
           }}>
           Allocated List
         </Text>
-
+</View>
         <TouchableOpacity
           onPress={() => navigation.navigate('HostelAllocationAdd')}
           style={{
@@ -141,7 +142,7 @@ const AllocatedListHostel = ({navigation}) => {
                 fontSize: 30,
                 color: 'white',
                 paddingRight: 20,
-                marginTop: 10,
+                
               }}
             />
             <Text
@@ -207,7 +208,7 @@ const AllocatedListHostel = ({navigation}) => {
                           marginHorizontal: -5,
                         }}>
                         {' '}
-                        {allocation.username}
+                        {allocation.username?allocation.username:'N/A'}
                       </Text>
 
                       <Text
@@ -218,8 +219,8 @@ const AllocatedListHostel = ({navigation}) => {
                           marginTop: 5,
                           fontFamily: 'openSans',
                         }}>
-                        {allocation.room} {', '}
-                        {allocation.floor} {' floor'}
+                        {allocation.room?allocation.room:'N/A'} {', '}
+                        {allocation.floor?allocation.floor:'N/A'} {' floor'}
                       </Text>
 
                       {/* */}
@@ -239,7 +240,7 @@ const AllocatedListHostel = ({navigation}) => {
                           color: institute ? institute.themeColor : '#505069',
                           fontFamily: 'openSans',
                         }}>
-                        {allocation.type}
+                        {allocation.type?allocation.type:'N/A'}
                       </Text>
                     </TouchableOpacity>
 
@@ -251,7 +252,7 @@ const AllocatedListHostel = ({navigation}) => {
                           fontFamily: 'Poppins-Regular',
                         }}>
                         {'Hostel: '}
-                        {allocation.hostel}
+                        {allocation.hostel?allocation.hostel:'N/A'}
                       </Text>
 
                       <TouchableOpacity
@@ -299,7 +300,7 @@ const AllocatedListHostel = ({navigation}) => {
                         fontFamily: 'Poppins-Regular',
                       }}>
                       {'Register: '}
-                      {allocation.regDate}
+                      {allocation.regDate?allocation.regDate:'N/A'}
                     </Text>
                   </View>
                   <View style={{marginTop: 15}}>
@@ -310,14 +311,14 @@ const AllocatedListHostel = ({navigation}) => {
                         fontSize: 12,
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {'Vacate: '} {allocation.vacaDate}
+                      {'Vacate: '} {allocation.vacaDate?allocation.vacaDate:'N/A'}
                     </Text>
                   </View>
                 </View>
               </View>
             ))
           : null}
-        <View style={{height: 60}} />
+        <View style={{height: 90}} />
       </ScrollView>
     </View>
   );
