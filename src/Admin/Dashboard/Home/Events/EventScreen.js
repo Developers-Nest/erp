@@ -8,8 +8,6 @@ import {
   ScrollView,
 } from 'react-native';
 
-import {} from 'react-native-paper';
-
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 //selector
@@ -57,6 +55,7 @@ export default function EventScreen({navigation}) {
       let token = await read('token');
       let response = await get('/event', token);
       setEvents(response);
+      console.log(response);
     } catch (err) {
       alert('Cannot fetch events : ' + err);
     }
@@ -198,7 +197,14 @@ export default function EventScreen({navigation}) {
                 </TouchableWithoutFeedback>
               </View>
               <View style={{marginLeft: 10, marginRight: 10}}>
-                <Text style={{color: '#211C5A'}}>{event.eventFor}</Text>
+                <Text style={{color: '#211C5A'}}>
+                  {event.eventFor === 'Common To All'
+                    ? event.eventFor
+                    : 'Batch: ' +
+                      event.course.courseName +
+                      ', ' +
+                      event.batch.batchName}
+                </Text>
                 <Text style={{color: '#211C5A', marginBottom: 0}}>
                   {event.description}
                 </Text>
