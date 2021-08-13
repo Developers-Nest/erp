@@ -182,7 +182,7 @@ export default function AddEvents({route, navigation}) {
         try {
           let response = await getCourse();
           setcourses(response);
-          fetchBatches(course);
+          if (course !== null) fetchBatches(course);
           console.log(response);
         } catch (err) {
           alert('Cannot fetch courses : ' + err);
@@ -334,7 +334,7 @@ export default function AddEvents({route, navigation}) {
       let response = await patch(slug, data, token);
       console.log(response);
       navigation.replace('Events');
-      alert('Event created!');
+      alert('Event updated!');
     } catch (err) {
       alert('Cannot create event!' + err);
     }
@@ -437,7 +437,7 @@ export default function AddEvents({route, navigation}) {
               </Text>
               <ModalSelector
                 data={eventTypes}
-                initValue={route.params.eventTypeName}
+                initValue={route.params.eventTypeName || 'select event type'}
                 onChange={option => {
                   setEventType(option.key);
                 }}
@@ -445,7 +445,6 @@ export default function AddEvents({route, navigation}) {
                   backgroundColor: 'white',
                   justifyContent: 'center',
                   width: 150,
-                  height: 50,
                   backgroundColor: '#FFFFFF',
                   borderRadius: 10,
                   shadowColor: 'black',
@@ -516,7 +515,7 @@ export default function AddEvents({route, navigation}) {
               </Text>
               <ModalSelector
                 data={courses}
-                initValue={route.params.coursename}
+                initValue={route.params.coursename || 'select course'}
                 onChange={option => {
                   fetchBatches(option.key);
                 }}
@@ -524,7 +523,6 @@ export default function AddEvents({route, navigation}) {
                   backgroundColor: 'white',
                   justifyContent: 'center',
                   width: 150,
-                  height: 50,
                   backgroundColor: '#FFFFFF',
                   borderRadius: 10,
                   shadowColor: 'black',
@@ -580,7 +578,7 @@ export default function AddEvents({route, navigation}) {
               </ScrollView> */}
               <ModalSelector
                 data={batches}
-                initValue={route.params.batchname}
+                initValue={route.params.batchname || 'select batch'}
                 onChange={option => {
                   setbatch(option.key);
                 }}
@@ -588,7 +586,6 @@ export default function AddEvents({route, navigation}) {
                   backgroundColor: 'white',
                   justifyContent: 'center',
                   width: 150,
-                  height: 50,
                   backgroundColor: '#FFFFFF',
                   borderRadius: 10,
                   shadowColor: 'black',
@@ -614,7 +611,7 @@ export default function AddEvents({route, navigation}) {
               </Text>
               <ModalSelector
                 data={departments}
-                initValue={route.params.departmentname}
+                initValue={route.params.departmentname || 'select department'}
                 onChange={option => {
                   setdepartment(option.key);
                 }}
@@ -622,7 +619,6 @@ export default function AddEvents({route, navigation}) {
                   backgroundColor: 'white',
                   justifyContent: 'center',
                   width: 150,
-                  height: 50,
                   backgroundColor: '#FFFFFF',
                   borderRadius: 10,
                   shadowColor: 'black',
