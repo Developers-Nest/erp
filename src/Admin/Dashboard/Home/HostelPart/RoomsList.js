@@ -6,9 +6,10 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
+import AntDesign from 'react-native-vector-icons/AntDesign'; 
 
 import { Button } from 'react-native-paper';
 
@@ -20,14 +21,18 @@ import read from '../../../../services/localstorage/read';
 
 //redux
 import { useSelector } from 'react-redux';
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
 const RoomsList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [listroom, setRoomsList] = useState([]);
+// loading screem
+const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   const onChangeSearch = query => setSearchQuery(query);
 
   useEffect(async () => {
+   showLoadingScreen();
     try {
       let slug = '/hostel/hostelRoom';
       let token = await read('token');
@@ -37,13 +42,14 @@ const RoomsList = ({ navigation }) => {
     } catch (err) {
       alert('Cannot fetch your rooms list !!');
     }
+    hideLoadingScreen();
   }, []);
 
   //theming
   const institute = useSelector(state => state.institute);
 
   return (
-    <View style={{ justifyContent: 'center', alignContent: 'center' }}>
+    <View style={styles.container}>
       {/* header start */}
 
       <View
@@ -51,6 +57,8 @@ const RoomsList = ({ navigation }) => {
           backgroundColor: institute ? institute.themeColor : '#FF5733',
           ...styles.header,
         }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+                    
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('AllocatedListHostel');
@@ -63,11 +71,11 @@ const RoomsList = ({ navigation }) => {
               alignSelf: 'center',
               fontSize: 25,
               color: 'white',
-              paddingLeft: 20,
-              paddingTop: 20,
+             
             }}
           />
         </TouchableOpacity>
+     
         <Text
           style={{
             fontStyle: 'normal',
@@ -75,11 +83,12 @@ const RoomsList = ({ navigation }) => {
             fontSize: 28,
             fontWeight: '600',
             alignSelf: 'center',
-            paddingLeft: 30,
+            paddingLeft: 20,
             color: 'white',
           }}>
           Rooms List
         </Text>
+        </View>
         <TouchableOpacity
           onPress={() => navigation.navigate('VisitorsList')}
           style={{
@@ -94,15 +103,7 @@ const RoomsList = ({ navigation }) => {
               alignItems: 'center',
               marginRight: 5,
             }}>
-            {/* <Ionicons
-                  name="add-circle"
-                  color="#900"
-                  style={{
-                    fontSize: 35,
-                    color: 'white',
-                    paddingRight: 20,
-                  }}
-                /> */}
+            
             <MaterialIcon
               name="align-horizontal-left"
               color="#900"
@@ -126,7 +127,6 @@ const RoomsList = ({ navigation }) => {
       </View>
 
       {/* header ends */}
-      <View style={{ height: 10 }} />
 
       <View style={{ marginHorizontal: 10, ...styles.shadow }}>
         <View style={styles.search}>
@@ -153,7 +153,8 @@ const RoomsList = ({ navigation }) => {
 
       <View style={{ height: 15 }} />
 
-      <View>
+      
+        <ScrollView>
         {listroom &&
           listroom.map(listroom => (
             <View style={styles.section} key={listroom._id}>
@@ -239,21 +240,21 @@ const RoomsList = ({ navigation }) => {
               </View>
             </View>
           ))}
-      </View>
+        <View style={{height:10}}/>
+          </ScrollView>
+      
 
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container1: {
-    paddingTop: 10,
-    flex: 1,
-    backgroundColor: '#E5E5E5',
-  },
+  
   container: {
     alignContent: 'center',
+    flex: 1,
     justifyContent: 'center',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    shadowColor: '#333',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 3,

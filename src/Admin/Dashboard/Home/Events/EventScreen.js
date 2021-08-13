@@ -177,7 +177,25 @@ export default function EventScreen({navigation}) {
                 <TouchableWithoutFeedback
                   style={{flexDirection: 'row', alignContent: 'flex-end'}}
                   onPress={() => {
-                    navigation.navigate('EditEvent');
+                    navigation.navigate('EditEvent', {
+                      id: event._id,
+                      v: event.__v,
+                      eventname: event.name,
+                      Organizer: event.organizer,
+                      des: event.description,
+                      start: event.startDate,
+                      end: event.endDate,
+                      eventFor: event.eventFor,
+                      eventType: event.type && event.type._id,
+                      eventTypeName: event.type && event.type.name,
+                      course: event.course && event.course._id,
+                      coursename: event.course && event.course.courseName,
+                      batch: event.batch && event.batch._id,
+                      batchname: event.batch && event.batch.batchName,
+                      department: event.department && event.department._id,
+                      departmentname: event.department && event.department.name,
+                      holiday: event.holiday,
+                    });
                   }}>
                   <FontAwesome5Icon
                     name="edit"
@@ -200,11 +218,12 @@ export default function EventScreen({navigation}) {
                 <Text style={{color: '#211C5A'}}>
                   {event.eventFor === 'Selected Batch'
                     ? 'Batch: ' +
-                      event.course.courseName +
+                      (event.course && event.course.courseName) +
                       ', ' +
-                      event.batch.batchName
+                      (event.batch && event.batch.batchName)
                     : event.eventFor === 'Selected Department'
-                    ? 'Department: ' + event.department.name
+                    ? 'Department: ' +
+                      (event.department && event.department.name)
                     : event.eventFor}
                 </Text>
                 <Text style={{color: '#211C5A', marginBottom: 0}}>
