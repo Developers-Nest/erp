@@ -317,7 +317,7 @@ const PlacementScreen1 = ({ navigation }) => {
 
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: ' #505069' }}>
+                            <Text style={{ fontSize: 12, color: '#505069' }}>
                                 Admission Number
                             </Text>
                         </TouchableOpacity>

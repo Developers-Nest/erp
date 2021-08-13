@@ -196,9 +196,10 @@ const styles = StyleSheet.create({
   },
 
   cardsWrapper: {
-    marginTop: 20,
+    marginTop:20,
     width: '90%',
     alignSelf: 'center',
+    flexDirection:'column-reverse'
   },
   card: {
     marginVertical: 10,
