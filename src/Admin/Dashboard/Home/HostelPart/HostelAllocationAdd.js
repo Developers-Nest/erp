@@ -289,6 +289,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                 throw new Error(response.error)
             } else if(response._id){
                 alert('Hosted Allocated')
+                navigation.navigate('AllocatedListHostel')
             }
         } catch (err) {
             alert('Error!! ' + err)

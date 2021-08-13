@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -18,10 +18,74 @@ import Evillcons from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
 
 import { useSelector } from 'react-redux';
-
-const HostelAllocationEdit = ({ navigation }) => {
+import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
+// helpers
+import patch from '../../../../services/helpers/request/patch'
+import deleteReq from '../../../../services/helpers/request/delete'
+import read from '../../../../services/localstorage/read'
+const HostelAllocationEdit = ({ route, navigation }) => {
   //theming
   const institute = useSelector(state => state.institute);
+
+  const [user, setuser] = useState([]);
+    const [hostel, setHostel] = useState({})
+
+
+    const [selectedHostelName, setSelectedHostelName] = useState('')
+    const [selectedHostelRoom, setSelectedHostelRoom] = useState('')
+    const [selectedDepartment, setSelectedDepartment] = useState('')
+    const [selectedCourse, setSelectedCourse] = useState('')
+    const [selectedBatch, setSelectedBatch] = useState('')
+    const [selectedUser, setSelectedUser] = useState('')
+    const [id, setId] = useState('')
+
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+  useEffect(async () => {
+      let hostel = route.params.hostel
+     
+setHostel(hostel)
+setDate(hostel.hostelRegistartionDate)
+setDate1(hostel.vacatingDate)
+setId(hostel._id)
+//       batch: "60d319d51f8c9327133b69b4"
+// course: "60d319d01f8c9327133b69b3"
+// createdAt: "2021-08-13T15:32:35.514Z"
+// hostelName: "60f1bff8fa745420676693ec"
+// hostelRegistartionDate: "2021-08-19T15:31:00.000Z"
+// hostelRoom: "61112cd787cbdc129b7a9e13"
+// hostelType: "60f1bfedfa745420676693e4"
+// institution: "60d318e21f8c9327133b67e0"
+// status: "Pending"
+// updatedAt: "2021-08-13T15:32:35.514Z"
+// user: "60ebbce6e8e48a2b402032c4"
+// userType: "60d318e21f8c9327133b67e2"
+// vacatingDate: "2021-08-28T15:31:00.000Z"
+// __v: 0
+// _id: "6116909358926e45a6d9c34f"
+  }, [])
+
+  
+
+  let handleDelete = async () => {
+      setLoadingScreen()
+      try {
+          let slug = `/hostel/hostelAllocation/${id}`
+          let token = await read('token')
+          let res = await deleteReq(slug, token)
+          if (res.error) {
+              alert(res.error)
+          } else {
+              alert('Deleted')
+              navigation.navigate('AcademicsMain');
+          }
+      } catch (err) {
+          alert('Cannot Delete !!')
+      }
+      hideLoadingScreen()
+  }
+
+
 
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [date, setDate] = React.useState('29 May 2021');
@@ -169,7 +233,12 @@ const HostelAllocationEdit = ({ navigation }) => {
         </View>
         <View style={{ flexDirection: 'row' }}>
           <ModalSelector
-            initValue="Type"
+           data={user}
+           initValue={hostel.hostelType? hostel.hostelType.name: 'N/A'}
+           onChange={option => {
+               // setclass(option.key);
+           }}
+           disabled={true}
             style={styles.card}
             initValueTextStyle={styles.SelectedValueSmall}
           //selectTextStyle={styles.SelectedValueSmall}
@@ -190,6 +259,7 @@ const HostelAllocationEdit = ({ navigation }) => {
             placeholder="Nilgiri"
             placeholderTextColor="grey"
             color="black"
+            value={hostel.hostelName? hostel.hostelName.name: 'N/A'}
           />
         </View>
         <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
@@ -201,9 +271,12 @@ const HostelAllocationEdit = ({ navigation }) => {
           <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
             <TextInput
               style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-              placeholder={date}
+              // placeholder={date}
               placeholderTextColor="grey"
               color="black"
+              value={date}
+              
+              editable={false}
             />
             <Feather
               size={18}
@@ -224,9 +297,12 @@ const HostelAllocationEdit = ({ navigation }) => {
           <TouchableOpacity style={styles.pickdate1} onPress={showDatePicker1}>
             <TextInput
               style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-              placeholder={date1}
+              // placeholder={date1}
               placeholderTextColor="grey"
               color="black"
+              value={date1}
+              
+              editable={false}
             />
             <Feather
               size={18}
@@ -250,7 +326,7 @@ const HostelAllocationEdit = ({ navigation }) => {
           <Pressable
             style={styles.button1}
             onPress={() => Alert.alert('Deleted')}>
-            <Text style={styles.text1}>Delete</Text>
+            <Text style={styles.text1} onPress={handleDelete}>Delete</Text>
           </Pressable>
           <Pressable
             style={styles.button}
