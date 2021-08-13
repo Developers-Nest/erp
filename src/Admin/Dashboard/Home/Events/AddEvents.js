@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -8,18 +8,16 @@ import {
   ScrollView,
 } from 'react-native';
 
-import {RadioButton, Button} from 'react-native-paper';
+import { RadioButton, Button } from 'react-native-paper';
 
 //checkbox
-import {CheckBox} from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 
 //selector
 import ModalSelector from 'react-native-modal-selector';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Feather from 'react-native-vector-icons/Feather';
 
 //date picker
@@ -38,9 +36,9 @@ import read from '../../../../services/localstorage/read';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function AddEvents({navigation}) {
+export default function AddEvents({ navigation }) {
   //institute
   const institute = useSelector(state => state.institute);
 
@@ -81,9 +79,9 @@ export default function AddEvents({navigation}) {
   //modal selector values
   const [eventTypes, setEventTypes] = useState([]);
   const [eventForList, setEventForList] = useState([
-    {key: 'Selected Batch', label: 'Selected Batch'},
-    {key: 'Selected Department', label: 'Selected Department'},
-    {key: 'Common To All', label: 'Common To All'},
+    { key: 'Selected Batch', label: 'Selected Batch' },
+    { key: 'Selected Department', label: 'Selected Department' },
+    { key: 'Common To All', label: 'Common To All' },
   ]);
 
   //date picker
@@ -138,7 +136,7 @@ export default function AddEvents({navigation}) {
       let token = await read('token');
       let response = await get('/event/eventTypes', token);
       let list = [];
-      response.map(type => list.push({key: type._id, label: type.name}));
+      response.map(type => list.push({ key: type._id, label: type.name }));
       setEventTypes(list);
       console.log(response);
     } catch (err) {
@@ -149,11 +147,17 @@ export default function AddEvents({navigation}) {
 
   // save details
   const handlesubmit = async () => {
+    showLoadingScreen();
     try {
       let slug = `/event`;
       let token = await read('token');
       let data;
       if (checked) {
+        if(!des || !end || !eventFor || !checked || !eventFor || !Organizer || !start || !eventname){
+          alert('All fields are required!!')
+          hideLoadingScreen()
+          return
+        }
         if (eventFor === 'Common To All') {
           data = {
             batch: [],
@@ -172,6 +176,13 @@ export default function AddEvents({navigation}) {
           Object.entries(checkBoxValueDept).forEach(([userId, value]) => {
             if (checkBoxValueDept[userId]) dept.push(userId);
           });
+
+          // atleast one department should be selected
+          if(dept.length == 0){
+            alert('Select a department!!')
+            hideLoadingScreen()
+            return
+          }
           data = {
             batch: [],
             course: '',
@@ -189,6 +200,11 @@ export default function AddEvents({navigation}) {
           Object.entries(checkBoxValueBatch).forEach(([Id, value]) => {
             if (checkBoxValueBatch[Id]) batch.push(Id);
           });
+          if(batch.length == 0){
+            alert('Select a batch!!')
+            hideLoadingScreen()
+            return
+          }
           data = {
             batch: batch,
             course: course,
@@ -203,6 +219,11 @@ export default function AddEvents({navigation}) {
           };
         }
       } else {
+        if(!des || !end || !eventFor || !checked || !eventFor || !Organizer || !start || !eventname){
+          alert('All fields are required!!')
+          hideLoadingScreen()
+          return
+        }
         if (eventFor === 'Common To All') {
           data = {
             batch: [],
@@ -222,6 +243,12 @@ export default function AddEvents({navigation}) {
           Object.entries(checkBoxValueDept).forEach(([userId, value]) => {
             if (checkBoxValueDept[userId]) dept.push(userId);
           });
+          // atleast one department should be selected
+          if(dept.length == 0){
+            alert('Select a department!!')
+            hideLoadingScreen()
+            return
+          }
           data = {
             batch: [],
             course: '',
@@ -240,6 +267,12 @@ export default function AddEvents({navigation}) {
           Object.entries(checkBoxValueBatch).forEach(([Id, value]) => {
             if (checkBoxValueBatch[Id]) batch.push(Id);
           });
+          // atleast one department should be selected
+          if(batch.length == 0){
+            alert('Select a batch!!')
+            hideLoadingScreen()
+            return
+          }
           data = {
             batch: batch,
             course: course,
@@ -255,14 +288,17 @@ export default function AddEvents({navigation}) {
           };
         }
       }
-      console.log(data);
       let response = await post(slug, data, token);
-      console.log(response);
-      navigation.replace('Events');
-      alert('Event created!');
+      if (response.error) {
+        alert(response.error)
+      } else {
+        navigation.replace('Events');
+        alert('Event created!');
+      }
     } catch (err) {
       alert('Cannot create event!' + err);
     }
+    hideLoadingScreen()
   };
 
   const HandleEventForSelection = async evefor => {
@@ -350,7 +386,7 @@ export default function AddEvents({navigation}) {
           ...styles.header,
         }}>
         <View
-          style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 20}}>
+          style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Events');
@@ -390,7 +426,7 @@ export default function AddEvents({navigation}) {
             justifyContent: 'space-between',
           }}>
           <View>
-            <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+            <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>
               Event Name
             </Text>
             <TextInput
@@ -433,7 +469,7 @@ export default function AddEvents({navigation}) {
           </View>
           {checked ? null : (
             <View>
-              <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+              <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>
                 Event Type
               </Text>
               <ModalSelector
@@ -466,7 +502,7 @@ export default function AddEvents({navigation}) {
             justifyContent: 'space-between',
           }}>
           <View>
-            <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+            <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>
               Organizer Name
             </Text>
             <TextInput
@@ -479,7 +515,7 @@ export default function AddEvents({navigation}) {
             />
           </View>
           <View>
-            <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+            <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>
               Event For
             </Text>
             <ModalSelector
@@ -512,7 +548,7 @@ export default function AddEvents({navigation}) {
               justifyContent: 'space-between',
             }}>
             <View>
-              <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+              <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>
                 Course
               </Text>
               <ModalSelector
@@ -537,7 +573,7 @@ export default function AddEvents({navigation}) {
               />
             </View>
             <View>
-              <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+              <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>
                 Batch
               </Text>
               <ScrollView
@@ -569,7 +605,7 @@ export default function AddEvents({navigation}) {
                         {''} {batch.label}
                       </Text>
                       <CheckBox
-                        containerStyle={{padding: 5}}
+                        containerStyle={{ padding: 5 }}
                         checked={checkBoxValueBatch[batch.key]}
                         onPress={() => toggleCheckBoxBatch(batch.key)}
                         checkedColor={
@@ -591,7 +627,7 @@ export default function AddEvents({navigation}) {
               justifyContent: 'space-between',
             }}>
             <View>
-              <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+              <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>
                 Department
               </Text>
               <ScrollView
@@ -623,7 +659,7 @@ export default function AddEvents({navigation}) {
                         {''} {dept.name}
                       </Text>
                       <CheckBox
-                        containerStyle={{padding: 5}}
+                        containerStyle={{ padding: 5 }}
                         checked={checkBoxValueDept[dept._id]}
                         onPress={() => toggleCheckBoxDept(dept._id)}
                         checkedColor={
@@ -645,11 +681,11 @@ export default function AddEvents({navigation}) {
           justifyContent: 'space-between',
         }}>
         <View>
-          <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+          <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>
             Start Date
           </Text>
           <TouchableOpacity style={styles.pickdate} onPress={showDatePicker1}>
-            <Text style={{marginTop: 15, marginLeft: 10, color: 'black'}}>
+            <Text style={{ marginTop: 15, marginLeft: 10, color: 'black' }}>
               {startDisplay}
               {'  '}
             </Text>
@@ -675,11 +711,11 @@ export default function AddEvents({navigation}) {
           </TouchableOpacity>
         </View>
         <View>
-          <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+          <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>
             End Date
           </Text>
           <TouchableOpacity style={styles.pickdate} onPress={showDatePicker2}>
-            <Text style={{marginTop: 15, marginLeft: 10, color: 'black'}}>
+            <Text style={{ marginTop: 15, marginLeft: 10, color: 'black' }}>
               {endDisplay}
               {'  '}
             </Text>
@@ -706,7 +742,7 @@ export default function AddEvents({navigation}) {
           marginHorizontal: 20,
           marginVertical: 10,
         }}>
-        <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
+        <Text style={{ fontFamily: 'Poppins-Regular', color: '#58636D' }}>
           Description
         </Text>
         <TextInput
@@ -720,7 +756,7 @@ export default function AddEvents({navigation}) {
         />
       </View>
 
-      <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+      <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
         <Button
           mode="contained"
           style={styles.ButtonView}
