@@ -249,14 +249,10 @@ export default function AddEvents({route, navigation}) {
             _id: id,
           };
         } else if (eventFor === 'Selected Department') {
-          let dept = [];
-          Object.entries(checkBoxValueDept).forEach(([userId, value]) => {
-            if (checkBoxValueDept[userId]) dept.push(userId);
-          });
           data = {
-            batch: [],
-            course: '',
-            department: dept,
+            batch: null,
+            course: null,
+            department: department,
             description: des,
             endDate: end,
             eventFor: eventFor,
@@ -268,14 +264,10 @@ export default function AddEvents({route, navigation}) {
             _id: id,
           };
         } else if (eventFor === 'Selected Batch') {
-          let batch = [];
-          Object.entries(checkBoxValueBatch).forEach(([Id, value]) => {
-            if (checkBoxValueBatch[Id]) batch.push(Id);
-          });
           data = {
             batch: batch,
             course: course,
-            department: [],
+            department: null,
             description: des,
             endDate: end,
             eventFor: eventFor,
@@ -305,14 +297,10 @@ export default function AddEvents({route, navigation}) {
             _id: id,
           };
         } else if (eventFor === 'Selected Department') {
-          let dept = [];
-          Object.entries(checkBoxValueDept).forEach(([userId, value]) => {
-            if (checkBoxValueDept[userId]) dept.push(userId);
-          });
           data = {
-            batch: [],
-            course: '',
-            department: dept,
+            batch: null,
+            course: null,
+            department: department,
             description: des,
             endDate: end,
             eventFor: eventFor,
@@ -325,14 +313,10 @@ export default function AddEvents({route, navigation}) {
             _id: id,
           };
         } else if (eventFor === 'Selected Batch') {
-          let batch = [];
-          Object.entries(checkBoxValueBatch).forEach(([Id, value]) => {
-            if (checkBoxValueBatch[Id]) batch.push(Id);
-          });
           data = {
             batch: batch,
             course: course,
-            department: [],
+            department: null,
             description: des,
             endDate: end,
             eventFor: eventFor,
