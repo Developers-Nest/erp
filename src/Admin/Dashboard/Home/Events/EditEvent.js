@@ -27,7 +27,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 //helpers
 import get from '../../../../services/helpers/request/get';
-import post from '../../../../services/helpers/request/post';
+import patch from '../../../../services/helpers/request/patch';
 import getBatch from '../../../../services/helpers/getList/getBatch';
 import getCourse from '../../../../services/helpers/getList/getCourse';
 
@@ -46,6 +46,10 @@ export default function AddEvents({route, navigation}) {
 
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+  //data for event editing
+  const [id, setId] = React.useState(route.params.id);
+  const [v, setV] = React.useState(route.params.v);
 
   //data for event creation
   const [eventname, SetEventname] = React.useState(route.params.eventname);
@@ -129,7 +133,7 @@ export default function AddEvents({route, navigation}) {
     setend(data.toString());
     hideDatePicker2();
   };
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = React.useState(route.params.holiday);
 
   // on load of the screen
   useEffect(async () => {
@@ -225,15 +229,15 @@ export default function AddEvents({route, navigation}) {
   // save details
   const handlesubmit = async () => {
     try {
-      let slug = `/event`;
+      let slug = `/event/${id}`;
       let token = await read('token');
       let data;
       if (checked) {
         if (eventFor === 'Common To All') {
           data = {
-            batch: [],
-            course: '',
-            department: [],
+            batch: null,
+            course: null,
+            department: null,
             description: des,
             endDate: end,
             eventFor: eventFor,
@@ -241,6 +245,8 @@ export default function AddEvents({route, navigation}) {
             name: eventname,
             organizer: Organizer,
             startDate: start,
+            __v: v,
+            _id: id,
           };
         } else if (eventFor === 'Selected Department') {
           let dept = [];
@@ -258,6 +264,8 @@ export default function AddEvents({route, navigation}) {
             name: eventname,
             organizer: Organizer,
             startDate: start,
+            __v: v,
+            _id: id,
           };
         } else if (eventFor === 'Selected Batch') {
           let batch = [];
@@ -275,14 +283,16 @@ export default function AddEvents({route, navigation}) {
             name: eventname,
             organizer: Organizer,
             startDate: start,
+            __v: v,
+            _id: id,
           };
         }
       } else {
         if (eventFor === 'Common To All') {
           data = {
-            batch: [],
-            course: '',
-            department: [],
+            batch: null,
+            course: null,
+            department: null,
             description: des,
             endDate: end,
             eventFor: eventFor,
@@ -290,6 +300,9 @@ export default function AddEvents({route, navigation}) {
             name: eventname,
             organizer: Organizer,
             startDate: start,
+            type: eventType,
+            __v: v,
+            _id: id,
           };
         } else if (eventFor === 'Selected Department') {
           let dept = [];
@@ -308,6 +321,8 @@ export default function AddEvents({route, navigation}) {
             organizer: Organizer,
             startDate: start,
             type: eventType,
+            __v: v,
+            _id: id,
           };
         } else if (eventFor === 'Selected Batch') {
           let batch = [];
@@ -326,11 +341,13 @@ export default function AddEvents({route, navigation}) {
             organizer: Organizer,
             startDate: start,
             type: eventType,
+            __v: v,
+            _id: id,
           };
         }
       }
       console.log(data);
-      let response = await post(slug, data, token);
+      let response = await patch(slug, data, token);
       console.log(response);
       navigation.replace('Events');
       alert('Event created!');
@@ -436,7 +453,7 @@ export default function AddEvents({route, navigation}) {
               </Text>
               <ModalSelector
                 data={eventTypes}
-                initValue={eventType}
+                initValue={route.params.eventTypeName}
                 onChange={option => {
                   setEventType(option.key);
                 }}
