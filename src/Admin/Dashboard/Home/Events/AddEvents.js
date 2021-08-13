@@ -215,6 +215,7 @@ export default function AddEvents({navigation}) {
             name: eventname,
             organizer: Organizer,
             startDate: start,
+            type: eventType,
           };
         } else if (eventFor === 'Selected Department') {
           let dept = [];
