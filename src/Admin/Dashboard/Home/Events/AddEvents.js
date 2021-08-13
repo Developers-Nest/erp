@@ -81,8 +81,8 @@ export default function AddEvents({navigation}) {
   //modal selector values
   const [eventTypes, setEventTypes] = useState([]);
   const [eventForList, setEventForList] = useState([
-    {key: 'Selected Batch', label: 'Batch'},
-    {key: 'Selected Department', label: 'Department'},
+    {key: 'Selected Batch', label: 'Selected Batch'},
+    {key: 'Selected Department', label: 'Selected Department'},
     {key: 'Common To All', label: 'Common To All'},
   ]);
 
@@ -491,7 +491,6 @@ export default function AddEvents({navigation}) {
                 backgroundColor: 'white',
                 justifyContent: 'center',
                 width: 150,
-                height: 50,
                 backgroundColor: '#FFFFFF',
                 borderRadius: 10,
                 shadowColor: 'black',
@@ -517,7 +516,7 @@ export default function AddEvents({navigation}) {
               </Text>
               <ModalSelector
                 data={courses}
-                initValue="Event For"
+                initValue="Course"
                 onChange={option => {
                   fetchBatches(option.key);
                 }}
