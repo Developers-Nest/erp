@@ -25,6 +25,8 @@ import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 // redux
 import { useSelector } from 'react-redux';
 
+import { useFocusEffect } from '@react-navigation/native';
+
 export default function AssignmentStudentDue({ navigation }) {
   const [assignments, setAssignments] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
@@ -32,18 +34,29 @@ export default function AssignmentStudentDue({ navigation }) {
 
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
 
-  useEffect(async () => {
-    setLoadingScreen()
-    try {
-      let slug = `/note/assignment?batch=${userInfo.batch}&course=${userInfo.course}`;
-      let token = await read('token');
-      const response = await get(slug, token);
-      setAssignments(response);
-    } catch (err) {
-      alert('Cannot fetch your assignments !!');
-    }
-    hideLoadingScreen()
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+
+      const fetchUser = async () => {
+        setLoadingScreen()
+        try {
+          let slug = `/note/assignment?batch=${userInfo.batch}&course=${userInfo.course}`;
+          let token = await read('token');
+          const response = await get(slug, token);
+          setAssignments(response);
+        } catch (err) {
+          alert('Cannot fetch your assignments !!');
+        }
+        hideLoadingScreen()
+      }
+      fetchUser();
+
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
   function isAssignmentDone(assignment) {
     // alert(assignment.attemptedBy.length);
@@ -146,14 +159,14 @@ export default function AssignmentStudentDue({ navigation }) {
                         fontSize: 12,
                         fontFamily: 'Poppins-Medium',
                       }}>
-                      {'  '}Due:{'  '} 
-                      {assignment.submissionDateString.slice(0,15) ||
+                      {'  '}Due:{'  '}
+                      {assignment.submissionDateString.slice(0, 15) ||
                         'Subject name Not Found'}
                     </Text>
 
                     <Button
                       style={styles.button}
-                      onPress={() => navigation.navigate('AssignmentSubmit', {assignment: assignment})}
+                      onPress={() => navigation.navigate('AssignmentSubmit', { assignment: assignment })}
                       labelStyle={{
                         color: 'white',
                         fontFamily: 'Poppins-Regular',
@@ -246,7 +259,7 @@ export default function AssignmentStudentDue({ navigation }) {
                         fontFamily: 'Poppins-Medium',
                       }}>
                       {'  '}Due:
-                      {assignment.submissionDateString.slice(0,15) ||
+                      {assignment.submissionDateString.slice(0, 15) ||
                         'Subject name Not Found'}
                     </Text>
 
@@ -265,7 +278,7 @@ export default function AssignmentStudentDue({ navigation }) {
                             .url,
                         )
                       }
-                      color={institute? institute.themeColor: 'blue'}
+                      color={institute ? institute.themeColor : 'blue'}
                       mode="contained">
                       View
                     </Button>

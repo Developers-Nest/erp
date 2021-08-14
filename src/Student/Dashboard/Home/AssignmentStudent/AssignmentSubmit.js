@@ -16,6 +16,7 @@ import DocumentPickerHandle from 'react-native-document-picker';
 import { useSelector } from 'react-redux';
 
 import patch from '../../../../services/helpers/request/patch'
+import formDataPatch from '../../../../services/helpers/request/formDataPatch'
 import read from '../../../../services/localstorage/read'
 import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 
@@ -23,7 +24,7 @@ export default function AssignmentSubmit({ navigation, route }) {
 
 
     const [assignment, setAssignments] = useState({})
-    const [file, setFile] = useState(null)
+    const [file, setFile] = useState({})
 
     const institute = useSelector((state) => state.institute)
     const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
@@ -38,7 +39,6 @@ export default function AssignmentSubmit({ navigation, route }) {
 
     const Props = (props) => {
         return (
-
             <View style={styles.inner}>
                 <TouchableOpacity onPress={() => filePicker()}>
                     <Icon1 size={105} color="rgba(88, 99, 109, 0.65)" name="addfile" style={{ padding: 0, marginLeft: 15 }} />
@@ -58,16 +58,16 @@ export default function AssignmentSubmit({ navigation, route }) {
         try{
             let slug = `/note/submit/assignment/${assignment._id}`
             let token = await read('token')
-            let data = {
-                text: 'N/A',
-                file: file
-            }
-            let response = await patch(slug, data,token)
+            let formData = new FormData()
+            formData.append('text', 'N/A')
+            formData.append('file', file)
+            let response = await formDataPatch(slug, formData, token)
             console.log('File Submit Response ', response)
             if(response.error){
                 alert(response.error)
             } else {
                 alert('Assignemnt Submitted!!')
+                navigation.navigate('AssignmentStudentDue')
             }
         } catch(err){
             alert('Cannot Submit! '+err)
