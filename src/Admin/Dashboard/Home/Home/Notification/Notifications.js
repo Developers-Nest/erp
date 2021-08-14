@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,7 +6,8 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import { Button } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -14,8 +15,11 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 // helpers
 import read from '../../../../../services/localstorage/read';
 import get from '../../../../../services/helpers/request/get';
+import deleteReq from '../../../../../services/helpers/request/delete';
 
 import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
+
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Notification() {
   let userInfo = useSelector(state => state.userInfo);
@@ -25,27 +29,58 @@ export default function Notification() {
   const [content, setContent] = useState([]);
   const [fetched, setFetched] = useState(false);
 
-  useEffect(async () => {
-    showLoadingScreen();
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+
+      const fetchUser = async () => {
+        showLoadingScreen();
+        try {
+          let slug = `/notification`;
+          let token = await read('token');
+          let res = await get(slug, token);
+          let Content = [];
+          res.map(noti => {
+            Content.push({
+              title: noti.title,
+              content: noti.message,
+              type: 'News',
+              _id: noti._id
+            });
+          });
+          setContent(Content);
+          setFetched(true);
+        } catch (err) {
+          alert('Cannot get Notifications!!');
+        }
+        hideLoadingScreen();
+      }
+      fetchUser();
+
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
+
+  let deleteNotification = async (id) => {
+    showLoadingScreen()
     try {
-      let slug = `/notification`;
-      let token = await read('token');
-      let res = await get(slug, token);
-      let Content = [];
-      res.map(noti => {
-        Content.push({
-          title: noti.title,
-          content: noti.message,
-          type: 'News',
-        });
-      });
-      setContent(Content);
-      setFetched(true);
+      let slug = `/notification/${id}`
+      console.log('Slug ', slug)
+      let token = await read('token')
+      let res = await deleteReq(slug, token)
+      if (res.error) {
+        alert(res.error)
+      } else if (res._id) {
+        alert('Deleted')
+        setContent(content.filter((c) => c._id != id))
+      }
     } catch (err) {
-      alert('Cannot get Notifications!!');
+      alert('Cannot Delete Notification!!')
     }
-    hideLoadingScreen();
-  }, []);
+    hideLoadingScreen()
+  }
 
   function renderHeader(section, _, isActive) {
     return (
@@ -53,12 +88,11 @@ export default function Notification() {
         duration={400}
         style={styles.header}
         transition="backgroundColor">
-        {loadingScreen}
         <View style={styles.iconConatiner}>
           <FontAwesome5
             name={section.type === 'Event' ? 'video' : 'calendar-day'}
             size={27}
-            style={{color: '#58636D'}}
+            style={{ color: '#58636D' }}
           />
           {section.type === 'Event' ? (
             <Text style={styles.iconText}>Event</Text>
@@ -68,6 +102,15 @@ export default function Notification() {
         </View>
         <View style={styles.titleContainer}>
           <Text style={styles.headerText}>{section.title}</Text>
+          <TouchableOpacity onPress={() => deleteNotification(section._id)}>
+            <View>
+              <FontAwesome5
+                name="trash"
+                size={14}
+                style={styles.collapseIconIcon}
+              />
+            </View>
+          </TouchableOpacity>
           {isActive ? (
             <View style={styles.collapseIconContainer}>
               <FontAwesome5
@@ -92,7 +135,7 @@ export default function Notification() {
 
   function renderContent(section, _, isActive) {
     return (
-      <Animatable.View duration={100} style={{paddingHorizontal: 10}}>
+      <Animatable.View duration={100} style={{ paddingHorizontal: 10 }}>
         <Text
           animation={isActive ? 'bounceIn' : undefined}
           style={styles.collapseContent}>
@@ -111,8 +154,9 @@ export default function Notification() {
 
   return (
     <View style={styles.container}>
+      {loadingScreen}
       {fetched ? (
-        <ScrollView style={{padding: 10}}>
+        <ScrollView style={{ padding: 10 }}>
           <Accordion
             activeSections={ActiveSections}
             sections={content}
@@ -160,7 +204,7 @@ const styles = StyleSheet.create({
   card: {
     marginVertical: 10,
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 3,

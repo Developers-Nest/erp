@@ -1,26 +1,26 @@
-import * as React from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Keyboard,ScrollView
+  Keyboard, ScrollView
 } from 'react-native';
 
-import {Text} from 'react-native-paper';
+import { Text } from 'react-native-paper';
 
 //icons
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons  from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 //stack navigation
 import Notifications from './Notifications';
 import Circulars from './Circulars';
-// redux
-import {useSelector} from 'react-redux';
 
-export default function NotificationMain({navigation}) {
+// redux
+import { useSelector } from 'react-redux';
+
+export default function NotificationMain({ navigation }) {
   const [showContent, setshowContent] = React.useState('Notification');
 
   //theming
@@ -85,7 +85,7 @@ export default function NotificationMain({navigation}) {
                     fontSize: 30,
                     color: 'white',
                     marginRight: 20,
-                    marginTop:10
+                    marginTop: 10
                   }}
                 />
                 <Text
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     flexDirection: 'row',
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 5,
