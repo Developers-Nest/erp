@@ -215,6 +215,8 @@ const AddVisitorsHostel = ({ navigation }) => {
       if (selectedUserType === 'Teacher') {
         data = {
           department: selectedDepartment,
+          hostelRoom: hostelRoom? hostelRoom.hostelRoom._id : null,
+         
           userType: selectedUserTypeId,
           visitorName: visitorname,
           relation: relation,
