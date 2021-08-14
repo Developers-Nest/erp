@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -8,6 +8,9 @@ import {
   TextInput,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import {
+  Button,
+} from 'react-native-paper';
 
 //modal selector
 import ModalSelector from 'react-native-modal-selector';
@@ -23,10 +26,21 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 //redux
 import { useSelector } from 'react-redux';
 
+import get from '../../../../services/helpers/request/get'
+import post from '../../../../services/helpers/request/post'
+import read from '../../../../services/localstorage/read'
+
+import getCourse from '../../../../services/helpers/getList/getCourse'
+import getBatch from '../../../../services/helpers/getList/getBatch'
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
+
+
+
 
 const AddVisitorsHostel = ({ navigation }) => {
   //theming
   const institute = useSelector(state => state.institute);
+
 // dropdown values
 const [userType, setUserType] = useState([])
 
@@ -36,6 +50,232 @@ const [users, setUsers] = useState([])
 const [departments, setDepartments] = useState([])
 
 const [usersObject, setUsersObject] = useState([])
+
+const [hostelRoom, setHostelRoom] = useState([])
+ //for textinputs
+ const [visitorname, setvisitorname] = useState('');
+ const [relation, setrelation] = useState('');
+// selected values
+const [selectedUserType, setSelectedUserType] = useState('')
+const [selectedUserTypeId, setSelectedUserTypeId] = useState('')
+
+const [selectedDepartment, setSelectedDepartment] = useState('')
+const [selectedCourse, setSelectedCourse] = useState('')
+const [selectedBatch, setSelectedBatch] = useState('')
+const [selectedUser, setSelectedUser] = useState('')
+
+const [selectedHostelRoom, setSelectedHostelRoom] = useState('')
+// loading screen
+const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+const [showtimePicker, setShowTimePicker] = useState(false);
+    const [time, setTime] = useState(null);
+
+
+    // handle time select
+    let handleSubmit2 = async sd => {
+        showLoadingScreen();
+        await setTime(sd.toString());
+        setShowTimePicker(false);
+        hideLoadingScreen();
+    };
+
+useEffect(async () => {
+    showLoadingScreen();
+    try {
+        let slug = '/usertype'
+        let token = await read('token')
+        let response = await get(slug, token)
+        let userArray = []
+        response && response.map((user) => {
+            userArray.push({
+                key: user._id,
+                label: user.name
+            })
+        })
+        console.log('UserTypes ', userArray)
+        setUserType(userArray)
+    } catch (err) {
+        alert('Error ', err)
+    }
+
+    try {
+        let courses = await getCourse()
+        setCourses(courses)
+    } catch (err) {
+        alert('Cannot fetch Courses!')
+    }
+
+    try {
+        let slug = '/department'
+        let token = await read('token')
+        let response = await get(slug, token)
+        let departmentArray = []
+        response && response.map((dep) => {
+            departmentArray.push({
+                key: dep._id,
+                label: dep.name
+            })
+        })
+        setDepartments(departmentArray)
+    } catch (err) {
+        alert('Cannot fetch departments!')
+    }
+
+    
+
+    console.log('Admin Institite ', institute)
+    hideLoadingScreen()
+}, [])
+
+// usertype === 'Teacher'
+let fetchEmployees = async (sd) => {
+    showLoadingScreen()
+    try {
+        setSelectedDepartment(sd)
+        let slug = `/employee?department=${sd}`
+        let token = await read('token')
+        let response = await get(slug, token)
+        console.log('Response ', response)
+        let employeeArray = []
+        response && response.map((dep) => {
+            employeeArray.push({
+                key: dep._id,
+                label: dep.firstName ? dep.firstName : 'N/A'
+            })
+        })
+        setUsersObject(response)
+        console.log('Emplo ', employeeArray)
+        setUsers(employeeArray)
+    } catch (err) {
+        alert('Cannot fetch Employess!')
+    }
+    hideLoadingScreen()
+}
+
+// usertype === 'Student'
+// get list of batches
+const fetchBatches = async sc => {
+    showLoadingScreen();
+    setSelectedCourse(sc);
+    try {
+        let bat = await getBatch(sc);
+        setBatches(bat);
+    } catch (err) {
+        alert('Cannot fetch Batches!!');
+    }
+    hideLoadingScreen();
+};
+
+// get list of students
+const fetchStudents = async sb => {
+    showLoadingScreen();
+    setSelectedBatch(sb);
+    try {
+        let slug = `/student/course?course=${selectedCourse}&batch=${sb}`
+        let token = await read('token')
+        let res = await get(slug, token)
+        let studentArray = []
+        res && res.map((student) => {
+            studentArray.push({
+                key: student._id,
+                label: student.firstName
+            })
+        })
+        setUsersObject(res)
+        setUsers(studentArray)
+    } catch (err) {
+        alert('Cannot fetch Students!!');
+    }
+    hideLoadingScreen();
+};
+
+//fetch room alloted to the user selected
+ const fetchRoomDetails=async us=>{
+   showLoadingScreen();
+   setSelectedUser(us)
+   try {
+    
+          let slug = `/hostel/hostelAllocation/one?userType=${selectedUserType}&user=${us}`
+          
+          let token = await read('token')
+          let res = await get(slug, token)
+          console.log('Response Add Visitors ',res)
+          // let list = []
+         res?alert('Room allocated to the given user'):alert('Room Not allocated');
+        //   res && res.map((student) => {
+        //       list.push({
+        //           key: student._id,
+        //           label: student.hostelRoom.roomNo
+        //       })
+        //   })
+        //   setHostelRoom(list)
+        //  alert('Room allocated to the chosen user');
+      } catch (err) {
+          alert('Cannot fetch Hostel room details of the chosen user!!');
+      }
+      hideLoadingScreen();
+ };
+
+ // submit form
+ const handleSubmit = async () => {
+  showLoadingScreen()
+  if (!userType || !date || !time) {
+      alert('All fields are required!')
+      hideLoadingScreen()
+      return
+  }
+
+  try {
+      let selectedUsersObject = {}
+      usersObject.map((user) => {
+          if (user._id === selectedUser) {
+              selectedUsersObject = user
+          }
+      })
+      let data = {}
+      if (selectedUsersObject.userType === 'Teacher') {
+          data = {
+              department: selectedDepartment,
+              userType: selectedUserTypeId,
+              visitorName:visitorname,
+              relation:relation,
+              dateOf:date,
+              timeOf:time,
+              
+          }
+      } else {
+          data = {
+            dateOf: "2021-08-14T09:31:07.547Z",
+            hostelRoom: "61112cd787cbdc129b7a9e13",
+            relation: "Brother",
+            timeOf: "2021-08-14T09:31:07.547Z",
+            user: "60d31b021f8c9327133b69bc",
+            userType: "60d318e21f8c9327133b67e2",
+            visitorName: "Karan"       
+          }
+      }
+
+      console.log('Hostel Data ', data)
+
+      let slug = '/hostel/hostelVisitor'
+      let token = await read('token')
+      let response = await post(slug, data, token)
+      console.log('Allocate Visitors ', response)
+      if (response.error) {
+          throw new Error(response.error)
+      } else if(response._id){
+          alert('Visitors Added')
+          // navigation.navigate()
+      }
+  } catch (err) {
+      alert('Error!! ' + err)
+  }
+  hideLoadingScreen()
+}
+
+
+//already there
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [date, setDate] = React.useState('29 May 2021');
   let index = 0;
@@ -113,7 +353,7 @@ const [usersObject, setUsersObject] = useState([])
       </View>
       <ScrollView>
         <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
-        
+      {loadingScreen}  
         <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                     <Text style={styles.section_heading}>User Type</Text>
                 </View>
@@ -123,15 +363,15 @@ const [usersObject, setUsersObject] = useState([])
                         style={styles.card2}
                         data={userType}
                         initValueTextStyle={styles.SelectedValueSmall}
-                        // onChange={option => {
-                        //     setSelectedUserType(option.label)
-                        //     setSelectedUserTypeId(option.key)
-                        // }}
+                        onChange={option => {
+                            setSelectedUserType(option.label)
+                            setSelectedUserTypeId(option.key)
+                        }}
                     />
                 </View>
 
-                {/* {
-                    selectedUserType === 'Student' ? ( */}
+                {
+                    selectedUserType === 'Student' ? (
                         <View>
                             <View style={{ width:'100%',paddingTop: 15, flexDirection: 'row' }}>
                                 <Text style={styles.section_heading}>Course </Text>
@@ -144,36 +384,36 @@ const [usersObject, setUsersObject] = useState([])
                                     style={styles.card3}
                                     initValueTextStyle={styles.SelectedValueSmall}
                                     data={courses}
-                                    // onChange={option => {
-                                    //     fetchBatches(option.key)
-                                    // }}
+                                    onChange={option => {
+                                        fetchBatches(option.key)
+                                    }}
                                 />
                                 <ModalSelector
                                     initValue="Batch"
                                     style={styles.card3}
                                     initValueTextStyle={styles.SelectedValueSmall}
                                     data={batches}
-                                    // onChange={option => {
-                                    //     fetchStudents(option.key)
-                                    // }}
+                                    onChange={option => {
+                                        fetchStudents(option.key)
+                                    }}
                                 />
                                 <ModalSelector
                                     initValue="Student"
                                     style={styles.card5}
                                     initValueTextStyle={styles.SelectedValueSmall}
                                     data={users}
-                                    // onChange={option => {
-                                    //     setSelectedUser(option.key)
-                                    // }}
+                                    onChange={option => {
+                                        fetchRoomDetails(option.key)
+                                    }}
                                 />
                             </View>
                         </View>
-                {/* //     ) : (null)
-                // }
+                     ) : (null)
+                 }
 
 
-                // {
-                //     selectedUserType === 'Teacher' ? ( */}
+                 {
+                    selectedUserType === 'Teacher' ? ( 
                         <View>
                             <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
                                 <Text style={styles.section_heading}>Department </Text>
@@ -185,25 +425,25 @@ const [usersObject, setUsersObject] = useState([])
                                     style={styles.card}
                                     initValueTextStyle={styles.SelectedValueSmall}
                                     data={departments}
-                                    // onChange={option => {
-                                    //     fetchEmployees(option.key)
-                                    // }}
+                                    onChange={option => {
+                                        fetchEmployees(option.key)
+                                    }}
                                 />
                                 <ModalSelector
                                     initValue="Employee"
                                     style={styles.card1}
                                     initValueTextStyle={styles.SelectedValueSmall}
                                     data={users}
-                                    // onChange={option => {
-                                    //     setSelectedUser(option.key)
-                                    // }}
+                                    onChange={option => {
+                                        fetchRoomDetails(option.key)
+                                    }}
                                 />
                             </View>
                         </View>
-                {/* //     ) : (null)
-                // } */}
+                 ) : (null)
+               
         
-          {/* <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
+          /* <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
             <Text style={styles.section_heading}>Vehicle No.</Text>
           </View>
 
@@ -239,11 +479,16 @@ const [usersObject, setUsersObject] = useState([])
             <TextInput style={styles.input}
               placeholderTextColor='grey'
               color='black'
-              placeholder="Shian Manzoor" />
+              placeholder="Shian Manzoor"
+             
+              onChangeText={val => setvisitorname(val)}
+              />
             <TextInput style={styles.input}
               placeholderTextColor='grey'
               color='black'
-              placeholder="Brother" />
+              placeholder="Brother"
+              onChangeText={val => setrelation(val)}
+              />
           </View>
           <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
             <Text style={styles.section_heading}>Date </Text>
@@ -257,6 +502,7 @@ const [usersObject, setUsersObject] = useState([])
                 placeholder={date}
                 placeholderTextColor='grey'
                 color='black'
+                editable={false}
               />
               <Feather
                 size={18}
@@ -275,24 +521,26 @@ const [usersObject, setUsersObject] = useState([])
               />
             </TouchableOpacity>
             <TouchableOpacity style={styles.pickdate1}>
-              <TextInput
-                style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                placeholder="13.00"
-                placeholderTextColor='grey'
-                color='black'
-              />
-              <Feather
-                size={18}
-                color="black"
-                name="calendar"
-                style={{
-                  marginTop: 16,
-                  marginRight: 0,
-                }}></Feather>
+                {/* time picker */}
+                <Button
+                                icon="calendar"
+                                mode="contained"
+                                color="white"
+                                style={{ margin: 2 }}
+                                onPress={() => setShowTimePicker(true)}>
+                                {time ? time.slice(11, 19) : 'TIME'}
+                            </Button>
+
+                            <DateTimePickerModal
+                                isVisible={showtimePicker}
+                                mode="time"
+                                onConfirm={handleSubmit2}
+                                onCancel={() => setShowTimePicker(!showtimePicker)}
+                            />
             </TouchableOpacity>
           </View>
           <View style={styles.fixToText}>
-            <Pressable style={styles.button} onPress={() => console.log('Pressed')}>
+            <Pressable style={styles.button} onPress={handleSubmit} >
               <Text style={styles.text}>Save</Text>
             </Pressable>
           </View>

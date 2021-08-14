@@ -14,7 +14,10 @@ import {Button} from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
+//for swipeable icons
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 // redux
 import {useSelector} from 'react-redux';
 
@@ -22,14 +25,15 @@ import {useSelector} from 'react-redux';
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
-
+import deleteReq from '../../../../services/helpers/request/delete'
 import {useFocusEffect} from '@react-navigation/native';
 
-const AllocatedListHostel = ({navigation}) => {
+const AllocatedListHostel = ({route,navigation}) => {
   const [allocation, setAllocationlist] = useState([]);
   // loading screem
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
-
+//for delete:
+// const [id, setId] = useState('')
   let parseDate = myDate => {
     let d = new Date(myDate);
     return d.toString().slice(0, 15);
@@ -42,13 +46,17 @@ const AllocatedListHostel = ({navigation}) => {
 
       const fetchUser = async () => {
         showLoadingScreen();
+       
+       
+       
         try {
           let slug = `/hostel/hostelAllocation`;
           let token = await read('token');
 
           let response = await get(slug, token);
-
+// setId(response._id)
           const list = [];
+         
           for (let i = 0; i < response.length; i++) {
             list.push({
               username: response[i].user.firstName,
@@ -75,7 +83,63 @@ const AllocatedListHostel = ({navigation}) => {
       };
     }, []),
   );
+  //for delete on swipe
+   const handleDelete = async id => {
+  
+    try {
+        let slug = `/hostel/hostelAllocation/${id}`
+        let token = await read('token')
+        let res = await deleteReq(slug, token)
+        if (res.error) {
+            alert(res.error)
+        } else {
+            alert('Deleted')
+           
+        }
+    } catch (err) {
+        alert('Cannot Delete !!')
+    }
+   
+}
 
+const RightActions = id => {
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        handleDelete(id);
+      }}>
+      <View style={styles.iconbubblereject}>
+        <FontAwesome5 size={38.5} color="white" name="trash-alt" />
+
+        <Text style={{color: 'white'}}>Reject</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+//for icons before ctrl z
+// let deletehostel = async id => {
+
+//   await fetch(
+//     `https://eduerp1-env.eba-3dvnemqw.ap-south-1.elasticbeanstalk.com/hostel/hostelAllocation/${id}`,{
+//   method:'DELETE'
+  
+//     } ).then((result)=>{
+//       result.json().then((res)=>{console.warn(res)})
+//     })
+
+// }
+// async function deletehostel(id){
+  
+//  await fetch(
+//   `https://eduerp1-env.eba-3dvnemqw.ap-south-1.elasticbeanstalk.com/hostel/hostelAllocation/${id}`,{
+// method:'DELETE'
+
+//   } ).then((result)=>{
+//     result.json().then((res)=>{console.warn(res)})
+//   })
+  
+// }
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -193,10 +257,17 @@ const AllocatedListHostel = ({navigation}) => {
       </Button>
 
       <ScrollView>
+      {/* {requests &&
+            requests.map(request =>
+              request && request.status === 'Pending' ? ( */}
         {allocation
-          ? allocation &&
+          ? (allocation) &&
             allocation.map(allocation => (
-              <View style={styles.section} key={allocation._id}>
+              <View key={allocation._id}>
+              <Swipeable
+               
+                renderRightActions={() => RightActions(allocation._id)}>
+              <View style={styles.section} >
                 <View style={styles.details}>
                   <View style={styles.userinhostels}>
                     <View style={styles.differentusers}>
@@ -256,9 +327,14 @@ const AllocatedListHostel = ({navigation}) => {
                       </Text>
 
                       <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate('HostelAllocationEdit')
-                        }
+onPress={()=>navigation.navigate('HostelAllocationEdit',{hostel:allocation})}
+
+// onPress=()=>{
+                        // // {handleDelete(allocation._id)}
+                        //  {deletehostel(allocation._id)}
+                        // }
+                        // onPress={()=>{deletehostel(allocation._id)}}
+                        // onPress={()=>{handleDelete(allocation._id)}}
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'space-between',
@@ -315,6 +391,8 @@ const AllocatedListHostel = ({navigation}) => {
                     </Text>
                   </View>
                 </View>
+              </View>
+              </Swipeable>
               </View>
             ))
           : null}
@@ -429,6 +507,27 @@ const styles = StyleSheet.create({
     height: 69,
     flexDirection: 'row',
   },
+  
+  iconbubblereject: {
+    width: 80,
+    height: 123,
+    backgroundColor: 'red',
+    // borderRadius: 1000,
+    // alignSelf: 'center',
+    // display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 1.41,
+    elevation: 5,
+  },
+
 });
 
 export default AllocatedListHostel;
