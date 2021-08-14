@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   StyleSheet,
   Text,
   TextInput,
@@ -11,19 +10,21 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign'; 
 
-import { Button } from 'react-native-paper';
 
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
-
+import deleteReq from '../../../../services/helpers/request/delete'
 //redux
 import { useSelector } from 'react-redux';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
 const RoomsList = ({ navigation }) => {
+
+  //theming
+const institute = useSelector(state => state.institute);
   const [searchQuery, setSearchQuery] = useState('');
   const [listroom, setRoomsList] = useState([]);
 // loading screem
@@ -31,6 +32,7 @@ const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   const onChangeSearch = query => setSearchQuery(query);
 
+//for displaying list
   useEffect(async () => {
    showLoadingScreen();
     try {
@@ -45,8 +47,24 @@ const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
     hideLoadingScreen();
   }, []);
 
-  //theming
-  const institute = useSelector(state => state.institute);
+  //to delete
+  const handleDelete = async id => {
+    showLoadingScreen()
+    try {
+      let slug = `/hostel/hostelRoom/${id}`
+      let token = await read('token')
+      let res = await deleteReq(slug, token)
+      if (res.error) {
+        alert(res.error)
+      } else {
+        alert('Chosen hostel room deleted successfully')
+        setRoomsList(listroom.filter(all => all._id != id))
+      }
+    } catch (err) {
+      alert('Cannot Delete !!')
+    }
+    hideLoadingScreen()
+  }
 
   return (
     <View style={styles.container}>
@@ -127,7 +145,7 @@ const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
       </View>
 
       {/* header ends */}
-
+{loadingScreen}
       <View style={{ marginHorizontal: 10, ...styles.shadow }}>
         <View style={styles.search}>
           <TextInput
@@ -178,13 +196,11 @@ const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
                         flexDirection: 'row',
                         fontSize: 10,
                         color: '#505069',
-                        marginTop: 5,
-                        fontFamily: 'openSans',
+                        fontFamily: 'OpenSans-Regular',
                       }}>
                       {listroom.roomNo}, {listroom.floorName}
                     </Text>
-
-                    {/* */}
+                    
                   </View>
                   <View style={styles.differentusers}>
                     <Text
@@ -204,6 +220,23 @@ const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
                       }}>
                       {listroom.hostelType.name}
                     </Text>
+                    <TouchableOpacity
+                          onPress={() => { handleDelete(listroom._id) }}
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginBottom:5
+                          }}>
+                         
+                          <MaterialIcon
+                            size={20}
+                            backgroundColor=" #211C5A"
+                            name="delete"
+                           
+                            color={institute ? institute.themeColor : 'red'}
+                          />
+                        </TouchableOpacity>
+                    {/* */}
                   </View>
                 </View>
               </View>

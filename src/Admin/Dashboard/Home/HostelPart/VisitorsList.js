@@ -5,19 +5,16 @@ import ModalSelector from 'react-native-modal-selector';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
 import Icon from 'react-native-vector-icons/Ionicons';
-import Icon1 from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
-import Icon2 from 'react-native-vector-icons/Ionicons';
-import Evillcons from 'react-native-vector-icons/Feather';
-import check from 'react-native-vector-icons/Ionicons';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Button } from 'react-native-paper';
+
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 //useFocusEffect
 import { useFocusEffect } from '@react-navigation/native';
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
+import deleteReq from '../../../../services/helpers/request/delete'
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
+
 //redux
 
 import { useSelector } from 'react-redux';
@@ -25,21 +22,23 @@ const VisitorsList = ({ navigation }) => {
     //theming
     const institute = useSelector(state => state.institute);
     const [visitorlist, setvisitorlist] = useState([]);
+    const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
     useFocusEffect(
         React.useCallback(() => {
             let isActive = true;
 
             const fetchUser = async () => {
+               
                 try {
                     let slug = '/hostel/hostelVisitor';
                     let token = await read('token');
                     const response = await get(slug, token);
-                    console.log(response);
                     setvisitorlist(response);
                 } catch (err) {
                     alert('Cannot fetch hostel visitors list !!');
                 }
+               
             };
 
             fetchUser();
@@ -50,7 +49,24 @@ const VisitorsList = ({ navigation }) => {
         }, [])
     );
 
-
+//to delete
+const handleDelete = async id => {
+    showLoadingScreen();
+    try {
+      let slug = `/hostel/hostelVisitor/${id}`
+      let token = await read('token')
+      let res = await deleteReq(slug, token)
+      if (res.error) {
+        alert(res.error)
+      } else {
+        alert('Visitor information deleted successfully')
+        setvisitorlist(visitorlist.filter(all => all._id != id))
+      }
+    } catch (err) {
+      alert('Cannot Delete !!')
+    }
+    hideLoadingScreen();
+  }
 
 
 
@@ -61,7 +77,6 @@ const VisitorsList = ({ navigation }) => {
             <View
                 style={{
                     backgroundColor: institute ? institute.themeColor : '#FF5733',
-                    // backgroundColor:'blue',
                     ...styles.header,
                 }}>
                 <TouchableOpacity
@@ -133,7 +148,7 @@ const VisitorsList = ({ navigation }) => {
 
             {/* header ends */}
 
-
+{loadingScreen}
 
             <View style={{ marginHorizontal: 10, ...styles.shadow }}>
                 <View style={styles.search}>
@@ -182,7 +197,7 @@ const VisitorsList = ({ navigation }) => {
 
                                         </Text>
 
-                                        <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', marginTop: 5, fontFamily: 'openSans' }}>
+                                        <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069',  fontFamily: 'OpenSans-Regular' }}>
                                             {visitorlist.hostelRoom.roomNo ? visitorlist.hostelRoom.roomNo : 'N/A'},{visitorlist.hostelRoom.floorName ? visitorlist.hostelRoom.floorName : 'N/A'} floor
                                         </Text>
 
@@ -221,27 +236,18 @@ const VisitorsList = ({ navigation }) => {
                                         </Text>
 
                                         <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate('EditVisitorsHostel')
-                        }
+                                                 onPress={() => { handleDelete(visitorlist._id) }}
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'space-between',
+                          marginBottom:5
                         }}>
-                        <Text
-                          style={{
-                            fontSize: 13,
-                            color: institute ? institute.themeColor : '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            
-                          }}>
-                          Edit
-                        </Text>
-                        <Icon1
-                          size={13}
+ 
+                        <MaterialIcon
+                          size={20}
                           backgroundColor=" #211C5A"
-                          name="edit"
-                          style={{marginTop:2,paddingRight: 12}}
+                          name="delete"
+                          
                           color={institute ? institute.themeColor : '#211C5A'}
                         />
                       </TouchableOpacity>
@@ -294,7 +300,7 @@ const VisitorsList = ({ navigation }) => {
 
                     ))}
 
-                <View style={{ height: 60 }} />
+                <View style={{ height: 90 }} />
             </ScrollView>
 
 
