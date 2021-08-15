@@ -29,7 +29,7 @@ const VisitorsList = ({ navigation }) => {
             let isActive = true;
 
             const fetchUser = async () => {
-               
+
                 try {
                     let slug = '/hostel/hostelVisitor';
                     let token = await read('token');
@@ -38,7 +38,7 @@ const VisitorsList = ({ navigation }) => {
                 } catch (err) {
                     alert('Cannot fetch hostel visitors list !!');
                 }
-               
+
             };
 
             fetchUser();
@@ -49,24 +49,24 @@ const VisitorsList = ({ navigation }) => {
         }, [])
     );
 
-//to delete
-const handleDelete = async id => {
-    showLoadingScreen();
-    try {
-      let slug = `/hostel/hostelVisitor/${id}`
-      let token = await read('token')
-      let res = await deleteReq(slug, token)
-      if (res.error) {
-        alert(res.error)
-      } else {
-        alert('Visitor information deleted successfully')
-        setvisitorlist(visitorlist.filter(all => all._id != id))
-      }
-    } catch (err) {
-      alert('Cannot Delete !!')
+    //to delete
+    const handleDelete = async id => {
+        showLoadingScreen();
+        try {
+            let slug = `/hostel/hostelVisitor/${id}`
+            let token = await read('token')
+            let res = await deleteReq(slug, token)
+            if (res.error) {
+                alert(res.error)
+            } else {
+                alert('Visitor information deleted successfully')
+                setvisitorlist(visitorlist.filter(all => all._id != id))
+            }
+        } catch (err) {
+            alert('Cannot Delete !!')
+        }
+        hideLoadingScreen();
     }
-    hideLoadingScreen();
-  }
 
 
 
@@ -148,7 +148,7 @@ const handleDelete = async id => {
 
             {/* header ends */}
 
-{loadingScreen}
+            {loadingScreen}
 
             <View style={{ marginHorizontal: 10, ...styles.shadow }}>
                 <View style={styles.search}>
@@ -197,7 +197,7 @@ const handleDelete = async id => {
 
                                         </Text>
 
-                                        <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069',  fontFamily: 'OpenSans-Regular' }}>
+                                        <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
                                             {visitorlist.hostelRoom.roomNo ? visitorlist.hostelRoom.roomNo : 'N/A'},{visitorlist.hostelRoom.floorName ? visitorlist.hostelRoom.floorName : 'N/A'} floor
                                         </Text>
 
@@ -217,7 +217,7 @@ const handleDelete = async id => {
 
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.differentusers}>
-                                        <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'OpenSans-Regular' }}>
+                                        <Text style={{ fontSize: 12, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
                                             {visitorlist.userType.name ? visitorlist.userType.name : 'N/A'}
                                         </Text>
                                     </TouchableOpacity>
@@ -236,21 +236,21 @@ const handleDelete = async id => {
                                         </Text>
 
                                         <TouchableOpacity
-                                                 onPress={() => { handleDelete(visitorlist._id) }}
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          marginBottom:5
-                        }}>
- 
-                        <MaterialIcon
-                          size={20}
-                          backgroundColor=" #211C5A"
-                          name="delete"
-                          
-                          color={institute ? institute.themeColor : '#211C5A'}
-                        />
-                      </TouchableOpacity>
+                                            onPress={() => { handleDelete(visitorlist._id) }}
+                                            style={{
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                marginBottom: 5
+                                            }}>
+
+                                            <MaterialIcon
+                                                size={20}
+                                                backgroundColor=" #211C5A"
+                                                name="delete"
+
+                                                color={institute ? institute.themeColor : '#211C5A'}
+                                            />
+                                        </TouchableOpacity>
 
 
                                     </View>
@@ -289,7 +289,7 @@ const handleDelete = async id => {
                                             fontSize: 12,
                                             fontFamily: 'Poppins-Regular',
                                         }}>
-                                        Time: {visitorlist.dateOf ? visitorlist.dateOf.slice(11, 19) : 'N/A'}
+                                        Time: {visitorlist.timeOf ? visitorlist.timeOf.slice(11, 19) : 'N/A'}
                                     </Text>
 
                                 </View>

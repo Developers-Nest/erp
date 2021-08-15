@@ -370,38 +370,6 @@ const IssuedBooksAdd = ({navigation}) => {
       </View>
       <ScrollView>
         <View style={{justifyContent: 'space-around', alignContent: 'center'}}>
-          {/* <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Vechile No.</Text>
-                </View> */}
-
-          {/* <View
-            style={{marginHorizontal: 10, paddingTop: 20, ...styles.shadow}}>
-            <View style={styles.search}>
-              <TextInput
-                style={{
-                  marginTop: 10,
-                  ...styles.search_input,
-                  fontFamily: 'Poppins-Regular',
-                }}
-                placeholder="Enter book name or ID here"
-                placeholderTextColor="grey"
-                color="black"
-              />
-              <TouchableOpacity
-                style={{
-                  alignSelf: 'center',
-                }}>
-                <Icon
-                  name="search-sharp"
-                  style={{
-                    alignSelf: 'center',
-                    fontSize: 25,
-                    color: 'black',
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-          </View> */}
           <View
             style={{
               flexDirection: 'row',

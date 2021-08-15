@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, TextInput} from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import {Button} from 'react-native-paper';
+import { Button } from 'react-native-paper';
 
 import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
 
@@ -287,7 +287,7 @@ const HostelAllocationAdd = ({ navigation }) => {
             console.log('Allocate Hostel ', response)
             if (response.error) {
                 throw new Error(response.error)
-            } else if(response._id){
+            } else if (response._id) {
                 alert('Hosted Allocated')
                 navigation.navigate('AllocatedListHostel')
             }
@@ -346,192 +346,227 @@ const HostelAllocationAdd = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
             {/* header ends */}
-<ScrollView>
-            <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
-                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>User Type</Text>
-                </View>
-                <View style={{ marginHorizontal: 10, ...styles.shadow }}>
-                    <ModalSelector
-                        initValue="User Type"
-                        style={styles.card2}
-                        data={userType}
-                        initValueTextStyle={styles.SelectedValueSmall}
-                        onChange={option => {
-                            setSelectedUserType(option.label)
-                            setSelectedUserTypeId(option.key)
-                        }}
-                    />
-                </View>
-
-                {
-                    selectedUserType === 'Student' ? (
-                        <View>
-                            <View style={{ width:'100%',paddingTop: 15, flexDirection: 'row' }}>
-                                <Text style={styles.section_heading}>Course </Text>
-                                <Text style={styles.section_heading4}>Batch</Text>
-                                <Text style={styles.section_heading3}>Student</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row' }} >
-                                <ModalSelector
-                                    initValue="Course"
-                                    style={styles.card3}
-                                    initValueTextStyle={styles.SelectedValueSmall}
-                                    data={courses}
-                                    onChange={option => {
-                                        fetchBatches(option.key)
-                                    }}
-                                />
-                                <ModalSelector
-                                    initValue="Batch"
-                                    style={styles.card3}
-                                    initValueTextStyle={styles.SelectedValueSmall}
-                                    data={batches}
-                                    onChange={option => {
-                                        fetchStudents(option.key)
-                                    }}
-                                />
-                                <ModalSelector
-                                    initValue="Student"
-                                    style={styles.card5}
-                                    initValueTextStyle={styles.SelectedValueSmall}
-                                    data={users}
-                                    onChange={option => {
-                                        setSelectedUser(option.key)
-                                    }}
-                                />
-                            </View>
-                        </View>
-                    ) : (null)
-                }
+            <ScrollView>
+                <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
 
 
-                {
-                    selectedUserType === 'Teacher' ? (
-                        <View>
-                            <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                                <Text style={styles.section_heading}>Department </Text>
-                                <Text style={styles.section_heading3}>Employee</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row' }} >
-                                <ModalSelector
-                                    initValue="Department"
-                                    style={styles.card}
-                                    initValueTextStyle={styles.SelectedValueSmall}
-                                    data={departments}
-                                    onChange={option => {
-                                        fetchEmployees(option.key)
-                                    }}
-                                />
-                                <ModalSelector
-                                    initValue="Employee"
-                                    style={styles.card1}
-                                    initValueTextStyle={styles.SelectedValueSmall}
-                                    data={users}
-                                    onChange={option => {
-                                        setSelectedUser(option.key)
-                                    }}
-                                />
-                            </View>
-                        </View>
-                    ) : (null)
-                }
 
+                    <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                        <Text style={styles.section_heading}>User Type</Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
 
-                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Hostel Type </Text>
-                    <Text style={styles.section_heading2}>Hostel Name</Text>
-                    <Text style={styles.section_heading3}>Hostel Room</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }} >
-                    <ModalSelector
-                        initValue="Type"
-                        style={styles.card3}
-                        initValueTextStyle={styles.SelectedValueSmall}
-                        data={hostelType}
-                        onChange={option => {
-                            fetchHostelName(option.key)
-                        }}
-                    />
-                    <ModalSelector
-                        initValue="Name"
-                        style={styles.card3}
-                        initValueTextStyle={styles.SelectedValueSmall}
-                        data={hostelName}
-                        onChange={option => {
-                            fetchHostelRoom(option.key)
-                        }}
-                    />
-                    <ModalSelector
-                        initValue="Room"
-                        style={styles.card4}
-                        initValueTextStyle={styles.SelectedValueSmall}
-                        data={hostelRoom}
-                        onChange={option => {
-                            setSelectedHostelRoom(option.key)
-                        }}
-                    />
-
-                </View>
-                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
-                    <Text style={styles.section_heading}>Registration </Text>
-                    <Text style={styles.section_heading1}>Vacating</Text>
-                </View>
-
-                <View style={{ flexDirection: 'row' }} >
-
-                    {/* registraion */}
-                    <TouchableOpacity style={styles.pickdate} onPress={() => setDatePickerVisibility(!isDatePickerVisible)}>
-                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: 'black' }}
-                            value={date ? date.slice(0, 11) : 'Select'}
-                            editable={false}
-                            placeholderTextColor='grey'
-                            color='black'
-                        />
-                        <Feather size={18} color="black" name="calendar"
-                            style={{
-                                marginTop: 16,
-                                marginRight: 0,
+                    }}>
+                        <ModalSelector
+                            initValue="User Type"
+                            style={styles.card}
+                            data={userType}
+                            initValueTextStyle={styles.SelectedValue}
+                            onChange={option => {
+                                setSelectedUserType(option.label)
+                                setSelectedUserTypeId(option.key)
                             }}
-                        ></Feather>
-                        <DateTimePickerModal
-                            isVisible={isDatePickerVisible}
-                            style={styles.pickdate}
-                            mode="date"
-                            onConfirm={handleConfirm}
-                            onCancel={() => setDatePickerVisibility(false)}
+                            selectTextStyle={styles.SelectedValue}
                         />
-                    </TouchableOpacity>
+                    </View>
 
-                    {/* vacating */}
-                    <TouchableOpacity style={styles.pickdate1} onPress={() => setDatePickerVisibility1(!isDatePickerVisible1)} >
-                        <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: 'black' }}
-                            value={date1 ? date1.slice(0, 11) : 'Select'}
-                            editable={false}
-                            placeholderTextColor='grey'
-                            color='black'
-             />
-                        <Feather size={18} color="black" name="calendar"
-                            style={{
-                                marginTop: 16,
-                                marginRight: 0,
+                    {
+                        selectedUserType === 'Student' ? (
+                            <View>
+                                <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
+                                    <Text style={styles.section_heading}>Course </Text>
+                                    <Text style={styles.section_heading4}>Batch</Text>
+                                    <Text style={styles.section_heading3}>Student</Text>
+                                </View>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        alignItems: 'center',
+
+                                    }}>
+
+                                    <ModalSelector
+                                        initValue="Course"
+                                        style={styles.cardsmall}
+                                        initValueTextStyle={styles.SelectedValueSmall}
+                                        selectTextStyle={styles.SelectedValueSmall}
+                                        data={courses}
+                                        onChange={option => {
+                                            fetchBatches(option.key)
+                                        }}
+                                    />
+                                    <ModalSelector
+                                        initValue="Batch"
+                                        style={styles.cardsmall}
+                                        initValueTextStyle={styles.SelectedValueSmall}
+                                        data={batches}
+                                        onChange={option => {
+                                            fetchStudents(option.key)
+                                        }}
+                                        selectTextStyle={styles.SelectedValueSmall}
+                                    />
+                                    <ModalSelector
+                                        initValue="Student"
+                                        style={styles.cardsmall}
+                                        initValueTextStyle={styles.SelectedValueSmall}
+                                        data={users}
+                                        onChange={option => {
+                                            setSelectedUser(option.key)
+                                        }}
+                                        selectTextStyle={styles.SelectedValueSmall}
+                                    />
+                                </View>
+                            </View>
+                        ) : (null)
+                    }
+
+
+                    {
+                        selectedUserType === 'Teacher' ? (
+                            <View>
+                                <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                                    <Text style={styles.section_heading}>Department </Text>
+                                    <Text style={styles.section_heading3}>Employee</Text>
+                                </View>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-around',
+                                        alignItems: 'center',
+
+                                    }}>
+                                    <ModalSelector
+                                        initValue="Department"
+                                        style={styles.cardteachers}
+                                        initValueTextStyle={styles.SelectedValueSmall}
+                                        data={departments}
+                                        onChange={option => {
+                                            fetchEmployees(option.key)
+                                        }}
+                                        selectTextStyle={styles.SelectedValueSmall}
+                                    />
+                                    <ModalSelector
+                                        initValue="Employee"
+                                        style={styles.cardteachers}
+                                        initValueTextStyle={styles.SelectedValueSmall}
+                                        data={users}
+                                        onChange={option => {
+                                            setSelectedUser(option.key)
+                                        }}
+                                        selectTextStyle={styles.SelectedValueSmall}
+                                    />
+                                </View>
+                            </View>
+                        ) : (null)
+                    }
+
+
+                    <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                        <Text style={styles.section_heading}>Hostel Type </Text>
+                        <Text style={styles.section_heading2}>Hostel Name</Text>
+                        <Text style={styles.section_heading3}>Hostel Room</Text>
+                    </View>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            alignItems: 'center',
+
+                        }}>
+                        <ModalSelector
+                            initValue="Type"
+                            style={styles.cardsmall}
+                            initValueTextStyle={styles.SelectedValueSmall}
+                            data={hostelType}
+                            onChange={option => {
+                                fetchHostelName(option.key)
                             }}
-                        ></Feather>
-                        <DateTimePickerModal
-                            isVisible={isDatePickerVisible1}
-                            style={styles.pickdate}
-                            mode="date"
-                            onConfirm={handleConfirm1}
-                            onCancel={() => setDatePickerVisibility1(false)}
+                            selectTextStyle={styles.SelectedValueSmall}
                         />
-                    </TouchableOpacity>
+                        <ModalSelector
+                            initValue="Name"
+                            style={styles.cardsmall}
+                            initValueTextStyle={styles.SelectedValueSmall}
+                            data={hostelName}
+                            onChange={option => {
+                                fetchHostelRoom(option.key)
+                            }}
+                            selectTextStyle={styles.SelectedValueSmall}
+                        />
+                        <ModalSelector
+                            initValue="Room"
+                            style={styles.cardsmall}
+                            initValueTextStyle={styles.SelectedValueSmall}
+                            data={hostelRoom}
+                            onChange={option => {
+                                setSelectedHostelRoom(option.key)
+                            }}
+                            selectTextStyle={styles.SelectedValueSmall}
+                        />
+
+                    </View>
+                    <View style={{ width: "100%", paddingTop: 15, flexDirection: 'row' }}>
+                        <Text style={styles.section_heading}>Registration </Text>
+                        <Text style={styles.section_heading1}>Vacating</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row' }} >
+
+                        {/* registraion */}
+                        <TouchableOpacity style={styles.pickdate} onPress={() => setDatePickerVisibility(!isDatePickerVisible)}>
+                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: 'black' }}
+                                value={date ? date.slice(0, 11) : 'Select'}
+                                editable={false}
+                                placeholderTextColor='grey'
+                                color='black'
+                            />
+                            <Feather size={18} color="black" name="calendar"
+                                style={{
+                                    marginTop: 16,
+                                    marginRight: 0,
+                                }}
+                            ></Feather>
+                            <DateTimePickerModal
+                                isVisible={isDatePickerVisible}
+                                style={styles.pickdate}
+                                mode="date"
+                                onConfirm={handleConfirm}
+                                onCancel={() => setDatePickerVisibility(false)}
+                            />
+                        </TouchableOpacity>
+
+                        {/* vacating */}
+                        <TouchableOpacity style={styles.pickdate1} onPress={() => setDatePickerVisibility1(!isDatePickerVisible1)} >
+                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: 'black' }}
+                                value={date1 ? date1.slice(0, 11) : 'Select'}
+                                editable={false}
+                                placeholderTextColor='grey'
+                                color='black'
+                            />
+                            <Feather size={18} color="black" name="calendar"
+                                style={{
+                                    marginTop: 16,
+                                    marginRight: 0,
+                                }}
+                            ></Feather>
+                            <DateTimePickerModal
+                                isVisible={isDatePickerVisible1}
+                                style={styles.pickdate}
+                                mode="date"
+                                onConfirm={handleConfirm1}
+                                onCancel={() => setDatePickerVisibility1(false)}
+                            />
+                        </TouchableOpacity>
 
 
+                    </View>
+                    <View style={styles.fixToText}>
+                        <Button onPress={handleSubmit} color={institute ? institute.themeColor : 'blue'} mode="contained">Save</Button>
+                    </View>
                 </View>
-                <View style={styles.fixToText}>
-                    <Button onPress={handleSubmit} color={institute? institute.themeColor: 'blue'} mode="contained">Save</Button>
-                </View>
-            </View>
 
             </ScrollView>
 
@@ -662,7 +697,7 @@ const styles = StyleSheet.create({
 
         marginBottom: 5,
         marginRight: 20,
-        width:'33%'
+        width: '33%'
     },
     section_heading2: {
         flex: 1,
@@ -674,13 +709,13 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         lineHeight: 18,
         textAlign: 'center',
-        marginRight: 20,
-        marginLeft:55,
+        marginRight: 25,
+        marginLeft: 30,
 
 
         color: 'rgba(88, 99, 109, 0.85)',
 
-        width:'33%'
+        width: '33%'
 
     },
     section_heading3: {
@@ -694,12 +729,12 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'center',
         marginRight: 20,
-        marginLeft:0,
+        marginLeft: 0,
 
 
         color: 'rgba(88, 99, 109, 0.85)',
 
-        width:'33%'
+        width: '33%'
 
     },
     section_heading4: {
@@ -713,12 +748,12 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         textAlign: 'center',
         marginRight: 20,
-        marginLeft:55,
+        marginLeft: 55,
 
 
         color: 'rgba(88, 99, 109, 0.85)',
 
-        width:'33%'
+        width: '33%'
 
     },
 
@@ -778,132 +813,79 @@ const styles = StyleSheet.create({
     SelectedValue: {
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: 18,
-        lineHeight: 27,
-        padding: 10,
-        backgroundColor: "#8a2be2",
+        fontWeight: '200',
+        fontWeight: '500',
+        fontSize: 14,
+        lineHeight: 30,
         color: '#211C5A',
     },
 
-
     card: {
-        width:'48%',
-        height: 50,
         shadowColor: '#999',
+        height: 50,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.5,
+        shadowRadius: 12,
+        elevation: 5,
         backgroundColor: 'white',
-        borderColor: '#58636D',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+        borderTopRightRadius: 12,
+        borderTopLeftRadius: 12,
         overflow: 'hidden',
-        justifyContent: 'center',
-        borderRadius: 8,
-        borderWidth: 0.3,
-        marginLeft: 10,
-        marginRight:0,
-        //flexDirection: 'row',
-        justifyContent: 'space-between'
+        margin: 0,
+        padding: 0,
+        width: '94%',
     },
-    
-    card1: {
-        width:'45%',
-        height: 50,
-        shadowColor: '#999',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.5,
-        backgroundColor: 'white',
-        borderColor: '#58636D',
-        overflow: 'hidden',
-        justifyContent: 'center',
-        borderRadius: 8,
-        borderWidth: 0.3,
-        marginLeft: 12,
-        marginRight:0,
-        //flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-
-    card2: {
-        width: 170,
-        height: 50,
-        shadowColor: '#999',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.5,
-        backgroundColor: 'white',
-        borderColor: '#58636D',
-        overflow: 'hidden',
-        justifyContent: 'center',
-        borderRadius: 8,
-        borderWidth: 0.3,
-        marginLeft: 15,
-        marginRight: 20,
-        //flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-
-    card3: {
-        width:'33%',
-        height: 50,
-        shadowColor: '#999',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.5,
-        backgroundColor: 'white',
-        borderColor: '#58636D',
-        overflow: 'hidden',
-        justifyContent: 'center',
-        borderRadius: 8,
-        borderWidth: 0.3,
-        marginLeft: 7,
-        marginRight:0,
-        //flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-card4:{
-    width:'28%',
-    height: 50,
-    shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.5,
-    backgroundColor: 'white',
-    borderColor: '#58636D',
-    overflow: 'hidden',
-    justifyContent: 'center',
-    borderRadius: 8,
-    borderWidth: 0.3,
-    marginLeft: 5,
-    marginRight:0,
-    //flexDirection: 'row',
-    justifyContent: 'space-between'
-},
-
-card5: {
-    width:'28%',
-    height: 50,
-    shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.5,
-    backgroundColor: 'white',
-    borderColor: '#58636D',
-    overflow: 'hidden',
-    justifyContent: 'center',
-    borderRadius: 8,
-    borderWidth: 0.3,
-    marginLeft: 7,
-    marginRight:0,
-    //flexDirection: 'row',
-    justifyContent: 'space-between'
-},
 
 
 
     SelectedValueSmall: {
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
+        fontWeight: '200',
         fontWeight: '500',
-        fontSize: 18,
-        justifyContent: 'space-between',
+        fontSize: 14,
+        lineHeight: 30,
         color: '#211C5A',
     },
+    cardsmall: {
+        shadowColor: '#999',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        backgroundColor: 'white',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+        borderTopRightRadius: 12,
+        borderTopLeftRadius: 12,
+        overflow: 'hidden',
+        justifyContent: 'center',
+        height: 50,
+        width: 110,
+        elevation: 3,
+    },
+    cardteachers: {
+        shadowColor: '#999',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        backgroundColor: 'white',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+        borderTopRightRadius: 12,
+        borderTopLeftRadius: 12,
+        overflow: 'hidden',
+        justifyContent: 'center',
+        height: 50,
+        width: 160,
+        elevation: 3,
+    },
+
 
     header: {
         height: 69,
