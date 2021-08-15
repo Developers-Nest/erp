@@ -817,7 +817,6 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         fontSize: 14,
         lineHeight: 30,
-        paddingTop: 3,
         color: '#211C5A',
     },
 
@@ -850,7 +849,6 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         fontSize: 14,
         lineHeight: 30,
-        paddingTop: 3,
         color: '#211C5A',
     },
     cardsmall: {

@@ -217,7 +217,7 @@ const VisitorsList = ({ navigation }) => {
 
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.differentusers}>
-                                        <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'OpenSans-Regular' }}>
+                                        <Text style={{ fontSize: 12, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
                                             {visitorlist.userType.name ? visitorlist.userType.name : 'N/A'}
                                         </Text>
                                     </TouchableOpacity>

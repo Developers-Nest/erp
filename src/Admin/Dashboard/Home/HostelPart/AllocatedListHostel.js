@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
+import AntDesign from 'react-native-vector-icons/AntDesign'; 
 
 import { Button } from 'react-native-paper';
 
@@ -17,6 +17,7 @@ import Icon1 from 'react-native-vector-icons/AntDesign';
 //for swipeable icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 // redux
 import { useSelector } from 'react-redux';
@@ -102,22 +103,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
     hideLoadingScreen()
   }
 
-  const RightActions = id => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          handleDelete(id);
-        }}>
-        <View style={styles.iconbubblereject}>
-          <FontAwesome5 size={38.5} color="white" name="trash-alt" />
-
-          <Text style={{ color: 'white' }}>Reject</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-
+  
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -239,10 +225,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
           ? (allocation) &&
           allocation.map(allocation => (
             <View key={allocation._id}>
-              <Swipeable
-
-                renderRightActions={() => RightActions(allocation._id)}>
-                <View style={styles.section} >
+              <View style={styles.section} >
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
                       <View style={styles.differentusers}>
@@ -262,8 +245,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
                             flexDirection: 'row',
                             fontSize: 12,
                             color: '#505069',
-                            marginTop: 5,
-                            fontFamily: 'openSans',
+                            fontFamily: 'OpenSans-Regular',
                           }}>
                           {allocation.room ? allocation.room : 'N/A'} {', '}
                           {allocation.floor ? allocation.floor : 'N/A'} {' floor'}
@@ -279,18 +261,18 @@ const AllocatedListHostel = ({ route, navigation }) => {
                             fontFamily: 'Poppins-Medium',
                           }}></Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.differentusers}>
+                      <View style={styles.differentusers}>
                         <Text
                           style={{
                             fontSize: 12,
                             color: institute ? institute.themeColor : '#505069',
-                            fontFamily: 'openSans',
+                            fontFamily: 'OpenSans-Regular',
                           }}>
                           {allocation.type ? allocation.type : 'N/A'}
                         </Text>
-                      </TouchableOpacity>
+                      </View>
 
-                      <TouchableOpacity style={styles.differentusers}>
+                      <View style={styles.differentusers}>
                         <Text
                           style={{
                             fontSize: 12,
@@ -306,36 +288,22 @@ const AllocatedListHostel = ({ route, navigation }) => {
                           style={{
                             flexDirection: 'row',
                             justifyContent: 'space-between',
+                            marginBottom:5
                           }}>
-                          <Text
-                            style={{
-                              fontSize: 13,
-                              color: institute ? institute.themeColor : '#211C5A',
-                              fontFamily: 'Poppins-Regular',
-                              marginTop: 5,
-                            }}>
-                            Delete
-                          </Text>
-                          <Icon1
-                            size={13}
+                          <MaterialIcon
+                            size={20}
                             backgroundColor=" #211C5A"
-                            name="edit"
-                            style={{ paddingTop: 7, paddingRight: 12 }}
+                            name="delete"
                             color={institute ? institute.themeColor : '#211C5A'}
                           />
                         </TouchableOpacity>
-                      </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
 
                   <View style={styles.belowhr}>
                     <View style={{ flexDirection: 'column' }}>
-                      <Text
-                        style={{
-                          color: '#B04305',
-                          fontSize: 12,
-                          fontFamily: 'Poppins-Medium',
-                        }}></Text>
+                      
                       <Text
                         style={{
                           color: '#211C5A',
@@ -347,7 +315,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
                         {allocation.regDate ? allocation.regDate : 'N/A'}
                       </Text>
                     </View>
-                    <View style={{ marginTop: 15 }}>
+                    <View>
                       <Text
                         style={{
                           color: '#211C5A',
@@ -360,7 +328,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
                     </View>
                   </View>
                 </View>
-              </Swipeable>
+           
             </View>
           ))
           : null}
@@ -458,7 +426,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 0,
     justifyContent: 'space-between',
-    paddingBottom: 10,
+   paddingVertical:10,
     borderBottomColor: '#333',
     //borderBottomWidth:1,
   },

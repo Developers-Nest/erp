@@ -8,7 +8,6 @@ import {
   TextInput,
   TouchableWithoutFeedback,
 } from 'react-native';
-import ModalSelector from 'react-native-modal-selector';
 
 import { Button } from 'react-native-paper';
 
@@ -263,7 +262,7 @@ const HostelDetails = ({ navigation }) => {
             </View>
           ))}
 
-        <View style={{ height: 90 }} />
+        <View style={{ height: 100 }} />
       </ScrollView>
     </View>
   );

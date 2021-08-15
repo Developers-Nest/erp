@@ -500,7 +500,7 @@ const AddVisitorsHostel = ({ navigation }) => {
                 icon="calendar"
                 mode="contained"
                 color="white"
-                style={{ alignSelf: 'center', width: 150, height: 44, marginLeft: -16 }}
+                style={{ alignSelf: 'center', width: 140, height: 44 }}
                 onPress={() => setShowTimePicker(true)}>
                 {time ? time.slice(15, 21) : 'TIME'}
               </Button>
@@ -716,14 +716,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  }, SelectedValue: {
+  }, 
+  SelectedValue: {
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: '200',
     fontWeight: '500',
     fontSize: 14,
     lineHeight: 30,
-    paddingTop: 3,
     color: '#211C5A',
   },
 
