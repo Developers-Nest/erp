@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
     Searchbar,
@@ -25,28 +25,28 @@ import patch from '../../../../../services/helpers/request/patch'
 import deleteReq from '../../../../../services/helpers/request/delete'
 import read from '../../../../../services/localstorage/read'
 import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
-
+import get from '../../../../../services/helpers/request/get';
 
 
 export default function EditDriver({ route, navigation }) {
 
     //theming
     const institute = useSelector(state => state.institute);
-//loading screen
+    //loading screen
     const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
-//modal selector values
-const [vehicles, setVehicles] = useState([]);
-//data to be sent
-const [vehicle, setVehicle] = useState();
-//for textinputs
-const [track, setTrackid] = useState();
-const [licensenum, setLicensenum] = useState('');
-const [name, setName] = useState('')
-const [phone, setPhone] = useState('')
-const [curraddr, setcurraddr] = useState('')
-const [permaddr, setpermaddr] = useState('')
+    //modal selector values
+    const [vehicles, setVehicles] = useState([]);
+    //data to be sent
+    const [vehicle, setVehicle] = useState();
+    //for textinputs
+    const [track, setTrackid] = useState();
+    const [licensenum, setLicensenum] = useState('');
+    const [name, setName] = useState('')
+    const [phone, setPhone] = useState('')
+    const [curraddr, setcurraddr] = useState('')
+    const [permaddr, setpermaddr] = useState('')
 
-const [id, setId] = useState('')
+    const [id, setId] = useState('')
 
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('21 May 2021')
@@ -63,110 +63,96 @@ const [id, setId] = useState('')
         setDatePickerVisibility(false);
     };
     const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date.toString());
         setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
-        // setDate(date.toString())
         hideDatePicker();
     };
 
-//for edit
+    //for edit
 
 
-useEffect(async () => {
-    let driver = route.params.driver
-    console.log('Edit driver ', driver)
-//  setVehicle(driver.vehicleNo)
- setDate(driver.dob)
- //text inputs
-setLicensenum(driver.licenseNumber)
-setName(driver.name)
+    useEffect(async () => {
+        let driver = route.params.driver
+        console.log('Edit driver ', driver)
+        setDate(driver.dob)
+        //text inputs
+        setLicensenum(driver.licenseNumber)
+        setName(driver.name)
 
-setPhone(driver.phone)
-setcurraddr(driver.presentAddress)
-setpermaddr(driver.permanentAddress)
-setId(driver._id)
-  
-try {
-   
-    let slug = '/transport/vehicle';
-    let token = await read('token');
-    let res = await get(slug, token);
-    let list = [];
+        setPhone(driver.phone)
+        setcurraddr(driver.presentAddress)
+        setpermaddr(driver.permanentAddress)
+        setId(driver._id)
 
-    res &&
-        res.map((res) => {
-            list.push({
-                label: res.vehicleNo,
-                key: res._id,
-            })
-        })
+        try {
 
-    console.log(list);
-    setVehicles(list);
+            let slug = '/transport/vehicle';
+            let token = await read('token');
+            let res = await get(slug, token);
+            let list = [];
 
-} catch (err) {
-    alert('Cannot fetch Vehicle number list!!');
-}
+            res &&
+                res.map((res) => {
+                    list.push({
+                        label: res.vehicleNo,
+                        key: res._id,
+                    })
+                })
 
-}, [])
+            console.log(list);
+            setVehicles(list);
 
-let fetchVehicle = async(sel)=>{
-    setLoadingScreen()
-    try{
-        setVehicle(sel)
-        
-    } catch(err){
-        alert('Cannot get vehicles!!')
-    }
-    hideLoadingScreen()
-}
-
-let handleUpdate = async () => {
-    setLoadingScreen()
-    try {
-        let slug = `/transport/driver/${id}`
-        let token = await read('token')
-        let data = {
-            vehicleNo: vehicle,
-            licenseNumber: licensenum,
-            name: name,
-            phone: phone,
-            presentAddress: curraddr,
-            permanentAddress: permaddr,
-            // trackId: track,
-            dob:date,
-            
+        } catch (err) {
+            alert('Cannot fetch Vehicle number list!!');
         }
-        let res = await patch(slug, data, token)
-        if (res.error) {
-            alert(res.error)
-        } else if (res._id) {
-            alert('Updated')
-            navigation.navigate('TransportMain');
-        }
-    } catch (err) {
-        alert('Cannot Update !!')
-    }
-    hideLoadingScreen()
-}
 
-let handleDelete = async () => {
-    setLoadingScreen()
-    try {
-        let slug = `/transport/driver/${id}`
-        let token = await read('token')
-        let res = await deleteReq(slug, token)
-        if (res.error) {
-            alert(res.error)
-        } else {
-            alert('Deleted')
-            navigation.navigate('TransportMain');
+    }, [])
+
+
+    let handleUpdate = async () => {
+        setLoadingScreen()
+        try {
+            let slug = `/transport/driver/${id}`
+            let token = await read('token')
+            let data = {
+                vehicleNo: vehicle,
+                licenseNumber: licensenum,
+                name: name,
+                phone: phone,
+                presentAddress: curraddr,
+                permanentAddress: permaddr,
+                dob: date,
+
+            }
+            let res = await patch(slug, data, token)
+            if (res.error) {
+                alert(res.error)
+            } else if (res._id) {
+                alert('Updated')
+                navigation.navigate('TransportMain');
+            }
+        } catch (err) {
+            alert('Cannot Update !!')
         }
-    } catch (err) {
-        alert('Cannot Delete !!')
+        hideLoadingScreen()
     }
-    hideLoadingScreen()
-}
+
+    let handleDelete = async () => {
+        setLoadingScreen()
+        try {
+            let slug = `/transport/driver/${id}`
+            let token = await read('token')
+            let res = await deleteReq(slug, token)
+            if (res.error) {
+                alert(res.error)
+            } else {
+                alert('Deleted')
+                navigation.navigate('TransportMain');
+            }
+        } catch (err) {
+            alert('Cannot Delete !!')
+        }
+        hideLoadingScreen()
+    }
 
     return (
         <View style={styles.backgroung}>
@@ -190,7 +176,7 @@ let handleDelete = async () => {
                                 alignSelf: 'center',
                                 fontSize: 25,
                                 color: 'white',
-                               
+
                             }}
                         />
                     </TouchableOpacity>
@@ -213,7 +199,7 @@ let handleDelete = async () => {
             {/* header ends */}
             <ScrollView>
                 <View style={{ padding: 10 }} />
-{loadingScreen}
+                {loadingScreen}
                 <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row', alignContent: 'flex-start', justifyContent: 'space-evenly' }}>
                     <Text style={styles.section_heading}>Vehicle No. </Text>
                     <Text style={styles.section_heading}>Track ID</Text>
@@ -272,11 +258,11 @@ let handleDelete = async () => {
                         <View style={styles.CardContent}>
                             <TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
                                 <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                    placeholder={date}
-                                    value={date}
+                                    placeholder='DATE'
+                                    value={date.toString().slice(0, 10)}
                                     placeholderTextColor="grey"
                                     color="black"
-                                   
+
                                     editable={false}
 
                                 />
@@ -292,7 +278,7 @@ let handleDelete = async () => {
                                     mode="date"
                                     onConfirm={handleConfirm}
                                     onCancel={hideDatePicker}
-                                  
+
                                 />
                             </TouchableOpacity>
                         </View>
@@ -376,7 +362,7 @@ let handleDelete = async () => {
 
                 </View>
 
-            
+
 
                 <View
                     style={{
@@ -389,7 +375,7 @@ let handleDelete = async () => {
                     <Button style={{ width: 90 }} color="#B04305" mode="contained" onPress={handleDelete}>
                         DELETE
                     </Button>
-                    <Button style={{ width: 90 }} color="#5177E7" mode="contained" onPress={handleUpdate}>
+                    <Button style={{ width: 90 }} color={institute ? institute.themeColor : '#5177E7'} mode="contained" onPress={handleUpdate}>
                         SAVE
                     </Button>
                 </View>

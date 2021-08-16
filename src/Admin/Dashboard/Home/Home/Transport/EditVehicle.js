@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
-    Searchbar,
-    Appbar,
-    List,
-    Card,
-    Title,
-    Paragraph,
+
     Button,
 } from 'react-native-paper';
 
@@ -405,7 +400,7 @@ export default function EditVehicle({ route, navigation }) {
 
                     }}>
                     <Button style={{ width: 90 }}
-                        //   color={institute ? institute.themeColor : '#5177E7'}
+
                         color="#B04305" mode="contained" onPress={handleDelete}>
                         DELETE
                     </Button>
