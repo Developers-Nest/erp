@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-
 import {createStackNavigator} from '@react-navigation/stack';
 
 // loading screen
@@ -16,6 +15,7 @@ import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 // helpers
 import get from '../../../services/helpers/request/get';
 import read from '../../../services/localstorage/read';
+import deleteReq from '../../../services/helpers/request/delete';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -23,7 +23,7 @@ import {useSelector} from 'react-redux';
 const Stack = createStackNavigator();
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import { Button, Appbar} from 'react-native-paper';
+import {Button, Appbar} from 'react-native-paper';
 import OccurenceEdit from './OccurenceEdit';
 import Occurence2 from './Occurence2';
 
@@ -43,12 +43,15 @@ function Occurance({navigation}) {
     return d.toString().slice(0, 15);
   };
 
-  const institute = useSelector(state => state.institute)
+  const institute = useSelector(state => state.institute);
 
   const [list, setlist] = useState([]);
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   const onChangeSearch = query => setSearchQuery(query);
+
+  //screen reload
+  const [reload, setreload] = React.useState(true);
 
   //fetch list
   useEffect(async () => {
@@ -63,11 +66,23 @@ function Occurance({navigation}) {
       alert('Cannot fetch your Live Classes !!\n');
     }
     hideLoadingScreen();
-  }, []);
+  }, [reload]);
+
+  const HandleDelete = async id => {
+    try {
+      let slug = `/occurrence/${id}`;
+      let token = await read('token');
+      const response = await deleteReq(slug, token);
+      setreload(!reload);
+    } catch (err) {
+      alert('Cannot delete occurrence!!' + err);
+    }
+  };
 
   return (
     <>
-      <Appbar style={{backgroundColor: institute? institute.themeColor: 'blue'}}>
+      <Appbar
+        style={{backgroundColor: institute ? institute.themeColor : 'blue'}}>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Occurence Register" />
         <Appbar.Action
@@ -104,25 +119,38 @@ function Occurance({navigation}) {
                       }}>
                       {occurance.employeeName.firstName}
                     </Text>
-                    <Button
-                      color={institute? institute.themeColor: 'blue'}
-                      onPress={() =>
-                        navigation.navigate('OccurenceEdit', {
-                          id: occurance._id,
-                          employeeID: occurance.employeeName._id,
-                          employeeName: occurance.employeeName.firstName,
-                          date: occurance.date,
-                          remarks: occurance.remarks,
-                          institution: occurance.institution,
-                          v: occurance.__v,
-                        })
-                      }>
-                      edit <FontAwesome5 name={'edit'} size={20} light />
-                    </Button>
+                    <View>
+                      <Button
+                        color={institute ? institute.themeColor : 'blue'}
+                        onPress={() =>
+                          navigation.navigate('OccurenceEdit', {
+                            id: occurance._id,
+                            employeeID: occurance.employeeName._id,
+                            employeeName: occurance.employeeName.firstName,
+                            date: occurance.date,
+                            remarks: occurance.remarks,
+                            institution: occurance.institution,
+                            v: occurance.__v,
+                          })
+                        }>
+                        edit <FontAwesome5 name={'edit'} size={20} light />
+                      </Button>
+                      <Button
+                        color={institute ? institute.themeColor : 'blue'}
+                        onPress={() => {
+                          HandleDelete(occurance._id);
+                        }}>
+                        Delete <FontAwesome5 name={'edit'} size={20} light />
+                      </Button>
+                    </View>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{ ...styles.differentusers}}>
-                    <Text style={{fontSize: 16, color: institute? institute.themeColor : 'blue'}}>
+                  <TouchableOpacity style={{...styles.differentusers}}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        color: institute ? institute.themeColor : 'blue',
+                      }}>
                       {parseDate(occurance.date)}
                     </Text>
                   </TouchableOpacity>
@@ -169,7 +197,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     marginHorizontal: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
 
   details: {
