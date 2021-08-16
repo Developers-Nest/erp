@@ -119,6 +119,7 @@ export default function AddVehicle({navigation}) {
       let res = await post(slug, data, token);
       console.log('Vehicle Added ', res);
       alert('created');
+      navigation.navigate('TransportMain')
     } catch (err) {
       alert('Cannot Add ' + err);
     }

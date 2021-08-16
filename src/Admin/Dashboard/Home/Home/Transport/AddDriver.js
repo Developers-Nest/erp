@@ -86,6 +86,7 @@ export default function AddDriver({ navigation }) {
             let res = await post(slug, data, token);
             console.log('Add Driver ', res);
             alert('Driver added!!');
+            navigation.navigate('TransportMain')
         } catch (err) {
             alert('Cannot Save !!' + err);
         }

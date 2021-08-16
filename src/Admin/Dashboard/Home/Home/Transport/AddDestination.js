@@ -75,6 +75,7 @@ export default function AddDestination({ navigation }) {
                 alert(res.error)
             } else if(res._id){
                 alert('Destination Added!!')
+                navigation.navigate('TransportMain')
             }
         } catch (err) {
             alert('Cannot Save !!' + err);
