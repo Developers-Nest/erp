@@ -249,7 +249,7 @@ export default function EditDriver({ route, navigation }) {
                                 placeholderTextColor="grey"
                                 color="black"
                                 keyboardType="numeric"
-                                value={licensenum}
+                                value={licensenum?licensenum.toString():'N/A'}
                                 onChangeText={val => setLicensenum(val)}
                             />
                         </View>
@@ -299,7 +299,7 @@ export default function EditDriver({ route, navigation }) {
                                 placeholder="Shaheen"
                                 placeholderTextColor="grey"
                                 color="black"
-                                value={name}
+                                value={name?name:'N/A'}
                                 onChangeText={val => setName(val)}
                             />
                         </View>
@@ -312,7 +312,7 @@ export default function EditDriver({ route, navigation }) {
                                 placeholderTextColor="grey"
                                 keyboardType="numeric"
                                 color="black"
-                                value={phone}
+                                value={phone?phone.toString():'N/A'}
                                 onChangeText={val => setPhone(val)}
                             />
                         </View>
@@ -332,7 +332,7 @@ export default function EditDriver({ route, navigation }) {
                                 placeholder="Enter current address"
                                 placeholderTextColor="grey"
                                 color="black"
-                                value={curraddr}
+                                value={curraddr?curraddr:'N/A'}
                                 onChangeText={val => setcurraddr(val)}
                             />
                         </View>
@@ -354,7 +354,7 @@ export default function EditDriver({ route, navigation }) {
                                 placeholder="Enter permanent address"
                                 placeholderTextColor="grey"
                                 color="black"
-                                value={permaddr}
+                                value={permaddr?permaddr:'N/A'}
                                 onChangeText={val => setpermaddr(val)}
                             />
                         </View>

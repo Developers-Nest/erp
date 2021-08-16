@@ -216,7 +216,8 @@ export default function EditVehicle({ route, navigation }) {
                                 placeholder="Vehicle No."
                                 placeholderTextColor="grey"
                                 color="black"
-                                value={vehiclenum}
+                                keyboardType="numeric"
+                                value={vehiclenum?vehiclenum.toString():'N/A'}
                                 onChangeText={val => setVehiclenum(val)}
                             />
                         </View>
@@ -229,7 +230,7 @@ export default function EditVehicle({ route, navigation }) {
                                 placeholderTextColor="grey"
                                 color="black"
                                 keyboardType="numeric"
-                                value={trackid}
+                                value={trackid?trackid:'N/A'}
                                 onChangeText={val => setTrackid(val)}
                             />
                         </View>
@@ -273,7 +274,7 @@ export default function EditVehicle({ route, navigation }) {
                                 <TextInput
                                     style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                                     placeholder={date}
-                                    value={date.slice(0, 10)}
+                                    value={date?date.slice(0, 10):'N/A'}
                                     placeholderTextColor="grey"
                                     color="black"
 
@@ -322,7 +323,7 @@ export default function EditVehicle({ route, navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Seats"
-                                value={maxseats}
+                                value={maxseats?maxseats.toString():'N/A'}
                                 placeholderTextColor="grey"
                                 color="black"
                                 keyboardType="numeric"
@@ -338,7 +339,7 @@ export default function EditVehicle({ route, navigation }) {
                                 placeholder="Driver's name"
                                 placeholderTextColor="grey"
                                 color="black"
-                                value={drivername}
+                                value={drivername?drivername:'N/A'}
                                 onChangeText={val => setDrivername(val)}
                             />
                         </View>
@@ -371,7 +372,7 @@ export default function EditVehicle({ route, navigation }) {
                                 placeholderTextColor="grey"
                                 color="black"
                                 keyboardType="numeric"
-                                value={maxallow}
+                                value={maxallow?maxallow.toString():'N/A'}
                                 onChangeText={val => setMaxallow(val)}
                             />
                         </View>
@@ -383,7 +384,7 @@ export default function EditVehicle({ route, navigation }) {
                                 placeholder="Phone no."
                                 placeholderTextColor="grey"
                                 color="black"
-                                value={phone}
+                                value={phone?phone.toString():'N/A'}
                                 keyboardType="numeric"
                             />
                         </View>
