@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
-    Searchbar,
-    Appbar,
-    List,
-    Card,
-    Title,
-    Paragraph,
+  
     Button,
 } from 'react-native-paper';
 
@@ -249,7 +244,7 @@ export default function EditDriver({ route, navigation }) {
                                 placeholderTextColor="grey"
                                 color="black"
                                 keyboardType="numeric"
-                                value={licensenum?licensenum.toString():'N/A'}
+                                value={licensenum.toString()}
                                 onChangeText={val => setLicensenum(val)}
                             />
                         </View>
@@ -299,7 +294,7 @@ export default function EditDriver({ route, navigation }) {
                                 placeholder="Shaheen"
                                 placeholderTextColor="grey"
                                 color="black"
-                                value={name?name:'N/A'}
+                                value={name}
                                 onChangeText={val => setName(val)}
                             />
                         </View>
@@ -312,7 +307,7 @@ export default function EditDriver({ route, navigation }) {
                                 placeholderTextColor="grey"
                                 keyboardType="numeric"
                                 color="black"
-                                value={phone?phone.toString():'N/A'}
+                                value={phone.toString()}
                                 onChangeText={val => setPhone(val)}
                             />
                         </View>
@@ -332,7 +327,7 @@ export default function EditDriver({ route, navigation }) {
                                 placeholder="Enter current address"
                                 placeholderTextColor="grey"
                                 color="black"
-                                value={curraddr?curraddr:'N/A'}
+                                value={curraddr}
                                 onChangeText={val => setcurraddr(val)}
                             />
                         </View>
@@ -354,7 +349,7 @@ export default function EditDriver({ route, navigation }) {
                                 placeholder="Enter permanent address"
                                 placeholderTextColor="grey"
                                 color="black"
-                                value={permaddr?permaddr:'N/A'}
+                                value={permaddr}
                                 onChangeText={val => setpermaddr(val)}
                             />
                         </View>

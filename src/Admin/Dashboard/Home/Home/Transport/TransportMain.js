@@ -486,8 +486,12 @@ export default function TransportMain({ navigation }) {
                         {destinationinfo.route.stopPlace ? destinationinfo.route.stopPlace : 'N/A'}
                       </Text>
                       <TouchableOpacity
-                        onPress={() => { navigation.navigate('EditDestination') }}
-                        style={{ flexDirection: 'row' }}>
+                         onPress={() => navigation.navigate('EditDestination', {
+                          destination: destinationinfo
+                      })
+                     }
+                       
+                       style={{ flexDirection: 'row' }}>
                         <Text
                           style={{
                             fontSize: 12,
