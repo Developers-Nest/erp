@@ -59,7 +59,6 @@ export default function EventScreen({navigation}) {
       let token = await read('token');
       let response = await get('/event', token);
       setEvents(response);
-      console.log(response);
     } catch (err) {
       alert('Cannot fetch events : ' + err);
     }

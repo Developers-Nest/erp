@@ -147,8 +147,11 @@ export default function LibraryMain({navigation}) {
 
   function IssuedBooks() {
     const [issuedbooks, setissuedbooks] = useState([]);
+
+    //screen reload
     const [reload, setreload] = React.useState(true);
 
+    //on load
     useEffect(async () => {
       try {
         let slug = '/library/issue';
@@ -166,7 +169,6 @@ export default function LibraryMain({navigation}) {
         let slug = `/library/issue/${id}`;
         let token = await read('token');
         const response = await deleteReq(slug, token);
-        setShowContent('IssuedBooks');
         setreload(!reload);
       } catch (err) {
         alert('Cannot delete issued book !!');

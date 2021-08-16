@@ -116,24 +116,6 @@ export default function OnlineLecture({navigation}) {
         style={{marginTop: 20}}>
         <View style={{marginHorizontal: 30, ...styles.shadow}}>
           <View style={styles.search}>
-            {/* <TextInput
-              style={{...styles.search_input}}
-              placeholder="Enter teacher’s name here"
-            /> */}
-
-            {/* <TouchableOpacity
-              style={{
-                alignSelf: 'center',
-              }}>
-              <IonIcon
-                name="search-sharp"
-                style={{
-                  alignSelf: 'center',
-                  fontSize: 30,
-                  color: 'black',
-                }}
-              />
-            </TouchableOpacity> */}
             <ModalSelector
               data={teacherlist}
               initValue="Select Teacher"
@@ -149,7 +131,7 @@ export default function OnlineLecture({navigation}) {
         {timeTable &&
           Object.keys(timeTable).map((day, index) => {
             return (
-              <View style={styles.section}>
+              <View style={styles.section} key={index}>
                 <View style={styles.shadow}>
                   <View style={styles.card_headingContainer}>
                     <Text style={styles.card_heading}>{day}</Text>
@@ -162,7 +144,9 @@ export default function OnlineLecture({navigation}) {
                     timeTable[day].map((slots, index) => {
                       return slots.map(slot => {
                         return (
-                          <TouchableOpacity style={styles.shadow}>
+                          <TouchableOpacity
+                            style={styles.shadow}
+                            key={slot._id}>
                             <View style={styles.classes_card}>
                               <Text style={styles.classes_cardClass}>
                                 {'Class'}
