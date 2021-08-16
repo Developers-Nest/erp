@@ -1,59 +1,143 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
-    Searchbar,
-    Appbar,
-    List,
-    Card,
-    Title,
-    Paragraph,
     Button,
 } from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-
 
 import ModalSelector from 'react-native-modal-selector';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
-import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //redux
 import { useSelector } from 'react-redux';
 
+import patch from '../../../../../services/helpers/request/patch'
+import deleteReq from '../../../../../services/helpers/request/delete'
+import read from '../../../../../services/localstorage/read'
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
+import get from '../../../../../services/helpers/request/get';
 
-export default function EditDestination({ navigation }) {
 
+export default function EditDestination({ route, navigation }) {
     //theming
     const institute = useSelector(state => state.institute);
+    //loading screen
+    const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+    
+    //modal selector values to be called from api
+    const [routenos, setroutenos] = useState([]);
 
-    const [isTimePickerVisible, setTimePickerVisibility] = React.useState(false);
-    const [Time, setTime] = React.useState('15:00')
-    let index = 0;
-    const dateMonths = {
-        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
+    //for fee type no API given,make the label and keys
+    const [feetypes, setfeetypes] = useState([
+        { label: 'Annual', key: 'Annual' },
+        { label: 'Bi-Annual', key: 'Bi-Annual' },
+        { label: 'Tri-Annual', key: 'Tri-Annual' },
+        { label: 'Quaterly', key: 'Quaterly' },
+        { label: 'Monthly', key: 'Monthly' },
+    ]);
+
+    //data to be sent
+    const [routeno, setrouteno] = useState();
+    const [feetype, setfeetype] = useState();
+
+    //for textinputs
+    const [feeamount, setfeeamount] = useState('');
+    const [drop, setdrop] = useState('');
+    const [id, setId] = useState('')
+   
+    const [showtimePicker, setShowTimePicker] = useState(false);
+    const [time, setTime] = useState(null);
+
+
+    // handle time select
+    let handleSubmit2 = async sd => {
+        showLoadingScreen();
+        await setTime(sd.toString());
+        setShowTimePicker(false);
+        hideLoadingScreen();
+    };
+
+    //on save button press action
+    let handleUpdate = async () => {
+        setLoadingScreen();
+        try {
+            let slug = `/transport/destinationAndFees/${id}`;
+            let token = await read('token');
+            let data = {
+                pickAndDrop: drop,
+                amount: feeamount,
+                feeType: feetype,
+                stopTime: time,
+                route: routeno,
+            };
+            let res = await patch(slug, data, token);
+            if(res.error){
+                alert(res.error)
+            } else if(res._id){
+                alert('Destination updated!!')
+                navigation.navigate('TransportMain');
+            }
+        } catch (err) {
+            alert('Cannot Update !!' + err);
+        }
+hideLoadingScreen();
     }
+//delete
+let handleDelete = async () => {
+    setLoadingScreen();
+    try {
+        let slug = `/transport/destinationAndFees/${id}`;
+        let token = await read('token')
+        let res = await deleteReq(slug, token)
+        if (res.error) {
+            alert(res.error)
+        } else {
+            alert('Deleted')
+            navigation.navigate('TransportMain');
+        }
+    } catch (err) {
+        alert('Cannot Delete !!')
+    }
+    hideLoadingScreen();
+}
 
-    const showTimePicker = () => {
-        setTimePickerVisibility(true);
-    };
 
-    const hideDatePicker = () => {
-        setTimePickerVisibility(false);
-    };
-    const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date.toString());
-        setTime(Time.getTime() + " " + TimeMonths[Time.getHour() + 1] + ":" + Time.getMinute())
-        hideTimePicker();
-    };
+    //on load
 
+    
+    useEffect(async () => {
+let destination = route.params.destination
+console.log('Edit destination ', destination)
+setfeeamount(destination.amount)
+setdrop(destination.pickAndDrop)
+setfeetype(destination.feeType)
+setTime(destination.stopTime)
+setrouteno(destination.route)
+setId(destination._id)
+
+try {
+    let slug = '/transport/route';
+    let token = await read('token');
+    let res = await get(slug, token);
+    let list = [];
+
+    res &&
+        res.map((res) => {
+            list.push({
+                label: res.code,
+                key: res._id,
+            })
+        })
+    setroutenos(list);
+} catch (err) {
+    alert('Cannot get route code!!');
+}
+    }, [])
+
+
+    
 
     return (
         <View style={styles.backgroung}>
@@ -77,11 +161,10 @@ export default function EditDestination({ navigation }) {
                                 alignSelf: 'center',
                                 fontSize: 25,
                                 color: 'white',
-                                // paddingLeft: 10,
-                                // paddingTop: 23,
                             }}
                         />
                     </TouchableOpacity>
+                    {loadingScreen}
                     <Text
                         style={{
                             fontStyle: 'normal',
@@ -99,6 +182,7 @@ export default function EditDestination({ navigation }) {
             </View>
 
             {/* header ends */}
+
             <ScrollView>
                 <View style={{ padding: 10 }} />
 
@@ -110,35 +194,34 @@ export default function EditDestination({ navigation }) {
 
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
+                    <ModalSelector
+                        data={routenos}
+                        initValue="Route Code"
+                        onChange={option => {
+                            setrouteno(option.key);
+                        }}
+                        style={styles.card}
+                        initValueTextStyle={styles.SelectedValueSmall}
+                        selectTextStyle={styles.SelectedValueSmall}
+                    />
                     <View style={styles.Card}>
                         <View style={styles.CardContent}>
-                            <TextInput
-                                style={{ ...styles.search_input }}
-                                placeholder="Route Code"
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.Card}>
-                        <View style={styles.CardContent}>
-                            <TouchableOpacity style={[styles.pickdate]} onPress={showTimePicker}>
-                                <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                    placeholder={Time}
+                            {/* time picker */}
+                            <Button
+                                icon="calendar"
+                                mode="contained"
+                                color="white"
+                                style={{ margin: 2 }}
+                                onPress={() => setShowTimePicker(true)}>
+                                {time ? time.slice(17, 21) : 'TIME'}
+                            </Button>
 
-                                />
-                                <Feather size={18} color="black" name="calendar"
-                                    style={{
-                                        marginTop: 10,
-                                        marginRight: 0,
-                                    }}
-                                ></Feather>
-                                <DateTimePickerModal
-                                    isVisible={isTimePickerVisible}
-                                    style={styles.pickdate}
-                                    mode='time'
-                                    onConfirm={handleConfirm}
-                                    onCancel={hideDatePicker}
-                                />
-                            </TouchableOpacity>
+                            <DateTimePickerModal
+                                isVisible={showtimePicker}
+                                mode="time"
+                                onConfirm={handleSubmit2}
+                                onCancel={() => setShowTimePicker(!showtimePicker)}
+                            />
                         </View>
                     </View>
                 </View>
@@ -150,26 +233,33 @@ export default function EditDestination({ navigation }) {
 
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
-                    <View style={styles.Card}>
-                        <View style={styles.CardContent}>
-                            <TextInput
-                                style={{ ...styles.search_input }}
-                                placeholder="Fee Type"
-                            />
-                        </View>
-                    </View>
+                    <ModalSelector
+                        data={feetypes}
+                        initValue="Fee Type"
+                        onChange={option => {
+                            setfeetype(option.key);
+                        }}
+                        style={styles.card}
+                        initValueTextStyle={styles.SelectedValueSmall}
+                        selectTextStyle={styles.SelectedValueSmall}
+                    />
                     <View style={styles.Card}>
                         <View style={styles.CardContent}>
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Fees Amount"
+                                placeholderTextColor="grey"
+                                color="black"
+                                keyboardType="numeric"
+                                value={feeamount.toString()}
+                                onChangeText={val => setfeeamount(val)}
                             />
                         </View>
                     </View>
                 </View>
 
                 <View style={{ width: "100%", paddingTop: 10, paddingLeft: '7%', flexDirection: 'row' }}>
-                    <Text style={styles.section_heading3}>Pick Up Address</Text>
+                    <Text style={styles.section_heading3}>Pick Up and Drop</Text>
                 </View>
 
 
@@ -179,30 +269,16 @@ export default function EditDestination({ navigation }) {
                             <TextInput
                                 style={{ ...styles.search_input }}
                                 placeholder="Enter pick-up address"
+                                placeholderTextColor="grey"
+                                color="black"
+                                value={drop.toString()}
+                                onChangeText={val => setdrop(val)}
                             />
                         </View>
                     </View>
-
                 </View>
 
-
-                <View style={{ width: "100%", paddingTop: 10, paddingLeft: '7%', flexDirection: 'row' }}>
-                    <Text style={styles.section_heading3}>Drop Address</Text>
-                </View>
-
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
-                    <View style={styles.Card3}>
-                        <View style={styles.CardContent}>
-                            <TextInput
-                                style={{ ...styles.search_input }}
-                                placeholder="Enter drop address"
-                            />
-                        </View>
-                    </View>
-
-                </View>
-
+                
                 <View
                     style={{
                         justifyContent: 'space-evenly',
@@ -211,13 +287,14 @@ export default function EditDestination({ navigation }) {
                         flexDirection: 'row',
 
                     }}>
-                    <Button style={{ width: 90 }} color="#B04305" mode="contained" onPress={() => console.log('Pressed')}>
+                    <Button style={{ width: 90 }} color="#B04305" mode="contained" onPress={handleDelete}>
                         DELETE
                     </Button>
-                    <Button style={{ width: 90 }} color="#5177E7" mode="contained" onPress={() => console.log('Pressed')}>
+                    <Button style={{ width: 90 }}color={ institute? institute.themeColor : "#5177E7"} mode="contained" onPress={handleUpdate} >
                         SAVE
                     </Button>
                 </View>
+
 
             </ScrollView>
         </View>
@@ -243,7 +320,7 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: '500',
         fontSize: 18,
-        lineHeight: 30,
+        lineHeight: 40,
         paddingTop: 3,
         color: '#211C5A',
     },
@@ -371,5 +448,24 @@ const styles = StyleSheet.create({
     header: {
         height: 69,
         flexDirection: 'row',
+    },
+    card: {
+        shadowColor: '#999',
+        height: 60,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.5,
+        shadowRadius: 12,
+        elevation: 5,
+        backgroundColor: 'white',
+        borderColor: '#ccc',
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+        borderTopRightRadius: 12,
+        borderTopLeftRadius: 12,
+        overflow: 'hidden',
+        alignSelf: 'center',
+        margin: 0,
+        padding: 0,
+        width: '40%',
     },
 });
