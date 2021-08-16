@@ -13,11 +13,14 @@ import { useSelector } from 'react-redux';
 
 import ModalSelector from 'react-native-modal-selector';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import getDesignation from '../../../../services/helpers/getList/getDesignation';
 import getHRname from '../../../../services/helpers/getList/getHRname';
 import getYear from '../../../../services/helpers/getList/getYear';
 import getMonth from '../../../../services/helpers/getList/getMonth';
-
+import get from '../../../../services/helpers/request/get';
+import patch from '../../../../services/helpers/request/patch';
+import read from '../../../../services/localstorage/read';
 
 // loading screem
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
@@ -96,16 +99,6 @@ const getMonths = async (y) => {
   }
   hideLoadingScreen();
 };
-// let fetchVehicle = async(sel)=>{
-//   setLoadingScreen()
-//   try{
-//       setVehicle(sel)
-      
-//   } catch(err){
-//       alert('Cannot get vehicles!!')
-//   }
-//   hideLoadingScreen()
-// }
 
 const getList = async () => {
   showLoadingScreen();
@@ -218,25 +211,26 @@ const getList = async () => {
           <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
 
             <ModalSelector
-              data={Months}
-              initValue="Month"
-              onChange={async option => {
-               setMonth(option.key);
-              }}
-              style={styles.card_picker}
-              initValueTextStyle={styles.SelectedValueSmall}
-              selectTextStyle={styles.SelectedValueSmall}
+             data={Years}
+             initValue="Year"
+             onChange={async option => {
+             await getMonths(option.key);
+             }}
+             style={styles.card_picker}
+             initValueTextStyle={styles.SelectedValueSmall}
+             selectTextStyle={styles.SelectedValueSmall} 
             />
             <View style={{ padding: 10 }} />
             <ModalSelector
-              data={Years}
-              initValue="Year"
-              onChange={async option => {
-              await getMonths(option.key);
-              }}
-              style={styles.card_picker}
-              initValueTextStyle={styles.SelectedValueSmall}
-              selectTextStyle={styles.SelectedValueSmall}
+             data={Months}
+             initValue="Month"
+             onChange={async option => {
+              setMonth(option.key);
+             }}
+             style={styles.card_picker}
+             initValueTextStyle={styles.SelectedValueSmall}
+             selectTextStyle={styles.SelectedValueSmall}
+             
             />
           </View>
         </View>
