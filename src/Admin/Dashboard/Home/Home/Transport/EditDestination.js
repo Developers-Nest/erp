@@ -53,7 +53,7 @@ export default function EditDestination({ route, navigation }) {
 
     // handle time select
     let handleSubmit2 = async sd => {
-        showLoadingScreen();
+        setLoadingScreen();
         await setTime(sd.toString());
         setShowTimePicker(false);
         hideLoadingScreen();
