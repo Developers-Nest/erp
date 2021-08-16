@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 // import { TextInput } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -25,9 +25,9 @@ import deleteReq from '../../../../../services/helpers/request/delete';
 import read from '../../../../../services/localstorage/read';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function LibraryMain({navigation}) {
+export default function LibraryMain({ navigation }) {
   const [showContent, setShowContent] = React.useState('IssuedBooks');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
@@ -57,15 +57,15 @@ export default function LibraryMain({navigation}) {
     return (
       <View style={styles.container}>
         <TouchableOpacity
-          style={{alignItems: 'flex-end', marginRight: 30}}
+          style={{ alignItems: 'flex-end', marginRight: 30 }}
           onPress={() => navigation.navigate('AddBooks')}>
-          <Text style={{color: 'blue', marginBottom: -6, fontWeight: 'bold'}}>
+          <Text style={{ color: 'blue', marginBottom: -6, fontWeight: 'bold' }}>
             Add more books
           </Text>
           <Text
             ellipsizeMode="clip"
             numberOfLines={1}
-            style={{color: 'blue', fontWeight: 'bold'}}>
+            style={{ color: 'blue', fontWeight: 'bold' }}>
             - - - - - - - - - - - - -
           </Text>
         </TouchableOpacity>
@@ -98,8 +98,12 @@ export default function LibraryMain({navigation}) {
                         {addedbooks.isbn}
                       </Text>
                       <TouchableOpacity
-                        style={{flexDirection: 'row'}}
-                        onPress={() => navigation.navigate('EditBooks')}>
+                        style={{ flexDirection: 'row' }}
+                        onPress={() => navigation.navigate('EditBooks', {
+                          books: addedbooks
+                        })
+                        }
+                      >
                         <Text
                           style={{
                             fontSize: 12,
@@ -112,7 +116,7 @@ export default function LibraryMain({navigation}) {
                           size={12}
                           color="#211C5A"
                           name="edit"
-                          style={{paddingTop: 2}}
+                          style={{ paddingTop: 2 }}
                         />
                       </TouchableOpacity>
                     </View>
@@ -181,15 +185,15 @@ export default function LibraryMain({navigation}) {
     return (
       <View style={styles.container}>
         <TouchableOpacity
-          style={{marginTop: 8, marginLeft: 30}}
+          style={{ marginTop: 8, marginLeft: 30 }}
           onPress={() => navigation.navigate('IssuedBooksAdd')}>
-          <Text style={{color: 'blue', marginBottom: -6, fontWeight: 'bold'}}>
+          <Text style={{ color: 'blue', marginBottom: -6, fontWeight: 'bold' }}>
             Issue more books
           </Text>
           <Text
             ellipsizeMode="clip"
             numberOfLines={1}
-            style={{color: 'blue', fontWeight: 'bold'}}>
+            style={{ color: 'blue', fontWeight: 'bold' }}>
             - - - - - - - - - - - - -
           </Text>
         </TouchableOpacity>
@@ -212,7 +216,7 @@ export default function LibraryMain({navigation}) {
                           : 'N/A'}
                       </Text>
 
-                      <View style={{flexDirection: 'row'}}>
+                      <View style={{ flexDirection: 'row' }}>
                         <Text
                           style={{
                             fontSize: 12,
@@ -246,7 +250,7 @@ export default function LibraryMain({navigation}) {
                         {issuedbooks.bookName.copies}
                       </Text>
                       <TouchableOpacity
-                        style={{flexDirection: 'row'}}
+                        style={{ flexDirection: 'row' }}
                         onPress={() => {
                           HandleDelete(issuedbooks._id);
                         }}>
@@ -262,7 +266,7 @@ export default function LibraryMain({navigation}) {
                           size={12}
                           color="#211C5A"
                           name="delete"
-                          style={{paddingTop: 2}}
+                          style={{ paddingTop: 2 }}
                         />
                       </TouchableOpacity>
                     </View>
@@ -377,7 +381,7 @@ export default function LibraryMain({navigation}) {
             marginBottom: 20,
             marginTop: 20,
           }}>
-          <View style={{alignItems: 'center', width: '90%'}}>
+          <View style={{ alignItems: 'center', width: '90%' }}>
             {/* open search */}
             <View
               style={{
@@ -390,7 +394,7 @@ export default function LibraryMain({navigation}) {
                 ...styles.shadow,
               }}>
               <TextInput
-                style={{width: '80%', ...styles.text_input}}
+                style={{ width: '80%', ...styles.text_input }}
                 placeholder="Enter book name or ID here"
                 placeholderTextColor="grey"
               />
@@ -430,15 +434,15 @@ export default function LibraryMain({navigation}) {
             <Text
               style={
                 ([styles.switchText],
-                [
-                  {
-                    color:
-                      showContent == 'IssuedBooks'
-                        ? 'rgba(176, 67, 5, 1)'
-                        : '#58636D',
-                  },
-                  {fontWeight: 'bold'},
-                ])
+                  [
+                    {
+                      color:
+                        showContent == 'IssuedBooks'
+                          ? 'rgba(176, 67, 5, 1)'
+                          : '#58636D',
+                    },
+                    { fontWeight: 'bold' },
+                  ])
               }>
               Issued Books
             </Text>
@@ -457,15 +461,15 @@ export default function LibraryMain({navigation}) {
             <Text
               style={
                 ([styles.switchText],
-                [
-                  {
-                    color:
-                      showContent == 'AddedBooks'
-                        ? 'rgba(176, 67, 5, 1)'
-                        : '#58636D',
-                  },
-                  {fontWeight: 'bold'},
-                ])
+                  [
+                    {
+                      color:
+                        showContent == 'AddedBooks'
+                          ? 'rgba(176, 67, 5, 1)'
+                          : '#58636D',
+                    },
+                    { fontWeight: 'bold' },
+                  ])
               }>
               Added Books
             </Text>
@@ -567,7 +571,7 @@ const styles = StyleSheet.create({
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',

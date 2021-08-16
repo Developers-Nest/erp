@@ -86,6 +86,8 @@ const AddBooks = ({ navigation }) => {
             console.log('Books Data ', data)
             let res = await post(slug, data, token)
             console.log('Book Res ', res)
+            alert('book added!!');
+            navigation.navigate('LibraryMain')
         } catch (err) {
             alert('Cannot Save !!' + err)
         }
@@ -453,14 +455,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexDirection: 'row',
         paddingHorizontal: 20,
-        borderTopEndRadius:8,
-        borderTopLeftRadius:8,
-        borderTopRightRadius:8,
-        borderTopStartRadius:8,
-         borderBottomEndRadius:8,
-         borderBottomLeftRadius:8,
-         borderBottomRightRadius:8,
-         borderBottomStartRadius:8,
+        borderTopEndRadius: 8,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        borderTopStartRadius: 8,
+        borderBottomEndRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderBottomStartRadius: 8,
     },
 
     section_heading: {
@@ -546,14 +548,14 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         paddingHorizontal: 20,
         backgroundColor: 'white',
-        borderTopEndRadius:8,
-        borderTopLeftRadius:8,
-        borderTopRightRadius:8,
-        borderTopStartRadius:8,
-         borderBottomEndRadius:8,
-         borderBottomLeftRadius:8,
-         borderBottomRightRadius:8,
-         borderBottomStartRadius:8,
+        borderTopEndRadius: 8,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        borderTopStartRadius: 8,
+        borderBottomEndRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderBottomStartRadius: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontFamily: 'Poppins-Regular'
@@ -576,14 +578,14 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: 'white',
         borderColor: '#58636D',
-        borderTopEndRadius:8,
-        borderTopLeftRadius:8,
-        borderTopRightRadius:8,
-        borderTopStartRadius:8,
-         borderBottomEndRadius:8,
-         borderBottomLeftRadius:8,
-         borderBottomRightRadius:8,
-         borderBottomStartRadius:8,
+        borderTopEndRadius: 8,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        borderTopStartRadius: 8,
+        borderBottomEndRadius: 8,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderBottomStartRadius: 8,
         marginLeft: 12,
         marginRight: 10,
         paddingHorizontal: 20,
