@@ -50,9 +50,8 @@ import getStudents from '../../../../services/helpers/getList/getStudents';
 import {useSelector} from 'react-redux';
 
 export default function AddTask({navigation}) {
-
-    //theming
-    const institute = useSelector(state => state.institute);
+  //theming
+  const institute = useSelector(state => state.institute);
 
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
@@ -67,12 +66,19 @@ export default function AddTask({navigation}) {
     {key: 'Employee', label: 'Employee'},
     {key: 'Student', label: 'Student'},
   ]);
-  const [Statuses, setUserStatuses] = useState([]);
+  const [Statuses, setUserStatuses] = useState([
+    {key: 'Open', label: 'Open'},
+    {key: 'Close', label: 'Close'},
+  ]);
 
   //student modal lists
   const [courses, setCourses] = useState([]);
   const [batches, setBatches] = useState([]);
   const [students, setStudents] = useState([]);
+
+  //employee data
+  const [departments, setDepartments] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
   //data
   const [Usertype, setUserType] = useState('');
@@ -84,10 +90,19 @@ export default function AddTask({navigation}) {
   const [batch, setBatch] = useState([]);
   const [selectedStudents, setselectedStudents] = useState([]);
 
-  //student toggle
-  const addStudent = student_name => {
-    selectedStudents.push(student_name);
+  //student checkboxes
+  const [checkBoxValueStud, setcheckBoxValueStud] = useState({});
+
+  //student
+  let toggleCheckBoxStud = Id => {
+    setcheckBoxValueStud(prev => {
+      return {
+        ...prev,
+        [Id]: !checkBoxValueStud[[Id]],
+      };
+    });
   };
+
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const [date, setDate] = React.useState('21 May 2021');
   let index = 0;
@@ -150,7 +165,6 @@ export default function AddTask({navigation}) {
     } catch (err) {
       alert('Cannot fetch course list !!\n' + err);
     }
-
     hideLoadingScreen();
   };
 
@@ -171,22 +185,46 @@ export default function AddTask({navigation}) {
     showLoadingScreen();
 
     try {
-      setCourse(option);
+      alert('hi');
+      setBatch(option);
       let list = await getStudents(course, option);
       console.log(list);
+      let checkBoxMapStud = {};
+      list &&
+        list.map(data => {
+          checkBoxMapStud[data.key] = false;
+        });
+      setcheckBoxValueStud(checkBoxMapStud);
       setStudents(list);
+      console.log(checkBoxMapStud);
     } catch (err) {
       alert('Cannot fetch batch list !!\n' + err);
     }
     hideLoadingScreen();
   };
 
+  // handle employee type
+  const handleemployeedept = async option => {
+    showLoadingScreen();
+    try {
+      setUserType(option);
+      let token = await read('token');
+      let response = await get('/department', token);
+      let list = [];
+      response.map(dept => list.push({key: dept._id, label: dept.name}));
+      setDepartments(list);
+    } catch (err) {
+      alert('Cannot fetch course list !!\n' + err);
+    }
+    hideLoadingScreen();
+  };
   return (
     <View style={styles.backgroung}>
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : '#FF5733',
-                        ...styles.header,
+          ...styles.header,
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('TasksList')}>
           <AntDesign
@@ -353,15 +391,17 @@ export default function AddTask({navigation}) {
             data={Usertypelist}
             initValue="Teacher"
             onChange={async option => {
-              await handlestudentcourses(option.key);
+              if (option.label === 'Student')
+                await handlestudentcourses(option.key);
+              else await handleemployeedept(option.key);
             }}
             style={styles.card_picker}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
           <ModalSelector
-            data={Status}
-            initValue="Teacher"
+            data={Statuses}
+            initValue="Status"
             onChange={async option => {
               await getPriority(option.key);
             }}
@@ -426,7 +466,7 @@ export default function AddTask({navigation}) {
               }}>
               {students &&
                 students.map(student => (
-                  <View style={styles.section}>
+                  <View style={styles.section} key={student._id}>
                     <View style={styles.details}>
                       <View style={styles.userinhostels}>
                         <TouchableOpacity style={styles.differentusers}>
@@ -440,19 +480,12 @@ export default function AddTask({navigation}) {
                               'Name Not Found'}
                           </Text>
                           <View style={{marginRight: 20}}>
-                            <RadioButton
-                              value="first"
-                              status={
-                                selectedStudents.includes(
-                                  student.firstName + ' ' + student.lastName,
-                                )
-                                  ? 'checked'
-                                  : 'unchecked'
-                              }
-                              onPress={() =>
-                                addStudent(
-                                  student.firstName + ' ' + student.lastName,
-                                )
+                            <CheckBox
+                              containerStyle={{padding: 5}}
+                              checked={checkBoxValueStud[student._id]}
+                              onPress={() => toggleCheckBoxStud(student._id)}
+                              checkedColor={
+                                institute ? institute.themeColor : 'black'
                               }
                             />
                           </View>
@@ -468,6 +501,82 @@ export default function AddTask({navigation}) {
                             {/* {studentsList[studentId].admissionNumber} 
                           </Text>
                         </TouchableOpacity> */}
+                      </View>
+                    </View>
+                  </View>
+                ))}
+            </View>
+          </>
+        )}
+        {Usertype === 'Employee' && (
+          <>
+            <View
+              style={{
+                width: '100%',
+                paddingTop: 10,
+                flexDirection: 'row',
+                alignContent: 'flex-start',
+                justifyContent: 'space-evenly',
+              }}>
+              <Text style={styles.section_heading}>Choose Department </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 25,
+              }}>
+              <ModalSelector
+                data={departments}
+                initValue="Department"
+                onChange={async option => {
+                  await handlestudentbatches(option.key);
+                }}
+                style={styles.card_picker}
+                initValueTextStyle={styles.SelectedValueSmall}
+                selectTextStyle={styles.SelectedValueSmall}
+              />
+            </View>
+            <View
+              style={{
+                width: '100%',
+                paddingTop: 10,
+                flexDirection: 'row',
+                alignContent: 'flex-start',
+                justifyContent: 'space-evenly',
+              }}>
+              <Text style={styles.section_heading}>Choose Employee </Text>
+            </View>
+            <View
+              style={{
+                paddingHorizontal: 25,
+              }}>
+              {employees &&
+                employees.map(employee => (
+                  <View style={styles.section} key={employee._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 22,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {employee.firstName + ' ' + employee.lastName ||
+                              'Name Not Found'}
+                          </Text>
+                          <View style={{marginRight: 20}}>
+                            <CheckBox
+                              containerStyle={{padding: 5}}
+                              checked={checkBoxValueEmp[employee._id]}
+                              onPress={() => toggleCheckBoxEmp(employee._id)}
+                              checkedColor={
+                                institute ? institute.themeColor : 'black'
+                              }
+                            />
+                          </View>
+                        </TouchableOpacity>
                       </View>
                     </View>
                   </View>
