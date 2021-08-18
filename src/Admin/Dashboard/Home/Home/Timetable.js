@@ -210,6 +210,16 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
 
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 20,
+    paddingTop: 3,
+    color: '#211C5A',
+  },
+
   card_heading: {
     fontFamily: 'Poppins-Regular',
     fontSize: 14,

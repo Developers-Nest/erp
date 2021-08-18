@@ -28,6 +28,7 @@ import getEmployee from '../../../services/helpers/getList/getEmployee';
 
 // redux
 import {useSelector} from 'react-redux';
+import {ScrollView} from 'react-native';
 
 export default function Occurence2({navigation}) {
   // loading screen
@@ -136,7 +137,9 @@ export default function Occurence2({navigation}) {
   };
 
   return (
-    <View>
+    <ScrollView>
+      {loadingScreen}
+
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -172,11 +175,10 @@ export default function Occurence2({navigation}) {
               paddingLeft: 20,
               color: 'white',
             }}>
-            Occurence Register
+            Occurence Add
           </Text>
         </View>
       </View>
-      {loadingScreen}
       <View style={{alignSelf: 'center', width: '90%'}}>
         <ModalSelector
           initValue="Name"
@@ -192,6 +194,8 @@ export default function Occurence2({navigation}) {
             shadowOpacity: 5,
             elevation: 3,
           }}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
           data={emp}
         />
 
@@ -247,7 +251,7 @@ export default function Occurence2({navigation}) {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -286,5 +290,14 @@ const styles = StyleSheet.create({
     elevation: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    fontSize: 18,
+    lineHeight: 20,
+    paddingTop: 3,
+    color: '#211C5A',
   },
 });
