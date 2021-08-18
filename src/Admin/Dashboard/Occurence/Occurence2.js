@@ -6,8 +6,14 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
+
 import {Appbar} from 'react-native-paper';
+
+//icons
+import Icon from 'react-native-vector-icons/AntDesign';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import ModalSelector from 'react-native-modal-selector';
 // date picker
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -43,7 +49,7 @@ export default function Occurence2({navigation}) {
   //date picker
   let parseDate = myDate => {
     let d = new Date(myDate);
-    return d.toString().slice(0, 15);
+    return d.toString().slice(4, 15);
   };
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
   const dateMonths = {
@@ -131,48 +137,67 @@ export default function Occurence2({navigation}) {
 
   return (
     <View>
-      <Appbar
-        style={{backgroundColor: institute ? institute.themeColor : 'blue'}}>
-        <Appbar.BackAction onPress={() => navigation.replace('Occurence')} />
-        <Appbar.Content title="Occurence Register" />
-      </Appbar>
-      {loadingScreen}
       <View
         style={{
-          width: '90%',
-          margin: 10,
-          flex: 1,
-          flexWrap: 'wrap',
-          flexDirection: 'row',
-          alignContent: 'space-between',
-          justifyContent: 'flex-start',
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
         }}>
-        <View style={styles.pickdate}>
-          <ModalSelector
-            initValue="Name"
-            onChange={option => {
-              setemployee(option.key);
-            }}
-            style={{
-              marginTop: 10,
-              width: 100,
-              shadowOpacity: 0,
-              borderWidth: 0,
-            }}
-            data={emp}
-          />
-          <Icon
+        <TouchableOpacity onPress={() => navigation.replace('Occurence')}>
+          <AntDesign
             size={24}
-            color="black"
-            name="down"
+            color="white"
+            name="left"
             style={{
-              marginTop: 16,
-              marginRight: 10,
-            }}></Icon>
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'white',
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
+          />
+        </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontFamily: 'NunitoSans-Light',
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 20,
+              color: 'white',
+            }}>
+            Occurence Register
+          </Text>
         </View>
+      </View>
+      {loadingScreen}
+      <View style={{alignSelf: 'center', width: '90%'}}>
+        <ModalSelector
+          initValue="Name"
+          onChange={option => {
+            setemployee(option.key);
+          }}
+          style={{
+            width: '100%',
+            marginTop: 10,
+            alignSelf: 'center',
+            backgroundColor: '#FFFFFF',
+            borderRadius: 10,
+            shadowOpacity: 5,
+            elevation: 3,
+          }}
+          data={emp}
+        />
+
         <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
           <Text style={{marginTop: 20, marginLeft: 10}}>
-            {datedisplay}
+            {datedisplay || 'Select Date'}
             {'  '}
           </Text>
           <Icon
@@ -180,9 +205,9 @@ export default function Occurence2({navigation}) {
             color="black"
             name="calendar"
             style={{
-              marginTop: 16,
-              marginRight: 10,
-            }}></Icon>
+              padding: 16,
+            }}
+          />
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             style={styles.pickdate}
@@ -191,14 +216,7 @@ export default function Occurence2({navigation}) {
             onCancel={hideDatePicker}
           />
         </TouchableOpacity>
-      </View>
-      <View
-        style={{
-          width: '90%',
-          margin: 10,
-          flexDirection: 'row',
-          justifyContent: 'center',
-        }}>
+
         <TextInput
           multiline
           placeholder="Write your remarks"
@@ -208,23 +226,11 @@ export default function Occurence2({navigation}) {
           }}
           style={styles.text_input}
         />
-      </View>
-      <View
-        style={{
-          alignContent: 'space-between',
-          position: 'absolute',
-          marginTop: 340,
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignContent: 'center',
-          marginLeft: 20,
-        }}>
+
         <TouchableOpacity
           onPress={handlesubmit}
           style={{
             ...styles.btn,
-            alignSelf: 'flex-end',
             backgroundColor: institute ? institute.themeColor : '#5177E7',
           }}>
           <Text
@@ -250,43 +256,35 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#E5E5E5',
   },
+  header: {
+    height: 69,
+    flexDirection: 'row',
+  },
   btn: {
     width: 80,
     height: 40,
-    marginLeft: 20,
     borderRadius: 5,
-    shadowColor: 'black',
     elevation: 5,
+    alignSelf: 'center',
+    margin: 10,
   },
 
   text_input: {
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    minHeight: 200,
-    alignSelf: 'center',
-    width: '90%',
-    color: 'grey',
-    marginLeft: 20,
-    marginTop: 150,
     padding: 20,
     backgroundColor: 'white',
     fontFamily: 'Poppins-Regular',
     borderRadius: 10,
     textAlignVertical: 'top',
-    shadowColor: 'black',
     elevation: 3,
+    color: 'black',
   },
   pickdate: {
     width: 155,
-    height: 60,
     backgroundColor: '#FFFFFF',
+    marginVertical: 10,
     borderRadius: 10,
-    shadowColor: 'black',
-    shadowOpacity: 5,
-    elevation: 3,
-    borderWidth: 0,
-    marginLeft: 28,
+    elevation: 5,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
 });
