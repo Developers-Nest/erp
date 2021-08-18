@@ -6,8 +6,14 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
+import {Button, Appbar} from 'react-native-paper';
 
 import {createStackNavigator} from '@react-navigation/stack';
+
+//icons
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // loading screen
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
@@ -21,9 +27,7 @@ import deleteReq from '../../../services/helpers/request/delete';
 import {useSelector} from 'react-redux';
 
 const Stack = createStackNavigator();
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import {Button, Appbar} from 'react-native-paper';
 import OccurenceEdit from './OccurenceEdit';
 import Occurence2 from './Occurence2';
 
@@ -81,15 +85,62 @@ function Occurance({navigation}) {
 
   return (
     <>
-      <Appbar
-        style={{backgroundColor: institute ? institute.themeColor : 'blue'}}>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Occurence Register" />
-        <Appbar.Action
-          icon="plus-circle-outline"
-          onPress={() => navigation.navigate('Occurence2')}
-        />
-      </Appbar>
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Home');
+          }}>
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
+            style={{
+              alignSelf: 'center',
+              fontSize: 25,
+              color: 'white',
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
+          />
+        </TouchableOpacity>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Text
+            style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontFamily: 'NunitoSans-Light',
+              fontWeight: '600',
+              alignSelf: 'center',
+              paddingLeft: 20,
+              color: 'white',
+            }}>
+            Occurence Register
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Occurence2')}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="pluscircleo"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+                paddingRight: 20,
+                paddingTop: 20,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
       {loadingScreen}
       {/* <View
         style={{
@@ -119,9 +170,13 @@ function Occurance({navigation}) {
                       }}>
                       {occurance.employeeName.firstName}
                     </Text>
-                    <View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                      }}>
                       <Button
                         color={institute ? institute.themeColor : 'blue'}
+                        style={{padding: 0, margin: 0}}
                         onPress={() =>
                           navigation.navigate('OccurenceEdit', {
                             id: occurance._id,
@@ -133,14 +188,20 @@ function Occurance({navigation}) {
                             v: occurance.__v,
                           })
                         }>
-                        edit <FontAwesome5 name={'edit'} size={20} light />
+                        {'edit '}
+                        <FontAwesome5 name={'edit'} size={20} light />
                       </Button>
                       <Button
                         color={institute ? institute.themeColor : 'blue'}
+                        style={{padding: 0, margin: 0}}
                         onPress={() => {
                           HandleDelete(occurance._id);
                         }}>
-                        Delete <FontAwesome5 name={'edit'} size={20} light />
+                        {'delete '}
+                        <MaterialCommunityIcons
+                          size={20}
+                          name="delete-outline"
+                        />
                       </Button>
                     </View>
                   </TouchableOpacity>
@@ -173,7 +234,11 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
+  },
+  header: {
+    height: 69,
+    flexDirection: 'row',
   },
   bottom: {
     position: 'absolute',
@@ -191,19 +256,17 @@ const styles = StyleSheet.create({
       height: 1,
     },
     shadowOpacity: 0.2,
-    elevation: 2,
+    elevation: 5,
     marginTop: 14,
     borderRadius: 12,
-    paddingLeft: 10,
-    paddingRight: 10,
     marginHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 10,
+    padding: 15,
   },
 
   details: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 10,
     paddingBottom: 10,
     borderBottomColor: '#333',
   },
@@ -221,7 +284,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 5,
   },
   userstext: {
     fontSize: 16,
