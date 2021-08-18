@@ -405,15 +405,15 @@ export default function AddEvents({route, navigation}) {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: 10,
             justifyContent: 'space-between',
-            height: 80,
           }}>
           <View
             style={{
-              justifyContent: 'space-between',
+              justifyContent: 'center',
               flexDirection: 'row',
               alignItems: 'center',
+              alignContent: 'center',
+              alignSelf: 'center',
             }}>
             <Text
               style={{
@@ -437,7 +437,7 @@ export default function AddEvents({route, navigation}) {
               </Text>
               <ModalSelector
                 data={eventTypes}
-                initValue={route.params.eventTypeName || 'select event type'}
+                initValue={route.params.eventTypeName || 'Select Event Type'}
                 onChange={option => {
                   setEventType(option.key);
                 }}
@@ -460,7 +460,7 @@ export default function AddEvents({route, navigation}) {
         <View
           style={{
             flexDirection: 'row',
-            marginTop: 10,
+            marginTop: 15,
             justifyContent: 'space-between',
           }}>
           <View>
@@ -692,8 +692,7 @@ export default function AddEvents({route, navigation}) {
               color="black"
               name="calendar"
               style={{
-                marginTop: 16,
-                marginRight: 0,
+                padding: 16,
               }}
             />
             <DateTimePickerModal
@@ -722,8 +721,7 @@ export default function AddEvents({route, navigation}) {
               color="black"
               name="calendar"
               style={{
-                marginTop: 16,
-                marginRight: 0,
+                padding: 16,
               }}
             />
             <DateTimePickerModal
@@ -837,6 +835,6 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     // flex:1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
 });

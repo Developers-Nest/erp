@@ -77,7 +77,10 @@ export default function EventScreen({navigation}) {
   };
 
   return (
-    <ScrollView style={{backgroundColor: 'rgba(249, 249, 249, 1)', flex: 1}}>
+    <ScrollView
+      style={{
+        backgroundColor: 'rgba(249, 249, 249, 1)',
+      }}>
       {loadingScreen}
       <View
         style={{
@@ -172,119 +175,121 @@ export default function EventScreen({navigation}) {
           />
         </TouchableOpacity>
       </View>
-      {events &&
-        events.map(event => (
-          <View style={styles.shadow} key={event._id}>
-            <View style={styles.EventCard}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginTop: 15,
-                  marginLeft: 10,
-                  marginRight: 10,
-                }}>
-                <Text
-                  style={{fontSize: 18, fontWeight: '400', color: '#211C5A'}}>
-                  {event.name}
-                </Text>
-                <View>
-                  <TouchableWithoutFeedback
-                    style={{flexDirection: 'row', alignContent: 'flex-end'}}
-                    onPress={() => {
-                      navigation.navigate('EditEvent', {
-                        id: event._id,
-                        v: event.__v,
-                        eventname: event.name,
-                        Organizer: event.organizer,
-                        des: event.description,
-                        start: event.startDate,
-                        end: event.endDate,
-                        eventFor: event.eventFor,
-                        eventType: event.type && event.type._id,
-                        eventTypeName: event.type && event.type.name,
-                        course: event.course && event.course._id,
-                        coursename: event.course && event.course.courseName,
-                        batch: event.batch && event.batch._id,
-                        batchname: event.batch && event.batch.batchName,
-                        department: event.department && event.department._id,
-                        departmentname:
-                          event.department && event.department.name,
-                        holiday: event.holiday,
-                      });
-                    }}>
-                    <FontAwesome5Icon
-                      name="edit"
-                      style={{
-                        alignSelf: 'center',
-                        fontSize: 15,
-                        color: institute ? institute.themeColor : '#211C5A',
-                        marginRight: 2,
-                      }}
-                    />
-                    <Text
-                      style={{
-                        color: institute ? institute.themeColor : '#211C5A',
-                      }}>
-                      Edit
-                    </Text>
-                  </TouchableWithoutFeedback>
-                  <TouchableWithoutFeedback
-                    style={{flexDirection: 'row', alignContent: 'flex-end'}}
-                    onPress={() => {
-                      HandleDelete(event._id);
-                    }}>
-                    <AntDesign
-                      size={12}
-                      color="#211C5A"
-                      name="delete"
-                      style={{paddingTop: 2}}
-                    />
-                    <Text
-                      style={{
-                        color: institute ? institute.themeColor : '#211C5A',
-                      }}>
-                      Delete
-                    </Text>
-                  </TouchableWithoutFeedback>
-                </View>
-              </View>
-              <View style={{marginLeft: 10, marginRight: 10}}>
-                <Text style={{color: '#211C5A'}}>
-                  {event.eventFor === 'Selected Batch'
-                    ? 'Batch: ' +
-                      (event.course && event.course.courseName) +
-                      ', ' +
-                      (event.batch && event.batch.batchName)
-                    : event.eventFor === 'Selected Department'
-                    ? 'Department: ' +
-                      (event.department && event.department.name)
-                    : event.eventFor}
-                </Text>
-                <Text style={{color: '#211C5A', marginBottom: 0}}>
-                  {event.description}
-                </Text>
+      <View style={{paddingBottom: 10}}>
+        {events &&
+          events.map(event => (
+            <View style={styles.shadow} key={event._id}>
+              <View style={styles.EventCard}>
                 <View
                   style={{
-                    marginTop: 10,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    marginBottom: 10,
-                    borderTopWidth: 0.5,
+                    marginTop: 15,
+                    marginLeft: 10,
+                    marginRight: 10,
                   }}>
-                  <Text style={{color: '#211C5A', marginTop: 5}}>
-                    {'From: '}
-                    {parseDate(event.startDate)}
+                  <Text
+                    style={{fontSize: 18, fontWeight: '400', color: '#211C5A'}}>
+                    {event.name}
                   </Text>
-                  <Text style={{color: '#211C5A', marginTop: 5}}>
-                    {'To: '}
-                    {parseDate(event.endDate)}
+                  <View>
+                    <TouchableWithoutFeedback
+                      style={{flexDirection: 'row', alignContent: 'flex-end'}}
+                      onPress={() => {
+                        navigation.navigate('EditEvent', {
+                          id: event._id,
+                          v: event.__v,
+                          eventname: event.name,
+                          Organizer: event.organizer,
+                          des: event.description,
+                          start: event.startDate,
+                          end: event.endDate,
+                          eventFor: event.eventFor,
+                          eventType: event.type && event.type._id,
+                          eventTypeName: event.type && event.type.name,
+                          course: event.course && event.course._id,
+                          coursename: event.course && event.course.courseName,
+                          batch: event.batch && event.batch._id,
+                          batchname: event.batch && event.batch.batchName,
+                          department: event.department && event.department._id,
+                          departmentname:
+                            event.department && event.department.name,
+                          holiday: event.holiday,
+                        });
+                      }}>
+                      <FontAwesome5Icon
+                        name="edit"
+                        style={{
+                          alignSelf: 'center',
+                          fontSize: 15,
+                          color: institute ? institute.themeColor : '#211C5A',
+                          marginRight: 2,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          color: institute ? institute.themeColor : '#211C5A',
+                        }}>
+                        Edit
+                      </Text>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                      style={{flexDirection: 'row', alignContent: 'flex-end'}}
+                      onPress={() => {
+                        HandleDelete(event._id);
+                      }}>
+                      <AntDesign
+                        size={12}
+                        color="#211C5A"
+                        name="delete"
+                        style={{paddingTop: 2}}
+                      />
+                      <Text
+                        style={{
+                          color: institute ? institute.themeColor : '#211C5A',
+                        }}>
+                        Delete
+                      </Text>
+                    </TouchableWithoutFeedback>
+                  </View>
+                </View>
+                <View style={{marginLeft: 10, marginRight: 10}}>
+                  <Text style={{color: '#211C5A'}}>
+                    {event.eventFor === 'Selected Batch'
+                      ? 'Batch: ' +
+                        (event.course && event.course.courseName) +
+                        ', ' +
+                        (event.batch && event.batch.batchName)
+                      : event.eventFor === 'Selected Department'
+                      ? 'Department: ' +
+                        (event.department && event.department.name)
+                      : event.eventFor}
                   </Text>
+                  <Text style={{color: '#211C5A', marginBottom: 0}}>
+                    {event.description}
+                  </Text>
+                  <View
+                    style={{
+                      marginTop: 10,
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginBottom: 10,
+                      borderTopWidth: 0.5,
+                    }}>
+                    <Text style={{color: '#211C5A', marginTop: 5}}>
+                      {'From: '}
+                      {parseDate(event.startDate)}
+                    </Text>
+                    <Text style={{color: '#211C5A', marginTop: 5}}>
+                      {'To: '}
+                      {parseDate(event.endDate)}
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        ))}
+          ))}
+      </View>
     </ScrollView>
   );
 }
