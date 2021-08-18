@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { Appbar} from 'react-native-paper';
+import {Appbar} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 // date picker
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -27,7 +27,7 @@ export default function Occurence2({navigation}) {
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  const institute = useSelector((state)=>state.institute)
+  const institute = useSelector(state => state.institute);
 
   //data to be created
   const [date, setDate] = React.useState('');
@@ -69,7 +69,6 @@ export default function Occurence2({navigation}) {
   };
 
   const handleConfirm = data => {
-    console.warn('A date has been picked: ', data.toString());
     setdatedisplay(parseDate(data.toString()));
     setDate(
       data.getFullYear() +
@@ -87,7 +86,6 @@ export default function Occurence2({navigation}) {
         threedigit(data.getMilliseconds()) +
         'Z',
     );
-    console.log('A date has been picked: ', date);
     hideDatePicker();
   };
 
@@ -113,15 +111,17 @@ export default function Occurence2({navigation}) {
   // save details
   const handlesubmit = async () => {
     try {
+      if (!date || !employee || !remarks) {
+        alert('Fill all fields!');
+        return;
+      }
       let slug = `/occurrence`;
-      console.log('Occurance slug', slug);
       let token = await read('token');
       let data = {
         date: date,
         employeeName: employee,
         remarks: remarks,
       };
-      console.log(data);
       let response = await post(slug, data, token);
       alert('occurance created!');
     } catch (err) {
@@ -131,7 +131,8 @@ export default function Occurence2({navigation}) {
 
   return (
     <View>
-      <Appbar style={{backgroundColor: institute? institute.themeColor: 'blue'}}>
+      <Appbar
+        style={{backgroundColor: institute ? institute.themeColor : 'blue'}}>
         <Appbar.BackAction onPress={() => navigation.replace('Occurence')} />
         <Appbar.Content title="Occurence Register" />
       </Appbar>
@@ -196,15 +197,12 @@ export default function Occurence2({navigation}) {
           width: '90%',
           margin: 10,
           flexDirection: 'row',
-          //  alignContent:'center',
           justifyContent: 'center',
         }}>
         <TextInput
           multiline
-          // mode='outlined'
           placeholder="Write your remarks"
           numberOfLines={20}
-          // value={Description}
           onChangeText={remarks => {
             setremarks(remarks);
           }}
@@ -222,34 +220,12 @@ export default function Occurence2({navigation}) {
           alignContent: 'center',
           marginLeft: 20,
         }}>
-        {/* <TouchableOpacity
-          style={{
-            ...styles.btn,
-            alignSelf: 'flex-start',
-            marginLeft: 100,
-            backgroundColor: 'white',
-            borderColor: '#B04305',
-            borderWidth: 1,
-          }}>
-          <Text
-            style={{
-              flex: 0,
-              flexDirection: 'row',
-              marginTop: 8,
-              color: '#B04305',
-              marginLeft: 15,
-              fontSize: 18,
-              // padding:5,
-            }}>
-            {'Delete'}
-          </Text>
-        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={handlesubmit}
           style={{
             ...styles.btn,
             alignSelf: 'flex-end',
-            backgroundColor: institute? institute.themeColor: '#5177E7',
+            backgroundColor: institute ? institute.themeColor : '#5177E7',
           }}>
           <Text
             style={{
@@ -310,7 +286,6 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderWidth: 0,
     marginLeft: 28,
-    // flex:1,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
