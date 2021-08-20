@@ -67,6 +67,15 @@ const AddVisitorsHostel = ({ navigation }) => {
   const [time, setTime] = useState(null);
 
 
+  const showTimePicker = () => {
+    setShowTimePicker(true);
+  };
+
+  const hideTimePicker = () => {
+    setShowTimePicker(false);
+  };
+
+
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
@@ -472,7 +481,7 @@ const AddVisitorsHostel = ({ navigation }) => {
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
               <TextInput
-                style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
+                style={{ marginLeft: 0, fontFamily: 'Poppins-Regular'}}
                 placeholder={date}
                 placeholderTextColor='grey'
                 color='black'
@@ -494,22 +503,44 @@ const AddVisitorsHostel = ({ navigation }) => {
                 onCancel={hideDatePicker}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.pickdate1}>
+            <TouchableOpacity style={styles.pickdate1} onPress={() => setShowTimePicker(true)}>
               {/* time picker */}
-              <Button
+
+              <TextInput
+                style={{ marginLeft: 0, fontFamily: 'Poppins-Regular'}}
+                placeholder={time ? time.slice(15, 21) : 'TIME'}
+                placeholderTextColor='grey'
+                color='black'
+                editable={false}
+              
+              />
+
+              <Feather
+                size={18}
+                color="black"
+                name="calendar"
+                style={{
+                  marginTop: 16,
+                  marginRight: 0,
+                }}></Feather>
+               
+              {/* <Button
                 icon="calendar"
                 mode="contained"
                 color="white"
-                style={{ alignSelf: 'center', width: 140, height: 44 }}
+                style={{ alignSelf:'center', width: 150, height: 47 }}
                 onPress={() => setShowTimePicker(true)}>
                 {time ? time.slice(15, 21) : 'TIME'}
-              </Button>
+              </Button> */}
 
               <DateTimePickerModal
                 isVisible={showtimePicker}
                 mode="time"
+                style={styles.pickdate1}
+                
                 onConfirm={handleSubmit2}
                 onCancel={() => setShowTimePicker(!showtimePicker)}
+                
               />
             </TouchableOpacity>
           </View>
@@ -678,6 +709,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.3,
     marginLeft: 22,
     marginRight: 12,
+    
     paddingHorizontal: 20,
     flex: 1,
     flexDirection: 'row',
@@ -716,7 +748,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  }, 
+  },
   SelectedValue: {
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
