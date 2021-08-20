@@ -1,12 +1,10 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Icon1 from 'react-native-vector-icons/AntDesign';
+
 import Feather from 'react-native-vector-icons/Feather';
 
 import Evillcons from 'react-native-vector-icons/Feather';
-import Icon2 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -21,27 +19,32 @@ import get from '../../../../services/helpers/request/get';
 import post from '../../../../services/helpers/request/post';
 import read from '../../../../services/localstorage/read';
 
+// helpers
+import patch from '../../../../services/helpers/request/patch'
 
 //redux
 import { useSelector } from 'react-redux';
 const PlacementScreen1 = ({ navigation }) => {
     //theming
     const institute = useSelector(state => state.institute);
-     // loading screen
-     const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
+    // loading screen
+    const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
     // dropdown values
     const [companyname, setcompanyname] = useState([]);
 
-
+    const [isSelectAll, setIsSelectAll] = useState(false)
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
     const [items, setItems] = useState([
         { label: 'Apple', value: 'apple' },
         { label: 'Banana', value: 'banana' }
     ]);
-     // selected values
+    // selected values
     const [scompany, setscompany] = useState('')
+    //for text input
+    const [year, setyear] = useState('');
+
 
 
     // users
@@ -65,84 +68,105 @@ const PlacementScreen1 = ({ navigation }) => {
         setDatePickerVisibility(false);
     };
     const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date.toString());
+        // console.warn("A date has been picked: ", date.toString());
         setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
         hideDatePicker();
     };
 
-   //on load
+    //on load
     useEffect(async () => {
         setLoadingScreen()
         try {
-          let slug = '/placement/vendor'
-          let token = await read('token')
-          let res = await get(slug, token)
-          let companynamearray = []
-          res && res.map((user) => {
-            companynamearray.push({
-              key: user._id,
-              label: user.companyName
+            let slug = '/placement/vendor'
+            let token = await read('token')
+            let res = await get(slug, token)
+            let companynamearray = []
+            res && res.map((user) => {
+                companynamearray.push({
+                    key: user._id,
+                    label: user.companyName
+                })
             })
-          })
-          setcompanyname(companynamearray)
+            setcompanyname(companynamearray)
         } catch (err) {
-          alert('Cannot get companynames!!')
+            alert('Cannot get companynames!!')
         }
-  
-        hideLoadingScreen()
-      }, [])
 
-      let fetchUsers = async (idx) => {
-          
+        hideLoadingScreen()
+    }, [])
+
+    let fetchUsers = async (scompany) => {
+
         setLoadingScreen()
-        setscompany(idx)
-        slug=`/placement/placed?joiningDate=${date}&companyName=${scompany}&year=${syear}`
+        
+        setscompany(scompany)
+       
+        
 
-        // if (sUserType === "Student") {
-        //   setSbatch(idx)
-        //   slug = `/settings/user?userType=${sUserId}&course=${scourse}&batch=${idx}`
-        // } else if (sUserType === "Teacher") {
-        //   setSdepartment(idx)
-        //   slug = `/settings/user?userType=${sUserId}&department=${idx}`
-        // }
-  
         try {
-          let token = await read('token')
-          let res = await get(slug, token)
-          let checkBoxMap = {}
-          res && res.map((user) => {
-            checkBoxMap[user._id] = false
-          })
-          setUsers(res)
-          setCheckBoxValue(checkBoxMap)
+           let slug = `/placement/placed?joiningDate=${date}&companyName=${scompany}&year=${year}`
+
+            let token = await read('token')
+            let res = await get(slug, token)
+            let checkBoxMap = {}
+            res && res.map((user) => {
+                checkBoxMap[user._id] = false
+            })
+            setUsers(res)
+            setCheckBoxValue(checkBoxMap)
         } catch (err) {
-          alert('Cannot get Users!!')
+            alert('Cannot get Users!!')
         }
         hideLoadingScreen()
-      }
-  
-      let toggleCheckBox = (userId) => {
+    }
+
+    let toggleCheckBox = (userId) => {
         setCheckBoxValue(prevRecDays => {
-          return {
-            ...prevRecDays,
-            [userId]: !checkBoxValue[[userId]],
-          };
-        });
-      }
-  
-      let selectAll = () => {
-        Object.entries(checkBoxValue).forEach(([userId, value]) => {
-          setCheckBoxValue(prevRecDays => {
             return {
-              ...prevRecDays,
-              [userId]: !isSelectAll,
+                ...prevRecDays,
+                [userId]: !checkBoxValue[[userId]],
             };
-          });
+        });
+    }
+
+    let selectAll = () => {
+        Object.entries(checkBoxValue).forEach(([userId, value]) => {
+            setCheckBoxValue(prevRecDays => {
+                return {
+                    ...prevRecDays,
+                    [userId]: !isSelectAll,
+                };
+            });
         });
         setIsSelectAll(!isSelectAll)
-      }
-  
-  
+    }
+    //on save button click
+    let handleUpdate = async () => {
+        setLoadingScreen()
+        try {
+            let slug = `/placement/placed/${id}`
+            let token = await read('token')
+            let data = {
+                companyName: scompany,
+               
+                joiningDate: date,
+                year:year
+
+            }
+            let res = await patch(slug, data, token)
+            if (res.error) {
+                alert(res.error)
+            } else if (res._id) {
+                alert('Updated')
+               
+            }
+        } catch (err) {
+            alert('Cannot Update !!')
+        }
+        hideLoadingScreen()
+    }
+
+
     return (
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
 
@@ -191,7 +215,7 @@ const PlacementScreen1 = ({ navigation }) => {
                 {/* header ends */}
 
 
-{loadingScreen}
+                {loadingScreen}
 
 
 
@@ -205,48 +229,6 @@ const PlacementScreen1 = ({ navigation }) => {
 
 
 
-                    <ModalSelector
-
-
-
-data={companyname}
-                        initValue="Company"
-
-                        style={styles.card}
-                        onChange={async option => {
-                           setscompany(option.key);
-                          }}
-
-                        initValueTextStyle={styles.SelectedValueSmall}
-                    selectTextStyle={styles.SelectedValueSmall}
-
-
-                    >
-                        <View style={{ marginTop: 10, flexDirection: 'row' }}>
-
-                            <Text style={styles.text}>Company</Text>
-                            <Evillcons size={22} color='#3E68E4' name='chevron-down'
-                                style={{
-
-                                    marginLeft: 20,
-
-
-
-                                }}>
-
-                            </Evillcons>
-
-                        </View>
-
-
-
-
-                    </ModalSelector>
-
-
-                   
-
-
 
 
 
@@ -254,6 +236,7 @@ data={companyname}
                     <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={date}
+
 
                         />
                         <Feather size={18} color="black" name="calendar"
@@ -270,6 +253,7 @@ data={companyname}
                             mode="date"
                             onConfirm={handleConfirm}
                             onCancel={hideDatePicker}
+
                         />
                     </TouchableOpacity>
 
@@ -284,13 +268,57 @@ data={companyname}
                                 placeholder="Year"
                                 placeholderTextColor="grey"
                                 color="black"
-                                // onChangeText={val => setdrop(val)}
+
+                                keyboardType="numeric"
+                                onChangeText={val => setyear(val)}
                             />
                         </View>
                     </View>
                 </View>
 
-             
+
+
+
+
+                <ModalSelector
+
+
+
+data={companyname}
+initValue="Company"
+
+style={styles.card}
+onChange={option => {
+    fetchUsers(option.key)
+}}
+
+initValueTextStyle={styles.SelectedValueSmall}
+selectTextStyle={styles.SelectedValueSmall}
+
+
+>
+{/* <View style={{ marginTop: 10, flexDirection: 'row' }}>
+
+    <Text style={styles.text}>Company</Text>
+    <Evillcons size={22} color='#3E68E4' name='chevron-down'
+        style={{
+
+            marginLeft: 20,
+
+
+
+        }}>
+
+    </Evillcons>
+
+</View> */}
+
+
+
+
+</ModalSelector>
+
+
 
             </View>
 
@@ -310,96 +338,100 @@ data={companyname}
                     Select All
                 </Text> */}
 
-<CheckBox
-            containerStyle={{ marginTop: -9 }}
-            // checked={isSelectAll}
-            title={'Select All'}
-            // onPress={selectAll}
-          />
+                <CheckBox
+                  
+                    checked={isSelectAll}
+                    title={'Select All'}
+                    onPress={selectAll}
+                />
             </View>
+            {
+                users && users.map((user) => (
+                    <View style={styles.section} key={user._id}>
+                        <View style={styles.details}>
+                            <View style={styles.userinhostels}>
+                                <View style={styles.differentusers}>
+                                    <Text
+                                        style={{
+                                            fontSize: 18,
+                                            color: '#211C5A',
+                                            fontFamily: 'Poppins-Regular',
+                                            marginHorizontal: -5,
+                                        }}>
 
-            <View style={styles.section} >
-                <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                        <View style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 18,
-                                    color: '#211C5A',
-                                    fontFamily: 'Poppins-Regular',
-                                    marginHorizontal: -5,
-                                }}>
+                                        {'TITLE'}
 
-                                Title
+                                    </Text>
 
-                            </Text>
-
-                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: '#211C5A',
-                                        fontFamily: 'Poppins-Regular',
-                                        marginTop: 5,
-                                    }}>
-                                    placed
-                                </Text>
-                                {/* <Icon2
+                                    <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <Text
+                                            style={{
+                                                fontSize: 12,
+                                                color: '#211C5A',
+                                                fontFamily: 'Poppins-Regular',
+                                                marginTop: 5,
+                                            }}>
+                                            placed
+                                        </Text>
+                                        {/* <Icon2
                                     size={30}
                                     color="#5177E7"
                                     name="checkbox"
                                     style={{ paddingTop: 2, paddingRight: 12 }}
                                 /> */}
-<CheckBox
-            containerStyle={{ marginTop: -9 }}
-            // checked={isSelectAll}
-            // title={'Select All'}
-            // onPress={selectAll}
-          />
+                                        <CheckBox
+                                            containerStyle={{ marginTop: -9 }}
+                                            checked={checkBoxValue[user._id]}
+                                            onPress={() => toggleCheckBox(user._id)}
+                                        />
 
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#5177E7',
-                                    fontFamily: 'Poppins-Medium',
-                                }}>
+                                    </TouchableOpacity>
+                                </View>
+                                <TouchableOpacity style={styles.differentusers}>
+                                    <Text
+                                        style={{
+                                            fontSize: 12,
+                                            color: '#5177E7',
+                                            fontFamily: 'Poppins-Medium',
+                                        }}>
 
-                            </Text>
+                                    </Text>
 
 
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: ' #505069' }}>
-                                Admission Number
-                            </Text>
-                        </TouchableOpacity>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.differentusers}>
+                                    <Text style={{ fontSize: 12, color: ' #505069' }}>
+                                        {user.code}
+                                    </Text>
+                                </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#505069',
-                                    fontFamily: 'Poppins-Regular',
-                                }}>
-                                Exams will be conducted via online mode in the upcoming week
+                                <TouchableOpacity style={styles.differentusers}>
+                                    <Text
+                                        style={{
+                                            fontSize: 12,
+                                            color: '#505069',
+                                            fontFamily: 'Poppins-Regular',
+                                        }}>
+                                        {/* Exams will be conducted via online mode in the upcoming week
                                 and these are notes for it.So,go through them and study well
+ */}
+                                        {user.remarks ? user.remarks : 'N/A'}
 
-                            </Text>
+                                    </Text>
 
 
-                        </TouchableOpacity>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+
                     </View>
-                </View>
+
+                ))
+            }
 
 
-            </View>
-
-
-
-            <View style={styles.section} >
+            {/* <View style={styles.section} >
                 <View style={styles.details}>
                     <View style={styles.userinhostels}>
                         <View style={styles.differentusers}>
@@ -469,7 +501,7 @@ data={companyname}
                 </View>
 
 
-            </View>
+            </View> */}
 
         </View>
     )
