@@ -8,28 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
   Button,
-  RadioButton,
 } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import IonIcon from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import {auto} from 'async';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
@@ -62,6 +46,7 @@ export default function AddTask({navigation}) {
     {key: 'Medium', label: 'Medium'},
     {key: 'High', label: 'High'},
   ]);
+
   const [Usertypelist, setUsertypelist] = useState([
     {key: 'Employee', label: 'Employee'},
     {key: 'Student', label: 'Student'},
@@ -592,7 +577,7 @@ export default function AddTask({navigation}) {
           }}>
           <Button
             style={{width: 90}}
-            color="#5177E7"
+            color={ institute? institute.themeColor: "#5177E7"}
             mode="contained"
             onPress={() => console.log('Pressed')}>
             SAVE

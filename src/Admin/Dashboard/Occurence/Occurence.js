@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,9 +6,9 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {Button, Appbar} from 'react-native-paper';
+import { Button, Appbar } from 'react-native-paper';
 
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 //icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -24,14 +24,14 @@ import read from '../../../services/localstorage/read';
 import deleteReq from '../../../services/helpers/request/delete';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const Stack = createStackNavigator();
 
 import OccurenceEdit from './OccurenceEdit';
 import Occurence2 from './Occurence2';
 
-export default function Occurence({navigation}) {
+export default function Occurence({ navigation }) {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Occurence" component={Occurance} />
@@ -41,7 +41,7 @@ export default function Occurence({navigation}) {
   );
 }
 
-function Occurance({navigation}) {
+function Occurance({ navigation }) {
   let parseDate = myDate => {
     let d = new Date(myDate);
     return d.toString().slice(0, 15);
@@ -85,6 +85,7 @@ function Occurance({navigation}) {
 
   return (
     <>
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -141,7 +142,6 @@ function Occurance({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
-      {loadingScreen}
       {/* <View
         style={{
           width: '90%',
@@ -176,7 +176,7 @@ function Occurance({navigation}) {
                       }}>
                       <Button
                         color={institute ? institute.themeColor : 'blue'}
-                        style={{padding: 0, margin: 0}}
+                        style={{ padding: 0, margin: 0 }}
                         onPress={() =>
                           navigation.navigate('OccurenceEdit', {
                             id: occurance._id,
@@ -193,7 +193,7 @@ function Occurance({navigation}) {
                       </Button>
                       <Button
                         color={institute ? institute.themeColor : 'blue'}
-                        style={{padding: 0, margin: 0}}
+                        style={{ padding: 0, margin: 0 }}
                         onPress={() => {
                           HandleDelete(occurance._id);
                         }}>
@@ -206,7 +206,7 @@ function Occurance({navigation}) {
                     </View>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{...styles.differentusers}}>
+                  <TouchableOpacity style={{ ...styles.differentusers }}>
                     <Text
                       style={{
                         fontSize: 16,
@@ -219,7 +219,7 @@ function Occurance({navigation}) {
                   <TouchableOpacity
                     onPress={() => navigation.navigate('Occurence2')}
                     style={styles.differentusers}>
-                    <Text style={{fontSize: 16}}>{occurance.remarks}</Text>
+                    <Text style={{ fontSize: 16 }}>{occurance.remarks}</Text>
                   </TouchableOpacity>
                 </View>
               </View>

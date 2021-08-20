@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,78 +7,26 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
-  Button,
-} from 'react-native-paper';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import ModalSelector from 'react-native-modal-selector';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {auto} from 'async';
-import Feather from 'react-native-vector-icons/Feather';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
+import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 
-export default function TasksList({navigation}) {
-    //theming
-    const institute = useSelector(state => state.institute);
+import { useFocusEffect } from '@react-navigation/native';
 
-  const [isTimePickerVisible, setTimePickerVisibility] = React.useState(false);
-  const [Time, setTime] = React.useState('15:00');
-  let index = 0;
-  const dateMonths = {
-    1: 'Jan',
-    2: 'Feb',
-    3: 'Mar',
-    4: 'Apr',
-    5: 'May',
-    6: 'June',
-    7: 'July',
-    8: 'Aug',
-    9: 'Sept',
-    10: 'Oct',
-    11: 'Nov',
-    12: 'Dec',
-  };
-
-  const showTimePicker = () => {
-    setTimePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setTimePickerVisibility(false);
-  };
-  const handleConfirm = date => {
-    // console.warn("A date has been picked: ", date.toString());
-    setTime(
-      Time.getTime() +
-        ' ' +
-        TimeMonths[Time.getHour() + 1] +
-        ':' +
-        Time.getMinute(),
-    );
-    hideTimePicker();
-  };
+export default function TasksList({ navigation }) {
+  //theming
+  const institute = useSelector(state => state.institute);
 
   //parse date
   let parseDate = myDate => {
@@ -89,19 +37,40 @@ export default function TasksList({navigation}) {
   //data
   const [tasks, setTasks] = useState([]);
 
-  //on load
-  useEffect(async () => {
-    let slug = '/task';
-    const token = await read('token');
-    const response = await get(slug, token);
-    console.log(response);
-    setTasks(response);
-  }, []);
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+
+      const fetchUser = async () => {
+        setLoadingScreen()
+        try {
+          let slug = '/task';
+          const token = await read('token');
+          const response = await get(slug, token);
+          setTasks(response);
+        } catch (err) {
+          alert('Error in fetching Task Lists!')
+        }
+        hideLoadingScreen()
+      };
+
+      fetchUser();
+
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
+
   return (
     <View style={styles.backgroung}>
+      {loadingScreen}
       <View
-        style={{backgroundColor: institute ? institute.themeColor : '#FF5733',
-        ...styles.header,
+        style={{
+          backgroundColor: institute ? institute.themeColor : '#FF5733',
+          ...styles.header,
         }}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <AntDesign
@@ -128,7 +97,7 @@ export default function TasksList({navigation}) {
           }}>
           Task's List
         </Text>
-        <View style={{flex: 1, marginLeft: 20}}>
+        <View style={{ flex: 1, marginLeft: 20 }}>
           <TouchableOpacity
             onPress={() => navigation.navigate('AddTask')}
             style={{
@@ -136,7 +105,7 @@ export default function TasksList({navigation}) {
               flex: 1,
               alignItems: 'center',
               alignSelf: 'flex-end',
-              marginTop:5,
+              marginTop: 5,
               paddingRight: 20,
             }}>
             <IonIcon size={30} color="white" name="add-circle-outline" />
@@ -148,15 +117,15 @@ export default function TasksList({navigation}) {
         <Appbar.Content title="Tasks List" />
         </Appbar> */}
       <ScrollView>
-        <View style={{padding: 10}} />
+        <View style={{ padding: 10 }} />
 
-        <View style={{marginHorizontal: 15, ...styles.shadow}}>
+        <View style={{ marginHorizontal: 15, ...styles.shadow }}>
           <View style={styles.search}>
             <TextInput
-              style={{...styles.search_input}}
+              style={{ ...styles.search_input }}
               placeholder="Enter the driver name here"
               placeholderTextColor="grey"
-              
+
             />
             <TouchableOpacity
               style={{
@@ -174,11 +143,11 @@ export default function TasksList({navigation}) {
           </View>
         </View>
 
-        <View style={{padding: 10}} />
+        <View style={{ padding: 10 }} />
 
         {tasks &&
           tasks.map(task => (
-            <View style={styles.section}>
+            <View style={styles.section} key={task._id}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
                   <View style={styles.differentusers}>
@@ -192,7 +161,7 @@ export default function TasksList({navigation}) {
                       {task.task}
                     </Text>
                   </View>
-                  <View style={{padding: 5}} />
+                  <View style={{ padding: 5 }} />
                   <View style={styles.differentusers}>
                     <Text
                       style={{
@@ -206,7 +175,7 @@ export default function TasksList({navigation}) {
                     </Text>
                     <Text
                       style={{
-                        color: '#B04305',
+                        color: institute ? institute.themeColor : '#B04305',
                         fontSize: 13,
                         fontFamily: 'Poppins-Medium',
                         fontWeight: 'bold',
@@ -215,7 +184,7 @@ export default function TasksList({navigation}) {
                       {' Priority'}
                     </Text>
                   </View>
-                  <View style={{padding: 3}} />
+                  <View style={{ padding: 3 }} />
                   <Text
                     style={{
                       fontSize: 13,
@@ -257,8 +226,8 @@ export default function TasksList({navigation}) {
                     {task.status}
                   </Text>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('EditTask')}
-                    style={{flexDirection: 'row'}}>
+                    onPress={() => navigation.navigate('EditTask', { task: task})}
+                    style={{ flexDirection: 'row' }}>
                     <Text
                       style={{
                         fontSize: 14,
@@ -273,16 +242,16 @@ export default function TasksList({navigation}) {
                       size={15}
                       color="#211C5A"
                       name="square-edit-outline"
-                      style={{paddingTop: 2, paddingRight: 10}}
+                      style={{ paddingTop: 2, paddingRight: 10 }}
                     />
                   </TouchableOpacity>
                 </View>
-                <View style={{padding: 10}} />
+                <View style={{ padding: 10 }} />
               </View>
             </View>
           ))}
 
-        <View style={{padding: 20}} />
+        <View style={{ padding: 20 }} />
       </ScrollView>
     </View>
   );
@@ -314,7 +283,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingHorizontal: 10,
     width: '90%',
-    color:'black'
+    color: 'black'
   },
   shadow: {
     elevation: 5,

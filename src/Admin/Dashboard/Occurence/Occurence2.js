@@ -53,20 +53,7 @@ export default function Occurence2({navigation}) {
     return d.toString().slice(4, 15);
   };
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-  const dateMonths = {
-    1: 'Jan',
-    2: 'Feb',
-    3: 'Mar',
-    4: 'Apr',
-    5: 'May',
-    6: 'June',
-    7: 'July',
-    8: 'Aug',
-    9: 'Sept',
-    10: 'Oct',
-    11: 'Nov',
-    12: 'Dec',
-  };
+
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -119,7 +106,7 @@ export default function Occurence2({navigation}) {
   const handlesubmit = async () => {
     try {
       if (!date || !employee || !remarks) {
-        alert('Fill all fields!');
+        alert('All fields are required!!');
         return;
       }
       let slug = `/occurrence`;
