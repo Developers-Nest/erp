@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,11 +11,28 @@ import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+//checkbox
+import { CheckBox, Modal } from 'react-native-elements';
+//helpers
+
+// loading screem
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
+import get from '../../../../services/helpers/request/get';
+import post from '../../../../services/helpers/request/post';
+import read from '../../../../services/localstorage/read';
+
+
 //redux
 import { useSelector } from 'react-redux';
 const PlacementScreen1 = ({ navigation }) => {
     //theming
     const institute = useSelector(state => state.institute);
+     // loading screen
+     const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+    // dropdown values
+    const [companyname, setcompanyname] = useState([]);
+
 
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState(null);
@@ -23,6 +40,15 @@ const PlacementScreen1 = ({ navigation }) => {
         { label: 'Apple', value: 'apple' },
         { label: 'Banana', value: 'banana' }
     ]);
+     // selected values
+    const [scompany, setscompany] = useState('')
+
+
+    // users
+    const [users, setUsers] = useState([])
+
+    //for checkboxes
+    const [checkBoxValue, setCheckBoxValue] = useState({});
 
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('21 May 2021')
@@ -44,6 +70,79 @@ const PlacementScreen1 = ({ navigation }) => {
         hideDatePicker();
     };
 
+   //on load
+    useEffect(async () => {
+        setLoadingScreen()
+        try {
+          let slug = '/placement/vendor'
+          let token = await read('token')
+          let res = await get(slug, token)
+          let companynamearray = []
+          res && res.map((user) => {
+            companynamearray.push({
+              key: user._id,
+              label: user.companyName
+            })
+          })
+          setcompanyname(companynamearray)
+        } catch (err) {
+          alert('Cannot get companynames!!')
+        }
+  
+        hideLoadingScreen()
+      }, [])
+
+      let fetchUsers = async (idx) => {
+          
+        setLoadingScreen()
+        setscompany(idx)
+        slug=`/placement/placed?joiningDate=${date}&companyName=${scompany}&year=${syear}`
+
+        // if (sUserType === "Student") {
+        //   setSbatch(idx)
+        //   slug = `/settings/user?userType=${sUserId}&course=${scourse}&batch=${idx}`
+        // } else if (sUserType === "Teacher") {
+        //   setSdepartment(idx)
+        //   slug = `/settings/user?userType=${sUserId}&department=${idx}`
+        // }
+  
+        try {
+          let token = await read('token')
+          let res = await get(slug, token)
+          let checkBoxMap = {}
+          res && res.map((user) => {
+            checkBoxMap[user._id] = false
+          })
+          setUsers(res)
+          setCheckBoxValue(checkBoxMap)
+        } catch (err) {
+          alert('Cannot get Users!!')
+        }
+        hideLoadingScreen()
+      }
+  
+      let toggleCheckBox = (userId) => {
+        setCheckBoxValue(prevRecDays => {
+          return {
+            ...prevRecDays,
+            [userId]: !checkBoxValue[[userId]],
+          };
+        });
+      }
+  
+      let selectAll = () => {
+        Object.entries(checkBoxValue).forEach(([userId, value]) => {
+          setCheckBoxValue(prevRecDays => {
+            return {
+              ...prevRecDays,
+              [userId]: !isSelectAll,
+            };
+          });
+        });
+        setIsSelectAll(!isSelectAll)
+      }
+  
+  
     return (
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
 
@@ -92,7 +191,7 @@ const PlacementScreen1 = ({ navigation }) => {
                 {/* header ends */}
 
 
-
+{loadingScreen}
 
 
 
@@ -110,14 +209,16 @@ const PlacementScreen1 = ({ navigation }) => {
 
 
 
-
+data={companyname}
                         initValue="Company"
 
                         style={styles.card}
-
+                        onChange={async option => {
+                           setscompany(option.key);
+                          }}
 
                         initValueTextStyle={styles.SelectedValueSmall}
-                    //selectTextStyle={styles.SelectedValueSmall}
+                    selectTextStyle={styles.SelectedValueSmall}
 
 
                     >
@@ -143,7 +244,7 @@ const PlacementScreen1 = ({ navigation }) => {
                     </ModalSelector>
 
 
-
+                   
 
 
 
@@ -175,11 +276,26 @@ const PlacementScreen1 = ({ navigation }) => {
 
 
                 </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
+                    <View style={styles.Card3}>
+                        <View style={styles.CardContent}>
+                            <TextInput
+                                style={{ ...styles.search_input }}
+                                placeholder="Year"
+                                placeholderTextColor="grey"
+                                color="black"
+                                // onChangeText={val => setdrop(val)}
+                            />
+                        </View>
+                    </View>
+                </View>
+
+             
 
             </View>
 
             <View style={{ flexDirection: 'row' }}>
-                <Icon2
+                {/* <Icon2
                     size={25}
                     color="#5177E7"
                     name="checkbox"
@@ -192,8 +308,14 @@ const PlacementScreen1 = ({ navigation }) => {
                     marginTop: 15,
                 }}>
                     Select All
-                </Text>
+                </Text> */}
 
+<CheckBox
+            containerStyle={{ marginTop: -9 }}
+            // checked={isSelectAll}
+            title={'Select All'}
+            // onPress={selectAll}
+          />
             </View>
 
             <View style={styles.section} >
@@ -222,12 +344,19 @@ const PlacementScreen1 = ({ navigation }) => {
                                     }}>
                                     placed
                                 </Text>
-                                <Icon2
+                                {/* <Icon2
                                     size={30}
                                     color="#5177E7"
                                     name="checkbox"
                                     style={{ paddingTop: 2, paddingRight: 12 }}
-                                />
+                                /> */}
+<CheckBox
+            containerStyle={{ marginTop: -9 }}
+            // checked={isSelectAll}
+            // title={'Select All'}
+            // onPress={selectAll}
+          />
+
                             </TouchableOpacity>
                         </View>
                         <TouchableOpacity style={styles.differentusers}>
@@ -524,6 +653,25 @@ const styles = StyleSheet.create({
     header: {
         height: 69,
         flexDirection: 'row',
+    },
+    Card3: {
+        backgroundColor: 'white',
+        width: '85%',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        paddingHorizontal: 10,
+        borderColor: '#00499F',
+        borderRadius: 8,
+    },
+    CardContent: {
+        borderRadius: 8,
+        height: 59,
+        fontSize: 15,
+        fontFamily: 'Poppins-Regular',
+        fontWeight: 'bold',
+        paddingTop: 10,
+        paddingHorizontal: 10,
+        width: '90%',
     },
 
 });
