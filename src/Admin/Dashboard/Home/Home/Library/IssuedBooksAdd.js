@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -7,7 +7,7 @@ import {
   Pressable,
   TextInput,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 
 //modal
 import ModalSelector from 'react-native-modal-selector';
@@ -19,7 +19,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // loading screen
 import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
@@ -33,7 +33,7 @@ import getCourse from '../../../../../services/helpers/getList/getCourse';
 import getBatch from '../../../../../services/helpers/getList/getBatch';
 import getStudents from '../../../../../services/helpers/getList/getStudents';
 
-const IssuedBooksAdd = ({navigation}) => {
+const IssuedBooksAdd = ({ navigation }) => {
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
@@ -51,7 +51,7 @@ const IssuedBooksAdd = ({navigation}) => {
   //STUDENT TYPE modal selector
   const [courses, setcourses] = useState([]);
   const [batches, setbatches] = useState([]);
-  const [students, setstudents] = useState([{key: 'hi', label: 'hi'}]);
+  const [students, setstudents] = useState([{ key: 'hi', label: 'hi' }]);
 
   //data to be sent
   const [book, setBook] = useState();
@@ -246,19 +246,19 @@ const IssuedBooksAdd = ({navigation}) => {
     setdatedisplayIssued(parseDate(data.toString()));
     setissue(
       data.getFullYear() +
-        '-' +
-        twodigit(data.getMonth() + 1) +
-        '-' +
-        twodigit(data.getDate()) +
-        'T' +
-        +twodigit(data.getHours()) +
-        ':' +
-        twodigit(data.getMinutes()) +
-        ':' +
-        twodigit(data.getSeconds()) +
-        '.' +
-        threedigit(data.getMilliseconds()) +
-        'Z',
+      '-' +
+      twodigit(data.getMonth() + 1) +
+      '-' +
+      twodigit(data.getDate()) +
+      'T' +
+      +twodigit(data.getHours()) +
+      ':' +
+      twodigit(data.getMinutes()) +
+      ':' +
+      twodigit(data.getSeconds()) +
+      '.' +
+      threedigit(data.getMilliseconds()) +
+      'Z',
     );
     console.log('A date has been picked: ', issue);
     hideDatePicker1();
@@ -268,19 +268,19 @@ const IssuedBooksAdd = ({navigation}) => {
     setdatedisplayDue(parseDate(data.toString()));
     setdue(
       data.getFullYear() +
-        '-' +
-        twodigit(data.getMonth() + 1) +
-        '-' +
-        twodigit(data.getDate()) +
-        'T' +
-        +twodigit(data.getHours()) +
-        ':' +
-        twodigit(data.getMinutes()) +
-        ':' +
-        twodigit(data.getSeconds()) +
-        '.' +
-        threedigit(data.getMilliseconds()) +
-        'Z',
+      '-' +
+      twodigit(data.getMonth() + 1) +
+      '-' +
+      twodigit(data.getDate()) +
+      'T' +
+      +twodigit(data.getHours()) +
+      ':' +
+      twodigit(data.getMinutes()) +
+      ':' +
+      twodigit(data.getSeconds()) +
+      '.' +
+      threedigit(data.getMilliseconds()) +
+      'Z',
     );
     console.log('A date has been picked: ', due);
     hideDatePicker2();
@@ -327,12 +327,13 @@ const IssuedBooksAdd = ({navigation}) => {
       let res = await post(slug, data, token);
       console.log('Issue Res ', res);
       alert('Issued!!');
+      navigation.navigate('LibraryMain')
     } catch (err) {
       alert('Cannot Save !!' + err);
     }
   };
   return (
-    <View style={{justifyContent: 'center', alignContent: 'center'}}>
+    <View style={{ justifyContent: 'center', alignContent: 'center' }}>
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -369,7 +370,7 @@ const IssuedBooksAdd = ({navigation}) => {
         </Text>
       </View>
       <ScrollView>
-        <View style={{justifyContent: 'space-around', alignContent: 'center'}}>
+        <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
           <View
             style={{
               flexDirection: 'row',
@@ -501,14 +502,14 @@ const IssuedBooksAdd = ({navigation}) => {
           )}
 
           {/* 3rd row starts */}
-          <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
+          <View style={{ width: '100%', paddingTop: 15, flexDirection: 'row' }}>
             <Text style={styles.section_heading}>Issued On </Text>
             <Text style={styles.section_heading1}>Due On</Text>
           </View>
 
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity style={styles.pickdate} onPress={showDatePicker1}>
-              <Text style={{marginTop: 15, marginLeft: 10,color:'black'}}>
+              <Text style={{ marginTop: 15, marginLeft: 10, color: 'black' }}>
                 {datedisplayIssued}
                 {'  '}
               </Text>
@@ -529,7 +530,7 @@ const IssuedBooksAdd = ({navigation}) => {
               />
             </TouchableOpacity>
             <TouchableOpacity style={styles.pickdate} onPress={showDatePicker2}>
-              <Text style={{marginTop: 15, marginLeft: 10,color:'black'}}>
+              <Text style={{ marginTop: 15, marginLeft: 10, color: 'black' }}>
                 {datedisplayDue}
                 {'  '}
               </Text>
@@ -551,7 +552,7 @@ const IssuedBooksAdd = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.fixToText}>
-            <TouchableOpacity style={{backgroundColor: institute? institute.themeColor: 'blue', ...styles.button}} onPress={handleSubmit}>
+            <TouchableOpacity style={{ backgroundColor: institute ? institute.themeColor : 'blue', ...styles.button }} onPress={handleSubmit}>
               <Text style={styles.text}>Save</Text>
             </TouchableOpacity>
           </View>
@@ -711,7 +712,7 @@ const styles = StyleSheet.create({
   card: {
     shadowColor: '#999',
     height: 50,
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,

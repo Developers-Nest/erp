@@ -51,28 +51,28 @@ export default function Booksrequest({ navigation }) {
     hideLoadingScreen()
   }, [])
 
-  let handeleUpdate = async(id, status)=>{
+  let handeleUpdate = async (id, status) => {
     setLoadingScreen()
-    try{
+    try {
       let slug = `/library/request/${id}`
       let token = await read('token')
       let data = {
         status: status
       }
       let res = await patch(slug, data, token)
-      if(res._id){
+      if (res._id) {
         let reqArray = []
-        requests.map((request)=>{
-          if(request._id === id){
+        requests.map((request) => {
+          if (request._id === id) {
             request.status = status
           }
           reqArray.push(request)
         })
         setRequests(reqArray)
-        alert('Status: '+status)
+        alert('Status: ' + status)
       }
-    } catch(err){
-      alert('Cannot update '+ err)
+    } catch (err) {
+      alert('Cannot update ' + err)
     }
     hideLoadingScreen()
   }
@@ -130,7 +130,7 @@ export default function Booksrequest({ navigation }) {
             requests && requests.map((request) => (
               request.status === "Pending" ? (
                 <View style={{ flexDirection: 'row', justifyContent: 'center' }} key={request._id}>
-                  <Swipeable renderLeftActions={()=>LeftActions(request._id)} renderRightActions={()=>RightActions(request._id)}>
+                  <Swipeable renderLeftActions={() => LeftActions(request._id)} renderRightActions={() => RightActions(request._id)}>
                     <View style={styles.section}>
                       <View style={styles.details}>
                         <View style={styles.userinhostels}>
@@ -236,7 +236,7 @@ export default function Booksrequest({ navigation }) {
                             color: '#211C5A',
                             fontFamily: 'Poppins-Regular',
                             marginHorizontal: -5,
-                           
+
                           }}>
                           {' '}
                           {request.title}
@@ -293,7 +293,7 @@ export default function Booksrequest({ navigation }) {
                     <View style={{ flexDirection: 'column' }}>
                       <Text
                         style={{
-                          color: institute? institute.themeColor: '#B04305',
+                          color: institute ? institute.themeColor : '#B04305',
                           fontSize: 12,
                           fontFamily: 'Poppins-Medium',
                         }}>
@@ -329,36 +329,39 @@ export default function Booksrequest({ navigation }) {
             backgroundColor: institute ? institute.themeColor : '#FF5733',
             ...styles.header,
           }}>
-            {loadingScreen}
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('LibraryMain');
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
+          {loadingScreen}
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('LibraryMain');
+              }}>
+              <AntDesign
+                size={24}
+                color="white"
+                name="left"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 25,
+                  color: 'white',
+
+                }}
+              />
+            </TouchableOpacity>
+
+            <Text
               style={{
+                fontStyle: 'normal',
+                fontFamily: 'NunitoSans-Regular',
+                fontSize: 28,
+                fontWeight: '600',
                 alignSelf: 'center',
-                fontSize: 25,
+                paddingLeft: 30,
                 color: 'white',
-                paddingLeft: 20,
-                paddingTop: 20,
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontFamily: 'NunitoSans-Regular',
-              fontSize: 28,
-              fontWeight: '600',
-              alignSelf: 'center',
-              paddingLeft: 30,
-              color: 'white',
-            }}>
-            Books Request
-          </Text>
+              }}>
+              Books Request
+            </Text>
+          </View>
         </View>
 
         {/* header ends */}
@@ -374,7 +377,6 @@ export default function Booksrequest({ navigation }) {
             <View
               style={{
                 marginTop: 10,
-                //make search and card in same line
                 marginLeft: 5,
                 justifyContent: 'space-between',
                 width: '95%',
@@ -460,15 +462,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     elevation: 5,
-    // marginTop: 5,
     borderRadius: 8,
     paddingHorizontal: 10,
     marginLeft: 5,
     marginRight: 5,
-    // paddingLeft: 10,
-    // paddingRight: 10,
-
-    // marginHorizontal: 20,
     marginBottom: 20,
   },
 
@@ -497,7 +494,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     marginTop: 4,
-    // paddingBottom: 10,
     borderBottomColor: '#333',
     paddingHorizontal: 10,
     borderBottomWidth: 0.5
@@ -512,7 +508,6 @@ const styles = StyleSheet.create({
   },
   userstext: {
     fontSize: 16,
-    // paddingVertical: 4,
     fontWeight: '300',
   },
   belowhr: {
@@ -522,7 +517,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 10,
     borderBottomColor: '#333',
-    //borderBottomWidth:1,
   },
   search: {
     backgroundColor: 'white',
@@ -555,9 +549,7 @@ const styles = StyleSheet.create({
   },
 
   text_input: {
-    // paddingHorizontal: 20,
     borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
     minWidth: 171,
@@ -586,9 +578,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 123,
     backgroundColor: 'red',
-    // borderRadius: 1000,
-    // alignSelf: 'center',
-    // display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
 
@@ -606,9 +595,6 @@ const styles = StyleSheet.create({
     width: 80,
     height: 123,
     backgroundColor: 'green',
-    // borderRadius: 1000,
-    // alignSelf: 'center',
-    // display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
 

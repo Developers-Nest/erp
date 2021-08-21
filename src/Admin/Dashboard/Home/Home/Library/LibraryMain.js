@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-// import { TextInput } from 'react-native-paper';
+
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import LinearGradient from 'react-native-linear-gradient';
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
-//for users section icons
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   StyleSheet,
   Text,
@@ -19,6 +16,8 @@ import {
   Keyboard,
 } from 'react-native';
 
+
+import { Button } from 'react-native-paper';
 // helpers
 import get from '../../../../../services/helpers/request/get';
 import deleteReq from '../../../../../services/helpers/request/delete';
@@ -250,23 +249,19 @@ export default function LibraryMain({ navigation }) {
                         {issuedbooks.bookName.copies}
                       </Text>
                       <TouchableOpacity
-                        style={{ flexDirection: 'row' }}
                         onPress={() => {
                           HandleDelete(issuedbooks._id);
+                        }}
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+
                         }}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          Delete{' '}
-                        </Text>
-                        <AntDesign
-                          size={12}
-                          color="#211C5A"
+                        <MaterialIcon
+                          size={20}
+                          backgroundColor=" #211C5A"
                           name="delete"
-                          style={{ paddingTop: 2 }}
+                          color={institute ? institute.themeColor : '#211C5A'}
                         />
                       </TouchableOpacity>
                     </View>
@@ -308,35 +303,36 @@ export default function LibraryMain({ navigation }) {
             backgroundColor: institute ? institute.themeColor : '#FF5733',
             ...styles.header,
           }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Home');
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Home');
+              }}>
+              <AntDesign
+                size={24}
+                color="white"
+                name="left"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 25,
+                  color: 'white',
+
+                }}
+              />
+            </TouchableOpacity>
+            <Text
               style={{
+                fontStyle: 'normal',
+                fontFamily: 'NunitoSans-Regular',
+                fontSize: 28,
+                fontWeight: '600',
                 alignSelf: 'center',
-                fontSize: 25,
+                paddingLeft: 30,
                 color: 'white',
-                paddingLeft: 20,
-                paddingTop: 20,
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontFamily: 'NunitoSans-Regular',
-              fontSize: 28,
-              fontWeight: '600',
-              alignSelf: 'center',
-              paddingLeft: 30,
-              color: 'white',
-            }}>
-            Library
-          </Text>
+              }}>
+              Library
+            </Text>
+          </View>
           <TouchableOpacity
             onPress={() => navigation.navigate('BooksRequest')}
             style={{
@@ -351,15 +347,7 @@ export default function LibraryMain({ navigation }) {
                 alignItems: 'center',
                 marginRight: 5,
               }}>
-              {/* <Ionicons
-                  name="add-circle"
-                  color="#900"
-                  style={{
-                    fontSize: 35,
-                    color: 'white',
-                    paddingRight: 20,
-                  }}
-                /> */}
+
               <MaterialIcon
                 name="align-horizontal-left"
                 color="#900"
@@ -378,7 +366,6 @@ export default function LibraryMain({ navigation }) {
         <View
           style={{
             alignItems: 'center',
-            marginBottom: 20,
             marginTop: 20,
           }}>
           <View style={{ alignItems: 'center', width: '90%' }}>
@@ -386,7 +373,6 @@ export default function LibraryMain({ navigation }) {
             <View
               style={{
                 marginTop: 10,
-                //make search and card in same line
                 marginLeft: 5,
                 justifyContent: 'space-between',
                 width: '95%',
@@ -416,6 +402,13 @@ export default function LibraryMain({ navigation }) {
         </View>
 
         {/* close search */}
+        <Button
+          onPress={() => navigation.navigate('IssuedStatus')}
+          style={{ marginHorizontal: 20, marginVertical: 20 }}
+          color={institute.themeColor}
+          mode="contained">
+          <Text>Issued Books Status</Text>
+        </Button>
 
         {/* tabs section open */}
         <View style={styles.switchTabsView}>
@@ -516,9 +509,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomWidth: 0.5,
   },
-  // userinhostels: {
-  //   marginBottom: 10,
-  // },
+
   differentusers: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -526,7 +517,6 @@ const styles = StyleSheet.create({
   },
   userstext: {
     fontSize: 16,
-    // paddingVertical: 4,
     fontWeight: '300',
   },
 
@@ -559,9 +549,8 @@ const styles = StyleSheet.create({
   },
 
   text_input: {
-    // paddingHorizontal: 20,
+
     borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
     minWidth: 171,
@@ -600,6 +589,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingHorizontal: 10,
     borderBottomColor: '#333',
-    //borderBottomWidth:1,
+
   },
 });
