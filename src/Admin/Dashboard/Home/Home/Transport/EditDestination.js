@@ -7,7 +7,7 @@ import {
 
 import ModalSelector from 'react-native-modal-selector';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-
+import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //redux
@@ -25,7 +25,7 @@ export default function EditDestination({ route, navigation }) {
     const institute = useSelector(state => state.institute);
     //loading screen
     const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
-    
+
     //modal selector values to be called from api
     const [routenos, setroutenos] = useState([]);
 
@@ -46,7 +46,7 @@ export default function EditDestination({ route, navigation }) {
     const [feeamount, setfeeamount] = useState('');
     const [drop, setdrop] = useState('');
     const [id, setId] = useState('')
-   
+
     const [showtimePicker, setShowTimePicker] = useState(false);
     const [time, setTime] = useState(null);
 
@@ -73,71 +73,71 @@ export default function EditDestination({ route, navigation }) {
                 route: routeno,
             };
             let res = await patch(slug, data, token);
-            if(res.error){
+            if (res.error) {
                 alert(res.error)
-            } else if(res._id){
+            } else if (res._id) {
                 alert('Destination updated!!')
                 navigation.navigate('TransportMain');
             }
         } catch (err) {
             alert('Cannot Update !!' + err);
         }
-hideLoadingScreen();
+        hideLoadingScreen();
     }
-//delete
-let handleDelete = async () => {
-    setLoadingScreen();
-    try {
-        let slug = `/transport/destinationAndFees/${id}`;
-        let token = await read('token')
-        let res = await deleteReq(slug, token)
-        if (res.error) {
-            alert(res.error)
-        } else {
-            alert('Deleted')
-            navigation.navigate('TransportMain');
+    //delete
+    let handleDelete = async () => {
+        setLoadingScreen();
+        try {
+            let slug = `/transport/destinationAndFees/${id}`;
+            let token = await read('token')
+            let res = await deleteReq(slug, token)
+            if (res.error) {
+                alert(res.error)
+            } else {
+                alert('Deleted')
+                navigation.navigate('TransportMain');
+            }
+        } catch (err) {
+            alert('Cannot Delete !!')
         }
-    } catch (err) {
-        alert('Cannot Delete !!')
+        hideLoadingScreen();
     }
-    hideLoadingScreen();
-}
 
 
     //on load
 
-    
+
     useEffect(async () => {
-let destination = route.params.destination
-console.log('Edit destination ', destination)
-setfeeamount(destination.amount)
-setdrop(destination.pickAndDrop)
-setfeetype(destination.feeType)
-setTime(destination.stopTime)
-setrouteno(destination.route)
-setId(destination._id)
+        let destination = route.params.destination
+        console.log('Edit destination ', destination)
+        setfeeamount(destination.amount)
+        setdrop(destination.pickAndDrop)
+        setfeetype(destination.feeType)
+        setTime(destination.stopTime)
+        setrouteno(destination.route)
+        setId(destination._id)
 
-try {
-    let slug = '/transport/route';
-    let token = await read('token');
-    let res = await get(slug, token);
-    let list = [];
+        try {
+            let slug = '/transport/route';
+            let token = await read('token');
+            let res = await get(slug, token);
+            let list = [];
 
-    res &&
-        res.map((res) => {
-            list.push({
-                label: res.code,
-                key: res._id,
-            })
-        })
-    setroutenos(list);
-} catch (err) {
-    alert('Cannot get route code!!');
-}
+            res &&
+                res.map((res) => {
+                    list.push({
+                        label: res.code,
+                        key: res._id,
+                    })
+                })
+            setroutenos(list);
+        } catch (err) {
+            alert('Cannot get route code!!');
+        }
     }, [])
 
 
-    
+
 
     return (
         <View style={styles.backgroung}>
@@ -200,14 +200,13 @@ try {
                         onChange={option => {
                             setrouteno(option.key);
                         }}
-                        style={styles.card}
+                        style={styles.cardsmall}
                         initValueTextStyle={styles.SelectedValueSmall}
                         selectTextStyle={styles.SelectedValueSmall}
                     />
-                    <View style={styles.Card}>
-                        <View style={styles.CardContent}>
-                            {/* time picker */}
-                            <Button
+
+                    {/* time picker */}
+                    {/* <Button
                                 icon="calendar"
                                 mode="contained"
                                 color="white"
@@ -221,9 +220,44 @@ try {
                                 mode="time"
                                 onConfirm={handleSubmit2}
                                 onCancel={() => setShowTimePicker(!showtimePicker)}
+                            /> */}
+                    <View style={styles.card}>
+                        <TouchableOpacity style={styles.pickdate1} onPress={() => setShowTimePicker(true)}>
+                            {/* time picker */}
+
+                            <TextInput
+                                style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
+                                placeholder={time ? time.slice(15, 21) : 'TIME'}
+                                placeholderTextColor='grey'
+                                color='black'
+                                editable={false}
+
                             />
-                        </View>
+
+                            <Feather
+                                size={18}
+                                color="black"
+                                name="calendar"
+                                style={{
+                                    marginTop: 16,
+                                    marginRight: 0,
+                                }}></Feather>
+
+
+
+                            <DateTimePickerModal
+                                isVisible={showtimePicker}
+                                mode="time"
+                                style={styles.pickdate1}
+
+                                onConfirm={handleSubmit2}
+                                onCancel={() => setShowTimePicker(!showtimePicker)}
+
+                            />
+                        </TouchableOpacity>
+
                     </View>
+
                 </View>
 
                 <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row', alignContent: 'flex-start', justifyContent: 'space-evenly' }}>
@@ -239,7 +273,7 @@ try {
                         onChange={option => {
                             setfeetype(option.key);
                         }}
-                        style={styles.card}
+                        style={styles.cardsmall}
                         initValueTextStyle={styles.SelectedValueSmall}
                         selectTextStyle={styles.SelectedValueSmall}
                     />
@@ -278,7 +312,7 @@ try {
                     </View>
                 </View>
 
-                
+
                 <View
                     style={{
                         justifyContent: 'space-evenly',
@@ -290,7 +324,7 @@ try {
                     <Button style={{ width: 90 }} color="#B04305" mode="contained" onPress={handleDelete}>
                         DELETE
                     </Button>
-                    <Button style={{ width: 90 }}color={ institute? institute.themeColor : "#5177E7"} mode="contained" onPress={handleUpdate} >
+                    <Button style={{ width: 90 }} color={institute ? institute.themeColor : "#5177E7"} mode="contained" onPress={handleUpdate} >
                         SAVE
                     </Button>
                 </View>
@@ -396,6 +430,30 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
+    },
+    cardsmall: {
+        shadowColor: '#000',
+        height: 59,
+        width: 160,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 5,
+        backgroundColor: 'white',
+        // borderColor: '#ccc',
+        // borderWidth: 1,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderTopRightRadius: 8,
+        borderTopLeftRadius: 8,
+        // overflow: 'hidden',
+        justifyContent: 'center',
+        margin: 0,
+        padding: 0,
+        minWidth: '30%',
     },
     Card1: {
         backgroundColor: 'white',
@@ -405,6 +463,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
     },
     Card2: {
         backgroundColor: 'white',
@@ -414,6 +475,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
     },
     Card3: {
         backgroundColor: 'white',
@@ -423,6 +487,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
     },
     CardContent: {
         borderRadius: 8,
@@ -441,6 +508,21 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#58636D',
         borderRadius: 8,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    pickdate1: {
+        width: 160,
+        height: 55,
+        backgroundColor: 'white',
+        borderColor: '#58636D',
+        borderRadius: 8,
+      
+        marginLeft: 0,
+        marginRight: 12,
+
+        paddingHorizontal: 20,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',

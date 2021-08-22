@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
-  
+
     Button,
 } from 'react-native-paper';
 
@@ -209,7 +209,7 @@ export default function EditDriver({ route, navigation }) {
                             setVehicle(option.key);
                         }}
                         // disabled={true}
-                        style={styles.card}
+                        style={styles.cardsmall}
                         initValueTextStyle={styles.SelectedValueSmall}
                         selectTextStyle={styles.SelectedValueSmall}
                     />
@@ -475,6 +475,31 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
+    },
+
+    cardsmall: {
+        shadowColor: '#000',
+        height: 59,
+        width: 160,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 5,
+        backgroundColor: 'white',
+        // borderColor: '#ccc',
+        // borderWidth: 1,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderTopRightRadius: 8,
+        borderTopLeftRadius: 8,
+        // overflow: 'hidden',
+        justifyContent: 'center',
+        margin: 0,
+        padding: 0,
+        minWidth: '30%',
     },
     Card1: {
         backgroundColor: 'white',
@@ -484,6 +509,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
     },
     Card2: {
         backgroundColor: 'white',
@@ -493,6 +521,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
     },
     Card3: {
         backgroundColor: 'white',
@@ -502,6 +533,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
     },
     CardContent: {
         borderRadius: 8,
