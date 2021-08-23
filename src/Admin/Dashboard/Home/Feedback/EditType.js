@@ -74,7 +74,8 @@ const EditType = ({route, navigation}) => {
   };
 
   return (
-    <View style={{justifyContent: 'center', alignContent: 'center'}}>
+    <View
+      style={{backgroundColor: 'rgba(249, 249, 249, 1)', minHeight: '100%'}}>
       {/* header start */}
 
       <View
@@ -126,7 +127,7 @@ const EditType = ({route, navigation}) => {
             style={{
               flexDirection: 'column',
               alignItems: 'center',
-              marginRight: 5,
+              marginRight: 15,
             }}>
             <MaterialCommunityIcon
               name="eye"
@@ -134,7 +135,6 @@ const EditType = ({route, navigation}) => {
               style={{
                 fontSize: 30,
                 color: 'white',
-                paddingRight: 20,
               }}
             />
             <Text
@@ -158,14 +158,10 @@ const EditType = ({route, navigation}) => {
           <Text style={styles.section_heading}>Add Feedback Type</Text>
         </View>
 
-        <View style={{marginHorizontal: 10, ...styles.shadow}}>
+        <View style={{marginHorizontal: 20}}>
           <View style={styles.search}>
             <TextInput
-              style={{
-                ...styles.search_input,
-                fontFamily: 'Poppins-Regular',
-                color: '#505069',
-              }}
+              style={styles.search_input}
               placeholder="Annual feedback forum"
               placeholderTextColor="grey"
               color="black"
@@ -292,7 +288,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     borderColor: '#58636D',
     borderRadius: 8,
     borderWidth: 0.3,
@@ -317,8 +313,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
 
     color: '#505069',
-    paddingTop: 5,
-    paddingHorizontal: 0,
     width: '90%',
     textAlign: 'left',
   },

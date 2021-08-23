@@ -1,15 +1,6 @@
-
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {
-  Text,
-  TextInput,
-  Appbar,
-  Card,
-  Button,
-  Title,
-  Paragraph,
-} from 'react-native-paper';
+import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {Text, Appbar, Card, Button, Title, Paragraph} from 'react-native-paper';
 
 //selector
 import ModalSelector from 'react-native-modal-selector';
@@ -28,7 +19,6 @@ import post from '../../../../services/helpers/request/post';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
 export default function FeedbackMain({navigation}) {
-
   const [feedback, setFeedback] = useState('');
 
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
@@ -55,17 +45,16 @@ export default function FeedbackMain({navigation}) {
       let response = await get(slug, token);
       let list = [];
       response &&
-      response.map((response) => {
+        response.map(response => {
           list.push({
-              label: response.feedbacktype,
-              key: response._id,
-          })
-      })
-  setTypes(list);
-} catch (err) {
-  alert('Cannot get feedback types!!');
-}
-     
+            label: response.feedbacktype,
+            key: response._id,
+          });
+        });
+      setTypes(list);
+    } catch (err) {
+      alert('Cannot get feedback types!!');
+    }
 
     hideLoadingScreen();
   }, []);
@@ -108,71 +97,70 @@ export default function FeedbackMain({navigation}) {
   };
 
   return (
-    <View style={{backgroundColor: '#E5E5E5'}}>
+    <View style={{backgroundColor: 'rgba(249, 249, 249, 1)'}}>
       {loadingScreen}
-        {/* header start */}
 
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : '#FF5733',
+          ...styles.header,
+        }}>
         <View
-                    style={{
-                        backgroundColor: institute ? institute.themeColor : '#FF5733',
-                        ...styles.header,
-                    }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
-                        <TouchableOpacity
-                            onPress={() => {
-                                navigation.navigate('Home');
-                            }}>
-                            <AntDesign
-                                size={24}
-                                color="white"
-                                name="left"
-                                style={{
-                                    alignSelf: 'center',
-                                    fontSize: 25,
-                                    color: 'white',
-
-                                }}
-                            />
-
-                        </TouchableOpacity>
-                    </View>
-                    <Text
-                        style={{
-                            fontStyle: 'normal',
-                            fontFamily: 'NunitoSans-Regular',
-                            fontSize: 28,
-                            fontWeight: '600',
-                            alignSelf: 'center',
-                            paddingLeft: 20,
-                            color: 'white',
-                        }}>
-                      Feedback
-                    </Text>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('AddQuestion')}
-                        style={{
-                            justifyContent: 'flex-end',
-                            flex: 1,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}>
-                        <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 5 }}>
-                            <MaterialIcon
-                                name="align-horizontal-right"
-                                color="#900"
-                                style={{
-                                    fontSize: 35,
-                                    color: 'white',
-                                    paddingRight: 20,
-                                }}
-                            />
-
-
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-                {/* header ends */}
+          style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 20}}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Home');
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text
+          style={{
+            fontStyle: 'normal',
+            fontFamily: 'NunitoSans-Regular',
+            fontSize: 28,
+            fontWeight: '600',
+            alignSelf: 'center',
+            paddingLeft: 20,
+            color: 'white',
+          }}>
+          Feedback
+        </Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('AddQuestion')}
+          style={{
+            justifyContent: 'flex-end',
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginRight: 5,
+            }}>
+            <MaterialIcon
+              name="align-horizontal-right"
+              color="#900"
+              style={{
+                fontSize: 35,
+                color: 'white',
+                paddingRight: 20,
+              }}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
 
       <View style={{padding: 10}} />
       <View style={{paddingHorizontal: 20}}>
@@ -189,7 +177,7 @@ export default function FeedbackMain({navigation}) {
           />
         </View>
         <View style={{padding: 10}} />
-        <Card>
+        <Card style={styles.card_picker}>
           <Card.Content>
             <Title>Questionnarie</Title>
             <View style={{padding: 2}} />
@@ -200,7 +188,7 @@ export default function FeedbackMain({navigation}) {
           </Card.Content>
         </Card>
         <View style={{padding: 10}} />
-        <Card style={{height: 200}}>
+        <Card style={{height: 200, ...styles.card_picker}}>
           <Card.Content>
             <TextInput
               placeholder="Write down your feedback question here..... "
@@ -213,7 +201,8 @@ export default function FeedbackMain({navigation}) {
         <Button
           onPress={handleSubmit}
           mode="contained"
-          color={institute.themeColor}>
+          color={institute.themeColor}
+          style={{marginVertical: 20}}>
           submit
         </Button>
       </View>

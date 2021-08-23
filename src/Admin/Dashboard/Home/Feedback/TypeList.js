@@ -51,9 +51,7 @@ const TypeList = ({navigation}) => {
   }, []);
 
   return (
-    <View style={{justifyContent: 'center', alignContent: 'center'}}>
-      {/* header start */}
-
+    <View style={styles.container}>
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : '#FF5733',
@@ -91,9 +89,7 @@ const TypeList = ({navigation}) => {
         </Text>
       </View>
 
-      {/* header ends */}
-
-      <View style={{marginHorizontal: 10, ...styles.shadow}}>
+      <View style={{marginHorizontal: 20, ...styles.shadow}}>
         <View style={styles.search}>
           <TextInput
             style={{...styles.search_input, fontFamily: 'Poppins-Regular'}}
@@ -130,21 +126,14 @@ const TypeList = ({navigation}) => {
                         fontFamily: 'Poppins-Regular',
                         marginHorizontal: -5,
                       }}>
+                      {' '}
                       {typelist.feedbacktype ? typelist.feedbacktype : 'N/A'}
                     </Text>
 
                     {/* */}
                   </View>
-                  <TouchableOpacity style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#5177E7',
-                        fontFamily: 'Poppins-Medium',
-                      }}></Text>
-                  </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.differentusers}>
+                  <View style={styles.differentusers}>
                     <Text
                       style={{
                         fontSize: 12,
@@ -185,7 +174,7 @@ const TypeList = ({navigation}) => {
                         style={{paddingTop: 7, paddingRight: 12}}
                       />
                     </TouchableOpacity>
-                  </TouchableOpacity>
+                  </View>
                 </View>
               </View>
 
@@ -220,11 +209,11 @@ const styles = StyleSheet.create({
   container1: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
   },
   container: {
     alignContent: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   SelectedValue: {
     fontFamily: 'Poppins-Regular',

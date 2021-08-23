@@ -53,14 +53,14 @@ const AddType = ({navigation}) => {
       let data = {
         feedbackfor: feedbackfor,
         feedbacktype: feedbacktype,
-
         status: status,
       };
       let res = await post(slug, data, token);
       if (res.error) {
         alert(res.error);
       } else if (res._id) {
-        alert('Fedback Type Added!!');
+        alert('Feedback Type Added!!');
+        navigation.replace('FeedbackMain');
       }
     } catch (err) {
       alert('Unable to add Feedback Type !!' + err);
@@ -69,13 +69,10 @@ const AddType = ({navigation}) => {
   };
 
   return (
-    <View style={{justifyContent: 'center', alignContent: 'center'}}>
-      {/* header start */}
-
+    <View style={styles.container}>
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : '#FF5733',
-
           ...styles.header,
         }}>
         <View
@@ -122,6 +119,7 @@ const AddType = ({navigation}) => {
               flexDirection: 'column',
               alignItems: 'center',
               marginRight: 5,
+              paddingRight: 10,
             }}>
             <MaterialCommunityIcon
               name="eye"
@@ -129,7 +127,6 @@ const AddType = ({navigation}) => {
               style={{
                 fontSize: 30,
                 color: 'white',
-                paddingRight: 20,
               }}
             />
             <Text
@@ -143,30 +140,26 @@ const AddType = ({navigation}) => {
           </View>
         </TouchableOpacity>
       </View>
-
-      {/* header ends */}
-
       {loadingScreen}
-
       <View style={{justifyContent: 'space-around', alignContent: 'center'}}>
-        <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
+        <View
+          style={{
+            width: '100%',
+            paddingTop: 25,
+            flexDirection: 'row',
+            paddingHorizontal: 5,
+          }}>
           <Text style={styles.section_heading}>Add Feedback Type</Text>
         </View>
 
-        <View style={{marginHorizontal: 10, ...styles.shadow}}>
-          <View style={styles.search}>
-            <TextInput
-              style={{
-                ...styles.search_input,
-                fontFamily: 'Poppins-Regular',
-                color: '#505069',
-              }}
-              placeholder="Annual feedback forum"
-              placeholderTextColor="grey"
-              color="black"
-              onChangeText={val => setfeedbacktype(val)}
-            />
-          </View>
+        <View style={styles.search}>
+          <TextInput
+            style={styles.search_input}
+            placeholder="Annual feedback forum"
+            placeholderTextColor="grey"
+            color="black"
+            onChangeText={val => setfeedbacktype(val)}
+          />
         </View>
 
         <View style={{width: '100%', paddingTop: 15, flexDirection: 'row'}}>
@@ -221,8 +214,8 @@ const AddType = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignContent: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
+    minHeight: '100%',
   },
   text2: {
     fontFamily: 'Poppins-Regular',
@@ -290,11 +283,12 @@ const styles = StyleSheet.create({
     borderColor: '#58636D',
     borderRadius: 8,
     borderWidth: 0.3,
+    marginHorizontal: 20,
   },
 
   section_heading: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 12,
+    fontSize: 13,
     fontStyle: 'normal',
     fontWeight: '600',
     lineHeight: 18,
@@ -311,7 +305,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
 
     color: '#505069',
-    paddingTop: 5,
     paddingHorizontal: 0,
     width: '90%',
     textAlign: 'left',
@@ -458,7 +451,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
 
     width: 160,
-    elevation: 3,
+    elevation: 2,
   },
 
   SelectedValueSmall: {

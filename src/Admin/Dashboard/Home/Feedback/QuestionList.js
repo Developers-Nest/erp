@@ -94,7 +94,7 @@ const QuestionList = ({navigation}) => {
   };
 
   return (
-    <View style={{justifyContent: 'center', alignContent: 'center'}}>
+    <View style={{backgroundColor: 'rgba(249, 249, 249, 1)'}}>
       <View style={{justifyContent: 'space-around', alignContent: 'center'}}>
         {/* header start */}
 
@@ -205,20 +205,13 @@ const QuestionList = ({navigation}) => {
                           fontFamily: 'Poppins-Regular',
                           marginHorizontal: -5,
                         }}>
-                        {/* Feedback Type */}
+                        {' '}
                         {questionlist.feedbacktype.feedbacktype}
                       </Text>
                     </View>
+
                     <TouchableOpacity style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: '#5177E7',
-                          fontFamily: 'Poppins-Medium',
-                        }}></Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.differentusers}>
-                      <Text style={{fontSize: 12, color: ' #505069'}}>
+                      <Text style={{fontSize: 12, color: '#505069'}}>
                         For: {questionlist.feedbacktype.feedbackfor}
                       </Text>
                     </TouchableOpacity>
@@ -240,14 +233,8 @@ const QuestionList = ({navigation}) => {
                   <View style={{flexDirection: 'column'}}>
                     <Text
                       style={{
-                        color: '#B04305',
-                        fontSize: 12,
-                        fontFamily: 'Poppins-Medium',
-                      }}></Text>
-                    <Text
-                      style={{
-                        color: '#5177E7',
-
+                        color: institute ? institute.themeColor : '#5177E7',
+                        paddingTop: 10,
                         fontSize: 12,
                         fontFamily: 'Poppins-Regular',
                       }}>
@@ -255,7 +242,7 @@ const QuestionList = ({navigation}) => {
                     </Text>
                   </View>
 
-                  <View style={{marginTop: 15}}>
+                  <View style={{marginTop: 5}}>
                     <TouchableOpacity
                       style={{
                         flexDirection: 'row',
@@ -293,7 +280,7 @@ const QuestionList = ({navigation}) => {
               </View>
             ))}
         </View>
-        <View style={{height: 20}} />
+        <View style={{height: 100}} />
       </ScrollView>
     </View>
   );
@@ -303,7 +290,7 @@ const styles = StyleSheet.create({
   container1: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   container: {
     alignContent: 'center',
@@ -316,7 +303,6 @@ const styles = StyleSheet.create({
     height: 50,
     fontSize: 15,
     color: 'black',
-
     paddingTop: 5,
     paddingHorizontal: 0,
     width: '90%',
@@ -331,6 +317,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 0.3,
     marginTop: 20,
+    marginHorizontal: 10,
+    elevation: 3,
   },
 
   section: {
