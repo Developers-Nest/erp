@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,21 +8,13 @@ import {
   ScrollView,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {
-  Button,
-  List,
-  Card,
-  Title,
-  Paragraph,
-  TextInput,
-} from 'react-native-paper';
-import {createStackNavigator} from '@react-navigation/stack';
+
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+// redux
+import { useSelector } from 'react-redux';
 //step indicator
-import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import StepIndicator from 'react-native-step-indicator';
 
 const customStyles = {
@@ -43,12 +35,12 @@ const customStyles = {
   currentStepIndicatorLabelFontSize: 0,
 };
 
-export default function Fees({navigation}) {
+export default function Fees({ navigation }) {
   const [CurrentPosition, setCurrentPosition] = useState(0);
   const labels = ['Registration Form', 'Semester Fees', 'Extra Fees'];
 
   const [collapsed, setcollapsed] = useState(Array(labels.length).fill(false));
-
+  const institute = useSelector(state => state.institute);
   const data = [
     {
       fees: 'Paid: Rs500',
@@ -107,14 +99,14 @@ export default function Fees({navigation}) {
           </View>
         </View>
       </View>
-      <ScrollView style={{paddingHorizontal: 30}}>
+      <ScrollView style={{ paddingHorizontal: 15 }}>
         <StepIndicator
           stepCount={data.length}
           customStyles={customStyles}
           currentPosition={CurrentPosition}
           labels={labels}
           direction="vertical"
-          renderLabel={({position, stepStaus, label, curentPosition}) => {
+          renderLabel={({ position, stepStaus, label, curentPosition }) => {
             return (
               <View style={styles.shadow}>
                 <View style={styles.card}>
@@ -124,7 +116,7 @@ export default function Fees({navigation}) {
                       justifyContent: 'space-between',
                       flex: 1,
                     }}>
-                    <View style={{justifyContent: 'space-between'}}>
+                    <View style={{ justifyContent: 'space-between' }}>
                       <Text style={styles.card_title}>{labels[position]}</Text>
                       <Text style={styles.card_fees}>
                         {data[position] && data[position].fees}
