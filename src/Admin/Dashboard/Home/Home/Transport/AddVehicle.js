@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -26,26 +26,26 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {auto} from 'async';
+import { auto } from 'async';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 // helpers
 import post from '../../../../../services/helpers/request/post';
 import read from '../../../../../services/localstorage/read';
 import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
 
-export default function AddVehicle({navigation}) {
+export default function AddVehicle({ navigation }) {
   //theming
   const institute = useSelector(state => state.institute);
 
   //dropdown
   const [types, setTypes] = useState([
-    {label: 'Contract', key: 'Contract'},
-    {label: 'Ownership', key: 'Ownership'},
+    { label: 'Contract', key: 'Contract' },
+    { label: 'Ownership', key: 'Ownership' },
   ]);
   //for textboxes
   const [vehiclenum, setVehiclenum] = useState('');
@@ -89,10 +89,10 @@ export default function AddVehicle({navigation}) {
     // console.warn("A date has been picked: ", date.toString());
     setDate(
       date.getDate() +
-        ' ' +
-        dateMonths[date.getMonth() + 1] +
-        ' ' +
-        date.getFullYear(),
+      ' ' +
+      dateMonths[date.getMonth() + 1] +
+      ' ' +
+      date.getFullYear(),
     );
     hideDatePicker();
   };
@@ -136,7 +136,7 @@ export default function AddVehicle({navigation}) {
           ...styles.header,
         }}>
         <View
-          style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 10}}>
+          style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
           <TouchableOpacity
             onPress={() => {
               navigation.replace('TransportMain');
@@ -172,7 +172,7 @@ export default function AddVehicle({navigation}) {
       {/* header ends */}
 
       <ScrollView>
-        <View style={{padding: 10}} />
+        <View style={{ padding: 10 }} />
 
         <View
           style={{
@@ -195,7 +195,7 @@ export default function AddVehicle({navigation}) {
           <View style={styles.Card}>
             <View style={styles.CardContent}>
               <TextInput
-                style={{...styles.search_input}}
+                style={[styles.search_input]}
                 placeholder="Vehicle No."
                 placeholderTextColor="grey"
                 color="black"
@@ -206,7 +206,7 @@ export default function AddVehicle({navigation}) {
           <View style={styles.Card}>
             <View style={styles.CardContent}>
               <TextInput
-                style={{...styles.search_input}}
+                style={{ ...styles.search_input }}
                 placeholder="Track ID"
                 placeholderTextColor="grey"
                 color="black"
@@ -241,7 +241,7 @@ export default function AddVehicle({navigation}) {
             onChange={option => {
               setType(option.key);
             }}
-            style={styles.card}
+            style={styles.cardsmall}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -252,7 +252,7 @@ export default function AddVehicle({navigation}) {
                 style={[styles.pickdate]}
                 onPress={showDatePicker}>
                 <TextInput
-                  style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
+                  style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                   placeholder={date}
                   placeholderTextColor="grey"
                   color="black"
@@ -300,7 +300,7 @@ export default function AddVehicle({navigation}) {
           <View style={styles.Card1}>
             <View style={styles.CardContent}>
               <TextInput
-                style={{...styles.search_input}}
+                style={{ ...styles.search_input }}
                 placeholder="Seats"
                 placeholderTextColor="grey"
                 color="black"
@@ -312,7 +312,7 @@ export default function AddVehicle({navigation}) {
           <View style={styles.Card2}>
             <View style={styles.CardContent}>
               <TextInput
-                style={{...styles.search_input}}
+                style={{ ...styles.search_input }}
                 placeholder="Driver's name"
                 placeholderTextColor="grey"
                 color="black"
@@ -343,7 +343,7 @@ export default function AddVehicle({navigation}) {
           <View style={styles.Card1}>
             <View style={styles.CardContent}>
               <TextInput
-                style={{...styles.search_input}}
+                style={{ ...styles.search_input }}
                 placeholder="Allowed"
                 placeholderTextColor="grey"
                 color="black"
@@ -355,7 +355,7 @@ export default function AddVehicle({navigation}) {
           <View style={styles.Card2}>
             <View style={styles.CardContent}>
               <TextInput
-                style={{...styles.search_input}}
+                style={{ ...styles.search_input }}
                 placeholder="Phone no."
                 placeholderTextColor="grey"
                 color="black"
@@ -394,6 +394,7 @@ const styles = StyleSheet.create({
     height: '100%',
     flex: 1,
   },
+  
   button: {
     backgroundColor: '#58636D',
 
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
   },
   card_picker: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -465,7 +466,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 3,
   },
+  shadow: {
+    elevation:5,
+
+    borderRadius: 0,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+  },
   Card: {
+
     backgroundColor: 'white',
     width: '40%',
     justifyContent: 'space-between',
@@ -473,6 +488,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderColor: '#00499F',
     borderRadius: 8,
+    shadowRadius: 8,
+    shadowOpacity: 1,
+    elevation:5,
+  },
+  cardsmall: {
+    shadowColor: '#000',
+    height: 59,
+    width: 160,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+    backgroundColor: 'white',
+    // borderColor: '#ccc',
+    // borderWidth: 1,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    borderTopRightRadius: 8,
+    borderTopLeftRadius: 8,
+    // overflow: 'hidden',
+    justifyContent: 'center',
+    margin: 0,
+    padding: 0,
+    minWidth: '30%',
   },
   Card1: {
     backgroundColor: 'white',
@@ -482,6 +521,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderColor: '#00499F',
     borderRadius: 8,
+    shadowRadius: 8,
+    shadowOpacity: 1,
+    elevation:5,
   },
   Card2: {
     backgroundColor: 'white',
@@ -491,10 +533,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderColor: '#00499F',
     borderRadius: 8,
+    shadowRadius: 8,
+    shadowOpacity: 1,
+    elevation:5,
+
   },
   CardContent: {
     borderRadius: 8,
-    height: 59,
+    height: 55,
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
     fontWeight: 'bold',
@@ -523,7 +569,7 @@ const styles = StyleSheet.create({
   card: {
     shadowColor: '#999',
     height: 60,
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,

@@ -261,7 +261,7 @@ export default function EditVehicle({ route, navigation }) {
                         onChange={option => {
                             setType(option.key);
                         }}
-                        style={styles.card}
+                        style={styles.cardsmall}
                         initValueTextStyle={styles.SelectedValueSmall}
                         selectTextStyle={styles.SelectedValueSmall}
                     />
@@ -274,7 +274,7 @@ export default function EditVehicle({ route, navigation }) {
                                 <TextInput
                                     style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                                     placeholder={date}
-                                    value={date?date.slice(0, 10):'N/A'}
+                                    value={date ? date.slice(0, 10) : 'N/A'}
                                     placeholderTextColor="grey"
                                     color="black"
 
@@ -503,6 +503,31 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
+
+    },
+    cardsmall: {
+        shadowColor: '#000',
+        height: 59,
+        width: 160,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 5,
+        backgroundColor: 'white',
+        // borderColor: '#ccc',
+        // borderWidth: 1,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderTopRightRadius: 8,
+        borderTopLeftRadius: 8,
+        // overflow: 'hidden',
+        justifyContent: 'center',
+        margin: 0,
+        padding: 0,
+        minWidth: '30%',
     },
     Card1: {
         backgroundColor: 'white',
@@ -512,6 +537,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
+
     },
     Card2: {
         backgroundColor: 'white',
@@ -521,10 +550,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         borderColor: '#00499F',
         borderRadius: 8,
+        shadowRadius: 8,
+        shadowOpacity: 1,
+        elevation: 5,
+
     },
     CardContent: {
         borderRadius: 8,
-        height: 59,
+        height: 55,
         fontSize: 15,
         fontFamily: 'Poppins-Regular',
         fontWeight: 'bold',
