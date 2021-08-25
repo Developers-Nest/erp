@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   Text,
-  TextInput,
-  Appbar,
   Card,
+  TextInput,
   Button,
   Title,
   Paragraph,
@@ -18,7 +17,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // helpers
 import read from '../../../../services/localstorage/read';
@@ -26,7 +25,7 @@ import get from '../../../../services/helpers/request/get';
 import post from '../../../../services/helpers/request/post';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-export default function Feedback({navigation}) {
+export default function Feedback({ navigation }) {
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
 
@@ -59,9 +58,9 @@ export default function Feedback({navigation}) {
       response.map(type => {
         type.feedbackfor === 'Student'
           ? list.push({
-              label: type.feedbacktype,
-              key: type._id,
-            })
+            label: type.feedbacktype,
+            key: type._id,
+          })
           : null;
       });
       setTypes(list);
@@ -111,7 +110,7 @@ export default function Feedback({navigation}) {
   };
 
   return (
-    <View style={{backgroundColor: '#E5E5E5'}}>
+    <View style={{ backgroundColor: 'rgba(249, 249, 249, 1)', }}>
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -147,8 +146,8 @@ export default function Feedback({navigation}) {
           Feedback
         </Text>
       </View>
-      <View style={{padding: 10}} />
-      <View style={{paddingHorizontal: 20}}>
+      <View style={{ padding: 10 }} />
+      <View style={{ paddingHorizontal: 20 }}>
         <View>
           <ModalSelector
             data={types}
@@ -161,28 +160,30 @@ export default function Feedback({navigation}) {
             selectTextStyle={styles.SelectedValueSmall}
           />
         </View>
-        <View style={{padding: 10}} />
-        <Card>
+        <View style={{ padding: 10 }} />
+        <Card style={styles.shadow}>
           <Card.Content>
             <Title>Questionnarie</Title>
-            <View style={{padding: 2}} />
+            <View style={{ padding: 2 }} />
             <Paragraph>
               This feedback is about the form that was given to you yesterday
               dealing with one of the issues of teachers.
             </Paragraph>
           </Card.Content>
         </Card>
-        <View style={{padding: 10}} />
-        <Card style={{height: 200}}>
+        <View style={{ padding: 10 }} />
+        <Card style={[styles.shadow]}>
           <Card.Content>
             <TextInput
               placeholder="Write down your feedback question here..... "
-              placeholderTextColor="black"
+              placeholderTextColor="grey"
+              color='black'
               onChangeText={val => setFeedback(val)}
-              style={{backgroundColor: 'white'}}
+              style={{ backgroundColor: 'white' }}
             />
           </Card.Content>
         </Card>
+        <View style={{ height: 20 }} />
         <Button
           onPress={handleSubmit}
           mode="contained"
@@ -199,6 +200,18 @@ const styles = StyleSheet.create({
     height: 69,
     flexDirection: 'row',
   },
+  shadow: {
+    display: 'flex',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    elevation: 5,
+    height: 200
+  },
+
   SelectedValueSmall: {
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
@@ -209,8 +222,8 @@ const styles = StyleSheet.create({
     color: '#211C5A',
   },
   card_picker: {
-    shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',

@@ -87,7 +87,7 @@ export default function Attendance({navigation}) {
   return (
     <View
       style={{
-        backgroundColor: '#E5E5E5',
+        backgroundColor: 'rgba(249, 249, 249, 1)',
         flex: 1,
         justifyContent: 'flex-start',
       }}>
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   header: {
     height: 69,
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
     paddingBottom: 10,
     borderBottomColor: '#333',
-    // borderBottomWidth: 1,
+    
   },
   userinhostels: {
     marginTop: 1,
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 10,
     borderBottomColor: '#333',
-    //borderBottomWidth:1,
+    
   },
   search: {
     backgroundColor: 'white',
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   maincontainer: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   card: {
     shadowColor: '#999',

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TextInput } from 'react-native-paper';
+
 
 import {
   StyleSheet,
@@ -9,11 +9,11 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  TextInput
 } from 'react-native';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 // redux
@@ -124,7 +124,7 @@ export default function BooksStudent({ navigation }) {
                   </View>
                 </View>
               </View>
-            )) : (<Text style={{display: 'flex', textAlign: 'center'}}>Nothing to Display!</Text>)
+            )) : (<Text style={{ display: 'flex', textAlign: 'center' }}>Nothing to Display!</Text>)
           }
         </ScrollView>
       </View>
@@ -193,7 +193,7 @@ export default function BooksStudent({ navigation }) {
                   </View>
                 </View>
               </View>
-            )) : (<Text style={{display: 'flex', textAlign: 'center'}}>No Dues!!</Text>)
+            )) : (<Text style={{ display: 'flex', textAlign: 'center' }}>No Dues!!</Text>)
           }
         </ScrollView>
       </View>
@@ -202,7 +202,7 @@ export default function BooksStudent({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
-        {/* <IssuedBooksheader /> */}
+
 
         {/* header start */}
         <View
@@ -239,7 +239,7 @@ export default function BooksStudent({ navigation }) {
             }}>
             Issued Books
           </Text>
-          
+
         </View>
 
         {/* header ends */}
@@ -255,7 +255,6 @@ export default function BooksStudent({ navigation }) {
           <View
             style={{
               marginTop: 10,
-              //make search and card in same line
               marginLeft: 5,
               justifyContent: 'space-between',
               width: '95%',
@@ -265,7 +264,7 @@ export default function BooksStudent({ navigation }) {
             <TextInput
               style={{ width: '80%', ...styles.text_input }}
               placeholder="Enter book name or ID here"
-              placeholderTextColor="black"
+              placeholderTextColor="grey"
             />
             <TouchableOpacity
               style={{
@@ -289,26 +288,66 @@ export default function BooksStudent({ navigation }) {
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
-              borderBottomWidth: showContent == 'Due' ? 1 : 0,
-              borderBottomColor: 'rgba(176, 67, 5, 1)',
+              borderBottomWidth: showContent == 'Due' ? 1.5 : 0,
+              borderBottomColor:
+                showContent == 'Due'
+                  ? 'rgba(176, 67, 5, 1)'
+                  : '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Due')}>
-            <Text style={styles.switchTextDue}>Due</Text>
+            <Text
+              style={
+                ([styles.switchText],
+                  [
+                    {
+                      color:
+                        showContent == 'Due'
+                          ? 'rgba(176, 67, 5, 1)'
+                          : '#58636D',
+                    },
+                    { fontWeight: 'bold' },
+                  ])
+              }
+
+
+
+
+            >Due</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{
-              borderBottomWidth: showContent == 'Cleared' ? 1 : 0,
-              borderBottomColor: '#58636D',
+              borderBottomWidth: showContent == 'Cleared' ? 1.5 : 0,
+              borderBottomColor:
+                showContent == 'Cleared'
+                  ? 'rgba(176, 67, 5, 1)'
+                  : '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Cleared')}>
-            <Text style={styles.switchText}>Cleared</Text>
+            <Text
+              style={
+                ([styles.switchText],
+                  [
+                    {
+                      color:
+                        showContent == 'Cleared'
+                          ? 'rgba(176, 67, 5, 1)'
+                          : '#58636D',
+                    },
+                    { fontWeight: 'bold' },
+                  ])
+              }
+
+
+
+
+            >Cleared</Text>
           </TouchableOpacity>
         </View>
         {showContent === 'Due' ? <Due /> : <Cleared />}
@@ -321,20 +360,20 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   section: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    shadowColor: '#333',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.2,
-    elevation: 2,
-    marginTop: 14,
+    shadowOpacity: 1,
+    elevation: 5,
+    marginVertical: 14,
     borderRadius: 12,
     paddingLeft: 10,
     paddingRight: 10,
@@ -358,7 +397,6 @@ const styles = StyleSheet.create({
   },
   userstext: {
     fontSize: 16,
-    // paddingVertical: 4,
     fontWeight: '300',
   },
 
@@ -380,7 +418,7 @@ const styles = StyleSheet.create({
   },
   maincontainer: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
 
   switchTextDue: {

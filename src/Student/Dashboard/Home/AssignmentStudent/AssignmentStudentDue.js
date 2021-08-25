@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {
   StyleSheet,
@@ -59,10 +59,10 @@ export default function AssignmentStudentDue({ navigation }) {
   );
 
   function isAssignmentDone(assignment) {
-    // alert(assignment.attemptedBy.length);
+   
     for (let i = 0; i < assignment.attemptedBy.length; i++) {
       if (assignment.attemptedBy[i] && assignment.attemptedBy[i].userId === userInfo._id) {
-        // alert(userInfo._id + ' ' + assignment.attemptedBy[i].userId);
+       
         return i;
       } else {
         return -1;
@@ -212,7 +212,6 @@ export default function AssignmentStudentDue({ navigation }) {
                           {assignment.title || 'Title Not Found'}
                         </Text>
 
-                        {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.differentusers}>
                         <Text
@@ -265,7 +264,6 @@ export default function AssignmentStudentDue({ navigation }) {
 
                     <Button
                       style={styles.button}
-                      // onPress={() => navigation.navigate('Student Dashboard')}
                       labelStyle={{
                         color: 'white',
                         fontFamily: 'Poppins-Regular',
@@ -347,7 +345,6 @@ export default function AssignmentStudentDue({ navigation }) {
           <View
             style={{
               marginTop: 10,
-              //make search and card in same line
               marginLeft: 5,
               justifyContent: 'space-between',
               width: '95%',
@@ -357,7 +354,7 @@ export default function AssignmentStudentDue({ navigation }) {
             <TextInput
               style={{ width: '80%', ...styles.text_input }}
               placeholder="Enter subject name"
-              placeholderTextColor="black"
+              placeholderTextColor="grey"
             />
             <TouchableOpacity
               style={{
@@ -379,66 +376,62 @@ export default function AssignmentStudentDue({ navigation }) {
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
-              borderBottomWidth: showContent == 'Due' ? 1 : 0,
-              borderBottomColor: 'rgba(176, 67, 5, 1)',
+              borderBottomWidth: showContent == 'Due' ? 1.5 : 0,
+              borderBottomColor:
+              showContent == 'Due'
+                ? 'rgba(176, 67, 5, 1)'
+                : '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Due')}>
-            <Text style={styles.switchTextDue}>Due</Text>
+            <Text 
+            style={
+              ([styles.switchText],
+                [
+                  {
+                    color:
+                      showContent == 'Due'
+                        ? 'rgba(176, 67, 5, 1)'
+                        : '#58636D',
+                  },
+                  { fontWeight: 'bold' },
+                ])
+            }
+            >Due</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{
-              borderBottomWidth: showContent == 'Submitted' ? 1 : 0,
-              borderBottomColor: '#58636D',
+              borderBottomWidth: showContent == 'Submitted' ? 1.5: 0,
+              borderBottomColor:
+              showContent == 'Submitted'
+                ? 'rgba(176, 67, 5, 1)'
+                : '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Submitted')}>
-            <Text style={styles.switchText}>Submitted</Text>
+            <Text
+             style={
+              ([styles.switchText],
+                [
+                  {
+                    color:
+                      showContent == 'Submitted'
+                        ? 'rgba(176, 67, 5, 1)'
+                        : '#58636D',
+                  },
+                  { fontWeight: 'bold' },
+                ])
+            }
+            >Submitted</Text>
           </TouchableOpacity>
         </View>
         {showContent === 'Due' ? <Due /> : <Submitted />}
-        {/* <TouchableOpacity
-            style={{
-              borderBottomWidth: activeTab == 'Due' ? 4 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => switchTab()}> */}
-
-        {/* <Text style={styles.switchText}>Due</Text> */}
-        {/* </TouchableOpacity> */}
-        {/* 
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: activeTab == 'Submitted' ? 4 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => switchTab()}> */}
-
-        {/* <Button title="Submitted" style={{
-              borderBottomWidth: showContent == 'Submitted' ? 4 : 0,
-              borderBottomColor: '#58636D',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            mode="contained"
-            color="grey"
-            onPress={() => {
-                
-                 setShowContent('Submitted')}}
-            /> */}
-        {/* </TouchableOpacity> */}
+       
       </View>
     </TouchableWithoutFeedback>
   );
@@ -448,7 +441,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   section: {
     display: 'flex',
@@ -469,7 +462,7 @@ const styles = StyleSheet.create({
   },
 
   details: {
-    //display: 'flex',
+    display: 'flex',
     flexDirection: 'column',
     marginTop: 10,
     paddingBottom: 0,
@@ -496,7 +489,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 10,
     borderBottomColor: '#333',
-    //borderBottomWidth:1,
+  
   },
   search: {
     backgroundColor: 'white',
@@ -515,9 +508,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   maincontainer: {
-    // paddingTop: 10,
+    
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   header: {
     height: 69,
@@ -531,13 +524,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 1,
     borderRadius: 6,
   },
-  switchTextDue: {
-    fontSize: 14,
-    color: '#B04305',
-    paddingHorizontal: 5,
-    fontFamily: 'Poppins-SemiBold',
-    fontWeight: 'bold',
-  },
+ 
   text_input: {
     paddingHorizontal: 20,
     borderRadius: 10,

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,7 +9,7 @@ import {
   TextInput,
   Modal,
 } from 'react-native';
-import {Avatar, Button} from 'react-native-paper';
+import { Avatar, Button } from 'react-native-paper';
 
 //icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -20,9 +20,9 @@ import patch from '../../../services/helpers/request/patch';
 import LoaderHook from '../../../components/LoadingScreen/LoadingScreen';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function Profile({navigation}) {
+export default function Profile({ navigation }) {
   const userInfo = useSelector(state => state.userInfo);
 
   //theming
@@ -121,9 +121,9 @@ export default function Profile({navigation}) {
         }}
       />
       <ScrollView>
-        <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+        <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
           {userInfo.url ? (
-            <Image source={{uri: userInfo.url}} style={styles.tinyLogo} />
+            <Image source={{ uri: userInfo.url }} style={styles.tinyLogo} />
           ) : (
             <Avatar.Text size={100} label={userInfo.firstName[0]} />
           )}
@@ -139,7 +139,7 @@ export default function Profile({navigation}) {
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={{marginTop: 20}}>Enter Email</Text>
+                <Text style={{ marginTop: 20 }}>Enter Email</Text>
                 <ScrollView>
                   <TextInput
                     placeholder={userInfo.email}
@@ -147,21 +147,21 @@ export default function Profile({navigation}) {
                     style={styles.textInput}
                     onChangeText={value => setUemail(value)}
                   />
-                  <Text style={{marginTop: 20}}>First Name</Text>
+                  <Text style={{ marginTop: 20 }}>First Name</Text>
                   <TextInput
                     placeholder={userInfo.firstName}
                     value={ufirstName}
                     style={styles.textInput}
                     onChangeText={value => setUfirstName(value)}
                   />
-                  <Text style={{marginTop: 20}}>Last Name</Text>
+                  <Text style={{ marginTop: 20 }}>Last Name</Text>
                   <TextInput
                     placeholder={userInfo.lastName}
                     value={ulastName}
                     style={styles.textInput}
                     onChangeText={value => setULastName(value)}
                   />
-                  <Text style={{marginTop: 20}}>Phone</Text>
+                  <Text style={{ marginTop: 20 }}>Phone</Text>
                   <TextInput
                     placeholder={userInfo.phone}
                     keyboardType="numeric"
@@ -170,7 +170,7 @@ export default function Profile({navigation}) {
                     style={styles.textInput}
                     onChangeText={value => setUmobile(value)}
                   />
-                  <Text style={{marginTop: 20}}>Present Address</Text>
+                  <Text style={{ marginTop: 20 }}>Present Address</Text>
                   <TextInput
                     placeholder={userInfo.presentAddress}
                     value={upaddress}
@@ -342,6 +342,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     padding: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    elevation: 5,
   },
   inputField: {
     fontWeight: 'bold',

@@ -114,7 +114,7 @@ export default function App({navigation}) {
           <TextInput
             style={styles.text_input1}
             placeholder="Institution Code"
-            placeholderTextColor="black"
+            placeholderTextColor="grey"
             mode="outlined"
             onChangeText={code => setInstitutionCode(code)}
           />
@@ -131,14 +131,14 @@ export default function App({navigation}) {
           style={styles.text_input}
           placeholder="Email or Username"
           mode="outlined"
-          placeholderTextColor="black"
+          placeholderTextColor="grey"
           onChangeText={username => setUsername(username)}
         />
         <TextInput
           style={styles.text_input}
           placeholder="Password"
           mode="outlined"
-          placeholderTextColor="black"
+          placeholderTextColor="grey"
           secureTextEntry={true}
           onChangeText={password => setPassword(password)}
         />

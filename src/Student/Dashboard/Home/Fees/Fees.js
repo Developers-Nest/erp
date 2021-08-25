@@ -115,6 +115,8 @@ export default function Fees({ navigation }) {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                       flex: 1,
+                      display:'flex',
+                      
                     }}>
                     <View style={{ justifyContent: 'space-between' }}>
                       <Text style={styles.card_title}>{labels[position]}</Text>
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: 'white',
     borderRadius: 8,
-    minWidth: 300,
+    minWidth: 350,
   },
   classes_cardClass: {
     fontSize: 20,

@@ -254,17 +254,7 @@ const Home = ({navigation}) => {
               color: institute ? institute.themeColor : 'black',
             }}
           />
-          {/* <FontAwesome5
-            name="book"
-            style={{
-              alignSelf: 'center',
-              fontSize: 25,
-              color: 'black',
-              paddingLeft: 20,
-              paddingTop: 20,
-              color: institute ? institute.themeColor : 'black',
-            }}
-          /> */}
+          
         </TouchableOpacity>
         <Text
           style={{
@@ -314,7 +304,7 @@ const Home = ({navigation}) => {
           <TextInput
             style={{...styles.search_input}}
             placeholder="Live class, fees and more"
-            placeholderTextColor="black"
+            placeholderTextColor="grey"
           />
 
           <TouchableOpacity
