@@ -53,7 +53,6 @@ const Recorded = () => {
     showLoadingScreen();
     try {
       let cour = await getCourse();
-      console.log(cour);
       setCourses(cour);
     } catch (err) {
       alert('Cannot fetch courses!!');
@@ -68,7 +67,6 @@ const Recorded = () => {
 
     try {
       let bat = await getBatch(sc);
-      console.log(bat);
       setBatches(bat);
     } catch (err) {
       alert('Cannot fetch Batches!!');
@@ -85,7 +83,6 @@ const Recorded = () => {
       let slug = `/record/${course}/${batch}`;
       let token = await read('token');
       let response = await get(slug, token);
-      console.log('Response ', response);
       setRecordedClasses(response);
     } catch (err) {
       alert('Cannot fetch your Live Classes !!\n' + err);

@@ -55,7 +55,6 @@ const Live = () => {
     showLoadingScreen();
     try {
       let cour = await getCourse();
-      console.log(cour);
       setCourses(cour);
     } catch (err) {
       alert('Cannot fetch courses!!');
@@ -70,7 +69,6 @@ const Live = () => {
 
     try {
       let bat = await getBatch(sc);
-      console.log(bat);
       setBatches(bat);
     } catch (err) {
       alert('Cannot fetch Batches!!');
@@ -87,7 +85,6 @@ const Live = () => {
       let slug = `/liveclass/${course}/${batch}`;
       let token = await read('token');
       let response = await get(slug, token);
-      console.log('Response ', response);
       setLiveClasses(response);
     } catch (err) {
       alert('Cannot fetch your Live Classes !!\n' + err);

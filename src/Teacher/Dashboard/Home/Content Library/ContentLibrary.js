@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,59 +8,56 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  Linking
+  Linking,
 } from 'react-native';
-import { Button } from 'react-native-paper';
+import {Button} from 'react-native-paper';
 
 //icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // redux
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 // helpers
-import read from '../../../../services/localstorage/read'
-import get from '../../../../services/helpers/request/get'
-import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen'
+import read from '../../../../services/localstorage/read';
+import get from '../../../../services/helpers/request/get';
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-
-
-export default function ContentLibrary({ navigation }) {
+export default function ContentLibrary({navigation}) {
   const [showContent, setShowContent] = React.useState('Material');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
   const institute = useSelector(state => state.institute);
 
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   // material array
-  const [studyMaterial, setStudyMaterial] = useState([])
-  const [videoMaterial, setVideoMaterial] = useState([])
+  const [studyMaterial, setStudyMaterial] = useState([]);
+  const [videoMaterial, setVideoMaterial] = useState([]);
 
   useEffect(async () => {
-    setLoadingScreen()
+    setLoadingScreen();
     try {
-      let slug = `/chapter/getStudyMaterial`
-      let token = await read('token')
-      let response = await get(slug, token)
-      setStudyMaterial(response)
+      let slug = `/chapter/getStudyMaterial`;
+      let token = await read('token');
+      let response = await get(slug, token);
+      setStudyMaterial(response);
     } catch (err) {
-      alert('Cannot get Study Material!!')
+      alert('Cannot get Study Material!!');
     }
 
     try {
-      let slug = `/chapter/getvedioMaterial`
-      let token = await read('token')
-      let response = await get(slug, token)
-      console.log('Response Content ', response)
-      setVideoMaterial(response)
+      let slug = `/chapter/getvedioMaterial`;
+      let token = await read('token');
+      let response = await get(slug, token);
+      setVideoMaterial(response);
     } catch (err) {
-      alert('Cannot get Video Material!!')
+      alert('Cannot get Video Material!!');
     }
-    hideLoadingScreen()
-  }, [])
+    hideLoadingScreen();
+  }, []);
 
   function Material() {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -71,60 +68,57 @@ export default function ContentLibrary({ navigation }) {
       <View style={styles.container}>
         {loadingScreen}
         <ScrollView>
-          {
-            studyMaterial.map((sm) => (
-              <View key={sm._id}>
-                <View style={styles.section}>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontWeight: 'normal',
-                            fontSize: 20,
-                            color: '#211C5A',
-                          }}>
-                          {sm.title}
-                        </Text>
-                      </View>
-
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text style={{ fontSize: 16, color: institute ? institute.themeColor : 'blue' }}>
-                          {sm.topic}
-                        </Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text style={{ fontSize: 16 }}>
-                          {sm.description}
-                        </Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity style={styles.hey}>
-                        <Text style={{ fontSize: 16 }}>
-                          Created By: {sm.createdBy ? sm.createdBy : 'Not Available'}
-                        </Text>
-                        {
-                          sm.insertfile != "null" ? (
-                            <Button
-                              styles={{ marginRight:20 }}
-                              color={institute ? institute.themeColor : 'blue'}
-                              mode="contained"
-                              onPress={() => Linking.openURL(sm.insertfile)}>
-                              View
-                            </Button>
-
-                          ) : (null)
-                        }
-                      </TouchableOpacity>
+          {studyMaterial.map(sm => (
+            <View key={sm._id}>
+              <View style={styles.section}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontSize: 20,
+                          color: '#211C5A',
+                        }}>
+                        {sm.title}
+                      </Text>
                     </View>
+
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: institute ? institute.themeColor : 'blue',
+                        }}>
+                        {sm.topic}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text style={{fontSize: 16}}>{sm.description}</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.hey}>
+                      <Text style={{fontSize: 16}}>
+                        Created By:{' '}
+                        {sm.createdBy ? sm.createdBy : 'Not Available'}
+                      </Text>
+                      {sm.insertfile != 'null' ? (
+                        <Button
+                          styles={{marginRight: 20}}
+                          color={institute ? institute.themeColor : 'blue'}
+                          mode="contained"
+                          onPress={() => Linking.openURL(sm.insertfile)}>
+                          View
+                        </Button>
+                      ) : null}
+                    </TouchableOpacity>
                   </View>
                 </View>
-                <View style={{ height: 20 }} />
               </View>
-            ))
-          }
-
+              <View style={{height: 20}} />
+            </View>
+          ))}
         </ScrollView>
       </View>
     );
@@ -135,75 +129,68 @@ export default function ContentLibrary({ navigation }) {
 
     const onChangeSearch = query => setSearchQuery(query);
 
-    useEffect(async () => {
-
-
-    }, [])
+    useEffect(async () => {}, []);
 
     return (
       <View style={styles.container}>
         <ScrollView>
-          {
-            videoMaterial.map((vm) => (
-              <View key={vm._id}>
-                <View style={styles.section}>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontWeight: 'normal',
-                            fontSize: 20,
-                            color: '#211C5A',
-                          }}>
-                          {vm.title}
-                        </Text>
-                      </View>
-
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text style={{ fontSize: 16, color: institute ? institute.themeColor : 'blue' }}>
-                          {vm.title}
-                        </Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text style={{ fontSize: 16 }}>
-                          {vm.description}
-                        </Text>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity style={styles.hey}>
-                        <Text style={{ fontSize: 16 }}>
-                          Created By: {vm.createdBy ? vm.createdBy : 'Not Available'}
-                        </Text>
-                        {
-                          vm.addAttachment ? (
-                            <Button
-                              styles={{ flexDirection: 'flex-end' }}
-                              mode="contained"
-                              color={institute ? institute.themeColor : 'blue'}
-                              onPress={async () => {
-                                try {
-                                  Linking.openURL(vm.addAttachment)
-                                } catch (err) {
-                                  alert('Invalid URL')
-                                }
-                              }
-                              }>
-                              View
-                            </Button>
-                          ) : (null)
-                        }
-
-                      </TouchableOpacity>
+          {videoMaterial.map(vm => (
+            <View key={vm._id}>
+              <View style={styles.section}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontSize: 20,
+                          color: '#211C5A',
+                        }}>
+                        {vm.title}
+                      </Text>
                     </View>
+
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: institute ? institute.themeColor : 'blue',
+                        }}>
+                        {vm.title}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text style={{fontSize: 16}}>{vm.description}</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.hey}>
+                      <Text style={{fontSize: 16}}>
+                        Created By:{' '}
+                        {vm.createdBy ? vm.createdBy : 'Not Available'}
+                      </Text>
+                      {vm.addAttachment ? (
+                        <Button
+                          styles={{flexDirection: 'flex-end'}}
+                          mode="contained"
+                          color={institute ? institute.themeColor : 'blue'}
+                          onPress={async () => {
+                            try {
+                              Linking.openURL(vm.addAttachment);
+                            } catch (err) {
+                              alert('Invalid URL');
+                            }
+                          }}>
+                          View
+                        </Button>
+                      ) : null}
+                    </TouchableOpacity>
                   </View>
                 </View>
-                <View style={{ height: 20 }} />
               </View>
-            ))
-          }
-
+              <View style={{height: 20}} />
+            </View>
+          ))}
         </ScrollView>
       </View>
     );
@@ -212,7 +199,7 @@ export default function ContentLibrary({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ScrollView>
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <View
             style={{
               backgroundColor: institute ? institute.themeColor : 'black',
@@ -280,7 +267,7 @@ export default function ContentLibrary({ navigation }) {
                 />
 
                 <TextInput
-                  style={{ width: '80%', ...styles.text_input }}
+                  style={{width: '80%', ...styles.text_input}}
                   placeholder="Enter subject or batch name"
                   placeholderTextColor="black"
                 />
@@ -426,12 +413,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     minWidth: 171,
     backgroundColor: 'white',
-    color: 'black'
+    color: 'black',
   },
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',

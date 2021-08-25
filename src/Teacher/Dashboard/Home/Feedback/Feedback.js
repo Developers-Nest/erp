@@ -95,9 +95,7 @@ export default function Feedback({navigation}) {
         feedbacktype: type,
         questions: [],
       };
-      console.log('data: ', data);
       let response = await post(slug, data, token);
-      console.log('response: ', response);
       alert('feedback created');
     } catch (err) {
       alert('Cannot get your Batches!!');

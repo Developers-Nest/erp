@@ -89,7 +89,6 @@ export default function AddNotes({route, navigation}) {
       let slug = `/subject/assign?course=${course}&batch=${selectedBatch}`;
       let token = await read('token');
       const response = await get(slug, token);
-      console.log(response);
       let list = [];
       response.map(sub =>
         list.push({
@@ -97,7 +96,6 @@ export default function AddNotes({route, navigation}) {
           label: sub.subject,
         }),
       );
-      console.log(response);
       setSubjects(list);
     } catch (err) {
       alert('Cannot get Subjects' + err);
@@ -124,14 +122,8 @@ export default function AddNotes({route, navigation}) {
           batch: batch,
           subject: subject,
         };
-        console.log(data);
         const response = await post(slug, data, token);
-        console.log(response);
-        // if (response.url) {
-        //   alert('Notes Uploaded!!');
-        // } else {
-        //   throw new Error('Cannot upload notes');
-        // }
+
         alert('Notes created');
         navigation.navigate('Home');
       } else {
@@ -260,19 +252,11 @@ export default function AddNotes({route, navigation}) {
               flexDirection: 'row',
               justifyContent: 'space-around',
             }}>
-            <Button
-              mode="contained"
-              color="white"
-              onPress={() => console.log('Pressed')}>
+            <Button mode="contained" color="white" onPress={() => {}}>
               Chapter{' '}
             </Button>
             <View style={{padding: 10}} />
-            {/* <Button
-              mode="contained"
-              color="white"
-              onPress={() => console.log('Pressed')}>
-              Add Link
-            </Button> */}
+
             <Button
               mode="contained"
               color={file ? 'green' : 'white'}

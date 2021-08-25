@@ -66,9 +66,7 @@ export default function Profile({navigation}) {
         presentAddress: upaddress,
         mobile: umobile,
       };
-      console.log('Update Profile Data ', data);
       let response = await patch(slug, data, token);
-      console.log('Profile Update Response ', response);
       if (response) {
         alert('Profile Updated!!');
       } else throw new Error('Some Error occured!!');

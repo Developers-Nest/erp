@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -19,23 +19,21 @@ import post from '../../../../../services/helpers/request/post';
 import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
 
 // redux
-import { NOTREADNOTIFICATIONS } from '../../../../../reducers/actionType';
-import { useDispatch } from 'react-redux';
+import {NOTREADNOTIFICATIONS} from '../../../../../reducers/actionType';
+import {useDispatch} from 'react-redux';
 
 export default function Notification() {
   let userInfo = useSelector(state => state.userInfo);
-  let notificatons = useSelector(state => state.notificatons)
-  let institute = useSelector(state => state.institute)
+  let notificatons = useSelector(state => state.notificatons);
+  let institute = useSelector(state => state.institute);
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   const [content, setContent] = useState([]);
 
-  const dispatch = useDispatch()
-  const notReadNotifications = useSelector(state => state.count)
+  const dispatch = useDispatch();
+  const notReadNotifications = useSelector(state => state.count);
 
   useEffect(async () => {
-    console.log('Notifications from store ', notificatons)
-
     if (!notificatons || notificatons.length == 0) {
       showLoadingScreen();
       try {
@@ -47,7 +45,9 @@ export default function Notification() {
           }
         };
 
-        let slug = `/notification?userType=${getUserType()}&department=${userInfo.department}`;
+        let slug = `/notification?userType=${getUserType()}&department=${
+          userInfo.department
+        }`;
         let token = await read('token');
         let res = await get(slug, token);
         let Content = [];
@@ -56,7 +56,7 @@ export default function Notification() {
             title: noti.title,
             content: noti.message,
             type: 'News',
-            _id: noti._id
+            _id: noti._id,
           });
         });
         setContent(Content);
@@ -64,28 +64,27 @@ export default function Notification() {
         alert('Cannot get Notifications!!');
       }
       hideLoadingScreen();
-    } else{
-      console.log('Set In Content ', notificatons)
-      setContent(notificatons)
+    } else {
+      setContent(notificatons);
     }
   }, []);
 
-  let markRead = async(id)=>{
-    let token = await read('token')
-    let slug = `/notification/read/${id}`
+  let markRead = async id => {
+    let token = await read('token');
+    let slug = `/notification/read/${id}`;
     let data = {
-      _id: id
-    }
-    let res = await post(slug, data, token)
-    console.log("Marked Read ", res)
+      _id: id,
+    };
+    let res = await post(slug, data, token);
+    console.log('Marked Read ', res);
 
-    if(res){
+    if (res) {
       dispatch({
         type: NOTREADNOTIFICATIONS,
-        count: notReadNotifications-1
-      })
+        count: notReadNotifications - 1,
+      });
     }
-  }
+  };
 
   function renderHeader(section, _, isActive) {
     return (
@@ -98,7 +97,7 @@ export default function Notification() {
           <FontAwesome5
             name={section.type === 'Event' ? 'video' : 'calendar-day'}
             size={27}
-            style={{ color: institute? institute.themeColor : '#58636D' }}
+            style={{color: institute ? institute.themeColor : '#58636D'}}
           />
           {section.type === 'Event' ? (
             <Text style={styles.iconText}>Event</Text>
@@ -107,7 +106,7 @@ export default function Notification() {
           )}
         </View>
         <View style={styles.titleContainer}>
-          <Text style={styles.headerText}>{ section.title }</Text>
+          <Text style={styles.headerText}>{section.title}</Text>
           {isActive ? (
             <View style={styles.collapseIconContainer}>
               <FontAwesome5
@@ -131,13 +130,12 @@ export default function Notification() {
   }
 
   function renderContent(section, _, isActive) {
-
-    if(!section.isRead){
-      markRead(section._id)
-      section.isRead = true
+    if (!section.isRead) {
+      markRead(section._id);
+      section.isRead = true;
     }
     return (
-      <Animatable.View duration={100} style={{ paddingHorizontal: 10 }}>
+      <Animatable.View duration={100} style={{paddingHorizontal: 10}}>
         <Text
           animation={isActive ? 'bounceIn' : undefined}
           style={styles.collapseContent}>
@@ -156,20 +154,20 @@ export default function Notification() {
 
   return (
     <View style={styles.container}>
-        <ScrollView style={{ padding: 10 }}>
-          <Accordion
-            activeSections={ActiveSections}
-            sections={content}
-            touchableComponent={TouchableOpacity}
-            renderHeader={renderHeader}
-            renderContent={renderContent}
-            duration={400}
-            onChange={setSections}
-            renderAsFlatList={false}
-            containerStyle={styles.cardsWrapper}
-            sectionContainerStyle={styles.card}
-          />
-        </ScrollView>
+      <ScrollView style={{padding: 10}}>
+        <Accordion
+          activeSections={ActiveSections}
+          sections={content}
+          touchableComponent={TouchableOpacity}
+          renderHeader={renderHeader}
+          renderContent={renderContent}
+          duration={400}
+          onChange={setSections}
+          renderAsFlatList={false}
+          containerStyle={styles.cardsWrapper}
+          sectionContainerStyle={styles.card}
+        />
+      </ScrollView>
     </View>
   );
 }
@@ -196,15 +194,15 @@ const styles = StyleSheet.create({
   },
 
   cardsWrapper: {
-    marginTop:20,
+    marginTop: 20,
     width: '90%',
     alignSelf: 'center',
-    flexDirection:'column-reverse'
+    flexDirection: 'column-reverse',
   },
   card: {
     marginVertical: 10,
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 20,
     elevation: 3,

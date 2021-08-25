@@ -45,7 +45,6 @@ export default function BooksStudent({navigation}) {
       let slug = `/library/issue`;
       const token = await read('token');
       const res = await get(slug, token);
-      console.log('Books ', res);
       let due = [];
       let cleared = [];
       res &&
@@ -54,8 +53,6 @@ export default function BooksStudent({navigation}) {
             cleared.push(book);
           } else due.push(book);
         });
-      console.log('Due ', due);
-      console.log('Cleared ', cleared);
       setDueBooks(due);
       setClearedBooks(cleared);
     } catch (err) {
@@ -403,7 +400,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 10,
     flex: 1,
-
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   section: {

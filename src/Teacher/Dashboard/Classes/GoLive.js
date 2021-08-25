@@ -88,7 +88,6 @@ export default function OnlineLecture({navigation}) {
   // handle time select
   let handleSubmit2 = async sd => {
     showLoadingScreen();
-    console.log('Selected TIME ', sd);
     await setTime(sd.toString());
     setShowTimePicker(false);
     hideLoadingScreen();
