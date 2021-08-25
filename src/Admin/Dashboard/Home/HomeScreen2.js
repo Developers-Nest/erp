@@ -1,36 +1,17 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   TextInput,
-  Alert,
 } from 'react-native';
 
-import Iconc from 'react-native-vector-icons/Foundation';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import IconBio1 from 'react-native-vector-icons/FontAwesome5';
-import IconBio2 from 'react-native-vector-icons/FontAwesome5';
-
-import * as Animatable from 'react-native-animatable';
-import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
-
-//navigation
-import {
-  createDrawerNavigator,
-  useIsDrawerOpen,
-  DrawerContentScrollView,
-  DrawerItem,
-} from '@react-navigation/drawer';
-import {createStackNavigator} from '@react-navigation/stack';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import { Text, Button, } from 'react-native-paper';
 
 //icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -38,20 +19,21 @@ import Collapsible from 'react-native-collapsible';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // helpers
 import read from '../../../services/localstorage/read';
 import get from '../../../services/helpers/request/get';
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 const HomeScreen2 = () => {
   const navigation = useNavigation();
   const institute = useSelector(state => state.institute);
 
-  const [collapsed, setCollapsed] = React.useState(true);
-  const [counts, setCounts] = React.useState([]);
+  const [collapsed, setCollapsed] = useState(true);
+  const [counts, setCounts] = useState([]);
+  const [circulars, setCirculars] = useState([])
   const toggleExpanded = () => {
     setCollapsed(!collapsed);
   };
@@ -71,16 +53,34 @@ const HomeScreen2 = () => {
       alert('Cannot get Study Material!!');
     }
 
+    try {
+      let token = await read('token');
+      let slug = `/circular`;
+      let res = await get(slug, token);
+      let circularArray = [];
+      res.map(cir => {
+        circularArray.push({
+          title: cir.circularsubject,
+          content: cir.circularContent,
+          time: parseDate(cir.circularDate),
+        });
+      });
+      setCirculars(circularArray);
+    } catch (err) {
+      alert('Cannot fetch circular!!');
+    }
+
     hideLoadingScreen();
   }, []);
 
   return (
     <ScrollView style={styles.container}>
-      <View style={{height: 20}}></View>
-      <View style={{marginHorizontal: 30, ...styles.shadow}}>
+      {loadingScreen}
+      <View style={{ height: 20 }}></View>
+      <View style={{ marginHorizontal: 30, ...styles.shadow }}>
         <View style={styles.search}>
           <TextInput
-            style={{...styles.search_input}}
+            style={{ ...styles.search_input }}
             placeholder="Live class, fees and more"
             placeholderTextColor="grey"
           />
@@ -101,7 +101,7 @@ const HomeScreen2 = () => {
         </View>
       </View>
       <ScrollView style={styles.main}>
-        <View style={{height: 15}} />
+        <View style={{ height: 15 }} />
 
         <View
           style={{
@@ -113,7 +113,7 @@ const HomeScreen2 = () => {
           {/* count of member section begins */}
 
           <View style={styles.count}>
-            <View style={{alignItems: 'center'}}>
+            <View style={{ alignItems: 'center' }}>
               <Text
                 style={{
                   fontWeight: 'normal',
@@ -139,7 +139,7 @@ const HomeScreen2 = () => {
             </View>
           </View>
           <View style={styles.count}>
-            <View style={{alignItems: 'center'}}>
+            <View style={{ alignItems: 'center' }}>
               <Text
                 style={{
                   fontWeight: 'normal',
@@ -167,7 +167,7 @@ const HomeScreen2 = () => {
           </View>
 
           <View style={styles.count}>
-            <View style={{alignItems: 'center'}}>
+            <View style={{ alignItems: 'center' }}>
               <Text
                 style={{
                   fontWeight: 'normal',
@@ -193,77 +193,75 @@ const HomeScreen2 = () => {
               </Text>
             </View>
           </View>
+          </View>
           {/* count of member section ends */}
 
-          <View style={{width: '100%', paddingTop: 15}}>
+          <View>
             <Text style={styles.section_heading}>New Circular</Text>
           </View>
-        </View>
+          {circulars && circulars.length > 0 ? (
+            circulars.map(circular => (
+              <View style={{ marginHorizontal: 30, ...styles.shadow }}>
+                <View
+                  style={{
+                    borderTopLeftRadius: 8,
+                    borderTopRightRadius: 8,
+                    borderBottomLeftRadius: collapsed ? 8 : 0,
+                    borderBottomRightRadius: collapsed ? 8 : 0,
+                    ...styles.collapsable_header,
+                  }}>
+                  <Text style={styles.collapsable_headerText}>
+                    {circular.title}
+                  </Text>
+                  {!collapsed ? (
+                    <TouchableOpacity
+                      style={styles.collapsable_IconContainer}
+                      onPress={toggleExpanded}>
+                      <FontAwesome5
+                        name="chevron-up"
+                        size={14}
+                        style={{
+                          color: institute
+                            ? institute.themeColor
+                            : 'rgba(62, 104, 228, 0.9)',
+                        }}
+                      />
+                      <Text style={styles.collapsable_IconText}>Read Less</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.collapsable_IconContainer}
+                      onPress={toggleExpanded}>
+                      <FontAwesome5
+                        name="chevron-down"
+                        size={14}
+                        style={{
+                          color: institute
+                            ? institute.themeColor
+                            : 'rgba(62, 104, 228, 0.9)',
+                        }}
+                      />
+                      <Text style={styles.collapsable_IconText}>Read More</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+                <Collapsible
+                  collapsed={collapsed}
+                  align="center"
+                  style={styles.collapsable_contentWrapper}>
+                  <Text style={styles.collapsable_content}>
+                    {circular.content}
+                  </Text>
+                </Collapsible>
+              </View>
+            ))
+          ) : (
+            <Text style={{ marginLeft: 30 }}>No Active Circulars</Text>
+          )}
 
-        <View style={{marginHorizontal: 20, ...styles.shadow}}>
-          <View
-            style={{
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-              borderBottomLeftRadius: collapsed ? 8 : 0,
-              borderBottomRightRadius: collapsed ? 8 : 0,
-              ...styles.collapsable_header,
-            }}>
-            <Text style={styles.collapsable_headerText}>Title</Text>
-            {!collapsed ? (
-              <TouchableOpacity
-                style={styles.collapsable_IconContainer}
-                onPress={toggleExpanded}>
-                <FontAwesome5
-                  name="chevron-up"
-                  size={14}
-                  style={{
-                    color: institute
-                      ? institute.themeColor
-                      : 'rgba(62, 104, 228, 0.9)',
-                  }}
-                />
-                <Text style={styles.collapsable_IconText}>Read Less</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.collapsable_IconContainer}
-                onPress={toggleExpanded}>
-                <FontAwesome5
-                  name="chevron-down"
-                  size={14}
-                  style={{
-                    color: institute
-                      ? institute.themeColor
-                      : 'rgba(62, 104, 228, 0.9)',
-                  }}
-                />
-                <Text style={styles.collapsable_IconText}>Read More</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-          <Collapsible
-            collapsed={collapsed}
-            align="center"
-            style={styles.collapsable_contentWrapper}>
-            <Text style={styles.collapsable_content}>
-              Exams will be conducted via online mode. All the best. It is
-              requested from the students to maintain the.
-            </Text>
-            <Button
-              mode="contained"
-              style={{
-                borderWidth: 0.5,
-                borderColor: institute ? institute.themeColor : 'black',
-              }}
-              color={institute ? institute.themeColor : 'black'}>
-              Download Circular
-            </Button>
-          </Collapsible>
-        </View>
         {/* Most used section*/}
 
-        <View style={{width: '100%', paddingTop: 35}}>
+        <View style={{ width: '100%', paddingTop: 35 }}>
           <Text style={styles.section_heading}>Mostly Used</Text>
         </View>
 
@@ -277,7 +275,7 @@ const HomeScreen2 = () => {
           <View style={styles.section}>
             <TouchableOpacity
               onPress={() => navigation.navigate('Library')}
-              style={{alignItems: 'center'}}>
+              style={{ alignItems: 'center' }}>
               <IonIcon
                 size={36.83}
                 color={institute ? institute.themeColor : '#211C5A'}
@@ -296,7 +294,7 @@ const HomeScreen2 = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.section}>
-            <TouchableOpacity onPress={() => {}} style={{alignItems: 'center'}}>
+            <TouchableOpacity onPress={() => {navigation.navigate('Students'); }} style={{ alignItems: 'center' }}>
               <SimpleLineIcon
                 size={38}
                 color={institute ? institute.themeColor : '#211C5A'}
@@ -317,7 +315,7 @@ const HomeScreen2 = () => {
 
           <View style={styles.section}>
             <TouchableOpacity
-              style={{alignItems: 'center'}}
+              style={{ alignItems: 'center' }}
               onPress={() => {
                 navigation.navigate('Employees');
               }}>
@@ -339,7 +337,7 @@ const HomeScreen2 = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{height: 30}} />
+        <View style={{ height: 30 }} />
       </ScrollView>
     </ScrollView>
   );
