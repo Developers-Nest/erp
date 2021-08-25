@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-import {Button, Card, TextInput} from 'react-native-paper';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
+import {Button, Card} from 'react-native-paper';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -193,42 +199,46 @@ export default function LessonPlanAdd({navigation}) {
               style={{
                 backgroundColor: 'white',
                 height: 50,
+                borderBottomWidth: 1,
+                borderBottomColor: 'grey',
               }}
               multiline={true}
               onChangeText={txt => setlectureCode(txt)}
               placeholder="Lecture Code"
-              right={<TextInput.Affix text="/100" />}
             />
             <TextInput
               style={{
                 backgroundColor: 'white',
+                borderBottomWidth: 1,
                 height: 50,
+                borderBottomColor: 'grey',
               }}
               multiline={true}
               onChangeText={txt => setTopic(txt)}
               placeholder="Topic"
-              mode="none"
-              right={<TextInput.Affix text="/100" />}
             />
             <TextInput
               style={{
                 backgroundColor: 'white',
+                borderBottomWidth: 1,
                 height: 50,
+                borderBottomColor: 'grey',
               }}
               onChangeText={txt => setUrl(txt)}
               multiline={true}
               placeholder="URL"
-              right={<TextInput.Affix text="/100" />}
             />
             <TextInput
               style={{
                 backgroundColor: 'white',
+                borderBottomWidth: 1,
+                borderBottomColor: 'grey',
+                textAlignVertical: 'top',
               }}
               multiline={true}
               onChangeText={desc => setDescription(desc)}
               numberOfLines={10}
               placeholder="Description"
-              right={<TextInput.Affix text="/100" />}
             />
           </Card.Content>
         </Card>
@@ -243,7 +253,7 @@ export default function LessonPlanAdd({navigation}) {
           <Button
             mode="contained"
             onPress={addPlan}
-            style={{backgroundColor: institute.themeColor}}>
+            style={{backgroundColor: institute.themeColor, margin: 0}}>
             Save
           </Button>
         </View>

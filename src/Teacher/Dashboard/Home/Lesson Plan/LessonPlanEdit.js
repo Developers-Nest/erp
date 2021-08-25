@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
-import {Button, Card, TextInput} from 'react-native-paper';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
+import {Button, Card} from 'react-native-paper';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -160,11 +166,16 @@ export default function LessonPlanAdd({route, navigation}) {
         <View style={{padding: 15}} />
         <Card style={styles.card}>
           <Card.Content>
+            <Text style={{color: 'grey', padding: 5}}>Lecture Code: </Text>
+
             <TextInput
               style={{
-                height: 80,
+                height: 50,
                 textAlignVertical: 'top',
                 backgroundColor: 'white',
+                borderBottomWidth: 1,
+                borderBottomColor: 'grey',
+                marginBottom: 5,
               }}
               value={lectureCode}
               multiline={true}
@@ -172,11 +183,16 @@ export default function LessonPlanAdd({route, navigation}) {
               numberOfLines={10}
               placeholder="Lecture Code"
             />
+            <Text style={{color: 'grey', padding: 5}}>Topic: </Text>
+
             <TextInput
               style={{
-                height: 80,
+                height: 50,
                 textAlignVertical: 'top',
                 backgroundColor: 'white',
+                borderBottomWidth: 1,
+                borderBottomColor: 'grey',
+                marginBottom: 5,
               }}
               value={topic}
               multiline={true}
@@ -184,11 +200,16 @@ export default function LessonPlanAdd({route, navigation}) {
               numberOfLines={10}
               placeholder="Topic"
             />
+            <Text style={{color: 'grey', padding: 5}}>URL: </Text>
+
             <TextInput
               style={{
-                height: 80,
+                height: 50,
                 textAlignVertical: 'top',
                 backgroundColor: 'white',
+                borderBottomWidth: 1,
+                borderBottomColor: 'grey',
+                marginBottom: 5,
               }}
               value={url}
               onChangeText={txt => setUrl(txt)}
@@ -196,11 +217,14 @@ export default function LessonPlanAdd({route, navigation}) {
               numberOfLines={10}
               placeholder="URL"
             />
+            <Text style={{color: 'grey', padding: 5}}>Description: </Text>
             <TextInput
               style={{
-                height: 80,
                 textAlignVertical: 'top',
                 backgroundColor: 'white',
+                borderBottomWidth: 1,
+                borderBottomColor: 'grey',
+                paddingBottom: 5,
               }}
               value={description}
               multiline={true}
@@ -252,7 +276,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 5,
-    // height: 310,
+    elevation: 3,
   },
   Week: {
     marginTop: 5,
