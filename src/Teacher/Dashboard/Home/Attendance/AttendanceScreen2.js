@@ -137,13 +137,9 @@ const AttendanceScreen2 = ({navigation}) => {
   };
 
   return (
-    <ScrollView>
-      <View
-        style={{
-          backgroundColor: 'rgba(249, 249, 249, 1)',
-          flex: 1,
-          // justifyContent: 'flex-start',
-        }}>
+    <View
+      style={{minHeight: '100%', backgroundColor: 'rgba(249, 249, 249, 1)'}}>
+      <ScrollView>
         {loadingScreen}
         <View
           style={{
@@ -348,8 +344,8 @@ const AttendanceScreen2 = ({navigation}) => {
         </ScrollView>
         <View style={{padding: 7}} />
         {/* close list part */}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -525,7 +521,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 0.5,
-    borderRadius:12,
+    borderRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
 

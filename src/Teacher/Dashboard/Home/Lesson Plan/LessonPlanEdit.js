@@ -1,174 +1,163 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
-import {
-  Button,
-  Card,
-  TextInput,
-} from 'react-native-paper'
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import {Button, Card, TextInput} from 'react-native-paper';
 
 //icons
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import ModalSelector from 'react-native-modal-selector'
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import ModalSelector from 'react-native-modal-selector';
 
 // helpers
-import patch from '../../../../services/helpers/request/patch'
-import read from '../../../../services/localstorage/read'
-import deleteReq from '../../../../services/helpers/request/delete'
+import patch from '../../../../services/helpers/request/patch';
+import read from '../../../../services/localstorage/read';
+import deleteReq from '../../../../services/helpers/request/delete';
 
 // loading screem
-import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js'
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
 
 // redux
-import { useSelector } from 'react-redux'
-import { ScrollView } from 'react-native-gesture-handler'
+import {useSelector} from 'react-redux';
+import {ScrollView} from 'react-native-gesture-handler';
 
-export default function LessonPlanAdd({ route,  navigation }) {
+export default function LessonPlanAdd({route, navigation}) {
+  const [course, setCourse] = useState('Select Me!');
+  const [batch, setBatch] = useState('Select Me!');
+  const [subject, setSubject] = useState('Select Me!');
 
-  const [course, setCourse] = useState('Select Me!')
-  const [batch, setBatch] = useState('Select Me!')
-  const [subject, setSubject] = useState('Select Me!')
-
-  const [planObject, setPlanObject] = useState({})
-  const [planId, setPlanId] = useState(null)
-  const [lectureCode, setlectureCode] = useState(null)
-  const [description, setDescription] = useState(null)
-  const [url, setUrl] = useState(null)
-  const [topic, setTopic] = useState(null)
+  const [planObject, setPlanObject] = useState({});
+  const [planId, setPlanId] = useState(null);
+  const [lectureCode, setlectureCode] = useState(null);
+  const [description, setDescription] = useState(null);
+  const [url, setUrl] = useState(null);
+  const [topic, setTopic] = useState(null);
 
   // loading screen
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   const addPlan = async () => {
     if (!course || !batch || !subject) {
-      alert('All fields are Mandatory!!')
-      return
+      alert('All fields are Mandatory!!');
+      return;
     }
 
-    try{
-      let token = await read('token')
-      let slug = `/lessonplanning/${planId}`
-      let data = planObject
-      data.topic = topic
-      data.url = url
-      data.description = description
-      data.code = lectureCode
-      let response = await patch(slug, data, token)
-      alert('Updated Lesson Plan')
-      navigation.navigate('Lesson Plan')
-    } catch(err){
-      alert('Cannot Delete!! '+ err)
+    try {
+      let token = await read('token');
+      let slug = `/lessonplanning/${planId}`;
+      let data = planObject;
+      data.topic = topic;
+      data.url = url;
+      data.description = description;
+      data.code = lectureCode;
+      let response = await patch(slug, data, token);
+      alert('Updated Lesson Plan');
+      navigation.navigate('Lesson Plan');
+    } catch (err) {
+      alert('Cannot Delete!! ' + err);
     }
-  }
+  };
 
-  const deletePlan = async()=>{
-    setLoadingScreen()
-    try{
-      let token = await read('token')
-      let slug = `/lessonplanning/${planId}`
-      let response = await deleteReq(slug, token)
-      alert('Lesson Plan Deleted!!')
-      navigation.navigate('Lesson Plan')
-    } catch(err){
-      alert('Cannot Delete!! '+ err)
+  const deletePlan = async () => {
+    setLoadingScreen();
+    try {
+      let token = await read('token');
+      let slug = `/lessonplanning/${planId}`;
+      let response = await deleteReq(slug, token);
+      alert('Lesson Plan Deleted!!');
+      navigation.navigate('Lesson Plan');
+    } catch (err) {
+      alert('Cannot Delete!! ' + err);
     }
-    hideLoadingScreen()
-    navigation.navigate('Lesson Plan')
-  }
+    hideLoadingScreen();
+    navigation.navigate('Lesson Plan');
+  };
 
   useEffect(async () => {
-    setLoadingScreen()
-    const {lessonPlan} = route.params
-    setPlanObject(lessonPlan)
-    setPlanId(lessonPlan._id)
-    setBatch(lessonPlan.batch.batchName)
-    setCourse(lessonPlan.course.courseName)
-    setSubject(lessonPlan.subject.name)
-    setUrl(lessonPlan.url)
-    setlectureCode(lessonPlan.code)
-    setTopic(lessonPlan.topic)
-    setDescription(lessonPlan.description)
+    setLoadingScreen();
+    const {lessonPlan} = route.params;
+    setPlanObject(lessonPlan);
+    setPlanId(lessonPlan._id);
+    setBatch(lessonPlan.batch.batchName);
+    setCourse(lessonPlan.course.courseName);
+    setSubject(lessonPlan.subject.name);
+    setUrl(lessonPlan.url);
+    setlectureCode(lessonPlan.code);
+    setTopic(lessonPlan.topic);
+    setDescription(lessonPlan.description);
 
-    hideLoadingScreen()
-  }, [])
+    hideLoadingScreen();
+  }, []);
 
   //theming
-  const institute = useSelector(state => state.institute)
+  const institute = useSelector(state => state.institute);
 
   return (
     <View style={styles.container}>
-        <View
-          style={{
-            backgroundColor: institute ? institute.themeColor : 'black',
-            ...styles.header,
+      <View
+        style={{
+          backgroundColor: institute ? institute.themeColor : 'black',
+          ...styles.header,
+        }}>
+        {loadingScreen}
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Lesson Plan');
           }}>
-          {loadingScreen}
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Lesson Plan')
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                paddingLeft: 20,
-                paddingTop: 20,
-              }}
-            />
-          </TouchableOpacity>
-          <Text
+          <AntDesign
+            size={24}
+            color="white"
+            name="left"
             style={{
-              fontStyle: 'normal',
-              fontSize: 28,
-              fontWeight: '600',
               alignSelf: 'center',
-              paddingLeft: 30,
+              fontSize: 25,
               color: 'white',
-              fontFamily: 'NunitoSans-Regular',
-            }}>
-            Edit Lesson Plan
-          </Text>
-        </View>
-        <View style={{ padding: 15 }} />
-        <View style={styles.Drop}>
-          <ModalSelector
-            initValue={course}
-            data={[
-              {label: 'Class1', key: 'Class1'},
-            ]}
-            disabled={true}
-            style={styles.card_picker}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
+              paddingLeft: 20,
+              paddingTop: 20,
+            }}
           />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontStyle: 'normal',
+            fontSize: 28,
+            fontWeight: '600',
+            alignSelf: 'center',
+            paddingLeft: 30,
+            color: 'white',
+            fontFamily: 'NunitoSans-Regular',
+          }}>
+          Edit Lesson Plan
+        </Text>
+      </View>
+      <View style={{padding: 15}} />
+      <View style={styles.Drop}>
+        <ModalSelector
+          initValue={course}
+          data={[{label: 'Class1', key: 'Class1'}]}
+          disabled={true}
+          style={styles.card_picker}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
 
-          <ModalSelector
-            initValue={batch}
-            disabled={true}
-            data={[
-              {label: 'Class1', key: 'Class1'},
-            ]}
-            style={styles.card_picker}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
+        <ModalSelector
+          initValue={batch}
+          disabled={true}
+          data={[{label: 'Class1', key: 'Class1'}]}
+          style={styles.card_picker}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
 
-          <ModalSelector
-            initValue={subject}
-            disabled={true}
-            data={[
-              {label: 'Class1', key: 'Class1'},
-            ]}
-            style={styles.card_picker}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-        </View>
-        <ScrollView>
-        <View style={{ padding: 15 }} />
+        <ModalSelector
+          initValue={subject}
+          disabled={true}
+          data={[{label: 'Class1', key: 'Class1'}]}
+          style={styles.card_picker}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
+      </View>
+      <ScrollView>
+        <View style={{padding: 15}} />
         <Card style={styles.card}>
           <Card.Content>
             <TextInput
@@ -223,22 +212,32 @@ export default function LessonPlanAdd({ route,  navigation }) {
         </Card>
 
         <View
-          style={{ justifyContent: 'space-evenly', marginTop: 20, flexDirection: 'row' }}>
-          <Button mode="contained" onPress={deletePlan} style={{ backgroundColor: institute.themeColor }}>
+          style={{
+            justifyContent: 'space-evenly',
+            marginTop: 20,
+            flexDirection: 'row',
+          }}>
+          <Button
+            mode="contained"
+            onPress={deletePlan}
+            style={{backgroundColor: institute.themeColor}}>
             Delete
           </Button>
-          <Button mode="contained" onPress={addPlan} style={{ backgroundColor: institute.themeColor }}>
+          <Button
+            mode="contained"
+            onPress={addPlan}
+            style={{backgroundColor: institute.themeColor}}>
             Save
           </Button>
         </View>
       </ScrollView>
     </View>
-  )
+  );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
   },
   header: {
     height: 69,
@@ -270,7 +269,7 @@ const styles = StyleSheet.create({
   },
   card_picker: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -285,4 +284,4 @@ const styles = StyleSheet.create({
     minWidth: 110,
     elevation: 3,
   },
-})
+});

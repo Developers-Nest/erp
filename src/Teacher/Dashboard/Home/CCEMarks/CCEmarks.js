@@ -164,6 +164,7 @@ export default function CceMarks({navigation}) {
 
   return (
     <View style={{backgroundColor: 'white', height: '100%'}}>
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -199,7 +200,7 @@ export default function CceMarks({navigation}) {
           CCE Marks
         </Text>
       </View>
-      {loadingScreen}
+
       <View
         style={{
           padding: 10,
@@ -426,13 +427,17 @@ const styles = StyleSheet.create({
   card_picker: {
     shadowColor: '#999',
     shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0,
+    shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
-    borderWidth: 0,
-    borderRadius: 0.5,
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
+
     minWidth: 110,
     elevation: 3,
   },

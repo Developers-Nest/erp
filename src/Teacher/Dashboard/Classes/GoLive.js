@@ -88,7 +88,7 @@ export default function OnlineLecture({navigation}) {
   // handle time select
   let handleSubmit2 = async sd => {
     showLoadingScreen();
-    console.log('Selected TIME ', sd)
+    console.log('Selected TIME ', sd);
     await setTime(sd.toString());
     setShowTimePicker(false);
     hideLoadingScreen();
@@ -109,10 +109,10 @@ export default function OnlineLecture({navigation}) {
 
   const handleSaveClass = async () => {
     showLoadingScreen();
-    if(!batch || !course || !date || !time || !url || !description){
-      alert('All fields are required!!')
-      hideLoadingScreen()
-      return
+    if (!batch || !course || !date || !time || !url || !description) {
+      alert('All fields are required!!');
+      hideLoadingScreen();
+      return;
     }
     try {
       let slug = `/liveclass`;
@@ -139,11 +139,11 @@ export default function OnlineLecture({navigation}) {
         name: description,
       };
       let response = await post(slug, data, token);
-      if(response.error){
-        alert(response.error)
-      }
-      else if (response._id) {
+      if (response.error) {
+        alert(response.error);
+      } else if (response._id) {
         alert('Class Added!');
+        navigation.replace('Lectures');
       }
     } catch (err) {
       alert('Cannot Add this Claas!');
@@ -231,7 +231,7 @@ export default function OnlineLecture({navigation}) {
                 textAlignVertical: 'top',
                 borderBottomWidth: 0.5,
                 fontSize: 15,
-                color: 'black'
+                color: 'black',
               }}
               onChangeText={val => setUrl(val)}
             />
@@ -246,7 +246,7 @@ export default function OnlineLecture({navigation}) {
                 marginTop: 5,
                 height: 150,
                 fontSize: 15,
-                color: 'black'
+                color: 'black',
               }}
               onChangeText={val => setDescription(val)}
             />
@@ -263,7 +263,7 @@ export default function OnlineLecture({navigation}) {
                 color="white"
                 style={{margin: 2}}
                 onPress={() => setShowDatePicker(true)}>
-                {date? date.slice(0,10) : 'DATE'}
+                {date ? date.slice(0, 10) : 'DATE'}
               </Button>
 
               <DateTimePickerModal
@@ -280,7 +280,7 @@ export default function OnlineLecture({navigation}) {
                 color="white"
                 style={{margin: 2}}
                 onPress={() => setShowTimePicker(true)}>
-                {time? time.slice(15,21) : 'TIME'}
+                {time ? time.slice(15, 21) : 'TIME'}
               </Button>
 
               <DateTimePickerModal
@@ -333,7 +333,10 @@ export default function OnlineLecture({navigation}) {
         <View style={{alignItems: 'center'}}>
           <Button
             mode="contained"
-            style={{backgroundColor: institute? institute.themeColor : 'blue', ...styles.submitButton}}
+            style={{
+              backgroundColor: institute ? institute.themeColor : 'blue',
+              ...styles.submitButton,
+            }}
             onPress={handleSaveClass}>
             Go Live
           </Button>

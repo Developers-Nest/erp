@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -6,12 +6,10 @@ import {
   TouchableOpacity,
   ScrollView,
   Button,
-  Linking
+  Linking,
 } from 'react-native';
 
-import {
-  TextInput,
-} from 'react-native-paper';
+import {TextInput} from 'react-native-paper';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -23,14 +21,14 @@ import read from '../../../../services/localstorage/read';
 import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 
 // redux
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
-import { useFocusEffect } from '@react-navigation/core';
+import {useFocusEffect} from '@react-navigation/core';
 
-export default function LessonPlan({ navigation }) {
+export default function LessonPlan({navigation}) {
   const [data, setData] = useState([]);
 
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook();
 
   //theming
   const institute = useSelector(state => state.institute);
@@ -40,35 +38,29 @@ export default function LessonPlan({ navigation }) {
       let isActive = true;
 
       const fetchUser = async () => {
-        setLoadingScreen()
+        setLoadingScreen();
         try {
           let slug = '/lessonplanning';
           const token = await read('token');
           const response = await get(slug, token);
-          console.log('Plan ', response)
-          setData(response)
+          console.log('Plan ', response);
+          setData(response);
         } catch (err) {
-          alert('Cannot fetch !!')
+          alert('Cannot fetch !!');
         }
-        hideLoadingScreen()
-
-
-      }
+        hideLoadingScreen();
+      };
       fetchUser();
 
       return () => {
         isActive = false;
       };
-    }, [])
+    }, []),
   );
 
   return (
     <View
-      style={{
-        backgroundColor: '#E5E5E5',
-        flex: 1,
-        justifyContent: 'flex-start'
-      }}>
+      style={{minHeight: '100%', backgroundColor: 'rgba(249, 249, 249, 1)'}}>
       {loadingScreen}
       <View
         style={{
@@ -100,7 +92,7 @@ export default function LessonPlan({ navigation }) {
           }}>
           Lesson Plan
         </Text>
-        <View style={{ flex: 1, marginLeft: 20 }}>
+        <View style={{flex: 1, marginLeft: 20}}>
           <TouchableOpacity
             onPress={() => navigation.navigate('Add Lesson Plan')}
             style={{
@@ -109,10 +101,15 @@ export default function LessonPlan({ navigation }) {
               alignItems: 'center',
               alignSelf: 'flex-end',
               paddingRight: 20,
-              marginTop: 15
+              marginTop: 15,
             }}>
             <IonIcon size={30} color="white" name="add-circle-outline" />
-            <Text style={{ fontFamily: 'Poppins-Regular', color: '#fff', marginRight: 5 }}>
+            <Text
+              style={{
+                fontFamily: 'Poppins-Regular',
+                color: '#fff',
+                marginRight: 5,
+              }}>
               Add
             </Text>
           </TouchableOpacity>
@@ -124,12 +121,11 @@ export default function LessonPlan({ navigation }) {
       <View
         style={{
           width: '90%',
-          marginLeft: 25,
-          marginBottom: 30,
+          alignSelf: 'center',
         }}>
         {/* open search */}
 
-        <View style={{ marginTop: 20, ...styles.card }}>
+        <View style={{marginTop: 20, ...styles.card}}>
           <TextInput
             left={<TextInput.Icon name="magnify" />}
             right={<TextInput.Icon name="filter" />}
@@ -166,12 +162,11 @@ export default function LessonPlan({ navigation }) {
                         fontSize: 18,
                         color: '#211C5A',
                       }}>
-                      {' '}
                       {'Topic: ' + plan.topic || 'Topic: N/A'}
                     </Text>
 
                     <TouchableOpacity
-                      style={{ flexDirection: 'row' }}
+                      style={{flexDirection: 'row'}}
                       onPress={() => {
                         navigation.navigate('Edit Lesson Plan', {
                           lessonPlan: plan,
@@ -195,7 +190,9 @@ export default function LessonPlan({ navigation }) {
                         color: institute.themeColor || '#505069',
                         fontFamily: 'Poppins-Regular',
                       }}>
-                      {plan.subject ? 'Subject: ' + plan.subject.name : 'Subject: N/A' || 'Subject: N/A'}
+                      {plan.subject
+                        ? 'Subject: ' + plan.subject.name
+                        : 'Subject: N/A' || 'Subject: N/A'}
                     </Text>
                   </View>
                   <View style={styles.differentusers}>
@@ -224,15 +221,15 @@ export default function LessonPlan({ navigation }) {
                   {plan.course && plan.course.courseName} -
                   {plan.batch && plan.batch.batchName}
                 </Text>
-                {
-                  plan.url ? <Button
+                {plan.url ? (
+                  <Button
                     title="Link"
                     mode="contained"
-                    color={institute.themeColor || "#5177E7"}
-                    labelStyle={{ color: 'white' }}
+                    color={institute.themeColor || '#5177E7'}
+                    labelStyle={{color: 'white'}}
                     onPress={() => Linking.openURL(plan.url)}
-                  /> : (null)
-                }
+                  />
+                ) : null}
               </View>
             </View>
           ))}
@@ -263,13 +260,13 @@ const styles = StyleSheet.create({
       height: 1,
     },
     shadowOpacity: 0.2,
-    elevation: 2,
+    elevation: 3,
     marginTop: 14,
     borderRadius: 12,
     paddingLeft: 10,
     paddingRight: 10,
     marginHorizontal: 20,
-    marginBottom: 30
+    marginBottom: 10,
   },
 
   details: {
@@ -324,7 +321,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,

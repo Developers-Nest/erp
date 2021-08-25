@@ -24,8 +24,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 
 export default function LecturesScreen({navigation}) {
-  const [showContent, setShowContent] = React.useState('Due');
-  const [activeTab, setActiveTab] = React.useState('Due');
+  const [showContent, setShowContent] = React.useState('Live');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
@@ -88,81 +87,94 @@ export default function LecturesScreen({navigation}) {
         </View>
 
         <ScrollView>
-        <View
-          style={{
-            alignItems:'center',
-            marginBottom: 20,
-            marginTop:10,
-          }}>
-          {/* open search */}
-<View style={{alignItems:'center',width:'90%'}}>
           <View
             style={{
+              alignItems: 'center',
+              marginBottom: 20,
               marginTop: 10,
-
-              justifyContent: 'space-between',
-              width: '95%',
-              flexDirection: 'row',
-              ...styles.shadow,
             }}>
-            <FontAwesome5
-              name="search"
-              style={{
-                alignSelf: 'center',
-                fontSize: 15,
-                color: '#6A6A80',
-              }}
-            />
+            {/* open search */}
+            <View style={{alignItems: 'center', width: '90%'}}>
+              <View
+                style={{
+                  marginTop: 10,
 
-            <TextInput
-              style={{width: '80%', ...styles.text_input}}
-              placeholder="Enter subject or batch name"
-              placeholderTextColor="black"
-            />
+                  justifyContent: 'space-between',
+                  width: '95%',
+                  flexDirection: 'row',
+                  ...styles.shadow,
+                }}>
+                <FontAwesome5
+                  name="search"
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 15,
+                    color: '#6A6A80',
+                  }}
+                />
+
+                <TextInput
+                  style={{width: '80%', ...styles.text_input}}
+                  placeholder="Enter subject or batch name"
+                  placeholderTextColor="black"
+                />
+                <TouchableOpacity
+                  style={{
+                    alignSelf: 'center',
+                  }}>
+                  <FontAwesome5
+                    name="filter"
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 21,
+                      color: '#6A6A80',
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            {/* close search */}
+          </View>
+          <View style={styles.switchTabsView}>
             <TouchableOpacity
               style={{
-                alignSelf: 'center',
-              }}>
-              <FontAwesome5
-                name="filter"
+                borderBottomWidth: showContent == 'Live' ? 2 : 0,
+                borderBottomColor:
+                  showContent == 'Live' ? '#B04305' : '#58636D',
+                paddingHorizontal: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setShowContent('Live')}>
+              <Text
                 style={{
-                  alignSelf: 'center',
-                  fontSize: 21,
-                  color: '#6A6A80',
-                }}
-              />
+                  color: showContent == 'Live' ? '#B04305' : '#58636D',
+                  ...styles.switchText,
+                }}>
+                Live
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                borderBottomWidth: showContent == 'Recorded' ? 2 : 0,
+                borderBottomColor: '#B04305',
+                paddingHorizontal: 4,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setShowContent('Recorded')}>
+              <Text
+                style={{
+                  color: showContent == 'Recorded' ? '#B04305' : '#58636D',
+                  ...styles.switchText,
+                }}>
+                Recorded
+              </Text>
             </TouchableOpacity>
           </View>
-          </View>
-          {/* close search */}
-        </View>
-        <View style={styles.switchTabsView}>
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: showContent == 'Live' ? 2 : 0,
-              borderBottomColor: '#B04305',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => setShowContent('Live')}>
-            <Text style={styles.switchText}>Live</Text>
-          </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{
-              borderBottomWidth: showContent == 'Recorded' ? 2 : 0,
-              borderBottomColor: '#B04305',
-              paddingHorizontal: 4,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            onPress={() => setShowContent('Recorded')}>
-            <Text style={styles.switchText}>Recorded</Text>
-          </TouchableOpacity>
-        </View>
-
-        {showContent === 'Live' ? <Live /> : <Recorded />}
+          {showContent === 'Live' ? <Live /> : <Recorded />}
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>
@@ -272,9 +284,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
   },
   switchText: {
+    fontFamily: 'Poppins-Regular',
+    fontWeight: '600',
     fontSize: 14,
-    color: '#B04305',
     paddingHorizontal: 5,
+
+    lineHeight: 21,
+
+    // color: '#58636D',
   },
   maincontainer: {
     flex: 1,
@@ -290,7 +307,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
-     color:'black',
+    color: 'black',
     backgroundColor: 'white',
   },
 

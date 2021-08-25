@@ -2,14 +2,13 @@ import React, {useEffect, useState} from 'react';
 import IconEnglish2 from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-
 import {
   StyleSheet,
   Text,
   View,
   ScrollView,
   TouchableOpacity,
-  Linking
+  Linking,
 } from 'react-native';
 
 //selector
@@ -39,7 +38,7 @@ const Recorded = () => {
   const [RecordedClasses, setRecordedClasses] = useState([]);
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
   const userInfo = useSelector(state => state.userInfo);
-  const institute = useSelector(state => state.institute)
+  const institute = useSelector(state => state.institute);
 
   // dropdown selected values
   const [batch, setBatch] = useState(null);
@@ -102,7 +101,7 @@ const Recorded = () => {
           marginBottom: 10,
           justifyContent: 'space-between',
           flexDirection: 'row',
-          margin: 20,
+          marginHorizontal: 20,
         }}>
         <View style={{marginTop: 10, width: 150, ...styles.card}}>
           <ModalSelector
@@ -110,7 +109,7 @@ const Recorded = () => {
             onChange={option => {
               fetchBatches(option.key);
             }}
-            initValue="This courses"
+            initValue="Select Course"
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -122,7 +121,7 @@ const Recorded = () => {
             onChange={option => {
               fetchList(option.key);
             }}
-            initValue="This batches"
+            initValue="Select Batch"
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -140,7 +139,11 @@ const Recorded = () => {
               <TouchableOpacity
                 style={styles.section}
                 key={RecordedClass._id}
-                onPress={() => RecordedClass.videoUrl ? Linking.openURL(RecordedClass.videoUrl) : alert('URL Not found!!')}>
+                onPress={() =>
+                  RecordedClass.videoUrl
+                    ? Linking.openURL(RecordedClass.videoUrl)
+                    : alert('URL Not found!!')
+                }>
                 <View style={styles.details}>
                   <View style={styles.userinhostels}>
                     <View style={styles.differentusers}>
@@ -163,13 +166,17 @@ const Recorded = () => {
                     </View>
 
                     <View style={styles.differentusers}>
-                      <Text style={styles.teacher, {color: institute? institute.themeColor : 'black'}}>
+                      <Text
+                        style={
+                          (styles.teacher,
+                          {color: institute ? institute.themeColor : 'black'})
+                        }>
                         {parseDate(RecordedClass.date)}
                       </Text>
                       <View style={{flexDirection: 'column'}}>
                         <IconEnglish2
                           size={24}
-                          color={ institute? institute.themeColor : "#B04305"}
+                          color={institute ? institute.themeColor : '#B04305'}
                           name="radio"
                           style={{paddingLeft: 7}}
                         />
@@ -292,11 +299,7 @@ const styles = StyleSheet.create({
     paddingLeft: 3,
     fontFamily: 'Poppins-Medium',
   },
-  switchText: {
-    fontSize: 14,
-    color: '#B04305',
-    paddingHorizontal: 5,
-  },
+
   maincontainer: {
     paddingTop: 10,
     flex: 1,
@@ -335,6 +338,14 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
     minWidth: 110,
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
   },
 });
 

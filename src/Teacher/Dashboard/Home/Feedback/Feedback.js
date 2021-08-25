@@ -26,7 +26,6 @@ import post from '../../../../services/helpers/request/post';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
 export default function Feedback({navigation}) {
-
   const [feedback, setFeedback] = useState('');
 
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
@@ -107,7 +106,10 @@ export default function Feedback({navigation}) {
   };
 
   return (
-    <View style={{backgroundColor: '#E5E5E5'}}>
+    <View
+      style={{
+        backgroundColor: 'rgba(249, 249, 249, 1)',
+      }}>
       {loadingScreen}
       <View
         style={{
@@ -159,7 +161,7 @@ export default function Feedback({navigation}) {
           />
         </View>
         <View style={{padding: 10}} />
-        <Card>
+        <Card style={{elevation: 3}}>
           <Card.Content>
             <Title>Questionnarie</Title>
             <View style={{padding: 2}} />
@@ -170,7 +172,7 @@ export default function Feedback({navigation}) {
           </Card.Content>
         </Card>
         <View style={{padding: 10}} />
-        <Card style={{height: 200}}>
+        <Card style={{height: 200, elevation: 3}}>
           <Card.Content>
             <TextInput
               placeholder="Write down your feedback question here..... "
@@ -182,6 +184,7 @@ export default function Feedback({navigation}) {
         </Card>
         <Button
           onPress={handleSubmit}
+          style={{marginTop: 10}}
           mode="contained"
           color={institute.themeColor}>
           submit

@@ -1,81 +1,82 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
   Text,
   ScrollView,
   Image,
-  TouchableOpacity, Alert, Modal, Pressable, TextInput
+  TouchableOpacity,
+  Alert,
+  Modal,
+  Pressable,
+  TextInput,
 } from 'react-native';
-import {
-  Avatar, Button
-} from 'react-native-paper';
+import {Avatar, Button} from 'react-native-paper';
 
 //icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // redux
-import { useSelector, useDispatch } from 'react-redux';
-import { USERINFO } from '../../../reducers/actionType';
+import {useSelector, useDispatch} from 'react-redux';
+import {USERINFO} from '../../../reducers/actionType';
 
 // helpers
-import patch from '../../../services/helpers/request/patch'
-import read from '../../../services/localstorage/read'
+import patch from '../../../services/helpers/request/patch';
+import read from '../../../services/localstorage/read';
 import LoaderHook from '../../../components/LoadingScreen/LoadingScreen';
 
-export default function Profile({ navigation }) {
+export default function Profile({navigation}) {
   const userInfo = useSelector(state => state.userInfo);
 
   //theming
   const institute = useSelector(state => state.institute);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
 
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook();
 
   // for updating
-  const [uemail, setUemail] = useState(null)
-  const [ufirstName, setUfirstName] = useState(null)
-  const [ulastName, setULastName] = useState(null)
-  const [upaddress, setUpAddress] = useState(null)
-  const [umobile, setUMobile] = useState(null)
+  const [uemail, setUemail] = useState(null);
+  const [ufirstName, setUfirstName] = useState(null);
+  const [ulastName, setULastName] = useState(null);
+  const [upaddress, setUpAddress] = useState(null);
+  const [umobile, setUMobile] = useState(null);
 
   useEffect(() => {
-    setUemail(userInfo.email)
-    setUfirstName(userInfo.firstName)
-    setULastName(userInfo.lastName)
-    setUpAddress(userInfo.permanentAddress)
-    setUMobile(userInfo.mobile)
-  }, [])
+    setUemail(userInfo.email);
+    setUfirstName(userInfo.firstName);
+    setULastName(userInfo.lastName);
+    setUpAddress(userInfo.permanentAddress);
+    setUMobile(userInfo.mobile);
+  }, []);
 
   let updateProfile = async () => {
-    setLoadingScreen()
-    setModalVisible(!modalVisible)
+    setLoadingScreen();
+    setModalVisible(!modalVisible);
     try {
-      let slug = '/user'
-      let token = await read('token')
+      let slug = '/user';
+      let token = await read('token');
       let data = {
         email: uemail,
         firstName: ufirstName,
         lastName: ulastName,
         presentAddress: upaddress,
-        mobile: umobile
-      }
-      console.log('Update Profile Data ', data)
-      let response = await patch(slug, data, token)
-      console.log('Profile Update Response ', response)
+        mobile: umobile,
+      };
+      console.log('Update Profile Data ', data);
+      let response = await patch(slug, data, token);
+      console.log('Profile Update Response ', response);
       if (response) {
-        alert('Profile Updated!!')
-      } else throw new Error('Some Error occured!!')
+        alert('Profile Updated!!');
+      } else throw new Error('Some Error occured!!');
     } catch (err) {
-      alert('Cannot Update ' + err)
+      alert('Cannot Update ' + err);
     }
-    hideLoadingScreen()
-  }
-
+    hideLoadingScreen();
+  };
 
   return (
     <View style={styles.container}>
@@ -128,10 +129,16 @@ export default function Profile({ navigation }) {
         }}
       />
       <ScrollView>
-        <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
-          {
-            userInfo.url ? <Image source={{ uri: userInfo.url }} style={styles.tinyLogo} /> : <Avatar.Text size={100} label={userInfo.firstName[0]} />
-          }
+        <View
+          style={{
+            justifyContent: 'center',
+            flexDirection: 'row',
+          }}>
+          {userInfo.url ? (
+            <Image source={{uri: userInfo.url}} style={styles.tinyLogo} />
+          ) : (
+            <Avatar.Text size={100} label={userInfo.firstName[0]} />
+          )}
         </View>
         <View style={styles.centeredView}>
           <Modal
@@ -140,52 +147,86 @@ export default function Profile({ navigation }) {
             visible={modalVisible}
             onRequestClose={() => {
               setModalVisible(!modalVisible);
-            }}
-          >
+            }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={{ marginTop: 20 }}>Enter Email</Text>
+                <Text style={{marginTop: 20}}>Enter Email</Text>
                 <ScrollView>
-                  <TextInput placeholder={userInfo.email}
-                    value={uemail} style={styles.textInput}
-                    onChangeText={(value) => setUemail(value)} />
-                  <Text style={{ marginTop: 20 }}>First Name</Text>
-                  <TextInput placeholder={userInfo.firstName}
-                    value={ufirstName} style={styles.textInput}
-                    onChangeText={(value) => setUfirstName(value)} />
-                  <Text style={{ marginTop: 20 }}>Last Name</Text>
-                  <TextInput placeholder={userInfo.lastName}
-                    value={ulastName} style={styles.textInput}
-                    onChangeText={(value) => setULastName(value)} />
-                  <Text style={{ marginTop: 20 }}>Mobile</Text>
-                  <TextInput placeholder={userInfo.mobile}
-                    value={umobile} style={styles.textInput}
-                    keyboardType='numeric'
+                  <TextInput
+                    placeholder={userInfo.email}
+                    value={uemail}
+                    style={styles.textInput}
+                    onChangeText={value => setUemail(value)}
+                  />
+                  <Text style={{marginTop: 20}}>First Name</Text>
+                  <TextInput
+                    placeholder={userInfo.firstName}
+                    value={ufirstName}
+                    style={styles.textInput}
+                    onChangeText={value => setUfirstName(value)}
+                  />
+                  <Text style={{marginTop: 20}}>Last Name</Text>
+                  <TextInput
+                    placeholder={userInfo.lastName}
+                    value={ulastName}
+                    style={styles.textInput}
+                    onChangeText={value => setULastName(value)}
+                  />
+                  <Text style={{marginTop: 20}}>Mobile</Text>
+                  <TextInput
+                    placeholder={userInfo.mobile}
+                    value={umobile}
+                    style={styles.textInput}
+                    keyboardType="numeric"
                     maxLength={10}
-                    onChangeText={(value) => setUMobile(value)} />
-                  <Text style={{ marginTop: 20 }}>Present Address</Text>
-                  <TextInput placeholder={userInfo.presentAddress}
-                    value={upaddress} style={styles.textInput}
-                    onChangeText={(value) => setUpAddress(value)} />
-
+                    onChangeText={value => setUMobile(value)}
+                  />
+                  <Text style={{marginTop: 20}}>Present Address</Text>
+                  <TextInput
+                    placeholder={userInfo.presentAddress}
+                    value={upaddress}
+                    style={styles.textInput}
+                    onChangeText={value => setUpAddress(value)}
+                  />
                 </ScrollView>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', margin: 20 }}>
-                  <Button mode="outlined" color={institute ? institute.themeColor : "red"} onPress={() => setModalVisible(!modalVisible)}>Cancel</Button>
-                  <Button mode="contained" color={institute ? institute.themeColor : "blue"} onPress={updateProfile} >Save</Button>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    margin: 20,
+                  }}>
+                  <Button
+                    mode="outlined"
+                    color={institute ? institute.themeColor : 'red'}
+                    onPress={() => setModalVisible(!modalVisible)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    mode="contained"
+                    color={institute ? institute.themeColor : 'blue'}
+                    onPress={updateProfile}>
+                    Save
+                  </Button>
                 </View>
               </View>
             </View>
           </Modal>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginEnd: 30 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            marginEnd: 30,
+          }}>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Text>
-              Edit Profile
-              &nbsp;
+              Edit Profile &nbsp;
               <FontAwesome5
                 name="edit"
                 size={20}
-                color={institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)'}
+                color={
+                  institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)'
+                }
               />
             </Text>
           </TouchableOpacity>
@@ -284,7 +325,7 @@ const styles = StyleSheet.create({
   tinyLogo: {
     width: 150,
     height: 150,
-    borderRadius: 100
+    borderRadius: 100,
   },
   text_input: {
     padding: 10,
@@ -312,6 +353,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     padding: 10,
+    elevation: 3,
   },
   inputField: {
     fontWeight: 'bold',
@@ -322,52 +364,52 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 10,
     padding: 35,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: '90%'
+    width: '90%',
   },
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: '#2196F3',
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: 'center',
   },
   textInput: {
-    width: "100%",
+    width: '100%',
     borderRadius: 5,
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderColor: "rgba(0, 0, 0, 0.2)",
+    borderColor: 'rgba(0, 0, 0, 0.2)',
     borderWidth: 1,
     marginBottom: 8,
-    color: 'black'
+    color: 'black',
   },
 });

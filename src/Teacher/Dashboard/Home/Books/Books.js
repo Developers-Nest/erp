@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 // import { TextInput } from 'react-native-paper';
 
 import {
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  TextInput
+  TextInput,
 } from 'react-native';
 
 //icons
@@ -18,15 +18,15 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 // redux
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 //helpers
-import get from '../../../../services/helpers/request/get'
-import read from '../../../../services/localstorage/read'
-import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen'
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
+import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-export default function BooksStudent({ navigation }) {
-  const userInfo = useSelector(state => state.userInfo)
+export default function BooksStudent({navigation}) {
+  const userInfo = useSelector(state => state.userInfo);
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -34,34 +34,35 @@ export default function BooksStudent({ navigation }) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen()
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
-  const [dueBooks, setDueBooks] = useState([])
-  const [clearedBooks, setClearedBooks] = useState([])
+  const [dueBooks, setDueBooks] = useState([]);
+  const [clearedBooks, setClearedBooks] = useState([]);
 
   useEffect(async () => {
-    setLoadingScreen()
+    setLoadingScreen();
     try {
-      let slug = `/library/issue`
-      const token = await read('token')
-      const res = await get(slug, token)
-      console.log("Books ", res)
-      let due = []
-      let cleared = []
-      res && res.map((book) => {
-        if (book.returned) {
-          cleared.push(book)
-        } else due.push(book)
-      })
-      console.log('Due ', due)
-      console.log('Cleared ', cleared)
-      setDueBooks(due)
-      setClearedBooks(cleared)
+      let slug = `/library/issue`;
+      const token = await read('token');
+      const res = await get(slug, token);
+      console.log('Books ', res);
+      let due = [];
+      let cleared = [];
+      res &&
+        res.map(book => {
+          if (book.returned) {
+            cleared.push(book);
+          } else due.push(book);
+        });
+      console.log('Due ', due);
+      console.log('Cleared ', cleared);
+      setDueBooks(due);
+      setClearedBooks(cleared);
     } catch (err) {
-      alert('Cannot get Books!!')
+      alert('Cannot get Books!!');
     }
-    hideLoadingScreen()
-  }, [])
+    hideLoadingScreen();
+  }, []);
 
   function Cleared() {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -71,8 +72,8 @@ export default function BooksStudent({ navigation }) {
     return (
       <View style={styles.container}>
         <ScrollView>
-          {
-            clearedBooks.length > 0 ? clearedBooks.map((book) => (
+          {clearedBooks.length > 0 ? (
+            clearedBooks.map(book => (
               <View style={styles.section} key={book._id}>
                 <View style={styles.details}>
                   <View style={styles.userinhostels}>
@@ -91,11 +92,10 @@ export default function BooksStudent({ navigation }) {
                       <Text
                         style={{
                           fontWeight: 'normal',
-                          fontSize: 18,
+                          fontSize: 15,
                           color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
                         }}>
-                        {' '}
                         Title: {book.bookName ? book.bookName.title : 'N/A'}
                       </Text>
                     </View>
@@ -103,11 +103,10 @@ export default function BooksStudent({ navigation }) {
                       <Text
                         style={{
                           fontWeight: 'normal',
-                          fontSize: 18,
+                          fontSize: 15,
                           color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
                         }}>
-                        {' '}
                         Name: {book.userId ? book.userId.firstName : 'N/A'}
                       </Text>
                     </View>
@@ -116,11 +115,10 @@ export default function BooksStudent({ navigation }) {
                       <Text
                         style={{
                           fontWeight: 'normal',
-                          fontSize: 18,
+                          fontSize: 15,
                           color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
                         }}>
-                        {' '}
                         Issuer: {book.userType ? book.userType.name : 'N/A'}
                       </Text>
                     </View>
@@ -131,27 +129,31 @@ export default function BooksStudent({ navigation }) {
                           fontSize: 12,
                           color: '#58626C',
                           fontFamily: 'Poppins-Regular',
-                          paddingLeft: 5,
                         }}>
-                        Issued: {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                        Issued:{' '}
+                        {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
                       </Text>
-                      <View style={{ flexDirection: 'row' }}>
+                      <View style={{flexDirection: 'row'}}>
                         <Text
                           style={{
                             fontSize: 12,
                             color: '#58636D',
                             fontFamily: 'Poppins-Regular',
                           }}>
-                          {' '}
-                          Due: {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                          Due:{' '}
+                          {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
                         </Text>
                       </View>
                     </View>
                   </View>
                 </View>
               </View>
-            )) : (<Text style={{ display: 'flex', textAlign: 'center' }}>Nothing to Display!</Text>)
-          }
+            ))
+          ) : (
+            <Text style={{display: 'flex', textAlign: 'center'}}>
+              Nothing to Display!
+            </Text>
+          )}
         </ScrollView>
       </View>
     );
@@ -165,8 +167,8 @@ export default function BooksStudent({ navigation }) {
     return (
       <View style={styles.container}>
         <ScrollView>
-          {
-            dueBooks.length > 0 ? dueBooks.map((book) => (
+          {dueBooks.length > 0 ? (
+            dueBooks.map(book => (
               <View style={styles.section} key={book._id}>
                 <View style={styles.details}>
                   <View style={styles.userinhostels}>
@@ -185,11 +187,10 @@ export default function BooksStudent({ navigation }) {
                       <Text
                         style={{
                           fontWeight: 'normal',
-                          fontSize: 18,
+                          fontSize: 15,
                           color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
                         }}>
-                        {' '}
                         Title: {book.bookName ? book.bookName.title : 'N/A'}
                       </Text>
                     </View>
@@ -197,11 +198,10 @@ export default function BooksStudent({ navigation }) {
                       <Text
                         style={{
                           fontWeight: 'normal',
-                          fontSize: 18,
+                          fontSize: 15,
                           color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
                         }}>
-                        {' '}
                         Name: {book.userId ? book.userId.firstName : 'N/A'}
                       </Text>
                     </View>
@@ -210,11 +210,10 @@ export default function BooksStudent({ navigation }) {
                       <Text
                         style={{
                           fontWeight: 'normal',
-                          fontSize: 18,
+                          fontSize: 15,
                           color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
                         }}>
-                        {' '}
                         Issuer: {book.userType ? book.userType.name : 'N/A'}
                       </Text>
                     </View>
@@ -225,27 +224,31 @@ export default function BooksStudent({ navigation }) {
                           fontSize: 12,
                           color: '#58626C',
                           fontFamily: 'Poppins-Regular',
-                          paddingLeft: 5,
                         }}>
-                        Issued: {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                        Issued:{' '}
+                        {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
                       </Text>
-                      <View style={{ flexDirection: 'row' }}>
+                      <View style={{flexDirection: 'row'}}>
                         <Text
                           style={{
                             fontSize: 12,
                             color: '#58636D',
                             fontFamily: 'Poppins-Regular',
                           }}>
-                          {' '}
-                          Due: {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                          Due:{' '}
+                          {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
                         </Text>
                       </View>
                     </View>
                   </View>
                 </View>
               </View>
-            )) : (<Text style={{ display: 'flex', textAlign: 'center' }}>No Dues!!</Text>)
-          }
+            ))
+          ) : (
+            <Text style={{display: 'flex', textAlign: 'center'}}>
+              No Dues!!
+            </Text>
+          )}
         </ScrollView>
       </View>
     );
@@ -290,24 +293,6 @@ export default function BooksStudent({ navigation }) {
             }}>
             Issued Books
           </Text>
-          {/* <TouchableOpacity
-            style={{
-              justifyContent: 'flex-end',
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <MaterialIcon
-              size={24}
-              color="white"
-              name="align-horizontal-right"
-              style={{
-                fontSize: 35,
-                color: 'white',
-                paddingRight: 20,
-              }}
-            />
-          </TouchableOpacity> */}
         </View>
 
         {/* header ends */}
@@ -331,7 +316,7 @@ export default function BooksStudent({ navigation }) {
               ...styles.shadow,
             }}>
             <TextInput
-              style={{ width: '80%', ...styles.text_input }}
+              style={{width: '80%', ...styles.text_input}}
               placeholder="Enter book name or ID here"
               placeholderTextColor="grey"
             />
@@ -357,7 +342,6 @@ export default function BooksStudent({ navigation }) {
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
-             
               borderBottomWidth: showContent == 'Due' ? 1 : 0,
               borderBottomColor: 'rgba(176, 67, 5, 1)',
               paddingHorizontal: 4,
@@ -365,19 +349,48 @@ export default function BooksStudent({ navigation }) {
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Due')}>
-            <Text style={[styles.switchText],[{ color:showContent=='Due'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600',fontSize:15}]}>Due</Text>
+            <Text
+              style={
+                ([styles.switchText],
+                [
+                  {
+                    color:
+                      showContent == 'Due' ? 'rgba(176, 67, 5, 1)' : '#58636D',
+                    fontWeight: '600',
+                    fontSize: 15,
+                  },
+                ])
+              }>
+              Due
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{
               borderBottomWidth: showContent == 'Cleared' ? 1 : 0,
-              borderBottomColor: showContent=='Cleared'?'rgba(176, 67, 5, 1)':'#58636D',
+              borderBottomColor:
+                showContent == 'Cleared' ? 'rgba(176, 67, 5, 1)' : '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Cleared')}>
-            <Text style={[styles.switchText],[{ color:showContent=='Cleared'?'rgba(176, 67, 5, 1)':'#58636D',fontWeight:'600',fontSize:15}]}>Cleared</Text>
+            <Text
+              style={
+                ([styles.switchText],
+                [
+                  {
+                    color:
+                      showContent == 'Cleared'
+                        ? 'rgba(176, 67, 5, 1)'
+                        : '#58636D',
+                    fontWeight: '600',
+                    fontSize: 15,
+                  },
+                ])
+              }>
+              Cleared
+            </Text>
           </TouchableOpacity>
         </View>
         {showContent === 'Due' ? <Due /> : <Cleared />}
@@ -405,9 +418,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 5,
     marginTop: 14,
-    marginBottom:10,
+    marginBottom: 10,
     borderRadius: 12,
- 
+
     marginHorizontal: 20,
   },
 
@@ -417,7 +430,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingBottom: 10,
     borderBottomColor: '#333',
-    paddingHorizontal:20,
+    paddingHorizontal: 20,
   },
   userinhostels: {
     marginBottom: 10,
@@ -426,6 +439,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingTop: 5,
   },
   userstext: {
     fontSize: 16,
@@ -445,15 +459,12 @@ const styles = StyleSheet.create({
   switchText: {
     fontSize: 14,
     paddingHorizontal: 5,
-    fontFamily:'Poppins-Regular',
-   
-    
+    fontFamily: 'Poppins-Regular',
   },
   maincontainer: {
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
-
 
   text_input: {
     paddingHorizontal: 20,
@@ -462,12 +473,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     minWidth: 171,
     backgroundColor: 'white',
-    color: 'black'
+    color: 'black',
   },
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',

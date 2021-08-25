@@ -231,7 +231,7 @@ const AttendanceScreen1 = ({navigation}) => {
               alignItems: 'center',
               alignSelf: 'flex-end',
               paddingRight: 20,
-              marginTop:10
+              marginTop: 10,
             }}>
             <MaterialCommunityIcon size={24} color="white" name="eye" />
             <Text style={{fontFamily: 'Poppins-Regular', color: '#fff'}}>
@@ -241,54 +241,53 @@ const AttendanceScreen1 = ({navigation}) => {
         </View>
       </View>
 
-<ScrollView>
-      <View style={{padding: 15}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
-            marginTop: 10,
-            alignContent: 'flex-start',
-            width: '100%',
-          }}>
-          {/* course selector */}
-          <ModalSelector
-            data={courses}
-            initValue="Class"
-            onChange={option => {
-              fetchBatches(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
+      <ScrollView>
+        <View style={{padding: 15}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              marginTop: 10,
+              alignContent: 'flex-start',
+              width: '100%',
+            }}>
+            {/* course selector */}
+            <ModalSelector
+              data={courses}
+              initValue="Class"
+              onChange={option => {
+                fetchBatches(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
 
-          {/* batch selector */}
-          <ModalSelector
-            data={batches}
-            initValue="Batch"
-            onChange={option => {
-              fetchSubjects(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
+            {/* batch selector */}
+            <ModalSelector
+              data={batches}
+              initValue="Batch"
+              onChange={option => {
+                fetchSubjects(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
 
-          {/* subject selector */}
-          <ModalSelector
-            data={subjects}
-            initValue="Subject"
-            onChange={option => {
-              getList(option.key);
-            }}
-            style={styles.card}
-            initValueTextStyle={styles.SelectedValueSmall}
-            selectTextStyle={styles.SelectedValueSmall}
-          />
-        </View>
-        {fetched ? (
-          
+            {/* subject selector */}
+            <ModalSelector
+              data={subjects}
+              initValue="Subject"
+              onChange={option => {
+                getList(option.key);
+              }}
+              style={styles.card}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
+          </View>
+          {fetched ? (
             <View style={{marginTop: 6, marginBottom: 150}}>
               <View style={{padding: 5, justifyContent: 'center'}} />
 
@@ -391,11 +390,15 @@ const AttendanceScreen1 = ({navigation}) => {
               </ScrollView>
               {/* Cards end */}
 
-              <Button onPress={handleSaveList} color={institute ? institute.themeColor : 'blue'} mode="contained">Save</Button>
+              <Button
+                onPress={handleSaveList}
+                color={institute ? institute.themeColor : 'blue'}
+                mode="contained">
+                Save
+              </Button>
             </View>
-          
-        ) : null}
-      </View>
+          ) : null}
+        </View>
       </ScrollView>
       <View style={{padding: 7}} />
 
@@ -487,7 +490,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 0.5,
-    borderRadius:12,
+    borderRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
     // margin: 0,

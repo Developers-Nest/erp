@@ -9,7 +9,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  Linking
+  Linking,
 } from 'react-native';
 
 //selector
@@ -36,7 +36,7 @@ const Live = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
-  let institute = useSelector((state)=>state.institute)
+  let institute = useSelector(state => state.institute);
 
   const [LiveClasses, setLiveClasses] = useState([]);
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
@@ -102,16 +102,16 @@ const Live = () => {
           marginBottom: 10,
           justifyContent: 'space-between',
           flexDirection: 'row',
-          margin: 20,
+          marginHorizontal: 20,
         }}>
-          {loadingScreen}
+        {loadingScreen}
         <View style={{marginTop: 10, width: 150, ...styles.card}}>
           <ModalSelector
             data={courses}
             onChange={option => {
               fetchBatches(option.key);
             }}
-            initValue="This courses"
+            initValue="Select Courses"
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -123,7 +123,7 @@ const Live = () => {
             onChange={option => {
               fetchList(option.key);
             }}
-            initValue="This batches"
+            initValue="Select Batch"
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -139,9 +139,11 @@ const Live = () => {
           {LiveClasses &&
             LiveClasses.map(LiveClass => (
               <TouchableOpacity
-                onPress={() => LiveClass.url ? 
-                  Linking.openURL(LiveClass.url)
-                : alert('Url Not found!!')}
+                onPress={() =>
+                  LiveClass.url
+                    ? Linking.openURL(LiveClass.url)
+                    : alert('Url Not found!!')
+                }
                 style={styles.section}
                 key={LiveClass._id}>
                 <View style={styles.details}>
@@ -154,7 +156,7 @@ const Live = () => {
                           color: ' rgba(25, 40, 57, 0.7)',
                           fontFamily: 'Poppins-Medium',
                         }}>
-                        {LiveClass.name.slice(0,12)}
+                        {LiveClass.name.slice(0, 12)}
                       </Text>
 
                       <MaterialCommunityIcon
@@ -166,13 +168,21 @@ const Live = () => {
                     </View>
 
                     <View style={styles.differentusers}>
-                      <Text style={styles.teacher, {color: institute ? institute.themeColor : 'rgba(25, 40, 57, 0.63)'}}>
+                      <Text
+                        style={
+                          (styles.teacher,
+                          {
+                            color: institute
+                              ? institute.themeColor
+                              : 'rgba(25, 40, 57, 0.63)',
+                          })
+                        }>
                         {LiveClass.date ? parseDate(LiveClass.date) : null}
                       </Text>
                       <View style={{flexDirection: 'column'}}>
                         <IconEnglish2
                           size={24}
-                          color={ institute? institute.themeColor : "#B04305"}
+                          color={institute ? institute.themeColor : '#B04305'}
                           name="radio"
                           style={{paddingLeft: 7}}
                         />
@@ -338,6 +348,14 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
     minWidth: 110,
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
   },
 });
 
