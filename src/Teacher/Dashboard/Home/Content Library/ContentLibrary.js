@@ -44,17 +44,21 @@ export default function ContentLibrary({navigation}) {
       let token = await read('token');
       let response = await get(slug, token);
       setStudyMaterial(response);
+      console.log(response);
     } catch (err) {
-      alert('Cannot get Study Material!!');
+      alert('Cannot get Study Material!!' + err);
+      console.log(err);
     }
 
     try {
       let slug = `/chapter/getvedioMaterial`;
       let token = await read('token');
       let response = await get(slug, token);
+      console.log(response);
       setVideoMaterial(response);
     } catch (err) {
-      alert('Cannot get Video Material!!');
+      alert('Cannot get Video Material!!' + err);
+      console.log(err);
     }
     hideLoadingScreen();
   }, []);
@@ -68,57 +72,60 @@ export default function ContentLibrary({navigation}) {
       <View style={styles.container}>
         {loadingScreen}
         <ScrollView>
-          {studyMaterial.map(sm => (
-            <View key={sm._id}>
-              <View style={styles.section}>
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 20,
-                          color: '#211C5A',
-                        }}>
-                        {sm.title}
-                      </Text>
+          {studyMaterial &&
+            studyMaterial.map(sm => {
+              return (
+                <View key={sm._id}>
+                  <View style={styles.section}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 20,
+                              color: '#211C5A',
+                            }}>
+                            {sm.title}
+                          </Text>
+                        </View>
+
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              color: institute ? institute.themeColor : 'blue',
+                            }}>
+                            {sm.topic}
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text style={{fontSize: 16}}>{sm.description}</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.hey}>
+                          <Text style={{fontSize: 16}}>
+                            Created By:{' '}
+                            {sm.createdBy ? sm.createdBy : 'Not Available'}
+                          </Text>
+                          {sm.insertfile != 'null' ? (
+                            <Button
+                              styles={{marginRight: 20}}
+                              color={institute ? institute.themeColor : 'blue'}
+                              mode="contained"
+                              onPress={() => Linking.openURL(sm.insertfile)}>
+                              View
+                            </Button>
+                          ) : null}
+                        </TouchableOpacity>
+                      </View>
                     </View>
-
-                    <TouchableOpacity style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          color: institute ? institute.themeColor : 'blue',
-                        }}>
-                        {sm.topic}
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.differentusers}>
-                      <Text style={{fontSize: 16}}>{sm.description}</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.hey}>
-                      <Text style={{fontSize: 16}}>
-                        Created By:{' '}
-                        {sm.createdBy ? sm.createdBy : 'Not Available'}
-                      </Text>
-                      {sm.insertfile != 'null' ? (
-                        <Button
-                          styles={{marginRight: 20}}
-                          color={institute ? institute.themeColor : 'blue'}
-                          mode="contained"
-                          onPress={() => Linking.openURL(sm.insertfile)}>
-                          View
-                        </Button>
-                      ) : null}
-                    </TouchableOpacity>
                   </View>
+                  <View style={{height: 20}} />
                 </View>
-              </View>
-              <View style={{height: 20}} />
-            </View>
-          ))}
+              );
+            })}
         </ScrollView>
       </View>
     );
@@ -128,8 +135,6 @@ export default function ContentLibrary({navigation}) {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
-
-    useEffect(async () => {}, []);
 
     return (
       <View style={styles.container}>
