@@ -1,44 +1,145 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
-    Searchbar,
-    Appbar,
-    List,
     Card,
-    Title,
-    Paragraph,
     Button,
 } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
+
+import getCourse from '../../../../services/helpers/getList/getCourse'
+import get from '../../../../services/helpers/request/get'
+import read from '../../../../services/localstorage/read'
+import post from '../../../../services/helpers/request/post'
+
+import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen'
 
 export default function BulkSMS({ navigation }) {
-      //theming
-      const institute = useSelector(state => state.institute);
+    //theming
+    const institute = useSelector(state => state.institute)
+    const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
 
-    const [SMS_for, setSMS_for] = useState([]);
+    const [SMS_for, setSMS_for] = useState([{ label: 'Common to all', key: 'Common to all'}, { label: 'Student', key: 'Student' }, { label: 'Employee', key: 'Employee' }]);
+    const [forTypeStu, setForTypeStu] = useState([{ label: 'Selected Batches', key: 'Selected Batches' }, { label: 'Selected Courses', key: 'Selected Courses' }, { label: 'Common to all', key: 'Common to all' }])
+    const [forTypeEmp, setFortypeEmp] = useState([{ label: 'Selected Departments', key: 'Selected Departments' }, { label: 'Common to all', key: 'Common to all' }])
+
+
+    const [smsGroups, setSmsGroup] = useState([])
+    const [courses, setCourses] = useState([])
+    const [batches, setBatches] = useState([])
+    const [departments, setDepartments] = useState([])
+    const [templates, setTemplates] = useState([])
+
+
+    // selected
+    const [course, setCourse] = useState('')
+    const [batch, setBatch] = useState('')
+    const [department, setDepartment] = useState('')
+    const [selectedList, setSelectedList] = useState([])
+    const [smsFor, setSmsFor] = useState('')
+    const [forStu, setForStu] = useState('')
+    const [forEmp, setForEmp] = useState('')
+    const [smsForSub, setSmsForSub] = useState('')
+    const [template, setTemplate] = useState('')
+    const [templateId, setTemplateId] = useState('')
+
+    useEffect(async () => {
+        setLoadingScreen()
+        try {
+
+            let slug = '/smsgroup'
+            let token = await read('token')
+            let res = await get(slug, token)
+            let arr = []
+            res && res.map((group) => {
+                arr.push({
+                    key: group._id,
+                    label: group.name,
+                    list: group.list
+                })
+            })
+            setSmsGroup(arr)
+
+            res = await getCourse()
+            setCourses(res)
+
+            slug = '/department'
+            res = await get(slug, token)
+            arr = []
+            res && res.map((dep) => {
+                arr.push({
+                    label: dep.name,
+                    key: dep._id
+                })
+            })
+            setDepartments(arr)
+
+            slug = '/smsTemplate'
+            res = await get(slug, token)
+            arr = []
+            res && res.map((temp) => {
+                arr.push({
+                    key: temp._id,
+                    label: temp.templateId,
+                    message: temp.templateMessage
+                })
+            })
+            setTemplates(arr)
+
+        } catch (err) {
+            alert('Error ' + err)
+        }
+        hideLoadingScreen()
+    }, [])
+
+    let handleSend = async()=>{
+        setLoadingScreen()
+        try{
+            let token = await read('token')
+            let slug = '/bulksms/send'
+            let data = {
+                batch: batch? batch : '',
+                course: course? course: '',
+                department: department? department: '',
+                message: template,
+                mybatches: batch? [batch] : [],
+                mycourses: course? [course]: [],
+                mydepartments: department? [department]: [],
+                myemployees: [],
+                mygroups: [],
+                mysmsrecep: "",
+                mystudents: [],
+                smsFor: smsFor,
+                smsForSub: smsForSub,
+                templateId: templateId
+            }
+            console.log('Data ', data)
+            let res = await post(slug, data, token)
+            console.log('Response ', res)
+            if(res.error){
+                alert(res.error)
+            } else if(res.Status) {
+                alert('Message Sent')
+            }
+        } catch(err){
+            console.log('Error ', err)
+            alert('Error ')
+        }
+        hideLoadingScreen()
+    }
+
     return (
         <View style={styles.backgroung}>
-            {/* <Appbar>
-        <Appbar.BackAction onPress={() => {}} />
-        <Appbar.Content title="Bulk SMS" />
-      </Appbar> */}
+            {loadingScreen}
             <View
-              style={{backgroundColor: institute ? institute.themeColor : '#FF5733',
-              ...styles.header,
+                style={{
+                    backgroundColor: institute ? institute.themeColor : '#FF5733',
+                    ...styles.header,
                 }}>
                 <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                     <AntDesign
@@ -74,7 +175,7 @@ export default function BulkSMS({ navigation }) {
                             alignItems: 'center',
                             alignSelf: 'flex-end',
                             paddingRight: 25,
-                            marginTop:5
+                            marginTop: 5
                         }}>
                         <IonIcon size={30} color="white" name="add-circle-outline" />
                     </TouchableOpacity>
@@ -85,25 +186,115 @@ export default function BulkSMS({ navigation }) {
                 <View style={{ padding: 15 }} >
                     <ModalSelector
                         data={SMS_for}
-                        initValue="Employee"
-                        onChange={async option => {
-                            await getAssessesments(option.key);
+                        initValue="SMS For"
+                        onChange={option => {
+                            setSmsFor(option.label)
                         }}
                         style={styles.card_picker}
                         initValueTextStyle={styles.SelectedValueSmall}
                         selectTextStyle={styles.SelectedValueSmall}
                     />
+                    <ModalSelector
+                        data={templates}
+                        initValue="Template ID"
+                        onChange={option => {
+                            setTemplate(option.message)
+                            setTemplateId(option.label)
+                        }}
+                        style={{ marginTop: 10, ...styles.card_picker }}
+                        initValueTextStyle={styles.SelectedValueSmall}
+                        selectTextStyle={styles.SelectedValueSmall}
+                    />
+                    {
+                        smsFor === "Student" ? (
+                            <ModalSelector
+                                data={forTypeStu}
+                                initValue="SMS For Students In"
+                                onChange={option => {
+                                    setForStu(option.label)
+                                    smsForSub(option.label)
+                                }}
+                                style={{ marginTop: 10, ...styles.card_picker }}
+                                initValueTextStyle={styles.SelectedValueSmall}
+                                selectTextStyle={styles.SelectedValueSmall}
+                            />
+                        ) : (null)
+
+                    }
+                    {
+                        smsFor === "Employee" ? (
+                            <ModalSelector
+                                data={forTypeEmp}
+                                initValue="SMS For Employee In"
+                                onChange={option => {
+                                    setForEmp(option.label)
+                                    smsForSub(option.label)
+                                }}
+                                style={{ marginTop: 10, ...styles.card_picker }}
+                                initValueTextStyle={styles.SelectedValueSmall}
+                                selectTextStyle={styles.SelectedValueSmall}
+                            />
+                        ) : (null)
+
+                    }
+
+                    {
+                        forStu === "Selected Batches" ? (
+                            <ModalSelector
+                                data={batches}
+                                initValue="Select Batch"
+                                onChange={option => {
+                                    setForEmp(option.label)
+                                }}
+                                style={{ marginTop: 10, ...styles.card_picker }}
+                                initValueTextStyle={styles.SelectedValueSmall}
+                                selectTextStyle={styles.SelectedValueSmall}
+                            />
+                        ) : (null)
+
+                    }
+
+                    {
+                        forStu === "Selected Courses" ? (
+                            <ModalSelector
+                                data={courses}
+                                initValue="Select Course"
+                                onChange={option => {
+                                    setCourse(option.key)
+                                }}
+                                style={{ marginTop: 10, ...styles.card_picker }}
+                                initValueTextStyle={styles.SelectedValueSmall}
+                                selectTextStyle={styles.SelectedValueSmall}
+                            />
+                        ) : (null)
+
+                    }
+
+                    {
+                        forEmp === "Selected Departments" ? (
+                            <ModalSelector
+                                data={departments}
+                                initValue="Select Department"
+                                onChange={option => {
+                                    setDepartment(option.key)
+                                }}
+                                style={{ marginTop: 10, ...styles.card_picker }}
+                                initValueTextStyle={styles.SelectedValueSmall}
+                                selectTextStyle={styles.SelectedValueSmall}
+                            />
+                        ) : (null)
+                    }
                     <View style={{ padding: 10 }} />
                     <Card style={{ height: 200, ...styles.Card }}>
                         <Card.Content>
                             <TextInput
                                 placeholder="Write your message here "
                                 placeholderTextColor='grey'
+                                value={template}
                                 color='black'
-                                onChange={val => setDiscription(val)}
-                                style={{ backgroundColor: 'white',textAlignVertical:'top',fontFamily:'Poppins-Regular',fontSize:15 }}
+                                onChangeText={val => setTemplate(val)}
+                                style={{ backgroundColor: 'white', textAlignVertical: 'top', fontFamily: 'Poppins-Regular', fontSize: 15 }}
                                 multiline={true}
-                                
                             />
                         </Card.Content>
                     </Card>
@@ -115,7 +306,7 @@ export default function BulkSMS({ navigation }) {
 
                             alignItems: 'center',
                         }}>
-                        <Button style={{ width: 90 }} color='#5177E7' mode="contained" onPress={() => console.log('Pressed')}>
+                        <Button style={{ width: 90 }} color={ institute? institute.themeColor: '#5177E7'} mode="contained" onPress={handleSend}>
                             Send
                         </Button>
                     </View>
@@ -161,7 +352,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#ccc',
         borderWidth: 0.5,
-        borderRadius:12,
+        borderRadius: 12,
         overflow: 'hidden',
         justifyContent: 'center',
         elevation: 3,
