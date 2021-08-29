@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -8,23 +8,26 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+
+//icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 //redux
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
+import deleteReq from '../../../../services/helpers/request/delete';
 
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
-export default function TasksList({ navigation }) {
+export default function TasksList({navigation}) {
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -35,25 +38,30 @@ export default function TasksList({ navigation }) {
   };
 
   //data
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState();
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook();
 
-  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+  //screen reload
+  const [reload, setreload] = React.useState(true);
 
+  //on load
   useFocusEffect(
     React.useCallback(() => {
       let isActive = true;
 
       const fetchUser = async () => {
-        setLoadingScreen()
+        setLoadingScreen();
         try {
           let slug = '/task';
-          const token = await read('token');
-          const response = await get(slug, token);
+          let token = await read('token');
+          let response = await get(slug, token);
+          console.log(response);
+
           setTasks(response);
         } catch (err) {
-          alert('Error in fetching Task Lists!')
+          alert('Error in fetching Task Lists!' + err);
         }
-        hideLoadingScreen()
+        hideLoadingScreen();
       };
 
       fetchUser();
@@ -61,9 +69,23 @@ export default function TasksList({ navigation }) {
       return () => {
         isActive = false;
       };
-    }, [])
+    }, [reload]),
   );
 
+  //delete
+  const HandleDelete = async id => {
+    setLoadingScreen();
+    try {
+      let slug = `/task/${id}`;
+      let token = await read('token');
+      const response = await deleteReq(slug, token);
+      setreload(!reload);
+      alert('Task deleted!!');
+    } catch (err) {
+      alert('Cannot delete task!!' + err);
+    }
+    hideLoadingScreen();
+  };
   return (
     <View style={styles.backgroung}>
       {loadingScreen}
@@ -97,7 +119,7 @@ export default function TasksList({ navigation }) {
           }}>
           Task's List
         </Text>
-        <View style={{ flex: 1, marginLeft: 20 }}>
+        <View style={{flex: 1, marginLeft: 20}}>
           <TouchableOpacity
             onPress={() => navigation.navigate('AddTask')}
             style={{
@@ -112,20 +134,16 @@ export default function TasksList({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <Appbar>
-        <Appbar.BackAction onPress={() => {}} />
-        <Appbar.Content title="Tasks List" />
-        </Appbar> */}
-      <ScrollView>
-        <View style={{ padding: 10 }} />
 
-        <View style={{ marginHorizontal: 15, ...styles.shadow }}>
+      <ScrollView>
+        <View style={{padding: 10}} />
+
+        <View style={{marginHorizontal: 15, ...styles.shadow}}>
           <View style={styles.search}>
             <TextInput
-              style={{ ...styles.search_input }}
+              style={{...styles.search_input}}
               placeholder="Enter the driver name here"
               placeholderTextColor="grey"
-
             />
             <TouchableOpacity
               style={{
@@ -142,116 +160,139 @@ export default function TasksList({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-
-        <View style={{ padding: 10 }} />
-
-        {tasks &&
-          tasks.map(task => (
-            <View style={styles.section} key={task._id}>
-              <View style={styles.details}>
-                <View style={styles.userinhostels}>
-                  <View style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        color: '#211C5A',
-                        fontFamily: 'Poppins-Regular',
-                        marginHorizontal: -5,
-                      }}>
-                      {task.task}
-                    </Text>
-                  </View>
-                  <View style={{ padding: 5 }} />
-                  <View style={styles.differentusers}>
+        <>
+          <View style={{padding: 10}} />
+          {tasks &&
+            tasks.map(task => (
+              <View style={styles.section} key={task._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: '#211C5A',
+                          marginHorizontal: 5,
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {task.task}
+                      </Text>
+                    </View>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 'bold',
+                          color: '#58636D',
+                          marginHorizontal: 5,
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {task.userType && task.userType.name}
+                        {': '}
+                        {task.user &&
+                          task.user.firstName + ' ' + task.user.lastName}
+                      </Text>
+                      <Text
+                        style={{
+                          color: institute ? institute.themeColor : '#B04305',
+                          fontSize: 13,
+                          fontFamily: 'Poppins-Medium',
+                          marginHorizontal: 5,
+                          fontWeight: 'bold',
+                        }}>
+                        {'Priority: '}
+                        {task.priority}
+                      </Text>
+                    </View>
+                    <View style={{padding: 3}} />
                     <Text
                       style={{
                         fontSize: 13,
-                        fontWeight: 'bold',
                         color: '#58636D',
                         fontFamily: 'Poppins-Regular',
-                        marginHorizontal: -5,
+                        marginHorizontal: 5,
                       }}>
-                      {task.userType}
-                    </Text>
-                    <Text
-                      style={{
-                        color: institute ? institute.themeColor : '#B04305',
-                        fontSize: 13,
-                        fontFamily: 'Poppins-Medium',
-                        fontWeight: 'bold',
-                      }}>
-                      {task.priority}
-                      {' Priority'}
+                      {'Description: '}
+                      {task.description}
                     </Text>
                   </View>
-                  <View style={{ padding: 3 }} />
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      color: '#58636D',
-                      fontFamily: 'Poppins-Regular',
-                      marginHorizontal: -5,
-                    }}>
-                    {task.description}
-                  </Text>
                 </View>
-              </View>
 
-              <View style={styles.belowhr}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: 5,
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text
+                <View style={styles.belowhr}>
+                  <View
                     style={{
-                      color: '#211C5A',
-                      fontSize: 15,
-                      fontFamily: 'Poppins-Medium',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      padding: 5,
+                      justifyContent: 'space-between',
                     }}>
-                    {parseDate(task.taskDate)}
-                  </Text>
-                  <Text
-                    style={{
-                      position: 'relative',
-                      right: 20,
-                      top: 5,
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      color: '#5177E7',
-                      fontFamily: 'Poppins-Medium',
-                    }}>
-                    {task.status}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('EditTask', { task: task})}
-                    style={{ flexDirection: 'row' }}>
                     <Text
                       style={{
-                        fontSize: 14,
-                        fontWeight: 'bold',
                         color: '#211C5A',
+                        fontSize: 15,
                         fontFamily: 'Poppins-Medium',
                       }}>
-                      Edit
+                      {parseDate(task.taskDate)}
                     </Text>
+                    <Text
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        padding: 2,
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                        color: '#5177E7',
+                        fontFamily: 'Poppins-Medium',
+                      }}>
+                      {task.status}
+                    </Text>
+                    {/* <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('EditTask', {task: task})
+                      }
+                      style={{flexDirection: 'row'}}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                        Edit
+                      </Text>
 
-                    <MaterialCommunityIcon
-                      size={15}
-                      color="#211C5A"
-                      name="square-edit-outline"
-                      style={{ paddingTop: 2, paddingRight: 10 }}
-                    />
-                  </TouchableOpacity>
+                      <MaterialCommunityIcon
+                        size={15}
+                        color="#211C5A"
+                        name="square-edit-outline"
+                        style={{paddingTop: 2, paddingRight: 10}}
+                      />
+                    </TouchableOpacity> */}
+                    <TouchableWithoutFeedback
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        padding: 2,
+                      }}
+                      onPress={() => {
+                        HandleDelete(task._id);
+                      }}>
+                      <AntDesign size={15} color="#211C5A" name="delete" />
+                      <Text
+                        style={{
+                          color: institute ? institute.themeColor : '#211C5A',
+                        }}>
+                        Delete
+                      </Text>
+                    </TouchableWithoutFeedback>
+                  </View>
+                  <View style={{padding: 5}} />
                 </View>
-                <View style={{ padding: 10 }} />
               </View>
-            </View>
-          ))}
+            ))}
+        </>
 
-        <View style={{ padding: 20 }} />
+        <View style={{padding: 20}} />
       </ScrollView>
     </View>
   );
@@ -259,7 +300,7 @@ export default function TasksList({ navigation }) {
 
 const styles = StyleSheet.create({
   backgroung: {
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
     height: '100%',
     flex: 1,
   },
@@ -283,7 +324,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingHorizontal: 10,
     width: '90%',
-    color: 'black'
+    color: 'black',
   },
   shadow: {
     elevation: 5,

@@ -7,15 +7,16 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {
-  Button,
-} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
+//checkbox
+import {CheckBox} from 'react-native-elements';
 
 // loading screen
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
@@ -42,33 +43,29 @@ export default function AddTask({navigation}) {
 
   //modal lists
   const [Priority, setPriority] = useState([
-    {key: 'Low', label: 'Low'},
-    {key: 'Medium', label: 'Medium'},
-    {key: 'High', label: 'High'},
+    {key: 'low', label: 'Low'},
+    {key: 'medium', label: 'Medium'},
+    {key: 'high', label: 'High'},
   ]);
 
-  const [Usertypelist, setUsertypelist] = useState([
-    {key: 'Employee', label: 'Employee'},
-    {key: 'Student', label: 'Student'},
-  ]);
+  const [Usertypelist, setUsertypelist] = useState([]);
   const [Statuses, setUserStatuses] = useState([
-    {key: 'Open', label: 'Open'},
-    {key: 'Close', label: 'Close'},
+    {key: 'open', label: 'Open'},
+    {key: 'close', label: 'Close'},
   ]);
+
+  //data
+  const [Usertype, setUserType] = useState('');
+  const [Usertypeid, setUserTypeID] = useState('');
+  const [Status, setUserStatus] = useState('');
+  const [PrioritySelected, setPrioritySelected] = useState('');
+  const [desc, setDesc] = useState('');
+  const [name, setName] = useState('');
 
   //student modal lists
   const [courses, setCourses] = useState([]);
   const [batches, setBatches] = useState([]);
   const [students, setStudents] = useState([]);
-
-  //employee data
-  const [departments, setDepartments] = useState([]);
-  const [employees, setEmployees] = useState([]);
-
-  //data
-  const [Usertype, setUserType] = useState('');
-  const [Status, setUserStatus] = useState([]);
-  const [PrioritySelected, getPriority] = useState([]);
 
   //student data
   const [course, setCourse] = useState([]);
@@ -88,22 +85,34 @@ export default function AddTask({navigation}) {
     });
   };
 
+  //teacher list
+  const [departments, setDepartments] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+
+  //teacher data
+  const [department, setDepartment] = useState('');
+  const [selectedTeachers, setselectedTeachers] = useState([]);
+
+  //teacher checkboxes
+  const [checkBoxValueTeacher, setcheckBoxValueTeacher] = useState({});
+
+  //teacher
+  let toggleCheckBoxTeacher = Id => {
+    setcheckBoxValueTeacher(prev => {
+      return {
+        ...prev,
+        [Id]: !checkBoxValueTeacher[[Id]],
+      };
+    });
+  };
+
   const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-  const [date, setDate] = React.useState('21 May 2021');
-  let index = 0;
-  const dateMonths = {
-    1: 'Jan',
-    2: 'Feb',
-    3: 'Mar',
-    4: 'Apr',
-    5: 'May',
-    6: 'June',
-    7: 'July',
-    8: 'Aug',
-    9: 'Sept',
-    10: 'Oct',
-    11: 'Nov',
-    12: 'Dec',
+  const [date, setDate] = React.useState();
+
+  //date picker
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(4, 15);
   };
 
   const showDatePicker = () => {
@@ -115,36 +124,33 @@ export default function AddTask({navigation}) {
   };
   const handleConfirm = date => {
     // console.warn("A date has been picked: ", date.toString());
-    setDate(
-      date.getDate() +
-        ' ' +
-        dateMonths[date.getMonth() + 1] +
-        ' ' +
-        date.getFullYear(),
-    );
+    setDate(date.toString());
     hideDatePicker();
   };
 
   //modal data
   const [emp, setEmp] = React.useState([]);
 
-  // //on load
-  // useEffect(async () => {
-  //   showLoadingScreen();
-  //   try {
-  //     let list = await getUsertypelist();
-  //     setUsertypelist(list);
-  //   } catch (err) {
-  //     alert('Cannot fetch employee list !!\n' + err);
-  //   }
-  //   hideLoadingScreen();
-  // }, []);
+  //on load
+  useEffect(async () => {
+    showLoadingScreen();
+    try {
+      let list = await getUsertypelist();
+      setUsertypelist(list);
+      console.log(list);
+    } catch (err) {
+      alert('Cannot fetch usertype list !!\n' + err);
+    }
+    hideLoadingScreen();
+  }, []);
 
   // handle student type
   const handlestudentcourses = async option => {
     showLoadingScreen();
     try {
-      setUserType(option);
+      console.log('user', option);
+      setUserType(option.key);
+      setUserTypeID(option.id);
       let list = await getCourse();
       setCourses(list);
     } catch (err) {
@@ -170,7 +176,6 @@ export default function AddTask({navigation}) {
     showLoadingScreen();
 
     try {
-      alert('hi');
       setBatch(option);
       let list = await getStudents(course, option);
       console.log(list);
@@ -181,18 +186,18 @@ export default function AddTask({navigation}) {
         });
       setcheckBoxValueStud(checkBoxMapStud);
       setStudents(list);
-      console.log(checkBoxMapStud);
     } catch (err) {
       alert('Cannot fetch batch list !!\n' + err);
     }
     hideLoadingScreen();
   };
 
-  // handle employee type
-  const handleemployeedept = async option => {
+  // handle teacher type
+  const handleTeacherdept = async option => {
     showLoadingScreen();
     try {
-      setUserType(option);
+      setUserType(option.key);
+      setUserTypeID(option.id);
       let token = await read('token');
       let response = await get('/department', token);
       let list = [];
@@ -203,6 +208,115 @@ export default function AddTask({navigation}) {
     }
     hideLoadingScreen();
   };
+
+  const handleTeacherTeachers = async option => {
+    showLoadingScreen();
+    try {
+      setDepartment(option);
+      let slug = `/employee?department=${option}&userType=${Usertypeid}`;
+      let token = await read('token');
+      let list = await get(slug, token);
+      let checkBoxMapTeacher = {};
+      list &&
+        list.map(data => {
+          checkBoxMapTeacher[data.key] = false;
+        });
+      setcheckBoxValueTeacher(checkBoxMapTeacher);
+      setTeachers(list);
+    } catch (err) {
+      alert('Cannot fetch course list !!\n' + err);
+    }
+    hideLoadingScreen();
+  };
+
+  // save details
+  const handlesubmit = async () => {
+    showLoadingScreen();
+    try {
+      let slug = `/task/add`;
+      let token = await read('token');
+      let data;
+
+      if (Usertype === 'Student') {
+        let students = [];
+        Object.entries(checkBoxValueStud).forEach(([userId, value]) => {
+          if (checkBoxValueStud[userId]) students.push(userId);
+        });
+
+        if (
+          !batch ||
+          !course ||
+          !desc ||
+          !PrioritySelected ||
+          !Status ||
+          !name ||
+          !date ||
+          !Usertypeid
+        ) {
+          alert('All fields are required!!');
+          hideLoadingScreen();
+          return;
+        }
+
+        data = {
+          batch: batch,
+          course: course,
+          description: desc,
+          priority: PrioritySelected,
+          status: Status,
+          task: name,
+          taskDate: date,
+          user: students,
+          userType: Usertypeid,
+        };
+        console.log(data);
+      } else if (Usertype === 'Teacher') {
+        let teachers = [];
+        Object.entries(checkBoxValueTeacher).forEach(([userId, value]) => {
+          if (checkBoxValueTeacher[userId]) teachers.push(userId);
+        });
+
+        if (
+          !department ||
+          !desc ||
+          !PrioritySelected ||
+          !Status ||
+          !name ||
+          !date ||
+          !Usertypeid
+        ) {
+          alert('All fields are required!!');
+          hideLoadingScreen();
+          return;
+        }
+
+        data = {
+          department: department,
+          description: desc,
+          priority: PrioritySelected,
+          status: Status,
+          task: name,
+          taskDate: date,
+          user: teachers,
+          userType: Usertypeid,
+        };
+        console.log(data);
+      }
+
+      let response = await post(slug, data, token);
+      if (response.error) {
+        alert(response.error);
+        console.log(response);
+      } else {
+        navigation.replace('TasksList');
+        alert('Task created!');
+      }
+    } catch (err) {
+      alert('Cannot create Task!' + err);
+    }
+    hideLoadingScreen();
+  };
+
   return (
     <View style={styles.backgroung}>
       {loadingScreen}
@@ -238,7 +352,7 @@ export default function AddTask({navigation}) {
         </Text>
       </View>
       <ScrollView>
-        <View style={{padding: 10}} />
+        <View style={{padding: 5}} />
 
         <View
           style={{
@@ -255,14 +369,15 @@ export default function AddTask({navigation}) {
             flexDirection: 'row',
             justifyContent: 'space-evenly',
             paddingBottom: 10,
+            paddingHorizontal: 10,
           }}>
           <View style={styles.Card3}>
             <View style={styles.CardContent}>
               <TextInput
-                style={{...styles.search_input}}
                 placeholder="Name of the task"
                 placeholderTextColor="grey"
                 color="black"
+                onChangeText={text => setName(text)}
               />
             </View>
           </View>
@@ -282,15 +397,16 @@ export default function AddTask({navigation}) {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-evenly',
+            paddingHorizontal: 10,
             paddingBottom: 10,
           }}>
           <View style={styles.Card3}>
             <View style={styles.CardContent}>
               <TextInput
-                style={{...styles.search_input}}
                 placeholder="Write the description here . . . ."
                 placeholderTextColor="grey"
                 color="black"
+                onChangeText={text => setDesc(text)}
               />
             </View>
           </View>
@@ -318,33 +434,40 @@ export default function AddTask({navigation}) {
             data={Priority}
             initValue="Active"
             onChange={async option => {
-              await getPriority(option.key);
+              await setPrioritySelected(option.key);
             }}
-            style={styles.card_picker}
+            style={{
+              backgroundColor: 'white',
+              justifyContent: 'center',
+              width: 150,
+              backgroundColor: '#FFFFFF',
+              borderRadius: 10,
+              shadowColor: 'black',
+              shadowOpacity: 5,
+              elevation: 3,
+            }}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
-          <View style={styles.card_picker}>
-            <TouchableOpacity
-              style={[styles.pickdate]}
-              onPress={showDatePicker}>
-              <TextInput
-                style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
-                placeholder={date}
-                placeholderTextColor="grey"
-                color="black"
-              />
+          <View>
+            <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
+              <Text style={{marginTop: 15, marginLeft: 20, color: 'black'}}>
+                {(date && parseDate(date)) || 'Choose date'}
+              </Text>
               <Feather
                 size={18}
                 color="black"
                 name="calendar"
                 style={{
-                  marginTop: 10,
-                  marginRight: 0,
-                }}></Feather>
+                  padding: 16,
+                }}
+              />
               <DateTimePickerModal
                 isVisible={isDatePickerVisible}
-                style={styles.pickdate}
+                style={{
+                  marginTop: 10,
+                  borderWidth: 0,
+                }}
                 mode="date"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
@@ -376,11 +499,20 @@ export default function AddTask({navigation}) {
             data={Usertypelist}
             initValue="Teacher"
             onChange={async option => {
-              if (option.label === 'Student')
-                await handlestudentcourses(option.key);
-              else await handleemployeedept(option.key);
+              if (option.label === 'Student') {
+                await handlestudentcourses(option);
+              } else await handleTeacherdept(option);
             }}
-            style={styles.card_picker}
+            style={{
+              backgroundColor: 'white',
+              justifyContent: 'center',
+              width: 150,
+              backgroundColor: '#FFFFFF',
+              borderRadius: 10,
+              shadowColor: 'black',
+              shadowOpacity: 5,
+              elevation: 3,
+            }}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -388,9 +520,18 @@ export default function AddTask({navigation}) {
             data={Statuses}
             initValue="Status"
             onChange={async option => {
-              await getPriority(option.key);
+              await setUserStatus(option.key);
             }}
-            style={styles.card_picker}
+            style={{
+              backgroundColor: 'white',
+              justifyContent: 'center',
+              width: 150,
+              backgroundColor: '#FFFFFF',
+              borderRadius: 10,
+              shadowColor: 'black',
+              shadowOpacity: 5,
+              elevation: 3,
+            }}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -400,7 +541,7 @@ export default function AddTask({navigation}) {
             <View
               style={{
                 width: '100%',
-                paddingTop: 10,
+                paddingTop: 20,
                 flexDirection: 'row',
                 alignContent: 'flex-start',
                 justifyContent: 'space-evenly',
@@ -420,7 +561,16 @@ export default function AddTask({navigation}) {
                 onChange={async option => {
                   await handlestudentbatches(option.key);
                 }}
-                style={styles.card_picker}
+                style={{
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  width: 150,
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 10,
+                  shadowColor: 'black',
+                  shadowOpacity: 5,
+                  elevation: 3,
+                }}
                 initValueTextStyle={styles.SelectedValueSmall}
                 selectTextStyle={styles.SelectedValueSmall}
               />
@@ -430,7 +580,16 @@ export default function AddTask({navigation}) {
                 onChange={async option => {
                   await handlestudentStudents(option.key);
                 }}
-                style={styles.card_picker}
+                style={{
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  width: 150,
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 10,
+                  shadowColor: 'black',
+                  shadowOpacity: 5,
+                  elevation: 3,
+                }}
                 initValueTextStyle={styles.SelectedValueSmall}
                 selectTextStyle={styles.SelectedValueSmall}
               />
@@ -438,10 +597,8 @@ export default function AddTask({navigation}) {
             <View
               style={{
                 width: '100%',
-                paddingTop: 10,
-                flexDirection: 'row',
-                alignContent: 'flex-start',
-                justifyContent: 'space-evenly',
+                paddingTop: 20,
+                paddingHorizontal: 25,
               }}>
               <Text style={styles.section_heading}>Choose Student </Text>
             </View>
@@ -449,15 +606,15 @@ export default function AddTask({navigation}) {
               style={{
                 paddingHorizontal: 25,
               }}>
-              {students &&
-                students.map(student => (
-                  <View style={styles.section} key={student._id}>
-                    <View style={styles.details}>
+              <View style={styles.section}>
+                {students &&
+                  students.map(student => (
+                    <View style={styles.details} key={student._id}>
                       <View style={styles.userinhostels}>
                         <TouchableOpacity style={styles.differentusers}>
                           <Text
                             style={{
-                              fontSize: 22,
+                              fontSize: 18,
                               color: '#211C5A',
                               fontFamily: 'Poppins-Regular',
                             }}>
@@ -475,25 +632,14 @@ export default function AddTask({navigation}) {
                             />
                           </View>
                         </TouchableOpacity>
-                        {/* <TouchableOpacity style={styles.differentusers}>
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              color: '#6A6A80',
-                              fontFamily: 'Poppins-Medium',
-                            }}>
-                            {'  '}Admission No.{' '}
-                            {/* {studentsList[studentId].admissionNumber} 
-                          </Text>
-                        </TouchableOpacity> */}
                       </View>
                     </View>
-                  </View>
-                ))}
+                  ))}
+              </View>
             </View>
           </>
         )}
-        {Usertype === 'Employee' && (
+        {Usertype === 'Teacher' && (
           <>
             <View
               style={{
@@ -515,9 +661,18 @@ export default function AddTask({navigation}) {
                 data={departments}
                 initValue="Department"
                 onChange={async option => {
-                  await handlestudentbatches(option.key);
+                  await handleTeacherTeachers(option.key);
                 }}
-                style={styles.card_picker}
+                style={{
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  width: 150,
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: 10,
+                  shadowColor: 'black',
+                  shadowOpacity: 5,
+                  elevation: 3,
+                }}
                 initValueTextStyle={styles.SelectedValueSmall}
                 selectTextStyle={styles.SelectedValueSmall}
               />
@@ -530,15 +685,15 @@ export default function AddTask({navigation}) {
                 alignContent: 'flex-start',
                 justifyContent: 'space-evenly',
               }}>
-              <Text style={styles.section_heading}>Choose Employee </Text>
+              <Text style={styles.section_heading}>Choose Teachers </Text>
             </View>
             <View
               style={{
                 paddingHorizontal: 25,
               }}>
-              {employees &&
-                employees.map(employee => (
-                  <View style={styles.section} key={employee._id}>
+              {teachers &&
+                teachers.map(teacher => (
+                  <View style={styles.section} key={teacher._id}>
                     <View style={styles.details}>
                       <View style={styles.userinhostels}>
                         <TouchableOpacity style={styles.differentusers}>
@@ -548,14 +703,14 @@ export default function AddTask({navigation}) {
                               color: '#211C5A',
                               fontFamily: 'Poppins-Regular',
                             }}>
-                            {employee.firstName + ' ' + employee.lastName ||
+                            {teacher.firstName + ' ' + teacher.lastName ||
                               'Name Not Found'}
                           </Text>
                           <View style={{marginRight: 20}}>
                             <CheckBox
                               containerStyle={{padding: 5}}
-                              checked={checkBoxValueEmp[employee._id]}
-                              onPress={() => toggleCheckBoxEmp(employee._id)}
+                              checked={checkBoxValueTeacher[teacher._id]}
+                              onPress={() => toggleCheckBoxTeacher(teacher._id)}
                               checkedColor={
                                 institute ? institute.themeColor : 'black'
                               }
@@ -577,9 +732,9 @@ export default function AddTask({navigation}) {
           }}>
           <Button
             style={{width: 90}}
-            color={ institute? institute.themeColor: "#5177E7"}
+            color={institute ? institute.themeColor : '#5177E7'}
             mode="contained"
-            onPress={() => console.log('Pressed')}>
+            onPress={handlesubmit}>
             SAVE
           </Button>
         </View>
@@ -590,7 +745,7 @@ export default function AddTask({navigation}) {
 
 const styles = StyleSheet.create({
   backgroung: {
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'rgba(249, 249, 249, 1)',
     height: '100%',
     flex: 1,
   },
@@ -617,9 +772,8 @@ const styles = StyleSheet.create({
   },
   section_heading: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 12,
+    fontSize: 13,
     width: 160,
-    paddingLeft: '0%',
     fontStyle: 'normal',
     fontWeight: '600',
     lineHeight: 18,
@@ -630,9 +784,9 @@ const styles = StyleSheet.create({
   },
   section_heading1: {
     fontFamily: 'Poppins-Medium',
-    fontSize: 12,
+    fontSize: 13,
     width: 160,
-    paddingLeft: 25,
+    paddingLeft: 10,
     fontStyle: 'normal',
     fontWeight: '600',
     lineHeight: 18,
@@ -655,7 +809,7 @@ const styles = StyleSheet.create({
   },
   section_heading3: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 12,
+    fontSize: 13,
     width: 210,
     fontStyle: 'normal',
     fontWeight: '600',
@@ -709,31 +863,31 @@ const styles = StyleSheet.create({
   },
   Card3: {
     backgroundColor: 'white',
-    width: '85%',
     justifyContent: 'space-between',
     flexDirection: 'row',
     paddingHorizontal: 10,
     borderColor: '#00499F',
     borderRadius: 8,
+    elevation: 3,
   },
   CardContent: {
     borderRadius: 8,
-    height: 59,
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
     fontWeight: 'bold',
-    paddingTop: 10,
     paddingHorizontal: 10,
     width: '90%',
   },
+
   pickdate: {
-    width: 120,
-    fontFamily: 'Poppins-Regular',
+    width: 150,
     height: 50,
-    backgroundColor: 'white',
-    borderColor: '#58636D',
-    borderRadius: 8,
-    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowOpacity: 5,
+    elevation: 3,
+    borderWidth: 0,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -769,5 +923,11 @@ const styles = StyleSheet.create({
   userinhostels2: {
     marginTop: -3,
     marginHorizontal: 10,
+  },
+  differentusers: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 2,
+    justifyContent: 'space-between',
   },
 });
