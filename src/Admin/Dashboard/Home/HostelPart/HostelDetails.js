@@ -4,14 +4,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
-  Pressable,
   TextInput,
-  TouchableWithoutFeedback,
 } from 'react-native';
 
 import { Button } from 'react-native-paper';
 
-import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 // helpers
@@ -27,6 +25,10 @@ const HostelDetails = ({ navigation }) => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [hdetails, sethdetails] = useState([]);
+
+  //for search-filteredusers for filtering cards based on the hostel name
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   const onChangeSearch = query => setSearchQuery(query);
   useEffect(async () => {
@@ -55,35 +57,37 @@ const HostelDetails = ({ navigation }) => {
           backgroundColor: institute ? institute.themeColor : '#FF5733',
           ...styles.header,
         }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Home');
-          }}>
-          <AntDesign
-            size={24}
-            color="white"
-            name="left"
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Home');
+            }}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+
+              }}
+            />
+          </TouchableOpacity>
+          <Text
             style={{
+              fontStyle: 'normal',
+              fontFamily: 'NunitoSans-Regular',
+              fontSize: 28,
+              fontWeight: '600',
               alignSelf: 'center',
-              fontSize: 25,
+              paddingLeft: 30,
               color: 'white',
-              paddingLeft: 20,
-              paddingTop: 20,
-            }}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontStyle: 'normal',
-            fontFamily: 'NunitoSans-Regular',
-            fontSize: 28,
-            fontWeight: '600',
-            alignSelf: 'center',
-            paddingLeft: 30,
-            color: 'white',
-          }}>
-          Hostel Details
-        </Text>
+            }}>
+            Hostel Details
+          </Text>
+        </View>
         <TouchableOpacity
           onPress={() => navigation.navigate('AllocatedListHostel')}
           style={{
@@ -98,15 +102,7 @@ const HostelDetails = ({ navigation }) => {
               alignItems: 'center',
               marginRight: 5,
             }}>
-            {/* <Ionicons
-                  name="add-circle"
-                  color="#900"
-                  style={{
-                    fontSize: 35,
-                    color: 'white',
-                    paddingRight: 20,
-                  }}
-                /> */}
+
             <MaterialIcon
               name="align-horizontal-left"
               color="#900"
@@ -129,20 +125,56 @@ const HostelDetails = ({ navigation }) => {
             placeholder="Enter hostel name here"
             placeholderTextColor="grey"
             color="black"
+            defaultValue={searchText}
+            textContentType='name'
+            onChangeText={(text) => {
+              setSearchText(text);
+              if (text === '') {
+                return setFilteredUsers([]);
+              }
+              const filtered_users = hdetails.filter((hdetails) =>
+                hdetails.name.toLowerCase().startsWith(text.toLowerCase())
+              );
+              setFilteredUsers(filtered_users);
+            }}
+            returnKeyType='search'
           />
-          <TouchableOpacity
-            style={{
-              alignSelf: 'center',
-            }}>
-            <Icon
-              name="search-sharp"
+
+          {searchText.length === 0 ? (
+            <TouchableOpacity
               style={{
                 alignSelf: 'center',
-                fontSize: 30,
-                color: '#505069',
               }}
-            />
-          </TouchableOpacity>
+            >
+              <Icon
+                name="search-sharp"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 30,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setSearchText('');
+                setFilteredUsers([]);
+              }}
+              style={{
+                alignSelf: 'center',
+              }}
+            >
+              <MaterialIcon name='cancel'
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 24,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          )}
+
         </View>
       </View>
       <Button
@@ -153,117 +185,232 @@ const HostelDetails = ({ navigation }) => {
         <Text>Hostel Requests</Text>
       </Button>
 
-      <ScrollView>
-        {hdetails &&
-          hdetails.map(hdetails => (
-            <View style={styles.section} key={hdetails._id}>
-              <View style={styles.details}>
-                <View style={styles.userinhostels}>
-                  <View style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        color: '#211C5A',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      {hdetails.name ? hdetails.name : 'Name N/A'}
-                    </Text>
 
-                    <Text
-                      style={{
-                        flexDirection: 'row',
-                        fontSize: 10,
-                        color: '#505069',
-                        marginTop: 5,
-                        fontFamily: 'openSans',
-                      }}>
-                      Ph:{hdetails.phoneNumber ? hdetails.phoneNumber : 'N/A'}
-                    </Text>
 
-                    {/* */}
-                  </View>
-                  {/* <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
-                                User Type
-                            </Text>
-                        </TouchableOpacity> */}
+      {filteredUsers.length > 0 ?
+        (
 
-                  <View style={styles.differentusers}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: '#211C5A',
-                        fontFamily: 'Poppins-Regular',
-                      }}>
-                      {hdetails.address ? hdetails.address : 'Address N/A'}
-                    </Text>
+          <ScrollView>
+            {filteredUsers.map(hdetails => (
 
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
+              <View style={styles.section} key={hdetails._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {hdetails.name ? hdetails.name : 'Name N/A'}
+                      </Text>
+
+                      <Text
+                        style={{
+                          flexDirection: 'row',
+                          fontSize: 10,
+                          color: '#505069',
+                          marginTop: 5,
+                          fontFamily: 'openSans',
+                        }}>
+                        Ph:{hdetails.phoneNumber ? hdetails.phoneNumber : 'N/A'}
+                      </Text>
+
+                    </View>
+
+
+                    <View style={styles.differentusers}>
                       <Text
                         style={{
                           fontSize: 12,
                           color: '#211C5A',
                           fontFamily: 'Poppins-Regular',
-                          marginTop: 5,
-                          marginHorizontal: 8,
                         }}>
-                        {hdetails.hostelType
-                          ? hdetails.hostelType.name
-                          : 'N/A'}
+                        {hdetails.address ? hdetails.address : 'Address N/A'}
                       </Text>
-                      {/* <Icon1
-                                    size={12}
-                                    backgroundColor=" #211C5A"
-                                    name="edit"
-                                    style={{ paddingTop: 7, paddingRight: 12 }}
-                                /> */}
+
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            marginTop: 5,
+                            marginHorizontal: 8,
+                          }}>
+                          {hdetails.hostelType
+                            ? hdetails.hostelType.name
+                            : 'N/A'}
+                        </Text>
+                      </View>
                     </View>
+                  </View>
+                </View>
+
+                <View style={styles.belowhr}>
+                  <View style={{ flexDirection: 'column' }}>
+                    <Text
+                      style={{
+                        color: '#B04305',
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Regular',
+                      }}></Text>
+                    <Text
+                      style={{
+                        color: '#211C5A',
+
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {hdetails.wardenName ? hdetails.wardenName : 'N/A'}
+                    </Text>
+                  </View>
+                  <View style={{ marginTop: 15 }}>
+                    <Text
+                      style={{
+                        color: '#211C5A',
+
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      Ph:
+                      {hdetails.wardenPhoneNumber
+                        ? hdetails.wardenPhoneNumber
+                        : 'N/A'}
+                    </Text>
                   </View>
                 </View>
               </View>
 
-              <View style={styles.belowhr}>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text
-                    style={{
-                      color: '#B04305',
-                      fontSize: 12,
-                      fontFamily: 'Poppins-Regular',
-                    }}></Text>
-                  <Text
-                    style={{
-                      color: '#211C5A',
 
-                      fontSize: 12,
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {hdetails.wardenName ? hdetails.wardenName : 'N/A'}
-                  </Text>
+            ))
+
+
+
+
+            }
+
+            <View style={{ height: 90 }} />
+
+          </ScrollView>
+
+
+        ) :
+        (
+          <ScrollView>
+            {hdetails && hdetails.map(hdetails => (
+              <View style={styles.section} key={hdetails._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {hdetails.name ? hdetails.name : 'Name N/A'}
+                      </Text>
+
+                      <Text
+                        style={{
+                          flexDirection: 'row',
+                          fontSize: 10,
+                          color: '#505069',
+                          marginTop: 5,
+                          fontFamily: 'openSans',
+                        }}>
+                        Ph:{hdetails.phoneNumber ? hdetails.phoneNumber : 'N/A'}
+                      </Text>
+
+                      {/* */}
+                    </View>
+
+
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {hdetails.address ? hdetails.address : 'Address N/A'}
+                      </Text>
+
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            marginTop: 5,
+                            marginHorizontal: 8,
+                          }}>
+                          {hdetails.hostelType
+                            ? hdetails.hostelType.name
+                            : 'N/A'}
+                        </Text>
+
+                      </View>
+                    </View>
+                  </View>
                 </View>
-                <View style={{ marginTop: 15 }}>
-                  <Text
-                    style={{
-                      color: '#211C5A',
 
-                      fontSize: 12,
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    Ph:
-                    {hdetails.wardenPhoneNumber
-                      ? hdetails.wardenPhoneNumber
-                      : 'N/A'}
-                  </Text>
+                <View style={styles.belowhr}>
+                  <View style={{ flexDirection: 'column' }}>
+                    <Text
+                      style={{
+                        color: '#B04305',
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Regular',
+                      }}></Text>
+                    <Text
+                      style={{
+                        color: '#211C5A',
+
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {hdetails.wardenName ? hdetails.wardenName : 'N/A'}
+                    </Text>
+                  </View>
+                  <View style={{ marginTop: 15 }}>
+                    <Text
+                      style={{
+                        color: '#211C5A',
+
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      Ph:
+                      {hdetails.wardenPhoneNumber
+                        ? hdetails.wardenPhoneNumber
+                        : 'N/A'}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
-          ))}
+            ))
 
-        <View style={{ height: 100 }} />
-      </ScrollView>
+            }
+
+            <View style={{ height: 90 }} />
+          </ScrollView>
+
+
+        )}
+
+
+      <View style={{ height: 30 }} />
     </View>
   );
 };
@@ -329,7 +476,6 @@ const styles = StyleSheet.create({
   },
 
   details: {
-    //display: 'flex',
     flexDirection: 'column',
     marginTop: 5,
     paddingBottom: 0,
@@ -358,7 +504,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingBottom: 10,
     borderBottomColor: '#333',
-    //borderBottomWidth:1,
   },
 
   button: {
