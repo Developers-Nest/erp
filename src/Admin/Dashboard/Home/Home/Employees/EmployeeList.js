@@ -8,11 +8,11 @@ import {
   TextInput,
   TouchableWithoutFeedback,
 } from 'react-native';
-import ModalSelector from 'react-native-modal-selector';
 
-import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
+import AntDesign from 'react-native-vector-icons/AntDesign'; 
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {useSelector} from 'react-redux';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -28,6 +28,9 @@ const EmployeeList = ({navigation}) => {
 
   const onChangeSearch = query => setSearchQuery(query);
 
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
   useEffect(async () => {
     try {
       let slug = '/employee';
@@ -95,15 +98,7 @@ const EmployeeList = ({navigation}) => {
               alignItems: 'center',
               marginRight: 5,
             }}>
-            {/* <Ionicons
-                  name="add-circle"
-                  color="#900"
-                  style={{
-                    fontSize: 35,
-                    color: 'white',
-                    paddingRight: 20,
-                  }}
-                /> */}
+           
             <MaterialCommunityIcon
               name="eye"
               color="#900"
@@ -132,26 +127,143 @@ const EmployeeList = ({navigation}) => {
             style={{...styles.search_input, fontFamily: 'Poppins-Regular'}}
             placeholder="Enter employee name here"
             placeholderTextColor="grey"
+            defaultValue={searchText}
+            textContentType='name'
+            onChangeText={(text) => {
+              setSearchText(text);
+              if (text === '') {
+                return setFilteredUsers([]);
+              }
+              const filtered_users = employees.filter((employee) =>
+               employee.firstName.toLowerCase().startsWith(text.toLowerCase())
+              );
+              setFilteredUsers(filtered_users);
+            }}
+            returnKeyType='search'
           />
-          <TouchableOpacity
-            style={{
-              alignSelf: 'center',
-            }}>
-            <Icon
-              name="search-sharp"
+          {searchText.length === 0 ? (
+            <TouchableOpacity
               style={{
                 alignSelf: 'center',
-                fontSize: 30,
-                color: '#505069',
               }}
-            />
-          </TouchableOpacity>
+            >
+              <Icon
+                name="search-sharp"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 30,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setSearchText('');
+                setFilteredUsers([]);
+              }}
+              style={{
+                alignSelf: 'center',
+              }}
+            >
+              <MaterialIcon name='cancel'
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 24,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          )}
+
         </View>
       </View>
 
       {/* cards open */}
-
+      {filteredUsers.length > 0 ?
+        (
       <ScrollView>
+        {employees &&
+          filteredUsers.map(employees => (
+            <View style={styles.section} key={employees._id}>
+              <View style={styles.details}>
+                <View style={styles.userinhostels}>
+                  <View style={styles.differentusers}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        color: '#211C5A',
+                        fontFamily: 'Poppins-Regular',
+                        marginHorizontal: -5,
+                        // marginRight:100,
+                        paddingRight: 50,
+                      }}>
+                      {' '}
+                      {employees.firstName
+                        ? employees.firstName.charAt(0).toUpperCase() +
+                          employees.firstName.slice(1) +
+                          ' ' +
+                          employees.middleName.charAt(0).toUpperCase() +
+                          employees.middleName.slice(1) +
+                          ' ' +
+                          employees.lastName.charAt(0).toUpperCase() +
+                          employees.lastName.slice(1)
+                        : 'Name not given'}
+                    </Text>
+                  </View>
+                  <View style={styles.differentusers}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: '#211C5A',
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {employees.designation ? employees.designation : 'N/A'}
+                    </Text>
+
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: '#211C5A',
+                        fontFamily: 'Poppins-Regular',
+                      }}>
+                      {employees.department ? employees.department : ' N / A'}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+              <View style={styles.belowhr}>
+                <View style={{flexDirection: 'column'}}>
+                  <Text
+                    style={{
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: '500',
+                      fontSize: 12,
+                      lineHeight: 18,
+                      color: '#211C5A',
+                    }}>
+                    {employees.email ? employees.email : 'EMAIL N/A'}
+                  </Text>
+                </View>
+                <View>
+                  <Text
+                    style={{
+                      fontFamily: 'Poppins-Regular',
+                      fontWeight: '500',
+                      fontSize: 12,
+                      lineHeight: 18,
+                      color: '#211C5A',
+                    }}>
+                    {employees.code ? employees.code : N / A}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          ))}
+        <View style={{height: 90}} />
+      </ScrollView>
+      ):(
+        <ScrollView>
         {employees &&
           employees.map(employees => (
             <View style={styles.section} key={employees._id}>
@@ -231,6 +343,10 @@ const EmployeeList = ({navigation}) => {
           ))}
         <View style={{height: 90}} />
       </ScrollView>
+
+
+      )
+      }
     </View>
   );
 };
