@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -14,20 +14,25 @@ import ModalSelector from 'react-native-modal-selector';
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // loading screen
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-export default function Guardian({navigation}) {
+export default function Guardian({ navigation }) {
   //guardian list
   const [Guardians, setGuardians] = useState([]);
+
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   //on load
   useEffect(async () => {
@@ -51,7 +56,7 @@ export default function Guardian({navigation}) {
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {loadingScreen}
       <View
         style={{
@@ -59,7 +64,7 @@ export default function Guardian({navigation}) {
           ...styles.header,
         }}>
         <View
-          style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 20}}>
+          style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Students');
@@ -109,51 +114,116 @@ export default function Guardian({navigation}) {
       {/* Search bar */}
       <View style={styles.search}>
         <TextInput
-          style={{...styles.search_input}}
+          style={{ ...styles.search_input }}
           placeholder="Enter Guardian's name Here"
           placeholderTextColor="grey"
+          defaultValue={searchText}
+          textContentType='name'
+          onChangeText={(text) => {
+            setSearchText(text);
+            if (text === '') {
+              return setFilteredUsers([]);
+            }
+            const filtered_users = Guardians.filter((guardian) =>
+              guardian.student.firstName.toLowerCase().startsWith(text.toLowerCase())
+            );
+            setFilteredUsers(filtered_users);
+          }}
+          returnKeyType='search'
         />
-
-        <TouchableOpacity
-          style={{
-            alignSelf: 'center',
-          }}>
-          <FontAwesome5Icon
-            name="search"
+        {searchText.length === 0 ? (
+          <TouchableOpacity
             style={{
               alignSelf: 'center',
-              fontSize: 30,
-              color: 'black',
+            }}>
+            <FontAwesome5Icon
+              name="search"
+              style={{
+                alignSelf: 'center',
+                fontSize: 30,
+                color: 'black',
+              }}
+            />
+          </TouchableOpacity>
+
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              setSearchText('');
+              setFilteredUsers([]);
             }}
-          />
-        </TouchableOpacity>
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <MaterialIcon name='cancel'
+              style={{
+                alignSelf: 'center',
+                fontSize: 24,
+                color: '#505069',
+              }}
+            />
+          </TouchableOpacity>
+        )}
       </View>
       {/* searchbar ends */}
 
       {/* Student section */}
-      {Guardians &&
-        Guardians.map(guardian => (
-          <View style={styles.StudentsCard} key={guardian._id}>
-            <View style={{margin: 10, flexDirection: 'column'}}>
-              <Text style={{fontFamily: 'Poppins-Regular', fontSize: 18}}>
-                {guardian.student.firstName + ' ' + guardian.student.lastName}
-              </Text>
-              <Text style={{fontFamily: 'Poppins-Regular', fontSize: 18}}>
-                {guardian.name}
-              </Text>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={{fontFamily: 'Poppins-Regular', fontSize: 15}}>
-                  {guardian.email}
-                </Text>
-                <Text style={{fontFamily: 'Poppins-Regular', fontSize: 15}}>
-                  {guardian.relation}
-                </Text>
-              </View>
-            </View>
-          </View>
-        ))}
-    </ScrollView>
+      {filteredUsers.length > 0 ?
+        (
+          <ScrollView>
+            {Guardians &&
+              filteredUsers.map(guardian => (
+                <View style={styles.StudentsCard} key={guardian._id}>
+                  <View style={{ margin: 10, flexDirection: 'column' }}>
+                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 18 }}>
+                      {guardian.student.firstName + ' ' + guardian.student.lastName}
+                    </Text>
+                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 18 }}>
+                      {guardian.name}
+                    </Text>
+                    <View
+                      style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15 }}>
+                        {guardian.email}
+                      </Text>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15 }}>
+                        {guardian.relation}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              ))}
+            <View style={{ height: 10 }} />
+          </ScrollView>
+        ) : (
+          <ScrollView>
+            {Guardians &&
+              Guardians.map(guardian => (
+                <View style={styles.StudentsCard} key={guardian._id}>
+                  <View style={{ margin: 10, flexDirection: 'column' }}>
+                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 18 }}>
+                      {guardian.student.firstName + ' ' + guardian.student.lastName}
+                    </Text>
+                    <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 18 }}>
+                      {guardian.name}
+                    </Text>
+                    <View
+                      style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15 }}>
+                        {guardian.email}
+                      </Text>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15 }}>
+                        {guardian.relation}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              ))}
+            <View style={{ height: 10 }} />
+          </ScrollView>
+        )}
+    </View>
   );
 }
 
@@ -183,7 +253,7 @@ const styles = StyleSheet.create({
 
   card_picker: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -222,7 +292,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     flexDirection: 'column',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 1,
     shadowRadius: 12,
     backgroundColor: 'white',

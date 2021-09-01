@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -14,6 +14,7 @@ import ModalSelector from 'react-native-modal-selector';
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 // helpers
 import get from '../../../../services/helpers/request/get';
@@ -22,17 +23,18 @@ import getCourse from '../../../../services/helpers/getList/getCourse';
 import getBatch from '../../../../services/helpers/getList/getBatch';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // loading screen
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-export default function Students({navigation}) {
+export default function Students({ navigation }) {
   //theming
   const institute = useSelector(state => state.institute);
 
   //loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
 
   //lists
   const [Students, setStudents] = useState([]);
@@ -42,6 +44,10 @@ export default function Students({navigation}) {
   //selected values
   const [Batch, setBatch] = useState([]);
   const [Course, setCourse] = useState([]);
+
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   //on load
   useEffect(async () => {
@@ -85,7 +91,7 @@ export default function Students({navigation}) {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {loadingScreen}
       <View
         style={{
@@ -93,7 +99,7 @@ export default function Students({navigation}) {
           ...styles.header,
         }}>
         <View
-          style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 20}}>
+          style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Home');
@@ -180,52 +186,130 @@ export default function Students({navigation}) {
 
       <View style={styles.search}>
         <TextInput
-          style={{...styles.search_input}}
+          style={{ ...styles.search_input }}
           placeholder="Enter Student's name Here"
           placeholderTextColor="grey"
+          defaultValue={searchText}
+          textContentType='name'
+          onChangeText={(text) => {
+            setSearchText(text);
+            if (text === '') {
+              return setFilteredUsers([]);
+            }
+            const filtered_users = Students.filter((student) =>
+              student.firstName.toLowerCase().startsWith(text.toLowerCase())
+            );
+            setFilteredUsers(filtered_users);
+          }}
+          returnKeyType='search'
         />
-
-        <TouchableOpacity
-          style={{
-            alignSelf: 'center',
-          }}>
-          <FontAwesome5Icon
-            name="search"
+        {searchText.length === 0 ? (
+          <TouchableOpacity
             style={{
               alignSelf: 'center',
-              fontSize: 30,
-              color: 'black',
+            }}>
+            <FontAwesome5Icon
+              name="search"
+              style={{
+                alignSelf: 'center',
+                fontSize: 30,
+                color: 'black',
+              }}
+            />
+          </TouchableOpacity>
+
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              setSearchText('');
+              setFilteredUsers([]);
             }}
-          />
-        </TouchableOpacity>
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <MaterialIcon name='cancel'
+              style={{
+                alignSelf: 'center',
+                fontSize: 24,
+                color: '#505069',
+              }}
+            />
+          </TouchableOpacity>
+        )}
+
       </View>
-      {Students &&
-        Students.map(student => (
-          <View style={styles.StudentsCard} key={student._id}>
-            <View style={{margin: 10, flexDirection: 'column'}}>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={{fontFamily: 'Poppins-Regular', fontSize: 20}}>
-                  {student.firstName + ' ' + student.lastName ||
-                    'Name not found'}
-                </Text>
-                <Text style={{fontFamily: 'Poppins-Regular', fontSize: 15}}>
-                  Admission Date : {student.rollno || 'NA'}
-                </Text>
-              </View>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={{fontFamily: 'Poppins-Regular', fontSize: 15}}>
-                  Registration code : {student.code || 'NA'}
-                </Text>
-                <Text style={{fontFamily: 'Poppins-Regular', fontSize: 15}}>
-                  Roll No : {student.rollno || 'NA'}
-                </Text>
-              </View>
-            </View>
-          </View>
-        ))}
-    </ScrollView>
+      {filteredUsers.length > 0 ?
+        (
+          <ScrollView>
+
+            {Students &&
+              filteredUsers.map(student => (
+                <View style={styles.StudentsCard} key={student._id}>
+                  <View style={{ margin: 10, flexDirection: 'column' }}>
+                    <View
+                      style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 20 }}>
+                        {student.firstName + ' ' + student.lastName ||
+                          'Name not found'}
+                      </Text>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15 }}>
+                        Admission Date : {student.rollno || 'NA'}
+                      </Text>
+                    </View>
+                    <View
+                      style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15 }}>
+                        Registration code : {student.code || 'NA'}
+                      </Text>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15 }}>
+                        Roll No : {student.rollno || 'NA'}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              ))}
+
+            <View style={{ height: 10 }} />
+          </ScrollView>
+        ) : (
+
+          <ScrollView>
+
+            {Students &&
+              Students.map(student => (
+                <View style={styles.StudentsCard} key={student._id}>
+                  <View style={{ margin: 10, flexDirection: 'column' }}>
+                    <View
+                      style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 20 }}>
+                        {student.firstName + ' ' + student.lastName ||
+                          'Name not found'}
+                      </Text>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15 }}>
+                        Admission Date : {student.rollno || 'NA'}
+                      </Text>
+                    </View>
+                    <View
+                      style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15 }}>
+                        Registration code : {student.code || 'NA'}
+                      </Text>
+                      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 15 }}>
+                        Roll No : {student.rollno || 'NA'}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              ))}
+
+            <View style={{ height: 10 }} />
+          </ScrollView>
+
+
+        )
+      }
+    </View>
   );
 }
 
@@ -255,7 +339,7 @@ const styles = StyleSheet.create({
 
   card_picker: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -294,7 +378,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     flexDirection: 'column',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 1,
     shadowRadius: 12,
     backgroundColor: 'white',
