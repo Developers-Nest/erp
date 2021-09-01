@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -32,6 +32,9 @@ export default function AssignmentDue({ navigation }) {
 
   const onChangeSearch = query => setSearchQuery(query);
 
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
   useEffect(async () => {
     try {
       let slug = '/note/assignment';
@@ -118,141 +121,277 @@ export default function AssignmentDue({ navigation }) {
                 flexDirection: 'row',
                 ...styles.shadow,
               }}>
-              <FontAwesome5
-                name="search"
-                style={{
-                  alignSelf: 'center',
-                  fontSize: 15,
-                  color: '#6A6A80',
-                }}
-              />
+
 
               <TextInput
                 style={{ width: '80%', ...styles.text_input }}
                 placeholder="Enter subject or batch name"
                 placeholderTextColor='grey'
+                defaultValue={searchText}
+                textContentType='name'
+                onChangeText={(text) => {
+                  setSearchText(text);
+                  if (text === '') {
+                    return setFilteredUsers([]);
+                  }
+                  const filtered_users = assignments.filter((assignment) =>
+                    assignment.title.toLowerCase().startsWith(text.toLowerCase())
+                  );
+                  setFilteredUsers(filtered_users);
+                }}
+                returnKeyType='search'
               />
-              <TouchableOpacity
-                style={{
-                  alignSelf: 'center',
-                }}>
-                <FontAwesome5
-                  name="filter"
+              {searchText.length === 0 ? (
+                <TouchableOpacity
                   style={{
                     alignSelf: 'center',
-                    fontSize: 21,
-                    color: '#6A6A80',
                   }}
-                />
-              </TouchableOpacity>
+                >
+                  <Ionicons
+                    name="search-sharp"
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 30,
+                      color: '#505069',
+                    }}
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => {
+                    setSearchText('');
+                    setFilteredUsers([]);
+                  }}
+                  style={{
+                    alignSelf: 'center',
+                  }}
+                >
+                  <MaterialIcon name='cancel'
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 24,
+                      color: '#505069',
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
             {/* close search */}
           </View>
         </View>
         <View style={styles.container}>
-          <ScrollView>
-            {assignments &&
-              assignments.map(assignment => (
-                <View style={styles.section} key={assignment._id}>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            marginHorizontal: -5,
-                          }}>
-                          {' '}
-                          {/* Title */}
-                          {assignment.title || 'Title Not Found'}
-                        </Text>
+          {filteredUsers.length > 0 ?
+            (
+              <ScrollView>
+                {assignments &&
+                  filteredUsers.map(assignment => (
+                    <View style={styles.section} key={assignment._id}>
+                      <View style={styles.details}>
+                        <View style={styles.userinhostels}>
+                          <View style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                                marginHorizontal: -5,
+                              }}>
+                              {' '}
+                              {/* Title */}
+                              {assignment.title || 'Title Not Found'}
+                            </Text>
 
-                        <TouchableOpacity
-                          style={{ flexDirection: 'row' }}
-                          onPress={() =>
-                            navigation.navigate('Assignment Edit', {
-                              assignment: assignment,
-                            })
-                          }>
+                            <TouchableOpacity
+                              style={{ flexDirection: 'row' }}
+                              onPress={() =>
+                                navigation.navigate('Assignment Edit', {
+                                  assignment: assignment,
+                                })
+                              }>
+                              <Text
+                                style={{
+                                  fontSize: 12,
+                                  color: '#211C5A',
+                                  fontFamily: 'Poppins-Medium',
+                                }}>
+                                Edit
+                              </Text>
+                              <Icon
+                                size={12}
+                                color="#211C5A"
+                                name="edit"
+                                style={{ paddingTop: 2, paddingRight: 10 }}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                          <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#5177E7',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              {assignment.course && assignment.course.courseName} -
+                              {assignment.batch && assignment.batch.batchName}
+                            </Text>
+
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#505069',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+
+                              {assignment.description || 'Description Not Found'}
+                            </Text>
+
+
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                      <View style={styles.belowhr}>
+                        <View style={{ flexDirection: 'column' }}>
+
                           <Text
                             style={{
+                              color: '#B04305',
                               fontSize: 12,
-                              color: '#211C5A',
+                              marginTop: 10,
                               fontFamily: 'Poppins-Medium',
                             }}>
-                            Edit
+                            Due:{' '}
+                            {assignment.submissionDateString.slice(0, 15) ||
+                              'Submission date Not Found'}
                           </Text>
-                          <Icon
-                            size={12}
-                            color="#211C5A"
-                            name="edit"
-                            style={{ paddingTop: 2, paddingRight: 10 }}
-                          />
-                        </TouchableOpacity>
+                        </View>
+                        <View>
+                          <Button
+                            style={styles.button}
+                            onPress={() =>
+                              Alert.alert('Assignment Successfully sent')
+                            }
+                            color={institute ? institute.themeColor : 'blue'}
+                            labelStyle={{ color: 'white' }}
+                            uppercase={false}
+                            mode="contained">
+                            Send
+                          </Button>
+                        </View>
                       </View>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#5177E7',
-                            fontFamily: 'Poppins-Medium',
-                          }}>
-                          {assignment.course && assignment.course.courseName} -
-                          {assignment.batch && assignment.batch.batchName}
-                        </Text>
-
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#505069',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-
-                          {assignment.description || 'Description Not Found'}
-                        </Text>
-
-
-                      </TouchableOpacity>
                     </View>
-                  </View>
+                  ))}
+                <View style={{ height: 20 }} />
+              </ScrollView>
 
-                  <View style={styles.belowhr}>
-                    <View style={{ flexDirection: 'column' }}>
+            ) : (
+              <ScrollView>
+                {assignments &&
+                  assignments.map(assignment => (
+                    <View style={styles.section} key={assignment._id}>
+                      <View style={styles.details}>
+                        <View style={styles.userinhostels}>
+                          <View style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                                marginHorizontal: -5,
+                              }}>
+                              {' '}
+                              {/* Title */}
+                              {assignment.title || 'Title Not Found'}
+                            </Text>
 
-                      <Text
-                        style={{
-                          color: '#B04305',
-                          fontSize: 12,
-                          marginTop: 10,
-                          fontFamily: 'Poppins-Medium',
-                        }}>
-                        Due:{' '}
-                        {assignment.submissionDateString.slice(0, 15) ||
-                          'Submission date Not Found'}
-                      </Text>
+                            <TouchableOpacity
+                              style={{ flexDirection: 'row' }}
+                              onPress={() =>
+                                navigation.navigate('Assignment Edit', {
+                                  assignment: assignment,
+                                })
+                              }>
+                              <Text
+                                style={{
+                                  fontSize: 12,
+                                  color: '#211C5A',
+                                  fontFamily: 'Poppins-Medium',
+                                }}>
+                                Edit
+                              </Text>
+                              <Icon
+                                size={12}
+                                color="#211C5A"
+                                name="edit"
+                                style={{ paddingTop: 2, paddingRight: 10 }}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                          <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#5177E7',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              {assignment.course && assignment.course.courseName} -
+                              {assignment.batch && assignment.batch.batchName}
+                            </Text>
+
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#505069',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+
+                              {assignment.description || 'Description Not Found'}
+                            </Text>
+
+
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                      <View style={styles.belowhr}>
+                        <View style={{ flexDirection: 'column' }}>
+
+                          <Text
+                            style={{
+                              color: '#B04305',
+                              fontSize: 12,
+                              marginTop: 10,
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            Due:{' '}
+                            {assignment.submissionDateString.slice(0, 15) ||
+                              'Submission date Not Found'}
+                          </Text>
+                        </View>
+                        <View>
+                          <Button
+                            style={styles.button}
+                            onPress={() =>
+                              Alert.alert('Assignment Successfully sent')
+                            }
+                            color={institute ? institute.themeColor : 'blue'}
+                            labelStyle={{ color: 'white' }}
+                            uppercase={false}
+                            mode="contained">
+                            Send
+                          </Button>
+                        </View>
+                      </View>
                     </View>
-                    <View>
-                      <Button
-                        style={styles.button}
-                        onPress={() =>
-                          Alert.alert('Assignment Successfully sent')
-                        }
-                        color={institute ? institute.themeColor : 'blue'}
-                        labelStyle={{ color: 'white' }}
-                        uppercase={false}
-                        mode="contained">
-                        Send
-                      </Button>
-                    </View>
-                  </View>
-                </View>
-              ))}
-            <View style={{ height: 20 }} />
-          </ScrollView>
+                  ))}
+                <View style={{ height: 20 }} />
+              </ScrollView>
+
+            )}
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -364,7 +503,6 @@ const styles = StyleSheet.create({
   },
   button: {
     color: '#F9F9F9',
-
     paddingHorizontal: 5,
     borderRadius: 5,
     height: 40,
