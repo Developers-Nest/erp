@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput, ScrollView } from 'react-native';
-import ModalSelector from 'react-native-modal-selector';
+import { View, TouchableOpacity, StyleSheet, Text, TextInput, ScrollView } from 'react-native';
 
 
-import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
+
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -23,6 +23,10 @@ const VisitorsList = ({ navigation }) => {
     const institute = useSelector(state => state.institute);
     const [visitorlist, setvisitorlist] = useState([]);
     const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+    //for search
+    const [searchText, setSearchText] = useState('');
+    const [filteredUsers, setFilteredUsers] = useState([]);
+
 
     useFocusEffect(
         React.useCallback(() => {
@@ -79,37 +83,37 @@ const VisitorsList = ({ navigation }) => {
                     backgroundColor: institute ? institute.themeColor : '#FF5733',
                     ...styles.header,
                 }}>
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate('RoomsList');
-                    }}>
-                    <AntDesign
-                        size={24}
-                        color="white"
-                        name="left"
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('RoomsList');
+                        }}>
+                        <AntDesign
+                            size={24}
+                            color="white"
+                            name="left"
+                            style={{
+                                alignSelf: 'center',
+                                fontSize: 25,
+                                color: 'white',
+
+                            }}
+                        />
+                    </TouchableOpacity>
+                    <Text
                         style={{
+                            fontStyle: 'normal',
+                            fontFamily: 'NunitoSans-Regular',
+                            fontSize: 28,
+                            fontWeight: '600',
                             alignSelf: 'center',
-
-                            fontSize: 25,
+                            marginLeft: 20,
                             color: 'white',
-                            paddingLeft: 20,
-                            marginTop: 22,
-                        }}
-                    />
-                </TouchableOpacity>
-                <Text
-                    style={{
-                        fontStyle: 'normal',
-                        fontFamily: 'NunitoSans-Regular',
-                        fontSize: 28,
-                        fontWeight: '600',
-                        alignSelf: 'center',
-                        marginLeft: 30,
-                        color: 'white',
-                    }}>
-                    Visitors List
-                </Text>
-
+                        }}>
+                        Visitors List
+                    </Text>
+                </View>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('AddVisitorsHostel')}
                     style={{
@@ -157,153 +161,322 @@ const VisitorsList = ({ navigation }) => {
                         placeholder="Enter hostel name here"
                         placeholderTextColor='grey'
                         color='black'
+                        defaultValue={searchText}
+                        textContentType='name'
+                        onChangeText={(text) => {
+                            setSearchText(text);
+                            if (text === '') {
+                                return setFilteredUsers([]);
+                            }
+                            const filtered_users = visitorlist.filter((visitorlist) =>
+                                visitorlist.visitorName.toLowerCase().startsWith(text.toLowerCase())
+                            );
+                            setFilteredUsers(filtered_users);
+                        }}
+                        returnKeyType='search'
                     />
-                    <TouchableOpacity
-                        style={{
-                            alignSelf: 'center',
-
-                        }}>
-                        <Icon
-                            name="search-sharp"
+                    {searchText.length === 0 ? (
+                        <TouchableOpacity
                             style={{
                                 alignSelf: 'center',
-                                fontSize: 30,
-                                color: '#505069',
-
                             }}
-                        />
-                    </TouchableOpacity>
+                        >
+                            <Icon
+                                name="search-sharp"
+                                style={{
+                                    alignSelf: 'center',
+                                    fontSize: 30,
+                                    color: '#505069',
+                                }}
+                            />
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity
+                            onPress={() => {
+                                setSearchText('');
+                                setFilteredUsers([]);
+                            }}
+                            style={{
+                                alignSelf: 'center',
+                            }}
+                        >
+                            <MaterialIcon name='cancel'
+                                style={{
+                                    alignSelf: 'center',
+                                    fontSize: 24,
+                                    color: '#505069',
+                                }}
+                            />
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
-            <ScrollView>
-                {visitorlist &&
-                    visitorlist.map(visitorlist => (
+            {filteredUsers.length > 0 ?
+                (
 
-                        <View style={styles.section}
-                            key={visitorlist._id}
-                        >
-                            <View style={styles.details}>
-                                <View style={styles.userinhostels}>
-                                    <View style={styles.differentusers}>
-                                        <Text
-                                            style={{
-                                                fontSize: 18,
-                                                color: '#211C5A',
-                                                fontFamily: 'Poppins-Regular',
-                                                marginHorizontal: -5,
-                                            }}>
-
-                                            {visitorlist.visitorName ? visitorlist.visitorName : 'N/A'}
-
-                                        </Text>
-
-                                        <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
-                                            {visitorlist.hostelRoom.roomNo ? visitorlist.hostelRoom.roomNo : 'N/A'},{visitorlist.hostelRoom.floorName ? visitorlist.hostelRoom.floorName : 'N/A'} floor
-                                        </Text>
+                    <ScrollView>
 
 
-                                        {/* */}
+                        {visitorlist &&
+                            filteredUsers.map(visitorlist => (
+
+                                <View style={styles.section}
+                                    key={visitorlist._id}
+                                >
+                                    <View style={styles.details}>
+                                        <View style={styles.userinhostels}>
+                                            <View style={styles.differentusers}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 18,
+                                                        color: '#211C5A',
+                                                        fontFamily: 'Poppins-Regular',
+                                                        marginHorizontal: -5,
+                                                    }}>
+
+                                                    {visitorlist.visitorName ? visitorlist.visitorName : 'N/A'}
+
+                                                </Text>
+
+                                                <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
+                                                    {visitorlist.hostelRoom.roomNo ? visitorlist.hostelRoom.roomNo : 'N/A'},{visitorlist.hostelRoom.floorName ? visitorlist.hostelRoom.floorName : 'N/A'} floor
+                                                </Text>
+
+
+                                                {/* */}
+                                            </View>
+                                            <TouchableOpacity style={styles.differentusers}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 12,
+                                                        color: '#5177E7',
+                                                        fontFamily: 'Poppins-Medium',
+                                                    }}>
+
+                                                </Text>
+
+
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={styles.differentusers}>
+                                                <Text style={{ fontSize: 12, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
+                                                    {visitorlist.userType.name ? visitorlist.userType.name : 'N/A'}
+                                                </Text>
+                                            </TouchableOpacity>
+
+
+
+                                            <View style={styles.differentusers}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 12,
+                                                        color: '#505069',
+                                                        fontFamily: 'Poppins-Regular',
+                                                    }}>
+                                                    {visitorlist.relation ? visitorlist.relation : 'N/A'}
+
+                                                </Text>
+
+                                                <TouchableOpacity
+                                                    onPress={() => { handleDelete(visitorlist._id) }}
+                                                    style={{
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'space-between',
+                                                        marginBottom: 5
+                                                    }}>
+
+                                                    <MaterialIcon
+                                                        size={20}
+                                                        backgroundColor=" #211C5A"
+                                                        name="delete"
+
+                                                        color={institute ? institute.themeColor : '#211C5A'}
+                                                    />
+                                                </TouchableOpacity>
+
+
+                                            </View>
+
+                                        </View>
                                     </View>
-                                    <TouchableOpacity style={styles.differentusers}>
-                                        <Text
-                                            style={{
-                                                fontSize: 12,
-                                                color: '#5177E7',
-                                                fontFamily: 'Poppins-Medium',
-                                            }}>
-
-                                        </Text>
-
-
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.differentusers}>
-                                        <Text style={{ fontSize: 12, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
-                                            {visitorlist.userType.name ? visitorlist.userType.name : 'N/A'}
-                                        </Text>
-                                    </TouchableOpacity>
 
 
 
-                                    <View style={styles.differentusers}>
-                                        <Text
-                                            style={{
-                                                fontSize: 12,
-                                                color: '#505069',
-                                                fontFamily: 'Poppins-Regular',
-                                            }}>
-                                            {visitorlist.relation ? visitorlist.relation : 'N/A'}
 
-                                        </Text>
+                                    <View style={styles.belowhr}>
+                                        <View style={{ flexDirection: 'column' }}>
+                                            <Text
+                                                style={{
+                                                    color: '#B04305',
+                                                    fontSize: 12,
+                                                    fontFamily: 'Poppins-Medium',
+                                                }}>
 
-                                        <TouchableOpacity
-                                            onPress={() => { handleDelete(visitorlist._id) }}
-                                            style={{
-                                                flexDirection: 'row',
-                                                justifyContent: 'space-between',
-                                                marginBottom: 5
-                                            }}>
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    color: '#211C5A',
 
-                                            <MaterialIcon
-                                                size={20}
-                                                backgroundColor=" #211C5A"
-                                                name="delete"
+                                                    fontSize: 12,
+                                                    fontFamily: 'Poppins-Regular',
+                                                }}>
+                                                Date: {visitorlist.dateOf ? visitorlist.dateOf.slice(0, 10) : 'N/A'}
+                                            </Text>
+                                        </View>
+                                        <View style={{ marginTop: 15 }}>
+                                            <Text
+                                                style={{
+                                                    color: '#211C5A',
 
-                                                color={institute ? institute.themeColor : '#211C5A'}
-                                            />
-                                        </TouchableOpacity>
+                                                    fontSize: 12,
+                                                    fontFamily: 'Poppins-Regular',
+                                                }}>
+                                                Time: {visitorlist.timeOf ? visitorlist.timeOf.slice(11, 19) : 'N/A'}
+                                            </Text>
 
-
+                                        </View>
                                     </View>
 
-                                </View>
-                            </View>
-
-
-
-
-                            <View style={styles.belowhr}>
-                                <View style={{ flexDirection: 'column' }}>
-                                    <Text
-                                        style={{
-                                            color: '#B04305',
-                                            fontSize: 12,
-                                            fontFamily: 'Poppins-Medium',
-                                        }}>
-
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            color: '#211C5A',
-
-                                            fontSize: 12,
-                                            fontFamily: 'Poppins-Regular',
-                                        }}>
-                                        Date: {visitorlist.dateOf ? visitorlist.dateOf.slice(0, 10) : 'N/A'}
-                                    </Text>
-                                </View>
-                                <View style={{ marginTop: 15 }}>
-                                    <Text
-                                        style={{
-                                            color: '#211C5A',
-
-                                            fontSize: 12,
-                                            fontFamily: 'Poppins-Regular',
-                                        }}>
-                                        Time: {visitorlist.timeOf ? visitorlist.timeOf.slice(11, 19) : 'N/A'}
-                                    </Text>
 
                                 </View>
-                            </View>
+
+                            ))}
+
+                        <View style={{ height: 90 }} />
+                    </ScrollView>
+
+                ) : (
+
+                    <ScrollView>
 
 
-                        </View>
+                        {visitorlist &&
+                            visitorlist.map(visitorlist => (
 
-                    ))}
+                                <View style={styles.section}
+                                    key={visitorlist._id}
+                                >
+                                    <View style={styles.details}>
+                                        <View style={styles.userinhostels}>
+                                            <View style={styles.differentusers}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 18,
+                                                        color: '#211C5A',
+                                                        fontFamily: 'Poppins-Regular',
+                                                        marginHorizontal: -5,
+                                                    }}>
 
-                <View style={{ height: 90 }} />
-            </ScrollView>
+                                                    {visitorlist.visitorName ? visitorlist.visitorName : 'N/A'}
+
+                                                </Text>
+
+                                                <Text style={{ flexDirection: 'row', fontSize: 10, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
+                                                    {visitorlist.hostelRoom.roomNo ? visitorlist.hostelRoom.roomNo : 'N/A'},{visitorlist.hostelRoom.floorName ? visitorlist.hostelRoom.floorName : 'N/A'} floor
+                                                </Text>
 
 
+                                                {/* */}
+                                            </View>
+                                            <TouchableOpacity style={styles.differentusers}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 12,
+                                                        color: '#5177E7',
+                                                        fontFamily: 'Poppins-Medium',
+                                                    }}>
+
+                                                </Text>
+
+
+                                            </TouchableOpacity>
+                                            <TouchableOpacity style={styles.differentusers}>
+                                                <Text style={{ fontSize: 12, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
+                                                    {visitorlist.userType.name ? visitorlist.userType.name : 'N/A'}
+                                                </Text>
+                                            </TouchableOpacity>
+
+
+
+                                            <View style={styles.differentusers}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 12,
+                                                        color: '#505069',
+                                                        fontFamily: 'Poppins-Regular',
+                                                    }}>
+                                                    {visitorlist.relation ? visitorlist.relation : 'N/A'}
+
+                                                </Text>
+
+                                                <TouchableOpacity
+                                                    onPress={() => { handleDelete(visitorlist._id) }}
+                                                    style={{
+                                                        flexDirection: 'row',
+                                                        justifyContent: 'space-between',
+                                                        marginBottom: 5
+                                                    }}>
+
+                                                    <MaterialIcon
+                                                        size={20}
+                                                        backgroundColor=" #211C5A"
+                                                        name="delete"
+
+                                                        color={institute ? institute.themeColor : '#211C5A'}
+                                                    />
+                                                </TouchableOpacity>
+
+
+                                            </View>
+
+                                        </View>
+                                    </View>
+
+
+
+
+                                    <View style={styles.belowhr}>
+                                        <View style={{ flexDirection: 'column' }}>
+                                            <Text
+                                                style={{
+                                                    color: '#B04305',
+                                                    fontSize: 12,
+                                                    fontFamily: 'Poppins-Medium',
+                                                }}>
+
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    color: '#211C5A',
+
+                                                    fontSize: 12,
+                                                    fontFamily: 'Poppins-Regular',
+                                                }}>
+                                                Date: {visitorlist.dateOf ? visitorlist.dateOf.slice(0, 10) : 'N/A'}
+                                            </Text>
+                                        </View>
+                                        <View style={{ marginTop: 15 }}>
+                                            <Text
+                                                style={{
+                                                    color: '#211C5A',
+
+                                                    fontSize: 12,
+                                                    fontFamily: 'Poppins-Regular',
+                                                }}>
+                                                Time: {visitorlist.timeOf ? visitorlist.timeOf.slice(11, 19) : 'N/A'}
+                                            </Text>
+
+                                        </View>
+                                    </View>
+
+
+                                </View>
+
+                            ))}
+
+                        <View style={{ height: 90 }} />
+                    </ScrollView>
+
+                )}
 
 
         </View>
