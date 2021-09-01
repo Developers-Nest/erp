@@ -40,6 +40,10 @@ export default function TransportMain({ navigation }) {
   function Vehicle() {
     const [vehicleinfo, setvehicleinfo] = useState([]);
 
+    //for search
+    const [searchText, setSearchText] = useState('');
+    const [filteredUsers, setFilteredUsers] = useState([]);
+
     useFocusEffect(
       React.useCallback(() => {
         let isActive = true;
@@ -94,117 +98,254 @@ export default function TransportMain({ navigation }) {
               placeholder="Enter the vehicle no. here"
               placeholderTextColor='grey'
               color='black'
+              defaultValue={searchText}
+              textContentType='name'
+              onChangeText={(text) => {
+                setSearchText(text);
+                if (text === '') {
+                  return setFilteredUsers([]);
+                }
+                const filtered_users = vehicleinfo.filter((vehicle) =>
+                  vehicle.vehicleNo.toLowerCase().startsWith(text.toLowerCase())
+                );
+                setFilteredUsers(filtered_users);
+              }}
+              returnKeyType='search'
             />
-            <TouchableOpacity
-              style={{
-                alignSelf: 'center',
-              }}>
-              <Icon
-                name="search-sharp"
+            {searchText.length === 0 ? (
+              <TouchableOpacity
                 style={{
                   alignSelf: 'center',
-                  fontSize: 30,
-                  color: 'black',
                 }}
-              />
-            </TouchableOpacity>
+              >
+                <Icon
+                  name="search-sharp"
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 30,
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  setSearchText('');
+                  setFilteredUsers([]);
+                }}
+                style={{
+                  alignSelf: 'center',
+                }}
+              >
+                <MaterialIcon name='cancel'
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 24,
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-        <ScrollView>
-          {vehicleinfo &&
-            vehicleinfo.map(vehicleinfo => (
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {vehicleinfo &&
+                filteredUsers.map(vehicleinfo => (
 
-              <View style={styles.section}
-                key={vehicleinfo._id}
-              >
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
+                  <View style={styles.section}
+                    key={vehicleinfo._id}
+                  >
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
 
-                        }}>
-                        {vehicleinfo.vehicleNo ? vehicleinfo.vehicleNo : 'N/A'}
-                      </Text>
-                      <Text style={{
-                        fontSize: 12,
-                        color: '#211C5A',
-                        fontFamily: 'Poppins-Regular',
-                        fontStyle: 'normal',
-                      }}>
-                        Vehicle Type: {vehicleinfo.type ? vehicleinfo.type : 'N/A'}
-                      </Text>
-                    </View>
-
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-
-                        }}>
-                        {''} {vehicleinfo.contactPerson ? vehicleinfo.contactPerson : 'N/A'}
-                      </Text>
-                      <TouchableOpacity
-                        style={{ flexDirection: 'row' }}
-                        onPress={() => navigation.navigate('EditVehicle', {
-                          vehicle: vehicleinfo
-                      })
-                     }
-                        
-                      >
-                        <Text
-                          style={{
+                            }}>
+                            {vehicleinfo.vehicleNo ? vehicleinfo.vehicleNo : 'N/A'}
+                          </Text>
+                          <Text style={{
                             fontSize: 12,
                             color: '#211C5A',
                             fontFamily: 'Poppins-Regular',
+                            fontStyle: 'normal',
                           }}>
-                          Edit
-                        </Text>
-                        <AntDesign
-                          size={12}
-                          color="#211C5A"
-                          name="edit"
-                          style={{ paddingTop: 2, paddingRight: 10 }}
-                        />
+                            Vehicle Type: {vehicleinfo.type ? vehicleinfo.type : 'N/A'}
+                          </Text>
+                        </View>
+
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+
+                            }}>
+                            {''} {vehicleinfo.contactPerson ? vehicleinfo.contactPerson : 'N/A'}
+                          </Text>
+                          <TouchableOpacity
+                            style={{ flexDirection: 'row' }}
+                            onPress={() => navigation.navigate('EditVehicle', {
+                              vehicle: vehicleinfo
+                            })
+                            }
+
+                          >
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Edit
+                            </Text>
+                            <AntDesign
+                              size={12}
+                              color="#211C5A"
+                              name="edit"
+                              style={{ paddingTop: 2, paddingRight: 10 }}
+                            />
 
 
-                      </TouchableOpacity>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+
+                    <View style={styles.belowhr}>
+
+                      <Text
+                        style={{
+                          color: '#B04305',
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                        Max:{vehicleinfo.maximumAllowed ? vehicleinfo.maximumAllowed : 'N/A'} Persons
+                      </Text>
+
+
+                      <Text
+                        style={{
+                          color: '#58636D',
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                        Seats:{vehicleinfo.seats ? vehicleinfo.seats : 'N/A'}
+                      </Text>
+
                     </View>
                   </View>
-                </View>
-
-                <View style={styles.belowhr}>
-
-                  <Text
-                    style={{
-                      color: '#B04305',
-                      fontSize: 12,
-                      fontFamily: 'Poppins-Medium',
-                    }}>
-                    Max:{vehicleinfo.maximumAllowed ? vehicleinfo.maximumAllowed : 'N/A'} Persons
-                  </Text>
 
 
-                  <Text
-                    style={{
-                      color: '#58636D',
-                      fontSize: 12,
-                      fontFamily: 'Poppins-Medium',
-                    }}>
-                    Seats:{vehicleinfo.seats ? vehicleinfo.seats : 'N/A'}
-                  </Text>
+                ))}
 
-                </View>
-              </View>
+              <View style={{ height: 10 }} />
+            </ScrollView>
+          ) : (
+            <ScrollView>
+              {vehicleinfo &&
+                vehicleinfo.map(vehicleinfo => (
+
+                  <View style={styles.section}
+                    key={vehicleinfo._id}
+                  >
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+
+                            }}>
+                            {vehicleinfo.vehicleNo ? vehicleinfo.vehicleNo : 'N/A'}
+                          </Text>
+                          <Text style={{
+                            fontSize: 12,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            fontStyle: 'normal',
+                          }}>
+                            Vehicle Type: {vehicleinfo.type ? vehicleinfo.type : 'N/A'}
+                          </Text>
+                        </View>
+
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+
+                            }}>
+                            {''} {vehicleinfo.contactPerson ? vehicleinfo.contactPerson : 'N/A'}
+                          </Text>
+                          <TouchableOpacity
+                            style={{ flexDirection: 'row' }}
+                            onPress={() => navigation.navigate('EditVehicle', {
+                              vehicle: vehicleinfo
+                            })
+                            }
+
+                          >
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Edit
+                            </Text>
+                            <AntDesign
+                              size={12}
+                              color="#211C5A"
+                              name="edit"
+                              style={{ paddingTop: 2, paddingRight: 10 }}
+                            />
 
 
-            ))}
-        </ScrollView>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+
+                    <View style={styles.belowhr}>
+
+                      <Text
+                        style={{
+                          color: '#B04305',
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                        Max:{vehicleinfo.maximumAllowed ? vehicleinfo.maximumAllowed : 'N/A'} Persons
+                      </Text>
+
+
+                      <Text
+                        style={{
+                          color: '#58636D',
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                        Seats:{vehicleinfo.seats ? vehicleinfo.seats : 'N/A'}
+                      </Text>
+
+                    </View>
+                  </View>
+
+
+                ))}
+
+              <View style={{ height: 10 }} />
+            </ScrollView>
+          )}
       </View>
     );
 
@@ -213,6 +354,10 @@ export default function TransportMain({ navigation }) {
   function Driver() {
 
     const [driverinfo, setdriverinfo] = useState([]);
+
+    //for search
+    const [searchText, setSearchText] = useState('');
+    const [filteredUsers, setFilteredUsers] = useState([]);
 
     useFocusEffect(
       React.useCallback(() => {
@@ -250,7 +395,7 @@ export default function TransportMain({ navigation }) {
 
 
         >
-          <Text style={{ color: 'blue', marginBottom: -6 ,fontWeight:'bold'}}>Add Driver</Text>
+          <Text style={{ color: 'blue', marginBottom: -6, fontWeight: 'bold' }}>Add Driver</Text>
           <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
             - - - - - - - - - -
 
@@ -264,115 +409,248 @@ export default function TransportMain({ navigation }) {
               placeholder="Enter the driver name here"
               placeholderTextColor='grey'
               color='black'
+              defaultValue={searchText}
+              textContentType='name'
+              onChangeText={(text) => {
+                setSearchText(text);
+                if (text === '') {
+                  return setFilteredUsers([]);
+                }
+                const filtered_users = driverinfo.filter((driver) =>
+                  driver.name.toLowerCase().startsWith(text.toLowerCase())
+                );
+                setFilteredUsers(filtered_users);
+              }}
+              returnKeyType='search'
             />
-            <TouchableOpacity
-              style={{
-                alignSelf: 'center',
-              }}>
-              <Icon
-                name="search-sharp"
+            {searchText.length === 0 ? (
+              <TouchableOpacity
                 style={{
                   alignSelf: 'center',
-                  fontSize: 30,
-                  color: 'black',
                 }}
-              />
-            </TouchableOpacity>
+              >
+                <Icon
+                  name="search-sharp"
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 30,
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  setSearchText('');
+                  setFilteredUsers([]);
+                }}
+                style={{
+                  alignSelf: 'center',
+                }}
+              >
+                <MaterialIcon name='cancel'
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 24,
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-        <ScrollView>
-          {driverinfo ? driverinfo &&
-            driverinfo.map(driverinfo => (
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {driverinfo ? driverinfo &&
+                filteredUsers.map(driverinfo => (
 
 
-              <View style={styles.section}
-                key={driverinfo._id}
-              >
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                         
-                        }}>
-                        {driverinfo.vehicleNo.vehicleNo ? driverinfo.vehicleNo.vehicleNo : 'N/A'}
-                      </Text>
-                      <Text style={{
-                        fontSize: 12,
-                        color: '#211C5A',
-                        fontFamily: 'Poppins',
-                        fontStyle: 'normal',
-                      }}>
-                        Ph:{driverinfo.phone ? driverinfo.phone : 'N/A'}
-                      </Text>
-                    </View>
-                   
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Medium',
-                          fontWeight: 'bold',
-                          
-                        }}>
-                        {driverinfo.name ? driverinfo.name : 'N/A'}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate('EditDriver', {
-                          driver: driverinfo
-                      })
-                     }
-                        style={{ flexDirection: 'row' }}>
-                        <Text
-                          style={{
+                  <View style={styles.section}
+                    key={driverinfo._id}
+                  >
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+
+                            }}>
+                            {driverinfo.vehicleNo.vehicleNo ? driverinfo.vehicleNo.vehicleNo : 'N/A'}
+                          </Text>
+                          <Text style={{
                             fontSize: 12,
                             color: '#211C5A',
-                            fontWeight: 'bold',
-                            fontFamily: 'Poppins-Medium',
+                            fontFamily: 'Poppins',
+                            fontStyle: 'normal',
                           }}>
-                          Edit
+                            Ph:{driverinfo.phone ? driverinfo.phone : 'N/A'}
+                          </Text>
+                        </View>
+
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 13,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Medium',
+                              fontWeight: 'bold',
+
+                            }}>
+                            {driverinfo.name ? driverinfo.name : 'N/A'}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => navigation.navigate('EditDriver', {
+                              driver: driverinfo
+                            })
+                            }
+                            style={{ flexDirection: 'row' }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontWeight: 'bold',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              Edit
+                            </Text>
+
+                            <AntDesign
+                              size={12}
+                              color="#211C5A"
+                              name="edit"
+                              style={{ paddingTop: 2, paddingRight: 10 }}
+                            />
+
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+
+                    <View style={styles.belowhr}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text
+                          style={{
+                            color: '#58636D',
+                            fontSize: 12,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: 'bold',
+                            color: '#58636D',
+                          }}>
+                          Licensce No.{driverinfo.licenseNumber ? driverinfo.licenseNumber : 'N/A'}
                         </Text>
-
-                        <AntDesign
-                          size={12}
-                          color="#211C5A"
-                          name="edit"
-                          style={{ paddingTop: 2, paddingRight: 10 }}
-                        />
-
-                      </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
-                </View>
 
-                <View style={styles.belowhr}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                    <Text
-                      style={{
-                        color: '#58636D',
-                        fontSize: 12,
-                        fontFamily: 'Poppins-Regular',
-                        fontWeight: 'bold',
-                        color: '#58636D',
-                      }}>
-                      Licensce No.{driverinfo.licenseNumber ? driverinfo.licenseNumber : 'N/A'}
-                    </Text>
+                )) : null}
+
+              <View style={{ height: 10 }} />
+            </ScrollView>
+          ) : (
+            <ScrollView>
+              {driverinfo ? driverinfo &&
+                driverinfo.map(driverinfo => (
+
+
+                  <View style={styles.section}
+                    key={driverinfo._id}
+                  >
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+
+                            }}>
+                            {driverinfo.vehicleNo.vehicleNo ? driverinfo.vehicleNo.vehicleNo : 'N/A'}
+                          </Text>
+                          <Text style={{
+                            fontSize: 12,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins',
+                            fontStyle: 'normal',
+                          }}>
+                            Ph:{driverinfo.phone ? driverinfo.phone : 'N/A'}
+                          </Text>
+                        </View>
+
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 13,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Medium',
+                              fontWeight: 'bold',
+
+                            }}>
+                            {driverinfo.name ? driverinfo.name : 'N/A'}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => navigation.navigate('EditDriver', {
+                              driver: driverinfo
+                            })
+                            }
+                            style={{ flexDirection: 'row' }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontWeight: 'bold',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              Edit
+                            </Text>
+
+                            <AntDesign
+                              size={12}
+                              color="#211C5A"
+                              name="edit"
+                              style={{ paddingTop: 2, paddingRight: 10 }}
+                            />
+
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+
+                    <View style={styles.belowhr}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text
+                          style={{
+                            color: '#58636D',
+                            fontSize: 12,
+                            fontFamily: 'Poppins-Regular',
+                            fontWeight: 'bold',
+                            color: '#58636D',
+                          }}>
+                          Licensce No.{driverinfo.licenseNumber ? driverinfo.licenseNumber : 'N/A'}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
-                </View>
-              </View>
 
-            )) : null}
-        </ScrollView>
+                )) : null}
+
+              <View style={{ height: 10 }} />
+            </ScrollView>
+          )}
       </View>
     );
 
   };
   function Destination() {
     const [destinationinfo, setdestinationinfo] = useState([]);
+
+    //for search
+    const [searchText, setSearchText] = useState('');
+    const [filteredUsers, setFilteredUsers] = useState([]);
 
     useFocusEffect(
       React.useCallback(() => {
@@ -405,7 +683,7 @@ export default function TransportMain({ navigation }) {
     return (
       <View style={styles.container}>
 
-        <TouchableOpacity style={{ marginTop: 8, marginRight: 30, alignItems: 'flex-end', marginBottom: 10}}
+        <TouchableOpacity style={{ marginTop: 8, marginRight: 30, alignItems: 'flex-end', marginBottom: 10 }}
 
           onPress={() =>
             navigation.navigate('AddDestination')}
@@ -413,9 +691,9 @@ export default function TransportMain({ navigation }) {
 
         >
           <View style={{}}></View>
-          <Text style={{ color: 'blue', marginBottom: -6 ,fontWeight:'bold'}}>Add Destination</Text>
+          <Text style={{ color: 'blue', marginBottom: -6, fontWeight: 'bold' }}>Add Destination</Text>
           <Text ellipsizeMode="clip" numberOfLines={1} style={{ color: 'blue', fontWeight: 'bold' }}>
-             - - - - - - - - - - - -
+            - - - - - - - - - - - -
 
           </Text>
         </TouchableOpacity>
@@ -428,117 +706,258 @@ export default function TransportMain({ navigation }) {
 
               placeholderTextColor='grey'
               color='black'
+              defaultValue={searchText}
+              textContentType='name'
+              onChangeText={(text) => {
+                setSearchText(text);
+                if (text === '') {
+                  return setFilteredUsers([]);
+                }
+                const filtered_users = destinationinfo.filter((destination) =>
+                  destination.route.code.toLowerCase().startsWith(text.toLowerCase())
+                );
+                setFilteredUsers(filtered_users);
+              }}
+              returnKeyType='search'
             />
-            <TouchableOpacity
-              style={{
-                alignSelf: 'center',
-              }}>
-              <Icon
-                name="search-sharp"
+            {searchText.length === 0 ? (
+              <TouchableOpacity
                 style={{
                   alignSelf: 'center',
-                  fontSize: 30,
-                  color: 'black',
                 }}
-              />
-            </TouchableOpacity>
+              >
+                <Icon
+                  name="search-sharp"
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 30,
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  setSearchText('');
+                  setFilteredUsers([]);
+                }}
+                style={{
+                  alignSelf: 'center',
+                }}
+              >
+                <MaterialIcon name='cancel'
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 24,
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            )}
+
+
           </View>
         </View>
+        {filteredUsers.length > 0 ?
+          (
 
-        <ScrollView>
-          {destinationinfo ? destinationinfo &&
-            destinationinfo.map(destinationinfo => (
+            <ScrollView>
+              {destinationinfo ? destinationinfo &&
+                filteredUsers.map(destinationinfo => (
 
 
-              <View style={styles.section}
-                key={destinationinfo._id}
-              >
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                          
-                        }}>
-                        {destinationinfo.route.code ? destinationinfo.route.code : 'N/A'}
-                      </Text>
-                      <Text style={{
-                        fontSize: 14,
-                        color: '#211C5A',
-                        fontFamily: 'Poppins-Regular',
-                        fontStyle: 'normal',
-                      }}>
-                        Stop time- {destinationinfo.stopTime ? destinationinfo.stopTime.slice(11, 19) : 'N/A'}
-                      </Text>
+                  <View style={styles.section}
+                    key={destinationinfo._id}
+                  >
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+
+                            }}>
+                            {destinationinfo.route.code ? destinationinfo.route.code : 'N/A'}
+                          </Text>
+                          <Text style={{
+                            fontSize: 14,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            fontStyle: 'normal',
+                          }}>
+                            Stop time- {destinationinfo.stopTime ? destinationinfo.stopTime.slice(11, 19) : 'N/A'}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                              fontWeight: 'bold',
+
+                            }}>
+                            {destinationinfo.route.stopPlace ? destinationinfo.route.stopPlace : 'N/A'}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => navigation.navigate('EditDestination', {
+                              destination: destinationinfo
+                            })
+                            }
+
+                            style={{ flexDirection: 'row' }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontWeight: 'bold',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Edit
+                            </Text>
+
+                            <AntDesign
+                              size={12}
+                              color="#211C5A"
+                              name="edit"
+                              style={{ paddingTop: 2, paddingRight: 10 }}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
                     </View>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                          fontWeight: 'bold',
-                          
-                        }}>
-                        {destinationinfo.route.stopPlace ? destinationinfo.route.stopPlace : 'N/A'}
-                      </Text>
-                      <TouchableOpacity
-                         onPress={() => navigation.navigate('EditDestination', {
-                          destination: destinationinfo
-                      })
-                     }
-                       
-                       style={{ flexDirection: 'row' }}>
+
+                    <View style={styles.belowhr}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text
                           style={{
+                            color: '#58636D',
                             fontSize: 12,
-                            color: '#211C5A',
-                            fontWeight: 'bold',
-                            fontFamily: 'Poppins-Regular',
+                            fontFamily: 'Poppins-Medium',
                           }}>
-                          Edit
+                          Fees Type: {destinationinfo.feeType ? destinationinfo.feeType : 'N/A'}
                         </Text>
+                      </View>
 
-                        <AntDesign
-                          size={12}
-                          color="#211C5A"
-                          name="edit"
-                          style={{ paddingTop: 2, paddingRight: 10 }}
-                        />
-                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          color: '#1F7C17',
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                        Fees:{destinationinfo.amount ? destinationinfo.amount : 'N/A'}
+                      </Text>
+
                     </View>
                   </View>
-                </View>
 
-                <View style={styles.belowhr}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                    <Text
-                      style={{
-                        color: '#58636D',
-                        fontSize: 12,
-                        fontFamily: 'Poppins-Medium',
-                      }}>
-                      Fees Type: {destinationinfo.feeType ? destinationinfo.feeType : 'N/A'}
-                    </Text>
+                )) : null}
+
+              <View style={{ height: 10 }} />
+            </ScrollView>
+          ) : (
+
+            <ScrollView>
+              {destinationinfo ? destinationinfo &&
+                destinationinfo.map(destinationinfo => (
+
+
+                  <View style={styles.section}
+                    key={destinationinfo._id}
+                  >
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+
+                            }}>
+                            {destinationinfo.route.code ? destinationinfo.route.code : 'N/A'}
+                          </Text>
+                          <Text style={{
+                            fontSize: 14,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                            fontStyle: 'normal',
+                          }}>
+                            Stop time- {destinationinfo.stopTime ? destinationinfo.stopTime.slice(11, 19) : 'N/A'}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                              fontWeight: 'bold',
+
+                            }}>
+                            {destinationinfo.route.stopPlace ? destinationinfo.route.stopPlace : 'N/A'}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => navigation.navigate('EditDestination', {
+                              destination: destinationinfo
+                            })
+                            }
+
+                            style={{ flexDirection: 'row' }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontWeight: 'bold',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Edit
+                            </Text>
+
+                            <AntDesign
+                              size={12}
+                              color="#211C5A"
+                              name="edit"
+                              style={{ paddingTop: 2, paddingRight: 10 }}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+
+                    <View style={styles.belowhr}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text
+                          style={{
+                            color: '#58636D',
+                            fontSize: 12,
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                          Fees Type: {destinationinfo.feeType ? destinationinfo.feeType : 'N/A'}
+                        </Text>
+                      </View>
+
+                      <Text
+                        style={{
+                          color: '#1F7C17',
+                          fontSize: 12,
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                        Fees:{destinationinfo.amount ? destinationinfo.amount : 'N/A'}
+                      </Text>
+
+                    </View>
                   </View>
-                 
-                    <Text
-                      style={{
-                        color: '#1F7C17',
-                        fontSize: 12,
-                        fontFamily: 'Poppins-Medium',
-                      }}>
-                      Fees:{destinationinfo.amount ? destinationinfo.amount : 'N/A'}
-                    </Text>
-               
-                </View>
-              </View>
 
-            )) : null}
-        </ScrollView>
+                )) : null}
+
+              <View style={{ height: 10 }} />
+            </ScrollView>
+
+          )
+        }
       </View>
     );
 
