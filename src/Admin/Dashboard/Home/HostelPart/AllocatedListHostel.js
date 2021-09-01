@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-import AntDesign from 'react-native-vector-icons/AntDesign'; 
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import { Button } from 'react-native-paper';
 
@@ -35,7 +35,10 @@ const AllocatedListHostel = ({ route, navigation }) => {
 
   // loading screem
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
-
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  //date
   let parseDate = myDate => {
     let d = new Date(myDate);
     return d.toString().slice(0, 15);
@@ -54,7 +57,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
           let token = await read('token');
 
           let response = await get(slug, token);
-          // setId(response._id)
+
           const list = [];
           for (let i = 0; i < response.length; i++) {
             list.push({
@@ -84,7 +87,6 @@ const AllocatedListHostel = ({ route, navigation }) => {
     }, [])
   );
 
-  //for delete on swipe
   const handleDelete = async id => {
     showLoadingScreen()
     try {
@@ -103,7 +105,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
     hideLoadingScreen()
   }
 
-  
+
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -114,7 +116,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : '#FF5733',
-          // backgroundColor:'blue',
+
           ...styles.header,
         }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
@@ -194,20 +196,55 @@ const AllocatedListHostel = ({ route, navigation }) => {
             style={{ ...styles.search_input, fontFamily: 'Poppins-Regular' }}
             placeholder="Enter hostel name here"
             placeholderTextColor="grey"
+            defaultValue={searchText}
+            textContentType='name'
+            onChangeText={(text) => {
+              setSearchText(text);
+              if (text === '') {
+                return setFilteredUsers([]);
+              }
+              const filtered_users = allocation.filter((allocation) =>
+                allocation.username.toLowerCase().startsWith(text.toLowerCase())
+              );
+              setFilteredUsers(filtered_users);
+            }}
+            returnKeyType='search'
           />
-          <TouchableOpacity
-            style={{
-              alignSelf: 'center',
-            }}>
-            <Icon
-              name="search-sharp"
+
+          {searchText.length === 0 ? (
+            <TouchableOpacity
               style={{
                 alignSelf: 'center',
-                fontSize: 30,
-                color: '#505069',
               }}
-            />
-          </TouchableOpacity>
+            >
+              <Icon
+                name="search-sharp"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 30,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setSearchText('');
+                setFilteredUsers([]);
+              }}
+              style={{
+                alignSelf: 'center',
+              }}
+            >
+              <MaterialIcon name='cancel'
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 24,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
       {/* <View style={{height:30}}/> */}
@@ -219,121 +256,240 @@ const AllocatedListHostel = ({ route, navigation }) => {
         mode="contained">
         <Text>Room List</Text>
       </Button>
+      {filteredUsers.length > 0 ?
+        (
+          <ScrollView>
+            {allocation
+              ? (allocation) &&
+              filteredUsers.map(allocation => (
+                <View key={allocation._id}>
+                  <View style={styles.section} >
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                              marginHorizontal: -5,
+                            }}>
+                            {' '}
+                            {allocation.username ? allocation.username : 'N/A'}
+                          </Text>
 
-      <ScrollView>
-        {allocation
-          ? (allocation) &&
-          allocation.map(allocation => (
-            <View key={allocation._id}>
-              <View style={styles.section} >
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            marginHorizontal: -5,
-                          }}>
-                          {' '}
-                          {allocation.username ? allocation.username : 'N/A'}
-                        </Text>
+                          <Text
+                            style={{
+                              flexDirection: 'row',
+                              fontSize: 12,
+                              color: '#505069',
+                              fontFamily: 'OpenSans-Regular',
+                            }}>
+                            {allocation.room ? allocation.room : 'N/A'} {', '}
+                            {allocation.floor ? allocation.floor : 'N/A'} {' floor'}
+                          </Text>
 
-                        <Text
-                          style={{
-                            flexDirection: 'row',
-                            fontSize: 12,
-                            color: '#505069',
-                            fontFamily: 'OpenSans-Regular',
-                          }}>
-                          {allocation.room ? allocation.room : 'N/A'} {', '}
-                          {allocation.floor ? allocation.floor : 'N/A'} {' floor'}
-                        </Text>
-
-                        {/* */}
-                      </View>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#5177E7',
-                            fontFamily: 'Poppins-Medium',
-                          }}></Text>
-                      </TouchableOpacity>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: institute ? institute.themeColor : '#505069',
-                            fontFamily: 'OpenSans-Regular',
-                          }}>
-                          {allocation.type ? allocation.type : 'N/A'}
-                        </Text>
-                      </View>
-
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#505069',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          {'Hostel: '}
-                          {allocation.hostel ? allocation.hostel : 'N/A'}
-                        </Text>
-
-                        <TouchableOpacity
-                          onPress={() => { handleDelete(allocation._id) }}
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginBottom:5
-                          }}>
-                          <MaterialIcon
-                            size={20}
-                            backgroundColor=" #211C5A"
-                            name="delete"
-                            color={institute ? institute.themeColor : '#211C5A'}
-                          />
+                        </View>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#5177E7',
+                              fontFamily: 'Poppins-Medium',
+                            }}></Text>
                         </TouchableOpacity>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: institute ? institute.themeColor : '#505069',
+                              fontFamily: 'OpenSans-Regular',
+                            }}>
+                            {allocation.type ? allocation.type : 'N/A'}
+                          </Text>
+                        </View>
+
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#505069',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {'Hostel: '}
+                            {allocation.hostel ? allocation.hostel : 'N/A'}
+                          </Text>
+
+                          <TouchableOpacity
+                            onPress={() => { handleDelete(allocation._id) }}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginBottom: 5
+                            }}>
+                            <MaterialIcon
+                              size={20}
+                              backgroundColor=" #211C5A"
+                              name="delete"
+                              color={institute ? institute.themeColor : '#211C5A'}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+
+                    <View style={styles.belowhr}>
+                      <View style={{ flexDirection: 'column' }}>
+
+                        <Text
+                          style={{
+                            color: '#211C5A',
+
+                            fontSize: 12,
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {'Register: '}
+                          {allocation.regDate ? allocation.regDate : 'N/A'}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text
+                          style={{
+                            color: '#211C5A',
+
+                            fontSize: 12,
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {'Vacate: '} {allocation.vacaDate ? allocation.vacaDate : 'N/A'}
+                        </Text>
                       </View>
                     </View>
                   </View>
 
-                  <View style={styles.belowhr}>
-                    <View style={{ flexDirection: 'column' }}>
-                      
-                      <Text
-                        style={{
-                          color: '#211C5A',
+                </View>
+              ))
+              : null}
+            <View style={{ height: 90 }} />
+          </ScrollView>
+        ) : (
+          <ScrollView>
+            {allocation
+              ? (allocation) &&
+              allocation.map(allocation => (
+                <View key={allocation._id}>
+                  <View style={styles.section} >
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                              marginHorizontal: -5,
+                            }}>
+                            {' '}
+                            {allocation.username ? allocation.username : 'N/A'}
+                          </Text>
 
-                          fontSize: 12,
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        {'Register: '}
-                        {allocation.regDate ? allocation.regDate : 'N/A'}
-                      </Text>
+                          <Text
+                            style={{
+                              flexDirection: 'row',
+                              fontSize: 12,
+                              color: '#505069',
+                              fontFamily: 'OpenSans-Regular',
+                            }}>
+                            {allocation.room ? allocation.room : 'N/A'} {', '}
+                            {allocation.floor ? allocation.floor : 'N/A'} {' floor'}
+                          </Text>
+
+                          {/* */}
+                        </View>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#5177E7',
+                              fontFamily: 'Poppins-Medium',
+                            }}></Text>
+                        </TouchableOpacity>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: institute ? institute.themeColor : '#505069',
+                              fontFamily: 'OpenSans-Regular',
+                            }}>
+                            {allocation.type ? allocation.type : 'N/A'}
+                          </Text>
+                        </View>
+
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#505069',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {'Hostel: '}
+                            {allocation.hostel ? allocation.hostel : 'N/A'}
+                          </Text>
+
+                          <TouchableOpacity
+                            onPress={() => { handleDelete(allocation._id) }}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              marginBottom: 5
+                            }}>
+                            <MaterialIcon
+                              size={20}
+                              backgroundColor=" #211C5A"
+                              name="delete"
+                              color={institute ? institute.themeColor : '#211C5A'}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
                     </View>
-                    <View>
-                      <Text
-                        style={{
-                          color: '#211C5A',
 
-                          fontSize: 12,
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        {'Vacate: '} {allocation.vacaDate ? allocation.vacaDate : 'N/A'}
-                      </Text>
+                    <View style={styles.belowhr}>
+                      <View style={{ flexDirection: 'column' }}>
+
+                        <Text
+                          style={{
+                            color: '#211C5A',
+
+                            fontSize: 12,
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {'Register: '}
+                          {allocation.regDate ? allocation.regDate : 'N/A'}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text
+                          style={{
+                            color: '#211C5A',
+
+                            fontSize: 12,
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {'Vacate: '} {allocation.vacaDate ? allocation.vacaDate : 'N/A'}
+                        </Text>
+                      </View>
                     </View>
                   </View>
+
                 </View>
-           
-            </View>
-          ))
-          : null}
-        <View style={{ height: 90 }} />
-      </ScrollView>
+              ))
+              : null}
+            <View style={{ height: 90 }} />
+          </ScrollView>
+
+
+
+        )}
     </View>
   );
 };
@@ -426,7 +582,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 0,
     justifyContent: 'space-between',
-   paddingVertical:10,
+    paddingVertical: 10,
     borderBottomColor: '#333',
     //borderBottomWidth:1,
   },
@@ -444,25 +600,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 
-  iconbubblereject: {
-    width: 80,
-    height: 123,
-    backgroundColor: 'red',
-    // borderRadius: 1000,
-    // alignSelf: 'center',
-    // display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 1.41,
-    elevation: 5,
-  },
 
 });
 
