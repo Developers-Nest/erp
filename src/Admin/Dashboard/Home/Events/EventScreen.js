@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -8,10 +8,8 @@ import {
   ScrollView,
 } from 'react-native';
 
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-//selector
-import ModalSelector from 'react-native-modal-selector';
 
 //helpers
 import get from '../../../../services/helpers/request/get';
@@ -28,10 +26,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
-// redux
-import {useSelector} from 'react-redux';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-export default function EventScreen({navigation}) {
+// redux
+import { useSelector } from 'react-redux';
+
+export default function EventScreen({ navigation }) {
   const [type, setType] = useState([]);
   const [courses, setCourses] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -51,6 +51,11 @@ export default function EventScreen({navigation}) {
     let d = new Date(myDate);
     return d.toString().slice(0, 15);
   };
+
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
 
   // on load of the screen
   useEffect(async () => {
@@ -88,7 +93,7 @@ export default function EventScreen({navigation}) {
           ...styles.header,
         }}>
         <View
-          style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 20}}>
+          style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Home');
@@ -156,139 +161,298 @@ export default function EventScreen({navigation}) {
 
       <View style={styles.search}>
         <TextInput
-          style={{...styles.search_input}}
+          style={{ ...styles.search_input }}
           placeholder="Enter Events name Here"
           placeholderTextColor="grey"
+          defaultValue={searchText}
+          textContentType='name'
+          onChangeText={(text) => {
+            setSearchText(text);
+            if (text === '') {
+              return setFilteredUsers([]);
+            }
+            const filtered_users = events.filter((event) =>
+              event.name.toLowerCase().startsWith(text.toLowerCase())
+            );
+            setFilteredUsers(filtered_users);
+          }}
+          returnKeyType='search'
         />
+        {searchText.length === 0 ? (
 
-        <TouchableOpacity
-          style={{
-            alignSelf: 'center',
-          }}>
-          <FontAwesome5Icon
-            name="search"
+          <TouchableOpacity
             style={{
               alignSelf: 'center',
-              fontSize: 30,
-              color: 'black',
+            }}>
+            <FontAwesome5Icon
+              name="search"
+              style={{
+                alignSelf: 'center',
+                fontSize: 30,
+                color: 'black',
+              }}
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              setSearchText('');
+              setFilteredUsers([]);
             }}
-          />
-        </TouchableOpacity>
+            style={{
+              alignSelf: 'center',
+            }}
+          >
+            <MaterialIcon name='cancel'
+              style={{
+                alignSelf: 'center',
+                fontSize: 24,
+                color: '#505069',
+              }}
+            />
+          </TouchableOpacity>
+        )}
+
       </View>
-      <View style={{paddingBottom: 10}}>
-        {events &&
-          events.map(event => (
-            <View style={styles.shadow} key={event._id}>
-              <View style={styles.EventCard}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: 15,
-                    marginLeft: 10,
-                    marginRight: 10,
-                  }}>
-                  <Text
-                    style={{fontSize: 18, fontWeight: '400', color: '#211C5A'}}>
-                    {event.name}
-                  </Text>
-                  <View>
-                    <TouchableWithoutFeedback
-                      style={{flexDirection: 'row', alignContent: 'flex-end'}}
-                      onPress={() => {
-                        navigation.navigate('EditEvent', {
-                          id: event._id,
-                          v: event.__v,
-                          eventname: event.name,
-                          Organizer: event.organizer,
-                          des: event.description,
-                          start: event.startDate,
-                          end: event.endDate,
-                          eventFor: event.eventFor,
-                          eventType: event.type && event.type._id,
-                          eventTypeName: event.type && event.type.name,
-                          course: event.course && event.course._id,
-                          coursename: event.course && event.course.courseName,
-                          batch: event.batch && event.batch._id,
-                          batchname: event.batch && event.batch.batchName,
-                          department: event.department && event.department._id,
-                          departmentname:
-                            event.department && event.department.name,
-                          holiday: event.holiday,
-                        });
-                      }}>
-                      <FontAwesome5Icon
-                        name="edit"
+      <View style={{ paddingBottom: 10 }}>
+
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {events &&
+                filteredUsers.map(event => (
+                  <View style={styles.shadow} key={event._id}>
+                    <View style={styles.EventCard}>
+                      <View
                         style={{
-                          alignSelf: 'center',
-                          fontSize: 15,
-                          color: institute ? institute.themeColor : '#211C5A',
-                          marginRight: 2,
-                        }}
-                      />
-                      <Text
-                        style={{
-                          color: institute ? institute.themeColor : '#211C5A',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          marginTop: 15,
+                          marginLeft: 10,
+                          marginRight: 10,
                         }}>
-                        Edit
-                      </Text>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback
-                      style={{flexDirection: 'row', alignContent: 'flex-end'}}
-                      onPress={() => {
-                        HandleDelete(event._id);
-                      }}>
-                      <AntDesign
-                        size={12}
-                        color="#211C5A"
-                        name="delete"
-                        style={{paddingTop: 2}}
-                      />
-                      <Text
+                        <Text
+                          style={{ fontSize: 18, fontWeight: '400', color: '#211C5A' }}>
+                          {event.name}
+                        </Text>
+                        <View>
+                          <TouchableWithoutFeedback
+                            style={{ flexDirection: 'row', alignContent: 'flex-end' }}
+                            onPress={() => {
+                              navigation.navigate('EditEvent', {
+                                id: event._id,
+                                v: event.__v,
+                                eventname: event.name,
+                                Organizer: event.organizer,
+                                des: event.description,
+                                start: event.startDate,
+                                end: event.endDate,
+                                eventFor: event.eventFor,
+                                eventType: event.type && event.type._id,
+                                eventTypeName: event.type && event.type.name,
+                                course: event.course && event.course._id,
+                                coursename: event.course && event.course.courseName,
+                                batch: event.batch && event.batch._id,
+                                batchname: event.batch && event.batch.batchName,
+                                department: event.department && event.department._id,
+                                departmentname:
+                                  event.department && event.department.name,
+                                holiday: event.holiday,
+                              });
+                            }}>
+                            <FontAwesome5Icon
+                              name="edit"
+                              style={{
+                                alignSelf: 'center',
+                                fontSize: 15,
+                                color: institute ? institute.themeColor : '#211C5A',
+                                marginRight: 2,
+                              }}
+                            />
+                            <Text
+                              style={{
+                                color: institute ? institute.themeColor : '#211C5A',
+                              }}>
+                              Edit
+                            </Text>
+                          </TouchableWithoutFeedback>
+                          <TouchableWithoutFeedback
+                            style={{ flexDirection: 'row', alignContent: 'flex-end' }}
+                            onPress={() => {
+                              HandleDelete(event._id);
+                            }}>
+                            <AntDesign
+                              size={12}
+                              color="#211C5A"
+                              name="delete"
+                              style={{ paddingTop: 2 }}
+                            />
+                            <Text
+                              style={{
+                                color: institute ? institute.themeColor : '#211C5A',
+                              }}>
+                              Delete
+                            </Text>
+                          </TouchableWithoutFeedback>
+                        </View>
+                      </View>
+                      <View style={{ marginLeft: 10, marginRight: 10 }}>
+                        <Text style={{ color: '#211C5A' }}>
+                          {event.eventFor === 'Selected Batch'
+                            ? 'Batch: ' +
+                            (event.course && event.course.courseName) +
+                            ', ' +
+                            (event.batch && event.batch.batchName)
+                            : event.eventFor === 'Selected Department'
+                              ? 'Department: ' +
+                              (event.department && event.department.name)
+                              : event.eventFor}
+                        </Text>
+                        <Text style={{ color: '#211C5A', marginBottom: 0 }}>
+                          {event.description}
+                        </Text>
+                        <View
+                          style={{
+                            marginTop: 10,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginBottom: 10,
+                            borderTopWidth: 0.5,
+                          }}>
+                          <Text style={{ color: '#211C5A', marginTop: 5 }}>
+                            {'From: '}
+                            {parseDate(event.startDate)}
+                          </Text>
+                          <Text style={{ color: '#211C5A', marginTop: 5 }}>
+                            {'To: '}
+                            {parseDate(event.endDate)}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                ))}
+              <View style={{ height: 10 }} />
+            </ScrollView>
+          ) : (
+            <ScrollView>
+              {events &&
+                events.map(event => (
+                  <View style={styles.shadow} key={event._id}>
+                    <View style={styles.EventCard}>
+                      <View
                         style={{
-                          color: institute ? institute.themeColor : '#211C5A',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          marginTop: 15,
+                          marginLeft: 10,
+                          marginRight: 10,
                         }}>
-                        Delete
-                      </Text>
-                    </TouchableWithoutFeedback>
+                        <Text
+                          style={{ fontSize: 18, fontWeight: '400', color: '#211C5A' }}>
+                          {event.name}
+                        </Text>
+                        <View>
+                          <TouchableWithoutFeedback
+                            style={{ flexDirection: 'row', alignContent: 'flex-end' }}
+                            onPress={() => {
+                              navigation.navigate('EditEvent', {
+                                id: event._id,
+                                v: event.__v,
+                                eventname: event.name,
+                                Organizer: event.organizer,
+                                des: event.description,
+                                start: event.startDate,
+                                end: event.endDate,
+                                eventFor: event.eventFor,
+                                eventType: event.type && event.type._id,
+                                eventTypeName: event.type && event.type.name,
+                                course: event.course && event.course._id,
+                                coursename: event.course && event.course.courseName,
+                                batch: event.batch && event.batch._id,
+                                batchname: event.batch && event.batch.batchName,
+                                department: event.department && event.department._id,
+                                departmentname:
+                                  event.department && event.department.name,
+                                holiday: event.holiday,
+                              });
+                            }}>
+                            <FontAwesome5Icon
+                              name="edit"
+                              style={{
+                                alignSelf: 'center',
+                                fontSize: 15,
+                                color: institute ? institute.themeColor : '#211C5A',
+                                marginRight: 2,
+                              }}
+                            />
+                            <Text
+                              style={{
+                                color: institute ? institute.themeColor : '#211C5A',
+                              }}>
+                              Edit
+                            </Text>
+                          </TouchableWithoutFeedback>
+                          <TouchableWithoutFeedback
+                            style={{ flexDirection: 'row', alignContent: 'flex-end' }}
+                            onPress={() => {
+                              HandleDelete(event._id);
+                            }}>
+                            <AntDesign
+                              size={12}
+                              color="#211C5A"
+                              name="delete"
+                              style={{ paddingTop: 2 }}
+                            />
+                            <Text
+                              style={{
+                                color: institute ? institute.themeColor : '#211C5A',
+                              }}>
+                              Delete
+                            </Text>
+                          </TouchableWithoutFeedback>
+                        </View>
+                      </View>
+                      <View style={{ marginLeft: 10, marginRight: 10 }}>
+                        <Text style={{ color: '#211C5A' }}>
+                          {event.eventFor === 'Selected Batch'
+                            ? 'Batch: ' +
+                            (event.course && event.course.courseName) +
+                            ', ' +
+                            (event.batch && event.batch.batchName)
+                            : event.eventFor === 'Selected Department'
+                              ? 'Department: ' +
+                              (event.department && event.department.name)
+                              : event.eventFor}
+                        </Text>
+                        <Text style={{ color: '#211C5A', marginBottom: 0 }}>
+                          {event.description}
+                        </Text>
+                        <View
+                          style={{
+                            marginTop: 10,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginBottom: 10,
+                            borderTopWidth: 0.5,
+                          }}>
+                          <Text style={{ color: '#211C5A', marginTop: 5 }}>
+                            {'From: '}
+                            {parseDate(event.startDate)}
+                          </Text>
+                          <Text style={{ color: '#211C5A', marginTop: 5 }}>
+                            {'To: '}
+                            {parseDate(event.endDate)}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
                   </View>
-                </View>
-                <View style={{marginLeft: 10, marginRight: 10}}>
-                  <Text style={{color: '#211C5A'}}>
-                    {event.eventFor === 'Selected Batch'
-                      ? 'Batch: ' +
-                        (event.course && event.course.courseName) +
-                        ', ' +
-                        (event.batch && event.batch.batchName)
-                      : event.eventFor === 'Selected Department'
-                      ? 'Department: ' +
-                        (event.department && event.department.name)
-                      : event.eventFor}
-                  </Text>
-                  <Text style={{color: '#211C5A', marginBottom: 0}}>
-                    {event.description}
-                  </Text>
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginBottom: 10,
-                      borderTopWidth: 0.5,
-                    }}>
-                    <Text style={{color: '#211C5A', marginTop: 5}}>
-                      {'From: '}
-                      {parseDate(event.startDate)}
-                    </Text>
-                    <Text style={{color: '#211C5A', marginTop: 5}}>
-                      {'To: '}
-                      {parseDate(event.endDate)}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          ))}
+                ))}
+              <View style={{ height: 10 }} />
+            </ScrollView>
+          )
+        }
       </View>
     </ScrollView>
   );
@@ -324,7 +488,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 1,
     shadowRadius: 12,
     backgroundColor: 'white',
