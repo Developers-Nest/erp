@@ -247,7 +247,6 @@ const AllocatedListHostel = ({ route, navigation }) => {
           )}
         </View>
       </View>
-      {/* <View style={{height:30}}/> */}
 
       <Button
         onPress={() => navigation.navigate('RoomsList')}
