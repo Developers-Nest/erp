@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,26 +8,26 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 import deleteReq from '../../../../services/helpers/request/delete';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
-export default function TasksList({navigation}) {
+export default function TasksList({ navigation }) {
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -40,6 +40,10 @@ export default function TasksList({navigation}) {
   //data
   const [tasks, setTasks] = useState();
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook();
+
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   //screen reload
   const [reload, setreload] = React.useState(true);
@@ -94,32 +98,34 @@ export default function TasksList({navigation}) {
           backgroundColor: institute ? institute.themeColor : '#FF5733',
           ...styles.header,
         }}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <AntDesign
-            size={24}
-            color="white"
-            name="left"
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
+
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <AntDesign
+              size={24}
+              color="white"
+              name="left"
+              style={{
+                alignSelf: 'center',
+                fontSize: 25,
+                color: 'white',
+
+              }}
+            />
+          </TouchableOpacity>
+          <Text
             style={{
+              fontStyle: 'normal',
+              fontSize: 28,
+              fontWeight: '600',
               alignSelf: 'center',
-              fontSize: 25,
-              color: 'white',
               paddingLeft: 20,
-              paddingTop: 20,
-            }}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontStyle: 'normal',
-            fontSize: 28,
-            fontWeight: '600',
-            alignSelf: 'center',
-            paddingLeft: 30,
-            color: 'white',
-          }}>
-          Task's List
-        </Text>
-        <View style={{flex: 1, marginLeft: 20}}>
+              color: 'white',
+            }}>
+            Task's List
+          </Text>
+        </View>
+        <View style={{ flex: 1, marginLeft: 20 }}>
           <TouchableOpacity
             onPress={() => navigation.navigate('AddTask')}
             style={{
@@ -135,165 +141,296 @@ export default function TasksList({navigation}) {
         </View>
       </View>
 
-      <ScrollView>
-        <View style={{padding: 10}} />
+      <View style={{ padding: 10 }} />
 
-        <View style={{marginHorizontal: 15, ...styles.shadow}}>
-          <View style={styles.search}>
-            <TextInput
-              style={{...styles.search_input}}
-              placeholder="Enter the driver name here"
-              placeholderTextColor="grey"
-            />
+      <View style={{ marginHorizontal: 15, ...styles.shadow }}>
+        <View style={styles.search}>
+          <TextInput
+            style={{ ...styles.search_input }}
+            placeholder="Enter the task type"
+            placeholderTextColor="grey"
+            defaultValue={searchText}
+            textContentType='name'
+            onChangeText={(text) => {
+              setSearchText(text);
+              if (text === '') {
+                return setFilteredUsers([]);
+              }
+              const filtered_users = tasks.filter((task) =>
+                task.task.toLowerCase().startsWith(text.toLowerCase())
+              );
+              setFilteredUsers(filtered_users);
+            }}
+            returnKeyType='search'
+          />
+          {searchText.length === 0 ? (
             <TouchableOpacity
               style={{
                 alignSelf: 'center',
-              }}>
+              }}
+            >
               <Icon
                 name="search-sharp"
                 style={{
                   alignSelf: 'center',
                   fontSize: 30,
-                  color: 'black',
+                  color: '#505069',
                 }}
               />
             </TouchableOpacity>
-          </View>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setSearchText('');
+                setFilteredUsers([]);
+              }}
+              style={{
+                alignSelf: 'center',
+              }}
+            >
+              <MaterialIcon name='cancel'
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 24,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          )}
+
         </View>
-        <>
-          <View style={{padding: 10}} />
-          {tasks &&
-            tasks.map(task => (
-              <View style={styles.section} key={task._id}>
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: '#211C5A',
-                          marginHorizontal: 5,
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        {task.task}
-                      </Text>
-                    </View>
-                    <View style={styles.differentusers}>
+      </View>
+
+      <View style={{ padding: 10 }} />
+      {filteredUsers.length > 0 ?
+        (
+          <ScrollView>
+
+            {
+              tasks &&
+              filteredUsers.map(task => (
+                <View style={styles.section} key={task._id}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            color: '#211C5A',
+                            marginHorizontal: 5,
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {task.task}
+                        </Text>
+                      </View>
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            fontWeight: 'bold',
+                            color: '#58636D',
+                            marginHorizontal: 5,
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {task.userType && task.userType.name}
+                          {': '}
+                          {task.user &&
+                            task.user.firstName + ' ' + task.user.lastName}
+                        </Text>
+                        <Text
+                          style={{
+                            color: institute ? institute.themeColor : '#B04305',
+                            fontSize: 13,
+                            fontFamily: 'Poppins-Medium',
+                            marginHorizontal: 5,
+                            fontWeight: 'bold',
+                          }}>
+                          {'Priority: '}
+                          {task.priority}
+                        </Text>
+                      </View>
+                      <View style={{ padding: 3 }} />
                       <Text
                         style={{
                           fontSize: 13,
-                          fontWeight: 'bold',
                           color: '#58636D',
-                          marginHorizontal: 5,
                           fontFamily: 'Poppins-Regular',
-                        }}>
-                        {task.userType && task.userType.name}
-                        {': '}
-                        {task.user &&
-                          task.user.firstName + ' ' + task.user.lastName}
-                      </Text>
-                      <Text
-                        style={{
-                          color: institute ? institute.themeColor : '#B04305',
-                          fontSize: 13,
-                          fontFamily: 'Poppins-Medium',
                           marginHorizontal: 5,
-                          fontWeight: 'bold',
                         }}>
-                        {'Priority: '}
-                        {task.priority}
+                        {'Description: '}
+                        {task.description}
                       </Text>
                     </View>
-                    <View style={{padding: 3}} />
-                    <Text
-                      style={{
-                        fontSize: 13,
-                        color: '#58636D',
-                        fontFamily: 'Poppins-Regular',
-                        marginHorizontal: 5,
-                      }}>
-                      {'Description: '}
-                      {task.description}
-                    </Text>
                   </View>
-                </View>
 
-                <View style={styles.belowhr}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      padding: 5,
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text
-                      style={{
-                        color: '#211C5A',
-                        fontSize: 15,
-                        fontFamily: 'Poppins-Medium',
-                      }}>
-                      {parseDate(task.taskDate)}
-                    </Text>
-                    <Text
+                  <View style={styles.belowhr}>
+                    <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        padding: 2,
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                        color: '#5177E7',
-                        fontFamily: 'Poppins-Medium',
+                        padding: 5,
+                        justifyContent: 'space-between',
                       }}>
-                      {task.status}
-                    </Text>
-                    {/* <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('EditTask', {task: task})
-                      }
-                      style={{flexDirection: 'row'}}>
                       <Text
                         style={{
-                          fontSize: 14,
-                          fontWeight: 'bold',
                           color: '#211C5A',
+                          fontSize: 15,
                           fontFamily: 'Poppins-Medium',
                         }}>
-                        Edit
+                        {parseDate(task.taskDate)}
+                      </Text>
+                      <Text
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          padding: 2,
+                          fontSize: 16,
+                          fontWeight: 'bold',
+                          color: '#5177E7',
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                        {task.status}
                       </Text>
 
-                      <MaterialCommunityIcon
-                        size={15}
-                        color="#211C5A"
-                        name="square-edit-outline"
-                        style={{paddingTop: 2, paddingRight: 10}}
-                      />
-                    </TouchableOpacity> */}
-                    <TouchableWithoutFeedback
+                      <TouchableWithoutFeedback
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          padding: 2,
+                        }}
+                        onPress={() => {
+                          HandleDelete(task._id);
+                        }}>
+                        <AntDesign size={15} color="#211C5A" name="delete" />
+                        <Text
+                          style={{
+                            color: institute ? institute.themeColor : '#211C5A',
+                          }}>
+                          Delete
+                        </Text>
+                      </TouchableWithoutFeedback>
+                    </View>
+                    <View style={{ padding: 5 }} />
+                  </View>
+                </View>
+              ))}
+            <View style={{ height: 10 }} />
+          </ScrollView>
+        ) : (
+          <ScrollView>
+
+            {tasks &&
+              tasks.map(task => (
+                <View style={styles.section} key={task._id}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            color: '#211C5A',
+                            marginHorizontal: 5,
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {task.task}
+                        </Text>
+                      </View>
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 13,
+                            fontWeight: 'bold',
+                            color: '#58636D',
+                            marginHorizontal: 5,
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {task.userType && task.userType.name}
+                          {': '}
+                          {task.user &&
+                            task.user.firstName + ' ' + task.user.lastName}
+                        </Text>
+                        <Text
+                          style={{
+                            color: institute ? institute.themeColor : '#B04305',
+                            fontSize: 13,
+                            fontFamily: 'Poppins-Medium',
+                            marginHorizontal: 5,
+                            fontWeight: 'bold',
+                          }}>
+                          {'Priority: '}
+                          {task.priority}
+                        </Text>
+                      </View>
+                      <View style={{ padding: 3 }} />
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          color: '#58636D',
+                          fontFamily: 'Poppins-Regular',
+                          marginHorizontal: 5,
+                        }}>
+                        {'Description: '}
+                        {task.description}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.belowhr}>
+                    <View
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        padding: 2,
-                      }}
-                      onPress={() => {
-                        HandleDelete(task._id);
+                        padding: 5,
+                        justifyContent: 'space-between',
                       }}>
-                      <AntDesign size={15} color="#211C5A" name="delete" />
                       <Text
                         style={{
-                          color: institute ? institute.themeColor : '#211C5A',
+                          color: '#211C5A',
+                          fontSize: 15,
+                          fontFamily: 'Poppins-Medium',
                         }}>
-                        Delete
+                        {parseDate(task.taskDate)}
                       </Text>
-                    </TouchableWithoutFeedback>
+                      <Text
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          padding: 2,
+                          fontSize: 16,
+                          fontWeight: 'bold',
+                          color: '#5177E7',
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                        {task.status}
+                      </Text>
+                      <TouchableWithoutFeedback
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          padding: 2,
+                        }}
+                        onPress={() => {
+                          HandleDelete(task._id);
+                        }}>
+                        <AntDesign size={15} color="#211C5A" name="delete" />
+                        <Text
+                          style={{
+                            color: institute ? institute.themeColor : '#211C5A',
+                          }}>
+                          Delete
+                        </Text>
+                      </TouchableWithoutFeedback>
+                    </View>
+                    <View style={{ padding: 5 }} />
                   </View>
-                  <View style={{padding: 5}} />
                 </View>
-              </View>
-            ))}
-        </>
+              ))}
+            <View style={{ height: 10 }} />
+          </ScrollView>
 
-        <View style={{padding: 20}} />
-      </ScrollView>
+        )}
+
+
     </View>
   );
 }
