@@ -107,7 +107,9 @@ export default function ContentLibrary({navigation}) {
                         <TouchableOpacity style={styles.hey}>
                           <Text style={{fontSize: 16}}>
                             Created By:{' '}
-                            {sm.createdBy ? sm.createdBy : 'Not Available'}
+                            {(sm.createdBy &&
+                              sm.createdBy.firstName + sm.createdBy.lastName) ||
+                              'NA'}
                           </Text>
                           {sm.insertfile != 'null' ? (
                             <Button
@@ -172,7 +174,9 @@ export default function ContentLibrary({navigation}) {
                     <TouchableOpacity style={styles.hey}>
                       <Text style={{fontSize: 16}}>
                         Created By:{' '}
-                        {vm.createdBy ? vm.createdBy : 'Not Available'}
+                        {(vm.createdBy &&
+                          vm.createdBy.firstName + vm.createdBy.lastName) ||
+                          'NA'}
                       </Text>
                       {vm.addAttachment ? (
                         <Button
