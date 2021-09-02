@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-//icons
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 
@@ -36,6 +35,10 @@ export default function Booksrequest({ navigation }) {
   const institute = useSelector(state => state.institute);
 
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(async () => {
     setLoadingScreen()
@@ -125,13 +128,202 @@ export default function Booksrequest({ navigation }) {
 
     return (
       <View style={styles.container}>
-        <ScrollView>
-          {
-            requests && requests.map((request) => (
-              request.status === "Pending" ? (
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }} key={request._id}>
-                  <Swipeable renderLeftActions={() => LeftActions(request._id)} renderRightActions={() => RightActions(request._id)}>
-                    <View style={styles.section}>
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {
+                requests && filteredUsers.map((request) => (
+                  request.status === "Pending" ? (
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }} key={request._id}>
+                      <Swipeable renderLeftActions={() => LeftActions(request._id)} renderRightActions={() => RightActions(request._id)}>
+                        <View style={styles.section}>
+                          <View style={styles.details}>
+                            <View style={styles.userinhostels}>
+                              <View style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    color: '#211C5A',
+                                    fontFamily: 'Poppins-Regular',
+                                    marginHorizontal: -5,
+                                    // marginRight: 100,
+                                    paddingRight: 80
+                                  }}>
+                                  {' '}
+                                  {request.title}
+                                </Text>
+
+                                <TouchableOpacity
+                                  style={{ flexDirection: 'row' }}
+                                >
+                                  <Text
+                                    style={{
+                                      fontSize: 12,
+                                      color: '#211C5A',
+                                      fontFamily: 'Poppins-Medium',
+                                    }}>
+                                    By: {request.author}
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                              <TouchableOpacity style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 12,
+                                    color: '#5177E7',
+                                    fontFamily: 'Poppins-Medium',
+                                  }}>
+                                  User: {request.student ? request.student.firstName : request.employee.firstName}
+                                </Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 12,
+                                    color: '#505069',
+                                    fontFamily: 'Poppins-Regular',
+                                  }}>
+                                  User Type: {request.userType ? request.userType.name : 'N/A'}
+                                </Text>
+
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+
+                          <View style={styles.belowhr}>
+                            <View style={{ flexDirection: 'column' }}>
+                              <Text
+                                style={{
+                                  color: institute ? institute.themeColor : '#B04305',
+                                  fontSize: 12,
+                                  fontFamily: 'Poppins-Medium',
+                                }}>
+                                {'  '}  Requested On:{' '} {request.requestedDate.slice(0, 10)}
+                                {/* {assignment.submissionDateString ||
+                            'Submission date Not Found'} */}
+                              </Text>
+
+                            </View>
+                            <View style={{ marginBottom: 3 }}>
+                              <Text>Need: {request.needLevel}</Text>
+                            </View>
+                          </View>
+                        </View>
+
+                      </Swipeable>
+                    </View>
+                  ) : (null)
+                ))
+              }
+              <View style={{ height: 20 }} />
+            </ScrollView>
+          ) : (
+            <ScrollView>
+              {
+                requests && requests.map((request) => (
+                  request.status === "Pending" ? (
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }} key={request._id}>
+                      <Swipeable renderLeftActions={() => LeftActions(request._id)} renderRightActions={() => RightActions(request._id)}>
+                        <View style={styles.section}>
+                          <View style={styles.details}>
+                            <View style={styles.userinhostels}>
+                              <View style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    color: '#211C5A',
+                                    fontFamily: 'Poppins-Regular',
+                                    marginHorizontal: -5,
+                                    // marginRight: 100,
+                                    paddingRight: 80
+                                  }}>
+                                  {' '}
+                                  {request.title}
+                                </Text>
+
+                                <TouchableOpacity
+                                  style={{ flexDirection: 'row' }}
+                                >
+                                  <Text
+                                    style={{
+                                      fontSize: 12,
+                                      color: '#211C5A',
+                                      fontFamily: 'Poppins-Medium',
+                                    }}>
+                                    By: {request.author}
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                              <TouchableOpacity style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 12,
+                                    color: '#5177E7',
+                                    fontFamily: 'Poppins-Medium',
+                                  }}>
+                                  User: {request.student ? request.student.firstName : request.employee.firstName}
+                                </Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 12,
+                                    color: '#505069',
+                                    fontFamily: 'Poppins-Regular',
+                                  }}>
+                                  User Type: {request.userType ? request.userType.name : 'N/A'}
+                                </Text>
+
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+
+                          <View style={styles.belowhr}>
+                            <View style={{ flexDirection: 'column' }}>
+                              <Text
+                                style={{
+                                  color: institute ? institute.themeColor : '#B04305',
+                                  fontSize: 12,
+                                  fontFamily: 'Poppins-Medium',
+                                }}>
+                                {'  '}  Requested On:{' '} {request.requestedDate.slice(0, 10)}
+                                {/* {assignment.submissionDateString ||
+                                        'Submission date Not Found'} */}
+                              </Text>
+
+                            </View>
+                            <View style={{ marginBottom: 3 }}>
+                              <Text>Need: {request.needLevel}</Text>
+                            </View>
+                          </View>
+                        </View>
+
+                      </Swipeable>
+                    </View>
+                  ) : (null)
+                ))
+              }
+              <View style={{ height: 20 }} />
+            </ScrollView>
+          )}
+      </View>
+    );
+  }
+
+  function Reviewed() {
+    const [searchQuery, setSearchQuery] = React.useState('');
+
+    const onChangeSearch = query => setSearchQuery(query);
+
+    return (
+      <View style={styles.container}>
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {
+                requests && filteredUsers.map((request) => (
+                  request.status != "Pending" ? (
+                    <View style={styles.sectionreviewed} key={request._id}>
                       <View style={styles.details}>
                         <View style={styles.userinhostels}>
                           <View style={styles.differentusers}>
@@ -141,8 +333,7 @@ export default function Booksrequest({ navigation }) {
                                 color: '#211C5A',
                                 fontFamily: 'Poppins-Regular',
                                 marginHorizontal: -5,
-                                // marginRight: 100,
-                                paddingRight: 80
+
                               }}>
                               {' '}
                               {request.title}
@@ -170,6 +361,16 @@ export default function Booksrequest({ navigation }) {
                               }}>
                               User: {request.student ? request.student.firstName : request.employee.firstName}
                             </Text>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: 'black',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              {request.status}
+                            </Text>
+
+
                           </TouchableOpacity>
                           <TouchableOpacity style={styles.differentusers}>
                             <Text
@@ -195,7 +396,7 @@ export default function Booksrequest({ navigation }) {
                             }}>
                             {'  '}  Requested On:{' '} {request.requestedDate.slice(0, 10)}
                             {/* {assignment.submissionDateString ||
-                            'Submission date Not Found'} */}
+                              'Submission date Not Found'} */}
                           </Text>
 
                         </View>
@@ -204,116 +405,106 @@ export default function Booksrequest({ navigation }) {
                         </View>
                       </View>
                     </View>
+                  ) : (null)
+                ))
+              }
+              <View style={{ height: 20 }} />
 
-                  </Swipeable>
-                </View>
-              ) : (null)
-            ))
-          }
-        </ScrollView>
-      </View>
-    );
-  }
+            </ScrollView>
+          ) : (
+            <ScrollView>
+              {
+                requests && requests.map((request) => (
+                  request.status != "Pending" ? (
+                    <View style={styles.sectionreviewed} key={request._id}>
+                      <View style={styles.details}>
+                        <View style={styles.userinhostels}>
+                          <View style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                                marginHorizontal: -5,
 
-  function Reviewed() {
-    const [searchQuery, setSearchQuery] = React.useState('');
+                              }}>
+                              {' '}
+                              {request.title}
+                            </Text>
 
-    const onChangeSearch = query => setSearchQuery(query);
+                            <TouchableOpacity
+                              style={{ flexDirection: 'row' }}
+                            >
+                              <Text
+                                style={{
+                                  fontSize: 12,
+                                  color: '#211C5A',
+                                  fontFamily: 'Poppins-Medium',
+                                }}>
+                                By: {request.author}
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                          <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#5177E7',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              User: {request.student ? request.student.firstName : request.employee.firstName}
+                            </Text>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: 'black',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              {request.status}
+                            </Text>
 
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          {
-            requests && requests.map((request) => (
-              request.status != "Pending" ? (
-                <View style={styles.sectionreviewed} key={request._id}>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            marginHorizontal: -5,
 
-                          }}>
-                          {' '}
-                          {request.title}
-                        </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#505069',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              User Type: {request.userType ? request.userType.name : 'N/A'}
+                            </Text>
 
-                        <TouchableOpacity
-                          style={{ flexDirection: 'row' }}
-                        >
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                      <View style={styles.belowhr}>
+                        <View style={{ flexDirection: 'column' }}>
                           <Text
                             style={{
+                              color: institute ? institute.themeColor : '#B04305',
                               fontSize: 12,
-                              color: '#211C5A',
                               fontFamily: 'Poppins-Medium',
                             }}>
-                            By: {request.author}
+                            {'  '}  Requested On:{' '} {request.requestedDate.slice(0, 10)}
+                            {/* {assignment.submissionDateString ||
+                                          'Submission date Not Found'} */}
                           </Text>
-                        </TouchableOpacity>
+
+                        </View>
+                        <View style={{ marginBottom: 3 }}>
+                          <Text>Need: {request.needLevel}</Text>
+                        </View>
                       </View>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#5177E7',
-                            fontFamily: 'Poppins-Medium',
-                          }}>
-                          User: {request.student ? request.student.firstName : request.employee.firstName}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: 'black',
-                            fontFamily: 'Poppins-Medium',
-                          }}>
-                          {request.status}
-                        </Text>
-
-
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#505069',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          User Type: {request.userType ? request.userType.name : 'N/A'}
-                        </Text>
-
-                      </TouchableOpacity>
                     </View>
-                  </View>
+                  ) : (null)
+                ))
+              }
+              <View style={{ height: 20 }} />
 
-                  <View style={styles.belowhr}>
-                    <View style={{ flexDirection: 'column' }}>
-                      <Text
-                        style={{
-                          color: institute ? institute.themeColor : '#B04305',
-                          fontSize: 12,
-                          fontFamily: 'Poppins-Medium',
-                        }}>
-                        {'  '}  Requested On:{' '} {request.requestedDate.slice(0, 10)}
-                        {/* {assignment.submissionDateString ||
-                              'Submission date Not Found'} */}
-                      </Text>
-
-                    </View>
-                    <View style={{ marginBottom: 3 }}>
-                      <Text>Need: {request.needLevel}</Text>
-                    </View>
-                  </View>
-                </View>
-              ) : (null)
-            ))
-          }
-
-
-        </ScrollView>
+            </ScrollView>
+          )}
       </View>
     );
   }
@@ -388,21 +579,64 @@ export default function Booksrequest({ navigation }) {
                 placeholder="Enter book's title here"
                 placeholderTextColor='grey'
                 color='black'
-
+                defaultValue={searchText}
+                textContentType='name'
+                onChangeText={(text) => {
+                  setSearchText(text);
+                  if (text === '') {
+                    return setFilteredUsers([]);
+                  }
+                  if (showContent === 'Unreviewed') {
+                    const filtered_users = requests.filter((book) =>
+                      book.title.toLowerCase().startsWith(text.toLowerCase())
+                    );
+                    setFilteredUsers(filtered_users);
+                  }
+                  if (showContent === 'Reviewed') {
+                    const filtered_users = requests.filter((book) =>
+                      book.title.toLowerCase().startsWith(text.toLowerCase())
+                    );
+                    setFilteredUsers(filtered_users);
+                  }
+                }}
+                returnKeyType='search'
               />
-              <TouchableOpacity
-                style={{
-                  alignSelf: 'center',
-                }}>
-                <FontAwesome5
-                  name="search"
+              {searchText.length === 0 ? (
+                <TouchableOpacity
                   style={{
                     alignSelf: 'center',
-                    fontSize: 21,
-                    color: '#505069',
+                  }}>
+                  <FontAwesome5
+                    name="search"
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 21,
+                      color: '#505069',
+                    }}
+                  />
+                </TouchableOpacity>
+
+              ) : (
+                <TouchableOpacity
+                  onPress={() => {
+                    setSearchText('');
+                    setFilteredUsers([]);
                   }}
-                />
-              </TouchableOpacity>
+                  style={{
+                    alignSelf: 'center',
+                  }}
+                >
+                  <MaterialIcon name='cancel'
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 24,
+                      color: '#505069',
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
+
+
             </View>
           </View>
         </View>
