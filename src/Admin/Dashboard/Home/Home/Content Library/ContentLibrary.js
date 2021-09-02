@@ -118,7 +118,7 @@ export default function ContentLibrary({navigation}) {
                     <TouchableOpacity style={styles.hey}>
                       <Text style={{fontSize: 16}}>
                         Created By:{' '}
-                        {sm.createdBy ? sm.createdBy : 'Not Available'}
+                        {sm.createdBy ? sm.createdBy.firstName : 'Not Available'}
                       </Text>
                       {sm.insertfile != 'null' ? (
                         <Button
