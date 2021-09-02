@@ -27,27 +27,47 @@ import read from '../../../../../services/localstorage/read';
 import { useSelector } from 'react-redux';
 
 export default function LibraryMain({ navigation }) {
+
+  const [addedbooks, setaddedbooks] = useState([]);
+
+  const [issuedbooks, setissuedbooks] = useState([]);
   const [showContent, setShowContent] = React.useState('IssuedBooks');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
+  //screen reload
+  const [reload, setreload] = React.useState(true);
 
   //theming
   const institute = useSelector(state => state.institute);
 
-  function AddedBooks() {
-    const [addedbooks, setaddedbooks] = useState([]);
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  //on load
+  useEffect(async () => {
+    try {
+      let slug = '/library/issue';
+      let token = await read('token');
+      const response = await get(slug, token);
+      console.log('Issued Books ', response);
+      setissuedbooks(response);
+    } catch (err) {
+      alert('Cannot fetch issued books list !!');
+    }
+    try {
+      let slug = '/library/books';
+      let token = await read('token');
+      const response = await get(slug, token);
+      console.log(response);
+      setaddedbooks(response);
+    } catch (err) {
+      alert('Cannot fetch added books list !!');
+    }
+  }, [reload]);
 
-    useEffect(async () => {
-      try {
-        let slug = '/library/books';
-        let token = await read('token');
-        const response = await get(slug, token);
-        console.log(response);
-        setaddedbooks(response);
-      } catch (err) {
-        alert('Cannot fetch added books list !!');
-      }
-    }, []);
+
+
+  function AddedBooks() {
 
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -68,104 +88,167 @@ export default function LibraryMain({ navigation }) {
             - - - - - - - - - - - - -
           </Text>
         </TouchableOpacity>
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {addedbooks &&
+                filteredUsers.map(addedbooks => (
+                  <View style={styles.section} key={addedbooks._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {' '}
+                            {addedbooks.title}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#505069',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {'  '}
+                            {addedbooks.isbn}
+                          </Text>
+                          <TouchableOpacity
+                            style={{ flexDirection: 'row' }}
+                            onPress={() => navigation.navigate('EditBooks', {
+                              books: addedbooks
+                            })
+                            }
+                          >
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Edit
+                            </Text>
+                            <AntDesign
+                              size={12}
+                              color="#211C5A"
+                              name="edit"
+                              style={{ paddingTop: 2 }}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
 
-        <ScrollView>
-          {addedbooks &&
-            addedbooks.map(addedbooks => (
-              <View style={styles.section} key={addedbooks._id}>
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
+                    <View style={styles.belowhr}>
                       <Text
                         style={{
-                          fontSize: 18,
-                          color: '#211C5A',
+                          fontSize: 12,
+                          color: '#1F7C17',
                           fontFamily: 'Poppins-Regular',
+                          paddingLeft: 5,
                         }}>
-                        {' '}
-                        {addedbooks.title}
+                        Issued:{addedbooks.purchaseDate.slice(0, 10)}
                       </Text>
-                    </View>
-                    <View style={styles.differentusers}>
                       <Text
                         style={{
                           fontSize: 12,
                           color: '#505069',
                           fontFamily: 'Poppins-Regular',
                         }}>
-                        {'  '}
-                        {addedbooks.isbn}
+                        {addedbooks.bookNumber}
                       </Text>
-                      <TouchableOpacity
-                        style={{ flexDirection: 'row' }}
-                        onPress={() => navigation.navigate('EditBooks', {
-                          books: addedbooks
-                        })
-                        }
-                      >
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          Edit
-                        </Text>
-                        <AntDesign
-                          size={12}
-                          color="#211C5A"
-                          name="edit"
-                          style={{ paddingTop: 2 }}
-                        />
-                      </TouchableOpacity>
                     </View>
                   </View>
-                </View>
+                ))}
+            </ScrollView>
+          ) :
+          (
+            <ScrollView>
+              {addedbooks &&
+                addedbooks.map(addedbooks => (
+                  <View style={styles.section} key={addedbooks._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {' '}
+                            {addedbooks.title}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#505069',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {'  '}
+                            {addedbooks.isbn}
+                          </Text>
+                          <TouchableOpacity
+                            style={{ flexDirection: 'row' }}
+                            onPress={() => navigation.navigate('EditBooks', {
+                              books: addedbooks
+                            })
+                            }
+                          >
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Edit
+                            </Text>
+                            <AntDesign
+                              size={12}
+                              color="#211C5A"
+                              name="edit"
+                              style={{ paddingTop: 2 }}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
 
-                <View style={styles.belowhr}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#1F7C17',
-                      fontFamily: 'Poppins-Regular',
-                      paddingLeft: 5,
-                    }}>
-                    Issued:{addedbooks.purchaseDate.slice(0, 10)}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#505069',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    {addedbooks.bookNumber}
-                  </Text>
-                </View>
-              </View>
-            ))}
-        </ScrollView>
+                    <View style={styles.belowhr}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#1F7C17',
+                          fontFamily: 'Poppins-Regular',
+                          paddingLeft: 5,
+                        }}>
+                        Issued:{addedbooks.purchaseDate.slice(0, 10)}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#505069',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {addedbooks.bookNumber}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+            </ScrollView>
+
+          )}
       </View>
     );
   }
 
   function IssuedBooks() {
-    const [issuedbooks, setissuedbooks] = useState([]);
-
-    //screen reload
-    const [reload, setreload] = React.useState(true);
-
-    //on load
-    useEffect(async () => {
-      try {
-        let slug = '/library/issue';
-        let token = await read('token');
-        const response = await get(slug, token);
-        console.log('Issued Books ', response);
-        setissuedbooks(response);
-      } catch (err) {
-        alert('Cannot fetch issued books list !!');
-      }
-    }, [reload]);
 
     const HandleDelete = async id => {
       try {
@@ -196,100 +279,199 @@ export default function LibraryMain({ navigation }) {
             - - - - - - - - - - - - -
           </Text>
         </TouchableOpacity>
-        <ScrollView>
-          {issuedbooks &&
-            issuedbooks.map(issuedbooks => (
-              <View style={styles.section} key={issuedbooks._id}>
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        {' '}
-                        {issuedbooks.bookName
-                          ? issuedbooks.bookName.title
-                          : 'N/A'}
-                      </Text>
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {issuedbooks &&
+                filteredUsers.map(issuedbooks => (
+                  <View style={styles.section} key={issuedbooks._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {' '}
+                            {issuedbooks.bookName
+                              ? issuedbooks.bookName.title
+                              : 'N/A'}
+                          </Text>
 
-                      <View style={{ flexDirection: 'row' }}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          {issuedbooks.returned ? 'Returned' : 'Not Returned'}
-                        </Text>
+                          <View style={{ flexDirection: 'row' }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              {issuedbooks.returned ? 'Returned' : 'Not Returned'}
+                            </Text>
+                          </View>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#5177E7',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            {' '}
+                            {issuedbooks.userType.name}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#505069',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {'  '}
+                            {/* Bulk Issue */}
+                            {issuedbooks.bookName.copies}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => {
+                              HandleDelete(issuedbooks._id);
+                            }}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+
+                            }}>
+                            <MaterialIcon
+                              size={20}
+                              backgroundColor=" #211C5A"
+                              name="delete"
+                              color={institute ? institute.themeColor : '#211C5A'}
+                            />
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
-                    <View style={styles.differentusers}>
+
+                    <View style={styles.belowhr}>
                       <Text
                         style={{
                           fontSize: 12,
-                          color: '#5177E7',
-                          fontFamily: 'Poppins-Medium',
+                          color: '#1F7C17',
+                          fontFamily: 'Poppins-Regular',
+                          paddingLeft: 5,
                         }}>
-                        {' '}
-                        {issuedbooks.userType.name}
+                        Issued:{issuedbooks.issueDate.slice(0, 10)}
                       </Text>
-                    </View>
-                    <View style={styles.differentusers}>
                       <Text
                         style={{
                           fontSize: 12,
-                          color: '#505069',
+                          color: '#B04305',
                           fontFamily: 'Poppins-Regular',
                         }}>
-                        {'  '}
-                        {/* Bulk Issue */}
-                        {issuedbooks.bookName.copies}
+                        Due: {issuedbooks.dueDate.slice(0, 10)}
                       </Text>
-                      <TouchableOpacity
-                        onPress={() => {
-                          HandleDelete(issuedbooks._id);
-                        }}
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-
-                        }}>
-                        <MaterialIcon
-                          size={20}
-                          backgroundColor=" #211C5A"
-                          name="delete"
-                          color={institute ? institute.themeColor : '#211C5A'}
-                        />
-                      </TouchableOpacity>
                     </View>
                   </View>
-                </View>
+                ))}
+            </ScrollView>
+          ) : (
+            <ScrollView>
+              {issuedbooks &&
+                issuedbooks.map(issuedbooks => (
+                  <View style={styles.section} key={issuedbooks._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {' '}
+                            {issuedbooks.bookName
+                              ? issuedbooks.bookName.title
+                              : 'N/A'}
+                          </Text>
 
-                <View style={styles.belowhr}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#1F7C17',
-                      fontFamily: 'Poppins-Regular',
-                      paddingLeft: 5,
-                    }}>
-                    Issued:{issuedbooks.issueDate.slice(0, 10)}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: '#B04305',
-                      fontFamily: 'Poppins-Regular',
-                    }}>
-                    Due: {issuedbooks.dueDate.slice(0, 10)}
-                  </Text>
-                </View>
-              </View>
-            ))}
-        </ScrollView>
+                          <View style={{ flexDirection: 'row' }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              {issuedbooks.returned ? 'Returned' : 'Not Returned'}
+                            </Text>
+                          </View>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#5177E7',
+                              fontFamily: 'Poppins-Medium',
+                            }}>
+                            {' '}
+                            {issuedbooks.userType.name}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#505069',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {'  '}
+                            {/* Bulk Issue */}
+                            {issuedbooks.bookName.copies}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => {
+                              HandleDelete(issuedbooks._id);
+                            }}
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+
+                            }}>
+                            <MaterialIcon
+                              size={20}
+                              backgroundColor=" #211C5A"
+                              name="delete"
+                              color={institute ? institute.themeColor : '#211C5A'}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+
+                    <View style={styles.belowhr}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#1F7C17',
+                          fontFamily: 'Poppins-Regular',
+                          paddingLeft: 5,
+                        }}>
+                        Issued:{issuedbooks.issueDate.slice(0, 10)}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#B04305',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        Due: {issuedbooks.dueDate.slice(0, 10)}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+            </ScrollView>
+
+          )}
       </View>
     );
   }
@@ -383,20 +565,64 @@ export default function LibraryMain({ navigation }) {
                 style={{ width: '80%', ...styles.text_input }}
                 placeholder="Enter book name or ID here"
                 placeholderTextColor="grey"
+                defaultValue={searchText}
+                textContentType='name'
+                onChangeText={(text) => {
+                  setSearchText(text);
+                  if (text === '') {
+                    return setFilteredUsers([]);
+                  }
+                  if (showContent === 'IssuedBooks') {
+                    const filtered_users = issuedbooks.filter((issuedbook) =>
+                      issuedbook.bookName.title.toLowerCase().startsWith(text.toLowerCase())
+                    );
+                    setFilteredUsers(filtered_users);
+                  }
+                  if (showContent === 'AddedBooks') {
+                    const filtered_users = addedbooks.filter((addedbook) =>
+                      addedbook.title.toLowerCase().startsWith(text.toLowerCase())
+                    );
+                    setFilteredUsers(filtered_users);
+                  }
+                }}
+                returnKeyType='search'
               />
-              <TouchableOpacity
-                style={{
-                  alignSelf: 'center',
-                }}>
-                <FontAwesome5
-                  name="search"
+              {searchText.length === 0 ? (
+                <TouchableOpacity
                   style={{
                     alignSelf: 'center',
-                    fontSize: 21,
-                    color: '#505069',
+                  }}>
+                  <FontAwesome5
+                    name="search"
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 21,
+                      color: '#505069',
+                    }}
+                  />
+                </TouchableOpacity>
+
+              ) : (
+                <TouchableOpacity
+                  onPress={() => {
+                    setSearchText('');
+                    setFilteredUsers([]);
                   }}
-                />
-              </TouchableOpacity>
+                  style={{
+                    alignSelf: 'center',
+                  }}
+                >
+                  <MaterialIcon name='cancel'
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 24,
+                      color: '#505069',
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
+
+
             </View>
           </View>
         </View>
