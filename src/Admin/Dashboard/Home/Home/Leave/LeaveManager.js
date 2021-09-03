@@ -38,6 +38,9 @@ export default function LeaveManager({ navigation }) {
   const institute = useSelector(state => state.institute);
 
   const [leaves, setLeaves] = useState([])
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(async () => {
     setLoadingScreen()
@@ -45,7 +48,7 @@ export default function LeaveManager({ navigation }) {
       let token = await read('token')
       let slug = '/leavemanagement/application'
       let res = await get(slug, token)
-      if(res.error){
+      if (res.error) {
         alert(res.error)
       } else {
         console.log('Leaves ', res)
@@ -134,13 +137,199 @@ export default function LeaveManager({ navigation }) {
 
     return (
       <View style={styles.container}>
-        <ScrollView>
-          {
-            leaves && leaves.map((leave) => (
-              leave.status === "Awaiting Approval" ? (
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }} key={leave._id}>
-                  <Swipeable renderLeftActions={() => LeftActions(leave._id, 'Approved')} renderRightActions={() => RightActions(leave._id, 'Rejected')}>
-                    <View style={styles.section}>
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {
+                leaves && filteredUsers.map((leave) => (
+                  leave.status === "Awaiting Approval" ? (
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }} key={leave._id}>
+                      <Swipeable renderLeftActions={() => LeftActions(leave._id, 'Approved')} renderRightActions={() => RightActions(leave._id, 'Rejected')}>
+                        <View style={styles.section}>
+                          <View style={styles.details}>
+                            <View style={styles.userinhostels}>
+                              <View style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    color: '#211C5A',
+                                    fontFamily: 'Poppins-Regular',
+                                    marginHorizontal: -5,
+                                    marginRight: 80,
+                                    // paddingRight:50
+                                  }}>
+                                  {' '}
+                                  Code: {leave.empcode}
+                                </Text>
+
+                                <View
+                                  style={{ flexDirection: 'row' }}
+                                >
+                                  <Text
+                                    style={{
+                                      fontSize: 12,
+                                      color: '#211C5A',
+                                      fontFamily: 'Poppins-Medium',
+                                    }}>
+                                    Remaining Leave: {leave.count}
+                                  </Text>
+                                </View>
+                              </View>
+                              <View style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 12,
+                                    color: '#505069',
+                                    fontFamily: 'Poppins-Regular',
+                                  }}>
+                                  Leave Type: {leave.leaveCategory ? leave.leaveCategory.name : 'N/A'}
+                                </Text>
+                              </View>
+                              <View style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 12,
+                                    color: '#505069',
+                                    fontFamily: 'Poppins-Regular',
+                                  }}>
+                                  Reason: {leave.reason}
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                          <View style={styles.belowhr}>
+                            <View style={{ flexDirection: 'column' }}>
+                              <Text style={{
+                                fontFamily: 'Poppins-Regular', fontWeight: '500',
+                                fontSize: 12, lineHeight: 18, color: '#211C5A'
+                              }}
+                              >
+                                {'  '}  From: {''}{leave.fromDate ? leave.fromDate.slice(0, 10) : 'N/A'}
+                                {/* {assignment.submissionDateString ||
+                            'Submission date Not Found'} */}
+                              </Text>
+
+                            </View>
+                            <View >
+                              <Text style={{
+                                fontFamily: 'Poppins-Regular', fontWeight: '500',
+                                fontSize: 12, lineHeight: 18, color: '#211C5A'
+                              }}
+                              > {'  '}  To: {''}{leave.toDate ? leave.toDate.slice(0, 10) : 'N/A'}</Text>
+                            </View>
+                          </View>
+                        </View>
+                      </Swipeable>
+                    </View>
+                  ) : (null)))
+              }
+            </ScrollView>
+          ) : (
+            <ScrollView>
+              {
+                leaves && leaves.map((leave) => (
+                  leave.status === "Awaiting Approval" ? (
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' }} key={leave._id}>
+                      <Swipeable renderLeftActions={() => LeftActions(leave._id, 'Approved')} renderRightActions={() => RightActions(leave._id, 'Rejected')}>
+                        <View style={styles.section}>
+                          <View style={styles.details}>
+                            <View style={styles.userinhostels}>
+                              <View style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 18,
+                                    color: '#211C5A',
+                                    fontFamily: 'Poppins-Regular',
+                                    marginHorizontal: -5,
+                                    marginRight: 80,
+                                    // paddingRight:50
+                                  }}>
+                                  {' '}
+                                  Code: {leave.empcode}
+                                </Text>
+
+                                <View
+                                  style={{ flexDirection: 'row' }}
+                                >
+                                  <Text
+                                    style={{
+                                      fontSize: 12,
+                                      color: '#211C5A',
+                                      fontFamily: 'Poppins-Medium',
+                                    }}>
+                                    Remaining Leave: {leave.count}
+                                  </Text>
+                                </View>
+                              </View>
+                              <View style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 12,
+                                    color: '#505069',
+                                    fontFamily: 'Poppins-Regular',
+                                  }}>
+                                  Leave Type: {leave.leaveCategory ? leave.leaveCategory.name : 'N/A'}
+                                </Text>
+                              </View>
+                              <View style={styles.differentusers}>
+                                <Text
+                                  style={{
+                                    fontSize: 12,
+                                    color: '#505069',
+                                    fontFamily: 'Poppins-Regular',
+                                  }}>
+                                  Reason: {leave.reason}
+                                </Text>
+                              </View>
+                            </View>
+                          </View>
+                          <View style={styles.belowhr}>
+                            <View style={{ flexDirection: 'column' }}>
+                              <Text style={{
+                                fontFamily: 'Poppins-Regular', fontWeight: '500',
+                                fontSize: 12, lineHeight: 18, color: '#211C5A'
+                              }}
+                              >
+                                {'  '}  From: {''}{leave.fromDate ? leave.fromDate.slice(0, 10) : 'N/A'}
+                                {/* {assignment.submissionDateString ||
+                            'Submission date Not Found'} */}
+                              </Text>
+
+                            </View>
+                            <View >
+                              <Text style={{
+                                fontFamily: 'Poppins-Regular', fontWeight: '500',
+                                fontSize: 12, lineHeight: 18, color: '#211C5A'
+                              }}
+                              > {'  '}  To: {''}{leave.toDate ? leave.toDate.slice(0, 10) : 'N/A'}</Text>
+                            </View>
+                          </View>
+                        </View>
+                      </Swipeable>
+                    </View>
+                  ) : (null)))
+              }
+            </ScrollView>
+          )
+        }
+      </View>
+    );
+  }
+
+  function Reviewed() {
+    const [searchQuery, setSearchQuery] = React.useState('');
+
+    const onChangeSearch = query => setSearchQuery(query);
+
+    return (
+      <View style={styles.container}>
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {
+                leaves && filteredUsers.map((leave) => (
+                  leave.status != "Awaiting Approval" ? (
+                    <View style={styles.sectionreviewed} key={leave._id}>
                       <View style={styles.details}>
                         <View style={styles.userinhostels}>
                           <View style={styles.differentusers}>
@@ -150,8 +339,8 @@ export default function LeaveManager({ navigation }) {
                                 color: '#211C5A',
                                 fontFamily: 'Poppins-Regular',
                                 marginHorizontal: -5,
-                                marginRight: 80,
-                                // paddingRight:50
+                                // marginRight:100,
+                                paddingRight: 50
                               }}>
                               {' '}
                               Code: {leave.empcode}
@@ -163,10 +352,10 @@ export default function LeaveManager({ navigation }) {
                               <Text
                                 style={{
                                   fontSize: 12,
-                                  color: '#211C5A',
+                                  color: 'black',
                                   fontFamily: 'Poppins-Medium',
                                 }}>
-                                Remaining Leave: {leave.count}
+                                Status: {leave.status}
                               </Text>
                             </View>
                           </View>
@@ -200,8 +389,7 @@ export default function LeaveManager({ navigation }) {
                           }}
                           >
                             {'  '}  From: {''}{leave.fromDate ? leave.fromDate.slice(0, 10) : 'N/A'}
-                            {/* {assignment.submissionDateString ||
-                            'Submission date Not Found'} */}
+
                           </Text>
 
                         </View>
@@ -214,102 +402,92 @@ export default function LeaveManager({ navigation }) {
                         </View>
                       </View>
                     </View>
-                  </Swipeable>
-                </View>
-              ) : (null)))
-          }
-        </ScrollView>
-      </View>
-    );
-  }
+                  ) : (null)))
+              }
+            </ScrollView>
+          ) : (
+            <ScrollView>
+              {
+                leaves && leaves.map((leave) => (
+                  leave.status != "Awaiting Approval" ? (
+                    <View style={styles.sectionreviewed} key={leave._id}>
+                      <View style={styles.details}>
+                        <View style={styles.userinhostels}>
+                          <View style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Regular',
+                                marginHorizontal: -5,
+                                // marginRight:100,
+                                paddingRight: 50
+                              }}>
+                              {' '}
+                              Code: {leave.empcode}
+                            </Text>
 
-  function Reviewed() {
-    const [searchQuery, setSearchQuery] = React.useState('');
-
-    const onChangeSearch = query => setSearchQuery(query);
-
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          {
-            leaves && leaves.map((leave) => (
-              leave.status != "Awaiting Approval" ? (
-                <View style={styles.sectionreviewed} key={leave._id}>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                            marginHorizontal: -5,
-                            // marginRight:100,
-                            paddingRight: 50
-                          }}>
-                          {' '}
-                          Code: {leave.empcode}
-                        </Text>
-
-                        <View
-                          style={{ flexDirection: 'row' }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: 'black',
-                              fontFamily: 'Poppins-Medium',
-                            }}>
-                            Status: {leave.status}
-                          </Text>
+                            <View
+                              style={{ flexDirection: 'row' }}
+                            >
+                              <Text
+                                style={{
+                                  fontSize: 12,
+                                  color: 'black',
+                                  fontFamily: 'Poppins-Medium',
+                                }}>
+                                Status: {leave.status}
+                              </Text>
+                            </View>
+                          </View>
+                          <View style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#505069',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Leave Type: {leave.leaveCategory ? leave.leaveCategory.name : 'N/A'}
+                            </Text>
+                          </View>
+                          <View style={styles.differentusers}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#505069',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Reason: {leave.reason}
+                            </Text>
+                          </View>
                         </View>
                       </View>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#505069',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          Leave Type: {leave.leaveCategory ? leave.leaveCategory.name : 'N/A'}
-                        </Text>
-                      </View>
-                      <View style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#505069',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          Reason: {leave.reason}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                  <View style={styles.belowhr}>
-                    <View style={{ flexDirection: 'column' }}>
-                      <Text style={{
-                        fontFamily: 'Poppins-Regular', fontWeight: '500',
-                        fontSize: 12, lineHeight: 18, color: '#211C5A'
-                      }}
-                      >
-                        {'  '}  From: {''}{leave.fromDate ? leave.fromDate.slice(0, 10) : 'N/A'}
+                      <View style={styles.belowhr}>
+                        <View style={{ flexDirection: 'column' }}>
+                          <Text style={{
+                            fontFamily: 'Poppins-Regular', fontWeight: '500',
+                            fontSize: 12, lineHeight: 18, color: '#211C5A'
+                          }}
+                          >
+                            {'  '}  From: {''}{leave.fromDate ? leave.fromDate.slice(0, 10) : 'N/A'}
 
-                      </Text>
+                          </Text>
 
+                        </View>
+                        <View >
+                          <Text style={{
+                            fontFamily: 'Poppins-Regular', fontWeight: '500',
+                            fontSize: 12, lineHeight: 18, color: '#211C5A'
+                          }}
+                          > {'  '}  To: {''}{leave.toDate ? leave.toDate.slice(0, 10) : 'N/A'}</Text>
+                        </View>
+                      </View>
                     </View>
-                    <View >
-                      <Text style={{
-                        fontFamily: 'Poppins-Regular', fontWeight: '500',
-                        fontSize: 12, lineHeight: 18, color: '#211C5A'
-                      }}
-                      > {'  '}  To: {''}{leave.toDate ? leave.toDate.slice(0, 10) : 'N/A'}</Text>
-                    </View>
-                  </View>
-                </View>
-              ) : (null)))
-          }
-        </ScrollView>
+                  ) : (null)))
+              }
+            </ScrollView>
+          )
+        }
       </View>
     );
   }
@@ -317,9 +495,9 @@ export default function LeaveManager({ navigation }) {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
         {loaadingScreen}
-                {/* header start */}
+        {/* header start */}
 
-                <View
+        <View
           style={{
             backgroundColor: institute ? institute.themeColor : '#FF5733',
             ...styles.header,
@@ -351,7 +529,7 @@ export default function LeaveManager({ navigation }) {
               paddingLeft: 30,
               color: 'white',
             }}>
-           Leave Manager
+            Leave Manager
           </Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('LeaveApplication')}
@@ -412,21 +590,63 @@ export default function LeaveManager({ navigation }) {
                 placeholder="Enter user's name here"
                 placeholderTextColor="grey"
                 color='black'
-
+                defaultValue={searchText}
+                textContentType='name'
+                onChangeText={(text) => {
+                  setSearchText(text);
+                  if (text === '') {
+                    return setFilteredUsers([]);
+                  }
+                  if (showContent === 'Unreviewed') {
+                    const filtered_users = leaves.filter((material) =>
+                      material.empcode.toLowerCase().startsWith(text.toLowerCase())
+                    );
+                    setFilteredUsers(filtered_users);
+                  }
+                  if (showContent === 'Reviewed') {
+                    const filtered_users = leaves.filter((video) =>
+                      video.empcode.toLowerCase().startsWith(text.toLowerCase())
+                    );
+                    setFilteredUsers(filtered_users);
+                  }
+                }}
+                returnKeyType='search'
               />
-              <TouchableOpacity
-                style={{
-                  alignSelf: 'center',
-                }}>
-                <FontAwesome5
-                  name="search"
+              {searchText.length === 0 ? (
+                <TouchableOpacity
                   style={{
                     alignSelf: 'center',
-                    fontSize: 21,
-                    color: '#505069',
+                  }}>
+                  <FontAwesome5
+                    name="search"
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 21,
+                      color: '#505069',
+                    }}
+                  />
+                </TouchableOpacity>
+
+              ) : (
+                <TouchableOpacity
+                  onPress={() => {
+
+                    setSearchText('');
+                    setFilteredUsers([]);
                   }}
-                />
-              </TouchableOpacity>
+                  style={{
+                    alignSelf: 'center',
+                  }}
+                >
+                  <MaterialIcon name='cancel'
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 24,
+                      color: '#505069',
+                    }}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>

@@ -1,5 +1,5 @@
-import React, { useState,useEffect} from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput ,TouchableWithoutFeedback} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput, TouchableWithoutFeedback } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';//for users section icons
@@ -12,12 +12,15 @@ import read from '../../../../../services/localstorage/read';
 import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const LeaveApplication = ({navigation}) => {
+const LeaveApplication = ({ navigation }) => {
     //theming
-  const institute = useSelector(state => state.institute);
+    const institute = useSelector(state => state.institute);
 
-  const [searchQuery, setSearchQuery] = useState('');
-    const [leaveapp,setleaveapp] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [leaveapp, setleaveapp] = useState([]);
+    //for search
+    const [searchText, setSearchText] = useState('');
+    const [filteredUsers, setFilteredUsers] = useState([]);
 
     const onChangeSearch = query => setSearchQuery(query);
     useEffect(async () => {
@@ -32,85 +35,86 @@ const LeaveApplication = ({navigation}) => {
         }
     }, []);
 
-  return (
-        <View style={{ justifyContent: 'center', alignContent: 'center',
-        backgroundColor: 'rgba(249, 249, 249, 1)', }}>
-             {/* header start */}
+    return (
+        <View style={{
+            justifyContent: 'center', alignContent: 'center',
+            backgroundColor: 'rgba(249, 249, 249, 1)',
+        }}>
+            {/* header start */}
 
-             <View
-          style={{
-            backgroundColor: institute ? institute.themeColor : 'black',
-            ...styles.header,
-          }}>
-        <View style={{flexDirection:'row',alignItems:'center',paddingLeft:10}} >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('LeaveManager');
-            }}>
-            <AntDesign
-              size={24}
-              color="white"
-              name="left"
-              style={{
-                alignSelf: 'center',
-                fontSize: 25,
-                color: 'white',
-                // paddingLeft: 10,
-                // paddingTop: 23,
-              }}
-            />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontStyle: 'normal',
-              fontSize: 28,
-              fontWeight: '600',
-              alignSelf: 'center',
-              paddingLeft: 10,
-              color: 'white',
-              fontFamily: 'NunitoSans-Regular',
-            }}>
-           Leave Application
-          </Text>
-          </View>
-      
-          <TouchableOpacity
-              onPress={() => navigation.navigate('AddApplication')}
-              style={{
-                justifyContent: 'flex-end',
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <View
+            <View
                 style={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  marginRight: 5,
+                    backgroundColor: institute ? institute.themeColor : 'black',
+                    ...styles.header,
                 }}>
-                <Icon
-                  name="add-circle"
-                  color="#900"
-                  style={{
-                    fontSize: 35,
-                    color: 'white',
-                    paddingRight: 20,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: 12,
-                    paddingRight: 20,
-                  }}>
-                  Add
-                </Text>
-              </View>
-            </TouchableOpacity>
-        </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }} >
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('LeaveManager');
+                        }}>
+                        <AntDesign
+                            size={24}
+                            color="white"
+                            name="left"
+                            style={{
+                                alignSelf: 'center',
+                                fontSize: 25,
+                                color: 'white',
 
-        {/* header ends */}
+                            }}
+                        />
+                    </TouchableOpacity>
+                    <Text
+                        style={{
+                            fontStyle: 'normal',
+                            fontSize: 28,
+                            fontWeight: '600',
+                            alignSelf: 'center',
+                            paddingLeft: 10,
+                            color: 'white',
+                            fontFamily: 'NunitoSans-Regular',
+                        }}>
+                        Leave Application
+                    </Text>
+                </View>
+
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('AddApplication')}
+                    style={{
+                        justifyContent: 'flex-end',
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}>
+                    <View
+                        style={{
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            marginRight: 5,
+                        }}>
+                        <Icon
+                            name="add-circle"
+                            color="#900"
+                            style={{
+                                fontSize: 35,
+                                color: 'white',
+                                paddingRight: 20,
+                            }}
+                        />
+                        <Text
+                            style={{
+                                color: '#fff',
+                                fontFamily: 'Poppins-Regular',
+                                fontSize: 12,
+                                paddingRight: 20,
+                            }}>
+                            Add
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+
+            {/* header ends */}
 
             <View style={{ marginHorizontal: 10, ...styles.shadow }}>
                 <View style={styles.search}>
@@ -119,126 +123,254 @@ const LeaveApplication = ({navigation}) => {
                         placeholder="Enter Employee no here"
                         placeholderTextColor='grey'
                         color='black'
+                        defaultValue={searchText}
+                        textContentType='name'
+                        onChangeText={(text) => {
+                            setSearchText(text);
+                            if (text === '') {
+                                return setFilteredUsers([]);
+                            }
 
+                            const filtered_users = leaveapp.filter((emp) =>
+                                emp.empcode.toLowerCase().startsWith(text.toLowerCase())
+                            );
+                            setFilteredUsers(filtered_users);
+
+                        }}
+                        returnKeyType='search'
                     />
-                    <TouchableOpacity
-                        style={{
-                            alignSelf: 'center',
-
-                        }}>
-                        <Icon
-                            name="search-sharp"
+                    {searchText.length === 0 ? (
+                        <TouchableOpacity
                             style={{
                                 alignSelf: 'center',
-                                fontSize: 30,
-                                color: '#505069',
 
+                            }}>
+                            <Icon
+                                name="search-sharp"
+                                style={{
+                                    alignSelf: 'center',
+                                    fontSize: 30,
+                                    color: '#505069',
+
+                                }}
+                            />
+                        </TouchableOpacity>
+
+                    ) : (
+                        <TouchableOpacity
+                            onPress={() => {
+
+                                setSearchText('');
+                                setFilteredUsers([]);
                             }}
-                        />
-                    </TouchableOpacity>
+                            style={{
+                                alignSelf: 'center',
+                            }}
+                        >
+                            <MaterialIcon name='cancel'
+                                style={{
+                                    alignSelf: 'center',
+                                    fontSize: 24,
+                                    color: '#505069',
+                                }}
+                            />
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
-            
-<TouchableWithoutFeedback
- onPress={() => navigation.navigate('HostelRequest')}
-           
->
-<ScrollView>
-    <View>
-        
-{leaveapp &&
-                        leaveapp.map(leaveapp => (
-            <View style={styles.section} 
-            key={leaveapp._id} 
+
+            <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('HostelRequest')}
+
             >
-                <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                        <View style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 18,
-                                    color: '#211C5A',
-                                    fontFamily: 'Poppins-Regular',
-                                    
-                                }}>
+                <ScrollView>
+                    {filteredUsers.length > 0 ?
+                        (
+                            <View>
 
-                             {leaveapp.empcode?leaveapp.empcode:'Employee code N/A'}
+                                {leaveapp &&
+                                    filteredUsers.map(leaveapp => (
+                                        <View style={styles.section}
+                                            key={leaveapp._id}
+                                        >
+                                            <View style={styles.details}>
+                                                <View style={styles.userinhostels}>
+                                                    <View style={styles.differentusers}>
+                                                        <Text
+                                                            style={{
+                                                                fontSize: 18,
+                                                                color: '#211C5A',
+                                                                fontFamily: 'Poppins-Regular',
 
-                            </Text>
+                                                            }}>
 
-                            <Text style={{ flexDirection: 'row', fontSize: 12, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
-                           {leaveapp.status?leaveapp.status:'N/A'}
-                            </Text>
+                                                            {leaveapp.empcode ? leaveapp.empcode : 'Employee code N/A'}
+
+                                                        </Text>
+
+                                                        <Text style={{ flexDirection: 'row', fontSize: 12, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
+                                                            {leaveapp.status ? leaveapp.status : 'N/A'}
+                                                        </Text>
 
 
-                            {/* */}
-                        </View>
-                        {/* <TouchableOpacity style={styles.differentusers}>
+                                                        {/* */}
+                                                    </View>
+                                                    {/* <TouchableOpacity style={styles.differentusers}>
                             <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
                                 User Type
                             </Text>
                         </TouchableOpacity> */}
 
-                        
 
-                            <View style={styles.differentusers}>
-                                <Text
-                                    style={{
-                                        fontSize: 14,
-                                        color: '#211C5A',
-                                        fontFamily: 'Poppins-Regular',
-                                    }}>
-                                  {leaveapp.leaveCategory?leaveapp.leaveCategory.name:'N/A'}
-                                </Text>
 
-                             
+                                                    <View style={styles.differentusers}>
+                                                        <Text
+                                                            style={{
+                                                                fontSize: 14,
+                                                                color: '#211C5A',
+                                                                fontFamily: 'Poppins-Regular',
+                                                            }}>
+                                                            {leaveapp.leaveCategory ? leaveapp.leaveCategory.name : 'N/A'}
+                                                        </Text>
 
+
+
+
+                                                    </View>
+
+                                                </View>
+                                            </View>
+
+
+
+
+                                            <View style={styles.belowhr}>
+                                                <View style={{ flexDirection: 'column' }}>
+
+                                                    <Text
+                                                        style={{
+                                                            color: '#211C5A',
+
+                                                            fontSize: 12,
+                                                            fontFamily: 'Poppins-Regular',
+                                                        }}>
+                                                        From:{leaveapp.fromDate ? leaveapp.fromDate.slice(0, 10) : 'N/A'}
+                                                    </Text>
+                                                </View>
+
+                                                <Text
+                                                    style={{
+                                                        color: '#211C5A',
+
+                                                        fontSize: 12,
+                                                        fontFamily: 'Poppins-Regular',
+                                                    }}>
+                                                    To:{leaveapp.toDate ? leaveapp.toDate.slice(0, 10) : 'N/A'}
+                                                </Text>
+
+                                            </View>
+
+
+                                        </View>
+                                    ))}
 
                             </View>
-                       
-                    </View>
-                </View>
+                        ) : (
+                            <View>
+
+                                {leaveapp &&
+                                    leaveapp.map(leaveapp => (
+                                        <View style={styles.section}
+                                            key={leaveapp._id}
+                                        >
+                                            <View style={styles.details}>
+                                                <View style={styles.userinhostels}>
+                                                    <View style={styles.differentusers}>
+                                                        <Text
+                                                            style={{
+                                                                fontSize: 18,
+                                                                color: '#211C5A',
+                                                                fontFamily: 'Poppins-Regular',
+
+                                                            }}>
+
+                                                            {leaveapp.empcode ? leaveapp.empcode : 'Employee code N/A'}
+
+                                                        </Text>
+
+                                                        <Text style={{ flexDirection: 'row', fontSize: 12, color: '#505069', fontFamily: 'OpenSans-Regular' }}>
+                                                            {leaveapp.status ? leaveapp.status : 'N/A'}
+                                                        </Text>
+
+
+                                                        {/* */}
+                                                    </View>
+                                                    {/* <TouchableOpacity style={styles.differentusers}>
+                                                            <Text style={{ fontSize: 12, color: ' #505069', fontFamily: 'openSans' }}>
+                                                                User Type
+                                                            </Text>
+                                                        </TouchableOpacity> */}
+
+
+
+                                                    <View style={styles.differentusers}>
+                                                        <Text
+                                                            style={{
+                                                                fontSize: 14,
+                                                                color: '#211C5A',
+                                                                fontFamily: 'Poppins-Regular',
+                                                            }}>
+                                                            {leaveapp.leaveCategory ? leaveapp.leaveCategory.name : 'N/A'}
+                                                        </Text>
 
 
 
 
-                <View style={styles.belowhr}>
-                    <View style={{ flexDirection: 'column' }}>
-                       
-                        <Text
-                            style={{
-                                color: '#211C5A',
+                                                    </View>
 
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-                           From:{leaveapp.fromDate?leaveapp.fromDate.slice(0,10):'N/A'}
-                        </Text>
-                    </View>
-                   
-                        <Text
-                            style={{
-                                color: '#211C5A',
-
-                                fontSize: 12,
-                                fontFamily: 'Poppins-Regular',
-                            }}>
-                           To:{leaveapp.toDate?leaveapp.toDate.slice(0,10):'N/A'}
-                        </Text>
-
-                </View>
+                                                </View>
+                                            </View>
 
 
-            </View>
-                         ))} 
-                        
-                        </View>
-                        {/* <View style={{height:90,backgroundColor: 'rgba(249, 249, 249, 1)',}}/> */}
 
-                        </ScrollView>
+
+                                            <View style={styles.belowhr}>
+                                                <View style={{ flexDirection: 'column' }}>
+
+                                                    <Text
+                                                        style={{
+                                                            color: '#211C5A',
+
+                                                            fontSize: 12,
+                                                            fontFamily: 'Poppins-Regular',
+                                                        }}>
+                                                        From:{leaveapp.fromDate ? leaveapp.fromDate.slice(0, 10) : 'N/A'}
+                                                    </Text>
+                                                </View>
+
+                                                <Text
+                                                    style={{
+                                                        color: '#211C5A',
+
+                                                        fontSize: 12,
+                                                        fontFamily: 'Poppins-Regular',
+                                                    }}>
+                                                    To:{leaveapp.toDate ? leaveapp.toDate.slice(0, 10) : 'N/A'}
+                                                </Text>
+
+                                            </View>
+
+
+                                        </View>
+                                    ))}
+
+                            </View>
+
+                        )}
+                </ScrollView>
             </TouchableWithoutFeedback>
 
-           
+
 
 
 
@@ -317,9 +449,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 2.0,
         elevation: 5,
         marginTop: 14,
-        marginBottom:5,
+        marginBottom: 5,
         borderRadius: 12,
-        paddingHorizontal:20,
+        paddingHorizontal: 20,
         marginHorizontal: 20,
     },
 
@@ -332,14 +464,14 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.8,
     },
     userinhostels: {
-        marginTop:10,
+        marginTop: 10,
     },
 
     differentusers: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        
+
     },
     userstext: {
         fontSize: 16,
@@ -351,7 +483,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 10,
         justifyContent: 'space-between',
-        paddingHorizontal:0,
+        paddingHorizontal: 0,
         paddingBottom: 10,
         borderBottomColor: '#333',
         //borderBottomWidth:1,
@@ -368,8 +500,8 @@ const styles = StyleSheet.create({
     header: {
         height: 69,
         flexDirection: 'row',
-      },
-     
+    },
+
 
 });
 
