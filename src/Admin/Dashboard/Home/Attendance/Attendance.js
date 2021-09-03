@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import ModalSelector from 'react-native-modal-selector';
@@ -10,14 +10,13 @@ import {
   ScrollView,
   TextInput,
 } from 'react-native';
-import {Button, RadioButton} from 'react-native-paper';
 
 //icons
 import Icon from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // helpers
 import getBatch from '../../../../services/helpers/getList/getBatch';
@@ -29,7 +28,7 @@ import get from '../../../../services/helpers/request/get';
 import patch from '../../../../services/helpers/request/patch';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-const AttendanceScreen2 = ({navigation}) => {
+const AttendanceScreen2 = ({ navigation }) => {
   // current year and month
   var d = new Date();
   let year = d.getUTCFullYear();
@@ -55,6 +54,10 @@ const AttendanceScreen2 = ({navigation}) => {
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   const [nameMethod, setNameMethod] = useState('Name');
+
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   //theming
   const institute = useSelector(state => state.institute);
@@ -183,7 +186,7 @@ const AttendanceScreen2 = ({navigation}) => {
 
         {/* open list part */}
         <ScrollView>
-          <View style={{padding: 15}}>
+          <View style={{ padding: 15 }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -224,9 +227,9 @@ const AttendanceScreen2 = ({navigation}) => {
               />
             </View>
             <ScrollView>
-              <View style={{marginTop: 20}}>
+              <View style={{ marginTop: 20 }}>
                 {/* <View style={{alignItems:'center'}}></View> */}
-                <View style={{padding: 5, alignItems: 'center'}}>
+                <View style={{ padding: 5, alignItems: 'center' }}>
                   {/* open search */}
                   <View
                     style={{
@@ -235,19 +238,61 @@ const AttendanceScreen2 = ({navigation}) => {
                       flexDirection: 'row',
                       ...styles.shadow,
                     }}>
-                    <FontAwesome5
-                      name="search"
-                      style={{
-                        alignSelf: 'center',
-                        fontSize: 11,
-                        color: '#6A6A80',
-                        marginLeft: 10,
-                        marginTop: 3,
-                      }}
-                    />
+
+                    {searchText.length === 0 ? (
+                      <FontAwesome5
+                        name="search"
+                        style={{
+                          alignSelf: 'center',
+                          fontSize: 14,
+                          color: '#6A6A80',
+                          marginLeft: 15,
+
+                        }}
+                      />
+                    ) :
+                      (
+                        <TouchableOpacity
+                          onPress={() => {
+
+                            setSearchText('');
+                            setFilteredUsers([]);
+                          }}
+                          style={{
+                            alignSelf: 'center',
+                          }}
+                        >
+                          <MaterialIcon name='cancel'
+                            style={{
+                              alignSelf: 'center',
+                              fontSize: 24,
+                              color: '#6A6A80',
+                              marginLeft: 15,
+
+                            }}
+                          />
+                        </TouchableOpacity>
+                      )}
                     <TextInput
-                      style={{width: '70%', ...styles.text_input}}
+                      style={{ width: '70%', ...styles.text_input }}
                       placeholder="Enter student's name"
+                      placeholderTextColor='grey'
+                      color='black'
+                      defaultValue={searchText}
+                      textContentType='name'
+                      onChangeText={(text) => {
+                        setSearchText(text);
+                        if (text === '') {
+                          return setFilteredUsers([]);
+                        }
+
+                        const filtered_users = studentList.filter((st) =>
+                          st.studentId.firstName.toLowerCase().startsWith(text.toLowerCase())
+                        );
+                        setFilteredUsers(filtered_users);
+
+                      }}
+                      returnKeyType='search'
                     />
 
                     <ModalSelector
@@ -289,64 +334,123 @@ const AttendanceScreen2 = ({navigation}) => {
                   </View>
                 </View>
 
-                <View style={{padding: 10}} />
+                <View style={{ padding: 10 }} />
+                <View>
+                  {filteredUsers.length > 0 ?
+                    (
+                      <ScrollView>
+                        {studentList &&
+                          filteredUsers.map(st => (
+                            <View style={styles.section} key={st._id}>
+                              <View style={styles.details}>
+                                <View style={styles.userinhostels2}>
+                                  <TouchableOpacity
+                                    style={styles.differentusers}
+                                    onPress={() => {
+                                      setNameMethod('Name');
+                                    }}>
+                                    <Text
+                                      style={{
+                                        fontSize: 22,
+                                        color: '#211C5A',
+                                        fontFamily: 'Poppins-regular',
+                                      }}>
+                                      {' '}
+                                      {st.studentId
+                                        ? st.studentId.firstName
+                                        : 'Not Found'}
+                                    </Text>
 
-                {studentList &&
-                  studentList.map(st => (
-                    <View style={styles.section} key={st._id}>
-                      <View style={styles.details}>
-                        <View style={styles.userinhostels2}>
-                          <TouchableOpacity
-                            style={styles.differentusers}
-                            onPress={() => {
-                              setNameMethod('Name');
-                            }}>
-                            <Text
-                              style={{
-                                fontSize: 22,
-                                color: '#211C5A',
-                                fontFamily: 'Poppins-regular',
-                              }}>
-                              {' '}
-                              {st.studentId
-                                ? st.studentId.firstName
-                                : 'Not Found'}
-                            </Text>
+                                    <Text
+                                      style={{
+                                        fontSize: 22,
+                                        paddingTop: 20,
+                                        color: '#000000',
+                                        fontFamily: 'Poppins-regular',
+                                      }}>
+                                      {getAttPer(st.days)} %
+                                    </Text>
+                                  </TouchableOpacity>
+                                  <TouchableOpacity style={styles.differentusers}>
+                                    <Text
+                                      style={{
+                                        fontSize: 14,
+                                        marginLeft: 5,
+                                        color: institute
+                                          ? institute.themeColor
+                                          : '#6A6A80',
+                                        fontFamily: 'Poppins-regular',
+                                      }}>
+                                      {''} Admission No: {st.studentAdmissionNumber}
+                                    </Text>
+                                  </TouchableOpacity>
+                                </View>
+                              </View>
+                            </View>
+                          ))}
+                      </ScrollView>
+                    ) :
+                    (
+                      <ScrollView>
+                        {studentList &&
+                          studentList.map(st => (
+                            <View style={styles.section} key={st._id}>
+                              <View style={styles.details}>
+                                <View style={styles.userinhostels2}>
+                                  <TouchableOpacity
+                                    style={styles.differentusers}
+                                    onPress={() => {
+                                      setNameMethod('Name');
+                                    }}>
+                                    <Text
+                                      style={{
+                                        fontSize: 22,
+                                        color: '#211C5A',
+                                        fontFamily: 'Poppins-regular',
+                                      }}>
+                                      {' '}
+                                      {st.studentId
+                                        ? st.studentId.firstName
+                                        : 'Not Found'}
+                                    </Text>
 
-                            <Text
-                              style={{
-                                fontSize: 22,
-                                paddingTop: 20,
-                                color: '#000000',
-                                fontFamily: 'Poppins-regular',
-                              }}>
-                              {getAttPer(st.days)} %
-                            </Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                              style={{
-                                fontSize: 14,
-                                marginLeft: 5,
-                                color: institute
-                                  ? institute.themeColor
-                                  : '#6A6A80',
-                                fontFamily: 'Poppins-regular',
-                              }}>
-                              {''} Admission No: {st.studentAdmissionNumber}
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    </View>
-                  ))}
-
-                {/* Cards end */}
+                                    <Text
+                                      style={{
+                                        fontSize: 22,
+                                        paddingTop: 20,
+                                        color: '#000000',
+                                        fontFamily: 'Poppins-regular',
+                                      }}>
+                                      {getAttPer(st.days)} %
+                                    </Text>
+                                  </TouchableOpacity>
+                                  <TouchableOpacity style={styles.differentusers}>
+                                    <Text
+                                      style={{
+                                        fontSize: 14,
+                                        marginLeft: 5,
+                                        color: institute
+                                          ? institute.themeColor
+                                          : '#6A6A80',
+                                        fontFamily: 'Poppins-regular',
+                                      }}>
+                                      {''} Admission No: {st.studentAdmissionNumber}
+                                    </Text>
+                                  </TouchableOpacity>
+                                </View>
+                              </View>
+                            </View>
+                          ))}
+                      </ScrollView>
+                    )
+                  }
+                  {/* Cards end */}
+                </View>
               </View>
             </ScrollView>
           </View>
         </ScrollView>
-        <View style={{padding: 7}} />
+        <View style={{ padding: 7 }} />
         {/* close list part */}
       </View>
     </ScrollView>
@@ -433,7 +537,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
@@ -463,7 +567,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -491,7 +595,7 @@ const styles = StyleSheet.create({
   },
   shadow2: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -520,7 +624,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -535,7 +639,7 @@ const styles = StyleSheet.create({
     minWidth: 110,
     elevation: 3,
   },
-  card_title: {fontSize: 18},
+  card_title: { fontSize: 18 },
   card_marks: {
     justifyContent: 'center',
     backgroundColor: ' rgba(88, 99, 109, 1)',
