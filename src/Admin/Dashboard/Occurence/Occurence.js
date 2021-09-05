@@ -142,19 +142,6 @@ function Occurance({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <View
-        style={{
-          width: '90%',
-          marginLeft: 25,
-          marginBottom: 10,
-          marginTop: 30,
-          justifyContent: 'flex-start',
-        }}></View> */}
-      {/* <Searchbar
-        placeholder="Enter subject or batch name"
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-      /> */}
       <ScrollView style={styles.container}>
         {list &&
           list.map(occurance => (
@@ -260,7 +247,7 @@ const styles = StyleSheet.create({
     marginTop: 14,
     borderRadius: 12,
     marginHorizontal: 20,
-    marginBottom: 10,
+    marginBottom: 20,
     padding: 15,
   },
 

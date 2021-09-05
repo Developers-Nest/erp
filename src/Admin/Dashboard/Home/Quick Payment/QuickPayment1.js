@@ -1,40 +1,104 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
   Button,
 } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
 import ModalSelector from 'react-native-modal-selector';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
+import getCourse from '../../../../services/helpers/getList/getCourse'
+import getBatch from '../../../../services/helpers/getList/getBatch'
+import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
+import get from '../../../../services/helpers/request/get'
+import read from '../../../../services/localstorage/read'
+
 export default function QuickPayment1({ navigation }) {
-  const [Department, setDrepartment] = useState([]);
-  const [UseType, setUseType] = useState([]);
+
+  // drop down values
+  const [course, setCourse] = useState([]);
+  const [batch, setBatch] = useState([]);
   const [FeeTypeCategory, setFeeTypeCategory] = useState([]);
   const [FeeSubTypeCategory, setFeeSubTypeCategory] = useState([]);
+
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+  // selected values
+  const [scourse, setsCourse] = useState('')
+  const [sbatch, setsBatch] = useState('')
+  const [sfeetype, setsFeeType] = useState('')
+  const [ssubfee, setsSubFee] = useState('')
+
+  useEffect(async () => {
+    setLoadingScreen()
+    try {
+      let res = await getCourse()
+      setCourse(res)
+    } catch (err) {
+      alert('Cannot get Courses!!')
+    }
+
+    try {
+      let token = await read('token')
+      let slug = '/fee/feeCategory'
+      let res = await get(slug, token)
+      let arr = []
+      res && res.map((fee) => {
+        arr.push({
+          key: fee._id,
+          label: fee.category
+        })
+      })
+      setFeeTypeCategory(arr)
+    } catch (err) {
+      alert('Cannot get fee Category!!')
+    }
+    hideLoadingScreen()
+  }, [])
+
+  let getSubCategory = async (sf) => {
+    setLoadingScreen()
+    try {
+      setsFeeType(sf)
+      let token = await read('token')
+      let slug = `/fee/feeSubCategory?feecategory=${sf}`
+      let res = await get(slug, token)
+      let arr = []
+      res && res.map((fee) => {
+        arr.push({
+          label: fee.name,
+          key: fee._id,
+          feeDates: fee.feeDates,
+          feeType: fee.feeType,
+          feeCategory: fee.feeCategory
+        })
+      })
+      setFeeSubTypeCategory(arr)
+    } catch (err) {
+      alert('Cannot get Sub Category!!')
+    }
+    hideLoadingScreen()
+  }
+
+  const fetchBatches = async (sc) => {
+    setLoadingScreen()
+    try {
+      setsCourse(sc)
+      let res = await getBatch(sc)
+      setBatch(res)
+    } catch (err) {
+      alert('Cannot get Batches')
+    }
+    hideLoadingScreen()
+  }
+
+
   const institute = useSelector(state => state.institute);
   return (
     <View style={styles.backgroung}>
-      {/* <Appbar>
-        <Appbar.BackAction onPress={() => {navigation.navigate('Home')}} />
-        <Appbar.Content title="Quick Payment" />
-      </Appbar> */}
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -53,8 +117,6 @@ export default function QuickPayment1({ navigation }) {
                 alignSelf: 'center',
                 fontSize: 25,
                 color: 'white',
-                // paddingLeft: 10,
-                // paddingTop: 23,
               }}
             />
           </TouchableOpacity>
@@ -76,20 +138,20 @@ export default function QuickPayment1({ navigation }) {
       <View style={{ padding: 10 }} >
         <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
           <ModalSelector
-            data={Department}
-            initValue="Department"
+            data={course}
+            initValue="Course"
             onChange={async option => {
-              await getAssessesments(option.key);
+              fetchBatches(option.key)
             }}
             style={styles.card_picker}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
           <ModalSelector
-            data={UseType}
-            initValue="User Type"
+            data={batch}
+            initValue="Batch"
             onChange={async option => {
-              await getAssessesments(option.key);
+              setsBatch(option.key)
             }}
             style={styles.card_picker}
             initValueTextStyle={styles.SelectedValueSmall}
@@ -101,7 +163,7 @@ export default function QuickPayment1({ navigation }) {
           data={FeeTypeCategory}
           initValue="Fee Type Category"
           onChange={async option => {
-            await getAssessesments(option.key);
+            getSubCategory(option.key)
           }}
           style={styles.card_picker1}
           initValueTextStyle={styles.SelectedValueSmall}
@@ -112,7 +174,7 @@ export default function QuickPayment1({ navigation }) {
           data={FeeSubTypeCategory}
           initValue="Fee Sub Type Category"
           onChange={async option => {
-            await getAssessesments(option.key);
+            setsSubFee(option.key)
           }}
           style={styles.card_picker1}
           initValueTextStyle={styles.SelectedValueSmall}
@@ -125,7 +187,7 @@ export default function QuickPayment1({ navigation }) {
         padding: 20
       }}>
 
-        <Button color='#5177E7' mode="contained" onPress={() => navigation.navigate('QuickPayment2')}>
+        <Button color={institute ? institute.themeColor : '#5177E7'} mode="contained" onPress={() => navigation.navigate('QuickPayment2')}>
           Search
         </Button>
       </View>

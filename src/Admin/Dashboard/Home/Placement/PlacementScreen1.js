@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 
 import Feather from 'react-native-vector-icons/Feather';
 
-import Evillcons from 'react-native-vector-icons/Feather';
-import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+
 //checkbox
-import { CheckBox, Modal } from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 //helpers
 
 // loading screem
@@ -44,8 +42,6 @@ const PlacementScreen1 = ({ navigation }) => {
     const [scompany, setscompany] = useState('')
     //for text input
     const [year, setyear] = useState('');
-
-
 
     // users
     const [users, setUsers] = useState([])
@@ -98,13 +94,11 @@ const PlacementScreen1 = ({ navigation }) => {
     let fetchUsers = async (scompany) => {
 
         setLoadingScreen()
-        
+
         setscompany(scompany)
-       
-        
 
         try {
-           let slug = `/placement/placed?joiningDate=${date}&companyName=${scompany}&year=${year}`
+            let slug = `/placement/placed?joiningDate=${date}&companyName=${scompany}&year=${year}`
 
             let token = await read('token')
             let res = await get(slug, token)
@@ -140,6 +134,7 @@ const PlacementScreen1 = ({ navigation }) => {
         });
         setIsSelectAll(!isSelectAll)
     }
+
     //on save button click
     let handleUpdate = async () => {
         setLoadingScreen()
@@ -148,9 +143,9 @@ const PlacementScreen1 = ({ navigation }) => {
             let token = await read('token')
             let data = {
                 companyName: scompany,
-               
+
                 joiningDate: date,
-                year:year
+                year: year
 
             }
             let res = await patch(slug, data, token)
@@ -158,7 +153,7 @@ const PlacementScreen1 = ({ navigation }) => {
                 alert(res.error)
             } else if (res._id) {
                 alert('Updated')
-               
+
             }
         } catch (err) {
             alert('Cannot Update !!')
@@ -169,11 +164,8 @@ const PlacementScreen1 = ({ navigation }) => {
 
     return (
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-
-
             <View style={{ justifyContent: 'space-around', alignContent: 'center' }}>
                 {/* header start */}
-
                 <View
                     style={{
                         backgroundColor: institute ? institute.themeColor : '#FF5733',
@@ -192,10 +184,8 @@ const PlacementScreen1 = ({ navigation }) => {
                                     alignSelf: 'center',
                                     fontSize: 25,
                                     color: 'white',
-
                                 }}
                             />
-
                         </TouchableOpacity>
                     </View>
                     <Text
@@ -213,39 +203,17 @@ const PlacementScreen1 = ({ navigation }) => {
                 </View>
 
                 {/* header ends */}
-
-
                 {loadingScreen}
-
-
-
-
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 40, width: '100%', }}>
-
-
-
-
-
-
-
-
-
-
-
-
                     <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
                         <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                             placeholder={date}
-
-
                         />
                         <Feather size={18} color="black" name="calendar"
                             style={{
                                 marginTop: 14,
                                 marginRight: 0,
                             }}
-
-
                         ></Feather>
                         <DateTimePickerModal
                             isVisible={isDatePickerVisible}
@@ -253,12 +221,8 @@ const PlacementScreen1 = ({ navigation }) => {
                             mode="date"
                             onConfirm={handleConfirm}
                             onCancel={hideDatePicker}
-
                         />
                     </TouchableOpacity>
-
-
-
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
                     <View style={styles.Card3}>
@@ -275,71 +239,20 @@ const PlacementScreen1 = ({ navigation }) => {
                         </View>
                     </View>
                 </View>
-
-
-
-
-
                 <ModalSelector
-
-
-
-data={companyname}
-initValue="Company"
-
-style={styles.card}
-onChange={option => {
-    fetchUsers(option.key)
-}}
-
-initValueTextStyle={styles.SelectedValueSmall}
-selectTextStyle={styles.SelectedValueSmall}
-
-
->
-{/* <View style={{ marginTop: 10, flexDirection: 'row' }}>
-
-    <Text style={styles.text}>Company</Text>
-    <Evillcons size={22} color='#3E68E4' name='chevron-down'
-        style={{
-
-            marginLeft: 20,
-
-
-
-        }}>
-
-    </Evillcons>
-
-</View> */}
-
-
-
-
-</ModalSelector>
-
-
-
+                    data={companyname}
+                    initValue="Company"
+                    style={styles.card}
+                    onChange={option => {
+                        fetchUsers(option.key)
+                    }}
+                    initValueTextStyle={styles.SelectedValueSmall}
+                    selectTextStyle={styles.SelectedValueSmall}
+                >
+                </ModalSelector>
             </View>
-
             <View style={{ flexDirection: 'row' }}>
-                {/* <Icon2
-                    size={25}
-                    color="#5177E7"
-                    name="checkbox"
-                    style={{ paddingTop: 10, paddingRight: 12, marginLeft: 20 }}
-                />
-                <Text style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Regular',
-                    marginTop: 15,
-                }}>
-                    Select All
-                </Text> */}
-
                 <CheckBox
-                  
                     checked={isSelectAll}
                     title={'Select All'}
                     onPress={selectAll}
@@ -373,12 +286,6 @@ selectTextStyle={styles.SelectedValueSmall}
                                             }}>
                                             placed
                                         </Text>
-                                        {/* <Icon2
-                                    size={30}
-                                    color="#5177E7"
-                                    name="checkbox"
-                                    style={{ paddingTop: 2, paddingRight: 12 }}
-                                /> */}
                                         <CheckBox
                                             containerStyle={{ marginTop: -9 }}
                                             checked={checkBoxValue[user._id]}
@@ -412,97 +319,15 @@ selectTextStyle={styles.SelectedValueSmall}
                                             color: '#505069',
                                             fontFamily: 'Poppins-Regular',
                                         }}>
-                                        {/* Exams will be conducted via online mode in the upcoming week
-                                and these are notes for it.So,go through them and study well
- */}
                                         {user.remarks ? user.remarks : 'N/A'}
-
                                     </Text>
-
-
                                 </TouchableOpacity>
                             </View>
                         </View>
-
-
                     </View>
 
                 ))
             }
-
-
-            {/* <View style={styles.section} >
-                <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                        <View style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 18,
-                                    color: '#211C5A',
-                                    fontFamily: 'Poppins-Regular',
-                                    marginHorizontal: -5,
-                                }}>
-
-                                Title
-
-                            </Text>
-
-                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text
-                                    style={{
-                                        fontSize: 12,
-                                        color: '#211C5A',
-                                        fontFamily: 'Poppins-Regular',
-                                        marginTop: 5,
-                                    }}>
-                                    Unplaced
-                                </Text>
-                                <Icon3
-                                    size={30}
-                                    color="#5177E7"
-                                    name="checkbox-blank-outline"
-                                    style={{ paddingTop: 2, paddingRight: 12 }}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#5177E7',
-                                    fontFamily: 'Poppins-Medium',
-                                }}>
-
-                            </Text>
-
-
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text style={{ fontSize: 12, color: '#505069' }}>
-                                Admission Number
-                            </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.differentusers}>
-                            <Text
-                                style={{
-                                    fontSize: 12,
-                                    color: '#505069',
-                                    fontFamily: 'Poppins-Regular',
-                                }}>
-                                Exams will be conducted via online mode in the upcoming week
-                                and these are notes for it.So,go through them and study well
-
-                            </Text>
-
-
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-
-            </View> */}
-
         </View>
     )
 };
@@ -517,10 +342,7 @@ const styles = StyleSheet.create({
     container: {
         alignContent: 'center',
         justifyContent: 'center',
-
-
     },
-
     section: {
         display: 'flex',
         flexDirection: 'column',

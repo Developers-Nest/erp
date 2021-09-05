@@ -286,10 +286,10 @@ export default function TasksList({ navigation }) {
                           padding: 2,
                           fontSize: 16,
                           fontWeight: 'bold',
-                          color: '#5177E7',
+                          color: institute? institute.themeColor: 'black',
                           fontFamily: 'Poppins-Medium',
                         }}>
-                        {task.status}
+                        {'Status: '+task.status.toUpperCase()}
                       </Text>
 
                       <TouchableWithoutFeedback
@@ -398,10 +398,10 @@ export default function TasksList({ navigation }) {
                           padding: 2,
                           fontSize: 16,
                           fontWeight: 'bold',
-                          color: '#5177E7',
+                          color: institute? institute.themeColor: 'black',
                           fontFamily: 'Poppins-Medium',
                         }}>
-                        {task.status}
+                        {'Status: '+task.status.toUpperCase()}
                       </Text>
                       <TouchableWithoutFeedback
                         style={{

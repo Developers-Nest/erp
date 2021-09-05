@@ -7,8 +7,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {Appbar} from 'react-native-paper';
-
 //icons
 import Icon from 'react-native-vector-icons/AntDesign';
 import AntDesign from 'react-native-vector-icons/AntDesign';
