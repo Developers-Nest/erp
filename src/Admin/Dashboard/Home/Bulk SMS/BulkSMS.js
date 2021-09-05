@@ -13,6 +13,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
 
 import getCourse from '../../../../services/helpers/getList/getCourse'
+import getBatch from '../../../../services/helpers/getList/getBatch'
 import get from '../../../../services/helpers/request/get'
 import read from '../../../../services/localstorage/read'
 import post from '../../../../services/helpers/request/post'
@@ -96,6 +97,17 @@ export default function BulkSMS({ navigation }) {
         }
         hideLoadingScreen()
     }, [])
+
+    let fetchBatch = async(sc)=>{
+        setLoadingScreen()
+        try{
+            let res = await getBatch(sc)
+            setBatches(res)
+        } catch(err){   
+            alert('Cannot get Batches')
+        }
+        hideLoadingScreen()
+    }
 
     let handleSend = async()=>{
         setLoadingScreen()
@@ -212,7 +224,7 @@ export default function BulkSMS({ navigation }) {
                                 initValue="SMS For Students In"
                                 onChange={option => {
                                     setForStu(option.label)
-                                    smsForSub(option.label)
+                                    setSmsForSub(option.label)
                                 }}
                                 style={{ marginTop: 10, ...styles.card_picker }}
                                 initValueTextStyle={styles.SelectedValueSmall}
@@ -228,7 +240,7 @@ export default function BulkSMS({ navigation }) {
                                 initValue="SMS For Employee In"
                                 onChange={option => {
                                     setForEmp(option.label)
-                                    smsForSub(option.label)
+                                    setSmsForSub(option.label)
                                 }}
                                 style={{ marginTop: 10, ...styles.card_picker }}
                                 initValueTextStyle={styles.SelectedValueSmall}
@@ -240,6 +252,18 @@ export default function BulkSMS({ navigation }) {
 
                     {
                         forStu === "Selected Batches" ? (
+                            <View>
+                            <ModalSelector
+                                data={courses}
+                                initValue="Select Course"
+                                onChange={option => {
+                                    setCourse(option.key)
+                                    fetchBatch(option.key)
+                                }}
+                                style={{ marginTop: 10, ...styles.card_picker }}
+                                initValueTextStyle={styles.SelectedValueSmall}
+                                selectTextStyle={styles.SelectedValueSmall}
+                            />
                             <ModalSelector
                                 data={batches}
                                 initValue="Select Batch"
@@ -250,6 +274,7 @@ export default function BulkSMS({ navigation }) {
                                 initValueTextStyle={styles.SelectedValueSmall}
                                 selectTextStyle={styles.SelectedValueSmall}
                             />
+                            </View>
                         ) : (null)
 
                     }
