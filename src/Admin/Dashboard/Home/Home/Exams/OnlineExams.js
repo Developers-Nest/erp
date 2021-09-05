@@ -1,25 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {Appbar} from 'react-native-paper';
-import {List} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   ScrollView,
-  ImageBackground,
-  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Icon from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 //redux
 import {useSelector} from 'react-redux';
