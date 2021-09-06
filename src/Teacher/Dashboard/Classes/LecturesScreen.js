@@ -174,7 +174,11 @@ export default function LecturesScreen({navigation}) {
             </TouchableOpacity>
           </View>
 
-          {showContent === 'Live' ? <Live /> : <Recorded />}
+          {showContent === 'Live' ? (
+            <Live navigation={navigation} />
+          ) : (
+            <Recorded navigation={navigation} />
+          )}
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>

@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
+//icons
+import Icon from 'react-native-vector-icons/AntDesign';
 import IconEnglish2 from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -32,7 +34,7 @@ let parseDate = myDate => {
   return d.toString().slice(0, 15);
 };
 
-const Live = () => {
+export default function Live({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
@@ -175,6 +177,8 @@ const Live = () => {
                           })
                         }>
                         {LiveClass.date ? parseDate(LiveClass.date) : null}
+                        {/* {'\n' + new Date().toString() + '\n'}
+                        {new Date(LiveClass.date).toString()} */}
                       </Text>
                       <View style={{flexDirection: 'column'}}>
                         <IconEnglish2
@@ -183,6 +187,7 @@ const Live = () => {
                           name="radio"
                           style={{paddingLeft: 7}}
                         />
+
                         <Text
                           style={{
                             fontSize: 10,
@@ -191,6 +196,30 @@ const Live = () => {
                           }}></Text>
                       </View>
                     </View>
+                    {new Date() < new Date(LiveClass.date) ? (
+                      <TouchableOpacity
+                        style={{flexDirection: 'row'}}
+                        onPress={() =>
+                          navigation.navigate('LiveEdit', {
+                            LiveClass: LiveClass,
+                          })
+                        }>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                          Edit
+                        </Text>
+                        <Icon
+                          size={12}
+                          color="#211C5A"
+                          name="edit"
+                          style={{paddingTop: 2, paddingRight: 10}}
+                        />
+                      </TouchableOpacity>
+                    ) : null}
                   </View>
                 </View>
               </TouchableOpacity>
@@ -199,7 +228,7 @@ const Live = () => {
       </ScrollView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -355,5 +384,3 @@ const styles = StyleSheet.create({
     color: '#211C5A',
   },
 });
-
-export default Live;
