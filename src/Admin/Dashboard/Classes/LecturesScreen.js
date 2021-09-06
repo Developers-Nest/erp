@@ -9,8 +9,6 @@ import {
   Text,
   View,
   ScrollView,
-  ImageBackground,
-  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
@@ -26,8 +24,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import {useSelector} from 'react-redux';
 
 export default function LecturesScreen({navigation}) {
-  const [showContent, setShowContent] = React.useState('Due');
-  const [activeTab, setActiveTab] = React.useState('Due');
+  const [showContent, setShowContent] = React.useState('Live');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
@@ -97,7 +94,7 @@ export default function LecturesScreen({navigation}) {
               marginTop: 10,
             }}>
             {/* open search */}
-            {/* <View style={{alignItems: 'center', width: '90%'}}>
+            <View style={{alignItems: 'center', width: '90%'}}>
               <View
                 style={{
                   marginTop: 10,
@@ -119,6 +116,7 @@ export default function LecturesScreen({navigation}) {
                 <TextInput
                   style={{width: '80%', ...styles.text_input}}
                   placeholder="Enter subject or batch name"
+                  placeholderTextColor="black"
                 />
                 <TouchableOpacity
                   style={{
@@ -134,20 +132,27 @@ export default function LecturesScreen({navigation}) {
                   />
                 </TouchableOpacity>
               </View>
-            </View> */}
+            </View>
             {/* close search */}
           </View>
           <View style={styles.switchTabsView}>
             <TouchableOpacity
               style={{
                 borderBottomWidth: showContent == 'Live' ? 2 : 0,
-                borderBottomColor: '#B04305',
+                borderBottomColor:
+                  showContent == 'Live' ? '#B04305' : '#58636D',
                 paddingHorizontal: 4,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
               onPress={() => setShowContent('Live')}>
-              <Text style={styles.switchText}>Live</Text>
+              <Text
+                style={{
+                  color: showContent == 'Live' ? '#B04305' : '#58636D',
+                  ...styles.switchText,
+                }}>
+                Live
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -159,11 +164,21 @@ export default function LecturesScreen({navigation}) {
                 alignItems: 'center',
               }}
               onPress={() => setShowContent('Recorded')}>
-              <Text style={styles.switchText}>Recorded</Text>
+              <Text
+                style={{
+                  color: showContent == 'Recorded' ? '#B04305' : '#58636D',
+                  ...styles.switchText,
+                }}>
+                Recorded
+              </Text>
             </TouchableOpacity>
           </View>
 
-          {showContent === 'Live' ? <Live /> : <Recorded />}
+          {showContent === 'Live' ? (
+            <Live navigation={navigation} />
+          ) : (
+            <Recorded navigation={navigation} />
+          )}
         </ScrollView>
       </View>
     </TouchableWithoutFeedback>
@@ -273,9 +288,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
   },
   switchText: {
+    fontFamily: 'Poppins-Regular',
+    fontWeight: '600',
     fontSize: 14,
-    color: '#B04305',
     paddingHorizontal: 5,
+
+    lineHeight: 21,
+
+    // color: '#58636D',
   },
   maincontainer: {
     flex: 1,
