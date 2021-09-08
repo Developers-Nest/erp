@@ -58,6 +58,8 @@ const AllocatedListHostel = ({ route, navigation }) => {
 
           let response = await get(slug, token);
 
+          console.log('Allocation Response ', response)
+
           const list = [];
           for (let i = 0; i < response.length; i++) {
             list.push({
@@ -68,7 +70,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
               room: response[i].hostelRoom.roomNo,
               floor: response[i].hostelRoom.floorName,
               institution: response[i].institution,
-              regDate: parseDate(response[i].hostelRegistartionDate),
+              regDate: parseDate(response[i].createdAt),
               vacaDate: parseDate(response[i].vacatingDate),
             });
             setAllocationlist(list)

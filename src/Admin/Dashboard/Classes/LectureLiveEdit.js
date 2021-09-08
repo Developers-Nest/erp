@@ -21,7 +21,6 @@ import patch from '../../../services/helpers/request/patch';
 import read from '../../../services/localstorage/read';
 import getBatch from '../../../services/helpers/getList/getBatch';
 import getCourse from '../../../services/helpers/getList/getCourse';
-import getSubject from '../../../services/helpers/getList/getSubject';
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
 //icons

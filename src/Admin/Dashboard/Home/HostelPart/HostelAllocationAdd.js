@@ -25,10 +25,10 @@ const HostelAllocationAdd = ({ navigation }) => {
     const institute = useSelector(state => state.institute);
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [date, setDate] = React.useState('29 May 2021')
+    const [date, setDate] = useState('')
 
     const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
-    const [date1, setDate1] = React.useState('29 May 2021')
+    const [date1, setDate1] = useState('')
 
     // dropdown values
     const [userType, setUserType] = useState([])
@@ -228,12 +228,12 @@ const HostelAllocationAdd = ({ navigation }) => {
 
     // date
     const handleConfirm = (date) => {
-        setDate(date.toString())
+        setDate(date.toISOString())
         setDatePickerVisibility(false);
     };
 
     const handleConfirm1 = (date1) => {
-        setDate1(date1.toString())
+        setDate1(date1.toISOString())
         setDatePickerVisibility1(false);
     };
 
@@ -280,6 +280,8 @@ const HostelAllocationAdd = ({ navigation }) => {
                     hostelRoom: selectedHostelRoom,
                 }
             }
+
+            console.log('Allocation List data ', data)
 
             let slug = '/hostel/hostelAllocation'
             let token = await read('token')
@@ -518,7 +520,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                         {/* registraion */}
                         <TouchableOpacity style={styles.pickdate} onPress={() => setDatePickerVisibility(!isDatePickerVisible)}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: 'black' }}
-                                value={date ? date.slice(0, 11) : 'Select'}
+                                value={date ? date.slice(0, 10) : 'Select'}
                                 editable={false}
                                 placeholderTextColor='grey'
                                 color='black'
@@ -541,7 +543,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                         {/* vacating */}
                         <TouchableOpacity style={styles.pickdate1} onPress={() => setDatePickerVisibility1(!isDatePickerVisible1)} >
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: 'black' }}
-                                value={date1 ? date1.slice(0, 11) : 'Select'}
+                                value={date1 ? date1.slice(0, 10) : 'Select'}
                                 editable={false}
                                 placeholderTextColor='grey'
                                 color='black'
