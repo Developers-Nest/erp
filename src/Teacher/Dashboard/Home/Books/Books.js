@@ -35,6 +35,9 @@ export default function BooksStudent({navigation}) {
   const onChangeSearch = query => setSearchQuery(query);
 
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
+//for search
+const [searchText, setSearchText] = useState('');
+const [filteredUsers, setFilteredUsers] = useState([]);
 
   const [dueBooks, setDueBooks] = useState([]);
   const [clearedBooks, setClearedBooks] = useState([]);
@@ -68,9 +71,11 @@ export default function BooksStudent({navigation}) {
 
     return (
       <View style={styles.container}>
+          {filteredUsers.length > 0 ?
+                    (
         <ScrollView>
           {clearedBooks.length > 0 ? (
-            clearedBooks.map(book => (
+            filteredUsers.map(book => (
               <View style={styles.section} key={book._id}>
                 <View style={styles.details}>
                   <View style={styles.userinhostels}>
@@ -152,6 +157,93 @@ export default function BooksStudent({navigation}) {
             </Text>
           )}
         </ScrollView>
+                    ):(
+                      <ScrollView>
+                      {clearedBooks.length > 0 ? (
+                        clearedBooks.map(book => (
+                          <View style={styles.section} key={book._id}>
+                            <View style={styles.details}>
+                              <View style={styles.userinhostels}>
+                                <View style={styles.differentusers}>
+                                  <Text> </Text>
+                                  <Text
+                                    style={{
+                                      fontSize: 10,
+                                      color: '#505069',
+                                      fontFamily: 'OpenSans-Regular',
+                                    }}>
+                                    ID: {book.bookNumber}
+                                  </Text>
+                                </View>
+                                <View style={styles.differentusers}>
+                                  <Text
+                                    style={{
+                                      fontWeight: 'normal',
+                                      fontSize: 15,
+                                      color: '#211C5A',
+                                      fontFamily: 'Poppins-Regular',
+                                    }}>
+                                    Title: {book.bookName ? book.bookName.title : 'N/A'}
+                                  </Text>
+                                </View>
+                                <View style={styles.differentusers}>
+                                  <Text
+                                    style={{
+                                      fontWeight: 'normal',
+                                      fontSize: 15,
+                                      color: '#211C5A',
+                                      fontFamily: 'Poppins-Regular',
+                                    }}>
+                                    Name: {book.userId ? book.userId.firstName : 'N/A'}
+                                  </Text>
+                                </View>
+            
+                                <View style={styles.differentusers}>
+                                  <Text
+                                    style={{
+                                      fontWeight: 'normal',
+                                      fontSize: 15,
+                                      color: '#211C5A',
+                                      fontFamily: 'Poppins-Regular',
+                                    }}>
+                                    Issuer: {book.userType ? book.userType.name : 'N/A'}
+                                  </Text>
+                                </View>
+            
+                                <View style={styles.differentusers}>
+                                  <Text
+                                    style={{
+                                      fontSize: 12,
+                                      color: '#58626C',
+                                      fontFamily: 'Poppins-Regular',
+                                    }}>
+                                    Issued:{' '}
+                                    {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                                  </Text>
+                                  <View style={{flexDirection: 'row'}}>
+                                    <Text
+                                      style={{
+                                        fontSize: 12,
+                                        color: '#58636D',
+                                        fontFamily: 'Poppins-Regular',
+                                      }}>
+                                      Due:{' '}
+                                      {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                                    </Text>
+                                  </View>
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                        ))
+                      ) : (
+                        <Text style={{display: 'flex', textAlign: 'center'}}>
+                          Nothing to Display!
+                        </Text>
+                      )}
+                    </ScrollView>
+                    )
+                      }
       </View>
     );
   }
@@ -163,7 +255,94 @@ export default function BooksStudent({navigation}) {
 
     return (
       <View style={styles.container}>
+         {filteredUsers.length > 0 ?
+                    (
         <ScrollView>
+          {dueBooks.length > 0 ? (
+            filteredUsers.map(book => (
+              <View style={styles.section} key={book._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text> </Text>
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color: '#505069',
+                          fontFamily: 'OpenSans-Regular',
+                        }}>
+                        ID: {book.bookNumber}
+                      </Text>
+                    </View>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontSize: 15,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        Title: {book.bookName ? book.bookName.title : 'N/A'}
+                      </Text>
+                    </View>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontSize: 15,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        Name: {book.userId ? book.userId.firstName : 'N/A'}
+                      </Text>
+                    </View>
+
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontSize: 15,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        Issuer: {book.userType ? book.userType.name : 'N/A'}
+                      </Text>
+                    </View>
+
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58626C',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        Issued:{' '}
+                        {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                      </Text>
+                      <View style={{flexDirection: 'row'}}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#58636D',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          Due:{' '}
+                          {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            ))
+          ) : (
+            <Text style={{display: 'flex', textAlign: 'center'}}>
+              No Dues!!
+            </Text>
+          )}
+        </ScrollView>
+                    ):(
+                      <ScrollView>
           {dueBooks.length > 0 ? (
             dueBooks.map(book => (
               <View style={styles.section} key={book._id}>
@@ -247,6 +426,7 @@ export default function BooksStudent({navigation}) {
             </Text>
           )}
         </ScrollView>
+                    )}
       </View>
     );
   }
@@ -314,23 +494,65 @@ export default function BooksStudent({navigation}) {
             }}>
             <TextInput
               style={{width: '80%', ...styles.text_input}}
-              placeholder="Enter book name or ID here"
+              placeholder="Enter book name here"
               placeholderTextColor="grey"
-            />
-            <TouchableOpacity
-              style={{
-                alignSelf: 'center',
-              }}>
-              <FontAwesome5
-                name="search"
-                style={{
-                  alignSelf: 'center',
-                  fontSize: 21,
-                  color: '#505069',
-                }}
-              />
-            </TouchableOpacity>
-          </View>
+              defaultValue={searchText}
+              textContentType='name'
+              onChangeText={(text) => {
+                  setSearchText(text);
+                  if (text === '') {
+                      return setFilteredUsers([]);
+                  }
+                  if (showContent === 'Due') {
+                      const filtered_users = dueBooks.filter((book) =>
+                          book.bookName.title.toLowerCase().startsWith(text.toLowerCase())
+                      );
+                      setFilteredUsers(filtered_users);
+                  }
+                  if (showContent === 'Cleared') {
+                      const filtered_users = clearedBooks.filter((book) =>
+                          book.bookName.title.toLowerCase().startsWith(text.toLowerCase())
+                      );
+                      setFilteredUsers(filtered_users);
+                  }
+              }}
+              returnKeyType='search'
+          />
+          {searchText.length === 0 ? (
+               <TouchableOpacity
+               style={{
+                 alignSelf: 'center',
+               }}>
+               <FontAwesome5
+                 name="search"
+                 style={{
+                   alignSelf: 'center',
+                   fontSize: 21,
+                   color: '#505069',
+                 }}
+               />
+             </TouchableOpacity>
+           
+          ) : (
+              <TouchableOpacity
+                  onPress={() => {
+                      setSearchText('');
+                      setFilteredUsers([]);
+                  }}
+                  style={{
+                      alignSelf: 'center',
+                  }}
+              >
+                  <MaterialIcon name='cancel'
+                      style={{
+                          alignSelf: 'center',
+                          fontSize: 24,
+                          color: '#505069',
+                      }}
+                  />
+              </TouchableOpacity>
+          )}
+           </View>
         </View>
 
         {/* close search */}
@@ -339,7 +561,7 @@ export default function BooksStudent({navigation}) {
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
-              borderBottomWidth: showContent == 'Due' ? 1 : 0,
+              borderBottomWidth: showContent == 'Due' ? 1.5 : 0,
               borderBottomColor: 'rgba(176, 67, 5, 1)',
               paddingHorizontal: 4,
               justifyContent: 'center',
@@ -353,9 +575,9 @@ export default function BooksStudent({navigation}) {
                   {
                     color:
                       showContent == 'Due' ? 'rgba(176, 67, 5, 1)' : '#58636D',
-                    fontWeight: '600',
                     fontSize: 15,
                   },
+                  { fontWeight: 'bold' },
                 ])
               }>
               Due
@@ -364,7 +586,7 @@ export default function BooksStudent({navigation}) {
 
           <TouchableOpacity
             style={{
-              borderBottomWidth: showContent == 'Cleared' ? 1 : 0,
+              borderBottomWidth: showContent == 'Cleared' ? 1.5 : 0,
               borderBottomColor:
                 showContent == 'Cleared' ? 'rgba(176, 67, 5, 1)' : '#58636D',
               paddingHorizontal: 4,
@@ -381,9 +603,9 @@ export default function BooksStudent({navigation}) {
                       showContent == 'Cleared'
                         ? 'rgba(176, 67, 5, 1)'
                         : '#58636D',
-                    fontWeight: '600',
                     fontSize: 15,
                   },
+                  { fontWeight: 'bold' },
                 ])
               }>
               Cleared
