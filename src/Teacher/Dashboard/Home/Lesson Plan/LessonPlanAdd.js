@@ -205,6 +205,8 @@ export default function LessonPlanAdd({navigation}) {
               multiline={true}
               onChangeText={txt => setlectureCode(txt)}
               placeholder="Lecture Code"
+              placeholderTextColor='grey'
+              color='black'
             />
             <TextInput
               style={{
@@ -216,6 +218,9 @@ export default function LessonPlanAdd({navigation}) {
               multiline={true}
               onChangeText={txt => setTopic(txt)}
               placeholder="Topic"
+              
+              placeholderTextColor='grey'
+              color='black'
             />
             <TextInput
               style={{
@@ -227,6 +232,8 @@ export default function LessonPlanAdd({navigation}) {
               onChangeText={txt => setUrl(txt)}
               multiline={true}
               placeholder="URL"
+              placeholderTextColor='grey'
+              color='black'
             />
             <TextInput
               style={{
@@ -239,6 +246,8 @@ export default function LessonPlanAdd({navigation}) {
               onChangeText={desc => setDescription(desc)}
               numberOfLines={10}
               placeholder="Description"
+              placeholderTextColor='grey'
+              color='black'
             />
           </Card.Content>
         </Card>

@@ -7,14 +7,15 @@ import {
   ScrollView,
   Button,
   Linking,
+  TextInput
 } from 'react-native';
 
-import {TextInput} from 'react-native-paper';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 // helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
@@ -32,6 +33,9 @@ export default function LessonPlan({navigation}) {
 
   //theming
   const institute = useSelector(state => state.institute);
+//for search
+const [searchText, setSearchText] = useState('');
+const [filteredUsers, setFilteredUsers] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -115,42 +119,74 @@ export default function LessonPlan({navigation}) {
           </TouchableOpacity>
         </View>
       </View>
-
-      {/* 
-<AttendanceTakeHeader/> */}
-      <View
-        style={{
-          width: '90%',
-          alignSelf: 'center',
-        }}>
-        {/* open search */}
-
-        <View style={{marginTop: 20, ...styles.card}}>
+<View style={{padding:20}}/>
+      <View style={{ marginHorizontal: 15, ...styles.shadow }}>
+        <View style={styles.search}>
           <TextInput
-            left={<TextInput.Icon name="magnify" />}
-            right={<TextInput.Icon name="filter" />}
-            theme={{
-              colors: {
-                primary: '#999',
-                underlineColor: 'transparent',
-                background: 'white',
-              },
+            style={{ ...styles.search_input }}
+            placeholder="Enter lesson's topic name"
+            placeholderTextColor="grey"
+            defaultValue={searchText}
+            textContentType='name'
+            onChangeText={(text) => {
+              setSearchText(text);
+              if (text === '') {
+                return setFilteredUsers([]);
+              }
+              const filtered_users = data.filter((plan) =>
+                plan.topic.toLowerCase().startsWith(text.toLowerCase())
+              );
+              setFilteredUsers(filtered_users);
             }}
-            placeholder="Enter subject's or batch name"
-            outlineColor="transparent"
-            styles={{
-              margin: 10,
-              padding: 10,
-              backgroundColor: 'white',
-            }}
-            mode="outline"
+            returnKeyType='search'
           />
+          {searchText.length === 0 ? (
+            <TouchableOpacity
+              style={{
+                alignSelf: 'center',
+              }}
+            >
+              <IonIcon
+                name="search-sharp"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 30,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setSearchText('');
+                setFilteredUsers([]);
+              }}
+              style={{
+                alignSelf: 'center',
+              }}
+            >
+              <MaterialIcon name='cancel'
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 24,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          )}
+
         </View>
       </View>
 
+      <View style={{ padding: 10 }} />
+
+      {filteredUsers.length > 0 ?
+        (
+
+
       <ScrollView>
         {data &&
-          data.map(plan => (
+          filteredUsers.map(plan => (
             <View style={styles.section} key={plan._id}>
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
@@ -233,7 +269,98 @@ export default function LessonPlan({navigation}) {
               </View>
             </View>
           ))}
+          <View style={{height:40}}/>
       </ScrollView>
+        ):(
+          <ScrollView>
+          {data &&
+            data.map(plan => (
+              <View style={styles.section} key={plan._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontFamily: 'Poppins-Regular',
+                          fontSize: 18,
+                          color: '#211C5A',
+                        }}>
+                        {'Topic: ' + plan.topic || 'Topic: N/A'}
+                      </Text>
+  
+                      <TouchableOpacity
+                        style={{flexDirection: 'row'}}
+                        onPress={() => {
+                          navigation.navigate('Edit Lesson Plan', {
+                            lessonPlan: plan,
+                          });
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#58636D',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          Edit &nbsp;
+                        </Text>
+                        <AntDesign size={12} color="#211C5A" name="edit" />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: institute.themeColor || '#505069',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {plan.subject
+                          ? 'Subject: ' + plan.subject.name
+                          : 'Subject: N/A' || 'Subject: N/A'}
+                      </Text>
+                    </View>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#505069',
+                          paddingRight: 15,
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {'Description: ' + plan.description || 'Description: N/A'}
+                      </Text>
+  
+                      {/* <Text style={styles.userstext}>Graded</Text> */}
+                    </View>
+                  </View>
+                </View>
+  
+                <View style={styles.belowhr}>
+                  <Text
+                    style={{
+                      color: '#505069',
+                      fontSize: 12,
+                      fontFamily: 'Poppins-Regular',
+                    }}>
+                    {plan.course && plan.course.courseName} -
+                    {plan.batch && plan.batch.batchName}
+                  </Text>
+                  {plan.url ? (
+                    <Button
+                      title="Link"
+                      mode="contained"
+                      color={institute.themeColor || '#5177E7'}
+                      labelStyle={{color: 'white'}}
+                      onPress={() => Linking.openURL(plan.url)}
+                    />
+                  ) : null}
+                </View>
+              </View>
+            ))}
+                      <View style={{height:190}}/>
+        </ScrollView>
+        )
+                  }
       {/* Cards end */}
     </View>
   );
@@ -344,4 +471,35 @@ const styles = StyleSheet.create({
 
     justifyContent: 'space-evenly',
   },
+  shadow: {
+    elevation: 5,
+    borderRadius: 8,
+    backgroundColor: 'transparent',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+  },
+  search: {
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    paddingHorizontal: 15,
+    borderColor: '#00499F',
+    borderRadius: 8,
+  },
+  search_input: {
+    borderRadius: 8,
+    height: 59,
+    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    paddingTop: 15,
+    paddingHorizontal: 10,
+    width: '90%',
+    color: 'black',
+  },
+
 });
