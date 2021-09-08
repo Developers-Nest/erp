@@ -1,5 +1,12 @@
-import React, { useState,useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {
   Searchbar,
   Appbar,
@@ -9,11 +16,15 @@ import {
   Paragraph,
   Button,
 } from 'react-native-paper';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
+//modal selector
 import ModalSelector from 'react-native-modal-selector';
+
+//icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
+//helpers
 import getDesignation from '../../../../services/helpers/getList/getDesignation';
 import getHRname from '../../../../services/helpers/getList/getHRname';
 import getYear from '../../../../services/helpers/getList/getYear';
@@ -25,8 +36,7 @@ import read from '../../../../services/localstorage/read';
 // loading screem
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js';
 
-export default function PaymentSlip({ navigation }) {
-  
+export default function PaymentSlip({navigation}) {
   const institute = useSelector(state => state.institute);
 
   // dropdown values
@@ -34,119 +44,102 @@ export default function PaymentSlip({ navigation }) {
   const [Names, setNames] = useState([]);
   const [Months, setMonths] = useState([]);
   const [Years, setYears] = useState([]);
-  
-  // selected Values
 
+  // selected Values
   const [Designation, setDesignation] = useState(null);
   const [Name, setName] = useState(null);
-  const [Month, setMonth] =useState(null);
+  const [Month, setMonth] = useState(null);
   const [Year, setYear] = useState(null);
- 
+
   // after fetching list
   const [fetched, setFetched] = useState(false);
   const [list, setList] = useState([]);
 
   // loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+  //date parser
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(4, 15);
+  };
+
+  //on load
   useEffect(async () => {
     showLoadingScreen();
     try {
       const response = await getDesignation();
       setDesignations(response);
+      const response1 = await getMonth();
+      setMonths(response1);
+      const response2 = await getYear();
+      setYears(response2);
     } catch (err) {
       alert('Cannot get Designations!');
     }
-   
-   
+
     hideLoadingScreen();
   }, []);
-//////////// get dropdown values ///////////////
-const getNames = async selectedDesignation => {
-  showLoadingScreen();
-  try {
-    await setDesignation(selectedDesignation);
-    const response = await getHRname(selectedDesignation);
-    setNames(response);
-  } catch (err) {
-    alert('Cannot get Names list');
-  }
-  hideLoadingScreen();
-};
 
-const getYears = async (m) => {
-  showLoadingScreen();
-  try {
-    await setName(m);
-  
-    const response = await getYear();
+  //////////// get dropdown values ///////////////
+  const getNames = async selectedDesignation => {
+    showLoadingScreen();
+    try {
+      await setDesignation(selectedDesignation);
+      const response = await getHRname(selectedDesignation);
+      setNames(response);
+    } catch (err) {
+      alert('Cannot get Names list');
+    }
+    hideLoadingScreen();
+  };
 
-    setYears(response);
-  } catch (err) {
-    alert('Cannot get Assessments!!');
-  }
-  hideLoadingScreen();
-};
-const getMonths = async (y) => {
-  showLoadingScreen();
-  try {
-    await setYear(y);
-  
-    const response = await getMonth();
-
-    setMonths(response);
-  } catch (err) {
-    alert('Cannot get Months!!');
-  }
-  hideLoadingScreen();
-};
-
-const getList = async () => {
-  showLoadingScreen();
-  try {
-    let slug = `
-    /payroll/employeeSalary?designation=${Designation}&employee=${Name}&year=${Year}&month=${Month}`;
-    let token = await read('token');
-    let res = await get(slug, token);
-    // res = res.students;
-    let payslipArray = [];
-    res.map(data => {
-      payslipArray.push({
-
-        nm:data.employee.firstName,
-        desg:data.employee.designation.name,
-        code:data.employee.code,
-        dept:data.employee.department.name,
-        dob:data.employee.dob,
-        join:data.employee.joiningDate,
-       account:data.bankDetails,
-       earntype:data.earnings.earntype,
-       deduct:data.deductions,
-       gross:data.grossSalary,
-       total:data.totalDeduction,
-       netsal:data.netSaalary
-
+  const getList = async () => {
+    showLoadingScreen();
+    try {
+      let slug = `/payroll/employeeSalary?designation=${Designation}&employee=${Name}&year=${Year}&month=${Month}`;
+      console.log(slug);
+      let token = await read('token');
+      let res = await get(slug, token);
+      // res = res.students;
+      let payslipArray = [];
+      res.map(data => {
+        payslipArray.push({
+          nm: data.employee.firstName,
+          desg: data.employee.designation.name,
+          code: data.employee.code,
+          dept: data.employee.department.name,
+          dob: parseDate(data.employee.dob),
+          join: parseDate(data.employee.joiningDate),
+          sal: data.empSalary,
+          account: data.bankDetails,
+          earntype: data.earnings.earntype,
+          deduct: data.deductions,
+          gross: data.grossSalary,
+          total: data.totalDeduction,
+          netsal: data.netSalary,
+        });
+        console.log(data);
       });
-    });
-    setList(res);
-    setFetched(true);
-  } catch (err) {
-    alert('No Lists found!!');
-  }
-  hideLoadingScreen();
-};
+      setList(payslipArray);
+      setFetched(true);
+    } catch (err) {
+      alert('No Lists found!!');
+      setList([]);
+    }
+    hideLoadingScreen();
+  };
 
   return (
     <View style={styles.backgroung}>
-      {/* <Appbar>
-        <Appbar.BackAction onPress={() => {navigation.navigate('Home')}} />
-        <Appbar.Content title="Payment Slip" />
-      </Appbar> */}
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
           ...styles.header,
         }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }} >
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 10}}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Home');
@@ -159,8 +152,6 @@ const getList = async () => {
                 alignSelf: 'center',
                 fontSize: 25,
                 color: 'white',
-                // paddingLeft: 10,
-                // paddingTop: 23,
               }}
             />
           </TouchableOpacity>
@@ -180,312 +171,329 @@ const getList = async () => {
       </View>
 
       <ScrollView>
-        <View style={{ padding: 10 }} />
-        <View style={{ padding: 10 }} >
-
+        <View style={{padding: 10}} />
+        <View style={{padding: 10}}>
           <ModalSelector
-           
             data={Designations}
-        
-          onChange={async option => {
-            await getNames(option.key);
-          }}
+            onChange={async option => {
+              await getNames(option.key);
+            }}
             initValue="Department"
-           
             style={styles.card_picker1}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
-          <View style={{ padding: 10 }} />
+          <View style={{padding: 10}} />
           <ModalSelector
             data={Names}
             initValue="Name"
             onChange={async option => {
-              await getYears(option.key);
+              await setName(option.key);
             }}
             style={styles.card_picker1}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
-          <View style={{ padding: 10 }} />
-          <View style={{ flexDirection: "row", justifyContent: 'space-between' }}>
-
+          <View style={{padding: 10}} />
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <ModalSelector
-             data={Years}
-             initValue="Year"
-             onChange={async option => {
-             await getMonths(option.key);
-             }}
-             style={styles.card_picker}
-             initValueTextStyle={styles.SelectedValueSmall}
-             selectTextStyle={styles.SelectedValueSmall} 
+              data={Years}
+              initValue="Year"
+              onChange={async option => {
+                await setYear(option.key + 2020);
+              }}
+              style={styles.card_picker}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
             />
-            <View style={{ padding: 10 }} />
+            <View style={{padding: 10}} />
             <ModalSelector
-             data={Months}
-             initValue="Month"
-             onChange={async option => {
-              setMonth(option.key);
-             }}
-             style={styles.card_picker}
-             initValueTextStyle={styles.SelectedValueSmall}
-             selectTextStyle={styles.SelectedValueSmall}
-             
+              data={Months}
+              initValue="Month"
+              onChange={async option => {
+                setMonth(option.label);
+              }}
+              style={styles.card_picker}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
             />
           </View>
         </View>
-        <View style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: 15
-        }}>
-
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 15,
+          }}>
           <Button
-           color={ institute ? institute.themeColor : "#5177E7"}
-           onPress={getList}
-          mode="contained"
-          >
+            color={institute ? institute.themeColor : '#5177E7'}
+            onPress={getList}
+            mode="contained">
             Get
           </Button>
         </View>
         {fetched
-        ? list &&
-          list.map(data => (
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Regular',
-                    paddingHorizontal: 5,
-                  }}>
-                  {data.nm}
-                </Text>
-              </View>
-              <View style={{ padding: 5 }} />
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Regular',
-                    paddingHorizontal: 5,
-                  }}>
-                 {data.desg}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
-                  }}>
-                  Code
-                </Text>
-              </View>
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Regular',
-                    paddingHorizontal: 5,
-                  }}>
-                  Department
-                </Text>
-              </View>
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
-                  }}>
-                  DOB: 31 July,2023
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
-                  }}>
-                  Joining Date: 31 July, 2022
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
-                  }}>
-                  Bank Name
-                </Text>
-              </View>
-              <View style={{ padding: 2 }} />
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
-                  }}>
-                  Ac. No.-446466464876434545
-                </Text>
-              </View>
-              <View style={{ padding: 2 }} />
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#1F7C17',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
-                  }}>
-                  Earnings
-                </Text>
-              </View>
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
-                  }}>
-                  Type
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
-                  }}>
-                  20,000 Rs
-                </Text>
-              </View>
+          ? list &&
+            list.map(data => (
+              <View style={styles.section} key={data._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                          paddingHorizontal: 5,
+                        }}>
+                        {data.nm}
+                      </Text>
+                    </View>
+                    <View style={{padding: 5}} />
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                          paddingHorizontal: 5,
+                        }}>
+                        {data.desg}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 'bold',
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Medium',
+                          paddingHorizontal: 5,
+                        }}>
+                        Code: {data.code}
+                      </Text>
+                    </View>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                          paddingHorizontal: 5,
+                        }}>
+                        Department: {data.dept}
+                      </Text>
+                    </View>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Medium',
+                          paddingHorizontal: 5,
+                        }}>
+                        DOB: {data.dob}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Medium',
+                          paddingHorizontal: 5,
+                        }}>
+                        Joining Date: {data.join}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 'bold',
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Medium',
+                          paddingHorizontal: 5,
+                        }}>
+                        Bank Name: {/*{data.account} */}
+                        {/* {'---Bank detail null in API---'} */}
+                      </Text>
+                    </View>
+                    <View style={{padding: 2}} />
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 'bold',
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Medium',
+                          paddingHorizontal: 5,
+                        }}>
+                        Ac. No. - {/*{data.account}*/}
+                        {/* {'---Bank detail null in API---'} */}
+                      </Text>
+                    </View>
+                    <View style={{padding: 2}} />
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: '#1F7C17',
+                          fontFamily: 'Poppins-Medium',
+                          paddingHorizontal: 5,
+                        }}>
+                        Earnings:
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Medium',
+                          paddingHorizontal: 5,
+                        }}>
+                        {data.sal}
+                      </Text>
+                    </View>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Medium',
+                          paddingHorizontal: 5,
+                        }}>
+                        Type:
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Medium',
+                          paddingHorizontal: 5,
+                        }}>
+                        {data.earntype}
+                      </Text>
+                    </View>
 
-              <View style={styles.differentusers}>
-                <Text
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: '#B04305',
+                          fontFamily: 'Poppins-Medium',
+                          paddingHorizontal: 5,
+                        }}>
+                        Deductions
+                      </Text>
+                    </View>
+                    {data.deduct.map(ele => (
+                      <View style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Medium',
+                            paddingHorizontal: 5,
+                          }}>
+                          {ele.type}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Medium',
+                            paddingHorizontal: 5,
+                          }}>
+                          {/* ---no amt field in api--- */}
+                        </Text>
+                      </View>
+                    ))}
+                    <View style={{padding: 5}} />
+                  </View>
+                </View>
+
+                <View style={styles.belowhr}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      paddingHorizontal: 5,
+                    }}>
+                    <Text
+                      style={{
+                        color: '#211C5A',
+                        fontSize: 14,
+                        fontFamily: 'Poppins-Medium',
+                      }}>
+                      Gross Salary
+                    </Text>
+                  </View>
+                  <View style={{marginBottom: 3}}>
+                    <Text
+                      style={{
+                        color: '#211C5A',
+                        fontSize: 14,
+                        fontFamily: 'Poppins-Medium',
+                        paddingHorizontal: 5,
+                      }}>
+                      {data.gross}
+                    </Text>
+                  </View>
+                </View>
+                <View
                   style={{
-                    fontSize: 14,
-                    color: '#B04305',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}>
-                  Deductions
-                </Text>
+                  <Text
+                    style={{
+                      color: '#211C5A',
+                      fontSize: 14,
+                      fontFamily: 'Poppins-Medium',
+                      paddingHorizontal: 5,
+                    }}>
+                    Total
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#211C5A',
+                      fontSize: 14,
+                      fontFamily: 'Poppins-Medium',
+                      paddingHorizontal: 5,
+                    }}>
+                    {data.total}
+                  </Text>
+                </View>
+                <View style={{padding: 8}} />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text
+                    style={{
+                      color: '#211C5A',
+                      fontSize: 18,
+                      fontFamily: 'Poppins-Medium',
+                      paddingHorizontal: 5,
+                    }}>
+                    Net Salary
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#211C5A',
+                      fontSize: 18,
+                      fontFamily: 'Poppins-Medium',
+                      paddingHorizontal: 5,
+                    }}>
+                    {data.netsal}
+                  </Text>
+                </View>
+                <View style={{padding: 15}} />
               </View>
-              <View style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
-                  }}>
-                  Type
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#211C5A',
-                    fontFamily: 'Poppins-Medium',
-                    paddingHorizontal: 5,
-                  }}>
-                  2000 Rs
-                </Text>
-              </View>
-              <View style={{ padding: 5 }} />
-            </View>
-          </View>
-
-
-          <View style={styles.belowhr}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 5 }}>
-              <Text
-                style={{
-                  color: '#211C5A',
-                  fontSize: 14,
-                  fontFamily: 'Poppins-Medium',
-                }}>
-                Gross Salary
-              </Text>
-            </View>
-            <View style={{ marginBottom: 3 }}>
-              <Text
-                style={{
-                  color: '#211C5A',
-                  fontSize: 14,
-                  fontFamily: 'Poppins-Medium',
-                  paddingHorizontal: 5
-                }}>
-                20,000 Rs
-              </Text>
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text
-              style={{
-                color: '#211C5A',
-                fontSize: 14,
-                fontFamily: 'Poppins-Medium',
-                paddingHorizontal: 5
-              }}>
-              Total
-            </Text>
-            <Text
-              style={{
-                color: '#211C5A',
-                fontSize: 14,
-                fontFamily: 'Poppins-Medium',
-                paddingHorizontal: 5,
-              }}>
-              2,000 Rs
-            </Text>
-          </View>
-          <View style={{ padding: 8 }} />
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text
-              style={{
-                color: '#211C5A',
-                fontSize: 18,
-                fontFamily: 'Poppins-Medium',
-                paddingHorizontal: 5
-              }}>
-              Net Salary
-            </Text>
-            <Text
-              style={{
-                color: '#211C5A',
-                fontSize: 18,
-                fontFamily: 'Poppins-Medium',
-                paddingHorizontal: 5,
-              }}>
-              18,000 Rs
-            </Text>
-          </View>
-          <View style={{ padding: 15 }} />
-        </View>
-
-        ))
-        : null}
-        <View style={{ padding: 40 }} />
+            ))
+          : null}
+        <View style={{padding: 40}} />
       </ScrollView>
     </View>
   );
@@ -510,7 +518,7 @@ const styles = StyleSheet.create({
   card_picker: {
     shadowColor: '#999',
     width: '45%',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -525,7 +533,7 @@ const styles = StyleSheet.create({
   },
   card_picker1: {
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
@@ -541,7 +549,7 @@ const styles = StyleSheet.create({
   Card: {
     borderRadius: 12,
     shadowColor: '#999',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.5,
   },
   search: {
@@ -562,7 +570,6 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   shadow: {
-
     elevation: 5,
     borderRadius: 8,
     backgroundColor: 'transparent',
