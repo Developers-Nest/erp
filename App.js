@@ -35,7 +35,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
   useEffect(()=>{
-    Firebase.initializeApp(this)
+    Firebase.initializeApp()
     PushNotification.configure({
       // (optional) Called when Token is generated (iOS and Android)
       onRegister: function (token) {
