@@ -26,13 +26,19 @@ import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 import { useSelector } from 'react-redux';
 
 import { useFocusEffect } from '@react-navigation/native';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
-export default function AssignmentStudentDue({ navigation }) {
+export default function AssignmentStudentDue({ navigation }) 
+{
+  const [searchQuery, setSearchQuery] = useState('');
   const [assignments, setAssignments] = useState([]);
   const userInfo = useSelector(state => state.userInfo);
   const institute = useSelector(state => state.institute)
 
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -59,10 +65,10 @@ export default function AssignmentStudentDue({ navigation }) {
   );
 
   function isAssignmentDone(assignment) {
-   
+
     for (let i = 0; i < assignment.attemptedBy.length; i++) {
       if (assignment.attemptedBy[i] && assignment.attemptedBy[i].userId === userInfo._id) {
-       
+
         return i;
       } else {
         return -1;
@@ -82,7 +88,7 @@ export default function AssignmentStudentDue({ navigation }) {
 
   const [activeTab, setActiveTab] = React.useState('Due');
 
-  const [searchQuery, setSearchQuery] = React.useState('');
+  //const [searchQuery, setSearchQuery] = React.useState('');
 
   const onChangeSearch = query => setSearchQuery(query);
   const [showContent, setShowContent] = React.useState('Due');
@@ -103,11 +109,12 @@ export default function AssignmentStudentDue({ navigation }) {
     return (
       <View style={styles.container}>
         {loadingScreen}
+        {filteredUsers.length > 0 ?
+        (
         <ScrollView>
-          {assignments &&
-            assignments.map(assignment =>
-              isAssignmentDone(assignment) > -1 ? null : (
-                <View style={styles.section} key={assignment._id}>
+          
+          {filteredUsers.map(assignments => (
+                <View style={styles.section} key={assignments._id}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
                       <TouchableOpacity style={styles.differentusers}>
@@ -119,7 +126,7 @@ export default function AssignmentStudentDue({ navigation }) {
                             fontFamily: 'Poppins-Regular',
                           }}>
                           {' '}
-                          {assignment.title || 'Title Not Found'}
+                          {assignments.title || 'Title Not Found'}
                         </Text>
 
                         {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
@@ -132,7 +139,7 @@ export default function AssignmentStudentDue({ navigation }) {
                             fontFamily: 'Poppins-Medium',
                           }}>
                           {'  '}
-                          {assignment.subject.name || 'Subject name Not Found'}
+                          {assignments.subject.name || 'Subject name Not Found'}
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.differentusers}>
@@ -144,7 +151,7 @@ export default function AssignmentStudentDue({ navigation }) {
                             color: '#505069',
                           }}>
                           {'  '}
-                          {assignment.description || 'Description Not Found'}
+                          {assignments.description || 'Description Not Found'}
                         </Text>
 
                         {/* <Text style={styles.userstext}>Graded</Text> */}
@@ -160,13 +167,13 @@ export default function AssignmentStudentDue({ navigation }) {
                         fontFamily: 'Poppins-Medium',
                       }}>
                       {'  '}Due:{'  '}
-                      {assignment.submissionDateString.slice(0, 15) ||
+                      {assignments.submissionDateString.slice(0, 15) ||
                         'Subject name Not Found'}
                     </Text>
 
                     <Button
                       style={styles.button}
-                      onPress={() => navigation.navigate('AssignmentSubmit', { assignment: assignment })}
+                      onPress={() => navigation.navigate('AssignmentSubmit', { assignments: assignments })}
                       labelStyle={{
                         color: 'white',
                         fontFamily: 'Poppins-Regular',
@@ -181,7 +188,91 @@ export default function AssignmentStudentDue({ navigation }) {
                 </View>
               ),
             )}
+            
         </ScrollView>
+        ):(
+          <ScrollView>
+          {assignments &&
+            assignments.map(assignments =>
+              isAssignmentDone(assignments) > -1 ? null : (
+                <View style={styles.section} key={assignments._id}>
+                  <View style={styles.details}>
+                    <View style={styles.userinhostels}>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontWeight: 'normal',
+                            fontSize: 18,
+                            color: '#211C5A',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          {assignments.title || 'Title Not Found'}
+                        </Text>
+
+                        {/* <Text style={styles.userstext}> Ph:9484422222</Text> */}
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: institute ? institute.themeColor : '#5177E7',
+                            fontFamily: 'Poppins-Medium',
+                          }}>
+                          {'  '}
+                          {assignments.subject.name || 'Subject name Not Found'}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.differentusers}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            marginRight: 30,
+                            fontFamily: 'Poppins-Regular',
+                            color: '#505069',
+                          }}>
+                          {'  '}
+                          {assignments.description || 'Description Not Found'}
+                        </Text>
+
+                        {/* <Text style={styles.userstext}>Graded</Text> */}
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  <View style={styles.belowhr}>
+                    <Text
+                      style={{
+                        color: '#58636D',
+                        fontSize: 12,
+                        fontFamily: 'Poppins-Medium',
+                      }}>
+                      {'  '}Due:{'  '}
+                      {assignments.submissionDateString.slice(0, 15) ||
+                        'Subject name Not Found'}
+                    </Text>
+
+                    <Button
+                      style={styles.button}
+                      onPress={() => navigation.navigate('AssignmentSubmit', { assignments: assignments })}
+                      labelStyle={{
+                        color: 'white',
+                        fontFamily: 'Poppins-Regular',
+                        fontWeight: 'bold',
+                      }}
+                      color={institute ? institute.themeColor : 'blue'}
+                      uppercase={false}
+                      mode="contained">
+                      Submit
+                    </Button>
+                  </View>
+                </View>
+              ),
+            )}
+
+          </ScrollView>
+        )
+        }
       </View>
     );
   }
@@ -195,9 +286,9 @@ export default function AssignmentStudentDue({ navigation }) {
       <View style={styles.container}>
         <ScrollView>
           {assignments &&
-            assignments.map(assignment =>
-              !(isAssignmentDone(assignment) > -1) ? null : (
-                <View style={styles.section} key={assignment._id}>
+            assignments.map(assignments =>
+              !(isAssignmentDone(assignments) > -1) ? null : (
+                <View style={styles.section} key={assignments._id}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
                       <TouchableOpacity style={styles.differentusers}>
@@ -209,7 +300,7 @@ export default function AssignmentStudentDue({ navigation }) {
                             fontFamily: 'Poppins-Regular',
                           }}>
                           {' '}
-                          {assignment.title || 'Title Not Found'}
+                          {assignments.title || 'Title Not Found'}
                         </Text>
 
                       </TouchableOpacity>
@@ -221,7 +312,7 @@ export default function AssignmentStudentDue({ navigation }) {
                             fontFamily: 'Poppins-Medium',
                           }}>
                           {'  '}
-                          {assignment.subject.name || 'Subject name Not Found'}
+                          {assignments.subject.name || 'Subject name Not Found'}
                         </Text>
                         <Text
                           style={{
@@ -229,7 +320,7 @@ export default function AssignmentStudentDue({ navigation }) {
                             color: '#5177E7',
                             fontFamily: 'Poppins-Regular',
                           }}>
-                          {assignment.attemptedBy[isAssignmentDone(assignment)]
+                          {assignments.attemptedBy[isAssignmentDone(assignments)]
                             .marks || 'Marks Not Found'}
                         </Text>
                       </TouchableOpacity>
@@ -242,7 +333,7 @@ export default function AssignmentStudentDue({ navigation }) {
                             color: '#505069',
                           }}>
                           {'  '}
-                          {assignment.description || 'Description Not Found'}
+                          {assignments.description || 'Description Not Found'}
                         </Text>
 
                         {/* <Text style={styles.userstext}>Graded</Text> */}
@@ -258,7 +349,7 @@ export default function AssignmentStudentDue({ navigation }) {
                         fontFamily: 'Poppins-Medium',
                       }}>
                       {'  '}Due:
-                      {assignment.submissionDateString.slice(0, 15) ||
+                      {assignments.submissionDateString.slice(0, 15) ||
                         'Subject name Not Found'}
                     </Text>
 
@@ -272,7 +363,7 @@ export default function AssignmentStudentDue({ navigation }) {
                       uppercase={false}
                       onPress={() =>
                         Linking.openURL(
-                          assignment.attemptedBy[isAssignmentDone(assignment)]
+                          assignments.attemptedBy[isAssignmentDone(assignments)]
                             .url,
                         )
                       }
@@ -355,21 +446,54 @@ export default function AssignmentStudentDue({ navigation }) {
               style={{ width: '80%', ...styles.text_input }}
               placeholder="Enter subject name"
               placeholderTextColor="grey"
+              defaultValue={searchText}
+              textContentType='name'
+              onChangeText={(text) => {
+                setSearchText(text);
+                if (text === '') {
+                  return setFilteredUsers([]);
+                }
+                const filtered_users = assignments.filter((assignments) =>
+                assignments.title.toLowerCase().startsWith(text.toLowerCase())
+                );
+                setFilteredUsers(filtered_users);
+              }}
+              returnKeyType='search'
             />
-            <TouchableOpacity
-              style={{
-                alignSelf: 'center',
-              }}>
-              <FontAwesome5
-                name="search"
+            {searchText.length === 0 ? (
+              <TouchableOpacity
                 style={{
                   alignSelf: 'center',
-                  fontSize: 21,
+                }}>
+                <FontAwesome5
+                  name="search"
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 21,
 
-                  color: '#505069',
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  setSearchText('');
+                  setFilteredUsers([]);
                 }}
-              />
-            </TouchableOpacity>
+                style={{
+                  alignSelf: 'center',
+                }}
+              >
+                <MaterialIcon name='cancel'
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 24,
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -378,60 +502,60 @@ export default function AssignmentStudentDue({ navigation }) {
             style={{
               borderBottomWidth: showContent == 'Due' ? 1.5 : 0,
               borderBottomColor:
-              showContent == 'Due'
-                ? 'rgba(176, 67, 5, 1)'
-                : '#58636D',
+                showContent == 'Due'
+                  ? 'rgba(176, 67, 5, 1)'
+                  : '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Due')}>
-            <Text 
-            style={
-              ([styles.switchText],
-                [
-                  {
-                    color:
-                      showContent == 'Due'
-                        ? 'rgba(176, 67, 5, 1)'
-                        : '#58636D',
-                  },
-                  { fontWeight: 'bold' },
-                ])
-            }
+            <Text
+              style={
+                ([styles.switchText],
+                  [
+                    {
+                      color:
+                        showContent == 'Due'
+                          ? 'rgba(176, 67, 5, 1)'
+                          : '#58636D',
+                    },
+                    { fontWeight: 'bold' },
+                  ])
+              }
             >Due</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{
-              borderBottomWidth: showContent == 'Submitted' ? 1.5: 0,
+              borderBottomWidth: showContent == 'Submitted' ? 1.5 : 0,
               borderBottomColor:
-              showContent == 'Submitted'
-                ? 'rgba(176, 67, 5, 1)'
-                : '#58636D',
+                showContent == 'Submitted'
+                  ? 'rgba(176, 67, 5, 1)'
+                  : '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
             onPress={() => setShowContent('Submitted')}>
             <Text
-             style={
-              ([styles.switchText],
-                [
-                  {
-                    color:
-                      showContent == 'Submitted'
-                        ? 'rgba(176, 67, 5, 1)'
-                        : '#58636D',
-                  },
-                  { fontWeight: 'bold' },
-                ])
-            }
+              style={
+                ([styles.switchText],
+                  [
+                    {
+                      color:
+                        showContent == 'Submitted'
+                          ? 'rgba(176, 67, 5, 1)'
+                          : '#58636D',
+                    },
+                    { fontWeight: 'bold' },
+                  ])
+              }
             >Submitted</Text>
           </TouchableOpacity>
         </View>
         {showContent === 'Due' ? <Due /> : <Submitted />}
-       
+
       </View>
     </TouchableWithoutFeedback>
   );
@@ -489,7 +613,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 10,
     borderBottomColor: '#333',
-  
+
   },
   search: {
     backgroundColor: 'white',
@@ -508,7 +632,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   maincontainer: {
-    
+
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
@@ -524,7 +648,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 1,
     borderRadius: 6,
   },
- 
+
   text_input: {
     paddingHorizontal: 20,
     borderRadius: 10,
