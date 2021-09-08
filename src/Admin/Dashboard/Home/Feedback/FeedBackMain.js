@@ -194,7 +194,7 @@ export default function FeedbackMain({navigation}) {
               placeholder="Write down your feedback question here..... "
               placeholderTextColor="black"
               onChangeText={val => setFeedback(val)}
-              style={{backgroundColor: 'white'}}
+              style={{backgroundColor: 'white', color: 'black'}}
             />
           </Card.Content>
         </Card>

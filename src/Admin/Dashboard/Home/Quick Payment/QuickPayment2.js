@@ -1,36 +1,20 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
   Button,
 } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-//redux
-import {useSelector} from 'react-redux';
 
+//redux
+import { useSelector } from 'react-redux';
 
 export default function QuickPayment2({ navigation }) {
 
-
-    
-      //theming
-      const institute = useSelector(state => state.institute);
+  //theming
+  const institute = useSelector(state => state.institute);
 
   const [Department, setDrepartment] = useState([]);
   const [UseType, setUseType] = useState([]);
@@ -133,7 +117,7 @@ export default function QuickPayment2({ navigation }) {
           padding: 20
         }}>
 
-          <Button color='#5177E7' mode="contained" onPress={() => console.log('Pressed')}>
+          <Button color={institute? institute.themeColor: '#5177E7'} mode="contained" onPress={() => console.log('Pressed')}>
             Search
           </Button>
         </View>
