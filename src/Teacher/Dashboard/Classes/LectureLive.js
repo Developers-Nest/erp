@@ -459,24 +459,17 @@ const styles = StyleSheet.create({
 
 
     borderBottomColor: '#333',
-    // borderBottomWidth:1,
+
   },
 
-  userinhostels: {
-    //  paddingVertical:20,
-  },
-
-  //different users for two columns
   differentusers: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    //for row spacing between two rows:done finally
     paddingBottom: 10,
   },
   userstext: {
     fontSize: 16,
-    // paddingVertical:4,
     fontWeight: '300',
   },
   belowhr: {
