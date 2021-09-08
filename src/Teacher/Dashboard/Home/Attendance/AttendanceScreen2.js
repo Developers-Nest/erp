@@ -14,7 +14,7 @@ import {Button, RadioButton} from 'react-native-paper';
 
 //icons
 import Icon from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -58,6 +58,10 @@ const AttendanceScreen2 = ({navigation}) => {
 
   //theming
   const institute = useSelector(state => state.institute);
+
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   // on load of the screen
   useEffect(async () => {
@@ -231,19 +235,61 @@ const AttendanceScreen2 = ({navigation}) => {
                       flexDirection: 'row',
                       ...styles.shadow,
                     }}>
-                    <FontAwesome5
-                      name="search"
-                      style={{
-                        alignSelf: 'center',
-                        fontSize: 11,
-                        color: '#6A6A80',
-                        marginLeft: 10,
-                        marginTop: 3,
-                      }}
-                    />
+                       {searchText.length === 0 ? (
+                      <FontAwesome5
+                        name="search"
+                        style={{
+                          alignSelf: 'center',
+                          fontSize: 14,
+                          color: '#6A6A80',
+                          marginLeft: 15,
+
+                        }}
+                      />
+                    ) :
+                      (
+                        <TouchableOpacity
+                          onPress={() => {
+
+                            setSearchText('');
+                            setFilteredUsers([]);
+                          }}
+                          style={{
+                            alignSelf: 'center',
+                          }}
+                        >
+                          <MaterialIcon name='cancel'
+                            style={{
+                              alignSelf: 'center',
+                              fontSize: 24,
+                              color: '#6A6A80',
+                              marginLeft: 15,
+
+                            }}
+                          />
+                        </TouchableOpacity>
+                      )}
+                   
                     <TextInput
                       style={{width: '70%', ...styles.text_input}}
                       placeholder="Enter student's name"
+                      placeholderTextColor='grey'
+                      color='black'
+                      defaultValue={searchText}
+                      textContentType='name'
+                      onChangeText={(text) => {
+                        setSearchText(text);
+                        if (text === '') {
+                          return setFilteredUsers([]);
+                        }
+
+                        const filtered_users = studentList.filter((st) =>
+                          st.studentId.firstName.toLowerCase().startsWith(text.toLowerCase())
+                        );
+                        setFilteredUsers(filtered_users);
+
+                      }}
+                      returnKeyType='search'
                     />
 
                     <ModalSelector
@@ -258,8 +304,6 @@ const AttendanceScreen2 = ({navigation}) => {
                             name="calendar"
                             style={{
                               alignSelf: 'center',
-                              // paddingRight:20,
-                              // marginRight:20,
                               fontSize: 20,
                               color: '#6A6A80',
                             }}
@@ -286,9 +330,12 @@ const AttendanceScreen2 = ({navigation}) => {
                 </View>
 
                 <View style={{padding: 10}} />
-
+                <View>
+                  {filteredUsers.length > 0 ?
+                    (
+                    <ScrollView>
                 {studentList &&
-                  studentList.map(st => (
+                  filteredUsers.map(st => (
                     <View style={styles.section} key={st._id}>
                       <View style={styles.details}>
                         <View style={styles.userinhostels2}>
@@ -336,8 +383,64 @@ const AttendanceScreen2 = ({navigation}) => {
                       </View>
                     </View>
                   ))}
+ </ScrollView>
+                    ) :
+                    (
+                      <ScrollView>
+                      {studentList &&
+                        studentList.map(st => (
+                          <View style={styles.section} key={st._id}>
+                            <View style={styles.details}>
+                              <View style={styles.userinhostels2}>
+                                <TouchableOpacity
+                                  style={styles.differentusers}
+                                  onPress={() => {
+                                    setNameMethod('Name');
+                                  }}>
+                                  <Text
+                                    style={{
+                                      fontSize: 22,
+                                      color: '#211C5A',
+                                      fontFamily: 'Poppins-regular',
+                                    }}>
+                                    {' '}
+                                    {st.studentId
+                                      ? st.studentId.firstName
+                                      : 'Not Found'}
+                                  </Text>
+      
+                                  <Text
+                                    style={{
+                                      fontSize: 22,
+                                      paddingTop: 20,
+                                      color: '#000000',
+                                      fontFamily: 'Poppins-regular',
+                                    }}>
+                                    {getAttPer(st.days)} %
+                                  </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.differentusers}>
+                                  <Text
+                                    style={{
+                                      fontSize: 14,
+                                      marginLeft: 5,
+                                      color: institute
+                                        ? institute.themeColor
+                                        : '#6A6A80',
+                                      fontFamily: 'Poppins-regular',
+                                    }}>
+                                    {''} Admission No: {st.studentAdmissionNumber}
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                            </View>
+                          </View>
+                        ))}
+       </ScrollView>
 
+                    )}
                 {/* Cards end */}
+                </View>
               </View>
             </ScrollView>
           </View>
