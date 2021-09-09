@@ -24,6 +24,8 @@ import get from '../../../../services/helpers/request/get'
 import read from '../../../../services/localstorage/read'
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen'
 
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
+
 export default function BooksStudent({ navigation }) {
   const userInfo = useSelector(state => state.userInfo)
   //theming
@@ -37,6 +39,9 @@ export default function BooksStudent({ navigation }) {
 
   const [dueBooks, setDueBooks] = useState([])
   const [clearedBooks, setClearedBooks] = useState([])
+
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(async () => {
     setLoadingScreen()
@@ -69,10 +74,12 @@ export default function BooksStudent({ navigation }) {
 
     return (
       <View style={styles.container}>
+        {filteredUsers.length > 0 ?
+        (
         <ScrollView>
-          {
-            clearedBooks.length > 0 ? clearedBooks.map((book) => (
-              <View style={styles.section} key={book._id}>
+          {filteredUsers.map(clearedBooks => (
+          
+              <View style={styles.section} key={clearedBooks._id}>
                 <View style={styles.details}>
                   <View style={styles.userinhostels}>
                     <TouchableOpacity style={styles.differentusers}>
@@ -83,7 +90,7 @@ export default function BooksStudent({ navigation }) {
                           color: '#505069',
                           fontFamily: 'OpenSans-Regular',
                         }}>
-                        ID: {book.bookNumber}
+                        ID: {clearedBooks.bookNumber}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.differentusers}>
@@ -95,7 +102,7 @@ export default function BooksStudent({ navigation }) {
                           fontFamily: 'Poppins-Regular',
                         }}>
                         {' '}
-                        {book.bookName ? book.bookName.title : 'N/A'}
+                        {clearedBooks.bookName ? clearedBooks.bookName.title : 'N/A'}
                       </Text>
                     </TouchableOpacity>
 
@@ -107,7 +114,7 @@ export default function BooksStudent({ navigation }) {
                           fontFamily: 'Poppins-Regular',
                           paddingLeft: 5,
                         }}>
-                        Issued: {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                        Issued: {clearedBooks.issueDate ? clearedBooks.issueDate.slice(0, 10) : 'N/A'}
                       </Text>
                       <View style={{ flexDirection: 'row' }}>
                         <Text
@@ -117,7 +124,65 @@ export default function BooksStudent({ navigation }) {
                             fontFamily: 'Poppins-Regular',
                           }}>
                           {' '}
-                          Due: {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                          Due: {clearedBooks.dueDate ? clearedBooks.dueDate.slice(0, 10) : 'N/A'}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+          ),
+          )}
+        </ScrollView>
+        ):(
+          <ScrollView>
+              {clearedBooks.length > 0 ? clearedBooks.map((clearedBooks) => (
+              <View style={styles.section} key={clearedBooks._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text> </Text>
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color: '#505069',
+                          fontFamily: 'OpenSans-Regular',
+                        }}>
+                        ID: {clearedBooks.bookNumber}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {' '}
+                        {clearedBooks.bookName ? clearedBooks.bookName.title : 'N/A'}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58626C',
+                          fontFamily: 'Poppins-Regular',
+                          paddingLeft: 5,
+                        }}>
+                        Issued: {clearedBooks.issueDate ? clearedBooks.issueDate.slice(0, 10) : 'N/A'}
+                      </Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#58636D',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          Due: {clearedBooks.dueDate ? clearedBooks.dueDate.slice(0, 10) : 'N/A'}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -126,7 +191,12 @@ export default function BooksStudent({ navigation }) {
               </View>
             )) : (<Text style={{ display: 'flex', textAlign: 'center' }}>Nothing to Display!</Text>)
           }
-        </ScrollView>
+
+
+          </ScrollView>
+
+        )
+        }
       </View>
     );
   }
@@ -138,10 +208,11 @@ export default function BooksStudent({ navigation }) {
 
     return (
       <View style={styles.container}>
+        {filteredUsers.length > 0 ?
+        (
         <ScrollView>
-          {
-            dueBooks.length > 0 ? dueBooks.map((book) => (
-              <View style={styles.section} key={book._id}>
+              {filteredUsers.map(dueBooks => (
+              <View style={styles.section} key={dueBooks._id}>
                 <View style={styles.details}>
                   <View style={styles.userinhostels}>
                     <TouchableOpacity style={styles.differentusers}>
@@ -152,7 +223,7 @@ export default function BooksStudent({ navigation }) {
                           color: '#505069',
                           fontFamily: 'OpenSans-Regular',
                         }}>
-                        ID: {book.bookNumber}
+                        ID: {dueBooks.bookNumber}
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.differentusers}>
@@ -164,7 +235,7 @@ export default function BooksStudent({ navigation }) {
                           fontFamily: 'Poppins-Regular',
                         }}>
                         {' '}
-                        {book.bookName ? book.bookName.title : 'N/A'}
+                        {dueBooks.bookName ? dueBooks.bookName.title : 'N/A'}
                       </Text>
                     </TouchableOpacity>
 
@@ -176,7 +247,7 @@ export default function BooksStudent({ navigation }) {
                           fontFamily: 'Poppins-Regular',
                           paddingLeft: 5,
                         }}>
-                        Issued: {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                        Issued: {dueBooks.issueDate ? dueBooks.issueDate.slice(0, 10) : 'N/A'}
                       </Text>
                       <View style={{ flexDirection: 'row' }}>
                         <Text
@@ -186,7 +257,67 @@ export default function BooksStudent({ navigation }) {
                             fontFamily: 'Poppins-Regular',
                           }}>
                           {' '}
-                          Due: {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                          Due: {dueBooks.dueDate ? dueBooks.dueDate.slice(0, 10) : 'N/A'}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+              )
+              )}
+        </ScrollView>
+        ):(
+
+          <ScrollView>
+          {
+            dueBooks.length > 0 ? dueBooks.map((dueBooks) => (
+              <View style={styles.section} key={dueBooks._id}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text> </Text>
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          color: '#505069',
+                          fontFamily: 'OpenSans-Regular',
+                        }}>
+                        ID: {dueBooks.bookNumber}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontSize: 18,
+                          color: '#211C5A',
+                          fontFamily: 'Poppins-Regular',
+                        }}>
+                        {' '}
+                        {dueBooks.bookName ? dueBooks.bookName.title : 'N/A'}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#58626C',
+                          fontFamily: 'Poppins-Regular',
+                          paddingLeft: 5,
+                        }}>
+                        Issued: {dueBooks.issueDate ? dueBooks.issueDate.slice(0, 10) : 'N/A'}
+                      </Text>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#58636D',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {' '}
+                          Due: {dueBooks.dueDate ? dueBooks.dueDate.slice(0, 10) : 'N/A'}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -196,6 +327,8 @@ export default function BooksStudent({ navigation }) {
             )) : (<Text style={{ display: 'flex', textAlign: 'center' }}>No Dues!!</Text>)
           }
         </ScrollView>
+        )
+  }
       </View>
     );
   }
@@ -265,7 +398,20 @@ export default function BooksStudent({ navigation }) {
               style={{ width: '80%', ...styles.text_input }}
               placeholder="Enter book name or ID here"
               placeholderTextColor="grey"
+              textContentType='name'
+              onChangeText={(text) => {
+                setSearchText(text);
+                if (text === '') {
+                  return setFilteredUsers([]);
+                }
+                const filtered_users = dueBooks.filter((dueBooks) =>
+                dueBooks.bookName.title.toLowerCase().startsWith(text.toLowerCase())
+                );
+                setFilteredUsers(filtered_users);
+              }}
+              returnKeyType='search'
             />
+            {searchText.length === 0 ? (
             <TouchableOpacity
               style={{
                 alignSelf: 'center',
@@ -279,6 +425,25 @@ export default function BooksStudent({ navigation }) {
                 }}
               />
             </TouchableOpacity>
+             ) : (
+              <TouchableOpacity
+              onPress={() => {
+                setSearchText('');
+                setFilteredUsers([]);
+              }}
+              style={{
+                alignSelf: 'center',
+              }}
+            >
+              <MaterialIcon name='cancel'
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 24,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          )}
           </View>
         </View>
 
