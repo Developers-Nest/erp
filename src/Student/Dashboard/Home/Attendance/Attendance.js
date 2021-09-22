@@ -30,11 +30,6 @@ export default function Attendance({navigation}) {
   //theming
   const institute = useSelector(state => state.institute);
 
-  //initial value
-  var d = new Date();
-  let currentyear = d.getUTCFullYear();
-  let currentmonth = d.getUTCMonth();
-
   //loading screen
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
@@ -43,8 +38,8 @@ export default function Attendance({navigation}) {
   const [years, setYears] = useState(getYear());
 
   //selected values
-  const [yearSelected, setyearSelected] = useState(currentyear);
-  const [monthSelected, setmonthSelected] = useState(currentmonth);
+  const [yearSelected, setyearSelected] = useState(null);
+  const [monthSelected, setmonthSelected] = useState(null);
 
   const [days, setdays] = useState([]);
   const [admNo, setadmNo] = useState();
@@ -55,35 +50,38 @@ export default function Attendance({navigation}) {
   useEffect(async () => {
     showLoadingScreen();
     try {
-      let token = await read('token');
-      let slug = `/student/attendance/monthly/?course=${userInfo.course}&year=${yearSelected}&month=${monthSelected}`;
-      console.log('student attendance slug', slug);
+      if (yearSelected != null && monthSelected != null) {
+        let token = await read('token');
+        let slug = `/student/attendance/monthly/?course=${userInfo.course}&year=${yearSelected}&month=${monthSelected}`;
+        console.log('student attendance slug', slug);
 
-      let response = await get(slug, token);
-      console.log('student attendance', response);
-      setdays([]);
-      if (response.length == 0) {
-        alert('Inactive Month!!');
-        hideLoadingScreen();
-        return;
+        let response = await get(slug, token);
+        console.log('student attendance', response);
+        setdays([]);
+        if (response.length == 0) {
+          alert('Inactive Month!!');
+          hideLoadingScreen();
+          return;
+        }
+
+        const studentFound = student => {
+          setadmNo(student.studentAdmissionNumber);
+          setdays(student.days);
+        };
+        response[0] &&
+          response[0].students.map(student =>
+            student.studentId && student.studentId._id === userInfo._id
+              ? studentFound(student)
+              : null,
+          );
       }
-
-      const studentFound = student => {
-        setadmNo(student.studentAdmissionNumber);
-        setdays(student.days);
-      };
-      response[0] &&
-        response[0].students.map(student =>
-          student.studentId && student.studentId._id === userInfo._id
-            ? studentFound(student)
-            : null,
-        );
     } catch (err) {
       alert('Cannot fetch List ' + err);
     }
     hideLoadingScreen();
   }, [yearSelected, monthSelected]);
 
+  let fetchAttendance = async type => {};
   return (
     <View
       style={{
@@ -127,8 +125,6 @@ export default function Attendance({navigation}) {
         </Text>
       </View>
 
-      
-
       <View
         style={{
           marginBottom: 10,
@@ -142,7 +138,7 @@ export default function Attendance({navigation}) {
             onChange={option => {
               setyearSelected(option.key + 2020);
             }}
-            initValue="This Year"
+            initValue="Select Year"
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -154,7 +150,7 @@ export default function Attendance({navigation}) {
             onChange={option => {
               setmonthSelected(option.key);
             }}
-            initValue="This Month"
+            initValue="Select Month"
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
@@ -163,9 +159,13 @@ export default function Attendance({navigation}) {
 
       <ScrollView>
         {days.length == 0 ? (
-          <Text style={{alignSelf: 'center'}}>
-            No attendance listed this month
-          </Text>
+          yearSelected == null || monthSelected == null ? (
+            <Text style={{alignSelf: 'center'}}>{'Select date and month'}</Text>
+          ) : (
+            <Text style={{alignSelf: 'center'}}>
+              {'No attendance listed this month'}
+            </Text>
+          )
         ) : (
           days.map(day => (
             <View style={styles.section} key={day._id}>
@@ -235,7 +235,6 @@ const styles = StyleSheet.create({
     marginTop: 0,
     paddingBottom: 10,
     borderBottomColor: '#333',
-    
   },
   userinhostels: {
     marginTop: 1,
@@ -259,7 +258,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 10,
     borderBottomColor: '#333',
-    
   },
   search: {
     backgroundColor: 'white',
