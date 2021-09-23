@@ -21,9 +21,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function LecturesScreen({navigation}) {
+export default function LecturesScreen({ navigation }) {
   const [showContent, setShowContent] = React.useState('Live');
   const [searchQuery, setSearchQuery] = React.useState('');
   const onChangeSearch = query => setSearchQuery(query);
@@ -87,54 +87,7 @@ export default function LecturesScreen({navigation}) {
         </View>
 
         <ScrollView>
-          <View
-            style={{
-              alignItems: 'center',
-              marginBottom: 20,
-              marginTop: 10,
-            }}>
-            {/* open search */}
-            <View style={{alignItems: 'center', width: '90%'}}>
-              <View
-                style={{
-                  marginTop: 10,
-
-                  justifyContent: 'space-between',
-                  width: '95%',
-                  flexDirection: 'row',
-                  ...styles.shadow,
-                }}>
-                <FontAwesome5
-                  name="search"
-                  style={{
-                    alignSelf: 'center',
-                    fontSize: 15,
-                    color: '#6A6A80',
-                  }}
-                />
-
-                <TextInput
-                  style={{width: '80%', ...styles.text_input}}
-                  placeholder="Enter subject or batch name"
-                  placeholderTextColor="black"
-                />
-                <TouchableOpacity
-                  style={{
-                    alignSelf: 'center',
-                  }}>
-                  <FontAwesome5
-                    name="filter"
-                    style={{
-                      alignSelf: 'center',
-                      fontSize: 21,
-                      color: '#6A6A80',
-                    }}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-            {/* close search */}
-          </View>
+          <View style={{ padding: 20 }} />
           <View style={styles.switchTabsView}>
             <TouchableOpacity
               style={{
@@ -199,7 +152,7 @@ const styles = StyleSheet.create({
 
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
@@ -317,7 +270,7 @@ const styles = StyleSheet.create({
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
