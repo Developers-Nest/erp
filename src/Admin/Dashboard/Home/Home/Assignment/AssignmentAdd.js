@@ -139,6 +139,7 @@ export default function AssignmentAdd({ navigation }) {
         if (response.url) {
           console.log('Response ', response)
           alert('Assignment Uploaded!!')
+          navigation.replace('Assignment Due')
         } else {
           console.log('Cannot upload file ', response)
           throw new Error('Cannot upload file')
