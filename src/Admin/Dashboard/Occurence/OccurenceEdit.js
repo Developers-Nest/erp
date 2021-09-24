@@ -134,6 +134,7 @@ export default function OccurenceEdit({route, navigation}) {
       console.log(data);
       let response = await patch(slug, data, token);
       alert('occurance updated!');
+      navigation.replace('Occurence');
     } catch (err) {
       alert('Cannot update occurance!' + err);
     }

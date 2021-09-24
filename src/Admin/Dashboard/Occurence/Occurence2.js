@@ -116,6 +116,7 @@ export default function Occurence2({navigation}) {
       };
       let response = await post(slug, data, token);
       alert('occurance created!');
+      navigation.replace('Occurence');
     } catch (err) {
       alert('Cannot create occurance!' + err);
     }
