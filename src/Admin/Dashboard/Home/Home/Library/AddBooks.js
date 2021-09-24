@@ -64,6 +64,12 @@ const AddBooks = ({ navigation }) => {
 
     let handleSubmit = async () => {
         try {
+            if (!author || !billNo || !bookNo || !bookCategory || !bookCondition
+                 || !copies || !bookCost || !edition || !isbn || !language 
+                 || !position || !publisher || !date || !shelf || !title ) {
+                alert('All fields are required!!');
+                return;
+              }
             let slug = '/library/books'
             let token = await read('token')
             let data = {
