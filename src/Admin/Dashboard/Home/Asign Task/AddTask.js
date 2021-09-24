@@ -302,6 +302,11 @@ export default function AddTask({navigation}) {
         };
         console.log(data);
       }
+      else{
+        alert('All fields are required!!');
+        hideLoadingScreen();
+        return;
+      }
 
       let response = await post(slug, data, token);
       if (response.error) {
