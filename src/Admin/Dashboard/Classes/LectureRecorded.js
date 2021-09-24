@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 
 import IconEnglish2 from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {
   StyleSheet,
@@ -9,7 +11,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  Linking
+  Linking,TextInput
 } from 'react-native';
 
 //selector
@@ -48,7 +50,9 @@ const Recorded = () => {
   // dropdown values
   const [batches, setBatches] = useState([]);
   const [courses, setCourses] = useState([]);
-
+//for search
+const [searchText, setSearchText] = useState('');
+const [filteredUsers, setFilteredUsers] = useState([]);
   //fetch courses
   useEffect(async () => {
     showLoadingScreen();
@@ -97,6 +101,74 @@ const Recorded = () => {
   return (
     <View style={styles.container}>
       {loadingScreen}
+       {/* open search */}
+       <View style={{ width: '90%', alignSelf: 'center', marginVertical: 20, alignItems: 'center' }}>
+        <View
+          style={{
+            justifyContent: 'space-between',
+            width: '95%',
+            flexDirection: 'row',
+            ...styles.shadow,
+          }}>
+
+
+          <TextInput
+            style={{ width: '80%', ...styles.text_input }}
+            placeholder="Enter subject name"
+            placeholderTextColor='grey'
+            defaultValue={searchText}
+            textContentType='name'
+            onChangeText={(text) => {
+              setSearchText(text);
+              if (text === '') {
+                return setFilteredUsers([]);
+              }
+              const filtered_users = RecordedClasses.filter((recordedclass) =>
+                recordedclass.name.toLowerCase().startsWith(text.toLowerCase())
+              );
+              setFilteredUsers(filtered_users);
+            }}
+            returnKeyType='search'
+          />
+          {searchText.length === 0 ? (
+            <TouchableOpacity
+              style={{
+                alignSelf: 'center',
+              }}
+            >
+              <Ionicons
+                name="search-sharp"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 30,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setSearchText('');
+                setFilteredUsers([]);
+              }}
+              style={{
+                alignSelf: 'center',
+              }}
+            >
+              <MaterialIcon name='cancel'
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 24,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+
+      </View>
+      {/* close search */}
+
       <View
         style={{
           marginBottom: 10,
@@ -135,6 +207,62 @@ const Recorded = () => {
             flexWrap: 'wrap',
             justifyContent: 'center',
           }}>
+            {filteredUsers.length > 0 ?
+            (
+              <>
+          {RecordedClasses &&
+            filteredUsers.map(RecordedClass => (
+              <TouchableOpacity
+                style={styles.section}
+                key={RecordedClass._id}
+                onPress={() => Linking.openURL(RecordedClass.videoUrl)}>
+                <View style={styles.details}>
+                  <View style={styles.userinhostels}>
+                    <View style={styles.differentusers}>
+                      <Text
+                        style={{
+                          fontWeight: 'normal',
+                          fontSize: 22,
+                          color: ' rgba(25, 40, 57, 0.7)',
+                          fontFamily: 'Poppins-Medium',
+                        }}>
+                        {RecordedClass.name}
+                      </Text>
+
+                      <MaterialCommunityIcon
+                        size={27}
+                        color="rgba(25, 40, 57, 0.63)"
+                        name="alpha-a"
+                        style={{paddingLeft: 7}}
+                      />
+                    </View>
+
+                    <View style={styles.differentusers}>
+                      <Text style={styles.teacher, {color: institute? institute.themeColor : 'black'}}>
+                        {parseDate(RecordedClass.date)}
+                      </Text>
+                      <View style={{flexDirection: 'column'}}>
+                        <IconEnglish2
+                          size={24}
+                          color={ institute? institute.themeColor : "#B04305"}
+                          name="radio"
+                          style={{paddingLeft: 7}}
+                        />
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            color: 'rgba(25, 40, 57, 0.9)',
+                            fontFamily: 'Poppins-Medium',
+                          }}></Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+            </>
+          ) : (
+<>
           {RecordedClasses &&
             RecordedClasses.map(RecordedClass => (
               <TouchableOpacity
@@ -185,6 +313,8 @@ const Recorded = () => {
                 </View>
               </TouchableOpacity>
             ))}
+            </>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -205,7 +335,7 @@ const styles = StyleSheet.create({
 
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
@@ -238,36 +368,32 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginHorizontal: 10,
     width: 170,
-    height: 170,
-    //new added
+    height: 180,
     alignSelf: 'center',
-    //new added to move english down
-    paddingTop: 50,
+    justifyContent: 'center',
+    marginBottom: 5,
+    paddingHorizontal: 14
   },
 
   details: {
     alignContent: 'center',
     flexDirection: 'column',
+    paddingHorizontal: 20,
+
 
     borderBottomColor: '#333',
-    // borderBottomWidth:1,
+
   },
 
-  userinhostels: {
-    //  paddingVertical:20,
-  },
-
-  //different users for two columns
   differentusers: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    //for row spacing between two rows:done finally
     paddingBottom: 10,
   },
+
   userstext: {
     fontSize: 16,
-    // paddingVertical:4,
     fontWeight: '300',
   },
   belowhr: {
@@ -292,11 +418,7 @@ const styles = StyleSheet.create({
     paddingLeft: 3,
     fontFamily: 'Poppins-Medium',
   },
-  switchText: {
-    fontSize: 14,
-    color: '#B04305',
-    paddingHorizontal: 5,
-  },
+
   maincontainer: {
     paddingTop: 10,
     flex: 1,
@@ -320,7 +442,44 @@ const styles = StyleSheet.create({
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    backgroundColor: 'white',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    margin: 0,
+    padding: 0,
+    minWidth: 110,
+  },
+  SelectedValueSmall: {
+    fontFamily: 'Poppins-Regular',
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 30,
+    paddingTop: 3,
+    color: '#211C5A',
+  },
+  text_input: {
+    paddingHorizontal: 20,
+    borderRadius: 10,
+
+    height: 50,
+    fontSize: 16,
+    minWidth: 171,
+    color: 'black',
+    backgroundColor: 'white',
+  },
+
+  shadow: {
+    shadowColor: '#999',
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
@@ -337,5 +496,6 @@ const styles = StyleSheet.create({
     minWidth: 110,
   },
 });
+
 
 export default Recorded;
