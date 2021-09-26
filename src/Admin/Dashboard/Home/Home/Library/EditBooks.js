@@ -72,6 +72,11 @@ const EditBooks = ({ route, navigation }) => {
         1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
     }
 
+  //date picker
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(4, 15);
+  };
     const showDatePicker = () => {
         setDatePickerVisibility(true);
     };
@@ -90,7 +95,9 @@ const EditBooks = ({ route, navigation }) => {
 
 
     useEffect(async () => {
+        
         let books = route.params.books
+        console.log(books.inbn);
         console.log('Edit books ', books)
         setauthor(books.author)
         setbillnum(books.billNumber)
@@ -109,6 +116,7 @@ const EditBooks = ({ route, navigation }) => {
         setshelf(books.shelf)
         settitle(books.title)
         setId(books._id)
+        setDate(books.purchaseDate)
 
 
         try {
@@ -162,7 +170,7 @@ const EditBooks = ({ route, navigation }) => {
                 alert(res.error)
             } else if (res._id) {
                 alert(' books added updated!!')
-                navigation.navigate('LibraryMain');
+                navigation.replace('LibraryMain');
             }
         } catch (err) {
             alert('Cannot Update !!' + err);
@@ -252,13 +260,14 @@ const EditBooks = ({ route, navigation }) => {
                             placeholderTextColor='grey'
                             color='black'
                             keyboardType="numeric"
-                            value={isbn}
+                            value={isbn.toString()}
                             onChangeText={val => setisbn(val)}
 
                         />
                         <TouchableOpacity style={[styles.pickdate, styles.shadow]} onPress={showDatePicker}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                placeholder={date}
+                                //placeholder={parseDate(date)}
+                                value={parseDate(date)}
                                 placeholderTextColor='grey'
                                 color='black'
                             />
@@ -393,7 +402,7 @@ const EditBooks = ({ route, navigation }) => {
 
                         <ModalSelector
                             data={conditions}
-                            initValue="Good"
+                            initValue={condition}
                             onChange={option => {
                                 setcondition(option.key);
                             }}

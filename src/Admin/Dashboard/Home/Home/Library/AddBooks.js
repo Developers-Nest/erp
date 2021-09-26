@@ -34,6 +34,7 @@ const AddBooks = ({ navigation }) => {
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('21 May 2021')
 
+
     const showDatePicker = () => {
         setDatePickerVisibility(true);
     };
@@ -81,7 +82,7 @@ const AddBooks = ({ navigation }) => {
                 copies: copies,
                 cost: bookCost,
                 edition: edition,
-                inbn: isbn,
+                isbn: isbn,
                 language: language,
                 position: position,
                 publisher: publisher,
@@ -93,7 +94,7 @@ const AddBooks = ({ navigation }) => {
             let res = await post(slug, data, token)
             console.log('Book Res ', res)
             alert('book added!!');
-            navigation.navigate('LibraryMain')
+            navigation.replace('LibraryMain')
         } catch (err) {
             alert('Cannot Save !!' + err)
         }
@@ -185,7 +186,7 @@ const AddBooks = ({ navigation }) => {
                                 placeholder={date}
                                 placeholderTextColor='grey'
                                 color='black'
-                                values={date}
+                                //value={date}
                                 editable={false}
                             />
                             <Feather size={18} color="black" name="calendar"
