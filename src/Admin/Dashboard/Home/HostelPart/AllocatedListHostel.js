@@ -70,7 +70,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
               room: response[i].hostelRoom.roomNo,
               floor: response[i].hostelRoom.floorName,
               institution: response[i].institution,
-              regDate: parseDate(response[i].createdAt),
+              regDate: parseDate(response[i].hostelRegistartionDate),
               vacaDate: parseDate(response[i].vacatingDate),
             });
             setAllocationlist(list)
