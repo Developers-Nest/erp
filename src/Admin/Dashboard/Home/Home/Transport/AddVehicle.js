@@ -331,7 +331,7 @@ export default function AddVehicle({ navigation }) {
             justifyContent: 'space-evenly',
           }}>
           <Text style={styles.section_heading1}>Max Allowed</Text>
-          <Text style={styles.section_heading2}>Phone no. of the driver</Text>
+          {/* <Text style={styles.section_heading2}>Phone no. of the driver</Text> */}
         </View>
 
         <View
@@ -352,17 +352,7 @@ export default function AddVehicle({ navigation }) {
               />
             </View>
           </View>
-          <View style={styles.Card2}>
-            <View style={styles.CardContent}>
-              <TextInput
-                style={{ ...styles.search_input }}
-                placeholder="Phone no."
-                placeholderTextColor="grey"
-                color="black"
-                keyboardType="numeric"
-              />
-            </View>
-          </View>
+
         </View>
 
         <View
@@ -394,7 +384,7 @@ const styles = StyleSheet.create({
     height: '100%',
     flex: 1,
   },
-  
+
   button: {
     backgroundColor: '#58636D',
 
@@ -467,7 +457,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   shadow: {
-    elevation:5,
+    elevation: 5,
 
     borderRadius: 0,
     backgroundColor: 'white',
@@ -490,7 +480,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     shadowRadius: 8,
     shadowOpacity: 1,
-    elevation:5,
+    elevation: 5,
   },
   cardsmall: {
     shadowColor: '#000',
@@ -523,7 +513,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     shadowRadius: 8,
     shadowOpacity: 1,
-    elevation:5,
+    elevation: 5,
   },
   Card2: {
     backgroundColor: 'white',
@@ -535,7 +525,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     shadowRadius: 8,
     shadowOpacity: 1,
-    elevation:5,
+    elevation: 5,
 
   },
   CardContent: {

@@ -230,7 +230,7 @@ export default function EditVehicle({ route, navigation }) {
                                 placeholderTextColor="grey"
                                 color="black"
                                 keyboardType="numeric"
-                                value={trackid}
+                                value={trackid.toString()}
                                 onChangeText={val => setTrackid(val)}
                             />
                         </View>
@@ -257,7 +257,7 @@ export default function EditVehicle({ route, navigation }) {
                     }}>
                     <ModalSelector
                         data={types}
-                        initValue="Contract"
+                        initValue={type}
                         onChange={option => {
                             setType(option.key);
                         }}
@@ -355,7 +355,7 @@ export default function EditVehicle({ route, navigation }) {
                         justifyContent: 'space-evenly',
                     }}>
                     <Text style={styles.section_heading1}>Max Allowed</Text>
-                    <Text style={styles.section_heading2}>Phone no. of the driver</Text>
+                    {/* <Text style={styles.section_heading2}>Phone no. of the driver</Text> */}
                 </View>
 
                 <View
@@ -377,18 +377,7 @@ export default function EditVehicle({ route, navigation }) {
                             />
                         </View>
                     </View>
-                    <View style={styles.Card2}>
-                        <View style={styles.CardContent}>
-                            <TextInput
-                                style={{ ...styles.search_input }}
-                                placeholder="Phone no."
-                                placeholderTextColor="grey"
-                                color="black"
-                                value={phone.toString()}
-                                keyboardType="numeric"
-                            />
-                        </View>
-                    </View>
+
                 </View>
 
 
