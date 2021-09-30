@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import {
   Button,
 } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
 import ModalSelector from 'react-native-modal-selector';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import getCourse from '../../../../services/helpers/getList/getCourse'
@@ -30,6 +30,18 @@ export default function QuickPayment1({ navigation }) {
   const [sbatch, setsBatch] = useState('')
   const [sfeetype, setsFeeType] = useState('')
   const [ssubfee, setsSubFee] = useState('')
+
+  // after fetching list
+  const [fetched, setFetched] = useState(false);
+  const [list, setList] = useState([]);
+
+
+  //date parser
+  let parseDate = myDate => {
+    let d = new Date(myDate);
+    return d.toString().slice(4, 15);
+  };
+
 
   useEffect(async () => {
     setLoadingScreen()
@@ -94,6 +106,33 @@ export default function QuickPayment1({ navigation }) {
     hideLoadingScreen()
   }
 
+  const getList = async () => {
+    setLoadingScreen();
+    try {
+      let slug = `/fee/feePayment?&course=${scourse}&batch=${sbatch}&feeCategory=${sfeetype}&feeSubCategory=${ssubfee}`;
+
+      console.log(slug);
+      let token = await read('token');
+      let res = await get(slug, token);
+      let quickpayArray = [];
+      res.map(data => {
+        quickpayArray.push({
+          _id: data._id,
+          nm: data.user.firstName,
+          reg: data.userCode,
+          amt: data.amount,
+          dt: parseDate(data.date)
+        });
+        console.log(data);
+      });
+      setList(quickpayArray);
+      setFetched(true);
+    } catch (err) {
+      alert('No Lists found!!');
+      setList([]);
+    }
+    hideLoadingScreen();
+  };
 
   const institute = useSelector(state => state.institute);
   return (
@@ -187,13 +226,106 @@ export default function QuickPayment1({ navigation }) {
         padding: 20
       }}>
 
-        <Button color={institute ? institute.themeColor : '#5177E7'} mode="contained" onPress={() => navigation.navigate('QuickPayment2')}>
+        <Button color={institute ? institute.themeColor : '#5177E7'} mode="contained" onPress={getList}>
           Search
         </Button>
       </View>
+
+
+      <View style={{ marginHorizontal: 30, ...styles.shadow }}>
+        {/* <View style={styles.search}>
+          <TextInput
+            style={{ ...styles.search_input }}
+            placeholder="Enter the employee name here"
+            placeholderTextColor='grey'
+            color='black'
+          />
+          <TouchableOpacity
+            style={{
+              alignSelf: 'center',
+            }}>
+            <Icon
+              name="search-sharp"
+              style={{
+                alignSelf: 'center',
+                fontSize: 30,
+                color: 'black',
+                paddingRight: 5,
+              }}
+            />
+          </TouchableOpacity>
+        </View> */}
+      </View>
+      <View style={{ padding: 10 }} />
+      <ScrollView>
+        {fetched
+          ? list &&
+          list.map(data => (
+            <View style={styles.section}>
+              <View style={styles.details}>
+                <View style={styles.userinhostels}>
+                  <View style={styles.differentusers}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        color: '#211C5A',
+                        fontFamily: 'Poppins-Regular',
+                        marginHorizontal: -5,
+                      }}>
+                      Name:{' '}{data.nm}
+                    </Text>
+                  </View>
+                  <View style={{ padding: 5 }} />
+                  <View style={styles.differentusers}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: '#211C5A',
+                        fontFamily: 'Poppins-Regular',
+                        marginHorizontal: -5,
+                      }}>
+                      User Code:{' '}{data.reg}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: '#211C5A',
+                        fontFamily: 'Poppins-Medium',
+                        paddingRight: 5,
+                      }}>
+                      Amount:{data.amt}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.belowhr}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', padding: 5 }}>
+                  <Text
+                    style={{
+                      color: '#211C5A',
+                      fontSize: 12,
+                      fontFamily: 'Poppins-Medium',
+                    }}>
+                    DATE OF PAYMENT: {data.dt}
+                  </Text>
+                </View>
+                <View style={{ marginBottom: 3 }} />
+              </View>
+            </View>
+
+          ))
+          :
+          null
+
+        }
+
+      </ScrollView>
+
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   backgroung: {
@@ -201,14 +333,7 @@ const styles = StyleSheet.create({
     height: '100%',
     flex: 1,
   },
-  button: {
-    backgroundColor: '#58636D',
 
-    color: '#F9F9F9',
-    padding: 3,
-    paddingHorizontal: 5,
-    borderRadius: 5,
-  },
   SelectedValueSmall: {
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
@@ -254,6 +379,78 @@ const styles = StyleSheet.create({
     shadowColor: '#999',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
+  },
+  search: {
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    borderColor: '#00499F',
+    borderRadius: 8,
+  },
+  search_input: {
+    borderRadius: 8,
+    height: 59,
+    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    fontWeight: 'bold',
+    paddingTop: 15,
+    paddingHorizontal: 10,
+    width: '90%',
+  },
+  shadow: {
+
+    elevation: 5,
+    borderRadius: 8,
+    backgroundColor: 'transparent',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 8,
+  },
+  section: {
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 1,
+    elevation: 5,
+    marginVertical: 14,
+    borderRadius: 12,
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginHorizontal: 20,
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 10,
+    paddingBottom: 0,
+    borderBottomColor: '#333',
+    borderBottomWidth: 0.5,
+  },
+  userinhostels: {
+    marginTop: 10,
+  },
+  differentusers: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 2,
+    justifyContent: 'space-between',
+  },
+  belowhr: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 10,
+    justifyContent: 'space-between',
+    paddingBottom: 10,
+    borderBottomColor: '#333',
   },
   header: {
     height: 69,
