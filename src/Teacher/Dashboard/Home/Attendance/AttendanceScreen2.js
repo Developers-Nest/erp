@@ -152,7 +152,7 @@ const AttendanceScreen2 = ({navigation}) => {
           }}>
           <TouchableOpacity
             onPress={() => {
-              navigation.goBack();
+              navigation.navigate('Home');
             }}>
             <Icon
               size={24}

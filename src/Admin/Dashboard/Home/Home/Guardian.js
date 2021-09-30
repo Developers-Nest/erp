@@ -96,7 +96,7 @@ export default function Guardian({ navigation }) {
       </View>
 
       {/* Modal Selector */}
-      <View style={styles.ModalContainer}>
+      {/* <View style={styles.ModalContainer}>
         <ModalSelector
           initValue="Batch"
           style={styles.card_picker}
@@ -107,7 +107,7 @@ export default function Guardian({ navigation }) {
           style={styles.card_picker}
           initValueTextStyle={styles.SelectedValueSmall}
           selectTextStyle={styles.SelectedValueSmall}></ModalSelector>
-      </View>
+      </View> */}
 
       {/* {modal selector ends} */}
 

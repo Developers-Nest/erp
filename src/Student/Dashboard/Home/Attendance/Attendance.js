@@ -7,8 +7,6 @@ import {
   ScrollView,
 } from 'react-native';
 
-//navigation
-import {createStackNavigator} from '@react-navigation/stack';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -53,10 +51,8 @@ export default function Attendance({navigation}) {
       if (yearSelected != null && monthSelected != null) {
         let token = await read('token');
         let slug = `/student/attendance/monthly/?course=${userInfo.course}&year=${yearSelected}&month=${monthSelected}`;
-        console.log('student attendance slug', slug);
 
         let response = await get(slug, token);
-        console.log('student attendance', response);
         setdays([]);
         if (response.length == 0) {
           alert('Inactive Month!!');

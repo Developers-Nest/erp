@@ -10,8 +10,6 @@ export default function Placement() {
         <Stack.Navigator headerMode="none">
             <Stack.Screen name="PlacementScreen1" component={PlacementScreen1} />
             <Stack.Screen name="NotFound" component={NotFound} />
-
-
         </Stack.Navigator>
     );
 }

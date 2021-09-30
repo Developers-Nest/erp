@@ -53,7 +53,7 @@ const PlacementScreen1 = ({ navigation }) => {
     };
     const handleConfirm = (date) => {
         let d = date.toString()
-        setDate(d.slice(4,12))
+        setDate(d.slice(4,15))
         setDateQuery(dateMonths[date.getMonth() + 1]+ " " + date.getDate() + ", " + date.getFullYear())
         hideDatePicker();
     };
@@ -143,11 +143,10 @@ const PlacementScreen1 = ({ navigation }) => {
                     {/* header ends */}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 40, width: '100%', marginBottom: 20 }}>
                         <TouchableOpacity style={styles.pickdate} onPress={showDatePicker}>
-                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                placeholder={date}
+                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular', color: "black" }}
                                 placeholderTextColor="grey"
-                                values={date}
-                            />
+                                placeholder="Date"
+                            >{date}</TextInput>
                             <Feather size={18} color="black" name="calendar"
                                 style={{
                                     marginTop: 14,
@@ -175,17 +174,19 @@ const PlacementScreen1 = ({ navigation }) => {
                             </View>
                         </View>
                     </View>
-                    <ModalSelector
-                        data={companyname}
-                        initValue="Company"
-                        style={styles.card}
-                        onChange={option => {
-                            fetchUsers(option.key)
-                        }}
-                        initValueTextStyle={styles.SelectedValueSmall}
-                        selectTextStyle={styles.SelectedValueSmall}
-                    >
-                    </ModalSelector>
+                    <View style={styles.companyConatainer}>
+                        <ModalSelector
+                            data={companyname}
+                            initValue="Company"
+                            style={styles.card}
+                            onChange={option => {
+                                fetchUsers(option.key)
+                            }}
+                            initValueTextStyle={styles.SelectedValueSmall}
+                            selectTextStyle={styles.SelectedValueSmall}
+                        >
+                        </ModalSelector>
+                    </View>
                 </View>
                 {
                     users && users.map((user) => (
@@ -230,7 +231,7 @@ const PlacementScreen1 = ({ navigation }) => {
                                         </Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.differentusers}>
-                                        <Text style={{ fontSize: 12, color: ' #505069' }}>
+                                        <Text style={{ fontSize: 12, color: '#505069' }}>
                                             Code: {user.code}
                                         </Text>
                                     </TouchableOpacity>
@@ -336,7 +337,6 @@ const styles = StyleSheet.create({
         margin: 0,
 
     },
-
     fixToText: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -420,9 +420,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'Poppins-Regular',
         fontWeight: 'bold',
-        paddingTop: 10,
+        // paddingTop: 10,
         paddingHorizontal: 10,
     },
+    companyConatainer: {
+        display: 'flex',
+        alignItems: 'center'
+    }
 
 });
 
