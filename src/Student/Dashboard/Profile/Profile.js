@@ -46,6 +46,24 @@ export default function Profile({ navigation }) {
     setUmobile(userInfo.phone);
   }, []);
 
+
+  // email format validification
+  const validate = () => {
+    console.log(uemail);
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(uemail) === true) {
+      console.log("Email is Correct");
+      setUemail(uemail)
+      updateProfile()
+    }
+    else {
+      console.log("Email is Correct");
+      return alert("Invalid Email Format");
+    }
+  }
+
+
+
   let updateProfile = async () => {
     setLoadingScreen();
     setModalVisible(!modalVisible);
@@ -193,7 +211,7 @@ export default function Profile({ navigation }) {
                   <Button
                     mode="contained"
                     color={institute ? institute.themeColor : 'blue'}
-                    onPress={updateProfile}>
+                    onPress={validate}>
                     Save
                   </Button>
                 </View>

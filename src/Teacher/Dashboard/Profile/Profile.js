@@ -65,7 +65,7 @@ export default function Profile({navigation}) {
       updateProfile()
     }
     else {
-      console.log("Email is Correct");
+      console.log("Email is Incorrect");
       return alert("Invalid Email Format");
     }
   }
