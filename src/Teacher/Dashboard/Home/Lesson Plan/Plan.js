@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect,useFocusEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -24,7 +24,7 @@ import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';
 // redux
 import {useSelector} from 'react-redux';
 
-import {useFocusEffect} from '@react-navigation/core';
+
 
 export default function LessonPlan({navigation}) {
   const [data, setData] = useState([]);
