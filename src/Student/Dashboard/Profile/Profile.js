@@ -194,6 +194,7 @@ export default function Profile({ navigation }) {
                     value={upaddress}
                     style={styles.textInput}
                     onChangeText={value => setUpAddress(value)}
+                    onSubmitEditing={validate}
                   />
                 </ScrollView>
                 <View
