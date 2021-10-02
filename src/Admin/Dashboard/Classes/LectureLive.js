@@ -29,6 +29,7 @@ import read from '../../../services/localstorage/read';
 import getCourse from '../../../services/helpers/getList/getCourse';
 import getBatch from '../../../services/helpers/getList/getBatch';
 
+import deleteReq from '../../../services/helpers/request/delete'
 // redux
 import { useSelector } from 'react-redux';
 
@@ -47,6 +48,7 @@ export default function Live({ navigation }) {
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
   const userInfo = useSelector(state => state.userInfo);
 
+  const [reload, setreload] = React.useState(true);
   // dropdown selected values
   const [batch, setBatch] = useState(null);
   const [course, setCourse] = useState(null);
@@ -96,6 +98,19 @@ export default function Live({ navigation }) {
       setLiveClasses(response);
     } catch (err) {
       alert('Cannot fetch your Live Classes !!\n' + err);
+    }
+    hideLoadingScreen();
+  };
+  const handleDelete = async id => {
+    showLoadingScreen();
+    try {
+      let slug = `/liveclass/${id}`
+      let token = await read('token')
+      let res = await deleteReq(slug, token)
+      alert('Deleted..kindly reload the classes')
+      setreload(!reload);
+    } catch (err) {
+      alert('Cannot delete this live class!!');
     }
     hideLoadingScreen();
   };
@@ -274,7 +289,8 @@ export default function Live({ navigation }) {
                                 }}></Text>
                             </View>
                           </View>
-                          {new Date() < new Date(LiveClass.date) ? (
+                          {/* {new Date() < new Date(LiveClass.date) ? ( */}
+                          <View style={styles.differentusers}>
                             <TouchableOpacity
                               style={{ flexDirection: 'row' }}
                               onPress={() =>
@@ -297,7 +313,23 @@ export default function Live({ navigation }) {
                                 style={{ paddingTop: 2, paddingRight: 10 }}
                               />
                             </TouchableOpacity>
-                          ) : null}
+                            <TouchableOpacity
+
+                              onPress={() => { handleDelete(LiveClass._id) }}
+                              style={{
+                                flexDirection: 'row',
+                                // justifyContent: 'space-between',
+                                marginBottom: 5
+                              }}>
+                              <MaterialIcon
+                                size={20}
+                                backgroundColor=" #211C5A"
+                                name="delete"
+                                color={institute ? institute.themeColor : '#211C5A'}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                          {/* ) : null} */}
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -367,7 +399,8 @@ export default function Live({ navigation }) {
                                 }}></Text>
                             </View>
                           </View>
-                          {new Date() < new Date(LiveClass.date) ? (
+                          {/* {new Date() < new Date(LiveClass.date) ? ( */}
+                          <View style={styles.differentusers}>
                             <TouchableOpacity
                               style={{ flexDirection: 'row' }}
                               onPress={() =>
@@ -390,7 +423,24 @@ export default function Live({ navigation }) {
                                 style={{ paddingTop: 2, paddingRight: 10 }}
                               />
                             </TouchableOpacity>
-                          ) : null}
+                            <TouchableOpacity
+
+                              onPress={() => { handleDelete(LiveClass._id) }}
+                              style={{
+                                flexDirection: 'row',
+                                // justifyContent: 'space-between',
+                                marginBottom: 5
+                              }}>
+                              <MaterialIcon
+                                size={20}
+                                backgroundColor=" #211C5A"
+                                name="delete"
+                                color={institute ? institute.themeColor : '#211C5A'}
+                              />
+                            </TouchableOpacity>
+                          </View>
+
+                          {/* ) : null} */}
                         </View>
                       </View>
                     </TouchableOpacity>

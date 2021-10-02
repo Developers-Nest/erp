@@ -292,43 +292,46 @@ export default function Live({ navigation }) {
                             </View>
                           </View>
                           {/* {new Date() < new Date(LiveClass.date) ? ( */}
-                          <TouchableOpacity
-                            style={{ flexDirection: 'row' }}
-                            onPress={() =>
-                              navigation.navigate('LiveEdit', {
-                                LiveClass: LiveClass,
-                              })
-                            }>
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                color: '#211C5A',
-                                fontFamily: 'Poppins-Medium',
-                              }}>
-                              Edit
-                            </Text>
-                            <Icon
-                              size={12}
-                              color="#211C5A"
-                              name="edit"
-                              style={{ paddingTop: 2, paddingRight: 10 }}
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity
+                          <View style={styles.differentusers}>
+                            <TouchableOpacity
+                              style={{ flexDirection: 'row' }}
+                              onPress={() =>
+                                navigation.navigate('LiveEdit', {
+                                  LiveClass: LiveClass,
+                                })
+                              }>
+                              <Text
+                                style={{
+                                  fontSize: 12,
+                                  color: '#211C5A',
+                                  fontFamily: 'Poppins-Medium',
+                                }}>
+                                Edit
+                              </Text>
+                              <Icon
+                                size={12}
+                                color="#211C5A"
+                                name="edit"
+                                style={{ paddingTop: 2, paddingRight: 10 }}
+                              />
+                            </TouchableOpacity>
 
-                            onPress={() => { handleDelete(LiveClass._id) }}
-                            style={{
-                              flexDirection: 'row',
-                              // justifyContent: 'space-between',
-                              marginBottom: 5
-                            }}>
-                            <MaterialIcon
-                              size={20}
-                              backgroundColor=" #211C5A"
-                              name="delete"
-                              color={institute ? institute.themeColor : '#211C5A'}
-                            />
-                          </TouchableOpacity>
+                            <TouchableOpacity
+
+                              onPress={() => { handleDelete(LiveClass._id) }}
+                              style={{
+                                flexDirection: 'row',
+                                // justifyContent: 'space-between',
+                                marginBottom: 5
+                              }}>
+                              <MaterialIcon
+                                size={20}
+                                backgroundColor=" #211C5A"
+                                name="delete"
+                                color={institute ? institute.themeColor : '#211C5A'}
+                              />
+                            </TouchableOpacity>
+                          </View>
                           {/* // ) : null} */}
                         </View>
                       </View>
