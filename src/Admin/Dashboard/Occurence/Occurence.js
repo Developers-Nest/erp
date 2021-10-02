@@ -143,6 +143,7 @@ function Occurance({ navigation }) {
         </View>
       </View>
       <ScrollView style={styles.container}>
+        <View flexDirection='column-reverse'>
         {list &&
           list.map(occurance => (
             <View style={styles.section} key={occurance._id}>
@@ -212,6 +213,7 @@ function Occurance({ navigation }) {
               </View>
             </View>
           ))}
+        </View>
       </ScrollView>
     </>
   );
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
 
   details: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column-reverse',
     paddingBottom: 10,
     borderBottomColor: '#333',
   },
