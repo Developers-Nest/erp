@@ -15,7 +15,6 @@ import getTeachers from '../../../../../services/helpers/getList/getTeachers';
 import post from '../../../../../services/helpers/request/post'
 import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen';
 import read from '../../../../../services/localstorage/read'
-import get from '../../../../../services/helpers/request/get';
 
 
 const AllocateClassTeacher = ({ navigation }) => {
@@ -256,23 +255,17 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 12,
         borderTopLeftRadius: 12,
         overflow: 'hidden',
-        // justifyContent: 'center',
-        // alignContent:'center',
         margin: 0,
         padding: 0,
         alignSelf: 'center',
         width: '94%'
     },
-
-
     header: {
         height: 69,
         flexDirection: 'row',
     },
 
 });
-
-
 
 
 export default AllocateClassTeacher;

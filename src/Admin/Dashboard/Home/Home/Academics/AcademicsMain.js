@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {
     StyleSheet,
     Text,
-    TextInput,
     View,
     ScrollView,
     TouchableOpacity,
@@ -376,36 +373,7 @@ export default function AcademicsMain({ navigation }) {
                         marginTop: 20,
                     }}>
                     <View style={{ alignItems: 'center', width: '90%' }}>
-                        {/* open search */}
-
-                        {/* <View
-                            style={{
-                                marginTop: 10,
-                                marginLeft: 5,
-                                justifyContent: 'space-between',
-                                width: '95%',
-                                flexDirection: 'row',
-                                ...styles.shadow,
-                            }}>
-                            <TextInput
-                                style={{ width: '80%', ...styles.text_input }}
-                                placeholder="Enter student's name"
-                                placeholderTextColor="grey"
-                            />
-                            <TouchableOpacity
-                                style={{
-                                    alignSelf: 'center',
-                                }}>
-                                <FontAwesome5
-                                    name="search"
-                                    style={{
-                                        alignSelf: 'center',
-                                        fontSize: 21,
-                                        color: '#505069',
-                                    }}
-                                />
-                            </TouchableOpacity>
-                        </View> */}
+                        
                     </View>
                 </View>
 

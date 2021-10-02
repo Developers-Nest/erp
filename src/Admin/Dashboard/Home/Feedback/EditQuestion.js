@@ -13,14 +13,8 @@ import {
 import ModalSelector from 'react-native-modal-selector';
 
 //icons
-import Icon from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import Evillcons from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign'; //for users section icons
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-//date picker
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 //helpers
 import get from '../../../../services/helpers/request/get';
@@ -505,5 +499,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
-
 export default EditQuestion;

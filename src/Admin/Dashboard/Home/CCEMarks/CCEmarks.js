@@ -6,17 +6,7 @@ import {
   List,
   Button,
 } from 'react-native-paper';
-import ModalSelector from 'react-native-modal-selector'
-
-// // helpers
-// import getBatch from '../../../../services/helpers/getList/getBatch'
-// import getCourse from '../../../../services/helpers/getList/getCourse'
-// import getSubject from '../../../../services/helpers/getList/getSubject'
-// import getTerm from '../../../../services/helpers/getList/getTerm'
-// import getAssessesment from '../../../../services/helpers/getList/getAssessesment'
-// import get from '../../../../services/helpers/request/get'
-// import read from '../../../../services/localstorage/read'
-// import getExam from '../../../../services/helpers/getList/getExam'
+import ModalSelector from 'react-native-modal-selector';
 
 // loading screem
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen.js'
@@ -78,89 +68,6 @@ export default function CceMarks() {
     }
     hideLoadingScreen()
   }, [])
-
-
-  ///////////// get dropdown values ///////////////
-  // const getBatches = async (selectedCourse) => {
-  //   showLoadingScreen()
-  //   try {
-  //     await setCourse(selectedCourse)
-  //     const response = await getBatch(selectedCourse)
-  //     setBatches(response)
-  //   } catch (err) {
-  //     alert('Cannot get Batches')
-  //   }
-  //   hideLoadingScreen()
-  // }
-
-  // const getSubjects = async (sc) => {
-  //   showLoadingScreen()
-  //   try {
-  //     await setBatch(sc)
-  //     const response = await getSubject(course, batch)
-  //     console.log("Subjects response ", response)
-  //     setSubjects(response)
-  //   } catch (err) {
-  //     alert('Cannot get Subjects')
-  //   }
-  //   hideLoadingScreen()
-  // }
-
-  // const getAssessesments = async (st) => {
-  //   showLoadingScreen()
-  //   try {
-  //     await setTerm(st)
-  //     console.log("Selected term ", st)
-  //     const response = await getAssessesment(st)
-
-  //     setAssessments(response)
-  //   } catch (err) {
-  //     alert('Cannot get Assessments!!')
-  //   }
-  //   hideLoadingScreen()
-  // }
-
-  // const getExams = async (ss) => {
-  //   showLoadingScreen()
-  //   try {
-  //     await setSubject(ss)
-  //     console.log("Selected exam ", ss)
-  //     const response = await getExam(course, batch, subject, term, assessment)
-  //     console.log('Exams ', response)
-  //     setExams(response)
-  //   } catch (err) {
-  //     alert('Cannot get your exams !!')
-  //   }
-  //   hideLoadingScreen()
-  // }
-
-  // ///////////// get dropdown values ends ///////////////
-
-  // const getList = async () => {
-  //   showLoadingScreen()
-  //   try {
-
-  //     let slug = `/cce/exam/scholasticMark?course=${course}&batch=${batch}&examname=${exam}&term=${term}&subject=${subject}&assessment=${assessment}`
-  //     let token = await read('token')
-  //     let res = await get(slug, token)
-  //     console.log("Marks list ", res)
-  //     res = res.students
-  //     let marksArray = []
-  //     res.map((data) => {
-  //       marksArray.push({
-  //         subjectName: data.subjectSub,
-  //         studentAddNum: data.studentAdmissionNumber,
-  //         mark: data.mark
-  //       })
-  //     })
-  //     setList(res)
-  //     setFetched(true)
-
-  //   } catch (err) {
-  //     alert('No Lists found!!')
-  //   }
-  //   hideLoadingScreen()
-  // }
 
 
   return (

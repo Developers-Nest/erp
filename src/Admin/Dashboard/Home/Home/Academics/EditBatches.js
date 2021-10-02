@@ -398,11 +398,8 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 12,
         overflow: 'hidden',
         alignSelf: 'center',
-        // justifyContent: 'center',
-        // alignContent:'center',
         margin: 0,
         padding: 0,
-
         width: '94%'
     },
 

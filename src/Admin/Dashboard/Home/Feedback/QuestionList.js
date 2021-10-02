@@ -4,22 +4,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
-  Pressable,
   TextInput,
   ScrollView,
 } from 'react-native';
-import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
 
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-
-import Evillcons from 'react-native-vector-icons/Feather';
-import Icon2 from 'react-native-vector-icons/Ionicons';
-import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 // helpers
 import get from '../../../../services/helpers/request/get';

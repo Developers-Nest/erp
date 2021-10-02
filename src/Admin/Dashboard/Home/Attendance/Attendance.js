@@ -466,13 +466,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    // shadowColor: '#333',
-    // shadowOffset: {
-    //   width: 3,
-    //   height: 1,
-    // },
-    // shadowOpacity: 0.2,
-    // elevation: 5,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -559,7 +552,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginTop: 5,
     borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
     minWidth: 171,
@@ -587,7 +579,6 @@ const styles = StyleSheet.create({
   text_input2: {
     paddingHorizontal: 10,
     borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
     minWidth: 171,
@@ -614,7 +605,6 @@ const styles = StyleSheet.create({
   Drop: {
     marginTop: 5,
     flexDirection: 'row',
-
     justifyContent: 'space-evenly',
   },
 
@@ -635,7 +625,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
-
     minWidth: 110,
     elevation: 3,
   },

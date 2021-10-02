@@ -361,13 +361,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    // shadowColor: '#333',
-    // shadowOffset: {
-    //   width: 3,
-    //   height: 1,
-    // },
-    // shadowOpacity: 0.2,
-    // elevation: 5,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -388,7 +381,6 @@ const styles = StyleSheet.create({
   details: {
     display: 'flex',
     flexDirection: 'column',
-
     borderBottomColor: '#333',
   },
   userinhostels: {
@@ -407,7 +399,6 @@ const styles = StyleSheet.create({
   },
   userstext: {
     fontSize: 16,
-
     fontWeight: '300',
   },
 
@@ -453,7 +444,6 @@ const styles = StyleSheet.create({
   text_input: {
     paddingHorizontal: 10,
     borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
     minWidth: 171,
@@ -481,7 +471,6 @@ const styles = StyleSheet.create({
   text_input2: {
     paddingHorizontal: 10,
     borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
     minWidth: 171,
@@ -508,7 +497,6 @@ const styles = StyleSheet.create({
   Drop: {
     marginTop: 5,
     flexDirection: 'row',
-
     justifyContent: 'space-evenly',
   },
 
@@ -529,7 +517,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
-
     minWidth: 110,
     elevation: 3,
   },
