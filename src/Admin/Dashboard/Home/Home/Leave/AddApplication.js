@@ -6,6 +6,7 @@ import {
   Text,
   Pressable,
   TextInput,
+  Alert,
 } from 'react-native';
 
 import {ScrollView} from 'react-native-gesture-handler';
@@ -154,6 +155,20 @@ const AddApplication = ({navigation}) => {
   let handleSubmit = async () => {
     setLoadingScreen();
     try {
+      if (
+        !des ||
+        !dur ||
+        !empcode ||
+        !empid ||
+        !date ||
+        !checkBoxValue ||
+        !reason
+      ) {
+        alert('All fields are required!');
+        hideLoadingScreen();
+        return;
+      }
+
       let slug = `/leavemanagement/application`;
       let token = await read('token');
       let data = {
