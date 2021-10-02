@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React from 'react';
 
 //stack navigation
 import Recorded from './LectureRecorded';
@@ -16,7 +16,6 @@ import {
 } from 'react-native';
 
 //icons
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 
@@ -87,7 +86,7 @@ export default function LecturesScreen({ navigation }) {
         </View>
 
         <ScrollView>
-          <View style={{ padding: 20 }} />
+          <View style={{ padding: 10 }} />
           <View style={styles.switchTabsView}>
             <TouchableOpacity
               style={{

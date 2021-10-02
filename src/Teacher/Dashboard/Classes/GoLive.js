@@ -272,6 +272,7 @@ export default function OnlineLecture({navigation}) {
                 onCancel={() => setShowDatePicker(!showdatePicker)}
               />
               <View style={{width: 40}}></View>
+
               {/* time picker */}
               <Button
                 icon="calendar"
@@ -344,6 +345,8 @@ export default function OnlineLecture({navigation}) {
     </View>
   );
 }
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

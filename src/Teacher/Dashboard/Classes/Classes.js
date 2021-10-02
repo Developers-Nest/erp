@@ -1,15 +1,4 @@
-import * as React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ImageBackground,
-  Button,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
+import React from 'react';
 
 import LecturesScreen from './LecturesScreen';
 import GoLiveScreen from './GoLive';
@@ -18,6 +7,9 @@ import LiveLectureScreen from './LectureLiveEdit';
 import {createStackNavigator} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
+
+
+// navigation for classes 
 
 export default function Classes() {
   return (

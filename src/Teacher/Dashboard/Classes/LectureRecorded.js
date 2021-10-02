@@ -99,7 +99,7 @@ const Recorded = () => {
   return (
     <View style={styles.container}>
       {/* open search */}
-      <View style={{ width: '90%', alignSelf: 'center', marginVertical: 20, alignItems: 'center' }}>
+      <View style={{ width: '90%', alignSelf: 'center', marginVertical: 10, alignItems: 'center' }}>
         <View
           style={{
             justifyContent: 'space-between',
@@ -169,10 +169,10 @@ const Recorded = () => {
       {loadingScreen}
       <View
         style={{
-          marginBottom: 10,
+          
           justifyContent: 'space-between',
           flexDirection: 'row',
-          marginHorizontal: 20,
+          marginHorizontal: 30,
         }}>
         <View style={{ marginTop: 10, width: 150, ...styles.card }}>
           <ModalSelector

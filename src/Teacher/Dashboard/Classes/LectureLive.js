@@ -121,8 +121,9 @@ export default function Live({ navigation }) {
 
   return (
     <View style={styles.container}>
+
       {/* open search */}
-      <View style={{ width: '90%', alignSelf: 'center', marginVertical: 20, alignItems: 'center' }}>
+      <View style={{ width: '90%', alignSelf: 'center', marginVertical: 10, alignItems: 'center' }}>
         <View
           style={{
             justifyContent: 'space-between',
@@ -130,7 +131,6 @@ export default function Live({ navigation }) {
             flexDirection: 'row',
             ...styles.shadow,
           }}>
-
 
           <TextInput
             style={{ width: '80%', ...styles.text_input }}
@@ -185,15 +185,14 @@ export default function Live({ navigation }) {
             </TouchableOpacity>
           )}
         </View>
-
       </View>
       {/* close search */}
+      
       <View
         style={{
-          marginBottom: 10,
           justifyContent: 'space-between',
           flexDirection: 'row',
-          marginHorizontal: 20,
+          marginHorizontal: 28,
         }}>
         <View style={{ marginTop: 10, width: 150, ...styles.card }}>
           <ModalSelector
@@ -291,6 +290,7 @@ export default function Live({ navigation }) {
                                 }}></Text>
                             </View>
                           </View>
+
                           {/* {new Date() < new Date(LiveClass.date) ? ( */}
                           <View style={styles.differentusers}>
                             <TouchableOpacity
@@ -321,7 +321,6 @@ export default function Live({ navigation }) {
                               onPress={() => { handleDelete(LiveClass._id) }}
                               style={{
                                 flexDirection: 'row',
-                                // justifyContent: 'space-between',
                                 marginBottom: 5
                               }}>
                               <MaterialIcon
@@ -424,15 +423,9 @@ export default function Live({ navigation }) {
                             />
                           </TouchableOpacity>
                           <TouchableOpacity
-                            //  style={{ flexDirection: 'row' }}
-                            //  onPress={() =>
-                            //    navigation.navigate('LiveEdit', {
-                            //      LiveClass: LiveClass,
-                            //    })
                             onPress={() => { handleDelete(LiveClass._id) }}
                             style={{
                               flexDirection: 'row',
-                              // justifyContent: 'space-between',
                               marginBottom: 5
                             }}>
                             <MaterialIcon
@@ -477,10 +470,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
@@ -490,7 +480,6 @@ const styles = StyleSheet.create({
   section: {
     flexDirection: 'column',
     backgroundColor: '#FFFFFF',
-
     paddingHorizontal: 13,
     shadowColor: '#000',
     shadowOffset: {
@@ -514,8 +503,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     flexDirection: 'column',
     paddingHorizontal: 20,
-
-
     borderBottomColor: '#333',
 
   },
@@ -571,7 +558,6 @@ const styles = StyleSheet.create({
   text_input: {
     paddingHorizontal: 20,
     borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
     minWidth: 171,
@@ -586,10 +572,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
@@ -607,7 +590,6 @@ const styles = StyleSheet.create({
   text_input: {
     paddingHorizontal: 20,
     borderRadius: 10,
-
     height: 50,
     fontSize: 16,
     minWidth: 171,
