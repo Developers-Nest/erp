@@ -28,6 +28,7 @@ import get from '../../../services/helpers/request/get';
 import read from '../../../services/localstorage/read';
 import getCourse from '../../../services/helpers/getList/getCourse';
 import getBatch from '../../../services/helpers/getList/getBatch';
+import deleteReq from '../../../services/helpers/request/delete'
 
 // redux
 import { useSelector } from 'react-redux';
@@ -47,6 +48,7 @@ export default function Live({ navigation }) {
   let institute = useSelector(state => state.institute);
 
   const [LiveClasses, setLiveClasses] = useState([]);
+  const [reload, setreload] = React.useState(true);
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
   const userInfo = useSelector(state => state.userInfo);
 
@@ -99,6 +101,23 @@ export default function Live({ navigation }) {
     }
     hideLoadingScreen();
   };
+
+  const handleDelete = async id => {
+    showLoadingScreen();
+    try {
+      let slug = `/liveclass/${id}`
+      let token = await read('token')
+      let res = await deleteReq(slug, token)
+      alert('Deleted..kindly reload the classes')
+      setreload(!reload);
+    } catch (err) {
+      alert('Cannot delete this live class!!');
+    }
+    hideLoadingScreen();
+  };
+
+
+
 
   return (
     <View style={styles.container}>
@@ -272,30 +291,45 @@ export default function Live({ navigation }) {
                                 }}></Text>
                             </View>
                           </View>
-                          {new Date() < new Date(LiveClass.date) ? (
-                            <TouchableOpacity
-                              style={{ flexDirection: 'row' }}
-                              onPress={() =>
-                                navigation.navigate('LiveEdit', {
-                                  LiveClass: LiveClass,
-                                })
-                              }>
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  color: '#211C5A',
-                                  fontFamily: 'Poppins-Medium',
-                                }}>
-                                Edit
-                              </Text>
-                              <Icon
-                                size={12}
-                                color="#211C5A"
-                                name="edit"
-                                style={{ paddingTop: 2, paddingRight: 10 }}
-                              />
-                            </TouchableOpacity>
-                          ) : null}
+                          {/* {new Date() < new Date(LiveClass.date) ? ( */}
+                          <TouchableOpacity
+                            style={{ flexDirection: 'row' }}
+                            onPress={() =>
+                              navigation.navigate('LiveEdit', {
+                                LiveClass: LiveClass,
+                              })
+                            }>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#211C5A',
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              Edit
+                            </Text>
+                            <Icon
+                              size={12}
+                              color="#211C5A"
+                              name="edit"
+                              style={{ paddingTop: 2, paddingRight: 10 }}
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+
+                            onPress={() => { handleDelete(LiveClass._id) }}
+                            style={{
+                              flexDirection: 'row',
+                              // justifyContent: 'space-between',
+                              marginBottom: 5
+                            }}>
+                            <MaterialIcon
+                              size={20}
+                              backgroundColor=" #211C5A"
+                              name="delete"
+                              color={institute ? institute.themeColor : '#211C5A'}
+                            />
+                          </TouchableOpacity>
+                          {/* // ) : null} */}
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -362,7 +396,8 @@ export default function Live({ navigation }) {
                               }}></Text>
                           </View>
                         </View>
-                        {new Date() < new Date(LiveClass.date) ? (
+                        {/* {new Date() < new Date(LiveClass.date) ? ( */}
+                        <View style={styles.differentusers}>
                           <TouchableOpacity
                             style={{ flexDirection: 'row' }}
                             onPress={() =>
@@ -385,7 +420,27 @@ export default function Live({ navigation }) {
                               style={{ paddingTop: 2, paddingRight: 10 }}
                             />
                           </TouchableOpacity>
-                        ) : null}
+                          <TouchableOpacity
+                            //  style={{ flexDirection: 'row' }}
+                            //  onPress={() =>
+                            //    navigation.navigate('LiveEdit', {
+                            //      LiveClass: LiveClass,
+                            //    })
+                            onPress={() => { handleDelete(LiveClass._id) }}
+                            style={{
+                              flexDirection: 'row',
+                              // justifyContent: 'space-between',
+                              marginBottom: 5
+                            }}>
+                            <MaterialIcon
+                              size={20}
+                              backgroundColor=" #211C5A"
+                              name="delete"
+                              color={institute ? institute.themeColor : '#211C5A'}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                        {/* ) : null} */}
                       </View>
                     </View>
                   </TouchableOpacity>
