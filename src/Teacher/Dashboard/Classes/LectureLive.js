@@ -99,6 +99,7 @@ export default function Live({ navigation }) {
     }
     hideLoadingScreen();
   };
+  
 
   return (
     <View style={styles.container}>
@@ -272,7 +273,7 @@ export default function Live({ navigation }) {
                                 }}></Text>
                             </View>
                           </View>
-                          {new Date() < new Date(LiveClass.date) ? (
+                          {/* {new Date() < new Date(LiveClass.date) ? ( */}
                             <TouchableOpacity
                               style={{ flexDirection: 'row' }}
                               onPress={() =>
@@ -295,7 +296,7 @@ export default function Live({ navigation }) {
                                 style={{ paddingTop: 2, paddingRight: 10 }}
                               />
                             </TouchableOpacity>
-                          ) : null}
+                          {/* // ) : null} */}
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -362,7 +363,7 @@ export default function Live({ navigation }) {
                               }}></Text>
                           </View>
                         </View>
-                        {new Date() < new Date(LiveClass.date) ? (
+                        {/* {new Date() < new Date(LiveClass.date) ? ( */}
                           <TouchableOpacity
                             style={{ flexDirection: 'row' }}
                             onPress={() =>
@@ -385,7 +386,7 @@ export default function Live({ navigation }) {
                               style={{ paddingTop: 2, paddingRight: 10 }}
                             />
                           </TouchableOpacity>
-                        ) : null}
+                        {/* ) : null} */}
                       </View>
                     </View>
                   </TouchableOpacity>
