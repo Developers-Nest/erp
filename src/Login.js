@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, TextInput} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, TextInput, Image } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {Button, Searchbar, IconButton} from 'react-native-paper';
+import { Button, Searchbar, IconButton, } from 'react-native-paper';
 
-import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 // helpers
 import post from '../src/services/helpers/request/post';
@@ -13,12 +13,12 @@ import write from '../src/services/localstorage/write';
 import read from '../src/services/localstorage/read';
 
 // redux
-import {USERINFO} from '../src/reducers/actionType';
+import { USERINFO } from '../src/reducers/actionType';
 
 // loading screen
 import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 
-export default function App({navigation}) {
+export default function App({ navigation }) {
   const [institutionCode, setInstitutionCode] = useState(null);
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
@@ -35,7 +35,7 @@ export default function App({navigation}) {
       let t = await read('token');
       let r = await read('role');
 
-      if(t && r){
+      if (t && r) {
         // get user information
         const response = await get('/user', t);
 
@@ -70,7 +70,7 @@ export default function App({navigation}) {
 
       // post request
       let response = await post(slug, data);
-      if(!response || !response.userType){
+      if (!response || !response.userType) {
         throw new Error('Cannot get User Account!!')
       }
       let role = response.userType.name;
@@ -97,7 +97,7 @@ export default function App({navigation}) {
       }
     } catch (err) {
       console.log(err);
-      alert('Cannot Login '+ err)
+      alert('Cannot Login ' + err)
     }
     hideLoadingScreen();
   };
@@ -108,8 +108,11 @@ export default function App({navigation}) {
       <LinearGradient
         colors={['rgba(0, 73, 159, 1)', 'rgba(176, 67, 5, 0.84)']}
         style={styles.linearGradient}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}>
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}>
+        <View style={styles.logoStyle}>
+          <Image source={require('../assets/bootsplash_logo.png')} />
+        </View>
         <View style={styles.textinput_search}>
           <TextInput
             style={styles.text_input1}
@@ -141,11 +144,12 @@ export default function App({navigation}) {
           placeholderTextColor="grey"
           secureTextEntry={true}
           onChangeText={password => setPassword(password)}
+          onSubmitEditing={handleSubmit}
         />
         <Button
           style={styles.button}
           // onPress={() => navigation.navigate('Teacher Dashboard')}
-          labelStyle={{color: 'white'}}
+          labelStyle={{ color: 'white' }}
           uppercase={false}
           onPress={handleSubmit}
           mode="contained">
@@ -167,8 +171,14 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 40,
   },
+  logoStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+    paddingBottom: 60,
+  },
   text_input: {
-    padding: 10,
+    padding: 5,
     paddingHorizontal: 20,
     marginVertical: 10,
     borderRadius: 10,
@@ -191,7 +201,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
-  search_icon: {padding: 0, margin: 0, alignSelf: 'flex-end'},
+  search_icon: { padding: 0, margin: 0, alignSelf: 'flex-end' },
   button: {
     backgroundColor: 'rgba(80, 80, 105, 1)',
     alignSelf: 'flex-end',
