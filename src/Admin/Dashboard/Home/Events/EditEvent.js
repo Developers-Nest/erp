@@ -537,45 +537,6 @@ export default function AddEvents({route, navigation}) {
               <Text style={{fontFamily: 'Poppins-Regular', color: '#58636D'}}>
                 Batch
               </Text>
-              {/* <ScrollView
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: 10,
-                  shadowColor: 'black',
-                  shadowOpacity: 5,
-                  elevation: 3,
-                  borderWidth: 0,
-                  padding: 10,
-                  width: 150,
-                }}>
-                {batches &&
-                  batches.map(batch => (
-                    <View
-                      style={{
-                        justifyContent: 'space-between',
-                        flexDirection: 'row',
-                        backgroundColor: 'white',
-                      }}
-                      key={batch.key}>
-                      <Text
-                        style={{
-                          color: '#58636D',
-                          fontFamily: 'Poppins-Regular',
-                          paddingVertical: 10,
-                        }}>
-                        {''} {batch.label}
-                      </Text>
-                      <CheckBox
-                        containerStyle={{padding: 5}}
-                        checked={checkBoxValueBatch[batch.key]}
-                        onPress={() => toggleCheckBoxBatch(batch.key)}
-                        checkedColor={
-                          institute ? institute.themeColor : 'black'
-                        }
-                      />
-                    </View>
-                  ))}
-              </ScrollView> */}
               <ModalSelector
                 data={batches}
                 initValue={route.params.batchname || 'select batch'}
@@ -628,45 +589,6 @@ export default function AddEvents({route, navigation}) {
                 initValueTextStyle={styles.SelectedValue}
                 selectTextStyle={styles.SelectedValue}
               />
-              {/* <ScrollView
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: 10,
-                  shadowColor: 'black',
-                  shadowOpacity: 5,
-                  elevation: 3,
-                  borderWidth: 0,
-                  padding: 10,
-                  width: 150,
-                }}>
-                {departments &&
-                  departments.map(dept => (
-                    <View
-                      style={{
-                        justifyContent: 'space-between',
-                        flexDirection: 'row',
-                        backgroundColor: 'white',
-                      }}
-                      key={dept._id}>
-                      <Text
-                        style={{
-                          color: '#58636D',
-                          fontFamily: 'Poppins-Regular',
-                          paddingVertical: 10,
-                        }}>
-                        {''} {dept.name}
-                      </Text>
-                      <CheckBox
-                        containerStyle={{padding: 5}}
-                        checked={checkBoxValueDept[dept._id]}
-                        onPress={() => toggleCheckBoxDept(dept._id)}
-                        checkedColor={
-                          institute ? institute.themeColor : 'black'
-                        }
-                      />
-                    </View>
-                  ))}
-              </ScrollView> */}
             </View>
           </View>
         ) : null}
@@ -833,7 +755,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 5,
     elevation: 3,
     borderWidth: 0,
-    // flex:1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

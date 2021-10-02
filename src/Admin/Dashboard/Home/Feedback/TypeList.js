@@ -4,29 +4,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
-  Pressable,
   TextInput,
 } from 'react-native';
 
-import {Button} from 'react-native-paper';
-
 import {ScrollView} from 'react-native-gesture-handler';
 
-//selector
-import ModalSelector from 'react-native-modal-selector';
 
 //icons
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Feather from 'react-native-vector-icons/Feather';
-import Icon2 from 'react-native-vector-icons/Ionicons';
-import Evillcons from 'react-native-vector-icons/Feather';
-import check from 'react-native-vector-icons/Ionicons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-//date picker
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 //redux
 import {useSelector} from 'react-redux';

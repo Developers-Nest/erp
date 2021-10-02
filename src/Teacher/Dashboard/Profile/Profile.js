@@ -53,6 +53,23 @@ export default function Profile({navigation}) {
     setUMobile(userInfo.mobile);
   }, []);
 
+
+
+  const validate = () => {
+
+    console.log(uemail);
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(uemail) === true) {
+      console.log("Email is Correct");
+      setUemail(uemail)
+      updateProfile()
+    }
+    else {
+      console.log("Email is Incorrect");
+      return alert("Invalid Email Format");
+    }
+  }
+
   let updateProfile = async () => {
     setLoadingScreen();
     setModalVisible(!modalVisible);
@@ -185,6 +202,7 @@ export default function Profile({navigation}) {
                     value={upaddress}
                     style={styles.textInput}
                     onChangeText={value => setUpAddress(value)}
+                    onSubmitEditing={validate}
                   />
                 </ScrollView>
                 <View
@@ -202,7 +220,7 @@ export default function Profile({navigation}) {
                   <Button
                     mode="contained"
                     color={institute ? institute.themeColor : 'blue'}
-                    onPress={updateProfile}>
+                    onPress={validate}>
                     Save
                   </Button>
                 </View>

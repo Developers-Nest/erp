@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-import {Button, Card} from 'react-native-paper';
+import { Button, Card } from 'react-native-paper';
 
 //selector
 import ModalSelector from 'react-native-modal-selector';
@@ -21,15 +21,16 @@ import patch from '../../../services/helpers/request/patch';
 import read from '../../../services/localstorage/read';
 import getBatch from '../../../services/helpers/getList/getBatch';
 import getCourse from '../../../services/helpers/getList/getCourse';
+import getSubject from '../../../services/helpers/getList/getSubject';
 import LoadingScreen from '../../../components/LoadingScreen/LoadingScreen';
 
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-export default function OnlineLecture({navigation, route}) {
+export default function LiveEdit({ navigation, route }) {
   //theme
   let institute = useSelector(state => state.institute);
 
@@ -68,7 +69,7 @@ export default function OnlineLecture({navigation, route}) {
   useEffect(async () => {
     showLoadingScreen();
     try {
-      const {LiveClass} = route.params;
+      const { LiveClass } = route.params;
       console.log(LiveClass.course);
       setCourse(LiveClass.course);
       setBatch(LiveClass.batch);
@@ -89,22 +90,6 @@ export default function OnlineLecture({navigation, route}) {
 
       const response = await getCourse();
       setCourses(response);
-
-      // for (let i = 0; i < response.length; i++) {
-      //   if (response[i].key == course) {
-      //     setCourseName(response[i].label);
-      //     console.log('course:', response[i].label);
-      //     break;
-      //   }
-      // }
-      // const response1 = await getBatch(LiveClass.course);
-      // for (let i = 0; i < response1.length; i++) {
-      //   if (response1[i].key == course) {
-      //     setBatchName(response1[i].label);
-      //     console.log('batch:', response1[i].label);
-      //     break;
-      //   }
-      // }
 
       getBatches(LiveClass.course);
     } catch (err) {
@@ -306,7 +291,7 @@ export default function OnlineLecture({navigation, route}) {
                 icon="calendar"
                 mode="contained"
                 color="white"
-                style={{margin: 2}}
+                style={{ margin: 2 }}
                 value={date}
                 onPress={() => setShowDatePicker(true)}>
                 {date ? date.slice(0, 10) : 'DATE'}
@@ -318,13 +303,13 @@ export default function OnlineLecture({navigation, route}) {
                 onConfirm={handleSubmit}
                 onCancel={() => setShowDatePicker(!showdatePicker)}
               />
-              <View style={{width: 40}}></View>
+              <View style={{ width: 40 }}></View>
               {/* time picker */}
               <Button
                 icon="calendar"
                 mode="contained"
                 color="white"
-                style={{margin: 2}}
+                style={{ margin: 2 }}
                 onPress={() => setShowTimePicker(true)}>
                 {time ? time.slice(15, 21) : 'TIME'}
               </Button>
@@ -350,7 +335,7 @@ export default function OnlineLecture({navigation, route}) {
         </Text>
         <View style={styles.Week}>
           {Object.keys(recDays).map(day => (
-            <View style={{marginTop: 15}} key={day}>
+            <View style={{ marginTop: 15 }} key={day}>
               <TouchableOpacity
                 onPress={() => {
                   setRecDays(prevRecDays => {
@@ -370,13 +355,13 @@ export default function OnlineLecture({navigation, route}) {
                     width: 90,
                     height: 40,
                   }}>
-                  <Text style={{color: 'white'}}>{day}</Text>
+                  <Text style={{ color: 'white' }}>{day}</Text>
                 </View>
               </TouchableOpacity>
             </View>
           ))}
         </View>
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <Button
             mode="contained"
             style={{
@@ -402,7 +387,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
@@ -431,7 +416,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 20,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 1,
     shadowRadius: 12,
     elevation: 5,

@@ -10,7 +10,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useSelector } from 'react-redux';
 
 // helpers
-import patch from '../../../../../services/helpers/request/patch'
 import deleteReq from '../../../../../services/helpers/request/delete'
 import read from '../../../../../services/localstorage/read'
 import getCourse from '../../../../../services/helpers/getList/getCourse'
@@ -66,18 +65,6 @@ const EditAllocationTeacher = ({ route, navigation }) => {
         try{
             let slug = `/classteacher/${teacher._id}`
             let token = await read('token')
-            // let data = {
-            //     batchName: batchName,
-            //     endDate: date,
-            //     maximumStudents: 600,
-            //     startDate: startDate
-            // }
-            // let res = await patch(slug, data, token)
-            // if(res.error){
-            //     alert(res.error)
-            // } else if(res._id){
-            //     alert('Updated')
-            // }
             alert('Updated!!')
         } catch(err){
             alert('Cannot Update !!'+err)
@@ -283,8 +270,6 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 12,
         borderTopLeftRadius: 12,
         overflow: 'hidden',
-        // justifyContent: 'center',
-        // alignContent:'center',
         margin: 0,
         padding: 0,
         alignSelf: 'center',
@@ -324,8 +309,5 @@ const styles = StyleSheet.create({
     },
 
 });
-
-
-
 
 export default EditAllocationTeacher;

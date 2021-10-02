@@ -12,7 +12,6 @@ import ModalSelector from 'react-native-modal-selector';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import get from '../../../../services/helpers/request/get';
 import post from '../../../../services/helpers/request/post';
 import read from '../../../../services/localstorage/read';
 import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';

@@ -363,7 +363,6 @@ const styles = StyleSheet.create({
   },
   maincontainer: {
     paddingTop: 10,
-    
     flex: 1,
     backgroundColor: 'rgba(249, 249, 249, 1)',
   },
@@ -379,7 +378,6 @@ const styles = StyleSheet.create({
   text_input: {
     paddingHorizontal: 20,
     borderRadius: 10,
-    // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
     minWidth: 171,

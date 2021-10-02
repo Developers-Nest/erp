@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {
     StyleSheet,
     Text,
-    TextInput,
     View,
     ScrollView,
     TouchableOpacity,
@@ -20,7 +17,6 @@ import get from '../../../../../services/helpers/request/get';
 import read from '../../../../../services/localstorage/read';
 //redux
 import { useSelector } from 'react-redux';
-import { Searchbar } from 'react-native-paper';
 
 //useFocusEffect
 import { useFocusEffect } from '@react-navigation/native';
@@ -113,34 +109,6 @@ export default function ClassTeacherAllocation({ navigation }) {
                     <View style={{ alignItems: 'center', width: '90%' }}>
                         {/* open search */}
 
-                        {/* <View
-                            style={{
-                                marginTop: 10,
-                                marginLeft: 5,
-                                justifyContent: 'space-between',
-                                width: '95%',
-                                flexDirection: 'row',
-                                ...styles.shadow,
-                            }}>
-                            <TextInput
-                                style={{ width: '80%', ...styles.text_input }}
-                                placeholder="Enter teacher's name"
-                                placeholderTextColor="grey"
-                            />
-                            <TouchableOpacity
-                                style={{
-                                    alignSelf: 'center',
-                                }}>
-                                <FontAwesome5
-                                    name="search"
-                                    style={{
-                                        alignSelf: 'center',
-                                        fontSize: 21,
-                                        color: '#505069',
-                                    }}
-                                />
-                            </TouchableOpacity>
-                        </View> */}
                     </View>
                 </View>
 
@@ -362,6 +330,5 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingHorizontal: 10,
         borderBottomColor: '#333',
-
     },
 });
