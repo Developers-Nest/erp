@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -15,7 +15,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import ModalSelector from 'react-native-modal-selector';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 //helpers
 import getMonth from '../../../../services/helpers/getList/getMonth';
@@ -24,7 +24,7 @@ import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 import read from '../../../../services/localstorage/read';
 import get from '../../../../services/helpers/request/get';
 
-export default function Attendance({navigation}) {
+export default function Attendance({ navigation }) {
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -77,7 +77,7 @@ export default function Attendance({navigation}) {
     hideLoadingScreen();
   }, [yearSelected, monthSelected]);
 
-  let fetchAttendance = async type => {};
+  let fetchAttendance = async type => { };
   return (
     <View
       style={{
@@ -93,7 +93,7 @@ export default function Attendance({navigation}) {
         }}>
         <TouchableOpacity
           onPress={() => {
-            navigation.goBack();
+            navigation.navigate("Home");
           }}>
           <AntDesign
             size={24}
@@ -128,7 +128,7 @@ export default function Attendance({navigation}) {
           flexDirection: 'row',
           margin: 20,
         }}>
-        <View style={{marginTop: 10, width: 150, ...styles.card}}>
+        <View style={{ marginTop: 10, width: 150, ...styles.card }}>
           <ModalSelector
             data={years}
             onChange={option => {
@@ -140,7 +140,7 @@ export default function Attendance({navigation}) {
           />
         </View>
 
-        <View style={{marginTop: 10, width: 150, ...styles.card}}>
+        <View style={{ marginTop: 10, width: 150, ...styles.card }}>
           <ModalSelector
             data={months}
             onChange={option => {
@@ -156,9 +156,9 @@ export default function Attendance({navigation}) {
       <ScrollView>
         {days.length == 0 ? (
           yearSelected == null || monthSelected == null ? (
-            <Text style={{alignSelf: 'center'}}>{'Select date and month'}</Text>
+            <Text style={{ alignSelf: 'center' }}>{'Select date and month'}</Text>
           ) : (
-            <Text style={{alignSelf: 'center'}}>
+            <Text style={{ alignSelf: 'center' }}>
               {'No attendance listed this month'}
             </Text>
           )
@@ -168,19 +168,19 @@ export default function Attendance({navigation}) {
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
                   <TouchableOpacity style={styles.differentusers}>
-                    <Text style={{fontSize: 22, color: '#211C5A'}}>
+                    <Text style={{ fontSize: 22, color: '#211C5A' }}>
                       {'Day: '}
                       {day && day.name}
                     </Text>
 
                     <Text
-                      style={{fontSize: 22, paddingTop: 22, color: '#000000'}}>
+                      style={{ fontSize: 22, paddingTop: 22, color: '#000000' }}>
                       {day.present === 'present' ? 'Present' : 'Absent'}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.differentusers}>
                     <Text
-                      style={{fontSize: 14, marginLeft: 5, color: '#6A6A80'}}>
+                      style={{ fontSize: 14, marginLeft: 5, color: '#6A6A80' }}>
                       {'Admission Number: '}
                       {admNo}
                     </Text>
@@ -195,7 +195,7 @@ export default function Attendance({navigation}) {
   );
 }
 
-const AttendanceScreen2 = ({navigation}) => {};
+const AttendanceScreen2 = ({ navigation }) => { };
 
 const styles = StyleSheet.create({
   container: {
@@ -211,14 +211,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#fff',
-    shadowColor: '#333',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.2,
-    elevation: 2,
-    marginTop: 10,
+    shadowOpacity: 1,
+    elevation: 5,
+    marginVertical: 10,
     borderRadius: 12,
     paddingLeft: 10,
     paddingRight: 10,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     elevation: 5,
