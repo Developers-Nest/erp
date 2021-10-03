@@ -1,7 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 
-import {Text,TextInput,Appbar,Card,Button,Title,Paragraph} from 'react-native-paper';
+import {TextInput,Appbar,Card,Title,Paragraph} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector'
 import { useState } from 'react';
 

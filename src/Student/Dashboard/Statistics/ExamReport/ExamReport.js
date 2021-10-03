@@ -70,35 +70,6 @@ export default function ExamReport({navigation}) {
         </View>
       </View>
       <View style={{padding: 15}}>
-        {/* <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          style={styles.card}
-          labelStyle={{
-            fontSize: 20,
-            paddingHorizontal: 15,
-
-            fontFamily: 'Poppins-Regular',
-            fontStyle: 'normal',
-            lineHeight: 27,
-            color: '#211C5A',
-          }}
-          arrowStyle={{marginRight: 10}}
-          placeholder="Choose Exam"
-          placeholderStyle={{
-            fontSize: 20,
-            paddingHorizontal: 15,
-
-            fontFamily: 'Poppins-Regular',
-            fontStyle: 'normal',
-            lineHeight: 27,
-            color: '#211C5A',
-          }}
-        /> */}
         <ModalSelector
           data={items}
           initValue="Final Exam"
@@ -141,40 +112,7 @@ const ExamReport1 = ({navigation}) => {
 const ExamReport2 = () => {
   return (
     <View>
-      {/* <View
-        style={{
-          marginTop: 10,
-          justifyContent: 'space-between',
-          flexDirection: 'row',
-          ...styles.card,
-        }}>
-        <FontAwesome5
-          name="search"
-          style={{
-            alignSelf: 'center',
-            fontSize: 15,
-            color: 'black',
-          }}
-        />
-        <TextInput
-          style={{width: '80%', ...styles.text_input}}
-          placeholder="Enter student’s name here"
-        />
-        <TouchableOpacity
-          style={{
-            alignSelf: 'center',
-          }}>
-          <FontAwesome5
-            name="filter"
-            style={{
-              alignSelf: 'center',
-              fontSize: 21,
-              color: 'black',
-            }}
-          />
-        </TouchableOpacity>
-      </View> */}
-      <ScrollView>
+       <ScrollView>
         <View style={{marginTop: 10, ...styles.card}}>
           <View style={styles.card_top}>
             <View>

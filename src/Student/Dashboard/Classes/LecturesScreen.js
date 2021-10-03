@@ -47,6 +47,7 @@ export default function LecturesScreen({navigation}) {
             backgroundColor: institute ? institute.themeColor : 'black',
             ...styles.header,
           }}>
+           {/* Appbar  */}
           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <AntDesign
               size={24}

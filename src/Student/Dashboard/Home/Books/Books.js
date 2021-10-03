@@ -43,6 +43,7 @@ export default function BooksStudent({ navigation }) {
   const [searchText, setSearchText] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
 
+  // loading screen 
   useEffect(async () => {
     setLoadingScreen()
     try {
@@ -66,7 +67,7 @@ export default function BooksStudent({ navigation }) {
     }
     hideLoadingScreen()
   }, [])
-
+// search bar query
   function Cleared() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -200,7 +201,7 @@ export default function BooksStudent({ navigation }) {
       </View>
     );
   }
-
+// Due selection menu
   function Due() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -511,7 +512,7 @@ export default function BooksStudent({ navigation }) {
 
 
 
-
+// cleared slection menu
             >Cleared</Text>
           </TouchableOpacity>
         </View>

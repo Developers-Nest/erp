@@ -13,10 +13,6 @@ import {
 export default function EditNotes() {
   return (
     <View style={{backgroundColor: '#E5E5E5', height: '100%'}}>
-      {/* <Appbar>
-        <Appbar.BackAction onPress={() => {}} />
-        <Appbar.Content title="Edit Notes" />
-      </Appbar> */}
       <View
         style={{
           padding: 10,

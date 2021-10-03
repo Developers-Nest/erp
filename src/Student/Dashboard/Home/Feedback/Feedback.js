@@ -70,7 +70,7 @@ export default function Feedback({ navigation }) {
 
     hideLoadingScreen();
   }, []);
-
+// Type selector modal selector
   let getQuestions = async type => {
     setLoadingScreen();
     setType(type);
