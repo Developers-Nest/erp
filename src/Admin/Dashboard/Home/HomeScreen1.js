@@ -1,39 +1,20 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
-  TextInput,
-  Alert,
+  ScrollView
 } from 'react-native';
 
-import Iconc from 'react-native-vector-icons/Foundation';
+
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import IconBio1 from 'react-native-vector-icons/FontAwesome5';
-import IconBio2 from 'react-native-vector-icons/FontAwesome5';
+import {Text} from 'react-native-paper';
 
-import * as Animatable from 'react-native-animatable';
-import {Text, Searchbar, Card, Button, Drawer} from 'react-native-paper';
-import {
-  createDrawerNavigator,
-  useIsDrawerOpen,
-  DrawerContentScrollView,
-  DrawerItem,
-} from '@react-navigation/drawer';
-import {createStackNavigator} from '@react-navigation/stack';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-import Collapsible from 'react-native-collapsible';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 import {useNavigation} from '@react-navigation/native';
 const HomeScreen1 = () => {
@@ -41,7 +22,7 @@ const HomeScreen1 = () => {
   return (
     <View style={styles.container}>
       <View style={{height: 20}}></View>
-      <View style={{marginHorizontal: 30, ...styles.shadow}}>
+      {/* <View style={{marginHorizontal: 30, ...styles.shadow}}>
         <View style={styles.search}>
           <TextInput
             style={{...styles.search_input}}
@@ -63,7 +44,7 @@ const HomeScreen1 = () => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
       <ScrollView style={styles.main}>
         <View style={{height: 30}}></View>
 

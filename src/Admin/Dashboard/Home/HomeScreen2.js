@@ -4,19 +4,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  TextInput,
 } from 'react-native';
 
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Text, Button, } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 
 //icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Collapsible from 'react-native-collapsible';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 // redux
 import { useSelector } from 'react-redux';
@@ -77,7 +75,7 @@ const HomeScreen2 = () => {
     <ScrollView style={styles.container}>
       {loadingScreen}
       <View style={{ height: 20 }}></View>
-      <View style={{ marginHorizontal: 30, ...styles.shadow }}>
+      {/* <View style={{ marginHorizontal: 30, ...styles.shadow }}>
         <View style={styles.search}>
           <TextInput
             style={{ ...styles.search_input }}
@@ -99,7 +97,7 @@ const HomeScreen2 = () => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
       <ScrollView style={styles.main}>
         <View style={{ height: 15 }} />
 
