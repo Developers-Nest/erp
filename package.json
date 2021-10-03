@@ -58,7 +58,7 @@
     "react-native-vector-icons": "^8.1.0",
     "react-native-webview": "^11.6.5",
     "react-redux": "^7.2.4",
-    "reanimated-bottom-sheet": "^1.0.0-alpha.22",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.20",
     "redux": "^4.1.0",
     "rn-fetch-blob": "^0.12.0",
     "socket.io-client": "^4.1.3"

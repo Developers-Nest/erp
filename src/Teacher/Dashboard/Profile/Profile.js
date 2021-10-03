@@ -1,18 +1,15 @@
-import React, {useState, useEffect,createRef} from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import {
   StyleSheet,
   View,
   Text,
   ScrollView,
-  Image,
   TouchableOpacity,
-  Alert,
   Modal,
-  Pressable,
   TextInput,
   ImageBackground
 } from 'react-native';
-import {Avatar, Button} from 'react-native-paper';
+import { Avatar, Button } from 'react-native-paper';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -21,19 +18,18 @@ import ImagePicker from 'react-native-image-crop-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
+
 
 // redux
-import {useSelector, useDispatch} from 'react-redux';
-import {USERINFO} from '../../../reducers/actionType';
+import { useSelector, useDispatch } from 'react-redux';
+import { USERINFO } from '../../../reducers/actionType';
 
 // helpers
 import patch from '../../../services/helpers/request/patch';
 import read from '../../../services/localstorage/read';
 import LoaderHook from '../../../components/LoadingScreen/LoadingScreen';
 
-export default function Profile({navigation}) {
+export default function Profile({ navigation }) {
   const userInfo = useSelector(state => state.userInfo);
 
   //theming
@@ -61,7 +57,14 @@ export default function Profile({navigation}) {
     setUMobile(userInfo.mobile);
   }, []);
 
+
+  const bs = createRef(null);
+  const fall = new Animated.Value(1);
+
+
+
   const takePhotoFromCamera = () => {
+
     ImagePicker.openCamera({
       compressImageMaxWidth: 300,
       compressImageMaxHeight: 300,
@@ -70,8 +73,13 @@ export default function Profile({navigation}) {
     }).then(image => {
       console.log(image);
       setImage(image.path);
-      bs.current.snapTo(1);
-    });
+      bs.current.snapTo(1)
+    })
+    .catch((err)=>{
+      console.log(err)
+      alert("cannot update profile picture")
+  
+    })
   }
 
   const choosePhotoFromLibrary = () => {
@@ -83,13 +91,16 @@ export default function Profile({navigation}) {
     }).then(image => {
       console.log(image);
       setImage(image.path);
-      bs.current.snapTo(1);
-    });
+      bs.current.snapTo(1)
+      
+    }).catch((err)=>{
+      console.log("openCamera catch" + err.toString())
+    })
   }
 
   const renderInner = () => (
     <View style={styles.panel}>
-      <View style={{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center' }}>
         <Text style={styles.panelTitle}>Upload Photo</Text>
         <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
       </View>
@@ -115,8 +126,7 @@ export default function Profile({navigation}) {
     </View>
   );
 
- const bs = createRef();
-  const fall = new Animated.Value(1);
+ 
 
 
   const validate = () => {
@@ -217,231 +227,232 @@ export default function Profile({navigation}) {
         enabledGestureInteraction={true}
       />
       <ScrollView>
-      <Animated.View style={{margin: 20,
-        opacity: Animated.add(0.9, Animated.multiply(fall, 1.0)),
-    }}>
-        <View
-          style={{
-            alignItems:'center'
-          }}>
+        <Animated.View style={{
+          margin: 20,
+          opacity: Animated.add(0.9, Animated.multiply(fall, 1.0)),
+        }}>
+          <View
+            style={{
+              alignItems: 'center'
+            }}>
             <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
-            <View
-              style={{
-                height: 100,
-                width: 100,
-                borderRadius: 15,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <ImageBackground
-                source={{
-                  uri: image,
-                }}
-                style={{height: 120, width: 120}}
-                imageStyle={{borderRadius: 15}}>
-                <View
-                  style={{
-                    marginTop:90,
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Icon
-                    name="camera"
-                    size={25}
-                    color="#fff"
+              <View
+                style={{
+                  height: 100,
+                  width: 100,
+                  borderRadius: 15,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <ImageBackground
+                  source={{
+                    uri: image,
+                  }}
+                  style={{ height: 120, width: 120 }}
+                  imageStyle={{ borderRadius: 15 }}>
+                  <View
                     style={{
-                      opacity: 0.8,
-                      alignItems: 'center',
+                      marginTop: 90,
+                      flex: 1,
                       justifyContent: 'center',
-                      borderWidth: 1,
-                      borderColor: '#fff',
-                      borderRadius: 10,
-                    }}
-                  />
-                </View>
-              </ImageBackground>
-            </View>
-          </TouchableOpacity>
+                      alignItems: 'center',
+                    }}>
+                    <Icon
+                      name="camera"
+                      size={25}
+                      color="#fff"
+                      style={{
+                        opacity: 0.8,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderWidth: 1,
+                        borderColor: '#fff',
+                        borderRadius: 10,
+                      }}
+                    />
+                  </View>
+                </ImageBackground>
+              </View>
+            </TouchableOpacity>
 
-          {/* {userInfo.url ? (
+            {/* {userInfo.url ? (
             <Image source={{uri: userInfo.url}} style={styles.tinyLogo} />
           ) : (
             <Avatar.Text size={100} label={userInfo.firstName[0]} />
           )} */}
-        </View>
-        <View style={styles.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={{marginTop: 20}}>Enter Email</Text>
-                <ScrollView>
-                  <TextInput
-                    placeholder={userInfo.email}
-                    value={uemail}
-                    style={styles.textInput}
-                    onChangeText={value => setUemail(value)}
-                  />
-                  <Text style={{marginTop: 20}}>First Name</Text>
-                  <TextInput
-                    placeholder={userInfo.firstName}
-                    value={ufirstName}
-                    style={styles.textInput}
-                    onChangeText={value => setUfirstName(value)}
-                  />
-                  <Text style={{marginTop: 20}}>Last Name</Text>
-                  <TextInput
-                    placeholder={userInfo.lastName}
-                    value={ulastName}
-                    style={styles.textInput}
-                    onChangeText={value => setULastName(value)}
-                  />
-                  <Text style={{marginTop: 20}}>Mobile</Text>
-                  <TextInput
-                    placeholder={userInfo.mobile}
-                    value={umobile}
-                    style={styles.textInput}
-                    keyboardType="numeric"
-                    maxLength={10}
-                    onChangeText={value => setUMobile(value)}
-                  />
-                  <Text style={{marginTop: 20}}>Present Address</Text>
-                  <TextInput
-                    placeholder={userInfo.presentAddress}
-                    value={upaddress}
-                    style={styles.textInput}
-                    onChangeText={value => setUpAddress(value)}
-                    onSubmitEditing={validate}
-                  />
-                </ScrollView>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    margin: 20,
-                  }}>
-                  <Button
-                    mode="outlined"
-                    color={institute ? institute.themeColor : 'red'}
-                    onPress={() => setModalVisible(!modalVisible)}>
-                    Cancel
-                  </Button>
-                  <Button
-                    mode="contained"
-                    color={institute ? institute.themeColor : 'blue'}
-                    onPress={validate}>
-                    Save
-                  </Button>
+          </View>
+          <View style={styles.centeredView}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}>
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text style={{ marginTop: 20 }}>Enter Email</Text>
+                  <ScrollView>
+                    <TextInput
+                      placeholder={userInfo.email}
+                      value={uemail}
+                      style={styles.textInput}
+                      onChangeText={value => setUemail(value)}
+                    />
+                    <Text style={{ marginTop: 20 }}>First Name</Text>
+                    <TextInput
+                      placeholder={userInfo.firstName}
+                      value={ufirstName}
+                      style={styles.textInput}
+                      onChangeText={value => setUfirstName(value)}
+                    />
+                    <Text style={{ marginTop: 20 }}>Last Name</Text>
+                    <TextInput
+                      placeholder={userInfo.lastName}
+                      value={ulastName}
+                      style={styles.textInput}
+                      onChangeText={value => setULastName(value)}
+                    />
+                    <Text style={{ marginTop: 20 }}>Mobile</Text>
+                    <TextInput
+                      placeholder={userInfo.mobile}
+                      value={umobile}
+                      style={styles.textInput}
+                      keyboardType="numeric"
+                      maxLength={10}
+                      onChangeText={value => setUMobile(value)}
+                    />
+                    <Text style={{ marginTop: 20 }}>Present Address</Text>
+                    <TextInput
+                      placeholder={userInfo.presentAddress}
+                      value={upaddress}
+                      style={styles.textInput}
+                      onChangeText={value => setUpAddress(value)}
+                      onSubmitEditing={validate}
+                    />
+                  </ScrollView>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      margin: 20,
+                    }}>
+                    <Button
+                      mode="outlined"
+                      color={institute ? institute.themeColor : 'red'}
+                      onPress={() => setModalVisible(!modalVisible)}>
+                      Cancel
+                    </Button>
+                    <Button
+                      mode="contained"
+                      color={institute ? institute.themeColor : 'blue'}
+                      onPress={validate}>
+                      Save
+                    </Button>
+                  </View>
                 </View>
               </View>
-            </View>
-          </Modal>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            marginEnd: 30,
-          }}>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Text>
-              Edit Profile &nbsp;
+            </Modal>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              marginEnd: 30,
+            }}>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Text>
+                Edit Profile &nbsp;
+                <FontAwesome5
+                  name="edit"
+                  size={20}
+                  color={
+                    institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)'
+                  }
+                />
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.textFields}>
+            <View style={styles.input}>
               <FontAwesome5
-                name="edit"
-                size={20}
-                color={
-                  institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)'
-                }
+                name="user-alt"
+                style={{
+                  color: institute ? institute.themeColor : 'black',
+                  fontSize: 22,
+                  marginRight: 10,
+                }}
               />
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Text style={styles.inputField}>Name: </Text>
+              <Text style={styles.inputValue}>{ufirstName}</Text>
+            </View>
 
-        <View style={styles.textFields}>
-          <View style={styles.input}>
-            <FontAwesome5
-              name="user-alt"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Name: </Text>
-            <Text style={styles.inputValue}>{ufirstName}</Text>
-          </View>
+            <View style={styles.input}>
+              <FontAwesome5
+                name="building"
+                style={{
+                  color: institute ? institute.themeColor : 'black',
+                  fontSize: 22,
+                  marginRight: 10,
+                }}
+              />
+              <Text style={styles.inputField}>Department: </Text>
+              <Text style={styles.inputValue}>{userInfo.departmentName}</Text>
+            </View>
 
-          <View style={styles.input}>
-            <FontAwesome5
-              name="building"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Department: </Text>
-            <Text style={styles.inputValue}>{userInfo.departmentName}</Text>
-          </View>
+            <View style={styles.input}>
+              <FontAwesome5
+                name="user-check"
+                style={{
+                  color: institute ? institute.themeColor : 'black',
+                  fontSize: 22,
+                  marginRight: 10,
+                }}
+              />
+              <Text style={styles.inputField}>Designation: </Text>
+              <Text style={styles.inputValue}>{userInfo.designationName}</Text>
+            </View>
 
-          <View style={styles.input}>
-            <FontAwesome5
-              name="user-check"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Designation: </Text>
-            <Text style={styles.inputValue}>{userInfo.designationName}</Text>
-          </View>
+            <View style={styles.input}>
+              <FontAwesome5
+                name="id-badge"
+                style={{
+                  color: institute ? institute.themeColor : 'black',
+                  fontSize: 22,
+                  marginRight: 10,
+                }}
+              />
+              <Text style={styles.inputField}>Employee Code: </Text>
+              <Text style={styles.inputValue}>{userInfo.code}</Text>
+            </View>
 
-          <View style={styles.input}>
-            <FontAwesome5
-              name="id-badge"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Employee Code: </Text>
-            <Text style={styles.inputValue}>{userInfo.code}</Text>
-          </View>
+            <View style={styles.input}>
+              <FontAwesome5
+                name="user-tag"
+                style={{
+                  color: institute ? institute.themeColor : 'black',
+                  fontSize: 22,
+                  marginRight: 10,
+                }}
+              />
+              <Text style={styles.inputField}>Role: </Text>
+              <Text style={styles.inputValue}>{userInfo.permRole.name}</Text>
+            </View>
 
-          <View style={styles.input}>
-            <FontAwesome5
-              name="user-tag"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Role: </Text>
-            <Text style={styles.inputValue}>{userInfo.permRole.name}</Text>
+            <View style={styles.input}>
+              <FontAwesome5
+                name="mobile-alt"
+                style={{
+                  color: institute ? institute.themeColor : 'black',
+                  fontSize: 22,
+                  marginRight: 10,
+                }}
+              />
+              <Text style={styles.inputField}>Mobile: </Text>
+              <Text style={styles.inputValue}>{umobile}</Text>
+            </View>
           </View>
-
-          <View style={styles.input}>
-            <FontAwesome5
-              name="mobile-alt"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Mobile: </Text>
-            <Text style={styles.inputValue}>{umobile}</Text>
-          </View>
-        </View>
         </Animated.View>
       </ScrollView>
     </View>
@@ -468,7 +479,7 @@ const styles = StyleSheet.create({
   headerImage: {
     backgroundColor: '#FFFFFF',
     shadowColor: '#333333',
-    shadowOffset: {width: -1, height: -3},
+    shadowOffset: { width: -1, height: -3 },
     shadowRadius: 2,
     shadowOpacity: 0.4,
     elevation: 5,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,createRef} from 'react';
 import {
   StyleSheet,
   View,
@@ -8,12 +8,19 @@ import {
   TouchableOpacity,
   TextInput,
   Modal,
+  ImageBackground
 } from 'react-native';
 import { Avatar, Button } from 'react-native-paper';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
+import ImagePicker from 'react-native-image-crop-picker';
+
 
 //icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 import read from '../../../services/localstorage/read';
 import patch from '../../../services/helpers/request/patch';
@@ -37,6 +44,7 @@ export default function Profile({ navigation }) {
   const [ulastName, setULastName] = useState(null);
   const [upaddress, setUpAddress] = useState(null);
   const [umobile, setUmobile] = useState(null);
+  const [image, setImage] = useState("https://cdn-icons-png.flaticon.com/512/906/906362.png");
 
   useEffect(() => {
     setUemail(userInfo.email);
@@ -45,6 +53,73 @@ export default function Profile({ navigation }) {
     setUpAddress(userInfo.permanentAddress);
     setUmobile(userInfo.phone);
   }, []);
+
+  const bs = createRef(null);
+  const fall = new Animated.Value(1);
+
+
+  const takePhotoFromCamera = () => {
+
+    ImagePicker.openCamera({
+      compressImageMaxWidth: 300,
+      compressImageMaxHeight: 300,
+      cropping: true,
+      compressImageQuality: 0.7
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+      bs.current.snapTo(1)
+    })
+      .catch((err) => {
+        console.log(err)
+        alert("cannot update profile picture")
+
+      })
+  }
+
+  const choosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true,
+      compressImageQuality: 0.7
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+      bs.current.snapTo(1)
+
+    }).catch((err) => {
+      console.log("openCamera catch" + err.toString())
+    })
+  }
+
+  const renderInner = () => (
+    <View style={styles.panel}>
+      <View style={{ alignItems: 'center' }}>
+        <Text style={styles.panelTitle}>Upload Photo</Text>
+        <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+      </View>
+      <TouchableOpacity style={styles.panelButton} onPress={takePhotoFromCamera}>
+        <Text style={styles.panelButtonTitle}>Take Photo</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.panelButton} onPress={choosePhotoFromLibrary}>
+        <Text style={styles.panelButtonTitle}>Choose From Library</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.panelButton}
+        onPress={() => bs.current.snapTo(1)}>
+        <Text style={styles.panelButtonTitle}>Cancel</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderHeader = () => (
+    <View style={styles.headerImage}>
+      <View style={styles.panelHeader}>
+        <View style={styles.panelHandle} />
+      </View>
+    </View>
+  );
 
 
   // email format validification
@@ -138,187 +213,245 @@ export default function Profile({ navigation }) {
           padding: 20,
         }}
       />
+      <BottomSheet
+        ref={bs}
+        snapPoints={[330, 0]}
+        renderContent={renderInner}
+        renderHeader={renderHeader}
+        initialSnap={1}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+      />
       <ScrollView>
-        <View style={{ justifyContent: 'center', flexDirection: 'row' }}>
-          {userInfo.url ? (
+        <Animated.View style={{
+        margin: 20,
+        opacity: Animated.add(0.9, Animated.multiply(fall, 1.0)),
+      }}>
+        <View
+        style={{
+        alignItems: 'center'
+      }}>
+        <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
+        <View
+        style={{
+        height: 100,
+        width: 100,
+        borderRadius: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <ImageBackground
+        source={{
+        uri: image,
+      }}
+        style={{ height: 120, width: 120 }}
+        imageStyle={{ borderRadius: 15 }}>
+        <View
+        style={{
+        marginTop: 90,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <Icon
+        name="camera"
+        size={25}
+        color="#fff"
+        style={{
+        opacity: 0.8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: '#fff',
+        borderRadius: 10,
+      }}
+        />
+        </View>
+        </ImageBackground>
+        </View>
+        </TouchableOpacity>
+      {/* {userInfo.url ? (
             <Image source={{ uri: userInfo.url }} style={styles.tinyLogo} />
           ) : (
             <Avatar.Text size={100} label={userInfo.firstName[0]} />
-          )}
+          )} */}
         </View>
 
+
+
         <View style={styles.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={{ marginTop: 20 }}>Enter Email</Text>
-                <ScrollView>
-                  <TextInput
-                    placeholder={userInfo.email}
-                    value={uemail}
-                    style={styles.textInput}
-                    onChangeText={value => setUemail(value)}
-                  />
-                  <Text style={{ marginTop: 20 }}>First Name</Text>
-                  <TextInput
-                    placeholder={userInfo.firstName}
-                    value={ufirstName}
-                    style={styles.textInput}
-                    onChangeText={value => setUfirstName(value)}
-                  />
-                  <Text style={{ marginTop: 20 }}>Last Name</Text>
-                  <TextInput
-                    placeholder={userInfo.lastName}
-                    value={ulastName}
-                    style={styles.textInput}
-                    onChangeText={value => setULastName(value)}
-                  />
-                  <Text style={{ marginTop: 20 }}>Phone</Text>
-                  <TextInput
-                    placeholder={userInfo.phone}
-                    keyboardType="numeric"
-                    maxLength={10}
-                    value={umobile}
-                    style={styles.textInput}
-                    onChangeText={value => setUmobile(value)}
-                  />
-                  <Text style={{ marginTop: 20 }}>Present Address</Text>
-                  <TextInput
-                    placeholder={userInfo.presentAddress}
-                    value={upaddress}
-                    style={styles.textInput}
-                    onChangeText={value => setUpAddress(value)}
-                    onSubmitEditing={validate}
-                  />
-                </ScrollView>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    margin: 20,
-                  }}>
-                  <Button
-                    mode="outlined"
-                    color={institute ? institute.themeColor : 'red'}
-                    onPress={() => setModalVisible(!modalVisible)}>
-                    Cancel
-                  </Button>
-                  <Button
-                    mode="contained"
-                    color={institute ? institute.themeColor : 'blue'}
-                    onPress={validate}>
-                    Save
-                  </Button>
-                </View>
-              </View>
-            </View>
-          </Modal>
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+        setModalVisible(!modalVisible);
+      }}>
+        <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+        <Text style={{ marginTop: 20 }}>Enter Email</Text>
+        <ScrollView>
+        <TextInput
+        placeholder={userInfo.email}
+        value={uemail}
+        style={styles.textInput}
+        onChangeText={value => setUemail(value)}
+        />
+        <Text style={{ marginTop: 20 }}>First Name</Text>
+        <TextInput
+        placeholder={userInfo.firstName}
+        value={ufirstName}
+        style={styles.textInput}
+        onChangeText={value => setUfirstName(value)}
+        />
+        <Text style={{ marginTop: 20 }}>Last Name</Text>
+        <TextInput
+        placeholder={userInfo.lastName}
+        value={ulastName}
+        style={styles.textInput}
+        onChangeText={value => setULastName(value)}
+        />
+        <Text style={{ marginTop: 20 }}>Phone</Text>
+        <TextInput
+        placeholder={userInfo.phone}
+        keyboardType="numeric"
+        maxLength={10}
+        value={umobile}
+        style={styles.textInput}
+        onChangeText={value => setUmobile(value)}
+        />
+        <Text style={{ marginTop: 20 }}>Present Address</Text>
+        <TextInput
+        placeholder={userInfo.presentAddress}
+        value={upaddress}
+        style={styles.textInput}
+        onChangeText={value => setUpAddress(value)}
+        onSubmitEditing={validate}
+        />
+        </ScrollView>
+        <View
+        style={{
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        margin: 20,
+      }}>
+        <Button
+        mode="outlined"
+        color={institute?institute.themeColor: 'red'}
+        onPress={() => setModalVisible(!modalVisible)}>
+        Cancel
+        </Button>
+        <Button
+        mode="contained"
+        color={institute?institute.themeColor: 'blue'}
+        onPress={validate}>
+        Save
+        </Button>
+        </View>
+        </View>
+        </View>
+        </Modal>
         </View>
         <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            marginEnd: 30,
-          }}>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Text>
-              Edit Profile &nbsp;
-              <FontAwesome5
-                name="edit"
-                size={20}
-                color={
-                  institute ? institute.themeColor : 'rgba(62, 104, 228, 0.9)'
-                }
-              />
-            </Text>
-          </TouchableOpacity>
+        style={{
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginEnd: 30,
+      }}>
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <Text>
+        Edit Profile &nbsp;
+        <FontAwesome5
+        name="edit"
+        size={20}
+        color={
+        institute?institute.themeColor: 'rgba(62, 104, 228, 0.9)'
+      }
+        />
+        </Text>
+        </TouchableOpacity>
         </View>
 
         <View style={styles.textFields}>
-          <View style={styles.input}>
-            <FontAwesome5
-              name="user-alt"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Name: </Text>
-            <Text style={styles.inputValue}>{userInfo.firstName}</Text>
-          </View>
-
-          <View style={styles.input}>
-            <FontAwesome5
-              name="building"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Course: </Text>
-            <Text style={styles.inputValue}>{userInfo.courseName}</Text>
-          </View>
-
-          <View style={styles.input}>
-            <FontAwesome5
-              name="user-check"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Batch: </Text>
-            <Text style={styles.inputValue}>{userInfo.batchName}</Text>
-          </View>
-
-          <View style={styles.input}>
-            <FontAwesome5
-              name="id-badge"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Code: </Text>
-            <Text style={styles.inputValue}>{userInfo.code}</Text>
-          </View>
-
-          <View style={styles.input}>
-            <FontAwesome5
-              name="user-tag"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Role: </Text>
-            <Text style={styles.inputValue}>{userInfo.permRole.name}</Text>
-          </View>
-
-          <View style={styles.input}>
-            <FontAwesome5
-              name="mobile-alt"
-              style={{
-                color: institute ? institute.themeColor : 'black',
-                fontSize: 22,
-                marginRight: 10,
-              }}
-            />
-            <Text style={styles.inputField}>Phone: </Text>
-            <Text style={styles.inputValue}>{umobile}</Text>
-          </View>
+        <View style={styles.input}>
+        <FontAwesome5
+        name="user-alt"
+        style={{
+        color: institute?institute.themeColor: 'black',
+        fontSize: 22,
+        marginRight: 10,
+      }}
+        />
+        <Text style={styles.inputField}>Name: </Text>
+        <Text style={styles.inputValue}>{userInfo.firstName}</Text>
         </View>
+
+        <View style={styles.input}>
+        <FontAwesome5
+        name="building"
+        style={{
+        color: institute?institute.themeColor: 'black',
+        fontSize: 22,
+        marginRight: 10,
+      }}
+        />
+        <Text style={styles.inputField}>Course: </Text>
+        <Text style={styles.inputValue}>{userInfo.courseName}</Text>
+        </View>
+
+        <View style={styles.input}>
+        <FontAwesome5
+        name="user-check"
+        style={{
+        color: institute?institute.themeColor: 'black',
+        fontSize: 22,
+        marginRight: 10,
+      }}
+        />
+        <Text style={styles.inputField}>Batch: </Text>
+        <Text style={styles.inputValue}>{userInfo.batchName}</Text>
+        </View>
+
+        <View style={styles.input}>
+        <FontAwesome5
+        name="id-badge"
+        style={{
+        color: institute?institute.themeColor: 'black',
+        fontSize: 22,
+        marginRight: 10,
+      }}
+        />
+        <Text style={styles.inputField}>Code: </Text>
+        <Text style={styles.inputValue}>{userInfo.code}</Text>
+        </View>
+
+        <View style={styles.input}>
+        <FontAwesome5
+        name="user-tag"
+        style={{
+        color: institute?institute.themeColor: 'black',
+        fontSize: 22,
+        marginRight: 10,
+      }}
+        />
+        <Text style={styles.inputField}>Role: </Text>
+        <Text style={styles.inputValue}>{userInfo.permRole.name}</Text>
+        </View>
+
+        <View style={styles.input}>
+        <FontAwesome5
+        name="mobile-alt"
+        style={{
+        color: institute?institute.themeColor: 'black',
+        fontSize: 22,
+        marginRight: 10,
+      }}
+        />
+        <Text style={styles.inputField}>Phone: </Text>
+        <Text style={styles.inputValue}>{umobile}</Text>
+        </View>
+        </View>
+        </Animated.View>
       </ScrollView>
     </View>
     // bottom navigation
@@ -334,6 +467,54 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 100,
+  },
+  panel: {
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    paddingTop: 20,
+  },
+  headerImage: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#333333',
+    shadowOffset: { width: -1, height: -3 },
+    shadowRadius: 2,
+    shadowOpacity: 0.4,
+    elevation: 5,
+    paddingTop: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  panelHeader: {
+    alignItems: 'center',
+  },
+  panelHandle: {
+    width: 40,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#00000040',
+    marginBottom: 10,
+  },
+  panelTitle: {
+    fontSize: 27,
+    height: 35,
+  },
+  panelSubtitle: {
+    fontSize: 14,
+    color: 'gray',
+    height: 30,
+    marginBottom: 10,
+  },
+  panelButton: {
+    padding: 13,
+    borderRadius: 10,
+    backgroundColor: '#FF6347',
+    alignItems: 'center',
+    marginVertical: 7,
+  },
+  panelButtonTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: 'white',
   },
   text_input: {
     padding: 10,
