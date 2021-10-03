@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect,createRef} from 'react';
 import {
   StyleSheet,
   View,
@@ -10,12 +10,19 @@ import {
   Modal,
   Pressable,
   TextInput,
+  ImageBackground
 } from 'react-native';
 import {Avatar, Button} from 'react-native-paper';
+import BottomSheet from 'reanimated-bottom-sheet';
+import Animated from 'react-native-reanimated';
+import ImagePicker from 'react-native-image-crop-picker';
 
 //icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
 
 // redux
 import {useSelector, useDispatch} from 'react-redux';
@@ -44,6 +51,7 @@ export default function Profile({navigation}) {
   const [ulastName, setULastName] = useState(null);
   const [upaddress, setUpAddress] = useState(null);
   const [umobile, setUMobile] = useState(null);
+  const [image, setImage] = useState("https://cdn-icons-png.flaticon.com/512/906/906362.png");
 
   useEffect(() => {
     setUemail(userInfo.email);
@@ -53,6 +61,62 @@ export default function Profile({navigation}) {
     setUMobile(userInfo.mobile);
   }, []);
 
+  const takePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      compressImageMaxWidth: 300,
+      compressImageMaxHeight: 300,
+      cropping: true,
+      compressImageQuality: 0.7
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+      bs.current.snapTo(1);
+    });
+  }
+
+  const choosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true,
+      compressImageQuality: 0.7
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+      bs.current.snapTo(1);
+    });
+  }
+
+  const renderInner = () => (
+    <View style={styles.panel}>
+      <View style={{alignItems: 'center'}}>
+        <Text style={styles.panelTitle}>Upload Photo</Text>
+        <Text style={styles.panelSubtitle}>Choose Your Profile Picture</Text>
+      </View>
+      <TouchableOpacity style={styles.panelButton} onPress={takePhotoFromCamera}>
+        <Text style={styles.panelButtonTitle}>Take Photo</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.panelButton} onPress={choosePhotoFromLibrary}>
+        <Text style={styles.panelButtonTitle}>Choose From Library</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.panelButton}
+        onPress={() => bs.current.snapTo(1)}>
+        <Text style={styles.panelButtonTitle}>Cancel</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderHeader = () => (
+    <View style={styles.headerImage}>
+      <View style={styles.panelHeader}>
+        <View style={styles.panelHandle} />
+      </View>
+    </View>
+  );
+
+ const bs = createRef();
+  const fall = new Animated.Value(1);
 
 
   const validate = () => {
@@ -143,17 +207,68 @@ export default function Profile({navigation}) {
           padding: 20,
         }}
       />
+      <BottomSheet
+        ref={bs}
+        snapPoints={[330, 0]}
+        renderContent={renderInner}
+        renderHeader={renderHeader}
+        initialSnap={1}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+      />
       <ScrollView>
+      <Animated.View style={{margin: 20,
+        opacity: Animated.add(0.9, Animated.multiply(fall, 1.0)),
+    }}>
         <View
           style={{
-            justifyContent: 'center',
-            flexDirection: 'row',
+            alignItems:'center'
           }}>
-          {userInfo.url ? (
+            <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
+            <View
+              style={{
+                height: 100,
+                width: 100,
+                borderRadius: 15,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <ImageBackground
+                source={{
+                  uri: image,
+                }}
+                style={{height: 120, width: 120}}
+                imageStyle={{borderRadius: 15}}>
+                <View
+                  style={{
+                    marginTop:90,
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Icon
+                    name="camera"
+                    size={25}
+                    color="#fff"
+                    style={{
+                      opacity: 0.8,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 1,
+                      borderColor: '#fff',
+                      borderRadius: 10,
+                    }}
+                  />
+                </View>
+              </ImageBackground>
+            </View>
+          </TouchableOpacity>
+
+          {/* {userInfo.url ? (
             <Image source={{uri: userInfo.url}} style={styles.tinyLogo} />
           ) : (
             <Avatar.Text size={100} label={userInfo.firstName[0]} />
-          )}
+          )} */}
         </View>
         <View style={styles.centeredView}>
           <Modal
@@ -327,6 +442,7 @@ export default function Profile({navigation}) {
             <Text style={styles.inputValue}>{umobile}</Text>
           </View>
         </View>
+        </Animated.View>
       </ScrollView>
     </View>
     // bottom navigation
@@ -342,6 +458,55 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 100,
+  },
+
+  panel: {
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    paddingTop: 20,
+  },
+  headerImage: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#333333',
+    shadowOffset: {width: -1, height: -3},
+    shadowRadius: 2,
+    shadowOpacity: 0.4,
+    elevation: 5,
+    paddingTop: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  panelHeader: {
+    alignItems: 'center',
+  },
+  panelHandle: {
+    width: 40,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#00000040',
+    marginBottom: 10,
+  },
+  panelTitle: {
+    fontSize: 27,
+    height: 35,
+  },
+  panelSubtitle: {
+    fontSize: 14,
+    color: 'gray',
+    height: 30,
+    marginBottom: 10,
+  },
+  panelButton: {
+    padding: 13,
+    borderRadius: 10,
+    backgroundColor: '#FF6347',
+    alignItems: 'center',
+    marginVertical: 7,
+  },
+  panelButtonTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: 'white',
   },
   text_input: {
     padding: 10,
