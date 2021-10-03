@@ -3,10 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   ScrollView,
-  ImageBackground,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 import {Appbar} from 'react-native-paper';

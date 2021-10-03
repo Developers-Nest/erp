@@ -1,16 +1,10 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, TextInput} from 'react-native';
 import {
-  Searchbar,
   Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
   Button,
 } from 'react-native-paper';
 
-import DropDownPicker from 'react-native-dropdown-picker';
 import ModalSelector from 'react-native-modal-selector';
 
 export default function GpaMarksStudent2()

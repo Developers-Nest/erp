@@ -496,7 +496,7 @@ export default function AssignmentStudentDue({ navigation })
             )}
           </View>
         </View>
-
+{/* switch table for due and sumitted begins */}
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{

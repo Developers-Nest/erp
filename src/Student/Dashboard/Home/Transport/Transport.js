@@ -3,17 +3,10 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
-  ScrollView,
   TouchableOpacity,
 } from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
   Card,
-  Title,
-  Paragraph,
   Button,
 } from 'react-native-paper';
 

@@ -128,6 +128,7 @@ export default function Attendance({ navigation }) {
           flexDirection: 'row',
           margin: 20,
         }}>
+{/* year selector */}
         <View style={{ marginTop: 10, width: 150, ...styles.card }}>
           <ModalSelector
             data={years}
@@ -152,7 +153,7 @@ export default function Attendance({ navigation }) {
           />
         </View>
       </View>
-
+{/* Month selector */}
       <ScrollView>
         {days.length == 0 ? (
           yearSelected == null || monthSelected == null ? (

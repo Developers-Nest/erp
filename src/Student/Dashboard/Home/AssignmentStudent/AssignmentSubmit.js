@@ -9,13 +9,12 @@ import {
     ScrollView,
     TouchableOpacity,
 } from 'react-native';
+
+// helpers
+
 import { Button } from 'react-native-paper';
-
 import DocumentPickerHandle from 'react-native-document-picker';
-
 import { useSelector } from 'react-redux';
-
-import patch from '../../../../services/helpers/request/patch'
 import formDataPatch from '../../../../services/helpers/request/formDataPatch'
 import read from '../../../../services/localstorage/read'
 import LoaderHook from '../../../../components/LoadingScreen/LoadingScreen';

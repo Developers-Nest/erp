@@ -304,12 +304,7 @@ export default function CceMarks() {
                     {data.subjectName}
                   </Text>
                 </View>
-                {/* <View style={styles.card_bottom}>
-                  <Text style={{ color: 'rgba(176, 67, 5, 1)', fontSize: 12 }}>
-                    Max:21/30
-                  </Text>
-                </View> */}
-              </View>
+               </View>
             </View>
           ))
         ) : (null)
