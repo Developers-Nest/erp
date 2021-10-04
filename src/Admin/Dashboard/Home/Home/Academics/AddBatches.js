@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
@@ -346,11 +345,11 @@ const styles = StyleSheet.create({
     SelectedValue: {
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
-        fontWeight: '200',
+        fontWeight: '14',
         fontWeight: '500',
-        fontSize: 14,
+        fontSize: 15,
         lineHeight: 30,
-        paddingTop: 3,
+        paddingTop: 1,
         color: 'rgba(88, 99, 109, 0.85)',
     },
 
@@ -364,10 +363,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#ccc',
         borderWidth: 1,
-        borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12,
-        borderTopRightRadius: 12,
-        borderTopLeftRadius: 12,
+        borderRadius:12,
         overflow: 'hidden',
         alignSelf: 'center',
         // justifyContent: 'center',
@@ -391,7 +387,7 @@ const styles = StyleSheet.create({
     },
     shadow: {
         elevation: 5,
-        borderRadius: 0,
+        borderRadius: 12,
         backgroundColor: 'white',
         shadowColor: '#000',
         shadowOffset: {
