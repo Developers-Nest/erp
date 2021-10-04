@@ -1,4 +1,4 @@
-import React, {useState, useEffect,useFocusEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,8 +9,7 @@ import {
   Linking,
   TextInput
 } from 'react-native';
-
-
+import { useFocusEffect } from '@react-navigation/native';
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcon from 'react-native-vector-icons/Ionicons';
