@@ -129,6 +129,7 @@ export default function ClassTeacherAllocation({ navigation }) {
                         </Text>
                     </TouchableOpacity>
                     <ScrollView>
+                        <View flexDirection="column-reverse">
                         {teacherallocationlist ? teacherallocationlist &&
                             teacherallocationlist.map(teacherallocationlist => (
                                 <View style={styles.section}
@@ -205,7 +206,7 @@ export default function ClassTeacherAllocation({ navigation }) {
                             )) : null}
 
                         <View style={{ height: 30 }} />
-
+                    </View>
                     </ScrollView>
                 </View>
 
@@ -232,9 +233,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         elevation: 5,
         marginTop: 14,
-        borderRadius: 8,
-        paddingLeft: 10,
-        paddingRight: 10,
+        borderRadius: 12,
+        paddingHorizontal:10,
         marginHorizontal: 20,
         marginBottom: 10,
 
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
 
     text_input: {
 
-        borderRadius: 10,
+        borderRadius: 12,
         height: 50,
         fontSize: 16,
         minWidth: 171,
@@ -307,10 +307,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#ccc',
         borderWidth: 1,
-        borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12,
-        borderTopRightRadius: 12,
-        borderTopLeftRadius: 12,
+        borderRadius:12,
         overflow: 'hidden',
         justifyContent: 'center',
         margin: 0,

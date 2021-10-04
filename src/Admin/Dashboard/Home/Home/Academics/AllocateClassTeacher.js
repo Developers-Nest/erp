@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignContent: 'center',
-        borderRadius: 8,
+        borderRadius: 12,
         margin: 40,
 
 
@@ -234,9 +234,9 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontWeight: '200',
         fontWeight: '500',
-        fontSize: 14,
+        fontSize: 15,
         lineHeight: 30,
-        paddingTop: 3,
+        paddingTop: 2,
         color: 'rgba(88, 99, 109, 0.85)',
     },
 
@@ -250,10 +250,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#ccc',
         borderWidth: 1,
-        borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12,
-        borderTopRightRadius: 12,
-        borderTopLeftRadius: 12,
+        borderRadius:12,
         overflow: 'hidden',
         margin: 0,
         padding: 0,
