@@ -14,6 +14,8 @@ import ModalSelector from 'react-native-modal-selector';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 // redux
 import {useSelector} from 'react-redux';
@@ -28,11 +30,18 @@ export default function OnlineLecture({navigation}) {
   const userInfo = useSelector(state => state.userInfo);
   const institute = useSelector(state => state.institute);
 
-  const [teacherlist, setTeacherlist] = useState([]);
+  const [tempteacherlist, setTempTeacherlist] = useState([]);
   const [timeTable, setTimeTable] = useState([]);
 
   // loading screem
   const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [teacherlist, setTeacherlist] = useState([]);
+
+  // handle teacher model open
+  const [openSel, setOpenSel] = useState(false);
 
   // on load of the screen
   useEffect(async () => {
@@ -48,9 +57,10 @@ export default function OnlineLecture({navigation}) {
       for (let i = 0; i < response.length; i++) {
         list.push({
           key: response[i]._id,
-          label: response[i].firstName,
+          label: response[i].firstName + ' ' + response[i].lastName,
         });
         setTeacherlist(list);
+        setTempTeacherlist(list);
         console.log(teacherlist);
       }
     } catch (err) {
@@ -111,23 +121,74 @@ export default function OnlineLecture({navigation}) {
           Time Table
         </Text>
       </View>
+
       <ScrollView
         showsHorizontalScrollIndicator={false}
         style={{marginTop: 20}}>
-        <View style={{marginHorizontal: 30, ...styles.shadow}}>
+        <View style={{marginHorizontal: 20, ...styles.shadow}}>
           <View style={styles.search}>
+            <TextInput
+              style={styles.text_input}
+              placeholder="Enter teacher's name"
+              placeholderTextColor="grey"
+              color="black"
+              defaultValue={searchText}
+              textContentType="name"
+              onChangeText={text => {
+                setSearchText(text);
+                if (text === '') {
+                  setTempTeacherlist(teacherlist);
+                } else {
+                  const filtered_teachers = teacherlist.filter(teacher =>
+                    teacher.label.toLowerCase().includes(text.toLowerCase()),
+                  );
+                  console.log(filtered_teachers);
+                  setTempTeacherlist(filtered_teachers);
+                }
+              }}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                setSearchText('');
+                setTempTeacherlist(teacherlist);
+              }}
+              style={{
+                alignSelf: 'center',
+              }}>
+              <MaterialIcon
+                name="cancel"
+                style={{
+                  alignSelf: 'center',
+                  fontSize: 24,
+                  color: '#505069',
+                }}
+              />
+            </TouchableOpacity>
             <ModalSelector
-              data={teacherlist}
-              initValue="Select Teacher"
+              data={tempteacherlist}
+              initValue={
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <FontAwesome5
+                    name="search"
+                    style={{
+                      alignSelf: 'center',
+                      fontSize: 20,
+                      color: '#6A6A80',
+                    }}
+                  />
+                </View>
+              }
               onChange={option => {
                 fetchTimetable(option.key);
               }}
-              style={styles.card}
+              visible={openSel}
+              style={{padding: 0, margin: 0}}
               initValueTextStyle={styles.SelectedValueSmall}
               selectTextStyle={styles.SelectedValueSmall}
             />
           </View>
         </View>
+
         {timeTable &&
           Object.keys(timeTable).map((day, index) => {
             return (
@@ -186,6 +247,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderColor: '#00499F',
     borderRadius: 8,
+    justifyContent: 'space-between',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   search_input: {
     borderRadius: 8,
@@ -194,7 +259,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     paddingTop: 15,
     paddingHorizontal: 10,
-    width: '90%',
+    width: '50%',
   },
   shadow: {
     marginBottom: 10,
@@ -283,6 +348,15 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   card: {
-    width: '100%',
+    width: '20%',
+  },
+  text_input: {
+    paddingHorizontal: 20,
+    marginTop: 5,
+    borderRadius: 10,
+    height: 50,
+    fontSize: 16,
+    width: 270,
+    backgroundColor: 'white',
   },
 });
