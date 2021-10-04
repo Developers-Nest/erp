@@ -3,29 +3,22 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import HomeScreen2 from './HomeScreen2';
 import HomeScreen1 from './HomeScreen1';
 import Swiper from 'react-native-swiper';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { Text, Badge, Button, Drawer } from 'react-native-paper';
+import { Text, Button} from 'react-native-paper';
 import {
   createDrawerNavigator,
-  useIsDrawerOpen,
   DrawerContentScrollView,
   DrawerItem,
 } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import Collapsible from 'react-native-collapsible';
-import Icon from 'react-native-vector-icons/Ionicons';
-
 //drawer navigation
-import Books from './Books/Books';
 import ContentLibrary from './Home/Content Library/ContentLibrary';
 import Feedback from './Feedback/Feedback';
 

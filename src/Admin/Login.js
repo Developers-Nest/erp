@@ -3,7 +3,6 @@ import { View, StyleSheet, TextInput, Image } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Button, Searchbar, IconButton } from 'react-native-paper';
 
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
 // helpers

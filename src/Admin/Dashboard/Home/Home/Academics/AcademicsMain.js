@@ -85,11 +85,11 @@ export default function AcademicsMain({ navigation }) {
                 </TouchableOpacity>
 
                 <ScrollView>
+                <View flexDirection="column-reverse">
                     {courselist ? courselist &&
                         courselist.map(courselist => (
                             <View style={styles.section}
-                                key={courselist._id}
-                            >
+                                key={courselist._id}>
                                 <View style={styles.details}>
                                     <View style={styles.userinhostels}>
                                         <View style={styles.differentusers}>
@@ -166,6 +166,7 @@ export default function AcademicsMain({ navigation }) {
                         )) : 'N/A'}
 
                     <View style={{ height: 30 }} />
+                    </View>
                 </ScrollView>
 
             </View>
@@ -215,6 +216,7 @@ export default function AcademicsMain({ navigation }) {
                     </Text>
                 </TouchableOpacity>
                 <ScrollView>
+                    <View flexDirection="column-reverse">
                     {batchlist ? batchlist &&
                         batchlist.map(batchlist => (
                             <View style={styles.section}
@@ -294,6 +296,7 @@ export default function AcademicsMain({ navigation }) {
                             </View>
                         )) : 'N/A'}
                     <View style={{ height: 30 }} />
+                </View>
                 </ScrollView>
 
             </View>
