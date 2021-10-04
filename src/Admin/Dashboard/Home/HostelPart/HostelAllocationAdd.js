@@ -70,7 +70,6 @@ const HostelAllocationAdd = ({ navigation }) => {
                     label: user.name
                 })
             })
-            console.log('UserTypes ', userArray)
             setUserType(userArray)
         } catch (err) {
             alert('Error ', err)
@@ -114,8 +113,6 @@ const HostelAllocationAdd = ({ navigation }) => {
         } catch (err) {
             alert('Cannot fetch hostel types!' + err)
         }
-
-        console.log('Admin Institite ', institute)
         hideLoadingScreen()
     }, [])
 
@@ -127,7 +124,6 @@ const HostelAllocationAdd = ({ navigation }) => {
             let slug = `/employee?department=${sd}`
             let token = await read('token')
             let response = await get(slug, token)
-            console.log('Response ', response)
             let employeeArray = []
             response && response.map((dep) => {
                 employeeArray.push({
@@ -136,7 +132,6 @@ const HostelAllocationAdd = ({ navigation }) => {
                 })
             })
             setUsersObject(response)
-            console.log('Emplo ', employeeArray)
             setUsers(employeeArray)
         } catch (err) {
             alert('Cannot fetch Employess!')
@@ -208,7 +203,6 @@ const HostelAllocationAdd = ({ navigation }) => {
         setSelectedHostelName(hn)
         try {
             let slug = `/hostel/hostelRoom?hostelType=${selectedHostelType}&hostelName=${hn}`
-            console.log('Slug Hostel Room ', slug)
             let token = await read('token')
             let res = await get(slug, token)
             let hostelArray = []
@@ -240,7 +234,7 @@ const HostelAllocationAdd = ({ navigation }) => {
     // submit form
     const handleSubmit = async () => {
         showLoadingScreen()
-        if (!userType || !date || !date1) {
+        if (!userType || !date || !date1 || !selectedUser) {
             alert('All fields are required!')
             hideLoadingScreen()
             return
@@ -258,7 +252,7 @@ const HostelAllocationAdd = ({ navigation }) => {
                 data = {
                     department: selectedDepartment,
                     hostelName: selectedHostelName,
-                    hostelRegistrationDate: date,
+                    hostelRegistartionDate: date,
                     hostelRoom: selectedHostelRoom,
                     hostelType: selectedHostelType,
                     user: selectedUsersObject,
@@ -269,7 +263,7 @@ const HostelAllocationAdd = ({ navigation }) => {
             } else {
                 data = {
                     hostelName: selectedHostelName,
-                    hostelRegistrationDate: date,
+                    hostelRegistartionDate: date,
                     hostelRoom: selectedHostelRoom,
                     hostelType: selectedHostelType,
                     user: selectedUsersObject,
@@ -281,12 +275,10 @@ const HostelAllocationAdd = ({ navigation }) => {
                 }
             }
 
-            console.log('Allocation List data ', data)
-
             let slug = '/hostel/hostelAllocation'
             let token = await read('token')
             let response = await post(slug, data, token)
-            console.log('Allocate Hostel ', response)
+
             if (response.error) {
                 throw new Error(response.error)
             } else if (response._id) {

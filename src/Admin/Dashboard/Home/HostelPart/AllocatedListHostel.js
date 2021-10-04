@@ -58,8 +58,6 @@ const AllocatedListHostel = ({ route, navigation }) => {
 
           let response = await get(slug, token);
 
-          console.log('Allocation Response ', response)
-
           const list = [];
           for (let i = 0; i < response.length; i++) {
             list.push({
