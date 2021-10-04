@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 // import { TextInput } from 'react-native-paper';
 
 import {
@@ -18,14 +18,14 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 // redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 //helpers
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 import LoadingScreen from '../../../../components/LoadingScreen/LoadingScreen';
 
-export default function BooksStudent({navigation}) {
+export default function BooksStudent({ navigation }) {
   const userInfo = useSelector(state => state.userInfo);
   //theming
   const institute = useSelector(state => state.institute);
@@ -35,9 +35,9 @@ export default function BooksStudent({navigation}) {
   const onChangeSearch = query => setSearchQuery(query);
 
   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoadingScreen();
-//for search
-const [searchText, setSearchText] = useState('');
-const [filteredUsers, setFilteredUsers] = useState([]);
+  //for search
+  const [searchText, setSearchText] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   const [dueBooks, setDueBooks] = useState([]);
   const [clearedBooks, setClearedBooks] = useState([]);
@@ -50,12 +50,11 @@ const [filteredUsers, setFilteredUsers] = useState([]);
       const res = await get(slug, token);
       let due = [];
       let cleared = [];
-      res &&
-        res.map(book => {
-          if (book.returned) {
-            cleared.push(book);
-          } else due.push(book);
-        });
+      res && res.map((book) => {
+        if (book.returned) {
+          cleared.push(book);
+        } else due.push(book);
+      });
       setDueBooks(due);
       setClearedBooks(cleared);
     } catch (err) {
@@ -71,179 +70,179 @@ const [filteredUsers, setFilteredUsers] = useState([]);
 
     return (
       <View style={styles.container}>
-          {filteredUsers.length > 0 ?
-                    (
-        <ScrollView>
-          {clearedBooks.length > 0 ? (
-            filteredUsers.map(book => (
-              <View style={styles.section} key={book._id}>
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text> </Text>
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          color: '#505069',
-                          fontFamily: 'OpenSans-Regular',
-                        }}>
-                        ID: {book.bookNumber}
-                      </Text>
-                    </View>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 15,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Title: {book.bookName ? book.bookName.title : 'N/A'}
-                      </Text>
-                    </View>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 15,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Name: {book.userId ? book.userId.firstName : 'N/A'}
-                      </Text>
-                    </View>
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {clearedBooks.length > 0 ? (
+                filteredUsers.map(book => (
+                  <View style={styles.section} key={book._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text> </Text>
+                          <Text
+                            style={{
+                              fontSize: 10,
+                              color: '#505069',
+                              fontFamily: 'OpenSans-Regular',
+                            }}>
+                            ID: {book.bookNumber}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Title: {book.bookName ? book.bookName.title : 'N/A'}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Name: {book.userId ? book.userId.firstName : 'N/A'}
+                          </Text>
+                        </View>
 
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 15,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Issuer: {book.userType ? book.userType.name : 'N/A'}
-                      </Text>
-                    </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Issuer: {book.userType ? book.userType.name : 'N/A'}
+                          </Text>
+                        </View>
 
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: '#58626C',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Issued:{' '}
-                        {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
-                      </Text>
-                      <View style={{flexDirection: 'row'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#58636D',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          Due:{' '}
-                          {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
-                        </Text>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#58626C',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Issued:{' '}
+                            {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                          </Text>
+                          <View style={{ flexDirection: 'row' }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#58636D',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Due:{' '}
+                              {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                            </Text>
+                          </View>
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
-              </View>
-            ))
+                ))
+              ) : (
+                <Text style={{ display: 'flex', textAlign: 'center' }}>
+                  Nothing to Display!
+                </Text>
+              )}
+            </ScrollView>
           ) : (
-            <Text style={{display: 'flex', textAlign: 'center'}}>
-              Nothing to Display!
-            </Text>
-          )}
-        </ScrollView>
-                    ):(
-                      <ScrollView>
-                      {clearedBooks.length > 0 ? (
-                        clearedBooks.map(book => (
-                          <View style={styles.section} key={book._id}>
-                            <View style={styles.details}>
-                              <View style={styles.userinhostels}>
-                                <View style={styles.differentusers}>
-                                  <Text> </Text>
-                                  <Text
-                                    style={{
-                                      fontSize: 10,
-                                      color: '#505069',
-                                      fontFamily: 'OpenSans-Regular',
-                                    }}>
-                                    ID: {book.bookNumber}
-                                  </Text>
-                                </View>
-                                <View style={styles.differentusers}>
-                                  <Text
-                                    style={{
-                                      fontWeight: 'normal',
-                                      fontSize: 15,
-                                      color: '#211C5A',
-                                      fontFamily: 'Poppins-Regular',
-                                    }}>
-                                    Title: {book.bookName ? book.bookName.title : 'N/A'}
-                                  </Text>
-                                </View>
-                                <View style={styles.differentusers}>
-                                  <Text
-                                    style={{
-                                      fontWeight: 'normal',
-                                      fontSize: 15,
-                                      color: '#211C5A',
-                                      fontFamily: 'Poppins-Regular',
-                                    }}>
-                                    Name: {book.userId ? book.userId.firstName : 'N/A'}
-                                  </Text>
-                                </View>
-            
-                                <View style={styles.differentusers}>
-                                  <Text
-                                    style={{
-                                      fontWeight: 'normal',
-                                      fontSize: 15,
-                                      color: '#211C5A',
-                                      fontFamily: 'Poppins-Regular',
-                                    }}>
-                                    Issuer: {book.userType ? book.userType.name : 'N/A'}
-                                  </Text>
-                                </View>
-            
-                                <View style={styles.differentusers}>
-                                  <Text
-                                    style={{
-                                      fontSize: 12,
-                                      color: '#58626C',
-                                      fontFamily: 'Poppins-Regular',
-                                    }}>
-                                    Issued:{' '}
-                                    {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
-                                  </Text>
-                                  <View style={{flexDirection: 'row'}}>
-                                    <Text
-                                      style={{
-                                        fontSize: 12,
-                                        color: '#58636D',
-                                        fontFamily: 'Poppins-Regular',
-                                      }}>
-                                      Due:{' '}
-                                      {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
-                                    </Text>
-                                  </View>
-                                </View>
-                              </View>
-                            </View>
+            <ScrollView>
+              {clearedBooks.length > 0 ? (
+                clearedBooks.map(book => (
+                  <View style={styles.section} key={book._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text> </Text>
+                          <Text
+                            style={{
+                              fontSize: 10,
+                              color: '#505069',
+                              fontFamily: 'OpenSans-Regular',
+                            }}>
+                            ID: {book.bookNumber}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Title: {book.bookName ? book.bookName.title : 'N/A'}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Name: {book.userId ? book.userId.firstName : 'N/A'}
+                          </Text>
+                        </View>
+
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Issuer: {book.userType ? book.userType.name : 'N/A'}
+                          </Text>
+                        </View>
+
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#58626C',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Issued:{' '}
+                            {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                          </Text>
+                          <View style={{ flexDirection: 'row' }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#58636D',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Due:{' '}
+                              {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                            </Text>
                           </View>
-                        ))
-                      ) : (
-                        <Text style={{display: 'flex', textAlign: 'center'}}>
-                          Nothing to Display!
-                        </Text>
-                      )}
-                    </ScrollView>
-                    )
-                      }
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                ))
+              ) : (
+                <Text style={{ display: 'flex', textAlign: 'center' }}>
+                  Nothing to Display!
+                </Text>
+              )}
+            </ScrollView>
+          )
+        }
       </View>
     );
   }
@@ -255,178 +254,178 @@ const [filteredUsers, setFilteredUsers] = useState([]);
 
     return (
       <View style={styles.container}>
-         {filteredUsers.length > 0 ?
-                    (
-        <ScrollView>
-          {dueBooks.length > 0 ? (
-            filteredUsers.map(book => (
-              <View style={styles.section} key={book._id}>
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text> </Text>
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          color: '#505069',
-                          fontFamily: 'OpenSans-Regular',
-                        }}>
-                        ID: {book.bookNumber}
-                      </Text>
-                    </View>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 15,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Title: {book.bookName ? book.bookName.title : 'N/A'}
-                      </Text>
-                    </View>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 15,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Name: {book.userId ? book.userId.firstName : 'N/A'}
-                      </Text>
-                    </View>
+        {filteredUsers.length > 0 ?
+          (
+            <ScrollView>
+              {dueBooks.length > 0 ? (
+                filteredUsers.map(book => (
+                  <View style={styles.section} key={book._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text> </Text>
+                          <Text
+                            style={{
+                              fontSize: 10,
+                              color: '#505069',
+                              fontFamily: 'OpenSans-Regular',
+                            }}>
+                            ID: {book.bookNumber}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Title: {book.bookName ? book.bookName.title : 'N/A'}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Name: {book.userId ? book.userId.firstName : 'N/A'}
+                          </Text>
+                        </View>
 
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 15,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Issuer: {book.userType ? book.userType.name : 'N/A'}
-                      </Text>
-                    </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Issuer: {book.userType ? book.userType.name : 'N/A'}
+                          </Text>
+                        </View>
 
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: '#58626C',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Issued:{' '}
-                        {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
-                      </Text>
-                      <View style={{flexDirection: 'row'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#58636D',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          Due:{' '}
-                          {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
-                        </Text>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#58626C',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Issued:{' '}
+                            {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                          </Text>
+                          <View style={{ flexDirection: 'row' }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#58636D',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Due:{' '}
+                              {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                            </Text>
+                          </View>
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
-              </View>
-            ))
+                ))
+              ) : (
+                <Text style={{ display: 'flex', textAlign: 'center' }}>
+                  No Dues!!
+                </Text>
+              )}
+            </ScrollView>
           ) : (
-            <Text style={{display: 'flex', textAlign: 'center'}}>
-              No Dues!!
-            </Text>
-          )}
-        </ScrollView>
-                    ):(
-                      <ScrollView>
-          {dueBooks.length > 0 ? (
-            dueBooks.map(book => (
-              <View style={styles.section} key={book._id}>
-                <View style={styles.details}>
-                  <View style={styles.userinhostels}>
-                    <View style={styles.differentusers}>
-                      <Text> </Text>
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          color: '#505069',
-                          fontFamily: 'OpenSans-Regular',
-                        }}>
-                        ID: {book.bookNumber}
-                      </Text>
-                    </View>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 15,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Title: {book.bookName ? book.bookName.title : 'N/A'}
-                      </Text>
-                    </View>
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 15,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Name: {book.userId ? book.userId.firstName : 'N/A'}
-                      </Text>
-                    </View>
+            <ScrollView>
+              {dueBooks.length > 0 ? (
+                dueBooks.map(book => (
+                  <View style={styles.section} key={book._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <View style={styles.differentusers}>
+                          <Text> </Text>
+                          <Text
+                            style={{
+                              fontSize: 10,
+                              color: '#505069',
+                              fontFamily: 'OpenSans-Regular',
+                            }}>
+                            ID: {book.bookNumber}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Title: {book.bookName ? book.bookName.title : 'N/A'}
+                          </Text>
+                        </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Name: {book.userId ? book.userId.firstName : 'N/A'}
+                          </Text>
+                        </View>
 
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontWeight: 'normal',
-                          fontSize: 15,
-                          color: '#211C5A',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Issuer: {book.userType ? book.userType.name : 'N/A'}
-                      </Text>
-                    </View>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 15,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Issuer: {book.userType ? book.userType.name : 'N/A'}
+                          </Text>
+                        </View>
 
-                    <View style={styles.differentusers}>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: '#58626C',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Issued:{' '}
-                        {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
-                      </Text>
-                      <View style={{flexDirection: 'row'}}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#58636D',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          Due:{' '}
-                          {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
-                        </Text>
+                        <View style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#58626C',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            Issued:{' '}
+                            {book.issueDate ? book.issueDate.slice(0, 10) : 'N/A'}
+                          </Text>
+                          <View style={{ flexDirection: 'row' }}>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#58636D',
+                                fontFamily: 'Poppins-Regular',
+                              }}>
+                              Due:{' '}
+                              {book.dueDate ? book.dueDate.slice(0, 10) : 'N/A'}
+                            </Text>
+                          </View>
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
-              </View>
-            ))
-          ) : (
-            <Text style={{display: 'flex', textAlign: 'center'}}>
-              No Dues!!
-            </Text>
+                ))
+              ) : (
+                <Text style={{ display: 'flex', textAlign: 'center' }}>
+                  No Dues!!
+                </Text>
+              )}
+            </ScrollView>
           )}
-        </ScrollView>
-                    )}
       </View>
     );
   }
@@ -493,66 +492,66 @@ const [filteredUsers, setFilteredUsers] = useState([]);
               ...styles.shadow,
             }}>
             <TextInput
-              style={{width: '80%', ...styles.text_input}}
+              style={{ width: '80%', ...styles.text_input }}
               placeholder="Enter book name here"
               placeholderTextColor="grey"
               defaultValue={searchText}
               textContentType='name'
               onChangeText={(text) => {
-                  setSearchText(text);
-                  if (text === '') {
-                      return setFilteredUsers([]);
-                  }
-                  if (showContent === 'Due') {
-                      const filtered_users = dueBooks.filter((book) =>
-                          book.bookName.title.toLowerCase().startsWith(text.toLowerCase())
-                      );
-                      setFilteredUsers(filtered_users);
-                  }
-                  if (showContent === 'Cleared') {
-                      const filtered_users = clearedBooks.filter((book) =>
-                          book.bookName.title.toLowerCase().startsWith(text.toLowerCase())
-                      );
-                      setFilteredUsers(filtered_users);
-                  }
+                setSearchText(text);
+                if (text === '') {
+                  return setFilteredUsers([]);
+                }
+                if (showContent === 'Due') {
+                  const filtered_users = dueBooks.filter((book) =>
+                    book.bookName.title.toLowerCase().startsWith(text.toLowerCase())
+                  );
+                  setFilteredUsers(filtered_users);
+                }
+                if (showContent === 'Cleared') {
+                  const filtered_users = clearedBooks.filter((book) =>
+                    book.bookName.title.toLowerCase().startsWith(text.toLowerCase())
+                  );
+                  setFilteredUsers(filtered_users);
+                }
               }}
               returnKeyType='search'
-          />
-          {searchText.length === 0 ? (
-               <TouchableOpacity
-               style={{
-                 alignSelf: 'center',
-               }}>
-               <FontAwesome5
-                 name="search"
-                 style={{
-                   alignSelf: 'center',
-                   fontSize: 21,
-                   color: '#505069',
-                 }}
-               />
-             </TouchableOpacity>
-           
-          ) : (
+            />
+            {searchText.length === 0 ? (
               <TouchableOpacity
-                  onPress={() => {
-                      setSearchText('');
-                      setFilteredUsers([]);
-                  }}
+                style={{
+                  alignSelf: 'center',
+                }}>
+                <FontAwesome5
+                  name="search"
                   style={{
-                      alignSelf: 'center',
+                    alignSelf: 'center',
+                    fontSize: 21,
+                    color: '#505069',
                   }}
-              >
-                  <MaterialIcon name='cancel'
-                      style={{
-                          alignSelf: 'center',
-                          fontSize: 24,
-                          color: '#505069',
-                      }}
-                  />
+                />
               </TouchableOpacity>
-          )}
-           </View>
+
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  setSearchText('');
+                  setFilteredUsers([]);
+                }}
+                style={{
+                  alignSelf: 'center',
+                }}
+              >
+                <MaterialIcon name='cancel'
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 24,
+                    color: '#505069',
+                  }}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
 
         {/* close search */}
@@ -571,14 +570,14 @@ const [filteredUsers, setFilteredUsers] = useState([]);
             <Text
               style={
                 ([styles.switchText],
-                [
-                  {
-                    color:
-                      showContent == 'Due' ? 'rgba(176, 67, 5, 1)' : '#58636D',
-                    fontSize: 15,
-                  },
-                  { fontWeight: 'bold' },
-                ])
+                  [
+                    {
+                      color:
+                        showContent == 'Due' ? 'rgba(176, 67, 5, 1)' : '#58636D',
+                      fontSize: 15,
+                    },
+                    { fontWeight: 'bold' },
+                  ])
               }>
               Due
             </Text>
@@ -597,16 +596,16 @@ const [filteredUsers, setFilteredUsers] = useState([]);
             <Text
               style={
                 ([styles.switchText],
-                [
-                  {
-                    color:
-                      showContent == 'Cleared'
-                        ? 'rgba(176, 67, 5, 1)'
-                        : '#58636D',
-                    fontSize: 15,
-                  },
-                  { fontWeight: 'bold' },
-                ])
+                  [
+                    {
+                      color:
+                        showContent == 'Cleared'
+                          ? 'rgba(176, 67, 5, 1)'
+                          : '#58636D',
+                      fontSize: 15,
+                    },
+                    { fontWeight: 'bold' },
+                  ])
               }>
               Cleared
             </Text>
@@ -696,7 +695,7 @@ const styles = StyleSheet.create({
 
   shadow: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     shadowRadius: 12,
     backgroundColor: 'white',
