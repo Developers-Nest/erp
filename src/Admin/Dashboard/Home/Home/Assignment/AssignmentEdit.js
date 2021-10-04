@@ -31,13 +31,31 @@ import getCourse from '../../../../../services/helpers/getList/getCourse';
 import getSubject from '../../../../../services/helpers/getList/getSubject';
 import {red100, white} from 'react-native-paper/lib/typescript/styles/colors';
 
-// redux
-import {useSelector} from 'react-redux';
+// date picker
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DocumentPickerHandle from 'react-native-document-picker';
+import formDataPatch from '../../../../../services/helpers/request/formDataPatch'
+import deleteReq from '../../../../../services/helpers/request/delete'
 
-export default function AssignmentEdit({navigation}) {
-  const [Chapter, setChapter] = useState("Chapter's name");
-  const [Topic, setTopic] = useState('Topic:');
-  const [Discription, setDiscription] = useState('Discription:');
+import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
+
+// redux
+import { useSelector } from 'react-redux';
+
+
+export default function EditAssignments({ route, navigation }) {
+
+  // input values
+  const [topic, setTopic] = useState(null);
+  const [discription, setDiscription] = useState(null);
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [dateString, setDateString] = useState(
+    new Date(1598051730000).toString(),
+  );
+  const [showdatePicker, setShowDatePicker] = useState(false);
+  const [file, setFile] = useState(null);
+  const [key, setKey] = useState(null)
+  const [id, setId] = useState(null)
 
   //theming
   const institute = useSelector(state => state.institute);
@@ -52,39 +70,150 @@ export default function AssignmentEdit({navigation}) {
   const [course, setCourse] = useState(null);
   const [subject, setSubject] = useState(null);
 
-  // input values
-  const [title, setTitle] = useState(null);
-  const [desc, setDesc] = useState(null);
+  // already Selected values
+  const [sbatch, setsBatch] = useState(null);
+  const [scourse, setsCourse] = useState(null);
+  const [ssubject, setsSubject] = useState(null);
+
+  // loading screem
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
 
   useEffect(async () => {
+    showLoadingScreen()
+    try {
+      const { assignment } = route.params
+      setsCourse(assignment.course.courseName)
+      setsBatch(assignment.batch.batchName)
+      setsSubject(assignment.subject.name)
+
+      setCourse(assignment.course._id)
+      setBatch(assignment.batch._id)
+      setSubject(assignment.subject._id)
+
+      setTopic(assignment.title)
+      setDiscription(assignment.description)
+      setDateString(assignment.submissionDateString);
+      setDate(assignment.submissionDate);
+      setFile(assignment.url)
+      setKey(assignment.key)
+      setId(assignment._id)
+    } catch (err) {
+      alert('Got Invalid Assignment Data!!')
+      navigation.navigate('Assignment Due')
+      hideLoadingScreen()
+    }
     try {
       let courseArray = await getCourse();
       setCourses(courseArray);
     } catch (err) {
       alert('Error in Getting Your Courses!!');
     }
+    hideLoadingScreen()
   }, []);
 
   let getBatches = async () => {
+    showLoadingScreen()
     try {
       let batchArray = await getBatch(course);
       setBatches(batchArray);
     } catch (err) {
       alert('Cannot get your Batches!!');
     }
+    hideLoadingScreen()
   };
 
   let getSubjects = async () => {
+    showLoadingScreen()
     try {
       let subjectArray = await getSubject(course, batch);
       setSubjects(subjectArray);
     } catch (err) {
       alert('Cannot get your Subjects!!');
     }
+    hideLoadingScreen()
   };
 
+  let handleDatePicker = async date => {
+    showLoadingScreen()
+    await setDateString(date.toString());
+    await setDate(date.toString());
+    setShowDatePicker(false);
+    hideLoadingScreen();
+  };
+
+  const filePicker = async () => {
+    const res = await DocumentPickerHandle.pick({
+      type: [DocumentPickerHandle.types.pdf],
+    })
+    setFile(res)
+
+    //  -- do not remove following 2 lines (for debugging) -- 
+    // const fileName = res.uri.replace("file://", "")
+    // setFile(fileName)
+
+  };
+
+  // handle form submission
+  let handleSubmit = async () => {
+    showLoadingScreen()
+
+    if (!topic || !discription || !file || !course || !batch || !subject || !date || !dateString) {
+      alert('All Fields are required!!')
+      hideLoadingScreen()
+      return
+    }
+
+    try {
+      let slug = `/note/assignment/${id}`;
+      let token = await read('token');
+
+      if (file != null) {
+
+        const data = new FormData();
+        data.append('title', topic);
+        data.append('description', discription);
+        data.append('file', file);
+        data.append('course', course);
+        data.append('batch', batch);
+        data.append('subject', subject);
+        data.append('submissionDate', date);
+        data.append('submissionDateString', dateString);
+
+        let response = await formDataPatch(slug, data, token)
+
+        if (response.url) {
+          alert('Assignment Updated!!')
+        } else {
+          throw new Error('Cannot upload file')
+        }
+      } else {
+        throw new Error('File not selected!!')
+      }
+
+    } catch (err) {
+      alert('Cannot create Assignment! ' + err);
+    }
+    navigation.navigate('Assignment Due')
+    hideLoadingScreen()
+  };
+
+  let handleDelete = async () => {
+    showLoadingScreen()
+    try {
+      let token = await read('token')
+      let slug = `/note/assignment/${id}`
+      let res = await deleteReq(slug, token)
+      alert('Assignment Deleted')
+    } catch (err) {
+      alert('Cannot Delete!!' + err)
+    }
+    navigation.navigate('Assignment Due')
+    hideLoadingScreen()
+  }
+
   return (
-    <View style={{backgroundColor: 'rgba(249, 249, 249, 1)', height: '100%'}}>
+    <View style={{ backgroundColor: 'rgba(249, 249, 249, 1)', height: '100%' }}>
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -117,7 +246,7 @@ export default function AssignmentEdit({navigation}) {
           Edit Assignment
         </Text>
       </View>
-      <View style={{padding: 10}} />
+      <View style={{ padding: 10 }} />
       <ScrollView>
         <View
           style={{
@@ -126,8 +255,8 @@ export default function AssignmentEdit({navigation}) {
           }}>
           <ModalSelector
             data={courses}
-            initValue="Course"
-            onChange={option => {
+            initValue={scourse}
+            onChangeText={option => {
               setCourse(option.key);
               getBatches();
             }}
@@ -138,8 +267,8 @@ export default function AssignmentEdit({navigation}) {
 
           <ModalSelector
             data={batches}
-            initValue="Batch"
-            onChange={option => {
+            initValue={sbatch}
+            onChangeText={option => {
               setBatch(option.key);
               getSubjects();
             }}
@@ -150,8 +279,8 @@ export default function AssignmentEdit({navigation}) {
 
           <ModalSelector
             data={subjects}
-            initValue="Subject"
-            onChange={option => {
+            initValue={ssubject}
+            onChangeText={option => {
               setSubject(option.key);
             }}
             style={styles.card_picker}
@@ -160,7 +289,7 @@ export default function AssignmentEdit({navigation}) {
           />
         </View>
 
-        <View style={{padding: 10}} />
+        <View style={{ padding: 10 }} />
         <View
           style={{
             paddingLeft: 11,
@@ -168,59 +297,66 @@ export default function AssignmentEdit({navigation}) {
           }}>
           <Card style={styles.card1}>
             <Card.Content>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}>
-                <TextInput
-                  placeholder="Chapter's name "
-                  placeholderTextColor='grey'
-                  color="black"
-                  onChange={val => setChapter(val)}
-                />
-                {/* <View style={{paddingLeft:10}} /> */}
-              </View>
-              <View style={{padding: 2}} />
-              <View style={{borderWidth: 0.2}} />
-              <View style={{padding: 10}} />
-              <TextInput placeholder="Topic " 
-              color="black"
-                              placeholderTextColor='grey'
-                              onChange={val => setTopic(val)} />
-              <View style={{padding: 2}} />
-              <View style={{borderWidth: 0.2}} />
-              <View style={{padding: 10}} />
-              <TextInput
-                placeholder="Discription (optional) "
-                placeholderTextColor='grey'
+              <TextInput placeholder="Topic"
+                placeholderTextColor="grey"
                 color="black"
-                onChange={val => setDiscription(val)}
+                value={topic}
+                onChangeText={val => setTopic(val)}
               />
-              <View style={{padding: 40}} />
+              <View style={{ padding: 2 }} />
+              <View style={{ borderWidth: 0.2 }} />
+              <View style={{ padding: 10 }} />
+              <TextInput
+                placeholder="Discription (optional)"
+                placeholderTextColor="grey"
+                color="black"
+                value={discription}
+                onChangeText={val => setDiscription(val)}
+              />
+              <View style={{ padding: 40 }} />
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'space-around',
                 }}>
+                {/* date picker */}
                 <Button
                   icon="calendar"
                   mode="contained"
                   color="white"
-                  onPress={() => console.log('Pressed')}>
-                  13:00{' '}
+                  onPress={() => setShowDatePicker(true)}>
+                  {dateString ? dateString.slice(0, 10) : 'Set Deadline'}
                 </Button>
-                <View style={{padding: 10}} />
+
+                <DateTimePickerModal
+                  isVisible={showdatePicker}
+                  mode="date"
+                  onConfirm={handleDatePicker}
+                  onCancel={() => setShowDatePicker(!showdatePicker)}
+                />
+
+                <View style={{ padding: 10 }} />
+                {
+                  file ? (
+                    <Button
+                      mode="contained"
+                      color={file ? "green" : "white"}
+                      onPress={() => Linking.openURL(file)}>
+                      {file ? key.slice(0, 5) + '...' : 'Add File'}
+                    </Button>
+                  ) : (null)
+                }
                 <Button
                   mode="contained"
-                  color="white"
-                  onPress={() => console.log('Pressed')}>
-                  Add file
+                  color={file && file.name ? "green" : "white"}
+                  onPress={() => filePicker()}>
+                  {file && file.name ? file.name : 'Add File'}
                 </Button>
               </View>
             </Card.Content>
           </Card>
         </View>
-        <View style={{padding: 20}} />
+        <View style={{ padding: 20 }} />
         <View
           style={{
             justifyContent: 'space-evenly',
@@ -229,8 +365,8 @@ export default function AssignmentEdit({navigation}) {
           }}>
           <Button
             mode="contained"
-            color="#5177E7"
-            onPress={() => console.log('Pressed')}
+            color={institute ? institute.themeColor : "#5177E7"}
+            onPress={handleSubmit}
             style={{
               width: 90,
             }}>
@@ -240,7 +376,7 @@ export default function AssignmentEdit({navigation}) {
           <Button
             mode="outlined"
             color="rgba(176, 67, 5, 1)"
-            onPress={() => console.log('Pressed')}
+            onPress={handleDelete}
             style={{
               width: 90,
               borderWidth: 1,
@@ -262,7 +398,7 @@ const styles = StyleSheet.create({
   card1: {
     borderRadius: 20,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 1,
     shadowRadius: 12,
     elevation: 5,
@@ -278,18 +414,14 @@ const styles = StyleSheet.create({
   },
   card_picker: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
-    borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderWidth: 0.5,
+    borderRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
-
     minWidth: 110,
     elevation: 3,
   },
