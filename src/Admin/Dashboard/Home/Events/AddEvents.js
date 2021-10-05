@@ -545,8 +545,9 @@ export default function AddEvents({navigation}) {
                 justifyContent: 'center',
                 width: 150,
                 backgroundColor: '#FFFFFF',
-                borderRadius: 10,
+                borderRadius: 12,
                 shadowColor: 'black',
+                fontSize:14,
                 shadowOpacity: 5,
                 elevation: 1,
               }}
@@ -561,6 +562,7 @@ export default function AddEvents({navigation}) {
             style={{
               flexDirection: 'row',
               marginTop: 20,
+              fontSize:14,
               justifyContent: 'space-between',
             }}>
             <View>
@@ -803,7 +805,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Poppins-Regular',
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
+    borderRadius: 12,
     shadowColor: 'black',
     shadowOpacity: 5,
     elevation: 3,
@@ -820,7 +822,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     height: 100,
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
     shadowColor: 'black',
     shadowOpacity: 5,
     elevation: 3,
@@ -846,7 +847,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 50,
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
+    borderRadius: 12,
     shadowColor: 'black',
     shadowOpacity: 5,
     elevation: 3,

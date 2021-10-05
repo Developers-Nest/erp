@@ -134,7 +134,7 @@ export default function EventScreen({ navigation }) {
             style={{
               flexDirection: 'column',
               alignItems: 'center',
-              marginRight: 5,
+              
             }}>
             <Ionicons
               name="add-circle"
@@ -142,8 +142,8 @@ export default function EventScreen({ navigation }) {
               style={{
                 fontSize: 30,
                 color: 'white',
-                marginRight: 20,
-                marginTop: 10,
+                marginRight: 12,
+                marginTop: 4,
               }}
             />
             <Text
@@ -151,7 +151,7 @@ export default function EventScreen({ navigation }) {
                 color: '#fff',
                 fontFamily: 'Poppins-Regular',
                 fontSize: 12,
-                marginRight: 20,
+                marginRight: 15,
               }}>
               Add Events
             </Text>
@@ -219,6 +219,7 @@ export default function EventScreen({ navigation }) {
         {filteredUsers.length > 0 ?
           (
             <ScrollView>
+              <View flexDirection="column-reverse">
               {events &&
                 filteredUsers.map(event => (
                   <View style={styles.shadow} key={event._id}>
@@ -332,10 +333,12 @@ export default function EventScreen({ navigation }) {
                     </View>
                   </View>
                 ))}
+                </View>
               <View style={{ height: 10 }} />
             </ScrollView>
           ) : (
             <ScrollView>
+              <View flexDirection="column-reverse">
               {events &&
                 events.map(event => (
                   <View style={styles.shadow} key={event._id}>
@@ -449,6 +452,7 @@ export default function EventScreen({ navigation }) {
                     </View>
                   </View>
                 ))}
+                </View>
               <View style={{ height: 10 }} />
             </ScrollView>
           )
@@ -474,7 +478,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
   },
   search_input: {
-    borderRadius: 8,
+    borderRadius: 10,
     height: 59,
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
@@ -483,7 +487,7 @@ const styles = StyleSheet.create({
   },
   EventCard: {
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 7,
   },
   shadow: {
