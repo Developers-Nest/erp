@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from 'react';
 // import { TextInput } from 'react-native-paper';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import LinearGradient from 'react-native-linear-gradient';
 //icons
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -16,8 +14,6 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  Touchable,
-  Alert,
 } from 'react-native';
 
 // helpers
@@ -252,6 +248,7 @@ export default function HostelRequest({navigation}) {
     return (
       <View style={styles.container}>
         <ScrollView>
+          <View flexDirection="column-reverse">
           {requests &&
             requests.map(request =>
               request && request.status === 'Pending' ? (
@@ -354,6 +351,7 @@ export default function HostelRequest({navigation}) {
                 </View>
               ) : null,
             )}
+            </View>
         </ScrollView>
       </View>
     );
@@ -394,6 +392,7 @@ export default function HostelRequest({navigation}) {
     return (
       <View style={styles.container}>
         <ScrollView>
+          <View flexDirection='column-reverse'>
           {requests &&
             requests.map(request =>
               request && request.status === 'Pending' ? null : (
@@ -499,6 +498,7 @@ export default function HostelRequest({navigation}) {
                 </View>
               ),
             )}
+            </View>
         </ScrollView>
       </View>
     );
@@ -522,7 +522,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 5,
     // marginTop: 5,
-    borderRadius: 8,
+    borderRadius: 12,
     paddingHorizontal: 10,
 
     // paddingLeft: 10,
@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     elevation: 5,
-    borderRadius: 8,
+    borderRadius: 12,
     paddingLeft: 10,
     paddingRight: 10,
 
@@ -613,7 +613,7 @@ const styles = StyleSheet.create({
 
   text_input: {
     // paddingHorizontal: 20,
-    borderRadius: 10,
+    borderRadius: 12,
     // backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
@@ -629,10 +629,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
