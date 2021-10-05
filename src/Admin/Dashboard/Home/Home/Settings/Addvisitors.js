@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
   shadow: {
     elevation: 2,
     borderRadius: 0,
-    backgroundColor: 'transparent',
+    backgroundColor: 'white',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
