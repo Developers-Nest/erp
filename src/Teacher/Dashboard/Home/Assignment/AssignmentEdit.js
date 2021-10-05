@@ -16,7 +16,7 @@ import ModalSelector from 'react-native-modal-selector';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-// helpers
+// helpers 
 import get from '../../../../services/helpers/request/get';
 import read from '../../../../services/localstorage/read';
 import getBatch from '../../../../services/helpers/getList/getBatch';

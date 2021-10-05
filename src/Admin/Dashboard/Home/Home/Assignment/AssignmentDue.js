@@ -5,6 +5,8 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
+import {useFocusEffect} from '@react-navigation/native';
+
 import {
   StyleSheet,
   Text,
@@ -23,6 +25,8 @@ import { Searchbar, Button } from 'react-native-paper';
 import get from '../../../../../services/helpers/request/get';
 import read from '../../../../../services/localstorage/read';
 
+import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
+
 // redux
 import { useSelector } from 'react-redux';
 
@@ -35,17 +39,36 @@ export default function AssignmentDue({ navigation }) {
   //for search
   const [searchText, setSearchText] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
-  useEffect(async () => {
-    try {
-      let slug = '/note/assignment';
-      let token = await read('token');
-      const response = await get(slug, token);
-      console.log(response);
-      setAssignments(response);
-    } catch (err) {
-      alert('Cannot fetch your assignments !!');
-    }
-  }, []);
+
+  // loading screem
+  const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoadingScreen();
+
+ 
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+
+      const fetchUser=async()=>{
+        showLoadingScreen()
+        try {
+          let slug = '/note/assignment';
+          let token = await read('token');
+          const response = await get(slug, token);
+          console.log(response);
+          setAssignments(response);
+        } catch (err) {
+          alert('Cannot fetch your assignments !!');
+        }
+        hideLoadingScreen()
+      }
+
+      fetchUser();
+
+      return () => {
+        isActive = false;
+      };
+    }, []),
+  );
 
   //theming
   const institute = useSelector(state => state.institute);
@@ -53,6 +76,7 @@ export default function AssignmentDue({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.maincontainer}>
+      {loadingScreen}
         <View
           style={{
             backgroundColor: institute ? institute.themeColor : 'black',

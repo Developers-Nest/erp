@@ -465,7 +465,6 @@ export default function TransportMain({ navigation }) {
               {driverinfo ? driverinfo &&
                 filteredUsers.map(driverinfo => (
 
-
                   <View style={styles.section}
                     key={driverinfo._id}
                   >

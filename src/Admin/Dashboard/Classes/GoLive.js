@@ -143,6 +143,7 @@ export default function OnlineLecture({navigation}) {
       }
       else if (response._id) {
         alert('Class Added!');
+        navigation.navigate('Lectures');
       }
     } catch (err) {
       alert('Cannot Add this Claas!');

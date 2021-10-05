@@ -136,11 +136,25 @@ export default function Profile({ navigation }) {
     if (reg.test(uemail) === true) {
       console.log("Email is Correct");
       setUemail(uemail)
-      updateProfile()
+      mobilevalidate()
+
     }
     else {
       console.log("Email is Incorrect");
-      return alert("Invalid Email Format");
+      setUemail(null)
+      return alert("Invalid Email Format Enter Again");
+    }
+  }
+
+
+  const mobilevalidate=()=> {
+    const reg = /^[0]?[789]\d{9}$/;
+    if (reg.test(umobile) === false) {
+      setUMobile(null)
+      return alert ("Invalid Number Format Enter Again");
+    } else {
+      setUMobile(umobile)
+      updateProfile()
     }
   }
 
@@ -294,7 +308,7 @@ export default function Profile({ navigation }) {
                   <Text style={{ marginTop: 20 }}>Enter Email</Text>
                   <ScrollView>
                     <TextInput
-                      placeholder={userInfo.email}
+                      placeholder="Enter Email"
                       value={uemail}
                       style={styles.textInput}
                       onChangeText={value => setUemail(value)}
@@ -315,7 +329,7 @@ export default function Profile({ navigation }) {
                     />
                     <Text style={{ marginTop: 20 }}>Mobile</Text>
                     <TextInput
-                      placeholder={userInfo.mobile}
+                      placeholder="Enter the Mobile number (IN)"
                       value={umobile}
                       style={styles.textInput}
                       keyboardType="numeric"

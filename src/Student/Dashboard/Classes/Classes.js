@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React from 'react';
 
 import LecturesScreen from './LecturesScreen';
 import GoLiveScreen from './GoLive';
