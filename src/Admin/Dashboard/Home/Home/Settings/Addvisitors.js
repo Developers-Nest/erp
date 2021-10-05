@@ -113,6 +113,7 @@ const AddVisitors = ({navigation}) => {
       console.log(data);
       let response = await post(slug, data, token);
       alert('Visitor created!');
+      navigation.navigate("SettingUsers")
     } catch (err) {
       alert('Cannot create occurance!' + err);
     }
@@ -235,6 +236,7 @@ const AddVisitors = ({navigation}) => {
           <View style={{flexDirection: 'row'}}>
             <TextInput
               placeholderTextColor="grey"
+              color="black"
               style={[styles.input, styles.shadow]}
               placeholder="Shian Manzoor"
               onChangeText={name => {
@@ -244,6 +246,7 @@ const AddVisitors = ({navigation}) => {
             <TextInput
               placeholderTextColor="grey"
               style={[styles.input, styles.shadow]}
+              color="black"
               placeholder="Brother"
             />
           </View>
@@ -275,6 +278,7 @@ const AddVisitors = ({navigation}) => {
               style={[styles.input, styles.shadow]}
               onChangeText={who => setWhomToMeet(who)}
               placeholder="Safi Ahmed"
+              color="black"
             />
             <TouchableOpacity
               style={[styles.pickdate, styles.shadow]}
@@ -283,6 +287,7 @@ const AddVisitors = ({navigation}) => {
                 style={{marginLeft: 0, fontFamily: 'Poppins-Regular'}}
                 placeholder={date}
                 placeholderTextColor="grey"
+                color="black"
               />
               <Feather
                 size={18}
