@@ -133,8 +133,8 @@ export default function TasksList({ navigation }) {
               flex: 1,
               alignItems: 'center',
               alignSelf: 'flex-end',
-              marginTop: 5,
-              paddingRight: 20,
+              marginTop: 4,
+              paddingRight: 15,
             }}>
             <IonIcon size={30} color="white" name="add-circle-outline" />
           </TouchableOpacity>
@@ -205,7 +205,6 @@ export default function TasksList({ navigation }) {
       {filteredUsers.length > 0 ?
         (
           <ScrollView>
-
             {
               tasks &&
               filteredUsers.map(task => (
@@ -315,10 +314,11 @@ export default function TasksList({ navigation }) {
                 </View>
               ))}
             <View style={{ height: 10 }} />
+            
           </ScrollView>
         ) : (
           <ScrollView>
-
+            <View flexDirection="column-reverse">
             {tasks &&
               tasks.map(task => (
                 <View style={styles.section} key={task._id}>
@@ -425,6 +425,7 @@ export default function TasksList({ navigation }) {
                   </View>
                 </View>
               ))}
+              </View>
             <View style={{ height: 10 }} />
           </ScrollView>
 
@@ -451,10 +452,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 15,
     borderColor: '#00499F',
-    borderRadius: 8,
+    borderRadius: 12,
   },
   search_input: {
-    borderRadius: 8,
+    borderRadius: 12,
     height: 59,
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
@@ -473,7 +474,7 @@ const styles = StyleSheet.create({
       height: 1,
     },
     shadowOpacity: 1,
-    shadowRadius: 8,
+    shadowRadius: 12,
   },
   section: {
     display: 'flex',

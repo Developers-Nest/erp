@@ -186,8 +186,8 @@ export default function BulkSMS({ navigation }) {
                             flex: 1,
                             alignItems: 'center',
                             alignSelf: 'flex-end',
-                            paddingRight: 25,
-                            marginTop: 5
+                            paddingRight: 15,
+                            marginTop: 4
                         }}>
                         <IonIcon size={30} color="white" name="add-circle-outline" />
                     </TouchableOpacity>
@@ -310,7 +310,7 @@ export default function BulkSMS({ navigation }) {
                         ) : (null)
                     }
                     <View style={{ padding: 10 }} />
-                    <Card style={{ height: 200, ...styles.Card }}>
+                    <Card style={{ height: 170, ...styles.Card }}>
                         <Card.Content>
                             <TextInput
                                 placeholder="Write your message here "
@@ -324,7 +324,7 @@ export default function BulkSMS({ navigation }) {
                         </Card.Content>
                     </Card>
                 </View>
-                <View style={{ padding: 10 }}>
+                <View style={{ padding: 10, paddingTop:50 }}>
                     <View
                         style={{
                             justifyContent: 'center',
@@ -365,9 +365,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
         fontWeight: '500',
-        fontSize: 18,
+        fontSize: 15,
         lineHeight: 30,
-        paddingTop: 3,
+        paddingTop: 2,
         color: '#211C5A',
     },
     card_picker: {

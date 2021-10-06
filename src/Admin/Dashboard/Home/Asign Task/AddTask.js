@@ -734,6 +734,7 @@ export default function AddTask({navigation}) {
             justifyContent: 'center',
             alignItems: 'center',
             padding: 20,
+            paddingTop:50,
           }}>
           <Button
             style={{width: 90}}
@@ -770,7 +771,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Medium',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 15,
     lineHeight: 30,
     paddingTop: 3,
     color: '#505069',
@@ -802,7 +803,7 @@ const styles = StyleSheet.create({
   },
   section_heading2: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 12,
+    fontSize: 13,
     width: 210,
     paddingLeft: '0%',
     fontStyle: 'normal',
@@ -830,10 +831,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     elevation: 3,
@@ -846,7 +844,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 10,
     borderColor: '#00499F',
-    borderRadius: 8,
+    borderRadius: 12,
   },
   Card1: {
     backgroundColor: 'white',
@@ -855,7 +853,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 10,
     borderColor: '#00499F',
-    borderRadius: 8,
+    borderRadius: 12,
   },
   Card2: {
     backgroundColor: 'white',
@@ -864,7 +862,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 10,
     borderColor: '#00499F',
-    borderRadius: 8,
+    borderRadius: 12,
   },
   Card3: {
     backgroundColor: 'white',
@@ -872,7 +870,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 10,
     borderColor: '#00499F',
-    borderRadius: 8,
+    borderRadius: 12,
     elevation: 3,
   },
   CardContent: {
