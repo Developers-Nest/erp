@@ -202,6 +202,7 @@ export default function OnlineExams({navigation}) {
       <View style={styles.container}>
         {loadingScreen}
         <ScrollView>
+        <View flexDirection="column-reverse">
           <View
             style={{
               flexDirection: 'row',
@@ -308,6 +309,7 @@ export default function OnlineExams({navigation}) {
                 </View>
               ) : null,
             )}
+            </View>
         </ScrollView>
       </View>
     );
@@ -477,9 +479,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 15,
     lineHeight: 30,
-    paddingTop: 3,
+    paddingTop: 2,
     color: '#211C5A',
   },
 
@@ -511,10 +513,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
 

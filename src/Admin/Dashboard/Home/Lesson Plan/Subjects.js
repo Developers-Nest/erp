@@ -115,7 +115,6 @@ export default function Subjects({ navigation }) {
                         ))}
                         </View>
                 </TouchableWithoutFeedback>
-                {/* </View> */}
             
             <View style={{ height: 10 }} />
             </ScrollView>
