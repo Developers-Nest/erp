@@ -155,15 +155,7 @@ const AddApplication = ({navigation}) => {
   let handleSubmit = async () => {
     setLoadingScreen();
     try {
-      if (
-        !des ||
-        !dur ||
-        !empcode ||
-        !empid ||
-        !date ||
-        !checkBoxValue ||
-        !reason
-      ) {
+      if (!des || !dur || !empcode || !empid || !date || !reason) {
         alert('All fields are required!');
         hideLoadingScreen();
         return;
