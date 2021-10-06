@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import {
   Button,
 } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
 import ModalSelector from 'react-native-modal-selector';
-import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import getCourse from '../../../../services/helpers/getList/getCourse'
@@ -338,9 +337,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 15,
     lineHeight: 30,
-    paddingTop: 3,
+    paddingTop: 2,
     color: '#211C5A',
   },
   card_picker: {
@@ -351,10 +350,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     elevation: 3,
@@ -366,10 +362,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     elevation: 3,
@@ -385,10 +378,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     borderColor: '#00499F',
-    borderRadius: 8,
+    borderRadius: 12,
   },
   search_input: {
-    borderRadius: 8,
+    borderRadius: 12,
     height: 59,
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
@@ -400,7 +393,7 @@ const styles = StyleSheet.create({
   shadow: {
 
     elevation: 5,
-    borderRadius: 8,
+    borderRadius: 12,
     backgroundColor: 'transparent',
     shadowColor: '#000',
     shadowOffset: {
@@ -408,7 +401,7 @@ const styles = StyleSheet.create({
       height: 1,
     },
     shadowOpacity: 1,
-    shadowRadius: 8,
+    shadowRadius: 12,
   },
   section: {
     display: 'flex',
