@@ -198,13 +198,15 @@ export default function FeedbackMain({navigation}) {
             />
           </Card.Content>
         </Card>
+        <View alignItems="center">
         <Button
           onPress={handleSubmit}
           mode="contained"
           color={institute.themeColor}
-          style={{marginVertical: 20}}>
+          style={{marginVertical: 20, width:120}}>
           submit
         </Button>
+        </View>
       </View>
     </View>
   );

@@ -8,12 +8,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
   Button,
 } from 'react-native-paper';
 import {useSelector} from 'react-redux';
@@ -165,7 +159,7 @@ export default function PaymentSlip({navigation}) {
               color: 'white',
               fontFamily: 'NunitoSans-Regular',
             }}>
-            Payment Slip
+           Genertae Pay Slip
           </Text>
         </View>
       </View>
@@ -178,7 +172,7 @@ export default function PaymentSlip({navigation}) {
             onChange={async option => {
               await getNames(option.key);
             }}
-            initValue="Department"
+            initValue="Designation"
             style={styles.card_picker1}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
@@ -186,7 +180,7 @@ export default function PaymentSlip({navigation}) {
           <View style={{padding: 10}} />
           <ModalSelector
             data={Names}
-            initValue="Name"
+            initValue="Employee Name"
             onChange={async option => {
               await setName(option.key);
             }}
