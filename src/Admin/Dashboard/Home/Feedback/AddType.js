@@ -119,6 +119,7 @@ const AddType = ({navigation}) => {
               alignItems: 'center',
               marginRight: 5,
               paddingRight: 10,
+              paddingTop:4,
             }}>
             <MaterialCommunityIcon
               name="eye"
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
     margin: 40,
   },
   search: {
@@ -280,7 +281,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 20,
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     marginHorizontal: 20,
   },
@@ -299,7 +300,7 @@ const styles = StyleSheet.create({
 
   search_input: {
     fontFamily: 'Poppins-Regular',
-    borderRadius: 8,
+    borderRadius: 12,
     height: 50,
     fontSize: 15,
 
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'white',
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     marginLeft: 22,
     marginRight: 12,
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: 'white',
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -375,7 +376,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'white',
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     marginLeft: 12,
     marginRight: 0,
@@ -404,10 +405,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#58636D',
-
     overflow: 'hidden',
     justifyContent: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     marginLeft: 15,
     marginRight: 20,
@@ -425,10 +425,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#58636D',
-
     overflow: 'hidden',
     justifyContent: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     marginLeft: 0,
     marginRight: 20,
@@ -442,10 +441,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
 
@@ -457,7 +453,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 15,
     lineHeight: 30,
     paddingTop: 3,
     color: '#211C5A',

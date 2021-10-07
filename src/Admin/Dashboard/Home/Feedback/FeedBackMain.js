@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
-import {Text, Appbar, Card, Button, Title, Paragraph} from 'react-native-paper';
+import {Text, Card, Button, Title, Paragraph} from 'react-native-paper';
 
 //selector
 import ModalSelector from 'react-native-modal-selector';
@@ -155,7 +155,7 @@ export default function FeedbackMain({navigation}) {
               style={{
                 fontSize: 35,
                 color: 'white',
-                paddingRight: 20,
+                paddingRight: 15,
               }}
             />
           </View>
@@ -188,7 +188,7 @@ export default function FeedbackMain({navigation}) {
           </Card.Content>
         </Card>
         <View style={{padding: 10}} />
-        <Card style={{height: 200, ...styles.card_picker}}>
+        <Card style={{height: 150, ...styles.card_picker}}>
           <Card.Content>
             <TextInput
               placeholder="Write down your feedback question here..... "
@@ -198,6 +198,7 @@ export default function FeedbackMain({navigation}) {
             />
           </Card.Content>
         </Card>
+        <View style={{ height: 30 }} />
         <View alignItems="center">
         <Button
           onPress={handleSubmit}
@@ -221,9 +222,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 15,
     lineHeight: 30,
-    paddingTop: 3,
+    paddingTop: 2,
     color: '#211C5A',
   },
   card_picker: {
@@ -233,13 +234,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
-
     minWidth: 110,
     elevation: 3,
   },

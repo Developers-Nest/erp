@@ -157,7 +157,7 @@ export default function PaymentSlip({navigation}) {
               color: 'white',
               fontFamily: 'NunitoSans-Regular',
             }}>
-           Genertae Pay Slip
+           Generate Pay Slip
           </Text>
         </View>
       </View>

@@ -113,7 +113,7 @@ const AddVisitors = ({navigation}) => {
       console.log(data);
       let response = await post(slug, data, token);
       alert('Visitor created!');
-      navigation.navigate("SettingUsers")
+      navigation.replace("SettingUsers")
     } catch (err) {
       alert('Cannot create occurance!' + err);
     }

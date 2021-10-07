@@ -137,6 +137,7 @@ const AddQuestion = ({navigation}) => {
               alignItems: 'center',
               justifyContent: 'center',
               paddingRight: 15,
+              paddingTop:4,
             }}>
             <MaterialCommunityIcon
               name="eye"
@@ -430,7 +431,7 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: '200',
     fontWeight: '500',
-    fontSize: 14,
+    fontSize: 15,
     lineHeight: 30,
     paddingTop: 3,
     color: 'rgba(88, 99, 109, 0.85)',

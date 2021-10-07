@@ -99,6 +99,7 @@ const TypeList = ({navigation}) => {
         </View>
       </View>
       <ScrollView>
+        <View flexDirection="column-reverse">
         {typelist &&
           typelist.map(typelist => (
             <View style={styles.section} key={typelist._id}>
@@ -185,6 +186,7 @@ const TypeList = ({navigation}) => {
               </View>
             </View>
           ))}
+          </View>
         <View style={{height: 80}} />
       </ScrollView>
     </View>
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
   },
   search_input: {
     fontFamily: 'Poppins-Regular',
-    borderRadius: 8,
+    borderRadius: 12,
     height: 50,
     fontSize: 15,
 
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 20,
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     marginTop: 20,
   },
@@ -289,7 +291,7 @@ const styles = StyleSheet.create({
     color: '#F9F9F9',
     padding: 3,
     paddingHorizontal: 5,
-    borderRadius: 5,
+    borderRadius: 4,
   },
   header: {
     height: 69,
