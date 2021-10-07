@@ -208,7 +208,10 @@ export default function AddEvents({route, navigation}) {
   //fetch batches after course fetch
   const fetchBatches = async course => {
     showLoadingScreen();
-
+    if (!course) {
+      hideLoadingScreen();
+      return;
+    }
     try {
       setcourse(course);
       let response = await getBatch(course);
@@ -232,6 +235,11 @@ export default function AddEvents({route, navigation}) {
       let slug = `/event/${id}`;
       let token = await read('token');
       let data;
+      if (!des || !end || !eventFor || !Organizer || !start || !eventname) {
+        alert('All fields are required!!');
+        hideLoadingScreen();
+        return;
+      }
       if (checked) {
         if (eventFor === 'Common To All') {
           data = {
@@ -249,6 +257,11 @@ export default function AddEvents({route, navigation}) {
             _id: id,
           };
         } else if (eventFor === 'Selected Department') {
+          if (!department) {
+            alert('All fields are required!!');
+            hideLoadingScreen();
+            return;
+          }
           data = {
             batch: null,
             course: null,
@@ -264,6 +277,11 @@ export default function AddEvents({route, navigation}) {
             _id: id,
           };
         } else if (eventFor === 'Selected Batch') {
+          if (!batch || !course) {
+            alert('All fields are required!!');
+            hideLoadingScreen();
+            return;
+          }
           data = {
             batch: batch,
             course: course,
@@ -297,6 +315,11 @@ export default function AddEvents({route, navigation}) {
             _id: id,
           };
         } else if (eventFor === 'Selected Department') {
+          if (!department) {
+            alert('All fields are required!!');
+            hideLoadingScreen();
+            return;
+          }
           data = {
             batch: null,
             course: null,
@@ -313,6 +336,11 @@ export default function AddEvents({route, navigation}) {
             _id: id,
           };
         } else if (eventFor === 'Selected Batch') {
+          if (!batch || !course) {
+            alert('All fields are required!!');
+            hideLoadingScreen();
+            return;
+          }
           data = {
             batch: batch,
             course: course,
