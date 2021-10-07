@@ -3,17 +3,10 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
   Button,
 } from 'react-native-paper';
 import {useSelector} from 'react-redux';
@@ -30,7 +23,6 @@ import getHRname from '../../../../services/helpers/getList/getHRname';
 import getYear from '../../../../services/helpers/getList/getYear';
 import getMonth from '../../../../services/helpers/getList/getMonth';
 import get from '../../../../services/helpers/request/get';
-import patch from '../../../../services/helpers/request/patch';
 import read from '../../../../services/localstorage/read';
 
 // loading screem
@@ -165,7 +157,7 @@ export default function PaymentSlip({navigation}) {
               color: 'white',
               fontFamily: 'NunitoSans-Regular',
             }}>
-            Payment Slip
+           Genertae Pay Slip
           </Text>
         </View>
       </View>
@@ -178,7 +170,7 @@ export default function PaymentSlip({navigation}) {
             onChange={async option => {
               await getNames(option.key);
             }}
-            initValue="Department"
+            initValue="Designation"
             style={styles.card_picker1}
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
@@ -186,7 +178,7 @@ export default function PaymentSlip({navigation}) {
           <View style={{padding: 10}} />
           <ModalSelector
             data={Names}
-            initValue="Name"
+            initValue="Employee Name"
             onChange={async option => {
               await setName(option.key);
             }}
@@ -510,9 +502,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 15,
     lineHeight: 30,
-    paddingTop: 3,
+    paddingTop: 2,
     color: '#211C5A',
   },
   card_picker: {
@@ -523,10 +515,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     elevation: 3,
@@ -538,10 +527,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     elevation: 3,
@@ -557,10 +543,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     borderColor: '#00499F',
-    borderRadius: 8,
+    borderRadius: 12,
   },
   search_input: {
-    borderRadius: 8,
+    borderRadius: 12,
     height: 59,
     fontSize: 15,
     fontFamily: 'Poppins-Regular',
@@ -571,7 +557,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     elevation: 5,
-    borderRadius: 8,
+    borderRadius: 12,
     backgroundColor: 'transparent',
     shadowColor: '#000',
     shadowOffset: {
@@ -579,7 +565,7 @@ const styles = StyleSheet.create({
       height: 1,
     },
     shadowOpacity: 1,
-    shadowRadius: 8,
+    shadowRadius: 12,
   },
   section: {
     display: 'flex',

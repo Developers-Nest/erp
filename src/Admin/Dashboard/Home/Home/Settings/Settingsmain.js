@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Modal
 } from 'react-native';
 
 //dropdown
@@ -21,7 +22,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 //checkbox
-import { CheckBox, Modal } from 'react-native-elements';
+import { CheckBox } from 'react-native-elements';
 
 //redux
 import { useSelector } from 'react-redux';
@@ -33,6 +34,7 @@ import post from '../../../../../services/helpers/request/post';
 import read from '../../../../../services/localstorage/read';
 import getCourse from '../../../../../services/helpers/getList/getCourse';
 import getBatch from '../../../../../services/helpers/getList/getBatch';
+import { Button } from 'react-native-paper';
 
 export default function Settingsmain({ navigation }) {
   const [showContent, setShowContent] = React.useState('Users');
@@ -280,10 +282,19 @@ export default function Settingsmain({ navigation }) {
       setIsSelectAll(!isSelectAll)
     }
 
+    const [visible, setVisible] = useState(false);
+    const [visibleMessage, setVisibleMessage] = useState(false)
+    const [visiblePassword, setVisiblePassword] = useState(false)
+    const [messageTemp, setMessageTemp] = useState('')
+    const [messageContent, setMessageConetent] = useState('')
+
+
     let sendEmail = async () => {
       setLoadingScreen()
-      if (users && users.length == 0) {
+      if (!users || users.length == 0 || emailText.length == 0) {
+        alert('All Fields are Required!!')
         hideLoadingScreen()
+        setVisible(false)
         return
       }
       try {
@@ -311,6 +322,47 @@ export default function Settingsmain({ navigation }) {
         alert('Cannot Send Email')
       }
       hideLoadingScreen()
+      setVisible(false)
+    }
+
+
+    let sendMessage = async () => {
+      setLoadingScreen()
+      if (users.length == 0 || messageContent.length == 0 || messageTemp.length == 0) {
+        alert('All Fields are Required!!')
+        hideLoadingScreen()
+        setVisibleMessage(false)
+        return
+      }
+
+      try {
+
+        let token = await read('token')
+        let slug = '/settings/user/email'
+
+        let list = []
+        Object.entries(checkBoxValue).forEach(([userId, value]) => {
+          if (checkBoxValue[userId]) list.push(userId)
+        });
+
+        let data = {
+          smsContent: messageContent,
+          smsTemplateID: messageTemp,
+          list: list
+        }
+
+        let res = await post(slug, data, token)
+        if (res.error) {
+          alert(res.error)
+        } else{
+          alert('Message Sent!!')
+        }
+
+      } catch (err) {
+        alert(err.message)
+      }
+      hideLoadingScreen()
+      setVisibleMessage(false)
     }
 
     return (
@@ -335,6 +387,71 @@ export default function Settingsmain({ navigation }) {
             initValueTextStyle={styles.SelectedValueSmall}
             selectTextStyle={styles.SelectedValueSmall}
           />
+
+          {/* modal to enter email text */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={visible}
+            onRequestClose={() => {
+              setVisible(!visible)
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <TextInput
+                  placeholder="Enter Message Here"
+                  placeholderTextColor="grey"
+                  onChangeText={(val) => setEmailText(val)}
+                ></TextInput>
+                <Button
+                  onPress={() => {
+                    sendEmail()
+                  }}
+                  style={{ marginHorizontal: 20, marginVertical: 10 }}
+                  color={institute.themeColor}
+                  mode="contained">
+                  <Text>Send Email</Text>
+                </Button>
+              </View>
+            </View>
+          </Modal>
+          {/* modal to enter email text ends */}
+
+
+          {/* modal to enter message text */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={visibleMessage}
+            onRequestClose={() => {
+              setVisibleMessage(!visibleMessage)
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <TextInput
+                  placeholder="Enter Template Id"
+                  placeholderTextColor="grey"
+                  onChangeText={(val) => setMessageTemp(val)}
+                ></TextInput>
+
+                <TextInput
+                  placeholder="Enter Message Content"
+                  placeholderTextColor="grey"
+                  onChangeText={(val) => setMessageConetent(val)}
+                ></TextInput>
+                <Button
+                  onPress={() => {
+                    sendMessage()
+                  }}
+                  style={{ marginHorizontal: 20, marginVertical: 10 }}
+                  color={institute.themeColor}
+                  mode="contained">
+                  <Text>Send Message</Text>
+                </Button>
+              </View>
+            </View>
+          </Modal>
+          {/* modal to enter email message ends */}
 
           {
             sUserType === "Student" ? (
@@ -397,7 +514,7 @@ export default function Settingsmain({ navigation }) {
                 marginLeft: 25,
               }}>
 
-              <TouchableOpacity style={styles.iconbubble} onPress={sendEmail}>
+              <TouchableOpacity style={styles.iconbubble} onPress={() => setVisible(true)}>
                 <MaterialCommunityIcon size={38.5} color="black" name="gmail" />
               </TouchableOpacity>
               <View>
@@ -412,13 +529,13 @@ export default function Settingsmain({ navigation }) {
               </View>
             </View>
             <View style={{ flexDirection: 'column' }}>
-              <View style={styles.iconbubble}>
+              <TouchableOpacity style={styles.iconbubble} onPress={() => setVisibleMessage(true)}>
                 <MaterialCommunityIcon
                   size={38.5}
                   color="black"
                   name="chat-processing"
                 />
-              </View>
+              </TouchableOpacity>
               <View>
                 <Text
                   style={{
@@ -868,5 +985,26 @@ const styles = StyleSheet.create({
 
     width: 140,
     elevation: 3,
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 35,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: '90%',
   },
 });

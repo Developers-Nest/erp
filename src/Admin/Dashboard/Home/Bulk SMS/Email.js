@@ -132,7 +132,7 @@ export default function SmsAlert({ navigation }) {
                         paddingLeft: 30,
                         color: 'white',
                     }}>
-                    Email
+                    Send Email
                 </Text>
             </View>
             <ScrollView>
