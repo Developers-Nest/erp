@@ -157,7 +157,6 @@ export default function AddEvents({navigation}) {
           !des ||
           !end ||
           !eventFor ||
-          !checked ||
           !eventFor ||
           !Organizer ||
           !start ||
@@ -232,7 +231,6 @@ export default function AddEvents({navigation}) {
           !des ||
           !end ||
           !eventFor ||
-          !checked ||
           !eventFor ||
           !Organizer ||
           !start ||
@@ -547,7 +545,7 @@ export default function AddEvents({navigation}) {
                 backgroundColor: '#FFFFFF',
                 borderRadius: 12,
                 shadowColor: 'black',
-                fontSize:14,
+                fontSize: 14,
                 shadowOpacity: 5,
                 elevation: 1,
               }}
@@ -562,7 +560,7 @@ export default function AddEvents({navigation}) {
             style={{
               flexDirection: 'row',
               marginTop: 20,
-              fontSize:14,
+              fontSize: 14,
               justifyContent: 'space-between',
             }}>
             <View>
