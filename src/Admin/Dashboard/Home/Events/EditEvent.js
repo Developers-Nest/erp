@@ -708,7 +708,7 @@ export default function AddEvents({route, navigation}) {
           style={styles.ButtonView}
           color={institute ? institute.themeColor : '#5177E7'}
           onPress={handlesubmit}>
-          Edit
+          Save
         </Button>
       </View>
     </ScrollView>
