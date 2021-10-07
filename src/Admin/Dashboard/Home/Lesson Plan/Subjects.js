@@ -80,12 +80,10 @@ export default function Subjects({ navigation }) {
             {/* header ends */}
 
             <ScrollView>
-
                 {/* <View style={styles.maincontainer}>     */}
                 <TouchableWithoutFeedback onPress={() => {
-                    navigation.navigate('LessonPlan');
-                }}>
-
+                    navigation.navigate('LessonPlan'); }}>
+                    <View flexDirection="column-reverse">
                     {subjects &&
                         subjects.map(subjects => (
 
@@ -115,9 +113,10 @@ export default function Subjects({ navigation }) {
 
                             </View>
                         ))}
+                        </View>
                 </TouchableWithoutFeedback>
-                {/* </View> */}
-
+            
+            <View style={{ height: 10 }} />
             </ScrollView>
 
         </View>

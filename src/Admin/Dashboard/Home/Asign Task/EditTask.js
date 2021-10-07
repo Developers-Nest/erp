@@ -1,27 +1,12 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity} from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
-  Card,
-  Title,
-  Paragraph,
   Button,
 } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import IonIcon from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
@@ -61,10 +46,6 @@ export default function EditTask({navigation}) {
 
   return (
     <View style={styles.backgroung}>
-      {/* <Appbar>
-        <Appbar.BackAction onPress={() => {}} />
-        <Appbar.Content title="Add Task" />
-      </Appbar> */}
       <View
             style={{backgroundColor: institute ? institute.themeColor : '#FF5733',
             ...styles.header,
@@ -251,14 +232,14 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Medium',
         fontStyle: 'normal',
         fontWeight: '500',
-        fontSize: 18,
+        fontSize: 15,
         lineHeight: 30,
         paddingTop: 3,
         color: '#505069',
       },
       section_heading: {
         fontFamily: 'Poppins-Regular',
-        fontSize: 12,
+        fontSize: 13,
         width:160,
         paddingLeft:'0%',
         fontStyle: 'normal',
@@ -271,7 +252,7 @@ const styles = StyleSheet.create({
     },
     section_heading1: {
         fontFamily: 'Poppins-Medium',
-        fontSize: 12,
+        fontSize: 13,
         width:160,
         paddingLeft: 25,
         fontStyle: 'normal',
@@ -284,7 +265,7 @@ const styles = StyleSheet.create({
     },
     section_heading2: {
         fontFamily: 'Poppins-Regular',
-        fontSize: 12,
+        fontSize: 13,
         width:210,
         paddingLeft:'0%',
         fontStyle: 'normal',
@@ -296,7 +277,7 @@ const styles = StyleSheet.create({
     },
     section_heading3: {
         fontFamily: 'Poppins-Regular',
-        fontSize: 12,
+        fontSize: 13,
         width:210,
         fontStyle: 'normal',
         fontWeight: '600',
@@ -312,10 +293,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#ccc',
         borderWidth: 1,
-        borderBottomLeftRadius: 12,
-        borderBottomRightRadius: 12,
-        borderTopRightRadius: 12,
-        borderTopLeftRadius: 12,
+        borderRadius:12,
         overflow: 'hidden',
         justifyContent: 'center',
         elevation: 3,
@@ -328,7 +306,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal:10,
         borderColor: '#00499F',
-        borderRadius: 8,
+        borderRadius: 12,
       },
       Card1: {
         backgroundColor: 'white',
@@ -337,7 +315,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal:10,
         borderColor: '#00499F',
-        borderRadius: 8,
+        borderRadius: 12,
       },
       Card2: {
         backgroundColor: 'white',
@@ -346,7 +324,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal:10,
         borderColor: '#00499F',
-        borderRadius: 8,
+        borderRadius: 12,
       },
       Card3: {
         backgroundColor: 'white',
@@ -355,10 +333,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal:10,
         borderColor: '#00499F',
-        borderRadius: 8,
+        borderRadius: 12,
       },
       CardContent: {
-        borderRadius: 8,
+        borderRadius: 12,
         height: 59,
         fontSize: 15,
         fontFamily: 'Poppins-Regular',
@@ -373,7 +351,7 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: 'white',
         borderColor: '#58636D',
-        borderRadius: 8,
+        borderRadius: 12,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',

@@ -111,7 +111,7 @@ export default function Settingsmain({ navigation }) {
                         {visitor.whomToMeet}
                       </Text>
 
-                      <TouchableOpacity
+                      {/* <TouchableOpacity
                         style={{ flexDirection: 'row' }}
                         onPress={() => navigation.navigate('EditVisitors')}>
                         <Text
@@ -128,7 +128,7 @@ export default function Settingsmain({ navigation }) {
                           name="edit"
                           style={{ paddingTop: 2, paddingRight: 10 }}
                         />
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
 
                     </View>
                   </View>

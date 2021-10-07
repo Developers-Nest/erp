@@ -246,7 +246,7 @@ const EditQuestion = ({route, navigation}) => {
                 ...styles.button,
               }}
               onPress={handleSubmit}>
-              <Text style={styles.text}>Edit</Text>
+              <Text style={styles.text}>Save</Text>
             </Pressable>
           </View>
         </View>

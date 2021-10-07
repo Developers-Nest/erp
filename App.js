@@ -13,7 +13,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import RNBootSplash from 'react-native-bootsplash';
 // import PushNotificationIOS from "@react-native-community/push-notification-ios";
 // import PushNotification from "react-native-push-notification";
-// import Firebase  from '@react-native-firebase/app';
+import Firebase  from '@react-native-firebase/app';
 
 // import Teacher from './src/Teacher/Teacher';
 // import Student from './src/Student/Student';

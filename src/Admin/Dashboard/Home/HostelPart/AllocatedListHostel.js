@@ -13,12 +13,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Button } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import Icon1 from 'react-native-vector-icons/AntDesign';
-//for swipeable icons
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+
 // redux
 import { useSelector } from 'react-redux';
 
@@ -163,7 +161,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
             style={{
               flexDirection: 'column',
               alignItems: 'center',
-              marginRight: 5,
+              paddingTop:4,
             }}>
             <Icon
               name="add-circle"
@@ -372,6 +370,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
           </ScrollView>
         ) : (
           <ScrollView>
+            <View flexDirection="column-reverse">
             {allocation
               ? (allocation) &&
               allocation.map(allocation => (
@@ -483,6 +482,7 @@ const AllocatedListHostel = ({ route, navigation }) => {
                 </View>
               ))
               : null}
+              </View>
             <View style={{ height: 90 }} />
           </ScrollView>
 
@@ -515,7 +515,7 @@ const styles = StyleSheet.create({
   },
   search_input: {
     fontFamily: 'Poppins-Regular',
-    borderRadius: 8,
+    borderRadius: 12,
     height: 50,
     fontSize: 15,
     color: 'black',
@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 20,
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     marginTop: 20,
   },

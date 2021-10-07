@@ -124,16 +124,31 @@ export default function Profile({ navigation }) {
 
   // email format validification
   const validate = () => {
+
     console.log(uemail);
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
     if (reg.test(uemail) === true) {
       console.log("Email is Correct");
       setUemail(uemail)
-      updateProfile()
+      mobilevalidate()
+
     }
     else {
-      console.log("Email is Correct");
-      return alert("Invalid Email Format");
+      console.log("Email is Incorrect");
+      setUemail(null)
+      return alert("Invalid Email Format Enter Again");
+    }
+  }
+
+
+  const mobilevalidate=()=> {
+    const reg = /^[0]?[789]\d{9}$/;
+    if (reg.test(umobile) === false) {
+      setUmobile(null)
+      return alert ("Invalid Number Format Enter Again");
+    } else {
+      setUmobile(umobile)
+      updateProfile()
     }
   }
 
@@ -292,7 +307,7 @@ export default function Profile({ navigation }) {
         <Text style={{ marginTop: 20 }}>Enter Email</Text>
         <ScrollView>
         <TextInput
-        placeholder={userInfo.email}
+        placeholder="Enter email address"
         value={uemail}
         style={styles.textInput}
         onChangeText={value => setUemail(value)}
@@ -313,7 +328,7 @@ export default function Profile({ navigation }) {
         />
         <Text style={{ marginTop: 20 }}>Phone</Text>
         <TextInput
-        placeholder={userInfo.phone}
+        placeholder="Enter the Mobile number (IN)"
         keyboardType="numeric"
         maxLength={10}
         value={umobile}

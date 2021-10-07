@@ -8,15 +8,12 @@ import {
   TextInput,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import {
-  Button,
-} from 'react-native-paper';
+
 
 //modal selector
 import ModalSelector from 'react-native-modal-selector';
 
 //icons
-import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -523,15 +520,6 @@ const AddVisitorsHostel = ({ navigation }) => {
                   marginTop: 16,
                   marginRight: 0,
                 }}></Feather>
-               
-              {/* <Button
-                icon="calendar"
-                mode="contained"
-                color="white"
-                style={{ alignSelf:'center', width: 150, height: 47 }}
-                onPress={() => setShowTimePicker(true)}>
-                {time ? time.slice(15, 21) : 'TIME'}
-              </Button> */}
 
               <DateTimePickerModal
                 isVisible={showtimePicker}
@@ -565,7 +553,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 12,
     paddingHorizontal: 25,
-    borderRadius: 4,
+    borderRadius: 5,
     elevation: 3,
   },
   text: {
@@ -589,7 +577,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 20,
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
   },
 
@@ -607,7 +595,7 @@ const styles = StyleSheet.create({
 
   search_input: {
     fontFamily: 'Poppins-Regular',
-    borderRadius: 8,
+    borderRadius: 12,
     height: 50,
     fontSize: 15,
 
@@ -705,7 +693,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'white',
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     marginLeft: 22,
     marginRight: 12,
@@ -726,7 +714,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: 'white',
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -739,7 +727,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'white',
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     marginLeft: 12,
     marginRight: 0,
@@ -769,10 +757,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     margin: 0,
     padding: 0,
@@ -798,10 +783,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
     height: 50,
@@ -815,10 +797,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
     height: 50,

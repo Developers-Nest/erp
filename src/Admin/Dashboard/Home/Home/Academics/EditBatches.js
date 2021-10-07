@@ -25,25 +25,21 @@ const EditBatches = ({ route, navigation }) => {
     const [batch, setBatch] = useState({})
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    
+    const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
     const [batchName, setBatchName] = useState('')
     const [date, setDate] = useState('29 May 2021')
     const [startDate, setstartDate] = useState('21 May 2021')
 
     const [loadingScreen, showLoadingScreen, hideLoadingScreen] = LoaderHook()
 
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
     const handleConfirm = (date) => {
         setDate(date.toString())
-        hideDatePicker();
+        setDatePickerVisibility1(false);
     };
     const handleConfirmissued = (startDate) => {
         setstartDate(startDate.toString())
-        hideDatePicker();
+        setDatePickerVisibility(false);
     };
 
     useEffect(()=>{
@@ -51,7 +47,7 @@ const EditBatches = ({ route, navigation }) => {
         let batch = b.batch
         setBatchName(batch.batchName)
         setBatch(batch)
-        setDate(batch.startDate)
+        setDate(batch.endDate)
         setstartDate(batch.startDate)
     },[])
 
@@ -120,8 +116,7 @@ const EditBatches = ({ route, navigation }) => {
                                 alignSelf: 'center',
                                 fontSize: 25,
                                 color: 'white',
-                                // paddingLeft: 10,
-                                // paddingTop: 23,
+                               
                             }}
                         />
                     </TouchableOpacity>
@@ -186,7 +181,7 @@ const EditBatches = ({ route, navigation }) => {
                     <View style={{ flexDirection: 'row' }} >
 
                         <TouchableOpacity style={[styles.pickdate, styles.shadow]}
-                            onPress={showDatePicker}>
+                            onPress={()=>setDatePickerVisibility(true)}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                                 value={startDate.slice(0,10)}
                                 placeholderTextColor='grey'
@@ -204,11 +199,11 @@ const EditBatches = ({ route, navigation }) => {
                                 style={styles.pickdate}
                                 mode="date"
                                 onConfirm={handleConfirmissued}
-                                onCancel={hideDatePicker}
+                                onCancel={()=>setDatePickerVisibility(false)}
                             />
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.pickdate, styles.shadow]}
-                            onPress={showDatePicker}>
+                           onPress={()=>setDatePickerVisibility1(true)}>
                             <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
                                 value={date.slice(0,10)}
                                 placeholderTextColor='grey'
@@ -222,11 +217,11 @@ const EditBatches = ({ route, navigation }) => {
                                 }}
                             ></Feather>
                             <DateTimePickerModal
-                                isVisible={isDatePickerVisible}
+                                isVisible={isDatePickerVisible1}
                                 style={styles.pickdate}
                                 mode="date"
                                 onConfirm={handleConfirm}
-                                onCancel={hideDatePicker}
+                                onCancel={()=>setDatePickerVisibility1(false)}
                             />
                         </TouchableOpacity>
                     </View>

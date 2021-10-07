@@ -294,6 +294,10 @@ const IssuedBooksAdd = ({ navigation }) => {
   };
 
   let handleSubmit = async () => {
+    if(!book || !userID || !department || !employee || !issue || !due){
+      alert('All Fields are required!!')
+      return
+  }
     try {
       let slug = '/library/issue';
       let token = await read('token');

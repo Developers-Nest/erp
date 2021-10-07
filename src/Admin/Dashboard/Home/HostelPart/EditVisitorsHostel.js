@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, Pressable, TextInput } from 'react-native';
-import ModalSelector from 'react-native-modal-selector';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -42,14 +41,6 @@ const institute = useSelector(state => state.institute);
 
 
         <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-            {/* <ModalSelector
-
-                initValue="Add Visitor"
-
-                style={styles.card}
-                initValueTextStyle={styles.SelectedValue}
-                selectTextStyle={styles.SelectedValue}
-            /> */}
             
             <View
         style={{
@@ -274,7 +265,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: 20,
         borderColor: '#58636D',
-        borderRadius: 8,
+        borderRadius: 12,
         borderWidth: 0.3,
 
     },
@@ -293,11 +284,9 @@ const styles = StyleSheet.create({
 
     search_input: {
         fontFamily: 'Poppins-Regular',
-        borderRadius: 8,
+        borderRadius: 12,
         height: 50,
         fontSize: 15,
-
-
         paddingTop: 5,
         paddingHorizontal: 0,
         width: '90%',
@@ -339,7 +328,7 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: 'white',
         borderColor: '#58636D',
-        borderRadius: 8,
+        borderRadius: 12,
         borderWidth: 0.3,
         marginLeft: 22,
         marginRight: 12,
@@ -360,7 +349,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         backgroundColor: 'white',
         borderColor: '#58636D',
-        borderRadius: 8,
+        borderRadius: 12,
         borderWidth: 0.3,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -375,7 +364,7 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: 'white',
         borderColor: '#58636D',
-        borderRadius: 8,
+        borderRadius: 12,
         borderWidth: 0.3,
         marginLeft: 12,
         marginRight: 0,

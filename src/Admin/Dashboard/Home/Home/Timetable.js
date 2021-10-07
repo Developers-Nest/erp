@@ -60,7 +60,7 @@ export default function OnlineLecture({navigation}) {
           label: response[i].firstName + ' ' + response[i].lastName,
         });
         setTeacherlist(list);
-        setTempTeacherlist(list);
+        setTempTeacherlist([]);
         console.log(teacherlist);
       }
     } catch (err) {
@@ -137,7 +137,7 @@ export default function OnlineLecture({navigation}) {
               onChangeText={text => {
                 setSearchText(text);
                 if (text === '') {
-                  setTempTeacherlist(teacherlist);
+                  setTempTeacherlist([]);
                 } else {
                   const filtered_teachers = teacherlist.filter(teacher =>
                     teacher.label.toLowerCase().includes(text.toLowerCase()),
@@ -150,7 +150,7 @@ export default function OnlineLecture({navigation}) {
             <TouchableOpacity
               onPress={() => {
                 setSearchText('');
-                setTempTeacherlist(teacherlist);
+                setTempTeacherlist([]);
               }}
               style={{
                 alignSelf: 'center',
@@ -161,10 +161,11 @@ export default function OnlineLecture({navigation}) {
                   alignSelf: 'center',
                   fontSize: 24,
                   color: '#505069',
+                  padding: 10,
                 }}
               />
             </TouchableOpacity>
-            <ModalSelector
+            {/* <ModalSelector
               data={tempteacherlist}
               initValue={
                 <View style={{flex: 1, flexDirection: 'row'}}>
@@ -185,9 +186,31 @@ export default function OnlineLecture({navigation}) {
               style={{padding: 0, margin: 0}}
               initValueTextStyle={styles.SelectedValueSmall}
               selectTextStyle={styles.SelectedValueSmall}
-            />
+            /> */}
           </View>
         </View>
+
+        {tempteacherlist.map(teacher => {
+          return (
+            <TouchableOpacity
+              style={{
+                marginVertical: 2,
+                marginHorizontal: 20,
+                ...styles.shadow,
+              }}
+              onPress={() => {
+                fetchTimetable(teacher.key);
+                setTempTeacherlist([]);
+                setSearchText(teacher.label);
+              }}>
+              <View
+                key={teacher.key}
+                style={{padding: 7, ...styles.card_headingContainer}}>
+                <Text>{teacher.label}</Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
 
         {timeTable &&
           Object.keys(timeTable).map((day, index) => {

@@ -291,20 +291,7 @@ export default function AssignmentDue({ navigation }) {
                               'Submission date Not Found'}
                           </Text>
                         </View>
-                        <View>
-                          <Button
-                            style={styles.button}
-                            onPress={() =>
-                              Alert.alert('Assignment Successfully sent')
-                            }
-                            color={institute ? institute.themeColor : 'blue'}
-                            labelStyle={{ color: 'white' }}
-                            uppercase={false}
-                            mode="contained">
-                            Send
-                          </Button>
-                        </View>
-                      </View>
+                         </View>
                     </View>
                   ))}
                 <View style={{ height: 20 }} />
@@ -396,20 +383,7 @@ export default function AssignmentDue({ navigation }) {
                               'Submission date Not Found'}
                           </Text>
                         </View>
-                        <View>
-                          <Button
-                            style={styles.button}
-                            onPress={() =>
-                              Alert.alert('Assignment Successfully sent')
-                            }
-                            color={institute ? institute.themeColor : 'blue'}
-                            labelStyle={{ color: 'white' }}
-                            uppercase={false}
-                            mode="contained">
-                            Send
-                          </Button>
-                        </View>
-                      </View>
+                          </View>
                     </View>
                   ))}
                 <View style={{ height: 20 }} />

@@ -227,7 +227,7 @@ export default function LessonPlan({ navigation }) {
         (
 
           <ScrollView>
-
+            <View flexDirection="column-reverse">
             {
               data && data.map((plan) => (
                 <View style={styles.section} key={plan._id}>
@@ -293,7 +293,7 @@ export default function LessonPlan({ navigation }) {
                 </View>
               ))
             }
-
+            </View>
             <View style={{ height: 10 }} />
           </ScrollView>
 
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
   },
   shadow: {
     elevation: 5,
-    borderRadius: 8,
+    borderRadius: 12,
     backgroundColor: 'transparent',
     shadowColor: '#000',
     shadowOffset: {
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
       height: 1,
     },
     shadowOpacity: 1,
-    shadowRadius: 8,
+    shadowRadius: 12,
   },
   search: {
     backgroundColor: 'white',
@@ -409,10 +409,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 15,
     borderColor: '#00499F',
-    borderRadius: 8,
+    borderRadius: 12,
   },
   search_input: {
-    borderRadius: 8,
+    borderRadius: 12,
     height: 59,
     fontSize: 15,
     fontFamily: 'Poppins-Regular',

@@ -303,6 +303,7 @@ const HostelDetails = ({ navigation }) => {
         ) :
         (
           <ScrollView>
+            <View flexDirection="column-reverse">
             {hdetails && hdetails.map(hdetails => (
               <View style={styles.section} key={hdetails._id}>
                 <View style={styles.details}>
@@ -402,7 +403,7 @@ const HostelDetails = ({ navigation }) => {
             ))
 
             }
-
+            </View>
             <View style={{ height: 90 }} />
           </ScrollView>
 
@@ -437,7 +438,7 @@ const styles = StyleSheet.create({
   },
   search_input: {
     fontFamily: 'Poppins-Regular',
-    borderRadius: 8,
+    borderRadius: 12,
     height: 50,
     fontSize: 15,
 
@@ -452,7 +453,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 20,
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     borderWidth: 0.3,
     marginTop: 20,
   },

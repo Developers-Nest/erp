@@ -132,7 +132,7 @@ export default function SmsAlert({ navigation }) {
                         paddingLeft: 30,
                         color: 'white',
                     }}>
-                    Email
+                    Send Email
                 </Text>
             </View>
             <ScrollView>
@@ -181,11 +181,11 @@ export default function SmsAlert({ navigation }) {
                         onChangeText={val => setMessage(val)}
                         multiline={true}
                         value={message}
-                        style={{ backgroundColor: 'white', color: 'black', fontFamily: 'Poppins-Regular', fontSize: 15, textAlignVertical: 'top', height: 150, borderRadius: 12 }}
+                        style={{ backgroundColor: 'white', color: 'black', fontFamily: 'Poppins-Regular', fontSize: 15, textAlignVertical: 'top', height: 120, borderRadius: 12 }}
                     />
 
                 </View>
-                <View style={{ padding: 10 }}>
+                <View style={{ padding: 10, paddingTop:30 }}>
                     <View
                         style={{
                             justifyContent: 'center',
@@ -225,9 +225,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
         fontWeight: '500',
-        fontSize: 18,
+        fontSize: 15,
         lineHeight: 30,
-        paddingTop: 3,
+        paddingTop: 2,
         color: '#211C5A',
     },
     card_picker: {
