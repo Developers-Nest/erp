@@ -298,7 +298,7 @@ const Home = ({navigation}) => {
           </Badge>
         </TouchableOpacity>
       </View>
-      <View style={{paddingTop: 10}}></View>
+      {/* <View style={{paddingTop: 10}}></View>
       <View style={{...styles.shadow}}>
         <View style={styles.search}>
           <TextInput
@@ -321,7 +321,7 @@ const Home = ({navigation}) => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
       <ScrollView style={styles.main}>
         <View style={{height: 30}}></View>
         <View>
