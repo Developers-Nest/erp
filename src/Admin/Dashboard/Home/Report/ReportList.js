@@ -128,18 +128,19 @@ const styles = StyleSheet.create({
       },
     CardContainer: {
         marginTop: 10,
-
         flex: 1,
         flexDirection: 'column',
     },
     card: {
-        borderRadius: 15,
+        borderRadius: 12,
         marginTop: 10,
         marginLeft: 10,
         marginRight: 10,
 
     },
     title: {
-        marginLeft:15
+        marginLeft:15,
+        fontSize:16,
+        fontFamily: 'Poppins-Regular',
     }
 });

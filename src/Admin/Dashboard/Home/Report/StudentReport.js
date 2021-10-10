@@ -10,7 +10,6 @@ import {
 import { Searchbar,Button,Card, Title} from 'react-native-paper';
 import ModalSelector from 'react-native-modal-selector';
 // date picker
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
 
@@ -287,19 +286,20 @@ const styles = StyleSheet.create({
     Modal :{
         backgroundColor:'white',
         margin:5,
-        borderRadius:5
+        borderRadius:12
     },
     SelectedValueSmall: {
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
         fontWeight: '500',
-        fontSize: 18,
-        lineHeight: 30,
+        fontSize: 16,
+        lineHeight: 25,
         paddingTop: 3,
         color: '#211C5A',
     },
     searchbar: {
         margin:8,
+        borderRadius:10,
        
     },
     InfoCards: {
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
         justifyContent:'center'
 },
 cardContent: {
-    borderRadius: 15,
+    borderRadius: 12,
     marginTop: 10,
     marginLeft:10,
     marginRight:10,

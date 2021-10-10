@@ -159,20 +159,20 @@ const institute = useSelector(state => state.institute);
             <View style={styles.InfoCards}>
             <Card style={styles.cardContent}>
                     <Card.Content>
-                        <Title>{Details.Name}</Title>
+                        <Title style={{fontSize:18,fontFamily: 'Poppins-Regular',fontStyle: 'normal',fontWeight:'bold'}}>{Details.Name}</Title>
                         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                        <Title style={{fontSize:18,fontWeight:'normal'}}>Date:{Details.Date}</Title>
-                        <Title >{Details.Amount}</Title>
+                        <Title style={{fontSize:14,fontFamily: 'Poppins-Regular',fontStyle: 'normal'}}>Date:{Details.Date}</Title>
+                        <Title style={{fontSize:14,fontFamily: 'Poppins-Regular',fontStyle: 'normal'}}>{Details.Amount}</Title>
                         </View>
                     </Card.Content>
                 </Card>
 
                 <Card style={styles.cardContent}>
                     <Card.Content>
-                        <Title>{Details.Name}</Title>
+                        <Title style={{fontSize:18,fontFamily: 'Poppins-Regular',fontStyle: 'normal',fontWeight:'bold'}}>{Details.Name}</Title>
                         <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                        <Title style={{fontSize:18,fontWeight:'normal'}}>Date:{Details.Date}</Title>
-                        <Title >{Details.Amount}</Title>
+                        <Title style={{fontSize:14,fontFamily: 'Poppins-Regular',fontStyle: 'normal'}}>Date:{Details.Date}</Title>
+                        <Title style={{fontSize:14,fontFamily: 'Poppins-Regular',fontStyle: 'normal'}}>{Details.Amount}</Title>
                         </View>
                     </Card.Content>
                 </Card>
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
         fontWeight: 'normal',
-        fontSize: 18,
+        fontSize: 16,
         lineHeight: 27,
         padding: 10,
         color: '#211C5A',
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontStyle: 'normal',
         fontWeight: '500',
-        fontSize: 18,
+        fontSize: 16,
         lineHeight: 30,
         paddingTop: 3,
         color: '#211C5A',
@@ -249,7 +249,10 @@ const styles = StyleSheet.create({
             flexDirection: 'column',
     },
     cardContent: {
-            borderRadius: 15,
+            borderRadius: 12,
+            fontSize:14,
+            fontFamily: 'Poppins-Regular',
+            fontStyle: 'normal',
             marginTop: 10,
             marginLeft: 10,
             marginRight: 10,
