@@ -1,482 +1,198 @@
-import * as React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  ScrollView,
-  ImageBackground,
-  Button,
-  TouchableOpacity,
-} from 'react-native';
-import {Appbar} from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, ScrollView, ImageBackground, Button, TouchableOpacity } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
-export default function Subjects() {
-  const [searchQuery, setSearchQuery] = React.useState('');
 
-  const onChangeSearch = query => setSearchQuery(query);
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
-  return (
-    <View style={styles.container}>
-      <Appbar.Header>
-        <Appbar.BackAction />
-        <Appbar.Content title="Subjects" />
-        <Appbar.Action icon="information" />
-      </Appbar.Header>
+// helpers
+import get from '../../../../services/helpers/request/get';
+import read from '../../../../services/localstorage/read';
+//redux
+import { useSelector } from 'react-redux';
 
-      <ScrollView>
-        {/* <View style={styles.maincontainer}>     */}
 
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
+export default function Subject({ navigation }) {
+
+    const [searchQuery, setSearchQuery] = useState('');
+    const [subjects, setsubjects] = useState([]);
+
+    const onChangeSearch = query => setSearchQuery(query);
+
+    useEffect(async () => {
+        try {
+            let slug = '/subject';
+            let token = await read('token');
+            const response = await get(slug, token);
+            console.log("Subjects ", response);
+            setsubjects(response);
+        } catch (err) {
+            alert('Cannot fetch your subjects list !!');
+        }
+    }, []);
+
+    //theming
+    const institute = useSelector(state => state.institute);
+
+
+    return (
+        <View style={styles.container}>
+            {/* header start */}
+
+            <View
+                style={{
+                    backgroundColor: institute ? institute.themeColor : '#FF5733',
+                    // backgroundColor:'blue',
+                    ...styles.header,
+                }}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('Home');
+                    }}>
+                    <AntDesign
+                        size={24}
+                        color="white"
+                        name="left"
+                        style={{
+                            alignSelf: 'center',
+
+                            fontSize: 25,
+                            color: 'white',
+                            paddingLeft: 20,
+                            marginTop: 22,
+                        }}
+                    />
+                </TouchableOpacity>
                 <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Physics
+                    style={{
+                        fontStyle: 'normal',
+                        fontFamily: 'NunitoSans-Regular',
+                        fontSize: 28,
+                        fontWeight: '600',
+                        alignSelf: 'center',
+                        marginLeft: 30,
+                        color: 'white',
+                    }}>
+                    Subjects
                 </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  PHY:20345
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginLeft: 5,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  Batch
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Class
-                </Text>
-              </TouchableOpacity>
             </View>
-          </View>
-        </View>
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Physics
-                </Text>
 
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  PHY:20345
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginLeft: 5,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  Batch
-                </Text>
+            {/* header ends */}
 
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Class
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+            <ScrollView>
+                {/* <View style={styles.maincontainer}>     */}
+                <TouchableWithoutFeedback >
+                    <View flexDirection="column-reverse">
+                    {subjects &&
+                        subjects.map(subjects => (
+
+                            <View style={styles.section} key={subjects._id}>
+                                <View style={styles.details}>
+
+                                    <View style={styles.userinhostels}>
+                                        <View style={styles.differentusers}>
+                                            <Text style={{ fontSize: 18, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>
+                                                {' '}{subjects.name ? subjects.name : 'N/A'}
+
+                                            </Text>
+
+                                            <Text style={{ fontSize: 12, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>
+                                                {subjects.code ? subjects.code : 'N/A'}</Text>
+                                        </View>
+                                        <View style={styles.differentusers}>
+                                            <Text style={{ fontSize: 12, marginLeft: 5, color: '#211C5A', fontFamily: 'Poppins-Regular' }}>
+                                                {subjects.description ? subjects.description : 'Description N/A'}
+
+
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+
+
+                            </View>
+                        ))}
+                        </View>
+                </TouchableWithoutFeedback>
+            
+            <View style={{ height: 10 }} />
+            </ScrollView>
+
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Physics
-                </Text>
 
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  PHY:20345
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginLeft: 5,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  Batch
-                </Text>
+    );
 
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Class
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Physics
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  PHY:20345
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginLeft: 5,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  Batch
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Class
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Physics
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  PHY:20345
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginLeft: 5,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  Batch
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Class
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Physics
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  PHY:20345
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginLeft: 5,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  Batch
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Class
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Physics
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  PHY:20345
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginLeft: 5,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  Batch
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Class
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.details}>
-            <View style={styles.userinhostels}>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Physics
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  PHY:20345
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.differentusers}>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginLeft: 5,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  Batch
-                </Text>
-
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: '#211C5A',
-                    fontFamily: 'PoppinsRegular',
-                  }}>
-                  {' '}
-                  Class
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        {/* </View> */}
-      </ScrollView>
-    </View>
-  );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#E5E5E5',
-  },
 
-  section: {
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 2,
-    paddingHorizontal: 13,
-    shadowColor: '#333',
-    shadowOffset: {
-      width: 0,
-      height: 1,
+    container: {
+        flex: 1,
+        backgroundColor: 'rgba(249, 249, 249, 1)',
+
     },
-    shadowOpacity: 0.2,
-    elevation: 10,
-    marginTop: 20,
-    borderRadius: 12,
-    marginHorizontal: 25,
-  },
 
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: 20,
-    paddingBottom: 10,
-    borderBottomColor: '#333',
-    // borderBottomWidth:1,
-  },
-  userinhostels: {
-    marginTop: 0,
-  },
-  differentusers: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  userstext: {
-    fontSize: 16,
-    paddingVertical: 4,
-    fontWeight: '300',
-  },
-  belowhr: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginTop: 20,
-    justifyContent: 'space-between',
-    paddingBottom: 10,
-    borderBottomColor: '#333',
-  },
-  search: {
-    backgroundColor: 'white',
-    color: 'black',
-  },
+    section: {
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: '#FFFFFF',
+        paddingVertical: 2,
+        paddingHorizontal: 13,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 1,
+        elevation: 5,
+        marginTop: 20,
+        marginBottom: 10,
+        borderRadius: 12,
+        marginHorizontal: 25,
+
+
+
+    },
+
+    details: {
+        display: 'flex',
+        flexDirection: 'column',
+        borderBottomColor: '#333',
+        marginVertical: 10
+        // borderBottomWidth:1,
+    },
+    userinhostels: {
+        marginTop: 0,
+    },
+    differentusers: {
+        flexDirection: 'row',
+        alignItems: "center",
+        justifyContent: 'space-between'
+    },
+    userstext: {
+        fontSize: 16,
+        paddingVertical: 4,
+        fontWeight: '300',
+    },
+    belowhr: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: 20,
+        justifyContent: 'space-between',
+        paddingBottom: 10,
+        borderBottomColor: '#333',
+
+    },
+    search: {
+        backgroundColor: "white",
+        color: "black"
+    },
+    header: {
+        height: 69,
+        flexDirection: 'row',
+        alignContent: 'center',
+    },
+
+
 });

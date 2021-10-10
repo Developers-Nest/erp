@@ -57,7 +57,7 @@ export default function LessonPlan({ navigation }) {
 
       >
         <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }} >
-          <TouchableOpacity onPress={() => { navigation.navigate('Subjects') }}>
+          <TouchableOpacity onPress={() => { navigation.navigate('Home') }}>
             <Icon
               size={24}
               color="white"

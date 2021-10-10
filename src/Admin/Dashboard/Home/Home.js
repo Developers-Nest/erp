@@ -34,6 +34,7 @@ import Task from './Asign Task/Task';
 import PaymentStack from './PaymentSlip/PaymentStack';
 import QuickPayment from './Quick Payment/QuickPayment';
 import Placement from './Placement/Placement';
+import Subject from './Subject/Subject';
 //navigations from home screen second screen
 import SettingUsers from './Home/Settings';
 import Timetable from './Home/Timetable';
@@ -295,6 +296,13 @@ function DrawerContent(props) {
           onPress={() => props.navigation.navigate('QuickPayment')}
 
         />
+         <DrawerItem
+          style={styles.item}
+          label={({ focused, color }) => (
+            <Text style={styles.drawer_item}>Subjects</Text>
+          )}
+          onPress={() => props.navigation.navigate('Subject')}
+        />
 
         <DrawerItem
           style={styles.item}
@@ -378,6 +386,7 @@ export default function Route() {
       <DrawerNav.Screen name="Hostel" component={Hostel} />
       <DrawerNav.Screen name="SmsStack" component={SmsStack} />
       <DrawerNav.Screen name="LessonPlanStack" component={LessonPlanStack} />
+      <DrawerNav.Screen name="Subject" component={Subject} />
       <DrawerNav.Screen name="Task" component={Task} />
       <DrawerNav.Screen name="PaymentStack" component={PaymentStack} />
       <DrawerNav.Screen name="QuickPayment" component={QuickPayment} />
