@@ -84,6 +84,7 @@ export default function AddDriver({ navigation }) {
                 presentAddress: curraddr,
                 permanentAddress: permaddr,
                 trackId: track,
+                dob:date,
 
             };
             console.log('Driver Data ', data);
