@@ -67,6 +67,10 @@ export default function AddDriver({ navigation }) {
 
     //on save button press action
     let handleSubmit = async () => {
+        if (!vehicle || !licensenum || !name || !phone || !curraddr || !permaddr || !date) {
+            alert('All Fields are required!!')
+            return
+        }
         try {
             let slug = '/transport/driver';
             let token = await read('token');
@@ -167,11 +171,11 @@ export default function AddDriver({ navigation }) {
 
                 <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row', alignContent: 'flex-start', justifyContent: 'space-evenly' }}>
                     <Text style={styles.section_heading}>Vehicle No. </Text>
-                    <Text style={styles.section_heading}>Track ID</Text>
+
                 </View>
 
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 20, paddingBottom: 10 }}>
                     <ModalSelector
                         data={vehicles}
                         initValue="Contract"
@@ -183,7 +187,7 @@ export default function AddDriver({ navigation }) {
                         selectTextStyle={styles.SelectedValueSmall}
                     />
 
-                    <View style={styles.Card}>
+                    {/* <View style={styles.Card}>
                         <View style={styles.CardContent}>
                             <TextInput
                                 style={{ ...styles.search_input }}
@@ -193,7 +197,7 @@ export default function AddDriver({ navigation }) {
                                 keyboardType="numeric"
                             />
                         </View>
-                    </View>
+                    </View> */}
                 </View>
 
 
@@ -357,6 +361,9 @@ const styles = StyleSheet.create({
         lineHeight: 40,
         paddingTop: 3,
         color: '#211C5A',
+
+
+
     },
     section_heading: {
         fontFamily: 'Poppins-Regular',
@@ -431,13 +438,13 @@ const styles = StyleSheet.create({
         borderColor: '#00499F',
         borderRadius: 8,
         shadowRadius: 8,
-    shadowOpacity: 1,
-    elevation:5,
+        shadowOpacity: 1,
+        elevation: 5,
     },
     cardsmall: {
         shadowColor: '#000',
         height: 59,
-        width:160,
+        flex: 1,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 8,
@@ -464,8 +471,8 @@ const styles = StyleSheet.create({
         borderColor: '#00499F',
         borderRadius: 8,
         shadowRadius: 8,
-    shadowOpacity: 1,
-    elevation:5,
+        shadowOpacity: 1,
+        elevation: 5,
     },
     Card2: {
         backgroundColor: 'white',
@@ -476,8 +483,8 @@ const styles = StyleSheet.create({
         borderColor: '#00499F',
         borderRadius: 8,
         shadowRadius: 8,
-    shadowOpacity: 1,
-    elevation:5,
+        shadowOpacity: 1,
+        elevation: 5,
     },
     Card3: {
         backgroundColor: 'white',
@@ -488,8 +495,8 @@ const styles = StyleSheet.create({
         borderColor: '#00499F',
         borderRadius: 8,
         shadowRadius: 8,
-    shadowOpacity: 1,
-    elevation:5,
+        shadowOpacity: 1,
+        elevation: 5,
     },
     CardContent: {
         borderRadius: 8,
