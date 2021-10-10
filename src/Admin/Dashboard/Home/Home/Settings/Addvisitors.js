@@ -99,6 +99,11 @@ const AddVisitors = ({navigation}) => {
 
   // save details
   const HandleAdd = async () => {
+
+    if(!category|| !purpose || !name || !whomToMeet || !student || !date){
+      alert('All Fields are required!!')
+      return
+  }
     try {
       let slug = `/visitors/add`;
       console.log('Visitor add slug', slug);
