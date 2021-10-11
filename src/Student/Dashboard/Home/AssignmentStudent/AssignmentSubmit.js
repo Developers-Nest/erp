@@ -185,36 +185,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
     },
-    userstext: {
-        fontSize: 16,
-        paddingVertical: 4,
-        fontWeight: '300',
-    },
     belowhr: {
         display: 'flex',
         flexDirection: 'row',
         marginTop: 10,
         justifyContent: 'space-between',
         paddingBottom: 15,
-    },
-    search: {
-        backgroundColor: 'white',
-        color: 'black',
-    },
-    switchTabsView: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 40,
-    },
-    switchText: {
-        fontSize: 14,
-        color: '#58636D',
-        paddingHorizontal: 5,
-    },
-    maincontainer: {
-        paddingTop: 10,
-        flex: 1,
-        backgroundColor: '#E5E5E5',
     },
     box: {
         paddingTop: 20,
