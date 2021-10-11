@@ -43,6 +43,7 @@ export default function EditDriver({ route, navigation }) {
 
     const [id, setId] = useState('')
 
+    //datepicker
     const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
     const [date, setDate] = React.useState('21 May 2021')
     let index = 0;
@@ -58,6 +59,7 @@ export default function EditDriver({ route, navigation }) {
         setDatePickerVisibility(false);
     };
     const handleConfirm = (date) => {
+        // console.warn("A date has been picked: ", date.toString());
         setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
         hideDatePicker();
     };
@@ -253,8 +255,9 @@ export default function EditDriver({ route, navigation }) {
                         <View style={styles.CardContent}>
                             <TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
                                 <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                    placeholder='DATE'
-                                    value={date.toString().slice(0, 10)}
+                                     placeholder={date}
+                                     value={date ? date.slice(0, 10) : 'N/A'}
+                                //    value={dob}
                                     placeholderTextColor="grey"
                                     color="black"
 
