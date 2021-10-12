@@ -43,6 +43,7 @@ export default function Profile({ navigation }) {
 
   // for updating
   const [uemail, setUemail] = useState(null);
+  const[upassword,setUpassword]=useState(null);
   const [ufirstName, setUfirstName] = useState(null);
   const [ulastName, setULastName] = useState(null);
   const [upaddress, setUpAddress] = useState(null);
@@ -51,6 +52,7 @@ export default function Profile({ navigation }) {
 
   useEffect(() => {
     setUemail(userInfo.email);
+    setUpassword(userInfo.password);
     setUfirstName(userInfo.firstName);
     setULastName(userInfo.lastName);
     setUpAddress(userInfo.permanentAddress);
@@ -170,6 +172,7 @@ export default function Profile({ navigation }) {
         lastName: ulastName,
         presentAddress: upaddress,
         mobile: umobile,
+        password:upassword,
       };
       let response = await patch(slug, data, token);
       if (response) {
@@ -312,6 +315,13 @@ export default function Profile({ navigation }) {
                       value={uemail}
                       style={styles.textInput}
                       onChangeText={value => setUemail(value)}
+                    />
+                    <Text style={{ marginTop: 20 }}>Password</Text>
+                    <TextInput
+                      placeholder={userInfo.password}
+                      value={upassword}
+                      style={styles.textInput}
+                      onChangeText={value => setUpassword(value)}
                     />
                     <Text style={{ marginTop: 20 }}>First Name</Text>
                     <TextInput
