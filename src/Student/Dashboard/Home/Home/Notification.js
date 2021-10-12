@@ -116,9 +116,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     paddingHorizontal: 5,
-
     lineHeight: 21,
-
     color: '#58636D',
   },
 

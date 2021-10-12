@@ -169,13 +169,13 @@ export default function Attendance({ navigation }) {
               <View style={styles.details}>
                 <View style={styles.userinhostels}>
                   <TouchableOpacity style={styles.differentusers}>
-                    <Text style={{ fontSize: 22, color: '#211C5A' }}>
+                    <Text style={{ fontSize: 18,fontFamily: 'Poppins-Regular', color: '#211C5A' }}>
                       {'Day: '}
                       {day && day.name}
                     </Text>
 
                     <Text
-                      style={{ fontSize: 22, paddingTop: 22, color: '#000000' }}>
+                      style={{ fontSize: 18,fontFamily: 'Poppins-Regular', paddingTop: 22, color: '#000000' }}>
                       {day.present === 'present' ? 'Present' : 'Absent'}
                     </Text>
                   </TouchableOpacity>
@@ -221,8 +221,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginVertical: 10,
     borderRadius: 12,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingHorizontal: 10,
     marginHorizontal: 20,
   },
 
@@ -284,10 +283,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
@@ -298,16 +294,15 @@ const styles = StyleSheet.create({
   Drop: {
     marginTop: 5,
     flexDirection: 'row',
-
     justifyContent: 'space-evenly',
   },
   SelectedValueSmall: {
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 30,
-    paddingTop: 3,
+    paddingTop: 2,
     color: '#211C5A',
   },
 });

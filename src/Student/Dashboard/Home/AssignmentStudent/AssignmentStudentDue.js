@@ -112,7 +112,7 @@ export default function AssignmentStudentDue({ navigation })
         {filteredUsers.length > 0 ?
         (
         <ScrollView>
-          
+          <View flexDirection="column-reverse">
           {filteredUsers.map(assignments => (
                 <View style={styles.section} key={assignments._id}>
                   <View style={styles.details}>
@@ -188,10 +188,11 @@ export default function AssignmentStudentDue({ navigation })
                 </View>
               ),
             )}
-            
+            </View>
         </ScrollView>
         ):(
           <ScrollView>
+            <View flexDirection="column-reverse">
           {assignments &&
             assignments.map(assignments =>
               isAssignmentDone(assignments) > -1 ? null : (
@@ -269,7 +270,7 @@ export default function AssignmentStudentDue({ navigation })
                 </View>
               ),
             )}
-
+          </View>
           </ScrollView>
         )
         }
@@ -436,9 +437,8 @@ export default function AssignmentStudentDue({ navigation })
           <View
             style={{
               marginTop: 10,
-              marginLeft: 5,
               justifyContent: 'space-between',
-              width: '95%',
+              width: '100%',
               flexDirection: 'row',
               ...styles.shadow,
             }}>

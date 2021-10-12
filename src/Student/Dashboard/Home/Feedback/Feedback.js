@@ -183,13 +183,15 @@ export default function Feedback({ navigation }) {
             />
           </Card.Content>
         </Card>
-        <View style={{ height: 20 }} />
+        <View style={{ height: 20}} />
+        <View style={{width:90, justifyContent:'center',alignItems: 'center'}}>
         <Button
           onPress={handleSubmit}
           mode="contained"
           color={institute.themeColor}>
           submit
         </Button>
+      </View>
       </View>
     </View>
   );
@@ -203,6 +205,7 @@ const styles = StyleSheet.create({
   shadow: {
     display: 'flex',
     shadowColor: '#000',
+    borderRadius:12,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -216,9 +219,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 30,
-    paddingTop: 3,
+    paddingTop: 2,
     color: '#211C5A',
   },
   card_picker: {
@@ -228,13 +231,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
-
     minWidth: 110,
     elevation: 3,
   },

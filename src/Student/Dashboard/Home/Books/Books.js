@@ -389,9 +389,7 @@ export default function BooksStudent({ navigation }) {
           <View
             style={{
               marginTop: 10,
-              marginLeft: 5,
               justifyContent: 'space-between',
-              width: '95%',
               flexDirection: 'row',
               ...styles.shadow,
             }}>
@@ -596,7 +594,7 @@ const styles = StyleSheet.create({
   },
 
   text_input: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     borderRadius: 10,
     height: 50,
     fontSize: 16,
@@ -613,10 +611,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    borderTopRightRadius: 12,
-    borderTopLeftRadius: 12,
+    borderRadius:12,
     overflow: 'hidden',
     justifyContent: 'center',
     margin: 0,
