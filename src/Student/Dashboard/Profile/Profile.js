@@ -278,18 +278,13 @@ export default function Profile({ navigation }) {
         justifyContent: 'center',
         borderWidth: 1,
         borderColor: '#fff',
-        borderRadius: 10,
+        borderRadius: 12,
       }}
         />
         </View>
         </ImageBackground>
         </View>
         </TouchableOpacity>
-      {/* {userInfo.url ? (
-            <Image source={{ uri: userInfo.url }} style={styles.tinyLogo} />
-          ) : (
-            <Avatar.Text size={100} label={userInfo.firstName[0]} />
-          )} */}
         </View>
 
 
@@ -521,7 +516,7 @@ const styles = StyleSheet.create({
   },
   panelButton: {
     padding: 13,
-    borderRadius: 10,
+    borderRadius: 12,
     backgroundColor: '#FF6347',
     alignItems: 'center',
     marginVertical: 7,
@@ -535,7 +530,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 20,
     marginVertical: 10,
-    borderRadius: 10,
+    borderRadius: 12,
     backgroundColor: 'rgba(249, 249, 249, 1)',
     height: 50,
     fontSize: 16,
@@ -555,7 +550,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: 50,
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -580,7 +575,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     backgroundColor: 'white',
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 35,
     shadowColor: '#000',
     shadowOffset: {

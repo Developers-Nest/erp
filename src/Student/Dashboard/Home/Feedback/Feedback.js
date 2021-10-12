@@ -219,9 +219,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontStyle: 'normal',
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 30,
-    paddingTop: 3,
+    paddingTop: 2,
     color: '#211C5A',
   },
   card_picker: {

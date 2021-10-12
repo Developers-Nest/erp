@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   shadow: {
     marginBottom: 10,
     elevation: 5,
-    borderRadius: 8,
+    borderRadius: 12,
     backgroundColor: 'transparent',
     shadowColor: '#000',
     shadowOffset: {
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
       height: 1,
     },
     shadowOpacity: 1,
-    shadowRadius: 8,
+    shadowRadius: 12,
   },
   card_heading: {
     fontFamily: 'Poppins-Regular',
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     color: 'rgba(88, 99, 109, 1)',
     backgroundColor: '#FFFFFF',
     borderColor: '#58636D',
-    borderRadius: 8,
+    borderRadius: 12,
     alignItems: 'center',
   },
   classes_cardWrapper: {
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 15,
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 12,
     width: 100,
     height: 150,
   },

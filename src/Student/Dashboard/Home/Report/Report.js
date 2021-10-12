@@ -119,11 +119,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 1.0,
     elevation: 5,
-
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    borderTopRightRadius: 8,
-    borderTopLeftRadius: 8,
+    borderRadius:12,
     padding: 1,
   },
 
