@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import ModalSelector from 'react-native-modal-selector';
 
 import {
@@ -14,14 +14,14 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //redux
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 // helpers
 import read from '../../../../../services/localstorage/read';
 import get from '../../../../../services/helpers/request/get';
 import LoadingScreen from '../../../../../components/LoadingScreen/LoadingScreen';
 
-export default function OnlineExams({navigation}) {
+export default function OnlineExams({ navigation }) {
   //theming
   const institute = useSelector(state => state.institute);
 
@@ -30,15 +30,31 @@ export default function OnlineExams({navigation}) {
 
   //exams
   const [exams, setexams] = useState([]);
+  //for tab navigation
+  const [publishedlist, setpublishedlist] = useState([])
+  const [unpublishedlist, setunpublishedlist] = useState([])
+
 
   //on load
   useEffect(async () => {
     setLoadingScreen();
     try {
       let slug = `/class/getClassAssignment`;
-      let token = await read('token');
-      let response = await get(slug, token);
-      setexams(response);
+      const token = await read('token');
+      const res = await get(slug, token);
+      console.log("OnlineExams ", res)
+      let unpublished = []
+      let published = []
+      res && res.map((exam) => {
+        if (exam.publishExam) {
+          published.push(exam)
+        } else unpublished.push(exam)
+      })
+      console.log('Published ', published)
+      console.log('Unpublished ', unpublished)
+      setpublishedlist(published)
+      setunpublishedlist(unpublished)
+
     } catch (err) {
       alert('Cannot get Exams!!');
     }
@@ -46,16 +62,8 @@ export default function OnlineExams({navigation}) {
     hideLoadingScreen();
   }, []);
 
-  const [className, setclassName] = useState(null);
-  const [classes, setclasses] = useState([]);
 
-  const [batch, setbatch] = useState(null);
-  const [batches, setbatches] = useState([]);
-
-  const [subject, setsubject] = useState(null);
-  const [subjects, setsubjects] = useState([]);
-
-  const [showContent, setShowContent] = React.useState('Processed');
+  const [showContent, setShowContent] = React.useState('Unpublished');
 
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -73,7 +81,7 @@ export default function OnlineExams({navigation}) {
     return d.toString().slice(0, 15);
   };
 
-  function Processed() {
+  function Unpublished() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
@@ -82,52 +90,11 @@ export default function OnlineExams({navigation}) {
       <View style={styles.container}>
         {loadingScreen}
         <ScrollView>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              marginTop: 20,
-              marginBottom: 10,
-              alignContent: 'flex-start',
-              // width: '100%'
-            }}>
-            <ModalSelector
-              data={classes}
-              initValue="Class"
-              onChange={option => {
-                // setclass(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValueSmall}
-              selectTextStyle={styles.SelectedValueSmall}
-            />
 
-            <ModalSelector
-              data={batches}
-              initValue="Batch"
-              onChange={option => {
-                // setsubject(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValueSmall}
-              selectTextStyle={styles.SelectedValueSmall}
-            />
-
-            <ModalSelector
-              data={subjects}
-              initValue="Subjects"
-              onChange={option => {
-                // setsubject(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValueSmall}
-              selectTextStyle={styles.SelectedValueSmall}
-            />
-          </View>
-          {/* close list part */}
-          {exams &&
-            exams.map(exam =>
-              new Date(exam.due) > new Date() ? (
+          <View flexDirection="column-reverse">
+            {unpublishedlist &&
+              unpublishedlist.map(exam =>
+                // new Date(exam.due) >= new Date() ? (
                 <View style={styles.section} key={exam._id}>
                   <View style={styles.details}>
                     <View style={styles.userinhostels}>
@@ -140,18 +107,17 @@ export default function OnlineExams({navigation}) {
                             fontFamily: 'Poppins-Regular',
                           }}>
                           {' '}
-                          {exam.title}
+                          <Text
+                            style={{
+                              color: 'green',
+                              fontFamily: 'Poppins-Regular',
+                              // marginTop: -20,
+                            }}>
+
+                            TITLE:{' '}</Text> {exam.title ? exam.title : 'N/A'}
                         </Text>
 
-                        <Text
-                          style={{
-                            fontSize: 10,
-                            color: '#B04305',
-                            fontFamily: 'Poppins-Regular',
-                            marginTop: -20,
-                          }}>
-                          {exam.topic && exam.topic.topicName}
-                        </Text>
+
                       </TouchableOpacity>
 
                       <TouchableOpacity style={styles.differentusers}>
@@ -161,19 +127,9 @@ export default function OnlineExams({navigation}) {
                             color: '#58636D',
                             fontFamily: 'Poppins-Regular',
                           }}>
-                          {parseDate(exam.due)}
+                          {'  '}Due on:  {parseDate(exam.due)}
                         </Text>
-                        <View style={{flexDirection: 'row'}}>
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              color: '#58636D',
-                              fontFamily: 'Poppins-Regular',
-                            }}>
-                            {' '}
-                            {new Date(exam.due).toString().slice(15)}{' '}
-                          </Text>
-                        </View>
+
                       </TouchableOpacity>
                       <Text
                         style={{
@@ -181,19 +137,20 @@ export default function OnlineExams({navigation}) {
                           color: '#58636D',
                           fontFamily: 'Poppins-Regular',
                         }}>
-                        Instructions: {exam.instruction}
+                        {'  '}Instructions: {exam.instruction}
                       </Text>
                     </View>
                   </View>
                 </View>
-              ) : null,
-            )}
+                // ) : null,
+              )}
+          </View>
         </ScrollView>
       </View>
     );
   }
 
-  function Completed() {
+  function Published() {
     const [searchQuery, setSearchQuery] = React.useState('');
 
     const onChangeSearch = query => setSearchQuery(query);
@@ -202,114 +159,61 @@ export default function OnlineExams({navigation}) {
       <View style={styles.container}>
         {loadingScreen}
         <ScrollView>
-        <View flexDirection="column-reverse">
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              marginTop: 20,
-              marginBottom: 10,
-              alignContent: 'flex-start',
-              // width: '100%'
-            }}>
-            <ModalSelector
-              data={classes}
-              initValue="Class"
-              onChange={option => {
-                // setclass(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValueSmall}
-              selectTextStyle={styles.SelectedValueSmall}
-            />
+          <View flexDirection="column-reverse">
 
-            <ModalSelector
-              data={batches}
-              initValue="Batch"
-              onChange={option => {
-                // setsubject(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValueSmall}
-              selectTextStyle={styles.SelectedValueSmall}
-            />
+            {publishedlist &&
+              publishedlist.map(exam =>
+                new Date(exam.due) < new Date() ? (
+                  <View style={styles.section} key={exam._id}>
+                    <View style={styles.details}>
+                      <View style={styles.userinhostels}>
+                        <TouchableOpacity style={styles.differentusers}>
+                          <Text
+                            style={{
+                              fontWeight: 'normal',
+                              fontSize: 18,
+                              color: '#211C5A',
+                              fontFamily: 'Poppins-Regular',
+                            }}>
+                            {' '}
+                            <Text
+                              style={{
+                                color: 'green',
+                                fontFamily: 'Poppins-Regular',
 
-            <ModalSelector
-              data={subjects}
-              initValue="Subjects"
-              onChange={option => {
-                // setsubject(option.key);
-              }}
-              style={styles.card}
-              initValueTextStyle={styles.SelectedValueSmall}
-              selectTextStyle={styles.SelectedValueSmall}
-            />
-          </View>
-          {/* close list part */}
-          {exams &&
-            exams.map(exam =>
-              new Date(exam.due) < new Date() ? (
-                <View style={styles.section} key={exam._id}>
-                  <View style={styles.details}>
-                    <View style={styles.userinhostels}>
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontWeight: 'normal',
-                            fontSize: 18,
-                            color: '#211C5A',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          {' '}
-                          {exam.title}
-                        </Text>
+                              }}>
 
-                        <Text
-                          style={{
-                            fontSize: 10,
-                            color: '#B04305',
-                            fontFamily: 'Poppins-Regular',
-                            marginTop: -20,
-                          }}>
-                          {exam.topic && exam.topic.topicName}
-                        </Text>
-                      </TouchableOpacity>
+                              TITLE:{' '}</Text> {exam.title ? exam.title : 'N/A'}
+                          </Text>
 
-                      <TouchableOpacity style={styles.differentusers}>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#58636D',
-                            fontFamily: 'Poppins-Regular',
-                          }}>
-                          {parseDate(exam.due)}
-                        </Text>
-                        <View style={{flexDirection: 'row'}}>
+
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.differentusers}>
                           <Text
                             style={{
                               fontSize: 12,
                               color: '#58636D',
                               fontFamily: 'Poppins-Regular',
                             }}>
-                            {' '}
-                            {new Date(exam.due).toString().slice(15)}{' '}
+                            {'  '}Due on:  {parseDate(exam.due)}
                           </Text>
-                        </View>
-                      </TouchableOpacity>
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: '#58636D',
-                          fontFamily: 'Poppins-Regular',
-                        }}>
-                        Instructions: {exam.instruction}
-                      </Text>
+
+                        </TouchableOpacity>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#58636D',
+                            fontFamily: 'Poppins-Regular',
+                          }}>
+                          {'  '}Instructions: {exam.instruction}
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
-              ) : null,
-            )}
-            </View>
+                ) : null,
+              )}
+          </View>
         </ScrollView>
       </View>
     );
@@ -353,38 +257,64 @@ export default function OnlineExams({navigation}) {
               marginLeft: 30,
               color: 'white',
             }}>
-            Online Exams
+            View Online Exams
           </Text>
         </View>
 
-        <View style={{padding: 5}} />
+        <View style={{ padding: 5 }} />
 
         <View style={styles.switchTabsView}>
           <TouchableOpacity
             style={{
-              borderBottomWidth: showContent == 'Processed' ? 2 : 0,
-              borderBottomColor: '#58636D',
+              borderBottomWidth: showContent == 'Unpublished' ? 2 : 0,
+              borderBottomColor: showContent == 'Unpublished' ? 'rgba(176, 67, 5, 1)' : '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
-            onPress={() => setShowContent('Processed')}>
-            <Text style={styles.switchText}>Processed</Text>
+            onPress={() => setShowContent('Unpublished')}>
+
+            <Text
+              style={
+                ([styles.switchText],
+                  [
+                    {
+                      color:
+                        showContent == 'Unpublished'
+                          ? 'rgba(176, 67, 5, 1)'
+                          : '#58636D',
+                    },
+                    { fontWeight: '700' },
+                  ])
+              }>Unpublished</Text>
+
           </TouchableOpacity>
 
           <TouchableOpacity
             style={{
-              borderBottomWidth: showContent == 'Completed' ? 2 : 0,
-              borderBottomColor: '#58636D',
+              borderBottomWidth: showContent == 'Published' ? 2 : 0,
+              borderBottomColor: showContent == 'Published' ? 'rgba(176, 67, 5, 1)' : '#58636D',
               paddingHorizontal: 4,
               justifyContent: 'center',
               alignItems: 'center',
             }}
-            onPress={() => setShowContent('Completed')}>
-            <Text style={styles.switchText}>Completed</Text>
+            onPress={() => setShowContent('Published')}>
+            <Text
+              style={
+                ([styles.switchText],
+                  [
+                    {
+                      color:
+                        showContent == 'Published'
+                          ? 'rgba(176, 67, 5, 1)'
+                          : '#58636D',
+                    },
+                    { fontWeight: 'bold' },
+                  ])
+              }>Published</Text>
           </TouchableOpacity>
         </View>
-        {showContent === 'Processed' ? <Processed /> : <Completed />}
+        {showContent === 'Unpublished' ? <Unpublished /> : <Published />}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -458,9 +388,10 @@ const styles = StyleSheet.create({
   },
   switchText: {
     fontSize: 14,
-    color: '#58636D',
     paddingHorizontal: 5,
     fontFamily: 'Poppins-Regular',
+
+
   },
   maincontainer: {
     flex: 1,
@@ -508,12 +439,12 @@ const styles = StyleSheet.create({
   },
   card: {
     shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.5,
     backgroundColor: 'white',
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius:12,
+    borderRadius: 12,
     overflow: 'hidden',
     justifyContent: 'center',
 
