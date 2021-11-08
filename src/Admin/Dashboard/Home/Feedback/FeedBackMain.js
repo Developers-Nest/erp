@@ -90,8 +90,10 @@ export default function FeedbackMain({navigation}) {
       let response = await post(slug, data, token);
       console.log('response: ', response);
       alert('feedback created');
+      navigation.navigate("Home");
+
     } catch (err) {
-      alert('Cannot get your Batches!!');
+      alert('Cannot create feedback!!');
     }
     hideLoadingScreen();
   };

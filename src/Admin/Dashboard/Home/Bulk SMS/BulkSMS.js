@@ -137,6 +137,7 @@ export default function BulkSMS({ navigation }) {
                 alert(res.error)
             } else if(res.Status) {
                 alert('Message Sent')
+                navigation.navigate("Home");
             }
         } catch(err){
             console.log('Error ', err)
