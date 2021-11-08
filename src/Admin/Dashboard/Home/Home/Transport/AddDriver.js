@@ -370,7 +370,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontSize: 12,
         width: 160,
-        paddingLeft: '0%',
+        
+      paddingHorizontal:40,
+        marginHorizontal:50,
         fontStyle: 'normal',
         fontWeight: '600',
         lineHeight: 18,

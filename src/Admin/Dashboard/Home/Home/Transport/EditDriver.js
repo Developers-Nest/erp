@@ -199,11 +199,11 @@ export default function EditDriver({ route, navigation }) {
                 {loadingScreen}
                 <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row', alignContent: 'flex-start', justifyContent: 'space-evenly' }}>
                     <Text style={styles.section_heading}>Vehicle No. </Text>
-                    <Text style={styles.section_heading}>Track ID</Text>
+                    
                 </View>
 
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 10 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingHorizontal: 20, paddingBottom: 10 }}>
                     <ModalSelector
                         data={vehicles}
                         initValue="Contract"
@@ -216,17 +216,7 @@ export default function EditDriver({ route, navigation }) {
                         selectTextStyle={styles.SelectedValueSmall}
                     />
 
-                    <View style={styles.Card}>
-                        <View style={styles.CardContent}>
-                            <TextInput
-                                style={{ ...styles.search_input }}
-                                placeholder="Track ID"
-                                placeholderTextColor='grey'
-                                color='black'
-                                keyboardType="numeric"
-                            />
-                        </View>
-                    </View>
+                   
                 </View>
 
 
@@ -405,12 +395,17 @@ const styles = StyleSheet.create({
         lineHeight: 40,
         paddingTop: 3,
         color: '#211C5A',
+
+
+
     },
     section_heading: {
         fontFamily: 'Poppins-Regular',
         fontSize: 12,
         width: 160,
-        paddingLeft: '0%',
+        
+      paddingHorizontal:40,
+        marginHorizontal:50,
         fontStyle: 'normal',
         fontWeight: '600',
         lineHeight: 18,
@@ -486,7 +481,7 @@ const styles = StyleSheet.create({
     cardsmall: {
         shadowColor: '#000',
         height: 59,
-        width: 160,
+        flex: 1,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 8,
@@ -498,13 +493,13 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 8,
         borderTopRightRadius: 8,
         borderTopLeftRadius: 8,
-        // overflow: 'hidden',
+        //overflow: 'hidden',
         justifyContent: 'center',
         margin: 0,
         padding: 0,
         minWidth: '30%',
     },
-    Card1: {
+     Card1: {
         backgroundColor: 'white',
         width: '30%',
         justifyContent: 'space-between',
