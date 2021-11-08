@@ -188,17 +188,6 @@ export default function AddDriver({ navigation }) {
                         selectTextStyle={styles.SelectedValueSmall}
                     />
 
-                    {/* <View style={styles.Card}>
-                        <View style={styles.CardContent}>
-                            <TextInput
-                                style={{ ...styles.search_input }}
-                                placeholder="Track ID"
-                                placeholderTextColor='grey'
-                                color='black'
-                                keyboardType="numeric"
-                            />
-                        </View>
-                    </View> */}
                 </View>
 
 
