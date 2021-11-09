@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+
 import EmployeeList from './Employees/EmployeeList';
 import EmployeeAttendance from './Employees/EmployeeAttendance';
-import { createStackNavigator } from '@react-navigation/stack';
+import EmpAttendance from './Employees/EmpAttendance';
 
+import {createStackNavigator} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
@@ -11,6 +13,7 @@ export default function Employees() {
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="EmployeeList" component={EmployeeList} />
       <Stack.Screen name="EmployeeAttendance" component={EmployeeAttendance} />
-         </Stack.Navigator>
+      <Stack.Screen name="EmpAttendance" component={EmpAttendance} />
+    </Stack.Navigator>
   );
 }

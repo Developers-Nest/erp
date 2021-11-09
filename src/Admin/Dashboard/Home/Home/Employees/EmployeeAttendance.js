@@ -108,6 +108,7 @@ const EmployeeAttendance = ({navigation}) => {
   const getAttPer = days => {
     let totalPresent = 0;
     let totalWorking = days.length;
+    console.log('Days', days);
     days.map(day => {
       if (day.present === 'present') totalPresent += 1;
     });
@@ -273,8 +274,15 @@ const EmployeeAttendance = ({navigation}) => {
                   employeeList.map(emp => (
                     <View style={styles.section} key={emp._id}>
                       <View style={styles.details}>
-                        <View style={styles.userinhostels2}>
-                          <TouchableOpacity style={styles.differentusers}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            navigation.navigate('EmpAttendance', {
+                              days: emp.days,
+                              name: emp.employeeId.firstName,
+                            });
+                          }}
+                          style={styles.userinhostels2}>
+                          <View style={styles.differentusers}>
                             <Text
                               style={{
                                 fontSize: 22,
@@ -296,8 +304,8 @@ const EmployeeAttendance = ({navigation}) => {
                               }}>
                               {getAttPer(emp.days)} %
                             </Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.differentusers}>
+                          </View>
+                          <View style={styles.differentusers}>
                             <Text
                               style={{
                                 fontSize: 14,
@@ -309,8 +317,8 @@ const EmployeeAttendance = ({navigation}) => {
                               }}>
                               {''} {emp.employeeCode}
                             </Text>
-                          </TouchableOpacity>
-                        </View>
+                          </View>
+                        </TouchableOpacity>
                       </View>
                     </View>
                   ))}
