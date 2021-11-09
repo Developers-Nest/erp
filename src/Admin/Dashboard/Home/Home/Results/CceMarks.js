@@ -143,13 +143,14 @@ export default function CceMarksAdmin({navigation}) {
     showLoadingScreen();
     try {
       let slug = `/cce/exam/scholasticMark?course=${course}&batch=${batch}&examname=${exam}&term=${term}&subject=${subject}&assessment=${assessment}`;
+      
       let token = await read('token');
       let res = await get(slug, token);
       let response = res.students;
       let marksArray = [];
       response.map(data => {
         marksArray.push({
-          subjectName: data.subjectSub,
+          // subjectName: data.subjectSub,
           studentAddNum: data.studentAdmissionNumber,
           mark: data.mark,
         });
@@ -199,7 +200,7 @@ export default function CceMarksAdmin({navigation}) {
           CCE Marks
         </Text>
       </View>
-      {/* {loadingScreen} */}
+      {loadingScreen}
       <View
         style={{
           padding: 10,
@@ -309,49 +310,41 @@ export default function CceMarksAdmin({navigation}) {
             Get
           </Button>
         </View>
+        <View style={{height:20}}/>
         {fetched
           ? list &&
-            list.map(data => (
-              <View>
-                <View
-                  style={{
-                    padding: 5,
-                  }}>
-                  <MySearchbar />
-                </View>
-                <View
-                  style={{
-                    padding: 5,
-                  }}></View>
-                <View style={{marginTop: 10, ...styles.shadow}}>
+            list.map((data) => (
+              <>
+                
+                <View style={{marginTop: 10, ...styles.shadow}} key={data._id}>
                   <View style={styles.card_top}>
                     <View>
                       <Text style={styles.card_title}>
-                        {/* {data.studentAddNum} */}
-                        data
+                        {data.studentAddNum}
+                        
                       </Text>
                       <Text style={{color: 'blue', fontSize: 12}}>Remarks</Text>
                     </View>
                     <View style={styles.card_marks}>
                       <Text style={{color: 'white'}}>
-                        {/* {data.mark} */}
-                        /50
+                        {data.mark}
+                        
                       </Text>
                     </View>
                   </View>
-                  <View style={styles.card_middle}>
+                  {/* <View style={styles.card_middle}>
                     <Text>
                       {/* {data.subjectName} */}
-                      data
+                      {/* data
                     </Text>
-                  </View>
-                  {/* <View style={styles.card_bottom}>
+                  </View> */} 
+                  <View style={styles.card_bottom}>
                   <Text style={{ color: 'rgba(176, 67, 5, 1)', fontSize: 12 }}>
-                    Max:21/30
+                    Max:50
                   </Text>
-                </View> */}
                 </View>
-              </View>
+                </View>
+              </>
             ))
           : null}
       </ScrollView>
