@@ -131,6 +131,7 @@ export default function CceMarksAdmin({navigation}) {
       await setSubject(ss);
       const response = await getExam(course, batch, ss, term, assessment);
       setExams(response);
+      console.log(response);
     } catch (err) {
       alert('Cannot get your exams !!');
     }
@@ -143,7 +144,7 @@ export default function CceMarksAdmin({navigation}) {
     showLoadingScreen();
     try {
       let slug = `/cce/exam/scholasticMark?course=${course}&batch=${batch}&examname=${exam}&term=${term}&subject=${subject}&assessment=${assessment}`;
-      
+      console.log(slug);
       let token = await read('token');
       let res = await get(slug, token);
       let response = res.students;
@@ -285,7 +286,7 @@ export default function CceMarksAdmin({navigation}) {
             data={exams}
             initValue="Exams"
             onChange={async option => {
-              setExam(option.key);
+              setExam(option.key1);
             }}
             style={styles.card_picker}
             initValueTextStyle={styles.SelectedValueSmall}
@@ -310,41 +311,36 @@ export default function CceMarksAdmin({navigation}) {
             Get
           </Button>
         </View>
-        <View style={{height:20}}/>
+        <View style={{height: 20}} />
         {fetched
           ? list &&
-            list.map((data) => (
-              <>
-                
-                <View style={{marginTop: 10, ...styles.shadow}} key={data._id}>
+            list.map(data => (
+              <View key={data._id} style={{marginHorizontal: 10}}>
+                <View style={{marginTop: 10, ...styles.shadow}}>
                   <View style={styles.card_top}>
                     <View>
                       <Text style={styles.card_title}>
                         {data.studentAddNum}
-                        
                       </Text>
                       <Text style={{color: 'blue', fontSize: 12}}>Remarks</Text>
                     </View>
                     <View style={styles.card_marks}>
-                      <Text style={{color: 'white'}}>
-                        {data.mark}
-                        
-                      </Text>
+                      <Text style={{color: 'white'}}>{data.mark}</Text>
                     </View>
                   </View>
                   {/* <View style={styles.card_middle}>
                     <Text>
                       {/* {data.subjectName} */}
-                      {/* data
+                  {/* data
                     </Text>
-                  </View> */} 
+                  </View> */}
                   <View style={styles.card_bottom}>
-                  <Text style={{ color: 'rgba(176, 67, 5, 1)', fontSize: 12 }}>
-                    Max:50
-                  </Text>
+                    <Text style={{color: 'rgba(176, 67, 5, 1)', fontSize: 12}}>
+                      Max:50
+                    </Text>
+                  </View>
                 </View>
-                </View>
-              </>
+              </View>
             ))
           : null}
       </ScrollView>
