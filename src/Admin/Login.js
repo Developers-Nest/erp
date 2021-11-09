@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TextInput, Image } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet, TextInput, Image} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { Button, Searchbar, IconButton } from 'react-native-paper';
+import {Button, Searchbar, IconButton} from 'react-native-paper';
 
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 // helpers
 import post from '../../src/services/helpers/request/post';
@@ -12,12 +12,12 @@ import write from '../../src/services/localstorage/write';
 import read from '../../src/services/localstorage/read';
 
 // redux
-import { USERINFO } from '../../src/reducers/actionType';
+import {USERINFO} from '../../src/reducers/actionType';
 
 // loading screen
 import LoadingScreen from '../components/LoadingScreen/LoadingScreen';
 
-export default function Login({ navigation }) {
+export default function Login({navigation}) {
   const [institutionCode, setInstitutionCode] = useState(null);
   const [email, setemail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -87,6 +87,8 @@ export default function Login({ navigation }) {
 
           if (role === 'admin') {
             navigation.replace('Admin Dashboard');
+          } else {
+            alert('Enter Valid Credentials');
           }
         }
       } catch (err) {
@@ -104,8 +106,8 @@ export default function Login({ navigation }) {
       <LinearGradient
         colors={['rgba(0, 73, 159, 1)', 'rgba(176, 67, 5, 0.84)']}
         style={styles.linearGradient}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}>
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}>
         <View style={styles.logoStyle}>
           <Image source={require('../../assets/bootsplash_logo.png')} />
         </View>
@@ -113,7 +115,7 @@ export default function Login({ navigation }) {
           <TextInput
             style={styles.text_input1}
             placeholder="Institution Code"
-            placeholderTextColor='grey'
+            placeholderTextColor="grey"
             mode="outlined"
             onChangeText={code => setInstitutionCode(code)}
           />
@@ -129,14 +131,14 @@ export default function Login({ navigation }) {
         <TextInput
           style={styles.text_input}
           placeholder="Email or Username"
-          placeholderTextColor='grey'
+          placeholderTextColor="grey"
           mode="outlined"
           onChangeText={email => setemail(email)}
         />
         <TextInput
           style={styles.text_input}
           placeholder="Password"
-          placeholderTextColor='grey'
+          placeholderTextColor="grey"
           mode="outlined"
           secureTextEntry={true}
           onChangeText={password => setPassword(password)}
@@ -145,7 +147,7 @@ export default function Login({ navigation }) {
         <Button
           style={styles.button}
           // onPress={() => navigation.navigate('Teacher Dashboard')}
-          labelStyle={{ color: 'white' }}
+          labelStyle={{color: 'white'}}
           uppercase={false}
           onPress={handleSubmit}
           mode="contained">
@@ -197,7 +199,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     color: 'black',
   },
-  search_icon: { padding: 0, margin: 0, alignSelf: 'flex-end' },
+  search_icon: {padding: 0, margin: 0, alignSelf: 'flex-end'},
   button: {
     backgroundColor: 'rgba(80, 80, 105, 1)',
     alignSelf: 'flex-end',
