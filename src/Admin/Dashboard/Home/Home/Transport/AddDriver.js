@@ -44,25 +44,14 @@ export default function AddDriver({ navigation }) {
     const [curraddr, setcurraddr] = useState('')
     const [permaddr, setpermaddr] = useState('')
 
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
+    // const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+    const [date, setDate] = useState('')
 
-    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
-    const [date, setDate] = React.useState('21 May 2021')
-    let index = 0;
-    const dateMonths = {
-        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
-    }
-
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
-    const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date.toString());
-        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
-        hideDatePicker();
+    const handleConfirm = (d) => {
+        setDate(d.toString())
+        setDatePickerVisibility1(false);
     };
 
     //on save button press action
@@ -194,7 +183,7 @@ export default function AddDriver({ navigation }) {
 
                 <View style={{ width: "100%", paddingTop: 10, flexDirection: 'row', alignContent: 'flex-start', justifyContent: 'space-evenly' }}>
                     <Text style={styles.section_heading}>License No. </Text>
-                    <Text style={styles.section_heading}>Date</Text>
+                    <Text style={styles.section_heading}>Date of Birth</Text>
                 </View>
 
 
@@ -213,29 +202,29 @@ export default function AddDriver({ navigation }) {
                     </View>
                     <View style={styles.Card}>
                         <View style={styles.CardContent}>
-                            <TouchableOpacity style={[styles.pickdate]} onPress={showDatePicker}>
-                                <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                    placeholder={date}
-                                    placeholderTextColor="grey"
-                                    color="black"
-                                    values={date}
-                                    editable={false}
+                             <TouchableOpacity style={[styles.pickdate, styles.shadow]}
+                            onPress={()=>setDatePickerVisibility1(true)}>
+                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
+                                value={date.slice(0,10)}
+                                placeholderTextColor='grey'
+                                color='black'
+                                editable={false}
+                            />
+                            <Feather size={18} color="black" name="calendar"
+                                style={{
+                                    marginTop: 16,
+                                    marginRight: 0,
+                                }}
+                            ></Feather>
+                            <DateTimePickerModal
+                                isVisible={isDatePickerVisible1}
+                                style={styles.pickdate}
+                                mode="date"
+                                onConfirm={handleConfirm}
+                                onCancel={()=>setDatePickerVisibility1(false)}
+                            />
+                        </TouchableOpacity>
 
-                                />
-                                <Feather size={18} color="black" name="calendar"
-                                    style={{
-                                        marginTop: 10,
-                                        marginRight: 0,
-                                    }}
-                                ></Feather>
-                                <DateTimePickerModal
-                                    isVisible={isDatePickerVisible}
-                                    style={styles.pickdate}
-                                    mode="date"
-                                    onConfirm={handleConfirm}
-                                    onCancel={hideDatePicker}
-                                />
-                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
