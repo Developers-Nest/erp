@@ -6,15 +6,6 @@ import {
 } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
 import Feather from 'react-native-vector-icons/Feather';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -58,24 +49,15 @@ export default function EditVehicle({ route, navigation }) {
     const [type, setType] = useState('');
 
     //datepicker
-    const [isDatePickerVisible, setDatePickerVisibility] = React.useState(false);
+   
+
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    
+    const [isDatePickerVisible1, setDatePickerVisibility1] = useState(false);
     const [date, setDate] = React.useState('21 May 2021')
-    let index = 0;
-    const dateMonths = {
-        1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'June', 7: 'July', 8: 'Aug', 9: 'Sept', 10: 'Oct', 11: 'Nov', 12: 'Dec',
-    }
-
-    const showDatePicker = () => {
-        setDatePickerVisibility(true);
-    };
-
-    const hideDatePicker = () => {
-        setDatePickerVisibility(false);
-    };
     const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date.toString());
-        setDate(date.getDate() + " " + dateMonths[date.getMonth() + 1] + " " + date.getFullYear())
-        hideDatePicker();
+        setDate(date.toString())
+        setDatePickerVisibility1(false);
     };
 
 
@@ -246,7 +228,7 @@ export default function EditVehicle({ route, navigation }) {
                         justifyContent: 'space-evenly',
                     }}>
                     <Text style={styles.section_heading}>Vehicle Type</Text>
-                    <Text style={styles.section_heading}>Date</Text>
+                    <Text style={styles.section_heading}>Insurance Renewal Date</Text>
                 </View>
 
                 <View
@@ -268,34 +250,30 @@ export default function EditVehicle({ route, navigation }) {
 
                     <View style={styles.Card}>
                         <View style={styles.CardContent}>
-                            <TouchableOpacity
-                                style={[styles.pickdate]}
-                                onPress={showDatePicker}>
-                                <TextInput
-                                    style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
-                                    placeholder={date}
-                                    value={date ? date.slice(0, 10) : 'N/A'}
-                                    placeholderTextColor="grey"
-                                    color="black"
-
-                                    editable={false}
-                                />
-                                <Feather
-                                    size={18}
-                                    color="black"
-                                    name="calendar"
-                                    style={{
-                                        marginTop: 10,
-                                        marginRight: 0,
-                                    }}></Feather>
-                                <DateTimePickerModal
-                                    isVisible={isDatePickerVisible}
-                                    style={styles.pickdate}
-                                    mode="date"
-                                    onConfirm={handleConfirm}
-                                    onCancel={hideDatePicker}
-                                />
-                            </TouchableOpacity>
+ 
+                         <TouchableOpacity style={[styles.pickdate, styles.shadow]}
+                           onPress={()=>setDatePickerVisibility1(true)}>
+                            <TextInput style={{ marginLeft: 0, fontFamily: 'Poppins-Regular' }}
+                                value={date?date.slice(0,10):'N/A'}
+                                placeholderTextColor='grey'
+                                color='black'
+                                editable={false}
+                            />
+                            <Feather size={18} color="black" name="calendar"
+                                style={{
+                                    marginTop: 16,
+                                    marginRight: 0,
+                                }}
+                            ></Feather>
+                            <DateTimePickerModal
+                                isVisible={isDatePickerVisible1}
+                                style={styles.pickdate}
+                                mode="date"
+                                onConfirm={handleConfirm}
+                                onCancel={()=>setDatePickerVisibility1(false)}
+                            />
+                        </TouchableOpacity>
+                        
                         </View>
                     </View>
                 </View>
