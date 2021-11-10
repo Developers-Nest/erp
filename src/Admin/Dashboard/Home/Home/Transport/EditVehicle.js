@@ -286,7 +286,7 @@ export default function EditVehicle({ route, navigation }) {
                         alignContent: 'flex-start',
                         justifyContent: 'space-evenly',
                     }}>
-                    <Text style={styles.section_heading1}>Max Seats </Text>
+                    <Text style={styles.section_heading1}>No. of Seats </Text>
                     <Text style={styles.section_heading2}>Name of the driver</Text>
                 </View>
 
