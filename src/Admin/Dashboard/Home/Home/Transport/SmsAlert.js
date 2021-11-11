@@ -1,40 +1,131 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
-  Searchbar,
-  Appbar,
-  List,
+ 
   Card,
-  Title,
-  Paragraph,
   Button,
 } from 'react-native-paper';
 
 import ModalSelector from 'react-native-modal-selector';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { auto } from 'async';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //redux
 import { useSelector } from 'react-redux';
+import get from '../../../../../services/helpers/request/get'
+import read from '../../../../../services/localstorage/read'
+import post from '../../../../../services/helpers/request/post'
+
+import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen'
 
 export default function SmsAlert({ navigation }) {
 
-  //theming
-  const institute = useSelector(state => state.institute);
+   //theming
+   const institute = useSelector(state => state.institute)
+   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
 
-  const [SMS_for, setSMS_for] = useState([]);
-  return (
+   const [SMS_for, setSMS_for] = useState([{ label: 'Common to all', key: 'Common to all'}, { label: 'Route Wise', key: 'Route Wise' }, { label: 'Destination Wise', key: 'Destination Wise' }]);
+   const [templates, setTemplates] = useState([]);
+   const[routes,setroutes] = useState([]);
+   const[dests,setdests] = useState([]);
+
+   //selected values
+   const [smsFor, setSmsFor] = useState('');
+   const [template, setTemplate] = useState('');
+   const [templateId, setTemplateId] = useState('');
+ const[route,setroute]= useState('');
+ const[destination,setdest]= useState('');
+ //on load
+   useEffect(async () => {
+    setLoadingScreen();
+    try {
+
+        let slug = '/transport/route'
+        let token = await read('token')
+        let res = await get(slug, token)
+        let arr = []
+        res && res.map((route) => {
+            arr.push({
+                key: route._id,
+                label: route.code,
+                // list: group.list
+            })
+        })
+        setroutes(arr)
+
+
+        slug = `/smsTemplate`;
+        res = await get(slug, token);
+        arr = [];
+        res && res.map((temp) => {
+            arr.push({
+                key: temp._id,
+                label: temp.templateId,
+                message: temp.templateMessage
+            })
+        })
+        setTemplates(arr);
+
+    } catch (err) {
+        alert('Error ' + err);
+    }
+
+    
+    hideLoadingScreen();
+}, [])
+
+let fetchdestination = async(route)=>{
+  setLoadingScreen()
+  try{
+    let slug = `/transport/destinationAndFees?route=${route}`
+    let token = await read('token')
+    let res = await get(slug, token)
+    let arr = []
+    res && res.map((destination) => {
+        arr.push({
+            key: destination._id,
+            label: destination.pickAndDrop,
+           
+        })
+    })
+    setdests(arr);     
+  } catch(err){   
+      alert('Cannot get destination');
+  }
+  hideLoadingScreen();
+}
+
+let handleSend = async()=>{
+  setLoadingScreen();
+  try{
+      let token = await read('token');
+      let slug = `/transport/route/sendsms`;
+      let data = {
+          message: template,
+          destination:destination?destination:'',
+          route:route?route:'',
+          reportType: smsFor,
+          templateId: templateId
+      }
+      console.log('Data ', data);
+      let res = await post(slug, data, token);
+      console.log('Response ', res);
+      if(res.error){
+          alert(res.error);
+      } else if(res.Status) {
+          alert('Message Sent');
+          // navigation.navigate("Home");
+      }
+  } catch(err){
+      console.log('Error ', err);
+      alert('Error ');
+  }
+  hideLoadingScreen()
+}
+
+   return (
     <View style={styles.backgroung}>
       {/* header start */}
-
+{loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -74,29 +165,99 @@ export default function SmsAlert({ navigation }) {
 
       </View>
 
+     
       {/* header ends */}
-
+<ScrollView>
+<View>
       <View style={{ padding: 10 }} />
       <View style={{ padding: 10 }} >
         <ModalSelector
-          data={SMS_for}
-          initValue="SMS for"
-          // onChange={async option => {
-          //   await getAssessesments(option.key);
-          // }}
+         data={SMS_for}
+         initValue="SMS For"
+         onChange={option => {
+             setSmsFor(option.label)
+         }}
+        
           style={styles.card_picker}
           initValueTextStyle={styles.SelectedValueSmall}
           selectTextStyle={styles.SelectedValueSmall}
         />
         <View style={{ padding: 10 }} />
+       {/* //for selecting route  */}
+       {
+                        smsFor === "Route Wise"? (
+        <ModalSelector
+         data={routes}
+         initValue="Route Code"
+         onChange={option => {
+             setroute(option.label)
+         }}
+        
+          style={styles.card_picker}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
+        ) : (null)
+
+      }
+{/* for selecting destination */}
+{
+                        smsFor === "Destination Wise" ? (
+<View style={{padding:10}}>
+                          <ModalSelector
+                          data={routes}
+                          initValue="Route Code"
+                          onChange={option => {
+                              setroute(option.label)
+                              fetchdestination(option.key)
+                          }}
+                         
+                           style={styles.card_picker}
+                           initValueTextStyle={styles.SelectedValueSmall}
+                           selectTextStyle={styles.SelectedValueSmall}
+                         />
+
+<View style={{padding:10}}/>
+<ModalSelector
+         data={dests}
+         initValue="Destination"
+         onChange={option => {
+             setdest(option.label)
+         }}
+        
+          style={styles.card_picker}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
+        </View>
+        ) : (null)
+
+      }
+       
+         {/* for template id */}
+         <ModalSelector
+       data={templates}
+       initValue="Template ID"
+       onChange={option => {
+           setTemplate(option.message)
+           setTemplateId(option.label)
+       }}
+          style={styles.card_picker}
+          initValueTextStyle={styles.SelectedValueSmall}
+          selectTextStyle={styles.SelectedValueSmall}
+        />
+         <View style={{ padding: 10 }} />
+         {/* for message */}
         <Card style={{ height: 200, ...styles.Card }}>
           <Card.Content>
             <TextInput
-              placeholder="Write your message here "
-              placeholderTextColor='grey'
-              color='black'
-              // onChange={val => setDiscription(val)}
-              style={{ backgroundColor: 'white' }}
+             placeholder="Write your message here "
+             placeholderTextColor='grey'
+             value={template}
+             color='black'
+             onChangeText={val => setTemplate(val)}
+             style={{ backgroundColor: 'white', textAlignVertical: 'top', fontFamily: 'Poppins-Regular', fontSize: 15 }}
+             multiline={true}
             />
           </Card.Content>
         </Card>
@@ -108,12 +269,15 @@ export default function SmsAlert({ navigation }) {
             flexDirection: 'row-reverse',
             // alignItems: 'center',
           }}>
-          <Button style={{ width: 90 }} mode="contained" onPress={() => console.log('Pressed')}>
+          <Button style={{ width: 90 }} color={ institute? institute.themeColor: '#5177E7'} mode="contained" onPress={handleSend}>
             SAVE
           </Button>
         </View>
       </View>
+      </View>
+</ScrollView>
     </View>
+
   );
 }
 
