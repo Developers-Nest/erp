@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native';
 import {
- 
+
   Card,
   Button,
 } from 'react-native-paper';
@@ -17,115 +17,120 @@ import post from '../../../../../services/helpers/request/post'
 
 import LoaderHook from '../../../../../components/LoadingScreen/LoadingScreen'
 
+/**
+ * @param {route} string route id 
+ * @returns array of routes
+ */
+
 export default function SmsAlert({ navigation }) {
 
-   //theming
-   const institute = useSelector(state => state.institute)
-   const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
+  //theming
+  const institute = useSelector(state => state.institute)
+  const [loadingScreen, setLoadingScreen, hideLoadingScreen] = LoaderHook()
 
-   const [SMS_for, setSMS_for] = useState([{ label: 'Common to all', key: 'Common to all'}, { label: 'Route Wise', key: 'Route Wise' }, { label: 'Destination Wise', key: 'Destination Wise' }]);
-   const [templates, setTemplates] = useState([]);
-   const[routes,setroutes] = useState([]);
-   const[dests,setdests] = useState([]);
+  const [SMS_for, setSMS_for] = useState([{ label: 'Common To All', key: 'Common To All' }, { label: 'Route Wise', key: 'Route Wise' }, { label: 'Destination Wise', key: 'Destination Wise' }]);
+  const [templates, setTemplates] = useState([]);
+  const [routes, setroutes] = useState([]);
+  const [dests, setdests] = useState([]);
 
-   //selected values
-   const [smsFor, setSmsFor] = useState('');
-   const [template, setTemplate] = useState('');
-   const [templateId, setTemplateId] = useState('');
- const[route,setroute]= useState('');
- const[destination,setdest]= useState('');
- //on load
-   useEffect(async () => {
+  //selected values
+  const [smsFor, setSmsFor] = useState('');
+  const [template, setTemplate] = useState('');
+  const [templateId, setTemplateId] = useState('');
+  const [route, setroute] = useState('');
+  const [destination, setdest] = useState('');
+  //on load
+  useEffect(async () => {
     setLoadingScreen();
     try {
 
-        let slug = '/transport/route'
-        let token = await read('token')
-        let res = await get(slug, token)
-        let arr = []
-        res && res.map((route) => {
-            arr.push({
-                key: route._id,
-                label: route.code,
-                // list: group.list
-            })
+      let slug = '/transport/route'
+      let token = await read('token')
+      let res = await get(slug, token)
+      let arr = []
+      res && res.map((route) => {
+        arr.push({
+          key: route._id,
+          label: route.code,
+          // list: group.list
         })
-        setroutes(arr)
+      })
+      setroutes(arr)
 
 
-        slug = `/smsTemplate`;
-        res = await get(slug, token);
-        arr = [];
-        res && res.map((temp) => {
-            arr.push({
-                key: temp._id,
-                label: temp.templateId,
-                message: temp.templateMessage
-            })
+      slug = `/smsTemplate`;
+      res = await get(slug, token);
+      arr = [];
+      res && res.map((temp) => {
+        arr.push({
+          key: temp._id,
+          label: temp.templateId,
+          message: temp.templateMessage
         })
-        setTemplates(arr);
+      })
+      setTemplates(arr);
 
     } catch (err) {
-        alert('Error ' + err);
+      alert('Error ' + err);
     }
 
-    
+
     hideLoadingScreen();
-}, [])
+  }, [])
 
-let fetchdestination = async(route)=>{
-  setLoadingScreen()
-  try{
-    let slug = `/transport/destinationAndFees?route=${route}`
-    let token = await read('token')
-    let res = await get(slug, token)
-    let arr = []
-    res && res.map((destination) => {
+  let fetchdestination = async (route) => {
+    setLoadingScreen()
+    try {
+      let slug = `/transport/destinationAndFees?route=${route}`
+      let token = await read('token')
+      let res = await get(slug, token)
+      let arr = []
+      res && res.map((destination) => {
         arr.push({
-            key: destination._id,
-            label: destination.pickAndDrop,
-           
-        })
-    })
-    setdests(arr);     
-  } catch(err){   
-      alert('Cannot get destination');
-  }
-  hideLoadingScreen();
-}
+          key: destination._id,
+          label: destination.pickAndDrop,
 
-let handleSend = async()=>{
-  setLoadingScreen();
-  try{
+        })
+      })
+      setdests(arr);
+    } catch (err) {
+      alert('Cannot get destination');
+    }
+    hideLoadingScreen();
+  }
+
+  let handleSend = async () => {
+    setLoadingScreen();
+    try {
       let token = await read('token');
       let slug = `/transport/route/sendsms`;
       let data = {
-          message: template,
-          destination:destination?destination:'',
-          route:route?route:'',
-          reportType: smsFor,
-          templateId: templateId
+        message: template,
+        destination: destination ? destination : '',
+        route: route ? route : '',
+        reportType: smsFor,
+        templateId: templateId
       }
       console.log('Data ', data);
       let res = await post(slug, data, token);
       console.log('Response ', res);
-      if(res.error){
-          alert(res.error);
-      } else if(res.Status) {
-          alert('Message Sent');
-          // navigation.navigate("Home");
+      if (res.error) {
+        alert(res.error);
+      } else if (res.Status) {
+        alert('Message Sent');
+        navigation.navigate("Home");
       }
-  } catch(err){
+    } catch (err) {
       console.log('Error ', err);
       alert('Error ');
+    }
+    hideLoadingScreen()
   }
-  hideLoadingScreen()
-}
 
-   return (
+  return (
     <View style={styles.backgroung}>
       {/* header start */}
-{loadingScreen}
+      {loadingScreen}
       <View
         style={{
           backgroundColor: institute ? institute.themeColor : 'black',
@@ -165,117 +170,117 @@ let handleSend = async()=>{
 
       </View>
 
-     
+
       {/* header ends */}
-<ScrollView>
-<View>
-      <View style={{ padding: 10 }} />
-      <View style={{ padding: 10 }} >
-        <ModalSelector
-         data={SMS_for}
-         initValue="SMS For"
-         onChange={option => {
-             setSmsFor(option.label)
-         }}
-        
-          style={styles.card_picker}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-        <View style={{ padding: 10 }} />
-       {/* //for selecting route  */}
-       {
-                        smsFor === "Route Wise"? (
-        <ModalSelector
-         data={routes}
-         initValue="Route Code"
-         onChange={option => {
-             setroute(option.label)
-         }}
-        
-          style={styles.card_picker}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-        ) : (null)
+      <ScrollView>
+        <View>
+          <View style={{ padding: 10 }} />
+          <View style={{ padding: 10 }} >
+            <ModalSelector
+              data={SMS_for}
+              initValue="SMS For"
+              onChange={option => {
+                setSmsFor(option.label)
+              }}
 
-      }
-{/* for selecting destination */}
-{
-                        smsFor === "Destination Wise" ? (
-<View style={{padding:10}}>
-                          <ModalSelector
-                          data={routes}
-                          initValue="Route Code"
-                          onChange={option => {
-                              setroute(option.label)
-                              fetchdestination(option.key)
-                          }}
-                         
-                           style={styles.card_picker}
-                           initValueTextStyle={styles.SelectedValueSmall}
-                           selectTextStyle={styles.SelectedValueSmall}
-                         />
-
-<View style={{padding:10}}/>
-<ModalSelector
-         data={dests}
-         initValue="Destination"
-         onChange={option => {
-             setdest(option.label)
-         }}
-        
-          style={styles.card_picker}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-        </View>
-        ) : (null)
-
-      }
-       
-         {/* for template id */}
-         <ModalSelector
-       data={templates}
-       initValue="Template ID"
-       onChange={option => {
-           setTemplate(option.message)
-           setTemplateId(option.label)
-       }}
-          style={styles.card_picker}
-          initValueTextStyle={styles.SelectedValueSmall}
-          selectTextStyle={styles.SelectedValueSmall}
-        />
-         <View style={{ padding: 10 }} />
-         {/* for message */}
-        <Card style={{ height: 200, ...styles.Card }}>
-          <Card.Content>
-            <TextInput
-             placeholder="Write your message here "
-             placeholderTextColor='grey'
-             value={template}
-             color='black'
-             onChangeText={val => setTemplate(val)}
-             style={{ backgroundColor: 'white', textAlignVertical: 'top', fontFamily: 'Poppins-Regular', fontSize: 15 }}
-             multiline={true}
+              style={styles.card_picker}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
             />
-          </Card.Content>
-        </Card>
-      </View>
-      <View style={{ padding: 10 }}>
-        <View
-          style={{
-            // justifyContent: 'center',
-            flexDirection: 'row-reverse',
-            // alignItems: 'center',
-          }}>
-          <Button style={{ width: 90 }} color={ institute? institute.themeColor: '#5177E7'} mode="contained" onPress={handleSend}>
-            SAVE
-          </Button>
+            <View style={{ padding: 10 }} />
+            {/* //for selecting route  */}
+            {
+              smsFor === "Route Wise" ? (
+                <ModalSelector
+                  data={routes}
+                  initValue="Route Code"
+                  onChange={option => {
+                    setroute(option.key)
+                  }}
+
+                  style={styles.card_picker}
+                  initValueTextStyle={styles.SelectedValueSmall}
+                  selectTextStyle={styles.SelectedValueSmall}
+                />
+              ) : (null)
+
+            }
+            {/* for selecting destination */}
+            {
+              smsFor === "Destination Wise" ? (
+                <View style={{ padding: 10 }}>
+                  <ModalSelector
+                    data={routes}
+                    initValue="Route Code"
+                    onChange={option => {
+                      setroute(option.key)
+                      fetchdestination(option.key)
+                    }}
+
+                    style={styles.card_picker}
+                    initValueTextStyle={styles.SelectedValueSmall}
+                    selectTextStyle={styles.SelectedValueSmall}
+                  />
+
+                  <View style={{ padding: 10 }} />
+                  <ModalSelector
+                    data={dests}
+                    initValue="Destination"
+                    onChange={option => {
+                      setdest(option.key)
+                    }}
+
+                    style={styles.card_picker}
+                    initValueTextStyle={styles.SelectedValueSmall}
+                    selectTextStyle={styles.SelectedValueSmall}
+                  />
+                </View>
+              ) : (null)
+
+            }
+
+            {/* for template id */}
+            <ModalSelector
+              data={templates}
+              initValue="Template ID"
+              onChange={option => {
+                setTemplate(option.message)
+                setTemplateId(option.label)
+              }}
+              style={styles.card_picker}
+              initValueTextStyle={styles.SelectedValueSmall}
+              selectTextStyle={styles.SelectedValueSmall}
+            />
+            <View style={{ padding: 10 }} />
+            {/* for message */}
+            <Card style={{ height: 200, ...styles.Card }}>
+              <Card.Content>
+                <TextInput
+                  placeholder="Write your message here "
+                  placeholderTextColor='grey'
+                  value={template}
+                  color='black'
+                  onChangeText={val => setTemplate(val)}
+                  style={{ backgroundColor: 'white', textAlignVertical: 'top', fontFamily: 'Poppins-Regular', fontSize: 15 }}
+                  multiline={true}
+                />
+              </Card.Content>
+            </Card>
+          </View>
+          <View style={{ padding: 10 }}>
+            <View
+              style={{
+                // justifyContent: 'center',
+                flexDirection: 'row-reverse',
+                // alignItems: 'center',
+              }}>
+              <Button style={{ width: 90 }} color={institute ? institute.themeColor : '#5177E7'} mode="contained" onPress={handleSend}>
+                SAVE
+              </Button>
+            </View>
+          </View>
         </View>
-      </View>
-      </View>
-</ScrollView>
+      </ScrollView>
     </View>
 
   );
